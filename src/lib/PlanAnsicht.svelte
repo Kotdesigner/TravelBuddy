@@ -4,8 +4,9 @@
   import { heuteTag } from './heute.js'
   // Plan (V4): alle Etappen mit Datum, darunter ihre Routen. Antippen öffnet die Etappe.
   // Ersetzt „Meine Reisen“ mit seinen 12 aufgeklappten Bearbeiten-Karten.
-  import { reisen, gesamtStart, buchungen, wanderungen, journal, wandleReiseUm, loescheReise } from './userdata.js'
-  import { etappenMitDatum, planUeberblick, routenDerEtappe, istRoute, ymd, vermuteEtappe } from './plan.js'
+  import { reisen, gesamtStart, reiseTage, buchungen, wanderungen, journal, wandleReiseUm, loescheReise } from './userdata.js'
+  import { etappenMitDatum, planUeberblick, routenDerEtappe, istRoute, ymd, vermuteEtappe, reiseZeitraum, gueltigesDatum } from './plan.js'
+  import Stepper from './Stepper.svelte'
   import { bereich, tageText, tagMonatJahr, zahl } from './format.js'
   import { loeschFrage } from './dialog.js'
   import { zeigeToast } from './toast.js'
@@ -16,6 +17,7 @@
   const heute = $derived($heuteTag)
   const eintraege = $derived(etappenMitDatum($reisen, $gesamtStart))
   const ueber = $derived(planUeberblick(eintraege))
+  const zeitraum = $derived(reiseZeitraum($gesamtStart, $reiseTage, ueber))
   const ohneEtappe = $derived($reisen.filter((r) => istRoute(r) && (!r.etappeId || !$reisen.some((e) => e.id === r.etappeId))))
   const lueckeNach = $derived(new Map(ueber.luecken.map((l) => [l.nachId, l])))
 
@@ -52,6 +54,14 @@
 </script>
 
 <div class="pl">
+  <!-- Basic: Reisebeginn und Reisedauer aus der Einführung, hier änderbar. Der Zeitraum steht im Titelbild. -->
+  <div class="pl-zeitraum">
+    <label class="pl-zf">{t('Reisebeginn')}<input type="date" value={$gesamtStart} onchange={(e) => { if (gueltigesDatum(e.currentTarget.value)) gesamtStart.set(e.currentTarget.value) }} /></label>
+    <span class="pl-zf">{t('Reisedauer in Tagen')}<Stepper value={$reiseTage || 0} min={0} max={365} label={t('Reisedauer in Tagen')} onchange={(v) => reiseTage.set(v)} /></span>
+  </div>
+  {#if !eintraege.length && zeitraum}
+    <p class="pl-summe"><b>{t('{tagMonatJahr} bis {tagMonatJahr2}', { tagMonatJahr: tagMonatJahr(zeitraum.von), tagMonatJahr2: tagMonatJahr(zeitraum.bis) })}</b>{t(', {tageText}, noch ohne Etappen', { tageText: tageText(zeitraum.tage) })}</p>
+  {/if}
   {#if eintraege.length}
     <p class="pl-summe">
       <b>{t('{tagMonatJahr} bis {tagMonatJahr2}', { tagMonatJahr: tagMonatJahr(ueber.start), tagMonatJahr2: tagMonatJahr(ueber.ende) })}</b>{t(', {tageText} in {length} Etappen', { tageText: tageText(ueber.tage), length: eintraege.length })}
@@ -140,6 +150,9 @@
 
 <style>
   .pl { display: flex; flex-direction: column; gap: 14px; }
+  .pl-zeitraum { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+  .pl-zf { display: flex; flex-direction: column; gap: 5px; flex: 1 1 150px; min-width: 0; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
+  .pl-zf input[type=date] { min-height: 46px; font-size: max(16px, calc(16px * var(--schrift, 1))); padding: 8px 12px; border: 1px solid var(--line-stark); border-radius: var(--radius-m); background: var(--eingabe); color: var(--ink); font-weight: 400; }
   .pl-summe { margin: 0; font-size: calc(15px * var(--schrift, 1)); color: var(--muted); }
   .pl-summe b { color: var(--ink); }
   .pl-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }

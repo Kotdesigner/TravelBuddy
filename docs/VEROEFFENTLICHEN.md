@@ -59,3 +59,11 @@ einem eigenen Fenster. Daten liegen im Speicher der App und bleiben über Neusta
 
 Unterschiede zum Browser: Die Sperre mit Touch ID für Belege braucht einen Browser (Safari, Chrome), in der
 App steht sie nicht zur Verfügung. Backups landen in „Downloads“, Links nach draußen öffnet der Standardbrowser.
+
+## 7 · Windows-App
+
+`sh win/baue-windows.sh` baut `win/build/TravelBuddy.exe` und `win/build/TravelBuddy-Windows.zip`, auch auf dem
+Mac (braucht Go, für das Symbol einmal `go install github.com/akavel/rsrc@v0.10.2`). Die Web-App steckt in der
+exe. Beim Start liefert ein eingebauter Server sie auf `127.0.0.1:8990` aus, Microsoft Edge zeigt sie als
+eigenes Fenster ohne Adressleiste, mit eigenem Profil unter `%LOCALAPPDATA%\TravelBuddy`. Fehlt Edge, nimmt die
+App Chrome oder den Standardbrowser. In Edge funktioniert die Sperre für Belege mit Windows Hello.

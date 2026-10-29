@@ -29,6 +29,21 @@ export const gueltigesDatum = (s) => typeof s === 'string' && /^\d{4}-\d{2}-\d{2
 /** Basic: Startdatum, solange noch keins gewählt ist: der Erste des nächsten Monats. */
 export function vorgabeStart(heute = new Date()) { return ymd(new Date(heute.getFullYear(), heute.getMonth() + 1, 1)) }
 
+/**
+ * Reisezeitraum fürs Titelbild und den Plan: Reisebeginn plus Reisedauer (aus der Einführung oder dem
+ * Plan), erweitert um alle Etappen. Ohne Dauer und ohne Etappen: null.
+ * @param ueber  planUeberblick(...) der Etappen
+ */
+export function reiseZeitraum(start, tage, ueber = {}) {
+  const n = Math.round(Number(tage) || 0)
+  const eigen = gueltigesDatum(start) && n > 0 ? { von: start, bis: plusTage(start, n - 1) } : null
+  const etappen = ueber.start && ueber.ende ? { von: ueber.start, bis: ueber.ende } : null
+  if (!eigen && !etappen) return null
+  const von = [eigen?.von, etappen?.von].filter(Boolean).sort()[0]
+  const bis = [eigen?.bis, etappen?.bis].filter(Boolean).sort().at(-1)
+  return { von, bis, tage: tageZwischen(von, bis) + 1 }
+}
+
 // ---------- Was ist was ----------
 /** Route = ausdrücklich so markiert, oder (Altbestand) eigene Reise außerhalb des Plans. */
 export function istRoute(r) {

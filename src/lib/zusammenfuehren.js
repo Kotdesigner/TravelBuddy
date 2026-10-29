@@ -265,10 +265,11 @@ export function fuehreSkalar(hier, dort, hierTs, dortTs, name, { grundwert = nul
 const ZEIGE = {
   gesamtStart: (v) => String(v).split('-').reverse().join('.'),
   reiseBudget: (v) => eur(v),
+  reiseTage: (v) => tn(v, '{n} Tag', '{n} Tage'),
 }
 
 /** Grundwerte, die „noch nie eingestellt" bedeuten. userdata.js reicht die echten herein. */
-export const SKALAR_GRUND = { gesamtStart: null, reiseBudget: 0 }
+export const SKALAR_GRUND = { gesamtStart: null, reiseBudget: 0, reiseTage: 0 }
 
 // ---------------------------------------------------------------------------
 // Gesamtlauf
@@ -367,7 +368,7 @@ export function fuehreZusammen(hier, datei, { quelle = t('anderes Gerät'), grun
   // Bei verstellter Uhr wird nur ein noch leerer Wert ergänzt.
   const sh = hier.skalarStand || {}, sd = datei.skalarStand || {}
   ergebnis.skalarStand = { ...sh }
-  for (const [feld, name] of [['gesamtStart', t('Startdatum')], ['reiseBudget', t('Budget')]]) {
+  for (const [feld, name] of [['gesamtStart', t('Startdatum')], ['reiseBudget', t('Budget')], ['reiseTage', t('Reisedauer')]]) {
     const r = fuehreSkalar(hier[feld], datei[feld], sh[feld] || URZEIT, sd[feld] || URZEIT, name,
       { grundwert: grundwerte[feld], nurErgaenzen, zeige: ZEIGE[feld] })
     ergebnis[feld] = r.wert

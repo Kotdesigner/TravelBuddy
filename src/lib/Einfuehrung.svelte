@@ -5,10 +5,11 @@
   // Buchung, Dokumente aufs Gerät. Für die echten Blätter und Seiten tritt die Einführung zur
   // Seite; ist das Blatt zu oder tippt man unten auf „Weiter“, geht es mit dem nächsten Schritt
   // weiter. Mehr → „Einführung noch einmal“ startet sie neu (einfuehrung.js).
-  import { ready, gesamtStart, reisen, buchungen, datenStand } from './userdata.js'
+  import { ready, gesamtStart, reiseTage, reisen, buchungen, datenStand } from './userdata.js'
   import { neuAnfrage, oeffneNeu } from './neu.js'
-  import { gueltigesDatum, istEtappe } from './plan.js'
+  import { gueltigesDatum, istEtappe, plusTage } from './plan.js'
   import { tagMonatJahr } from './format.js'
+  import Stepper from './Stepper.svelte'
   import { modal } from './modal.js'
   import { blattRaus, ausblenden } from './motion.js'
   import { SCHRITTE, einfuehrung, lies, merke, sollZeigen, istLeer } from './einfuehrung.js'
@@ -33,7 +34,8 @@
 
   // Startdatum: das Feld zeigt den gespeicherten Wert (Vorgabe: Erster des nächsten Monats)
   let start = $state('')
-  $effect(() => { if (id === 'start' && !start) start = $gesamtStart })
+  let dauer = $state(0)
+  $effect(() => { if (id === 'start' && !start) { start = $gesamtStart; dauer = $reiseTage || 21 } })
 
   function setze(schritt, pause = null) {
     einfuehrung.set({ schritt, pause })
@@ -41,7 +43,7 @@
   }
   function weiter() {
     if (!offen) return
-    if (id === 'start' && gueltigesDatum(start)) gesamtStart.set(start)
+    if (id === 'start' && gueltigesDatum(start)) { gesamtStart.set(start); reiseTage.set(dauer) }
     if (offen.schritt >= SCHRITTE.length - 1) return beenden()
     setze(offen.schritt + 1)
   }
@@ -108,10 +110,13 @@
 
     {:else if id === 'start'}
       <p class="ef-icon" aria-hidden="true">📅</p>
-      <h2 id="ef-titel">{t('Wann geht es los?')}</h2>
-      <p id="ef-text">{t('Der Tag, an dem deine Reise beginnt. Daraus rechnet die App den Countdown und die Tage deiner Etappen. Du kannst ihn später im Plan ändern.')}</p>
-      <label class="ef-f">{t('Reisebeginn')}<input type="date" bind:value={start} /></label>
-      {#if gueltigesDatum(start)}<p class="ef-k">{tagMonatJahr(start)}</p>{/if}
+      <h2 id="ef-titel">{t('Wann geht es los, und wie lange?')}</h2>
+      <p id="ef-text">{t('Reisebeginn und Dauer deiner Reise. Der Zeitraum steht dann oben im Titelbild, und die App rechnet daraus den Countdown und die Tage deiner Etappen. Beides lässt sich später im Plan ändern.')}</p>
+      <div class="ef-zeile">
+        <label class="ef-f">{t('Reisebeginn')}<input type="date" bind:value={start} /></label>
+        <span class="ef-f">{t('Reisedauer in Tagen')}<Stepper value={dauer} min={1} max={365} label={t('Reisedauer in Tagen')} onchange={(v) => (dauer = v)} /></span>
+      </div>
+      {#if gueltigesDatum(start)}<p class="ef-k">{t('{von} bis {bis}, erscheint oben im Titelbild', { von: tagMonatJahr(start), bis: tagMonatJahr(plusTage(start, dauer - 1)) })}</p>{/if}
       <div class="ef-knoepfe">
         <button class="btn-primary ef-los" onclick={weiter} disabled={!gueltigesDatum(start)}>{je('Weiter', 'Next')}</button>
         <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
@@ -220,6 +225,8 @@
   .ef .ef-k { font-size: calc(14px * var(--schrift, 1)); color: var(--muted); }
   .ef .ef-ok { font-size: calc(15px * var(--schrift, 1)); font-weight: 700; color: var(--ok); }
   .ef-liste { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: calc(15px * var(--schrift, 1)); line-height: 1.45; }
+  .ef-zeile { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .ef-zeile .ef-f { flex: 1 1 140px; min-width: 0; }
   .ef-f { display: flex; flex-direction: column; gap: 5px; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
   .ef-f input { min-height: 46px; font-size: max(16px, calc(17px * var(--schrift, 1))); padding: 8px 12px; border: 1px solid var(--line-stark); border-radius: var(--radius-m); background: var(--eingabe); color: var(--ink); font-weight: 400; }
   .ef-sprache { display: grid; grid-template-columns: 1fr 1fr; }

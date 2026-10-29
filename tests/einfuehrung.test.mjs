@@ -2,7 +2,8 @@
 // Ausführen: node tests/einfuehrung.test.mjs
 import fs from 'node:fs'
 import { SCHRITTE, bereinige, sollZeigen, istLeer, KEY } from '../src/lib/einfuehrung.js'
-import { vorgabeStart } from '../src/lib/plan.js'
+import { vorgabeStart, reiseZeitraum } from '../src/lib/plan.js'
+import { fuehreZusammen } from '../src/lib/zusammenfuehren.js'
 
 let ok = 0, bad = 0
 const p = (name, bed, zusatz = '') => {
@@ -36,6 +37,24 @@ console.log('\n3  Startdatum ohne feste Vorgabe')
 {
   p('Erster des nächsten Monats', vorgabeStart(new Date(2038, 2, 17)) === '2038-04-01')
   p('über den Jahreswechsel', vorgabeStart(new Date(2038, 11, 5)) === '2039-01-01')
+}
+
+console.log('\n3b Reisedauer: Zeitraum im Titelbild')
+{
+  const z = reiseZeitraum('2038-03-10', 45, {})
+  p('Beginn plus 45 Tage, ohne Etappen', z?.von === '2038-03-10' && z.bis === '2038-04-23' && z.tage === 45, JSON.stringify(z))
+  p('ohne Dauer und ohne Etappen: nichts', reiseZeitraum('2038-03-10', 0, {}) === null)
+  p('Etappen allein reichen', reiseZeitraum('2038-03-10', 0, { start: '2038-03-12', ende: '2038-03-20' })?.bis === '2038-03-20')
+  const w = reiseZeitraum('2038-03-10', 5, { start: '2038-03-12', ende: '2038-03-30' })
+  p('Etappen verlängern den Zeitraum', w.von === '2038-03-10' && w.bis === '2038-03-30' && w.tage === 21, JSON.stringify(w))
+  p('Unsinn wird ignoriert', reiseZeitraum('kein Datum', 10, {}) === null && reiseZeitraum('2038-03-10', 'x', {}) === null)
+  const app = fs.readFileSync(wurzel + 'App.svelte', 'utf8')
+  p('Titelbild nutzt den Zeitraum', /reiseZeitraum\(\$gesamtStart, \$reiseTage/.test(app) && /kopfZeit\.von/.test(app))
+  p('im Plan änderbar', /reiseTage\.set/.test(fs.readFileSync(wurzel + 'lib/PlanAnsicht.svelte', 'utf8')))
+  p('kommt ins Backup', /reiseTage: get\(reiseTage\)/.test(fs.readFileSync(wurzel + 'lib/userdata.js', 'utf8')))
+  const leer = { reisen: [], journal: [], eigeneOrte: [], daten: {}, buchungen: { events: [] } }
+  const r = fuehreZusammen({ ...leer, reiseTage: 0, skalarStand: {} }, { ...leer, reiseTage: 30, skalarStand: { reiseTage: '2026-05-01T00:00:00Z' } }, { grundwerte: { reiseTage: 0 } })
+  p('Zusammenführen übernimmt die Dauer vom anderen Gerät', r.ergebnis.reiseTage === 30, String(r.ergebnis.reiseTage))
 }
 
 console.log('\n4  Einbindung')

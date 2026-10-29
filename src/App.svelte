@@ -29,7 +29,7 @@
   import { frage, hinweis, loeschFrage } from './lib/dialog.js'
   import { neuAnfrage, oeffneNeu } from './lib/neu.js'
   import { leseAdresse, geh, merke, zurueck } from './lib/navigation.js'
-  import { etappenMitDatum, planUeberblick, ymd as ymdPlan } from './lib/plan.js'
+  import { etappenMitDatum, planUeberblick, reiseZeitraum, ymd as ymdPlan } from './lib/plan.js'
   import Quiz from './lib/Quiz.svelte'
   import Packliste from './lib/Packliste.svelte'
   import XoxoSpiel from './lib/XoxoSpiel.svelte'
@@ -59,7 +59,7 @@
   import { initUserData, userData, exportBackup, leseBackup, wendeBackupAn, backupInfo, datenStand, syncZeiten,
     eigeneOrte, updateEigenenOrt, loescheEigenenOrt, gefahrenCache, journal, reisen, reiseBudget, vorabKosten, buchungen, importiereReisekalender,
     vorschauZusammenfuehren, fuehreBackupZusammen, importRueckgaengig, schnappschuss, rettung,
-    gesamtStart, berechneKalender, ready } from './lib/userdata.js'
+    gesamtStart, reiseTage, ready } from './lib/userdata.js'
   import { get } from 'svelte/store'
   import { modal } from './lib/modal.js'
   import { holeOrtsdaten } from './lib/ortdaten.js'
@@ -765,8 +765,9 @@
   // Einheitliches Toast-System (Phase 3): flash() leitet an zeigeToast weiter.
   // Zeitraum in der Kopfzeile aus dem Gesamtplan — stand bis 18.09. fest auf
   // „13. Dez 2026 – 27. Jan 2027“, einem Planungsstand vom Frühjahr.
-  const kopfPlan = $derived(berechneKalender($reisen, $gesamtStart))
-  const kopfDatum = (d) => d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short', year: 'numeric' }).replace(/(\p{L})\./u, '$1')
+  // Titelbild: Reisebeginn plus Reisedauer (Einführung, Plan), erweitert um die Etappen
+  const kopfZeit = $derived(reiseZeitraum($gesamtStart, $reiseTage, planUeberblick(etappenMitDatum($reisen, $gesamtStart))))
+  const kopfDatum = (s) => new Date(s + 'T00:00:00').toLocaleDateString(LOCALE, { day: 'numeric', month: 'short', year: 'numeric' }).replace(/(\p{L})\./u, '$1')
   function flash(m) { zeigeToast(m, /✓/.test(m) ? 'ok' : /fehlgeschlagen|Fehler/i.test(m) ? 'fehler' : 'info') }
   // Nach dem Start: wurde etwas aus dem Notspeicher zurückgeholt, soll man das sehen.
   $effect(() => {
@@ -790,7 +791,7 @@
 {#if ansicht.tab === 'heute'}
 <header class="hero">
   <div class="hero-musik"><MusikSymbol {geh} hell /></div>
-  <div class="kicker"><span>{t('Roadtrip')}</span>{#if kopfPlan.gesamtTage}<span class="k-datum" class:k-wartet={!$ready}>{kopfDatum(kopfPlan.start)}<span class="k-bis">{kopfDatum(kopfPlan.ende)}</span></span>{/if}</div>
+  <div class="kicker"><span>{t('Roadtrip')}</span>{#if kopfZeit}<span class="k-datum" class:k-wartet={!$ready}>{kopfDatum(kopfZeit.von)}<span class="k-bis">{kopfDatum(kopfZeit.bis)}</span></span>{/if}</div>
   <h1>
     <span class="stretch">{#each 'WESTERN'.split('') as ch}<span>{ch}</span>{/each}</span>
     <span class="akz">{t('Australia')}</span>

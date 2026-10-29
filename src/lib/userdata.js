@@ -32,6 +32,7 @@ const KEY_DOKU = 'dokumente-v1'
 const KEY_VORAB = 'vorab-kosten-v1'
 const KEY_BUCHUNGEN = 'buchungen-v1'
 const KEY_GRAB = 'grabsteine-v1'
+const KEY_DAUER = 'reise-tage-v1'      // Basic: Reisedauer in Tagen (Einführung, Plan), 0 = offen
 const KEY_SKALAR = 'skalar-stand-v1' // wann Startdatum / Budget zuletzt von Hand geändert wurden
 const KEY_ROUTE_ALT = 'eigene-route-v1' // alte Einzel-Route (Migration)
 const KEY_ZUSAMMEN = 'vacation-zusammengefuehrt-v1' // Merker: Ost-Töpfe sind übernommen
@@ -127,6 +128,8 @@ export const urlaubJournal = writable([])
 export const urlaubStart = writable(U_START_DEFAULT)
 /** Gesamt-Reisebudget in EUR (0 = nicht gesetzt). */
 export const reiseBudget = writable(0)
+/** Reisedauer in Tagen ab dem Reisebeginn (0 = noch offen). Zeigt den Zeitraum schon vor der ersten Etappe. */
+export const reiseTage = writable(0)
 /** Änderungsstempel der Einzelwerte: { gesamtStart: iso, reiseBudget: iso } — fürs Zusammenführen. */
 export const skalarStand = writable({})
 /** Nach dem Start aus dem Notspeicher Gerettetes (für einen Hinweis in der App) oder null. */
@@ -241,6 +244,8 @@ export async function initUserData() {
     }
     const bg = await idbGet(KEY_BUDGET)
     if (typeof bg === 'number') reiseBudget.set(bg)
+    const rt = await idbGet(KEY_DAUER)
+    if (typeof rt === 'number') reiseTage.set(rt)
     const vb = await idbGet(KEY_VORB)
     if (vb && typeof vb === 'object') vorbereitung.set({ checked: vb.checked || {}, custom: vb.custom || [] })
     const dk = await idbGet(KEY_DOKU)
@@ -275,6 +280,7 @@ export async function initUserData() {
   autoSave(wanderungen, KEY_WANDER)
   autoSave(checkins, KEY_CHECKINS)
   autoSave(reiseBudget, KEY_BUDGET)
+  autoSave(reiseTage, KEY_DAUER)
   autoSave(vorbereitung, KEY_VORB)
   autoSave(dokumente, KEY_DOKU)
   autoSave(vorabKosten, KEY_VORAB)
@@ -283,6 +289,7 @@ export async function initUserData() {
   autoSave(skalarStand, KEY_SKALAR)
   beobachteSkalar(gesamtStart, 'gesamtStart')
   beobachteSkalar(reiseBudget, 'reiseBudget')
+  beobachteSkalar(reiseTage, 'reiseTage')
   grabsteineAufraeumen()
 }
 
@@ -1001,6 +1008,7 @@ function baueBackupPayload() {
     wanderungen: get(wanderungen),
     checkins: get(checkins),
     reiseBudget: get(reiseBudget),
+    reiseTage: get(reiseTage),
     vorbereitung: get(vorbereitung),
     dokumente: get(dokumente),
     vorabKosten: get(vorabKosten),
@@ -1096,7 +1104,7 @@ export function leseBackup(file) {
  * echte Lauf — die Vorschau kann deshalb nicht andere Zahlen zeigen als das Ergebnis.
  */
 // Was „noch nie eingestellt" bedeutet — beim Zusammenführen schlägt das nie einen echten Wert.
-const GRUNDWERTE = { gesamtStart: START_DEFAULT, reiseBudget: 0 }
+const GRUNDWERTE = { gesamtStart: START_DEFAULT, reiseBudget: 0, reiseTage: 0 }
 
 // Eingelesene Dateien können aus der Oberfläche als Svelte-Proxy kommen. Die lassen sich
 // nicht in IndexedDB speichern — also vor jeder Verarbeitung in reine Daten verwandeln.
@@ -1179,6 +1187,7 @@ function uebernehmeRoh(p) {
     fuehreOstDatenZusammen(p.urlaubOrte || [], p.urlaubReisen || [], p.urlaubJournal || [])
   }
   if (typeof p.reiseBudget === 'number') reiseBudget.set(p.reiseBudget)
+  if (typeof p.reiseTage === 'number') reiseTage.set(p.reiseTage)
   if (p.vorbereitung && typeof p.vorbereitung === 'object') vorbereitung.set({ checked: p.vorbereitung.checked || {}, custom: p.vorbereitung.custom || [] })
   if (Array.isArray(p.dokumente)) dokumente.set(p.dokumente)
   if (Array.isArray(p.vorabKosten)) vorabKosten.set(p.vorabKosten)
