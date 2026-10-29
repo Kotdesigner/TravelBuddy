@@ -119,6 +119,58 @@
   let mapGeladen = $state(false)
   let marker = []
 
+  // ---------- Straßen ----------
+  // Rangfolge nach dem Protomaps-Schema (`kind`, `kind_detail`): Highway und Fernstraße breit und
+  // kräftig, Haupt- und Verbindungsstraßen mittel, Nebenstraßen schmal, Pisten und Wege gestrichelt.
+  // Jede Straße bekommt einen dunklen Rand, damit sie sich vom hellen Land abhebt (Kontrast des
+  // Rands zum Land 3,5 : 1 bis 7,5 : 1). Straßennummern (`shield_text`) stehen als Schild auf der
+  // Linie, Straßennamen erst ab Zoomstufe 12 (in den Kacheln für WA ohnehin nur die Nummern).
+  const RANG = ['match', ['get', 'kind_detail'],
+    ['motorway', 'trunk'], 4, ['motorway_link', 'trunk_link', 'primary'], 3, ['primary_link', 'secondary'], 2.5,
+    ['secondary_link', 'tertiary'], 2, ['tertiary_link'], 1.5, 1]
+  const HAUPT = ['in', ['get', 'kind'], ['literal', ['highway', 'major_road']]]
+  const NEBEN = ['==', ['get', 'kind'], 'minor_road']
+  const PISTE = ['any', ['==', ['get', 'kind'], 'path'], ['in', ['get', 'kind_detail'], ['literal', ['track', 'unclassified']]]]
+  // Breite in px: wächst mit dem Zoom, multipliziert mit dem Rang der Straße. `rand` legt die
+  // Breite des Rands dazu; MapLibre erlaubt `zoom` nur ganz außen, daher je Stufe eingerechnet.
+  const breite = (faktor = 1, rand = 0) => ['interpolate', ['exponential', 1.6], ['zoom'],
+    ...[[4, 0.35], [8, 0.8], [11, 1.6], [14, 3.4]].flatMap(([z, b]) => [z, ['+', ['*', b * faktor, RANG], rand]])]
+  const FUELLUNG = ['match', ['get', 'kind_detail'],
+    ['motorway', 'motorway_link', 'trunk', 'trunk_link'], '#c8551f',
+    ['primary', 'primary_link', 'secondary', 'secondary_link'], '#e08a3c', '#ffffff']
+  // Versorgungspunkte unter Straßennamen und -nummern legen: obere Symbol-Ebenen werden zuerst
+  // platziert, die Nummern verschwinden sonst zwischen den Punkten.
+  const unterStrassenSchrift = () => (map?.getLayer('strasse-name') ? 'strasse-name' : undefined)
+  function strassenEbenen() {
+    const quelle = { source: 'protomaps', 'source-layer': 'roads' }
+    const rund = { 'line-cap': 'round', 'line-join': 'round' }
+    return [
+      { id: 'strasse-faehre', type: 'line', ...quelle, filter: ['==', ['get', 'kind'], 'ferry'],
+        paint: { 'line-color': '#2f6f99', 'line-width': 1.2, 'line-dasharray': [3, 2] } },
+      { id: 'strasse-bahn', type: 'line', ...quelle, minzoom: 8, filter: ['==', ['get', 'kind'], 'rail'],
+        paint: { 'line-color': '#6f6a64', 'line-width': ['interpolate', ['linear'], ['zoom'], 8, 0.6, 14, 1.6], 'line-dasharray': [4, 2] } },
+      { id: 'strasse-piste', type: 'line', ...quelle, minzoom: 9, filter: PISTE, layout: rund,
+        paint: { 'line-color': '#8a6a4a', 'line-width': ['interpolate', ['linear'], ['zoom'], 9, 0.8, 14, 2.2], 'line-dasharray': [2, 1.5] } },
+      { id: 'strasse-neben-rand', type: 'line', ...quelle, minzoom: 10, filter: ['all', NEBEN, ['!', PISTE]], layout: rund,
+        paint: { 'line-color': '#a0785a', 'line-width': breite(0.8, 1.4) } },
+      { id: 'strasse-haupt-rand', type: 'line', ...quelle, filter: HAUPT, layout: { ...rund, 'line-sort-key': RANG },
+        paint: { 'line-color': ['case', ['>=', RANG, 2.5], '#7a3b1e', '#a0785a'], 'line-width': breite(1, 1.6) } },
+      { id: 'strasse-neben', type: 'line', ...quelle, minzoom: 10, filter: ['all', NEBEN, ['!', PISTE]], layout: rund,
+        paint: { 'line-color': '#ffffff', 'line-width': breite(0.8) } },
+      { id: 'strasse-haupt', type: 'line', ...quelle, filter: HAUPT, layout: { ...rund, 'line-sort-key': RANG },
+        paint: { 'line-color': FUELLUNG, 'line-width': breite() } },
+      { id: 'strasse-name', type: 'symbol', ...quelle, minzoom: 12, filter: ['has', 'name'],
+        layout: { 'symbol-placement': 'line', 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Regular'], 'text-size': 11, 'symbol-spacing': 280 },
+        paint: { 'text-color': '#4a3424', 'text-halo-color': '#fffdf8', 'text-halo-width': 1.6 } },
+      // Straßennummer als kleines Schild: weiße Schrift auf dunklem Rand (Kontrast 8,5 : 1)
+      { id: 'strasse-nummer', type: 'symbol', ...quelle, minzoom: 6, filter: ['all', HAUPT, ['has', 'shield_text']],
+        layout: { 'symbol-placement': 'line', 'text-field': ['get', 'shield_text'], 'text-font': ['Noto Sans Regular'],
+          'text-size': ['interpolate', ['linear'], ['zoom'], 6, 10.5, 10, 12.5, 13, 14], 'text-rotation-alignment': 'viewport',
+          'symbol-spacing': ['interpolate', ['linear'], ['zoom'], 6, 220, 12, 420], 'text-padding': 6 },
+        paint: { 'text-color': '#ffffff', 'text-halo-color': '#7a3b1e', 'text-halo-width': 3.5 } },
+    ]
+  }
+
   // Eigener, schlanker Kartenstil auf Basis des Protomaps-Kachelschemas.
   // Bewusst ausdrucks-arm gehalten (maximale Kompatibilität).
   function styleFor(region) {
@@ -140,7 +192,7 @@
         // zur Fläche — gerade Kante von Anfang bis Ende → blaue Keile übers Land. Daher nur Polygone.
         { id: 'wasser', type: 'fill', source: 'protomaps', 'source-layer': 'water', filter: ['==', '$type', 'Polygon'], paint: { 'fill-color': '#a2cae0' } },
         { id: 'fluesse', type: 'line', source: 'protomaps', 'source-layer': 'water', filter: ['==', '$type', 'LineString'], paint: { 'line-color': '#8fbdd6', 'line-width': 1 } },
-        { id: 'strassen', type: 'line', source: 'protomaps', 'source-layer': 'roads', paint: { 'line-color': '#e2b877', 'line-width': 1 } },
+        ...strassenEbenen(),
         { id: 'grenze', type: 'line', source: 'protomaps', 'source-layer': 'boundaries', paint: { 'line-color': '#b09ab5', 'line-width': 0.7 } },
         {
           id: 'ort-label', type: 'symbol', source: 'protomaps', 'source-layer': 'places',
@@ -324,7 +376,7 @@
           'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 3, 0.4, 7, 1, 11, 1.5],
           'circle-opacity': 0.95,
         },
-      })
+      }, unterStrassenSchrift())
       map.addLayer({
         id: 'poi-lyr', type: 'symbol', source: 'pois', minzoom: 10,
         layout: {
@@ -342,7 +394,7 @@
           'text-optional': true,
         },
         paint: { 'text-color': '#33322e', 'text-halo-color': '#ffffff', 'text-halo-width': 1.4 },
-      })
+      }, unterStrassenSchrift())
       map.on('click', poiKlick)
       map.on('mousemove', (e) => {
         const { x, y } = e.point

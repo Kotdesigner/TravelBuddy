@@ -90,5 +90,22 @@ const ebene = (id) => (stil.match(new RegExp(`\\{ id: '${id}'[^\\n]*`)) || [''])
 p('Wasser-Füllung nimmt nur Flächen', /type: 'fill'/.test(ebene('wasser')) && ebene('wasser').includes("filter: ['==', '$type', 'Polygon']"), ebene('wasser'))
 p('Flüsse als eigene Linien-Ebene', /type: 'line'/.test(ebene('fluesse')) && ebene('fluesse').includes("'source-layer': 'water'") && ebene('fluesse').includes("filter: ['==', '$type', 'LineString']"), ebene('fluesse'))
 
+console.log('\n7  Kartenstil: Straßen nach Rang, mit Rand und Nummern')
+{
+  const kontrast = (a, b) => {
+    const l = (h) => { const c = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((x) => (x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] }
+    const [x, y] = [l(a), l(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05)
+  }
+  const LAND = '#f6f0e2'
+  p('keine einheitliche 1-px-Straße mehr', !/id: 'strassen', type: 'line'/.test(stil))
+  for (const id of ['strasse-haupt-rand', 'strasse-haupt', 'strasse-neben-rand', 'strasse-neben', 'strasse-piste', 'strasse-bahn', 'strasse-faehre', 'strasse-name', 'strasse-nummer'])
+    p(`Ebene ${id} vorhanden`, stil.includes(`id: '${id}'`))
+  p('Rand der Hauptstraßen hebt sich ab (≥ 3 : 1)', kontrast('#7a3b1e', LAND) >= 3 && kontrast('#a0785a', LAND) >= 3, `${kontrast('#7a3b1e', LAND).toFixed(1)} / ${kontrast('#a0785a', LAND).toFixed(1)}`)
+  p('Pisten gestrichelt und lesbar (≥ 3 : 1)', ebene('strasse-piste').includes('line-dasharray') || /strasse-piste[\s\S]{0,300}line-dasharray/.test(stil), kontrast('#8a6a4a', LAND).toFixed(1))
+  p('Straßennummer als Schild lesbar (≥ 4,5 : 1)', kontrast('#ffffff', '#7a3b1e') >= 4.5)
+  p('Versorgungspunkte liegen unter Straßennamen und -nummern', (stil.match(/unterStrassenSchrift\(\)\)/g) || []).length === 2)
+  p('Zoom nur ganz außen in den Breiten (MapLibre-Regel)', !/\['\+', breite\(/.test(stil))
+}
+
 console.log(`\n${'═'.repeat(46)}\n  ${ok} bestanden · ${bad} gescheitert\n`)
 process.exit(bad ? 1 : 0)
