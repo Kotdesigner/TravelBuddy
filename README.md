@@ -35,7 +35,8 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 | ⛽ **Knows where it gets tight** | The longest stretch without fuel, long sections without water, the latest departure to arrive before sunset. |
 | 🔥 **Warns you in time** | Official fire, flood and storm warnings, plus road closures on your route. |
 | 📍 **144 hand-picked places** | With photos, seasonal tips, sun times and labels like "must-see", "hidden gem" or "4WD only". |
-| 📖 **Keeps what you experience** | A logbook with photos, kilometres and wildlife that turns into a travel journal, a trip film and a travel report. |
+| 🎵 **Plays where you are** | Collects music from every place you pass into your own Spotify playlist: local bands, their most-played song first. |
+| 📖 **Keeps what you experience** | A logbook with 16 modules, from the fly factor to the roadkill counter, that turns into a travel journal, a trip film and a travel report. |
 | 🔒 **Yours alone** | No account, no server, no tracking. All data stays on your device. |
 
 ---
@@ -87,31 +88,75 @@ The first time you open TravelBuddy, a setup assistant walks you through eight s
 - **Stages and routes:** stages are periods with dates, routes are the drives within them. New stops go where they add the least detour, and you can drag to reorder.
 - **What the app works out for every route:** distance and driving time, the longest stretch without fuel, long sections without water, sights up to 25 km off the road, weather along the way.
 - **Driving days:** distance, driving time with breaks and the latest departure to arrive before sunset. Wildlife is out at dusk.
-- **Route ideas** for the south and north loops from Perth, **hikes**, a **calendar** to print and as a spreadsheet.
+- **Trip map and 3D globe:** all stages and routes with numbered stops, flights as great circles. **"Play trip"** animates your whole journey.
+- **Route ideas** for the south and north loops from Perth, **hikes** with status, the **calendar** as a print PDF and as a real Excel file, the **map as a print image** in the size you need.
+- **Import** your travel calendar, and bookings fall into place by themselves.
+
+### 📍 Places
+- **144 hand-picked places** with photos, seasonal tips and labels like "must-see", "hidden gem" or "4WD only".
+- **Sun and stars at every place:** sunrise and sunset, golden and blue hour, moon phase, Milky Way and how good tonight is for star photos.
+- **Add your own places:** the app suggests matches from OpenStreetMap and fetches coordinates, photo and description from Wikipedia on its own.
+- **Your notes and reports** stay with each place. "Plan in" puts a place into your stage.
 
 ### 🚙 On the road
 - **Offline map** for all of Australia, in detail the west coast, the east coast, Melbourne, Cairns and the Whitsundays.
 - **Supplies:** fuel, water, toilets, camps, rest areas, shops, workshops and clinics along the route, with the route kilometre.
-- **Hazards:** warnings from Western Australia, Victoria and Queensland, plus **WA road conditions** with closures on your route.
-- **Emergency,** even offline: your location ready to read out, emergency numbers, the nearest clinic and workshop.
-- **Sun and stars:** golden and blue hour, moon phase and the Milky Way at every place.
-- **Local music** lands in your Spotify playlist automatically, bands from the area with their best-known song first.
+- **Hazards:** warnings from Western Australia, Victoria and Queensland in a radius you choose, plus **WA road conditions** with closures on your route.
+- **Emergency,** fully offline: your GPS position ready to copy and read out, nearest help with distance and direction, emergency numbers, sharing your location and an **"I'm OK" log** you can export.
+- **"Ready to go?"** checks before you drive into a dead zone what is really stored offline on this device.
 
-### 📖 Remember
-- **Logbook** with text, photos, voice memo, kilometres, weather and mood. Photos find their day on their own from the image data.
-- **Wildlife:** a collector's album with 20 animals of Western Australia.
-- **Travel journal** to print, **trip film** in portrait format and a **travel report** for family and friends, without bookings, costs or exact coordinates.
+### 📖 The logbook
+One entry per day (or several), sorted by stage, with text, photos and a **voice memo**, or simply **dictate** it (online). Photos find their day, place and route kilometre on their own from the image data. And then it really starts: **16 modules with 72 fields**, fill in whatever fits.
+
+| Module | What goes in |
+|---|---|
+| 📊 **Quick stats** | daily km, temperature and weather, the **fly factor**, signal, song of the day, mood, roadkill density, road trains counted |
+| 💸 **Costs and transport** | 18 categories from fuel to drone, in AU$ or euro, feeding straight into your budget |
+| 👃 **Senses and atmosphere** | "the sound today was …", "I can still smell …", the dominant colour, how the heat and wind felt |
+| 🦘 **Roadside and wildlife** | animals seen alive (with photo, they go to your wildlife album), a **roadkill counter** for 12 species, a counter for **roadside curiosities**: Big Things, odd mailboxes, shoe fences, rust buckets, statues, strange warning signs, and how remote it is to the next stop |
+| 🚐 **Vanlife** | what the photos don't show, what was cooked on the gas stove (with a taste rating), why tonight's campsite was special |
+| 🚿 **Grid, water and emergency** | done without a phone, where and how you showered, where you filled up drinking water |
+| 🔧 **Breakdowns and outback grit** | what you fixed with tape, cable ties and WD-40, where the red dust ended up |
+| 🌌 **Sky and night** | Southern Cross and Milky Way, the sounds of the night, the campfire |
+| ⚠️ **Warning signs and hazards** | the strangest or scariest sign, hazards you faced, and the **official situation** from the authorities captured automatically for that day |
+| 🍻 **Encounters and Aussie culture** | the Aussie word you learned, a nice or weird encounter, a tip from locals |
+| 💭 **Reflection** | "thought X, turned out Y", the highlight away from the tourists, thought of the day, what you're grateful for |
+| 👥 **People** | who you met, new people, the best moment with someone |
+| 🕰️ **Memories then and now** | what changed since last time, what you remember from back then |
+| ⭐ **Experiences** | highlight of the day, special occasion, activity |
+| 🏝️ **Island, beach and nature** | what you saw in the water while snorkelling or diving, sunset and night sky |
+| 🍽️ **Food and drink** | best meal or restaurant with a rating, drink of the day |
+
+**What it turns into:**
+- **Wildlife album:** 20 animals of Western Australia to collect, each sighting with date, place, note and photo.
+- **Read mode** day by day, and **notes** with categories.
+- **Travel journal** to print or as a PDF, with painted globes, photos and the **trip summary** (km, days, animals, costs and much more).
+- **Animated photo collage** of all your photos, offline and without AI.
+- **Trip film** in portrait format, recorded right in the app.
+- **Travel report** as a single file for family and friends, deliberately without bookings, costs and exact coordinates.
+
+### 🎵 Spotify: the soundtrack of your trip
+TravelBuddy collects the music of the places you pass through, **automatically, while you drive**.
+- **Every new place counts:** as soon as you are far enough from the last one (distance, waiting time, radius and tracks per place are up to you), the app looks for music from there.
+- **Really local:** bands that come from the area (MusicBrainz), each with its **most-played song first** (Last.fm), plus Spotify playlists of the area and, with a Last.fm key, the country's charts.
+- **Your taste first:** favourite genres come first, nothing ends up twice in the playlist.
+- **Into your own playlist:** each track is matched exactly on Spotify and added to a playlist in your account, which the app creates for you. A counter on the music icon shows what's new.
+- **No signal? No problem:** places are noted offline and caught up as soon as you're back online, or tap "Catch up now".
+- **In control:** pick a place by hand, see all tracks by place, take single ones out again, or start over and remove them from the playlist. A log shows every step.
+- **Secure:** Spotify login without a password in the app (PKCE), the token stays on your device, and the location history can be deleted at any time.
+- Needs **Spotify Premium** and your own free app on developer.spotify.com. It runs while TravelBuddy is open.
 
 ### 🎟️ Organise
-- **Booking from email:** paste the confirmation, and date, place, booking number and price are recognised.
+- **Booking from email:** paste the confirmation, and date, time, place, booking number and price are recognised and attached to the right stage.
 - **Tickets and documents** open offline, protected by **Face ID, Touch ID or Windows Hello** if you like. They never leave the device.
-- **Budget in euro and AU$** at the daily rate, an outback packing list, a pre-departure checklist and the "Ready to go?" offline check.
+- **Trip preparation** with a countdown and a ready-made checklist (weeks before, just before, departure day) plus your own points, **documents** with expiry dates and warnings.
+- **Budget in euro and AU$** at the daily rate, pre-trip costs, an outback **packing list**.
+- **Backup and sync** between Mac and iPhone: importing merges and shows beforehand what will change. Nothing gets lost.
 - **One search for everything:** places, days, animals, bookings, notes.
 
-### ✨ Readable for everyone
-- **Text size and overall size,** four steps each, set separately.
-- **Light and dark,** German and English, usability checked against WCAG 2.2 AA.
-- And a few small games hide in the search field. 🦘
+### ✨ Readable and fun
+- **Text size and overall size,** four steps each, set separately. **Light and dark,** German and English, usability checked against WCAG 2.2 AA.
+- **Australia quiz** with five levels, a **manual** as a PDF in the app, and a few small games hiding in the search field. 🦘
 
 ---
 
@@ -257,7 +302,8 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 | ⛽ **Rechnet mit, wo es knapp wird** | Die längste Strecke ohne Tankstelle, lange Abschnitte ohne Wasser, die späteste Abfahrt vor Sonnenuntergang. |
 | 🔥 **Warnt rechtzeitig** | Amtliche Warnungen zu Feuer, Flut und Unwetter, dazu Straßensperrungen auf deiner Route. |
 | 📍 **144 handverlesene Orte** | Mit Bildern, Saison-Tipps, Sonnenzeiten und Markierungen wie „Muss-Sehen“, „Geheimtipp“ oder „Nur 4WD“. |
-| 📖 **Hält fest, was du erlebst** | Logbuch mit Fotos, Kilometern und Tieren, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
+| 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
+| 📖 **Hält fest, was du erlebst** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
 | 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
 
 ## In einer Minute startklar
@@ -270,31 +316,75 @@ Beim ersten Öffnen führt dich ein Einrichtungsassistent in acht kurzen Schritt
 - **Etappen und Routen:** Etappen sind Zeitabschnitte mit Datum, Routen die Strecken darin. Neue Stopps landen dort, wo sie den kleinsten Umweg machen, die Reihenfolge lässt sich ziehen.
 - **Was die App an jeder Route rechnet:** Kilometer und Fahrzeit, die längste Strecke ohne Tankstelle, lange Strecken ohne Wasser, Sehenswertes bis 25 km neben der Strecke, Wetter an der Strecke.
 - **Fahrtage:** Strecke, Fahrzeit mit Pausen und die späteste Abfahrt, um vor Sonnenuntergang anzukommen. In der Dämmerung ist viel Wild unterwegs.
-- **Routen-Ideen** für die Süd- und Nord-Schleife ab Perth, **Wanderungen**, **Kalender** zum Drucken und als Tabelle.
+- **Reise-Karte und 3D-Weltkugel:** alle Etappen und Routen mit nummerierten Stopps, Flüge als Großkreise. **„Reise abspielen“** lässt die ganze Reise ablaufen.
+- **Routen-Ideen** für die Süd- und Nord-Schleife ab Perth, **Wanderungen** mit Stand, der **Kalender** als Druck-PDF und als echte Excel-Datei, die **Karte als Druckbild** in der gewünschten Größe.
+- **Reisekalender importieren**, und die Buchungen sortieren sich von selbst ein.
+
+### 📍 Orte
+- **144 handverlesene Orte** mit Bildern, Saison-Tipps und Markierungen wie „Muss-Sehen“, „Geheimtipp“ oder „Nur 4WD“.
+- **Sonne und Sterne an jedem Ort:** Auf- und Untergang, goldene und blaue Stunde, Mondphase, Milchstraße und wie gut die Nacht für Sternenfotos ist.
+- **Eigene Orte anlegen:** Die App schlägt passende Treffer aus OpenStreetMap vor und holt Koordinaten, Bild und Beschreibung selbst aus Wikipedia.
+- **Eigene Notizen und Berichte** bleiben am Ort. „Einplanen“ legt einen Ort in deine Etappe.
 
 ### 🚙 Unterwegs
 - **Offline-Karte** für ganz Australien, im Detail Westküste, Ostküste, Melbourne, Cairns und Whitsundays.
 - **Versorgung:** Tankstellen, Wasserstellen, Toiletten, Camps, Rastplätze, Läden, Werkstätten und Kliniken entlang der Route mit Streckenkilometer.
-- **Gefahrenlage:** Warnungen aus Western Australia, Victoria und Queensland, dazu die **Straßenlage WA** mit Sperrungen auf deiner Route.
-- **Notfall,** auch ohne Netz: Standort zum Vorlesen, Notrufnummern, nächste Klinik und Werkstatt.
-- **Sonne und Sterne:** goldene und blaue Stunde, Mondphase und Milchstraße an jedem Ort.
-- **Musik aus der Gegend** wandert automatisch in deine Spotify-Playlist, lokale Bands mit ihrem bekanntesten Song zuerst.
+- **Gefahrenlage:** Warnungen aus Western Australia, Victoria und Queensland im Umkreis deiner Wahl, dazu die **Straßenlage WA** mit Sperrungen auf deiner Route.
+- **Notfall,** komplett offline: GPS-Standort zum Kopieren und Vorlesen, nächste Hilfe mit Entfernung und Richtung, Notrufnummern, Standort teilen und ein **„Ich bin OK“-Protokoll** zum Exportieren.
+- **„Bereit für unterwegs?“** prüft vor der Fahrt ins Funkloch, was wirklich offline auf diesem Gerät liegt.
 
-### 📖 Erinnern
-- **Logbuch** mit Text, Fotos, Sprachnotiz, Kilometern, Wetter und Stimmung. Fotos landen anhand ihrer Bilddaten von selbst am richtigen Tag.
-- **Tierwelt:** ein Sammelalbum mit 20 Tieren Westaustraliens.
-- **Reisetagebuch** zum Drucken, **Reise-Film** im Hochformat und **Reisebericht** für Familie und Freunde, ohne Buchungen, Kosten und genaue Koordinaten.
+### 📖 Das Logbuch
+Ein Eintrag je Tag (oder mehrere), sortiert nach Etappe, mit Text, Fotos und **Sprachnotiz**, oder einfach **diktiert** (online). Fotos finden ihren Tag, ihren Ort und den Streckenkilometer anhand ihrer Bilddaten von selbst. Und dann geht es erst los: **16 Module mit 72 Feldern**, ausgefüllt wird, was passt.
+
+| Modul | Was hineinkommt |
+|---|---|
+| 📊 **Quick-Stats** | Tageskilometer, Temperatur und Wetter, der **Fliegen-Faktor**, Empfang, Song des Tages, Stimmung, Roadkill-Dichte, gezählte Road-Trains |
+| 💸 **Kosten und Verkehr** | 18 Kategorien von Sprit bis Drohne, in AU$ oder Euro, direkt im Budget |
+| 👃 **Sinneseindrücke und Atmosphäre** | „Der Sound heute war …“, „Ich rieche sofort wieder …“, die dominierende Farbe, gefühlte Hitze, Luft und Wind |
+| 🦘 **Straßenrand und Wildlife** | lebend gesehene Tiere (mit Foto, sie landen im Tier-Album), ein **Roadkill-Zähler** für 12 Arten, ein Zähler für **Kuriositäten am Straßenrand**: Big Things, skurrile Briefkästen, Schuh-Zäune, Rostlauben, Statuen, kuriose Warnschilder, dazu wie abgeschieden es bis zum nächsten Stopp ist |
+| 🚐 **Vanlife-Alltag** | was die Fotos nicht zeigen, was auf dem Gaskocher gekocht wurde (mit Geschmacksnote), warum der Stellplatz besonders war |
+| 🚿 **Netz, Wasser und Notfall** | ohne Handy gemacht, wie und wo geduscht, wo Trinkwasser aufgefüllt |
+| 🔧 **Pannen und Outback-Härte** | was mit Tape, Kabelbindern und WD-40 improvisiert wurde, wo der rote Staub gelandet ist |
+| 🌌 **Himmel und Nachtleben** | Kreuz des Südens und Milchstraße, die Geräusche der Nacht, das Lagerfeuer |
+| ⚠️ **Warnschilder und Gefahren** | das kurioseste oder gruseligste Schild, Gefahren, denen du begegnet bist, und die **amtliche Lage** der Behörden für diesen Tag, automatisch festgehalten |
+| 🍻 **Begegnungen und Aussie-Kultur** | das gelernte Aussie-Wort, eine nette oder skurrile Begegnung, der Geheimtipp von Locals |
+| 💭 **Reflexion und Fazit** | „Dachte X, war aber Y“, das Highlight abseits der Touristen, der Gedanke des Tages, wofür du dankbar bist |
+| 👥 **Menschen und Wiedersehen** | wen du getroffen hast, neue Leute, der schönste Moment mit jemandem |
+| 🕰️ **Erinnerungen früher und heute** | was sich verändert hat, woran du dich von damals erinnerst |
+| ⭐ **Erlebnisse und Highlights** | Highlight des Tages, besonderer Anlass, Unternehmung |
+| 🏝️ **Insel, Strand und Natur** | was du beim Schnorcheln oder Tauchen gesehen hast, Sonnenuntergang und Nachthimmel |
+| 🍽️ **Essen und Genuss** | bestes Essen oder Restaurant mit Bewertung, Drink des Tages |
+
+**Was daraus wird:**
+- **Tier-Album:** 20 Tiere Westaustraliens zum Sammeln, jede Sichtung mit Datum, Ort, Notiz und Foto.
+- **Lesemodus** Tag für Tag und **Notizen** mit Kategorien.
+- **Reisetagebuch** zum Drucken oder als PDF, mit gemalten Weltkugeln, Fotos und der **Reise-Bilanz** (Kilometer, Tage, Tiere, Kosten und vieles mehr).
+- **Animierte Foto-Kollage** aus allen Fotos, offline und ohne KI.
+- **Reise-Film** im Hochformat, direkt in der App aufgenommen.
+- **Reisebericht** als eine Datei für Familie und Freunde, bewusst ohne Buchungen, Kosten und genaue Koordinaten.
+
+### 🎵 Spotify: der Soundtrack deiner Reise
+TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, während du fährst**.
+- **Jeder neue Ort zählt:** Sobald du weit genug vom letzten entfernt bist (Abstand, Wartezeit, Umkreis und Titel je Ort stellst du selbst ein), sucht die App Musik von dort.
+- **Wirklich von hier:** Bands, die aus der Gegend stammen (MusicBrainz), jeweils mit ihrem **meistgehörten Song zuerst** (Last.fm), dazu Spotify-Playlists der Gegend und mit Last.fm-Schlüssel die Charts des Landes.
+- **Dein Geschmack zuerst:** Lieblingsstile kommen nach vorn, nichts landet doppelt in der Playlist.
+- **In deine eigene Playlist:** Jeder Titel wird auf Spotify genau gefunden und in eine Playlist in deinem Konto gelegt, die die App für dich anlegt. Ein Zähler am Musik-Symbol zeigt, was neu ist.
+- **Kein Netz? Kein Problem:** Orte werden offline vorgemerkt und nachgeholt, sobald wieder Netz da ist, oder per „Jetzt nachholen“.
+- **Alles im Griff:** Ort von Hand wählen, alle Titel nach Ort ansehen, einzelne wieder herausnehmen oder von vorne anfangen und sie aus der Playlist entfernen. Ein Protokoll zeigt jeden Schritt.
+- **Sicher:** Anmeldung bei Spotify ohne Passwort in der App (PKCE), das Token bleibt auf deinem Gerät, der Standortverlauf lässt sich jederzeit löschen.
+- Braucht **Spotify Premium** und eine eigene, kostenlose App auf developer.spotify.com. Läuft, solange TravelBuddy offen ist.
 
 ### 🎟️ Organisieren
-- **Buchung aus Mail:** Bestätigung einfügen, Datum, Ort, Buchungsnummer und Preis werden erkannt.
+- **Buchung aus Mail:** Bestätigung einfügen, Datum, Uhrzeit, Ort, Buchungsnummer und Preis werden erkannt und an die passende Etappe gehängt.
 - **Tickets und Dokumente** öffnen sich auch offline, auf Wunsch geschützt mit **Face ID, Touch ID oder Windows Hello**. Sie verlassen nie das Gerät.
-- **Budget in Euro und AU$** zum Tageskurs, Packliste fürs Outback, Checkliste vor der Abreise und der Check „Bereit für unterwegs?“.
+- **Reisevorbereitung** mit Countdown und fertiger Checkliste (Wochen vorher, kurz vorher, Abreisetag) plus eigenen Punkten, **Dokumente** mit Ablaufdatum und Warnung.
+- **Budget in Euro und AU$** zum Tageskurs, Vorab-Ausgaben, **Packliste** fürs Outback.
+- **Backup und Abgleich** zwischen Mac und iPhone: Der Import führt zusammen und zeigt vorher, was sich ändert. Nichts geht verloren.
 - **Eine Suche für alles:** Orte, Tage, Tiere, Buchungen, Notizen.
 
-### ✨ Für jeden lesbar
-- **Schriftgröße und Gesamtgröße** in je vier Stufen, getrennt einstellbar.
-- **Hell und dunkel,** Deutsch und Englisch, Bedienung nach WCAG 2.2 AA geprüft.
-- Und im Suchfeld verstecken sich ein paar kleine Spiele. 🦘
+### ✨ Lesbar und mit Spaß
+- **Schriftgröße und Gesamtgröße** in je vier Stufen, getrennt einstellbar. **Hell und dunkel,** Deutsch und Englisch, Bedienung nach WCAG 2.2 AA geprüft.
+- **Australien-Quiz** mit fünf Stufen, **Handbuch** als PDF in der App, und im Suchfeld verstecken sich ein paar kleine Spiele. 🦘
 
 ## Offline und online
 
