@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>TravelBuddy · Handbuch</title>
+<!-- Vorlage für public/handbuch.pdf. Neu erzeugen: sh scripts/handbuch-pdf.sh
+     Inhalt nach dem Code der Basic-Fassung (Stand 29.10.2026). Texte ohne Gedankenstriche in Sätzen. -->
+<style>
+  @font-face { font-family: 'Anton'; src: url('../../public/fonts/anton.woff2') format('woff2'); }
+  @page { size: A4; margin: 18mm 17mm 18mm 17mm; }
+  @page :first { margin: 0; }
+  :root { --terra: #8a3f16; --terra-hell: #c1662f; --sand: #f6efe3; --ink: #2b2621; --muted: #5a5248; --gold: #f0b453; --linie: #e5ddd0; --petrol: #1a5f6a; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font: 10.6pt/1.55 'Iowan Old Style', 'Charter', Georgia, serif; color: var(--ink); }
+  h1, h2, h3 { font-family: 'Anton', Impact, sans-serif; font-weight: 400; letter-spacing: 0.02em; color: var(--terra); }
+  h1 { font-size: 30pt; margin: 0 0 4mm; line-height: 1.05; border-bottom: 1.2pt solid var(--terra); padding-bottom: 2mm; }
+  h2 { font-size: 15pt; margin: 7mm 0 2.5mm; padding-left: 3mm; border-left: 3pt solid var(--gold); break-after: avoid; }
+  h3 { font-size: 10.5pt; color: var(--petrol); margin: 4mm 0 1.5mm; text-transform: uppercase; letter-spacing: 0.06em; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  ul, ol { margin: 0 0 3mm; padding-left: 5mm; }
+  li { margin: 0.8mm 0; }
+  b { color: var(--terra); }
+  code, .k { font: 8.8pt/1.4 Menlo, 'SF Mono', monospace; background: #f4ede2; border: 0.5pt solid var(--linie); border-radius: 3pt; padding: 0 3pt; white-space: nowrap; color: var(--ink); }
+  .teil { font: 8.5pt Menlo, monospace; letter-spacing: 0.3em; color: var(--terra-hell); text-transform: uppercase; margin-top: 2mm; }
+  .seite { break-before: page; }
+  .kasten { background: #faf5ec; border: 0.6pt solid var(--linie); border-left: 3pt solid var(--petrol); border-radius: 4pt; padding: 3mm 4mm; margin: 3mm 0 4mm; break-inside: avoid; }
+  .kasten.warn { border-left-color: var(--terra); background: #fdf1e6; }
+  .kasten p:last-child, .kasten ul:last-child { margin-bottom: 0; }
+  ol.schritte { list-style: none; padding: 0; counter-reset: s; }
+  ol.schritte > li { counter-increment: s; position: relative; padding-left: 8mm; margin: 1.6mm 0; }
+  ol.schritte > li::before { content: counter(s); position: absolute; left: 0; top: 0.2mm; width: 5mm; height: 5mm; border-radius: 50%; background: var(--terra); color: #fff; font: 700 8pt/5mm system-ui, sans-serif; text-align: center; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9.6pt; break-inside: avoid; }
+  th, td { text-align: left; vertical-align: top; padding: 1.6mm 2mm; border-bottom: 0.5pt solid var(--linie); }
+  th { font: 400 9pt 'Anton', sans-serif; letter-spacing: 0.04em; color: var(--petrol); text-transform: uppercase; }
+  td:first-child { white-space: nowrap; font-weight: 600; }
+  .zwei { columns: 2; column-gap: 8mm; }
+  .zwei > * { break-inside: avoid; }
+
+  /* Deckblatt */
+  .deck { height: 297mm; padding: 0 22mm; display: flex; flex-direction: column; justify-content: center; color: #f6efe3;
+    background: radial-gradient(ellipse at 75% 18%, rgba(240,180,83,0.55), transparent 45%), linear-gradient(170deg, #1f2a31 0%, #3a2a1f 26%, #6e3518 48%, #9a4a1c 64%, #c8782e 84%, #dc9a45 100%); }
+  .deck .klein { font: 9pt Menlo, monospace; letter-spacing: 0.35em; text-transform: uppercase; color: #f3dcb8; }
+  .deck .titel { font: 64pt/0.95 'Anton', sans-serif; margin: 6mm 0 0; color: #f6efe3; }
+  .deck .titel span { color: var(--gold); display: block; }
+  .deck .striche { margin: 7mm 0; display: flex; gap: 6mm; }
+  .deck .striche i { width: 11mm; height: 1.6mm; background: var(--gold); display: block; }
+  .deck .unter { font-size: 15pt; line-height: 1.45; max-width: 120mm; color: #fbefe0; }
+  .deck .meta { font: 9pt/1.7 Menlo, monospace; margin-top: 14mm; color: #f8e6cc; }
+
+  /* Inhalt */
+  .inhalt { columns: 2; column-gap: 10mm; margin-top: 6mm; }
+  .inhalt div { display: flex; gap: 3mm; padding: 1.8mm 0; border-bottom: 0.5pt dotted #cdbfa8; break-inside: avoid; }
+  .inhalt span { font: 9pt Menlo, monospace; color: var(--terra-hell); min-width: 7mm; }
+</style>
+</head>
+<body>
+
+<section class="deck">
+  <div class="klein">Handbuch · Bedienung</div>
+  <div class="titel">Travel<span>Buddy</span></div>
+  <div class="striche"><i></i><i></i><i></i><i></i></div>
+  <div class="unter">Reiseplaner, Logbuch und Begleiter für den Roadtrip durch Westaustralien, auf dem Mac und auf dem iPhone, auch ohne Netz.</div>
+  <div class="meta">Basic-Fassung · Stand 29. Oktober 2026</div>
+</section>
+
+<section class="seite">
+  <h1>Inhalt</h1>
+  <div class="inhalt">
+    <div><span>1</span>Loslegen auf Mac und iPhone</div>
+    <div><span>2</span>Aufbau und Bedienung</div>
+    <div><span>3</span>Heute</div>
+    <div><span>4</span>Plan: Etappen und Routen</div>
+    <div><span>5</span>Was die App an einer Route rechnet</div>
+    <div><span>6</span>Karte, Wanderungen, Kalender</div>
+    <div><span>7</span>Orte</div>
+    <div><span>8</span>Logbuch und Tagebuch</div>
+    <div><span>9</span>Mehr: Notfall bis Quiz</div>
+    <div><span>10</span>Belege und Dokumente aufs Gerät</div>
+    <div><span>11</span>Sichern und Mac mit iPhone abgleichen</div>
+    <div><span>12</span>Offline im Outback</div>
+    <div><span>13</span>Wenn etwas hakt</div>
+  </div>
+  <div class="kasten">
+    <p><b>Kurz gesagt:</b> Am Mac planen, das iPhone einmal mit Internet einrichten, unterwegs das iPhone benutzen. Abgeglichen wird über eine Backup-Datei, die beim Import zusammengeführt wird. Nichts landet auf einem fremden Server, es gibt kein Konto und keine Werbung.</p>
+  </div>
+  <div class="kasten">
+    <p><b>Beim ersten Öffnen</b> führt dich eine kurze Einführung durch die App: Reisebeginn festlegen, erste Etappe anlegen, eine Buchung einfügen, Dokumente aufs Gerät laden, Orte entdecken. Jeden Schritt kannst du überspringen. Unter <b>Mehr → 🧭 Einführung noch einmal</b> startet sie erneut.</p>
+  </div>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 1</div>
+  <h1>Loslegen</h1>
+
+  <h2>1 · Auf dem Mac</h2>
+  <ol class="schritte">
+    <li>Die Adresse der App, die du bekommen hast, in Safari oder Chrome öffnen.</li>
+    <li>Die Einführung startet von selbst. Danach liegt alles im Speicher dieses Browsers.</li>
+  </ol>
+
+  <h2>Auf dem iPhone</h2>
+  <ol class="schritte">
+    <li>In <b>Safari</b> die Adresse der App öffnen.</li>
+    <li><b>Teilen</b> antippen, dann „Zum Home-Bildschirm“ und „Hinzufügen“. Das Symbol „TravelBuddy“ erscheint.</li>
+    <li>Die App einmal mit Internet vom Home-Bildschirm öffnen. Danach startet sie auch im Flugmodus.</li>
+  </ol>
+  <div class="kasten">
+    <p><b>Safari und Home-Bildschirm haben getrennte Speicher.</b> Was du im Safari-Tab einträgst, sieht die App auf dem Home-Bildschirm nicht und umgekehrt. Benutze unterwegs nur die App vom Home-Bildschirm. iOS löscht deren Daten nicht von selbst.</p>
+  </div>
+
+  <h3>Neue Version</h3>
+  <p>Ist eine neue Fassung hochgeladen, lädt die App sie beim nächsten Öffnen mit Internet von selbst. Deine Einträge bleiben erhalten. Welche Fassung läuft, steht ganz unten in der Fußzeile, zum Beispiel „Basic · Build 29.10.2026“.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 2</div>
+  <h1>Aufbau und Bedienung</h1>
+
+  <h2>2 · Fünf Bereiche</h2>
+  <table>
+    <tr><th>Bereich</th><th>Was dort ist</th></tr>
+    <tr><td>Heute</td><td>Countdown oder Reisetag, die Fahrt des Tages, Cockpit, Daten und Fakten, Ausgaben, die Weltkugel</td></tr>
+    <tr><td>Plan</td><td>Etappen und Routen, Wanderungen, Offline-Karte, Kalender</td></tr>
+    <tr><td>Orte</td><td>144 Orte in Süden, Norden und Ostküste, Meine Orte, Routen-Ideen</td></tr>
+    <tr><td>Logbuch</td><td>Reisetage, Tagebuch lesen und drucken, Tierwelt, Notizen</td></tr>
+    <tr><td>Mehr</td><td>Notfall, Reisevorbereitung, Gefahrenlage, Packliste, Praxis, Musik, Reisebericht teilen, Quiz, dazu Backup, Import, Handbuch und Design</td></tr>
+  </table>
+
+  <h3>iPhone</h3>
+  <ul>
+    <li>Unten die schwebende Leiste mit den fünf Bereichen, rechts daneben der runde <b>Such-Knopf</b>.</li>
+    <li>„Mehr“ öffnet ein Blatt von unten. Schließen: daneben tippen oder nach unten wischen.</li>
+    <li>Oben unter dem Titel die Unterpunkte des Bereichs als wischbare Leiste.</li>
+    <li>Zurück: vom linken Rand wischen.</li>
+  </ul>
+  <h3>Mac (ab 900 Pixel Breite)</h3>
+  <ul>
+    <li>Links eine Seitenleiste mit denselben Bereichen und ihren Unterpunkten, unten Backup, Import, Handbuch und Design (Auto, Hell, Dunkel).</li>
+    <li>Suche mit <code>⌘K</code> oder <code>/</code>. Zurück geht mit der Zurück-Taste des Browsers.</li>
+  </ul>
+  <h3>Sprache</h3>
+  <p>Deutsch oder Englisch, ohne Wahl wie das Gerät. Umschalten unten in der Seitenleiste (Mac) oder im Mehr-Blatt unter „🌐 Sprache“ (iPhone).</p>
+
+  <h2>Suche</h2>
+  <p>Sucht Orte, Tage, Tiere, Wanderungen, Buchungen, Etappen, Notizen und Listen. Ein Datum wie <code>3.12.</code> oder <code>Tag 5</code> zeigt den Tag. Unter dem Suchfeld filtern die Etiketten <b>MUSS-SEHEN</b>, <b>GEHEIMTIPP</b>, <b>NUR-4WD</b>, <b>EXPEDITION</b> und <b>MEIN ORT</b>. Ein Treffer springt zur Kachel und hebt sie kurz hervor. Am iPhone sitzt das Suchfeld unten über der Tastatur. Unten im Blatt stellst du das Datum für die Sonnenzeiten aller Orte ein.</p>
+
+  <h2>Rückfragen und Löschen</h2>
+  <p>Vor jedem Löschen fragt die App nach, der Knopf dafür ist rot. Nach einem Import lässt sich die Änderung mit „Rückgängig“ zurücknehmen.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 3</div>
+  <h1>Heute</h1>
+  <h2>3 · Was „Heute“ zeigt</h2>
+  <table>
+    <tr><th>Wann</th><th>Inhalt</th></tr>
+    <tr><td>Vor der Reise</td><td>Tage bis zur Abreise, die nächsten drei Buchungen, Stand der Reisevorbereitung</td></tr>
+    <tr><td>Unterwegs</td><td>„Tag N von M“, die Etappe, was heute und morgen gebucht ist, die <b>Fahrt des Tages</b> und der Knopf „Heute ins Logbuch schreiben“</td></tr>
+    <tr><td>Danach</td><td>Tage unterwegs, wie viele davon im Logbuch stehen, der Weg zum Tagebuch</td></tr>
+  </table>
+  <h3>Fahrt des Tages</h3>
+  <p>Steht heute eine Fahrt an, zeigt eine Zeile Strecke, Fahrzeit mit Pausen und die <b>späteste Abfahrt</b>, um vor Sonnenuntergang anzukommen. In der Dämmerung ist auf australischen Straßen viel Wild unterwegs. Wird es zu knapp, warnt die Zeile und schlägt vor, die Fahrt auf mehrere Tage aufzuteilen, mit genauen Teilstrecken.</p>
+  <h3>Cockpit, Daten und Fakten</h3>
+  <ul>
+    <li>Quiz-Stufe, ab dem ersten Logbuchtag Reisetage, km, Temperatur, Fliegen, Kängurus und Roadkill.</li>
+    <li>Gefahrene und geflogene km, Sprit und Spritkosten (geschätzt mit 13 Litern je 100 km), Stunden am Steuer, Vergleiche.</li>
+  </ul>
+  <h3>Ausgaben und Budget</h3>
+  <p>Trage ein Budget in Euro ein. Die App zählt die Kosten aus dem Logbuch und die Vorab-Ausgaben zusammen und zeigt alles in Euro und AU$, umgerechnet zum Tageskurs des jeweiligen Tages. Ohne Netz rechnet sie mit einem Näherungskurs und sagt das dazu. Alle angezeigten Teilbeträge ergeben genau die angezeigte Summe.</p>
+  <h3>Meine Reise-Karte</h3>
+  <ul>
+    <li>Eine Weltkugel mit allen Etappen und Routen. Zwei Finger drehen sie, ein Finger scrollt die Seite.</li>
+    <li><b>„Reise abspielen“</b> fliegt die Etappen der Reihe nach an. <b>„🎬 Film“</b> nimmt daraus ein Video im Hochformat auf, mit bis zu drei Fotos je Etappe, zum Teilen oder Speichern.</li>
+    <li>Route antippen: Infofenster mit km, Fahrzeit, Fotos und Logbuch. „Zur Reise“ springt in den Plan.</li>
+    <li>Ist das Gerät zu langsam für die Kugel, schaltet die Karte selbst auf flach. Der Knopf 🗺️/🌍 wechselt von Hand.</li>
+  </ul>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 4</div>
+  <h1>Plan</h1>
+  <h2>4 · Etappen und Routen</h2>
+  <div class="kasten">
+    <p><b>Etappe</b> = ein Zeitabschnitt mit festem Datum, zum Beispiel „Roadtrip Westaustralien, 13.12. bis 27.01.“. Die meisten kommen aus deinem Reisekalender.</p>
+    <p><b>Route</b> = eine Strecke mit Stopps innerhalb einer Etappe, zum Beispiel „Coral Coast: Perth → Exmouth“. Eine Route verlängert die Reise nicht.</p>
+  </div>
+  <ul>
+    <li><b>Etappen</b>: Liste mit Datum, km, Routen, Wanderungen, Buchungen und wie viele Tage im Logbuch stehen. Die App weist auf Lücken und Überschneidungen hin.</li>
+    <li>Etappe antippen: Name, Farbe, Datum, Gebuchtes mit 📎 Belegen, Routen, Wanderungen, Logbuch.</li>
+    <li><b>„+ Neu“</b> legt eine Etappe, Route, Wanderung oder einen Logbuchtag an, mit nur den nötigsten Feldern.</li>
+  </ul>
+  <h3>Route bearbeiten</h3>
+  <ol class="schritte">
+    <li>Route aufklappen, oben 🚗 Auto oder ✈️ Flug wählen.</li>
+    <li>„Stopp hinzufügen“ sucht über alle Orte und WA-Städte. Ein neuer Stopp landet dort, wo er den kleinsten Umweg macht.</li>
+    <li>Reihenfolge am Griff ≡ ziehen. Stopp antippen zeigt Foto und Entfernen.</li>
+    <li>„📍 In Google Maps öffnen“ übergibt die Route zum Navigieren (bis 11 Stopps).</li>
+  </ol>
+  <p>An jedem Stopp steht „x km ab …“. Alle Abschnitte zusammen ergeben genau die km im Kopf der Route.</p>
+  <h3>Ort aus der Sammlung einplanen</h3>
+  <p>Auf einer Ortskachel „➕ Einplanen“: Die App bietet die Routen nach Nähe an, mit Abstand zur Strecke, dazu „Neue Route mit diesem Ort“ und „Als Wanderung merken“.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 5</div>
+  <h1>Was die App an einer Route rechnet</h1>
+  <h2>5 · Straßenroute und Luftlinie</h2>
+  <div class="kasten warn">
+    <p><b>Die echte Straßenroute kommt online</b> (Dienst OSRM): km, Fahrzeit und Verlauf. <b>Stopps lassen sich auch ohne Netz hinzufügen:</b> Die App schätzt die Route sofort aus der Luftlinie und passt sie an die echte Straße an, sobald wieder Netz da ist. Öffne jede Route einmal mit Internet, dann sind km und Hinweise gespeichert. „Bereit für unterwegs?“ zeigt, welche Routen noch fehlen.</p>
+  </div>
+  <table>
+    <tr><th>Hinweis</th><th>Was er sagt</th></tr>
+    <tr><td>⛽ Tankstellen</td><td>Längste Strecke ohne Tankstelle und jede lange Strecke mit letzter und nächster Tankstelle beim Namen. Rot, wenn sie länger ist als deine Reichweite (einstellbar, Vorgabe 500 km).</td></tr>
+    <tr><td>Versorgung unterwegs</td><td>Tankstellen, Wasser, Toiletten, Camps, Rastplätze, Läden, Werkstätten und Kliniken neben der Strecke mit Streckenkilometer, nach Abschnitten. Lange Strecken ohne Sprit oder Wasser rot. Offline aus OpenStreetMap.</td></tr>
+    <tr><td>Fahrtage</td><td>Je Fahrtag km, Fahrzeit mit Pausen und späteste Abfahrt vor Sonnenuntergang. Zu lange Tage mit Vorschlag zum Aufteilen.</td></tr>
+    <tr><td>Sehenswertes</td><td>Orte aus der Sammlung bis 25 km neben der Route, mit „+“ an der richtigen Stelle einplanen oder ausblenden.</td></tr>
+    <tr><td>🌦️ Wetter</td><td>Vorhersage an der Strecke für die nächsten drei Tage (braucht Netz).</td></tr>
+    <tr><td>Warnungen</td><td>Amtliche Warnungen im eingestellten Umkreis um die Route.</td></tr>
+  </table>
+  <h3>Wie die Zahlen zusammenpassen</h3>
+  <ul>
+    <li>Alle Streckenkilometer einer Route sind auf ihre Länge laut Straßenroute geeicht. Das Ziel liegt genau bei den km im Kopf.</li>
+    <li>Jede Position wird einmal auf ganze km gerundet, Längen sind die Differenz. „von km 528 bis 826“ heißt also genau 298 km.</li>
+    <li>Tank-Hinweis und Versorgung zeigen immer dieselbe Zahl, weil sie aus derselben Rechnung kommen.</li>
+  </ul>
+  <p>Tankstellen gelten bis 5 km neben der Strecke, alles andere bis 3 km. Öffnungszeiten und ob Wasser trinkbar ist, vor Ort prüfen.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 6</div>
+  <h1>Karte, Wanderungen, Kalender</h1>
+  <h2>6 · Offline-Karte (Plan → Karte)</h2>
+  <ul>
+    <li>Eine Karte für ganz Australien. Beim Hineinzoomen lädt sie selbst den genaueren Kartenteil: Westküste, Ostküste, Melbourne, Cairns, Whitsundays.</li>
+    <li><b>„📥 Ganz Australien sichern“</b> legt alle Kartenteile aufs Gerät (rund 80 MB). Einmal mit WLAN tippen und warten.</li>
+    <li>Leiste „Zeigen“: Orte, ⛽ Tankstellen, 💧 Wasser, 🅿️ Rastplätze, 🏕️ Camping, 🚻 Toiletten, 🛒 Läden, 🔧 Werkstätten, 🏥 Kliniken, mit Anzahl im Ausschnitt. Punkt antippen: Name, Koordinaten, Google Maps oder Apple Karten.</li>
+    <li>Die Gelände-Schattierung kommt nur online.</li>
+  </ul>
+  <h2>Wanderungen</h2>
+  <p>Wunschliste, geplant oder gemacht. Datum und Uhrzeit, Startpunkt mit Navigation, Länge, Dauer, Höhenmeter, Wasser, Schwierigkeit, Bewertung und Fotos. Wanderungen mit Datum stehen am richtigen Tag im Logbuch.</p>
+  <h2>Kalender</h2>
+  <p>„Mein Gesamtplan“ mit allen Etappen, Buchungen und Wanderungen. <b>📄 PDF</b> erzeugt eine Druckfassung, <b>📊 Excel</b> eine Tabelle mit einer Zeile je Termin. Darunter der ursprüngliche Vorschlag als Referenz.</p>
+
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 7</div>
+  <h1>Orte</h1>
+  <h2>7 · Die Ortskachel</h2>
+  <ul>
+    <li>Bild, Etiketten, Beschreibung und was im Dezember und Januar dort gilt (Saison).</li>
+    <li><b>Sonne und Wetter</b>: Auf- und Untergang, blaue und goldene Stunde, Wetter (online) und der <b>Sternenhimmel</b>: Mond, Dunkelheit, Milchstraße.</li>
+    <li>Warnmarke, wenn eine amtliche Warnung den Ort betrifft.</li>
+    <li>💬 öffnet deine Notiz, Fotos und die Logbuchtage zu diesem Ort.</li>
+  </ul>
+  <h3>Ort hinzufügen</h3>
+  <p><b>„+ Ort hinzufügen“</b> (in Süden, Norden, Ostküste und Meine Orte) fragt zuerst, welcher Ort gemeint ist: Beim Tippen erscheinen Vorschläge aus OpenStreetMap mit Typ und Bundesstaat, zum Beispiel „Margaret River · Stadt · Westaustralien“. Gibt es den Ort schon in der App, steht er obenan. Ohne Netz legst du ihn von Hand an.</p>
+  <p>Danach prüfst und passt du an: Name, Symbol, Beschreibung, Koordinaten, Kennzeichnung und Gruppe. Bild und Beschreibung holt die App aus Wikipedia, die <b>Gruppe</b> (Süden, Norden, Ostküste mit Region) wählt sie nach dem nächsten hinterlegten Ort. Aus den Koordinaten kommen Sonnenzeiten, Sterne, Wetter und Gefahrenlage wie bei allen anderen Orten. Der Ort steht danach in seiner Gruppe und unter „Meine Orte“.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 8</div>
+  <h1>Logbuch und Tagebuch</h1>
+  <h2>8 · Tage</h2>
+  <p>Jeder Reisetag ist ein Punkt am farbigen Band seiner Etappe: voll = geschrieben, Ring = noch offen, klein = kommt noch. Der heutige Tag ist größer und wird beim Öffnen angesprungen.</p>
+  <h3>Einen Tag schreiben</h3>
+  <ol class="schritte">
+    <li>„Heute ins Logbuch schreiben“ auf Heute oder „+ Tag“ im Logbuch.</li>
+    <li>Ort oder Strecke des Tages wählen, dann der Text.</li>
+    <li>Dazu Fotos, eine 🎙️ Sprachnotiz, Kurzwerte (km, Wetter, Fliegen, Empfang, Stimmung, Road-Trains) und 16 Themen von Kosten bis Nachthimmel.</li>
+  </ol>
+  <h3>Fotos einsortieren</h3>
+  <p>Mehrere Fotos auf einmal wählen. Die App liest Datum und Ort aus den Bilddaten und legt jedes Foto an den richtigen Tag, in einen vorhandenen oder einen neuen Eintrag.</p>
+  <h2>Tierwelt</h2>
+  <p>Ein Sammelalbum mit 20 Tieren. Sichtung mit Anzahl, Datum, Ort und Foto eintragen, auch direkt im Tageseintrag.</p>
+  <h2>Lesen: das Tagebuch</h2>
+  <ul>
+    <li>Kapitel je Etappe mit Weltkugel, Routen, Orten und Wanderungen. Was gezeigt wird, stellst du oben ein.</li>
+    <li><b>📊 Bilanz</b>: Reisetage, geschriebene Tage, km, Ausgaben, Tiere.</li>
+    <li><b>🖨️ Als Tagebuch drucken oder PDF</b> und <b>✨ Kollage</b> als Diaschau aus deinen Fotos.</li>
+  </ul>
+  <h2>Notizen</h2>
+  <p>Kategorien Notizen, Einkaufen, Routentips, Orga und Kontakte, zum Abhaken und als Textdatei zum Exportieren.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 9</div>
+  <h1>Mehr</h1>
+  <h2>9 · 🆘 Notfall (komplett offline)</h2>
+  <div class="kasten warn">
+    <p><b>Echter Notfall zuerst 000.</b> 112 geht über jedes Mobilnetz, 106 ist der Notruf per SMS, die Royal Flying Doctors erreichst du unter 1800 625 800. Ohne Handynetz hilft nur ein Satelliten-Gerät.</p>
+  </div>
+  <p>Dein Standort zum Vorlesen und Kopieren, nächste Tankstelle, Wasserstelle, Klinik und Werkstatt mit Richtung, dazu „Standort teilen“ und „✅ Ich bin OK“.</p>
+  <h2>🧳 Reisevorbereitung</h2>
+  <ul>
+    <li>Checkliste „Wochen vorher“, „Kurz vorher“, „Abreisetag“ mit eigenen Punkten.</li>
+    <li>Dokumente mit Ablaufdatum, Buchungen mit Belegen (Teil 10), Vorab-Ausgaben.</li>
+    <li><b>„+ Aus Mail“</b>: Text einer Buchungsmail einfügen. Art, Titel, Datum, Uhrzeit, Ort, Buchungsnummer und Preis werden erkannt. Du prüfst und übernimmst.</li>
+    <li><b>„Bereit für unterwegs?“</b> prüft fünf Punkte: Offline-Karten, App und Versorgungspunkte offline, Routen berechnet, Spotify verbunden, letzte Sicherung.</li>
+  </ul>
+  <h2>⚠️ Gefahrenlage</h2>
+  <p>Amtliche Warnungen aus WA, Victoria und Queensland zu Feuer, Flut und Unwetter im eingestellten Umkreis um deine Orte, dazu die <b>Straßenlage WA</b> (Sperrungen von Main Roads, getrennt nach „auf deiner Route“ und „in der Nähe“). Ohne Netz bleibt der letzte Stand sichtbar. Die Wetter-Hinweise darunter sind abgeleitet, keine amtlichen Warnungen.</p>
+  <h2>🎒 Packliste · 🛠️ Praxis · 📤 Teilen · 🇦🇺 Quiz</h2>
+  <p>Packliste fürs Outback zum Abhaken, zum Drucken und als Tabelle. Praxis mit Permits, Tanken und Reifen. <b>Reisebericht teilen</b> macht eine einzelne Datei für Familie und Freunde mit Etappen, Routen, Orten und den Fotos, die du auswählst, ohne Buchungen, Kosten, Dokumente, Kontakte und genaue Koordinaten. Das Quiz hat 50 Fragen in fünf Stufen.</p>
+  <h2>🎵 Musik unterwegs</h2>
+  <p>Sammelt unterwegs Musik aus der Gegend in einer eigenen Spotify-Playlist: Bands aus der Umgebung (MusicBrainz), deine Lieblingsstile zuerst, mit eigenem Last.fm-Schlüssel auch Charts. Braucht <b>Spotify Premium</b> und eine eigene, kostenlose Spotify-App auf developer.spotify.com: dort die Rücksprung-Adresse eintragen, die unter Mehr → Musik steht, die Client-ID in die App übernehmen und einmal „Mit Spotify verbinden“. Gesammelt wird nur bei offener App und „eingeschaltet“, im Entwicklermodus für höchstens fünf Konten.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 10</div>
+  <h1>Belege und Dokumente aufs Gerät</h1>
+  <div class="kasten warn">
+    <p><b>Die Belege liegen nicht im Netz.</b> Tickets, Hotelbestätigungen, Reisepass und Visum tragen Namen und Buchungsnummern. Deshalb ist in der hochgeladenen App kein einziger Beleg. Du legst sie auf jedem Gerät einmal selbst hinein.</p>
+  </div>
+  <ol class="schritte">
+    <li>Mit Internet die App öffnen: <b>Mehr → Reisevorbereitung → 🎟️ Buchungen</b> aufklappen.</li>
+    <li><b>„📂 PDFs auswählen“</b> → in der Dateien-App den Ordner mit deinen Belegen öffnen → oben „Auswählen“ → alle → „Öffnen“. Fotos von Tickets gehen über „Fotos“. Am Mac geht auch „ganzen Ordner“.</li>
+    <li>Die App schlägt für jede Datei den passenden Termin vor. Du bestätigst oder wählst selbst, auch „🪪 Eigene Dokumente“ für Pass und Visum.</li>
+  </ol>
+  <p>Danach öffnet jede 📎 an einer Buchung ihr PDF, auch offline. Reisepass, Visum, Führerschein und Versicherung stehen grün unter <b>🪪 Eigene Dokumente</b>.</p>
+  <ul>
+    <li>Ein Ticket nur als Foto oder Bildschirmfoto: <b>„🖼️ Foto vom Ticket“</b> → Foto wählen oder fotografieren → in der Liste unter „Gehört zu“ den Termin wählen → speichern. Dasselbe gilt für jede Datei, die die App nicht selbst erkennt.</li>
+    <li>Die Belege wandern <b>nicht</b> ins Backup. Nach einem neuen Gerät oder dem Löschen der App den Ordner einfach noch einmal wählen.</li>
+    <li>„löschen“ nimmt alle Belege wieder von diesem Gerät. Die Dateien in iCloud bleiben.</li>
+    <li><b>🔒 Belege schützen:</b> „Mit Face ID schützen“ (Mac: Touch ID) zeigt einen <b>Notfall-Code</b>. Auf Papier schreiben, eintippen, mit Face ID bestätigen. Danach liegen die Belege verschlüsselt auf dem Gerät und öffnen sich nur nach Face ID oder mit dem Code, auch offline. Einmal entsperrt, bleiben sie fünf Minuten offen. Auf iPhone und Mac je einmal einrichten.</li>
+  </ul>
+
+  <div class="teil" style="margin-top:9mm">Teil 11</div>
+  <h1>Sichern und abgleichen</h1>
+  <h2>11 · Backup und Import</h2>
+  <ul>
+    <li><b>💾 Backup</b> speichert eine Datei <code>WA-Reiseplan-Backup_JJJJ-MM-TT.json</code> und öffnet das Teilen-Menü (AirDrop, Mail).</li>
+    <li><b>📂 Import</b> zeigt erst eine Vorschau und <b>führt zusammen</b>: Neues kommt dazu, Ergänzungen werden übernommen, nichts auf diesem Gerät wird gelöscht. Danach geht „Rückgängig“.</li>
+    <li>Bewusst gelöschte Einträge werden mit übertragen. Ein leeres Feld überschreibt nie ein volles.</li>
+    <li>Eine Datei aus der Kalender-App erkennt der Import selbst und baut daraus die Etappen und Buchungen.</li>
+  </ul>
+  <div class="kasten">
+    <p><b>Mac und iPhone gleichen sich nicht automatisch ab.</b> Ablauf: auf dem einen Gerät Backup, per AirDrop schicken, auf dem anderen Import. Wer an derselben Route auf beiden Geräten die Reihenfolge der Stopps ändert, gleicht vorher ab. Belege und Musik-Daten sind nicht im Backup.</p>
+  </div>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 12</div>
+  <h1>Offline im Outback</h1>
+  <h2>12 · Was ohne Netz geht</h2>
+  <div class="zwei">
+    <div>
+      <h3>Geht offline</h3>
+      <ul>
+        <li>Alle deine Daten, Plan, Logbuch, Tagebuch</li>
+        <li>Gespeicherte Routen mit km und Hinweisen</li>
+        <li>Stopps hinzufügen (die Route wird sofort geschätzt)</li>
+        <li>Offline-Karte (gesicherte Teile)</li>
+        <li>Versorgung an der Route, Fahrtage</li>
+        <li>Sonnenzeiten, Sternenhimmel</li>
+        <li>Notfall, Packliste, Quiz</li>
+        <li>Belege, die auf dem Gerät liegen</li>
+        <li>Letzter Stand der Gefahrenlage</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Braucht Netz</h3>
+      <ul>
+        <li>Die echte Straßenroute (bis dahin geschätzt)</li>
+        <li>Wetter und Wetter an der Strecke</li>
+        <li>Neue Warnungen und Straßenlage</li>
+        <li>Tageskurs (sonst Näherung)</li>
+        <li>Vorschläge, Bild und Daten für neue Orte</li>
+        <li>Gelände-Schattierung, Karte auf der Weltkugel</li>
+        <li>Musik unterwegs</li>
+      </ul>
+    </div>
+  </div>
+  <h2>Vor der Abreise</h2>
+  <ol class="schritte">
+    <li>Neue Version aufs iPhone holen (App einmal mit Internet öffnen).</li>
+    <li>Letztes Backup vom Mac importieren.</li>
+    <li>Belege laden und zuordnen.</li>
+    <li>Plan → Karte → „Ganz Australien sichern“.</li>
+    <li>Jede Route einmal mit Netz öffnen, bis km und Hinweise dastehen.</li>
+    <li>„Bereit für unterwegs?“ zeigt fünf von fünf Punkten.</li>
+    <li><b>Flugmodus-Test</b>: App öffnen, einen Beleg antippen, auf der Karte hineinzoomen.</li>
+  </ol>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 13</div>
+  <h1>Wenn etwas hakt</h1>
+  <table>
+    <tr><th>Problem</th><th>Lösung</th></tr>
+    <tr><td>Alte Version</td><td>App schließen und mit Internet neu öffnen. Hilft das nicht: an die Adresse der App <code>/reset.html</code> anhängen, öffnen und den Knopf drücken. Der rote Knopf löscht zusätzlich Karten und Belege.</td></tr>
+    <tr><td>Daten fehlen</td><td>Läuft gerade der Safari-Tab statt der App vom Home-Bildschirm? Beide haben getrennte Speicher. Am Mac: derselbe Browser wie beim Einrichten?</td></tr>
+    <tr><td>Route nur Luftlinie</td><td>Mit Netz die Route öffnen oder „🔄 Neu berechnen“.</td></tr>
+    <tr><td>„x von 6 Kartenteilen“</td><td>Mit WLAN „Ganz Australien sichern“ und warten, bis alles geladen ist.</td></tr>
+    <tr><td>📎 öffnet nichts</td><td>Belege liegen noch nicht auf diesem Gerät: Teil 10.</td></tr>
+    <tr><td>Druck oder PDF startet nicht</td><td>Den Pop-up-Blocker für die App erlauben.</td></tr>
+    <tr><td>Spotify sammelt nicht</td><td>Mehr → Musik: verbunden? „eingeschaltet“? Netz da? Wartende Orte holt „Jetzt nachholen“.</td></tr>
+    <tr><td>Falsche Sprache</td><td>Unten in der Seitenleiste (Mac) oder im Mehr-Blatt (iPhone) umschalten.</td></tr>
+  </table>
+  <h2>Drei kleine Extras</h2>
+  <p>Tippe <code>sn4ke</code>, <code>xoxo</code> oder <code>4444</code> ins Suchfeld.</p>
+  <p style="margin-top:12mm; color: var(--muted); font-size: 9pt">Roadtrip-Designer by Kotdesigner · TravelBuddy Basic · Stand 29. Oktober 2026</p>
+</section>
+
+</body>
+</html>

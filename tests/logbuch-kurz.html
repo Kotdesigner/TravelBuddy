@@ -1,0 +1,83 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logbuch — Kurzansicht & Reihenfolge</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:420px;height:830px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let z=[]
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=50000,st=400){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+document.getElementById('f').onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('#tagebuch'),50000)){p('ABBRUCH',false);return}
+  await warte(3500)
+  d.querySelector('#tagebuch').scrollIntoView(); await warte(800)
+
+  const eintraege=()=>[...d.querySelectorAll('#tagebuch article.je')]
+  const kurz=()=>[...d.querySelectorAll('#tagebuch article.je.zu')]
+  p('Reisetage im Logbuch: '+eintraege().length, eintraege().length>0)
+  p('davon zugeklappt: '+kurz().length+'/'+eintraege().length, kurz().length===eintraege().length)
+
+  // Höhe: zugeklappt muss deutlich kürzer sein
+  const hZu=eintraege()[0]?.getBoundingClientRect().height||0
+  p('Höhe zugeklappt: '+Math.round(hZu)+' px', hZu>0 && hZu<120)
+
+  // Kurzzeile zeigt Datum + Ort
+  const k=d.querySelector('#tagebuch .je-kurz')
+  p('Kurzzeile: '+(k?k.textContent.replace(/\s+/g,' ').trim().slice(0,72):'—'), !!k)
+  p('   Datum sichtbar', !!d.querySelector('#tagebuch .k-datum'))
+
+  // Aufklappen
+  klick(k); await warte(900)
+  const hAuf=eintraege()[0].getBoundingClientRect().height
+  p('nach Aufklappen: '+Math.round(hAuf)+' px', hAuf>hZu*2)
+  p('   Datumsfeld zum Bearbeiten da', !!d.querySelector('#tagebuch .je .kopf input.datum'))
+  // Wieder zu
+  const zuBtn=d.querySelector('#tagebuch .je-zu')
+  p('   Zuklapp-Knopf vorhanden', !!zuBtn)
+  if(zuBtn){ klick(zuBtn); await warte(700)
+    p('   wieder zugeklappt', eintraege()[0].classList.contains('zu')) }
+
+  // Neuer Eintrag → muss GANZ OBEN stehen
+  const vorher=eintraege().length
+  const neuBtn=[...d.querySelectorAll('#tagebuch button')].find(b=>/Neuer Tag/.test(b.textContent))
+  p('Knopf „+ Neuer Tag"', !!neuBtn)
+  klick(neuBtn); await warte(1500)
+  p('Eintrag angelegt: '+vorher+' → '+eintraege().length, eintraege().length===vorher+1)
+  const erster=eintraege()[0]
+  const istNeu = !erster.classList.contains('zu')            // frisch = offen
+              && !!erster.querySelector('.kopf input.datum')
+  p('Der neue Eintrag steht GANZ OBEN und ist offen', istNeu)
+  if(!istNeu) p('   erster Eintrag ist: '+(d.querySelector('#tagebuch .je-kurz')?.textContent.replace(/\s+/g,' ').trim().slice(0,60)||'?'), false)
+
+  // Datum des neuen Eintrags mit dem des zweiten vergleichen
+  const datumFeld=erster.querySelector('.kopf input.datum')
+  const zweiterDat=eintraege()[1]?.querySelector('.k-datum')?.textContent
+    || eintraege()[1]?.querySelector('.kopf input.datum')?.value
+  p('   neu: '+(datumFeld?.value||'?')+'  ·  darunter: '+(zweiterDat||'?'), true)
+
+  // Tippen darf ihn nicht wegspringen lassen
+  const ta=erster.querySelector('.haupt textarea')
+  if(ta){ ta.value='Testtext'; ta.dispatchEvent(new Event('input',{bubbles:true})); await warte(1200)
+    const nochOben = eintraege()[0].querySelector('.haupt textarea')?.value==='Testtext'
+    p('   bleibt nach dem Tippen oben', nochOben) }
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=z.filter(x=>x[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

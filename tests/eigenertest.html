@@ -1,0 +1,108 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eigene Orte — Strukturvergleich</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:390px;height:760px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let zeilen=[]
+const p=(t,ok)=>{ zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=20000,st=250){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+const tippe=(el,wert)=>{const set=Object.getOwnPropertyDescriptor(el.ownerDocument.defaultView.HTMLInputElement.prototype,'value').set
+  set.call(el,wert); el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true}))}
+
+// Struktur einer Ortskarte erfassen — daran vergleichen wir eigene vs. hinterlegte
+function struktur(card){
+  return {
+    bild: !!card.querySelector('.img img'),
+    badge: card.querySelector('.badge')?.textContent?.trim() || '',
+    pills: [...card.querySelectorAll('.tagpill')].map(e=>e.textContent.trim()),
+    beschreibung: (card.querySelector('.desc')?.textContent||'').trim().length,
+    sonneWetter: !!card.querySelector('.sw'),
+    sterne: !!card.querySelector('.sw .stern') || !!card.querySelector('.sw'),
+    notizknopf: !!card.querySelector('.bubble'),
+    maps: !!card.querySelector('.maps'),
+    zuReise: !!card.querySelector('.reise-btn'),
+  }
+}
+const zeige=s=>`Bild ${s.bild?'✓':'✗'} · Badge „${s.badge||'—'}" · Tags [${s.pills.join(',')||'—'}] · Text ${s.beschreibung} Z. · Sonne/Wetter ${s.sonneWetter?'✓':'✗'} · Notiz ${s.notizknopf?'✓':'✗'} · Maps ${s.maps?'✓':'✗'} · zu Reise ${s.zuReise?'✓':'✗'}`
+
+const f=document.getElementById('f')
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('#meine-orte')&&d.querySelectorAll('#norden .card').length>0,25000)){p('ABBRUCH — App nicht geladen',false);return}
+
+  // Referenz: ein hinterlegter Ort
+  const ref=struktur(d.querySelector('#norden .card'))
+  p('Hinterlegter Ort (Vorbild):',true); p('   '+zeige(ref))
+
+  // Eigenen Ort anlegen: Coral Bay liegt im Norden-Abschnitt der Reise
+  d.querySelector('#meine-orte').scrollIntoView()
+  await warte(400)
+  klick(d.querySelector('#meine-orte .mo-kopf .btn')); await warte(500)
+  const form=await bis(()=>d.querySelector('#meine-orte .mo-form'),5000)
+  p('Formular „Neuer Ort" offen',!!form); if(!form)return
+  tippe(form.querySelector('input'),'Coral Bay')
+  const tagKnopf=[...form.querySelectorAll('.mo-tag')].find(b=>b.textContent.trim()==='GEHEIMTIPP')
+  p('Kennzeichnungs-Auswahl im Formular: '+[...form.querySelectorAll('.mo-tag')].map(b=>b.textContent.trim()).join(', '),!!tagKnopf)
+  if(tagKnopf) klick(tagKnopf)
+  await warte(300)
+  klick(form.querySelector('.btn.go')); await warte(1200)
+
+  const karte=await bis(()=>d.querySelector('#meine-orte .mo-card .card'),8000)
+  p('Eigener Ort angelegt',!!karte); if(!karte)return
+
+  // Anreicherung abwarten: Beschreibung (Wikipedia) und Bild (Commons + Verkleinern)
+  p('Warte auf Beschreibung & Bild aus dem Netz (bis 60 s) …')
+  await bis(()=>{const k=d.querySelector('#meine-orte .mo-card .card')
+    return k && (k.querySelector('.desc')?.textContent||'').trim().length>20},60000,1000)
+  await bis(()=>d.querySelector('#meine-orte .mo-card .card .img img'),40000,1000)
+  await warte(1500)
+  const mein=struktur(d.querySelector('#meine-orte .mo-card .card'))
+  p('Eigener Ort:',true); p('   '+zeige(mein))
+
+  p('— Vergleich mit dem Vorbild —')
+  p('Vorschaubild vorhanden',mein.bild)
+  p('Badge auf dem Bild',!!mein.badge)
+  p('Tag-Pillen unter dem Namen: '+(mein.pills.join(', ')||'—'),mein.pills.length>0)
+  p('   davon gewählte Kennzeichnung GEHEIMTIPP',mein.pills.includes('GEHEIMTIPP'))
+  p('Beschreibung gefüllt ('+mein.beschreibung+' Z.)',mein.beschreibung>20)
+  p('Sonne / Sterne / Wetter',mein.sonneWetter)
+  p('Notiz-/Bericht-Knopf',mein.notizknopf)
+  p('Google Maps',mein.maps)
+  p('„zu Reise" hinzufügbar',mein.zuReise)
+
+  // Rubrik: steht der Ort jetzt mit unter „Orte Nord" bzw. „Orte Süd"?
+  const inNord=[...d.querySelectorAll('#norden .card .name')].some(e=>e.textContent.trim()==='Coral Bay')
+  const inSued=[...d.querySelectorAll('#sueden .card .name')].some(e=>e.textContent.trim()==='Coral Bay')
+  p('Einsortiert unter Orte Nord/Süd: '+(inNord?'Norden':inSued?'Süden':'nirgends'),inNord||inSued)
+
+  // Filter: verschwindet der eigene Ort, sobald ein Filter aktiv ist?
+  const chip=[...d.querySelectorAll('.chip')].find(c=>c.textContent.trim()==='GEHEIMTIPP')
+  if(chip){ klick(chip); await warte(900)
+    // Bei aktivem Filter blendet die App auf „Suchergebnisse" um
+    const nochDa=[...d.querySelectorAll('.card .name')].some(e=>e.textContent.trim()==='Coral Bay')
+    const anz=d.querySelectorAll('.card').length
+    p('Filter GEHEIMTIPP: eigener Ort in den Treffern ('+anz+' Karten)',nochDa)
+    klick(chip); await warte(700) }
+  const chip2=[...d.querySelectorAll('.chip')].find(c=>c.textContent.trim()==='MEIN ORT')
+  p('Filter-Chip „MEIN ORT" vorhanden',!!chip2)
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.join(' | '):'keine'),fehler.length===0)
+  const bad=zeilen.filter(z=>z[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————',bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

@@ -1,0 +1,56 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gefahren-Symbol auf den Kacheln</title>
+<style>body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+#log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+.ok{color:#1a7f37}.bad{color:#c62828;font-weight:700} iframe{width:420px;height:180px;border:1px solid #ccc}</style>
+<div id="log">…</div>
+<script>
+localStorage.setItem('standort-schon-gefragt','1')
+const f=document.createElement('iframe'); f.src='./index.html'; document.body.appendChild(f)
+const L=document.getElementById('log'); let z=[]
+const zeig=()=>L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('')
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t); zeig() }
+const w8=ms=>new Promise(r=>setTimeout(r,ms))
+const bis=async(fn,ms=60000)=>{const t=Date.now();while(Date.now()-t<ms){try{const v=fn();if(v)return v}catch{}await w8(400)}return null}
+
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]
+  w.addEventListener('error',e=>fehler.push(e.message||''))
+  try{ Object.defineProperty(w.navigator,'geolocation',{get:()=>undefined}) }catch{}
+  if(!await bis(()=>d.querySelector('nav.bar'))){p('ABBRUCH',false);return}
+  await w8(6000)
+
+  // Sind die amtlichen Meldungen überhaupt geladen? (Gefahren-Seite zeigt sie.)
+  const gs = await bis(()=>d.querySelector('#gefahren'), 15000)
+  p('Sektion „Gefahrenlage" da', !!gs)
+
+  const kacheln = d.querySelectorAll('article.card')
+  p('Ortskacheln gerendert: '+kacheln.length, kacheln.length>0)
+
+  // Das Badge selbst: <span class="warn"> im Bildbereich der Kachel
+  const warn = d.querySelectorAll('article.card .img .warn')
+  p('Gefahren-Symbole auf Kacheln: '+warn.length, true)
+  if(warn.length){
+    [...warn].slice(0,4).forEach((s)=>{
+      const kachel = s.closest('article.card')
+      const name = kachel?.querySelector('.name')?.textContent.trim() || '?'
+      const stil = w.getComputedStyle(s)
+      p('   '+name+' → '+s.textContent.replace(/\s+/g,' ').trim()+'  ['+stil.backgroundColor+']', true)
+    })
+  } else {
+    p('   Aktuell keine — das Symbol erscheint nur bei einer LAUFENDEN Meldung.', true)
+  }
+
+  // Beweis, dass die Verkabelung steht: die Gefahren-Seite muss dieselbe Quelle zeigen.
+  const gtxt = gs ? gs.textContent.replace(/\s+/g,' ') : ''
+  const m = gtxt.match(/(\d+)\s*(Warnung|Meldung|amtlich)/i)
+  p('Gefahren-Seite meldet: '+gtxt.slice(0,110), !!gtxt)
+
+  z.unshift('JS-FEHLER ('+fehler.length+')')
+  const bad=z.filter(x=>x[0]==='❌').length
+  z.push('———— '+((bad||fehler.length)?(bad+' FEHLER, '+fehler.length+' JS'):'ALLES OK')+' ————')
+  zeig(); f.style.display='none'
+}
+</script>

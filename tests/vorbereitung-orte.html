@@ -1,0 +1,76 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ausklappbar + Orte im Logbuch</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:420px;height:820px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let z=[]
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=50000,st=400){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+document.getElementById('f').onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('#vorbereitung'),50000)){p('ABBRUCH: Vorbereitung fehlt',false);return}
+  await warte(3500)
+
+  const sek=d.getElementById('vorbereitung')
+  const kopf=[...sek.querySelectorAll('.b-auf')]
+  p('Aufklapp-Köpfe: '+kopf.length+' — '+kopf.map(k=>k.textContent.replace(/\s+/g,' ').trim().slice(0,44)).join(' | '), kopf.length===2)
+
+  for(const [name,muster] of [['Dokumente',/Dokumente/],['Vorab-Ausgaben',/Vorab-Ausgaben/]]){
+    const k=kopf.find(x=>muster.test(x.textContent))
+    if(!k){ p(name+': Kopf fehlt',false); continue }
+    const block=k.closest('section')
+    const hZu=block.getBoundingClientRect().height
+    p(name+' zugeklappt: '+Math.round(hZu)+' px · Kopfzeile „'+k.textContent.replace(/\s+/g,' ').trim()+'"', hZu<140)
+    klick(k); await warte(700)
+    const hAuf=block.getBoundingClientRect().height
+    p('   aufgeklappt: '+Math.round(hAuf)+' px', hAuf>hZu*1.5)
+    klick(k); await warte(500)
+    p('   wieder zu', block.getBoundingClientRect().height<140)
+  }
+  // „+" muss den Block öffnen
+  const neuBtn=[...sek.querySelectorAll('.neu')].find(b=>/Dokument/.test(b.textContent))
+  if(neuBtn){ klick(neuBtn); await warte(900)
+    const auf=sek.querySelector('.dok-liste')
+    p('„+ Dokument" öffnet den Block und legt an', !!auf)
+    const del=[...sek.querySelectorAll('.dok .del')]
+    if(del.length){ w.confirm=()=>true; klick(del[del.length-1]); await warte(500) }
+  }
+
+  // ---- Orte im Logbuch ----
+  // Die Reisetage sind seit der Kurzansicht ZUGEKLAPPT — Ortsliste und Verknüpfungs-
+  // Auswahl stehen erst im aufgeklappten Eintrag im DOM. Also erst aufklappen.
+  const daten=await (await w.fetch('/orte.json')).json()
+  d.getElementById('tagebuch')?.scrollIntoView(); await warte(700)
+  const ersteKurz=d.querySelector('#tagebuch .je-kurz')
+  if(ersteKurz){ klick(ersteKurz); await warte(1200) }
+  const jd=d.querySelector('#tagebuch datalist')
+  const sel=d.querySelector('#tagebuch select.verkn')
+  if(!jd||!sel){ p('Kein Logbuch-Eintrag sichtbar — „+ Neuer Tag" anlegen', false) }
+  else {
+    p('Ortsliste im Logbuch (Tippen): '+jd.options.length+' Einträge', jd.options.length>=daten.length)
+    p('Verknüpfungs-Auswahl: '+(sel.options.length-1)+' Orte (orte.json hat '+daten.length+')', sel.options.length-1>=daten.length)
+    const namen=[...sel.options].map(o=>o.text)
+    for(const n of ['Millaa Millaa Falls & Waterfall Circuit','Cape Tribulation','Masons Falls','Cairns Esplanade Lagoon'])
+      p('   neuer Ort wählbar: '+n, namen.includes(n))
+  }
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=z.filter(x=>x[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

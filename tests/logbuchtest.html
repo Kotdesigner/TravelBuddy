@@ -1,0 +1,97 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logbuch — Fassungen & Kollage</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:1000px;height:800px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let zeilen=[]
+const p=(t,ok)=>{ zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=25000,st=300){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+const f=document.getElementById('f')
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+  // Druckfenster abfangen, damit der Test nicht blockiert
+  let druckAufrufe=0
+  w.open = () => { druckAufrufe++; return null }
+
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('#tagebuch'),30000)){p('ABBRUCH',false);return}
+  await warte(4000)
+
+  d.querySelector('#tagebuch').scrollIntoView(); await warte(1000)
+
+  // In den Lese-/Fotobuch-Modus wechseln
+  const leseKnopf=[...d.querySelectorAll('#tagebuch button')].find(b=>/lese|fotobuch|magazin/i.test(b.textContent))
+  p('Umschalter in den Lesemodus: '+(leseKnopf?leseKnopf.textContent.trim():'—'),!!leseKnopf)
+  if(leseKnopf) klick(leseKnopf)
+  const magazin=await bis(()=>d.querySelector('#tagebuch .magazin'),12000)
+  p('Fotobuch-Ansicht gerendert',!!magazin); if(!magazin)return
+
+  const tage=d.querySelectorAll('#tagebuch .magazin article.tag').length
+  p('Reisetage im Fotobuch: '+tage,tage>0)
+
+  // — Fassungen —
+  const fBtns=[...d.querySelectorAll('#tagebuch .f-btn')].map(b=>b.textContent.trim())
+  p('Fassungs-Umschalter: '+fBtns.join(' | '),fBtns.length===2)
+
+  const zaehleModule=()=>d.querySelectorAll('#tagebuch .magazin section.modul, #tagebuch .magazin .zitate, #tagebuch .magazin .t-bilanz').length
+  const langN=zaehleModule()
+  p('Ausführlich — Module/Zitate/Bilanz sichtbar: '+langN,langN>0)
+
+  const kurz=[...d.querySelectorAll('#tagebuch .f-btn')].find(b=>/kurz/i.test(b.textContent))
+  klick(kurz); await warte(900)
+  const kurzN=zaehleModule()
+  p('Kurzfassung — dieselben Elemente: '+kurzN,kurzN===0)
+  const kurzFotos=d.querySelectorAll('#tagebuch .magazin .g-foto').length
+  const kurzText=d.querySelectorAll('#tagebuch .magazin .t-lead').length
+  p('  Fotos bleiben: '+kurzFotos+' · Haupttexte bleiben: '+kurzText,true)
+  p('  Druckknopf zeigt die Fassung an',/kurz/i.test(d.querySelector('#tagebuch .wz.druck')?.textContent||''))
+
+  klick([...d.querySelectorAll('#tagebuch .f-btn')].find(b=>/ausführlich/i.test(b.textContent))); await warte(900)
+  p('Zurück auf ausführlich: '+zaehleModule()+' Elemente',zaehleModule()===langN)
+
+  // — Kollage —
+  const koBtn=[...d.querySelectorAll('#tagebuch .wz')].find(b=>/Kollage/.test(b.textContent))
+  p('Kollage-Knopf: '+(koBtn?koBtn.textContent.trim():'— (keine Fotos)'),!!koBtn)
+  if(koBtn){
+    klick(koBtn); await warte(1400)
+    const ko=d.querySelector('.ko')
+    p('Kollage öffnet',!!ko)
+    if(ko){
+      const kacheln=ko.querySelectorAll('.ka img').length
+      p('  Kacheln mit Foto: '+kacheln,kacheln>0)
+      const r=ko.getBoundingClientRect()
+      p('  füllt das Fenster: '+Math.round(r.width)+'×'+Math.round(r.height),r.width>w.innerWidth*0.85&&r.height>w.innerHeight*0.8)
+      const dr=ko.querySelector('.ko-druck')
+      p('  Druck-/Exportknopf vorhanden',!!dr)
+      if(dr){ klick(dr); await warte(700)
+        p('  Druckfassung wird aufgebaut (Fenster angefordert)',druckAufrufe>0) }
+      // Weiterblättern wechselt die Kacheln
+      const vorher=[...ko.querySelectorAll('.ka img')].map(i=>i.src).join('|')
+      klick([...ko.querySelectorAll('.ko-steuer button')].find(b=>b.textContent.trim()==='›'))
+      await warte(900)
+      const nachher=[...d.querySelectorAll('.ko .ka img')].map(i=>i.src).join('|')
+      p('  Weiterblättern wechselt die Fotos',vorher!==nachher)
+      klick(d.querySelector('.ko .ko-zu')); await warte(600)
+      p('Kollage schließt',!d.querySelector('.ko'))
+    }
+  }
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.join(' | '):'keine'),fehler.length===0)
+  const bad=zeilen.filter(z=>z[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————',bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

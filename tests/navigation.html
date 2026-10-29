@@ -1,0 +1,137 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Navigation — untere Leisten antippbar</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:390px;height:844px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let zeilen=[]
+const p=(t,ok)=>{ zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=45000,st=350){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+document.getElementById('f').onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+  const H=()=>w.innerHeight, B=()=>w.innerWidth
+
+  p('Warte auf App …')
+  const BAR=()=>d.querySelector('nav.bar[aria-label="Hauptnavigation"]')
+  if(!await bis(()=>BAR(),45000)){p('ABBRUCH: Tab-Leiste nicht gefunden',false);return}
+  await warte(2500)
+
+  // Trifft ein Fingertipp an dieser Stelle wirklich dieses Element?
+  const trifft=(el)=>{
+    const r=el.getBoundingClientRect()
+    if(r.width<4||r.height<4) return {ok:false,grund:'unsichtbar'}
+    const x=r.left+r.width/2, y=r.top+r.height/2
+    if(y<0||y>H()||x<0||x>B()) return {ok:false,grund:'außerhalb des Bildschirms'}
+    const oben=d.elementFromPoint(x,y)
+    if(!oben) return {ok:false,grund:'nichts an der Stelle'}
+    const eigen = oben===el || el.contains(oben) || oben.contains(el)
+    return {ok:eigen, grund:eigen?'':'verdeckt von <'+oben.tagName.toLowerCase()+' class="'+(oben.className||'').toString().slice(0,30)+'">'}
+  }
+
+  // ---- 1 · Tab-Leiste unten ----
+  const bar=BAR(), br=bar.getBoundingClientRect()
+  p(`Tab-Leiste sitzt unten: oben ${Math.round(br.top)} / Bildschirm ${H()}`, br.bottom>H()-4 && br.top>H()*0.85)
+  const tabs=[...bar.querySelectorAll('.tab')]
+  const tabTreffer=tabs.map(t=>({n:t.textContent.trim(),...trifft(t)}))
+  p('Alle 5 Tabs antippbar: '+tabTreffer.filter(t=>t.ok).length+'/'+tabs.length,
+    tabTreffer.every(t=>t.ok))
+  tabTreffer.filter(t=>!t.ok).forEach(t=>p('   ✗ '+t.n+' — '+t.grund, false))
+
+  // ---- 2 · Auf „Orte" tippen ----
+  const orteTab=tabs.find(t=>/Orte/.test(t.textContent))
+  klick(orteTab); await warte(2200)
+
+  const sub=d.querySelector('.subnav')
+  p('Unter-Navigation vorhanden', !!sub)
+  if(sub){
+    const sr=sub.getBoundingClientRect()
+    p(`Unter-Navigation sitzt UNTEN: oben ${Math.round(sr.top)} / Bildschirm ${H()}`, sr.top>H()*0.6)
+    p('   liegt über der Tab-Leiste (nicht dahinter)', sr.bottom<=br.top+2)
+    p('   nicht hinter der Notch (oben > 60px)', sr.top>60)
+
+    const chips=[...sub.querySelectorAll('.sub-chip')]
+    const sichtbar=chips.filter(c=>{const r=c.getBoundingClientRect();return r.left>=-1&&r.right<=B()+1})
+    const tr=sichtbar.map(c=>({n:c.textContent.trim(),...trifft(c)}))
+    p('Unter-Reiter antippbar: '+tr.filter(t=>t.ok).length+'/'+sichtbar.length+' sichtbare (von '+chips.length+')',
+      sichtbar.length>0 && tr.every(t=>t.ok))
+    tr.filter(t=>!t.ok).forEach(t=>p('   ✗ '+t.n+' — '+t.grund, false))
+    p('   Beschriftungen: '+chips.map(c=>c.textContent.trim()).join(' · '), true)
+  }
+
+  // ---- 3 · Sprungziel darf nicht unter Notch/Leiste verschwinden ----
+  const scrollRuht=async(max=12000)=>{ let letzt=-1, gleich=0, t0=Date.now()
+    while(Date.now()-t0<max){ const y=w.scrollY
+      if(Math.abs(y-letzt)<1){ if(++gleich>=3) return true } else gleich=0
+      letzt=y; await warte(220) }
+    return false }
+
+  // WICHTIG: nicht per scrollTo(0,0) zurücksetzen — ganz oben gibt es keine
+  // Unter-Navigation, die Reiter verschwinden aus dem DOM und der Klick liefe ins Leere.
+  // Stattdessen von einem anderen Reiter aus springen, so wie man es auch tippt.
+  async function pruefeSprung(id, label, vonId){
+    if(vonId){
+      const start=[...d.querySelectorAll('.sub-chip')].find(c=>c.dataset.sub===vonId)
+      if(start){ klick(start); await scrollRuht(); await warte(500) }
+    }
+    const chip=[...d.querySelectorAll('.sub-chip')].find(c=>c.dataset.sub===id)
+    if(!chip){ p('Sprung '+label+': Reiter fehlt — vorhanden: '+
+      ([...d.querySelectorAll('.sub-chip')].map(c=>c.dataset.sub).join(', ')||'keine'), false); return }
+    const vorher=Math.round(w.scrollY)
+    klick(chip)
+    const ruht=await scrollRuht()
+    await warte(400)
+    const ziel=d.getElementById(id)
+    const kopf=ziel.querySelector('h2, h3, .abschnitt') || ziel
+    const kr=kopf.getBoundingClientRect()
+    // Streng: die Überschrift muss WIRKLICH im Bild stehen — und nicht unter
+    // Notch oder Leiste. Nur „nicht verdeckt" wäre auch erfüllt, wenn sie
+    // 36000 px weiter unten steht.
+    const imBild = kr.top >= 0 && kr.bottom <= H()
+    const unterNotch = kr.top >= 20
+    p(`Sprung „${label}": ${vorher} → ${Math.round(w.scrollY)} px · Überschrift bei y=${Math.round(kr.top)} (Bild 0…${H()})`,
+      imBild && unterNotch)
+    if(!ruht) p('   Scrollen kam nicht zur Ruhe', false)
+    if(imBild) p('   Überschrift antippbar/frei', trifft(kopf).ok)
+  }
+  await pruefeSprung('norden','Orte Nord','sueden')
+  await pruefeSprung('meine-orte','Meine Orte','norden')
+  await pruefeSprung('sueden','Orte Süd','meine-orte')
+
+  // ---- 4 · Roadtrip-Gruppe ----
+  const rtTab=tabs.find(t=>/Roadtrip/.test(t.textContent))
+  klick(rtTab); await warte(2000)
+  const sub2=d.querySelector('.subnav')
+  const chips2=[...(sub2?.querySelectorAll('.sub-chip')||[])]
+  p('Roadtrip-Unterreiter: '+chips2.map(c=>c.textContent.trim()).join(' · '), chips2.length>0)
+  if(chips2.length){
+    const sicht=chips2.filter(c=>{const r=c.getBoundingClientRect();return r.left>=-1&&r.right<=B()+1})
+    const tr2=sicht.map(c=>({n:c.textContent.trim(),...trifft(c)}))
+    p('   antippbar: '+tr2.filter(t=>t.ok).length+'/'+sicht.length, tr2.every(t=>t.ok))
+    tr2.filter(t=>!t.ok).forEach(t=>p('   ✗ '+t.n+' — '+t.grund, false))
+  }
+
+  // ---- 5 · Nichts vom Inhalt bleibt unter den Leisten begraben ----
+  const wrap=d.querySelector('.wrap')
+  const pb=parseFloat(w.getComputedStyle(wrap).paddingBottom)
+  const barJetzt=BAR().getBoundingClientRect()
+  const barH=barJetzt.height + (sub?sub.getBoundingClientRect().height:0)
+  p(`Freiraum unten: ${Math.round(pb)} px Polster für ${Math.round(barH)} px Leisten`, pb >= barH)
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=zeilen.filter(z=>z[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

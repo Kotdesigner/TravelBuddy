@@ -1,0 +1,60 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ── TravelBuddy (V6) ─────────────────────────────────────────────
+# Private Daten liegen außerhalb dieses Ordners (TravelBuddy_V3/_Documente,
+# _Sicherung, _Nachtraege) und kommen nie hier hinein. Zur Sicherheit:
+_Documente/
+_Sicherung/
+_Nachtraege/
+startdaten.json
+
+# Werbung: Mediendateien sind groß und werden aus den Quellen neu erzeugt
+werbung/film/node_modules/
+werbung/film/out/
+*.mp4
+*.mov
+*.webm
+*.wav
+*.ogg
+*.mp3
+*.m4a
+*.aiff
+*.flac
+# Demo-Backups enthalten echte Buchungsdaten (Buchungsnummern, Termine)
+werbung/demo-backup.json
+werbung/*Backup*.json
+# Python-Umgebungen und Zwischenstände (Chatterbox-Stimme u. a.)
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pth
+*.pt
+*.safetensors
+*.ckpt
+
+# Upload-Paket (wird aus dist/ erzeugt)
+*Netlify.zip

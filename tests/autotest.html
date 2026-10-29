@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Auto-Test</title>
+<style>
+  html,body{margin:0;background:#12100e;color:#f0e7da;font:600 19px/1.3 -apple-system,system-ui,sans-serif}
+  #kopf{position:sticky;top:0;background:#12100e;padding:10px 12px 8px;border-bottom:2px solid #453522}
+  h1{font-size:22px;margin:0 0 6px}
+  #stat{font-size:20px}
+  .gut{color:#86cbb0}.schlecht{color:#ff8a7a}.warn{color:#e0a72b}
+  ol{margin:0;padding:6px 12px 30px 34px}
+  li{padding:5px 0;border-bottom:1px solid #2a2119;font-size:17px}
+  .n{color:#b3a795;font-weight:500;font-size:15px;display:block}
+  iframe{position:fixed;left:0;bottom:0;width:100%;height:46%;border:0;opacity:.001;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="kopf"><h1>🧪 Auto-Test (iOS/WebKit)</h1><div id="stat">startet …</div></div>
+<ol id="liste"></ol>
+<iframe id="f" src="/"></iframe>
+<script>
+const liste = document.getElementById('liste'), stat = document.getElementById('stat')
+let ok = 0, fail = 0
+const warte = (ms) => new Promise(r => setTimeout(r, ms))
+function melde(name, bestanden, notiz) {
+  bestanden ? ok++ : fail++
+  const li = document.createElement('li')
+  li.innerHTML = `<span class="${bestanden?'gut':'schlecht'}">${bestanden?'✓':'✗'}</span> ${name}` + (notiz?`<span class="n">${notiz}</span>`:'')
+  liste.appendChild(li)
+  stat.innerHTML = `<span class="gut">${ok} ok</span> · <span class="${fail?'schlecht':'gut'}">${fail} Fehler</span>`
+}
+async function test(name, fn) {
+  try { const r = await fn(); melde(name, r !== false, typeof r === 'string' ? r : (r && r.notiz) || '') }
+  catch (e) { melde(name, false, e.message) }
+}
+
+const f = document.getElementById('f')
+let W, D
+const q = (s) => D.querySelector(s), qa = (s) => [...D.querySelectorAll(s)]
+const klick = (el) => { el.dispatchEvent(new W.MouseEvent('click', { bubbles: true, cancelable: true })) }
+function tippe(el, wert) {
+  const proto = el.tagName === 'SELECT' ? W.HTMLSelectElement.prototype
+    : el.tagName === 'TEXTAREA' ? W.HTMLTextAreaElement.prototype : W.HTMLInputElement.prototype
+  Object.getOwnPropertyDescriptor(proto, 'value').set.call(el, wert)
+  el.dispatchEvent(new W.Event('input', { bubbles: true }))
+  el.dispatchEvent(new W.Event('change', { bubbles: true }))
+}
+const db = (k) => new Promise(r => {
+  const to = setTimeout(() => r(null), 2500)
+  try {
+    const rq = W.indexedDB.open('wa-plan', 1)
+    rq.onsuccess = () => { try {
+      const d = rq.result
+      if (!d.objectStoreNames.contains('kv')) { clearTimeout(to); return r(null) }
+      const t = d.transaction('kv','readonly').objectStore('kv').get(k)
+      t.onsuccess = () => { clearTimeout(to); r(t.result) }; t.onerror = () => { clearTimeout(to); r(null) }
+    } catch { clearTimeout(to); r(null) } }
+    rq.onerror = () => { clearTimeout(to); r(null) }
+  } catch { clearTimeout(to); r(null) }
+})
+
+f.onload = async () => {
+  W = f.contentWindow; D = f.contentDocument
+  const fehler = []
+  W.addEventListener('error', e => fehler.push(e.message))
+  await warte(14000)                                   // App + Startdaten laden lassen
+
+  // ---------- Struktur ----------
+  // Seit der Zusammenlegung: 5 Vacation-Sektionen entfallen, „Ostküste" kommt dazu.
+  await test('19 Sektionen vorhanden', () => { const n = qa('section.anchor').length
+    if (n !== 19) return `nur ${n}`; return true })
+  await test('Bottom-Bar mit 5 Tabs', () => qa('nav[aria-label="Hauptnavigation"] .lbl').map(l=>l.textContent).join('·') === 'Start·Orte·Roadtrip·Logbuch·Mehr')
+  await test('Startdaten übernommen', async () => {
+    const vk = await db('vorab-kosten-v1'); if (vk?.length !== 23) return false; return `${vk.length} Vorab-Ausgaben`
+  })
+
+  // ---------- Navigation ----------
+  await test('Tab „Roadtrip" springt zur Sektion', async () => {
+    const tab = qa('nav[aria-label="Hauptnavigation"] button').find(b => /Roadtrip/.test(b.textContent))
+    klick(tab); await warte(1400)
+    const r = D.getElementById('eigene-route').getBoundingClientRect()
+    if (!(r.top < 400)) return false; return 'ok'
+  })
+  await test('„Mehr"-Sheet öffnet (Notfall zuerst)', async () => {
+    klick(qa('nav[aria-label="Hauptnavigation"] button').find(b => /Mehr/.test(b.textContent))); await warte(700)
+    const z = qa('[role="dialog"] .s-zeile'); if (!(z.length >= 6 && /Notfall/.test(z[0].textContent))) return false; return z.length + ' Einträge, Notfall zuerst'
+  })
+  await test('Design-Umschalter: Dunkel', async () => {
+    klick(qa('[role="dialog"] .segment button').find(b => b.textContent.trim() === 'Dunkel')); await warte(600)
+    const t = D.documentElement.getAttribute('data-theme'); if (t !== 'dark') return false; return 'dark'
+  })
+  await test('Design-Umschalter: zurück auf Auto', async () => {
+    klick(qa('[role="dialog"] .segment button').find(b => b.textContent.trim() === 'Auto')); await warte(500)
+    return !!D.documentElement.getAttribute('data-theme')
+  })
+  await test('Sheet schließt (Außenklick)', async () => {
+    const bd = q('[role="dialog"]')?.previousElementSibling; if (bd) klick(bd); await warte(600)
+    return !q('[role="dialog"]')
+  })
+
+  // ---------- Reisen ----------
+  await test('Reise aufklappen (Chevron)', async () => {
+    const c = q('#eigene-route .aufklapp'); klick(c); await warte(800)
+    return c.classList.contains('offen') && !!q('#eigene-route .stops')
+  })
+  await test('Stepper „Tage" erhöht Wert', async () => {
+    const vorher = (await db('reisen-v1'))?.[0]?.tage
+    const plus = qa('#eigene-route .stepper .st-btn').find(b => b.textContent.trim() === '＋')
+    klick(plus); await warte(900)
+    const nachher = (await db('reisen-v1'))?.[0]?.tage
+    if (nachher !== vorher + 1) return false; return `${vorher} → ${nachher}`
+  })
+  await test('Reise-Hub zeigt Verknüpfungen', () => {
+    const t = qa('#eigene-route .tb-verkn .tb-titel').map(x => x.textContent.trim())
+    if (t.length === 0) return false
+    return t.join(' · ')
+  })
+
+  // ---------- Karte (WebGL) ----------
+  await test('Offline-Karte rendert (WebGL-Canvas)', async () => {
+    D.getElementById('karten').scrollIntoView(); await warte(6000)
+    const c = q('#karten canvas')
+    if (!(c && c.width > 100 && c.height > 100)) return false; return `${c.width}×${c.height}`
+  })
+  await test('POI-Filter vorhanden', () => qa('#karten .poi-bar button, #karten .poi-chip').length > 3 || 'keine POI-Chips')
+
+  // ---------- Logbuch ----------
+  await test('Logbuch: neuen Tag anlegen', async () => {
+    const vorher = (await db('journal-v1'))?.length ?? 0
+    klick(qa('#tagebuch button').find(b => /Neuer Tag/.test(b.textContent))); await warte(1200)
+    const nachher = (await db('journal-v1'))?.length ?? 0
+    if (nachher !== vorher + 1) return false; return `${vorher} → ${nachher}`
+  })
+  await test('Logbuch: Text speichern', async () => {
+    const ta = q('#tagebuch .je .haupt textarea') || q('#tagebuch .je textarea')
+    tippe(ta, 'AUTOTEST-TEXT'); await warte(1200)
+    const j = await db('journal-v1')
+    return !!j?.some(e => e.text === 'AUTOTEST-TEXT')
+  })
+  await test('Logbuch: Modul aufklappen', async () => {
+    const k = qa('#tagebuch .je .m-kopf')[0]; klick(k); await warte(600)
+    return !!q('#tagebuch .je .modul.offen .m-body')
+  })
+  await test('Logbuch: Lese-Modus', async () => {
+    klick(qa('#tagebuch button').find(b => /Lesen/.test(b.textContent))); await warte(1200)
+    const mag = !!q('#tagebuch .magazin')
+    klick(qa('#tagebuch button').find(b => /Bearbeiten/.test(b.textContent))); await warte(600)
+    return mag
+  })
+
+  // ---------- Notizen / Wanderungen ----------
+  await test('Notiz anlegen', async () => {
+    const inp = qa('#notizen input').find(i => /Neuer Eintrag/.test(i.placeholder))
+    tippe(inp, 'AUTOTEST-NOTIZ'); await warte(500)
+    klick(qa('#notizen button').find(b => /Hinzufügen/.test(b.textContent))); await warte(1000)
+    const n = await db('notizen-v1')
+    return !!n?.some(x => x.text === 'AUTOTEST-NOTIZ')
+  })
+  await test('Wanderung anlegen', async () => {
+    const vorher = (await db('wanderungen-v1'))?.length ?? 0
+    klick(qa('#wanderungen button').find(b => /Neue Wanderung/.test(b.textContent))); await warte(1000)
+    return ((await db('wanderungen-v1'))?.length ?? 0) === vorher + 1
+  })
+
+  // ---------- Vorbereitung / Kosten ----------
+  await test('Checkliste abhaken', async () => {
+    const v = await db('vorbereitung-v1'); const vorher = Object.keys(v?.checked || {}).length
+    klick(qa('#vorbereitung .item')[3]); await warte(900)
+    const n = await db('vorbereitung-v1')
+    return Object.keys(n?.checked || {}).length !== vorher
+  })
+  await test('Vorab-Ausgabe ändern wirkt auf Startseite', async () => {
+    const feld = qa('#vorbereitung .vk .vk-betrag')[0]
+    const alt = feld.value; tippe(feld, '999'); await warte(1400)
+    const summe = q('#vorbereitung .vk-summe')?.textContent || ''
+    tippe(feld, alt); await warte(800)
+    if (!summe.length) return false; return summe.trim()
+  })
+
+  // ---------- Suche / Quiz / Notfall ----------
+  await test('Suche filtert', async () => {
+    const s = q('.search'); tippe(s, 'Kalbarri'); await warte(1200)
+    const treffer = qa('.card').length
+    tippe(s, ''); await warte(900)
+    if (!(treffer > 0)) return false; return treffer + ' Treffer'
+  })
+  await test('Quiz beantwortbar', async () => {
+    D.getElementById('quiz').scrollIntoView(); await warte(700)
+    const a = qa('#quiz button')[0]; if (!a) return 'keine Frage'
+    klick(a); await warte(800)
+    const q1 = await db('quiz-v1'); return Object.keys(q1 || {}).length > 0
+  })
+  await test('Notfall: Koordinaten → nächste Hilfe', async () => {
+    const det = q('#notfall .manuell'); if (det) det.open = true; await warte(400)
+    const ins = qa('#notfall .man-zeile input')
+    tippe(ins[0], '-27.71'); tippe(ins[1], '114.16'); await warte(400)
+    klick(qa('#notfall .man-zeile button').find(b => /Übernehmen/.test(b.textContent)))
+    await warte(3500)
+    const h = qa('#notfall .hilfe .h-km').map(x => x.textContent.trim())
+    if (h.length < 3) return false; return h.slice(0,3).join(' ')
+  })
+
+  // ---------- Persistenz & Fehler ----------
+  await test('Alles gespeichert (IndexedDB)', async () => {
+    const keys = ['reisen-v1','journal-v1','notizen-v1','wanderungen-v1','vorab-kosten-v1','vorbereitung-v1']
+    const da = []; for (const k of keys) if (await db(k)) da.push(k)
+    if (da.length !== keys.length) return false; return `${da.length}/${keys.length}`
+  })
+  await test('Keine JavaScript-Fehler', () => fehler.length === 0 || fehler.slice(0,2).join(' | '))
+
+  stat.innerHTML += ' — fertig'
+}
+</script>
+</body>
+</html>

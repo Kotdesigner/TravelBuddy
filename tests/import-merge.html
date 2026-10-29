@@ -1,0 +1,112 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zusammenführender Import</title>
+<style>body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+#log{white-space:pre-wrap;font:11.5px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+.ok{color:#1a7f37}.bad{color:#c62828;font-weight:700} iframe{width:420px;height:110px;border:1px solid #ccc}</style>
+<div id="log">…</div>
+<script>
+localStorage.setItem('standort-schon-gefragt','1')
+const f=document.createElement('iframe'); f.src='./index.html'; document.body.appendChild(f)
+const L=document.getElementById('log'); let z=[]
+const zeig=()=>L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('')
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t); zeig() }
+const w8=ms=>new Promise(r=>setTimeout(r,ms))
+const bis=async(fn,ms=45000)=>{const t=Date.now();while(Date.now()-t<ms){try{const v=fn();if(v)return v}catch{}await w8(300)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]
+  w.addEventListener('error',e=>fehler.push((e.message||'')+' @'+(e.lineno||'')))
+  w.addEventListener('unhandledrejection',e=>fehler.push('Promise: '+(e.reason?.message||e.reason)))
+  const ce=w.console.error; w.console.error=(...a)=>{fehler.push('console: '+a.map(x=>String(x?.message||x)).join(' ').slice(0,90)); ce.apply(w.console,a)}
+  try{ Object.defineProperty(w.navigator,'geolocation',{get:()=>undefined}) }catch{}
+  w.confirm=()=>true; w.alert=()=>{}
+  if(!await bis(()=>d.querySelector('nav.bar'))){p('ABBRUCH',false);return}
+  await w8(4500)
+
+  const zaehle = () => d.querySelectorAll('#tagebuch .je').length
+  const vorher = zaehle()
+  p('Reisetage vor dem Import: '+vorher, true)
+
+  // Backup bauen: ein Eintrag, den es hier NICHT gibt
+  const echt = await (await fetch('./WA-Reiseplan-Backup.json')).json()
+  const neuerTag = { id: 'test-merge-'+Date.now(), datum: '2037-12-20', ort: 'TESTORT-MERGE',
+    text: 'Kam per Zusammenführung', fotos: [], audios: [], felder: { stimmung: 4 },
+    geaendert: new Date().toISOString() }
+  const datei = { ...echt, geraet: 'Mac (Test)', exportiert: new Date().toISOString(),
+    journal: [...(echt.journal||[]), neuerTag] }
+
+  const inp = d.querySelector('input[type=file][accept*=json]')
+  const dt = new w.DataTransfer(); dt.items.add(new w.File([JSON.stringify(datei)],'b.json',{type:'application/json'}))
+  inp.files = dt.files; inp.dispatchEvent(new Event('change',{bubbles:true}))
+  await w8(2500)
+
+  const dlg = d.querySelector('.imp')
+  p('Vorschau-Bildschirm erscheint (statt confirm)', !!dlg)
+  if(!dlg){ z.push('———— ABBRUCH ————'); zeig(); return }
+  p('   Überschrift: '+dlg.querySelector('h3')?.textContent.trim(), /Mac \(Test\)/.test(dlg.textContent))
+  p('   Kernsatz: '+dlg.querySelector('.imp-kern')?.textContent.replace(/\s+/g,' ').trim(),
+    /Nichts auf diesem Gerät wird gelöscht/.test(dlg.textContent))
+  const zeilen=[...dlg.querySelectorAll('.imp-tab tbody tr')].map(r=>[...r.cells].map(c=>c.textContent.trim()).join(' | '))
+  p('   Tabelle: '+zeilen.length+' Zeilen', zeilen.length>0)
+  zeilen.slice(0,4).forEach(x=>p('     '+x, true))
+  p('   Knopf „Zusammenführen"', !!dlg.querySelector('.imp-ok'))
+  p('   Notausgang „alles ersetzen" klein und rot', !!dlg.querySelector('.imp-ersetz'))
+
+  klick(dlg.querySelector('.imp-ok'))
+  await bis(()=>d.querySelector('.imp h3')?.textContent.includes('Übernommen'), 25000)
+  const ber = d.querySelector('.imp')
+  p('Bericht danach: '+ber?.querySelector('.imp-kern')?.textContent.replace(/\s+/g,' ').trim(),
+    /neu/.test(ber?.textContent||''))
+  await w8(1500)
+  // Der Testserver laeuft auf eigenem Port = eigener Datenspeicher: das Geraet startet
+  // leer. Erwartet wird deshalb, was in der Datei steckt, nicht vorher+1.
+  const soll = datei.journal.length
+  const nachImport = zaehle()
+  p('Reisetage nach dem Import: '+nachImport+' (Datei hat '+soll+')', nachImport===soll)
+  p('   der neue Tag ist da', d.querySelector('#tagebuch').textContent.includes('TESTORT-MERGE'))
+
+  // Nochmal dieselbe Datei — darf nichts verdoppeln.
+  // WICHTIG: frische DataTransfer, die App leert das Dateifeld nach jedem Import.
+  klick(ber.querySelector('.imp-ok')); await w8(800)
+  p('Berichtsfenster geschlossen', !d.querySelector('.imp'))
+  const dt2 = new w.DataTransfer()
+  dt2.items.add(new w.File([JSON.stringify(datei)],'b2.json',{type:'application/json'}))
+  inp.files = dt2.files
+  inp.dispatchEvent(new Event('change',{bubbles:true}))
+  const dlg2 = await bis(()=>d.querySelector('.imp'), 20000)
+  p('zweite Vorschau erscheint', !!dlg2)
+  const summe2 = [...(dlg2?.querySelectorAll('.imp-tab tbody tr')||[])].map(r=>r.cells[1].textContent.trim())
+  p('zweiter Import meldet nichts Neues: '+(summe2.join(',')||'keine Tabelle'),
+    summe2.every(x=>x==='–') || !dlg2.querySelector('.imp-tab'))
+  if(dlg2?.querySelector('.imp-ok')){ klick(dlg2.querySelector('.imp-ok')); await bis(()=>d.querySelector('.imp h3')?.textContent.includes('Übernommen'),20000) }
+  await w8(1500)
+  p('   immer noch '+zaehle()+' Reisetage, nicht verdoppelt', zaehle()===nachImport)
+
+  // Rückgängig
+  const ber2 = d.querySelector('.imp')
+  p('   Berichts-Fenster offen: '+(ber2 ? ber2.querySelector('h3')?.textContent.trim() : 'KEINS'), !!ber2)
+  const knoepfe = ber2 ? [...ber2.querySelectorAll('button')].map(b=>b.textContent.trim()) : []
+  p('   Knöpfe im Bericht: '+knoepfe.join(' / '), knoepfe.length>0)
+  const zurueck = ber2 && [...ber2.querySelectorAll('button')].find(b=>/rückgängig/i.test(b.textContent))
+  p('Knopf „Rückgängig" vorhanden', !!zurueck)
+  if(zurueck){
+    // Der Knopf sagt selbst, auf welchen Stand er zurückführt — genau das wird geprüft.
+    const beschriftung = zurueck.textContent.replace(/\s+/g,' ').trim()
+    const soll = Number((beschriftung.match(/auf (\d+) Reisetage/) || [])[1])
+    p('   Knopf nennt den Zielstand: „'+beschriftung+'"', Number.isFinite(soll))
+    klick(zurueck); await w8(3000)
+    p('   nach Rückgängig: '+zaehle()+' Reisetage (Knopf versprach '+soll+')', zaehle()===soll)
+  }
+
+  const schlecht=z.filter(x=>x[0]==='❌')
+  z.unshift('JS-FEHLER ('+fehler.length+')')
+  fehler.slice(0,3).forEach((x,i)=>z.splice(1+i,0,'  ⤷ '+String(x).slice(0,96)))
+  schlecht.forEach((x,i)=>z.splice(i,0,x))
+  z.push('———— '+((schlecht.length||fehler.length)?(schlecht.length+' FEHLER, '+fehler.length+' JS'):'ALLES OK')+' ————')
+  zeig(); f.style.display='none'
+}
+</script>

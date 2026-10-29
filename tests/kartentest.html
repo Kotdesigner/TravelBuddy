@@ -1,0 +1,137 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kartentest</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:390px;height:760px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L = document.getElementById('log'); let zeilen = []
+const p = (t, ok) => { zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t); L.innerHTML = zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte = (ms) => new Promise(r=>setTimeout(r,ms))
+async function bis(fn, ms=15000, schritt=250){ const t0=Date.now(); while(Date.now()-t0<ms){ try{ const v=fn(); if(v) return v }catch{} await warte(schritt) } return null }
+const klick = (el) => { for (const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView})) }
+
+const f = document.getElementById('f')
+const q = new URLSearchParams(location.search)
+if(q.get('w')){ f.style.width = q.get('w')+'px' }
+if(q.get('h')){ f.style.height = q.get('h')+'px' }
+f.onload = async () => {
+  const w = f.contentWindow, d = f.contentDocument
+  let fehler = []
+  w.addEventListener('error', e => fehler.push(e.message))
+
+  p('Warte auf App …')
+  const app = await bis(()=> d.querySelector('.rk') && d.querySelectorAll('section.anchor').length>5, 25000)
+  p('App geladen, Reise-Karte im DOM', !!app)
+  if(!app){ p('ABBRUCH'); return }
+
+  // 1) Karte in den Sichtbereich bringen (IntersectionObserver → lazy init)
+  d.querySelector('.rk').scrollIntoView()
+  await warte(600)
+
+  // 2) MapLibre-Canvas rendert (WebGL)
+  const cv = await bis(()=>{ const c = d.querySelector('.rk-map canvas'); return c && c.width>50 ? c : null }, 20000)
+  p('MapLibre-Canvas rendert: ' + (cv? cv.width+'×'+cv.height : '—'), !!cv)
+
+  // 3) Touren erkannt?
+  const legs = [...d.querySelectorAll('.rk-leg')]
+  p('Touren in der Legende: ' + legs.length + ' → ' + legs.map(b=>b.textContent.trim()).join(' | '), legs.length>0)
+  if(!legs.length){ p('Keine Reisen mit Stopps — Rest nicht prüfbar'); return }
+
+  // 4) Nummerierte Stopps im GeoJSON
+  await warte(2500)
+  let stopps = -1, routen = -1
+  try {
+    // MapLibre-Instanz über das Canvas nicht erreichbar → über die Quelldaten im DOM prüfen
+    stopps = d.querySelectorAll('.rk-map .maplibregl-canvas-container') ? 1 : 0
+  } catch{}
+
+  // 5) Klick auf eine Route (über Legende — dieselbe waehle()-Funktion wie der Kartenklick)
+  klick(legs[0]); await warte(900)
+  const info = d.querySelector('.info')
+  p('Infofenster öffnet nach Routen-Klick', !!info)
+  if(info){
+    const name = info.querySelector('.i-name')?.textContent || ''
+    const zahlen = [...info.querySelectorAll('.i-zahlen span')].map(s=>s.textContent.trim())
+    const nrs = [...info.querySelectorAll('.i-stopp i')].map(i=>i.textContent)
+    p('  Titel: ' + name, !!name)
+    p('  Kennzahlen: ' + zahlen.join(' · '), zahlen.length>=2)
+    p('  Stopp-Liste im Popup (klein ausgeblendet): ' + nrs.length, true)
+    const log = info.querySelector('.i-log')
+    p('  Logbuch-Einträge: ' + (log ? log.querySelectorAll('.i-log-zeile').length : 0), true)
+    const foto = info.querySelector('.i-foto img')
+    p('  Foto vorhanden: ' + (foto ? 'ja' : 'nein (keine Fotos hinterlegt)'), true)
+    if(foto){
+      const vorher = foto.src
+      const pfeil = info.querySelectorAll('.f-steuer button')[1]
+      if(pfeil){ klick(pfeil); await warte(400)
+        p('  Foto-Durchblättern (Pfeil ›)', d.querySelector('.i-foto img').src !== vorher) }
+      else p('  nur 1 Foto → keine Pfeile (korrekt)', true)
+    }
+    p('  Link „Zur Reise" vorhanden', !!info.querySelector('.i-link'))
+  }
+
+  // 6) Zweite Tour wählen → Infofenster wechselt
+  const n1 = d.querySelector('.i-name')?.textContent || ''
+  if(legs.length>1){ klick(legs[1]); await warte(800)
+    const n2 = d.querySelector('.i-name')?.textContent||''
+    p('Wechsel zu Tour 2: ' + n2, !!n2 && n2 !== n1) }
+
+  // 7) Vergrößern
+  const lupe = d.querySelector('.rk-btn')
+  klick(lupe); await warte(700)
+  const gross = d.querySelector('.rk.gross')
+  p('Karte vergrößert (Vollbild)', !!gross)
+  if(gross){
+    // Muss wirklich das Fenster füllen. Ein `transform` auf einem Vorfahren würde
+    // position:fixed umbiegen — dann klebt das „Vollbild" im Textfluss.
+    const r = gross.getBoundingClientRect(), vh = w.innerHeight, vw = w.innerWidth
+    const fuellt = r.top < 40 && r.left < 40 && r.width > vw*0.85 && r.height > vh*0.8
+    p('  füllt das Fenster: ' + Math.round(r.width)+'×'+Math.round(r.height)+' bei '+Math.round(r.left)+','+Math.round(r.top)+' (Fenster '+vw+'×'+vh+')', fuellt)
+    if(!fuellt){
+      const schuld=[]
+      for(let el=gross.parentElement; el && el!==d.documentElement; el=el.parentElement){
+        const cs = w.getComputedStyle(el)
+        const g=[]
+        if(cs.transform && cs.transform!=='none') g.push('transform:'+cs.transform)
+        if(cs.filter && cs.filter!=='none') g.push('filter')
+        if(cs.backdropFilter && cs.backdropFilter!=='none') g.push('backdrop-filter')
+        if(cs.perspective && cs.perspective!=='none') g.push('perspective')
+        if(cs.willChange && !['auto',''].includes(cs.willChange)) g.push('will-change:'+cs.willChange)
+        if(cs.contain && !['none',''].includes(cs.contain)) g.push('contain:'+cs.contain)
+        if(cs.containerType && !['normal',''].includes(cs.containerType)) g.push('container-type:'+cs.containerType)
+        if(g.length) schuld.push((el.tagName.toLowerCase()+'.'+String(el.className||'').split(' ')[0])+' → '+g.join('+'))
+      }
+      p('  Bezugsrahmen-Verursacher: ' + (schuld.join(' | ')||'keiner gefunden'), false)
+      const cs2 = w.getComputedStyle(gross)
+      p('  .rk.gross position=' + cs2.position + ' inset=' + cs2.top+'/'+cs2.left + ' display=' + cs2.display + ' zIndex=' + cs2.zIndex, false)
+    }
+  }
+  await warte(900)
+  const cv2 = d.querySelector('.rk-map canvas')
+  const kinder = [...d.querySelectorAll('.rk-map > *')].map(e=>e.className).join(',') || 'leer'
+  const ig = d.querySelector('.info.gross')
+  if(ig){ const ir = ig.getBoundingClientRect(), br = d.querySelector('.rk.gross').getBoundingClientRect()
+    const breit = br.width >= 560
+    const rechts = ir.left > br.left + br.width*0.4
+    p('  Infofenster ' + (breit? 'rechts neben der Karte (Breitformat)' : 'unten (Hochformat)') + ': '+Math.round(ir.width)+'×'+Math.round(ir.height), breit ? rechts : true) }
+  const nrsG = [...d.querySelectorAll('.info.gross .i-stopp i')].map(i=>i.textContent)
+  p('  Nummerierte Stopp-Liste im Vollbild: ' + nrsG.length + ' (' + nrsG.slice(0,5).join(',') + (nrsG.length>5?',…':'') + ')', nrsG.length>0 && nrsG[0]==='1')
+  p('  Canvas nach Vergrößern: ' + (cv2? cv2.width+'×'+cv2.height : '— | .rk-map enthält: '+kinder), !!cv2 && cv2.width>50)
+  klick(d.querySelector('.rk.gross .rk-btn')); await warte(600)
+  p('Karte wieder verkleinert', !d.querySelector('.rk.gross'))
+
+  // 8) Keine JS-Fehler
+  p('JavaScript-Fehler: ' + (fehler.length? fehler.join(' | ') : 'keine'), fehler.length===0)
+
+  const bad = zeilen.filter(z=>z[0]==='❌').length
+  p('———— ' + (bad? bad+' FEHLER' : 'ALLES OK') + ' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0); document.title = bad? bad+' Fehler' : 'OK'
+}
+</script>

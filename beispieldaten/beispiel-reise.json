@@ -1,0 +1,452 @@
+{
+  "typ": "wa-reiseplan-backup",
+  "version": 7,
+  "exportiert": "2026-10-15T17:14:54.956Z",
+  "daten": {},
+  "reisen": [
+    {
+      "id": "bsp-etappe-perth",
+      "typ": "etappe",
+      "name": "Ankommen in Perth",
+      "von": "2027-05-01",
+      "tage": 3,
+      "art": "auto",
+      "flug": false,
+      "farbe": "#1a7a8a",
+      "imGesamtplan": true,
+      "stops": [
+        {
+          "name": "Perth",
+          "lat": -31.9523,
+          "lon": 115.8613,
+          "img": null
+        },
+        {
+          "name": "Rottnest Island (Wadjemup)",
+          "lat": -32.00727,
+          "lon": 115.50415,
+          "img": null,
+          "ortId": "rottnest_island_wadjemup"
+        }
+      ],
+      "geaendert": "2026-10-15T16:37:16.549Z"
+    },
+    {
+      "id": "bsp-etappe-coral",
+      "typ": "etappe",
+      "name": "Coral Coast",
+      "von": "2027-05-04",
+      "tage": 9,
+      "art": "auto",
+      "flug": false,
+      "farbe": "#c1662f",
+      "imGesamtplan": true,
+      "stops": [],
+      "geaendert": "2026-10-15T16:37:16.549Z"
+    },
+    {
+      "id": "bsp-etappe-pilbara",
+      "typ": "etappe",
+      "name": "Pilbara & Karijini",
+      "von": "2027-05-13",
+      "tage": 7,
+      "art": "auto",
+      "flug": false,
+      "farbe": "#7a5c8e",
+      "imGesamtplan": true,
+      "stops": [],
+      "geaendert": "2026-10-15T16:37:16.549Z"
+    },
+    {
+      "id": "bsp-route-coral",
+      "typ": "route",
+      "etappeId": "bsp-etappe-coral",
+      "name": "Coral Coast: Perth → Exmouth",
+      "art": "auto",
+      "farbe": "#c1662f",
+      "tage": 9,
+      "imGesamtplan": false,
+      "stops": [
+        {
+          "name": "Perth",
+          "lat": -31.9523,
+          "lon": 115.8613,
+          "img": null
+        },
+        {
+          "name": "Lancelin Sand Dunes",
+          "lat": -31.01,
+          "lon": 115.33,
+          "img": null,
+          "ortId": "lancelin_sand_dunes"
+        },
+        {
+          "name": "The Pinnacles (Nambung NP)",
+          "lat": -30.58819,
+          "lon": 115.15579,
+          "img": null,
+          "ortId": "the_pinnacles_nambung_np"
+        },
+        {
+          "name": "Kalbarri NP & Murchison Station",
+          "lat": -27.61616,
+          "lon": 114.47554,
+          "img": null,
+          "ortId": "kalbarri_np_murchison_station"
+        },
+        {
+          "name": "Monkey Mia & Herald Bight",
+          "lat": -25.79427,
+          "lon": 113.71891,
+          "img": null,
+          "ortId": "monkey_mia_herald_bight"
+        },
+        {
+          "name": "Carnarvon",
+          "lat": -24.884,
+          "lon": 113.659,
+          "img": null
+        },
+        {
+          "name": "Quobba Blowholes",
+          "lat": -24.48161,
+          "lon": 113.40739,
+          "img": null,
+          "ortId": "quobba_blowholes"
+        },
+        {
+          "name": "Coral Bay",
+          "lat": -23.14368,
+          "lon": 113.77017,
+          "img": null,
+          "ortId": "coral_bay"
+        },
+        {
+          "name": "Turquoise Bay & Jurabi Turtle Centre",
+          "lat": -22.09602,
+          "lon": 113.88762,
+          "img": null,
+          "ortId": "turquoise_bay_jurabi_turtle_centre"
+        }
+      ],
+      "geaendert": "2026-10-15T16:37:16.549Z"
+    },
+    {
+      "id": "bsp-route-karijini",
+      "typ": "route",
+      "etappeId": "bsp-etappe-pilbara",
+      "name": "Exmouth → Karijini → Port Hedland",
+      "art": "auto",
+      "farbe": "#7a5c8e",
+      "tage": 7,
+      "imGesamtplan": false,
+      "stops": [
+        {
+          "name": "Exmouth",
+          "lat": -21.9314,
+          "lon": 114.1222,
+          "img": null
+        },
+        {
+          "name": "Tom Price",
+          "lat": -22.6939,
+          "lon": 117.7932,
+          "img": null
+        },
+        {
+          "name": "Karijini NP",
+          "lat": -22.40684,
+          "lon": 118.47567,
+          "img": null,
+          "ortId": "karijini_np"
+        },
+        {
+          "name": "Port Hedland",
+          "lat": -20.3106,
+          "lon": 118.6014,
+          "img": null
+        }
+      ],
+      "geaendert": "2026-10-15T16:37:16.549Z"
+    }
+  ],
+  "eigeneOrte": [],
+  "gesamtStart": "2027-05-01",
+  "journal": [
+    {
+      "id": "bsp-tag-2027-05-01",
+      "datum": "2027-05-01",
+      "ort": "Perth",
+      "lat": null,
+      "lon": null,
+      "ortId": null,
+      "reiseId": null,
+      "legIdx": null,
+      "text": "Gelandet, Camper-Papiere sortiert, abends Kings Park. Die Stadt glitzert unter uns.",
+      "fotos": [],
+      "audios": [],
+      "felder": {
+        "waehrung": "AUD",
+        "distance_km": 18,
+        "temp_celsius": "24 °C, klar",
+        "fly_factor": 1,
+        "stimmung": 5,
+        "verkehrsmittel": [
+          "Bus"
+        ],
+        "kosten_lebensmittel": "64"
+      },
+      "geaendert": "2026-10-15T17:14:54.956Z",
+      "sichtungen": [
+        {
+          "id": "s-2027-05-01-galah",
+          "art": "galah",
+          "anzahl": 8,
+          "ort": "Perth",
+          "lat": -31.9523,
+          "lon": 115.8613,
+          "zeit": "2027-05-01T09:00:00.000Z"
+        },
+        {
+          "id": "s-2027-05-01-pelikan",
+          "art": "pelikan",
+          "anzahl": 2,
+          "ort": "Perth",
+          "lat": -31.9523,
+          "lon": 115.8613,
+          "zeit": "2027-05-01T09:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "bsp-tag-2027-05-05",
+      "datum": "2027-05-05",
+      "ort": "The Pinnacles (Nambung NP)",
+      "lat": null,
+      "lon": null,
+      "ortId": null,
+      "reiseId": null,
+      "legIdx": null,
+      "text": "Kalksteinsäulen im Abendlicht, danach der klarste Sternenhimmel bisher.",
+      "fotos": [],
+      "audios": [],
+      "felder": {
+        "waehrung": "AUD",
+        "distance_km": 196,
+        "temp_celsius": "27 °C, sonnig",
+        "fly_factor": 3,
+        "stimmung": 5,
+        "verkehrsmittel": [
+          "Camper"
+        ],
+        "kosten_sprit": "96",
+        "kosten_attraktion": "15",
+        "roadside_sightings": [
+          "🦘 Känguru",
+          "🦤 Emu",
+          "🦅 Greifvogel"
+        ],
+        "roadkill_counts": {
+          "Känguru": 2,
+          "Echse": 1
+        },
+        "roadkill_density": "Niedrig",
+        "roadtrain_count": "4"
+      },
+      "geaendert": "2026-10-15T17:14:54.956Z",
+      "sichtungen": [
+        {
+          "id": "s-2027-05-05-kaenguru",
+          "art": "kaenguru",
+          "anzahl": 6,
+          "ort": "The Pinnacles",
+          "lat": -30.58819,
+          "lon": 115.15579,
+          "zeit": "2027-05-05T09:00:00.000Z"
+        },
+        {
+          "id": "s-2027-05-05-emu",
+          "art": "emu",
+          "anzahl": 3,
+          "ort": "The Pinnacles",
+          "lat": -30.58819,
+          "lon": 115.15579,
+          "zeit": "2027-05-05T09:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "bsp-tag-2027-05-08",
+      "datum": "2027-05-08",
+      "ort": "Coral Bay",
+      "lat": null,
+      "lon": null,
+      "ortId": null,
+      "reiseId": null,
+      "legIdx": null,
+      "text": "Schnorcheln direkt vom Strand, eine Schildkröte zieht vorbei. Abends Fish & Chips.",
+      "fotos": [],
+      "audios": [],
+      "felder": {
+        "waehrung": "AUD",
+        "distance_km": 152,
+        "temp_celsius": "29 °C, leichter Wind",
+        "fly_factor": 2,
+        "stimmung": 5,
+        "verkehrsmittel": [
+          "Camper"
+        ],
+        "kosten_sprit": "81",
+        "kosten_genuss": "38",
+        "roadside_sightings": [
+          "🦘 Känguru",
+          "🐄 Vieh"
+        ],
+        "roadkill_counts": {
+          "Känguru": 3,
+          "Vogel": 1
+        },
+        "roadkill_density": "Mittel",
+        "roadtrain_count": "7"
+      },
+      "geaendert": "2026-10-15T17:14:54.956Z",
+      "sichtungen": [
+        {
+          "id": "s-2027-05-08-schildkroete",
+          "art": "schildkroete",
+          "anzahl": 1,
+          "ort": "Coral Bay",
+          "lat": -23.14368,
+          "lon": 113.77017,
+          "zeit": "2027-05-08T09:00:00.000Z"
+        },
+        {
+          "id": "s-2027-05-08-manta",
+          "art": "manta",
+          "anzahl": 2,
+          "ort": "Coral Bay",
+          "lat": -23.14368,
+          "lon": 113.77017,
+          "zeit": "2027-05-08T09:00:00.000Z"
+        },
+        {
+          "id": "s-2027-05-08-delfin",
+          "art": "delfin",
+          "anzahl": 3,
+          "ort": "Coral Bay",
+          "lat": -23.14368,
+          "lon": 113.77017,
+          "zeit": "2027-05-08T09:00:00.000Z"
+        }
+      ]
+    }
+  ],
+  "quizAntworten": {},
+  "packliste": {
+    "checked": {},
+    "custom": []
+  },
+  "notizen": [
+    {
+      "id": "bsp-n1",
+      "kategorie": "einkauf",
+      "text": "20 Liter Wasser, Obst, Fliegennetz",
+      "erledigt": false,
+      "zeit": "2026-10-15T16:37:16.549Z"
+    },
+    {
+      "id": "bsp-n2",
+      "kategorie": "routentips",
+      "text": "Vor Minilya volltanken, danach lange nichts",
+      "erledigt": false,
+      "zeit": "2026-10-15T16:37:16.549Z"
+    }
+  ],
+  "wanderungen": [
+    {
+      "id": "bsp-w1",
+      "name": "Dales Gorge Rundweg",
+      "datum": "2027-05-15",
+      "zeit": "07:30",
+      "status": "geplant",
+      "trailhead": {
+        "name": "Karijini NP",
+        "lat": -22.40684,
+        "lon": 118.47567,
+        "img": null,
+        "ortId": "karijini_np"
+      },
+      "km": 2,
+      "dauerMin": 120,
+      "hm": 100,
+      "wasserL": 2,
+      "schwierigkeit": "mittel",
+      "wegart": "rundweg",
+      "beschreibung": "Fortescue Falls und Fern Pool, früh starten.",
+      "geaendert": "2026-10-15T16:37:16.549Z"
+    }
+  ],
+  "checkins": [],
+  "reiseBudget": 8000,
+  "vorbereitung": {
+    "checked": {},
+    "custom": []
+  },
+  "dokumente": [],
+  "vorabKosten": [
+    {
+      "id": "bsp-k1",
+      "text": "Camper-Miete (Beispiel)",
+      "kat": "kosten_mietfahrzeug",
+      "betrag": 1950,
+      "waehrung": "EUR",
+      "datum": "2027-02-10",
+      "geaendert": "2026-10-15T16:37:16.549Z"
+    },
+    {
+      "id": "bsp-k2",
+      "text": "Flug (Beispiel)",
+      "kat": "kosten_flug",
+      "betrag": 1240,
+      "waehrung": "EUR",
+      "datum": "2027-01-20",
+      "geaendert": "2026-10-15T16:37:16.549Z"
+    }
+  ],
+  "buchungen": {
+    "stand": "2026-10-15T16:37:16.549Z",
+    "von": "2027-05-01",
+    "bis": "2027-05-19",
+    "persoenlich": [],
+    "events": [
+      {
+        "id": "bsp-b1",
+        "datum": "2027-05-01",
+        "kat": "flug",
+        "titel": "Ankunft Perth",
+        "sub": "Beispielbuchung",
+        "emoji": "✈️",
+        "docs": []
+      },
+      {
+        "id": "bsp-b2",
+        "datum": "2027-05-04",
+        "kat": "mietwagen",
+        "titel": "Camper-Übernahme",
+        "sub": "Perth · Beispielbuchung",
+        "emoji": "🚐",
+        "docs": []
+      },
+      {
+        "id": "bsp-b3",
+        "datum": "2027-05-08",
+        "kat": "unterkunft",
+        "titel": "Campingplatz Coral Bay",
+        "sub": "Beispielbuchung",
+        "emoji": "🏕️",
+        "docs": []
+      }
+    ]
+  },
+  "grabsteine": {}
+}

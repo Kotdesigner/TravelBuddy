@@ -1,0 +1,30 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eigener Ort — Ansicht</title>
+<style>html,body{margin:0;height:100%;background:#111}iframe{width:100vw;height:100vh;border:0;display:block}</style>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+const tippe=(el,v)=>{const s=Object.getOwnPropertyDescriptor(el.ownerDocument.defaultView.HTMLInputElement.prototype,'value').set
+  s.call(el,v); el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true}))}
+async function bis(fn,ms,st=500){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const ORT=new URLSearchParams(location.search).get('ort')||'Coral Bay'
+document.getElementById('f').onload=async()=>{
+  const d=document.getElementById('f').contentDocument
+  await bis(()=>d.querySelector('#meine-orte'),25000)
+  await warte(1200)
+  d.querySelector('#meine-orte').scrollIntoView()
+  klick(d.querySelector('#meine-orte .mo-kopf .btn')); await warte(600)
+  const form=await bis(()=>d.querySelector('#meine-orte .mo-form'),5000)
+  tippe(form.querySelector('input'),ORT)
+  const t=[...form.querySelectorAll('.mo-tag')].find(b=>b.textContent.trim()==='GEHEIMTIPP'); if(t) klick(t)
+  await warte(300); klick(form.querySelector('.btn.go'))
+  // auf Bild + Beschreibung warten
+  await bis(()=>{const k=d.querySelector('#meine-orte .mo-card .card')
+    return k && k.querySelector('.img img') && (k.querySelector('.desc')?.textContent||'').length>20},70000,1000)
+  await warte(1200)
+  d.querySelector('#meine-orte .mo-card')?.scrollIntoView({block:'center'})
+}
+</script>

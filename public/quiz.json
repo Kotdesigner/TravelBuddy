@@ -1,0 +1,696 @@
+{
+ "fragen": [
+  {
+   "id": 1,
+   "tag": 1,
+   "thema": "Die Form der Dinge",
+   "frage": "Welche einzigartige Form hat der Kot eines Wombats?",
+   "antworten": [
+    "Sternförmig",
+    "Würfelförmig",
+    "Pyramidenförmig",
+    "Perfekt rund"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 2,
+   "tag": 2,
+   "thema": "Prominente Trinker",
+   "frage": "Welcher spätere australische Premierminister stellte 1954 einen Weltrekord im Bier-Schnelltrinken auf (1,4 Liter in 11 Sekunden)?",
+   "antworten": [
+    "John Howard",
+    "Paul Keating",
+    "Bob Hawke",
+    "Kevin Rudd"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 3,
+   "tag": 3,
+   "thema": "Stadtgeschichte",
+   "frage": "Wie hieß die Metropole Melbourne im Jahr 1835 bei ihrer Gründung für kurze Zeit?",
+   "antworten": [
+    "New London",
+    "Batmania",
+    "Cooktown",
+    "Kangaroo City"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 4,
+   "tag": 4,
+   "thema": "Kuriose Kriege",
+   "frage": "Im Jahr 1932 erklärte die australische Armee einer Tierart offiziell den „Krieg“ – und verlor. Welcher?",
+   "antworten": [
+    "Dingo",
+    "Emu",
+    "Rotem Känguru",
+    "Cane Toad (Akrabröte)"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 5,
+   "tag": 5,
+   "thema": "Verschollen im Meer",
+   "frage": "Im Jahr 1967 verschwand der amtierende Premierminister Harold Holt spurlos beim Schwimmen. Was wurde nach ihm benannt?",
+   "antworten": [
+    "Ein Flughafen",
+    "Eine Haifisch-Schutzzone",
+    "Ein Schwimmbad (Harold Holt Memorial Swimming Centre)",
+    "Ein U-Boot-Stützpunkt"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 6,
+   "tag": 6,
+   "thema": "Zahlen, bitte! (Strände)",
+   "frage": "Australien hat eine gigantische Küste. Wie viele Strände gibt es schätzungsweise auf dem Kontinent?",
+   "antworten": [
+    "Ca. 2.500",
+    "Ca. 5.000",
+    "Ca. 8.200",
+    "Ca. 10.600"
+   ],
+   "richtig": 3
+  },
+  {
+   "id": 7,
+   "tag": 7,
+   "thema": "Wüstenschiffe",
+   "frage": "Welches Land exportiert Kamele nach Saudi-Arabien, weil es die größte Wildkamel-Population der Welt hat?",
+   "antworten": [
+    "Ägypten",
+    "Australien",
+    "Sudan",
+    "Tunesien"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 8,
+   "tag": 8,
+   "thema": "Giftzähne",
+   "frage": "Das Schnabeltier ist eines der wenigen giftigen Säugetiere. Wo befindet sich das Gift beim Männchen?",
+   "antworten": [
+    "In den Zähnen",
+    "An den Spornen der Hinterbeine",
+    "Am Schwanzansatz",
+    "In den Krallen der Vorderpfoten"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 9,
+   "tag": 9,
+   "thema": "Gigantische Zäune",
+   "frage": "Wie lang ist der berühmte australische Dingo Fence, der längste Zaun der Welt?",
+   "antworten": [
+    "Ca. 1.200 km",
+    "Ca. 3.400 km",
+    "Ca. 5.600 km",
+    "Ca. 8.900 km"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 10,
+   "tag": 10,
+   "thema": "Schnee in den Tropen?",
+   "frage": "Glaube es oder nicht: Die Australischen Alpen erhalten im Winter durchschnittlich auf mehr Fläche Schnee als welches europäische Land?",
+   "antworten": [
+    "Österreich",
+    "Schweiz",
+    "Norwegen",
+    "Italien"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 11,
+   "tag": 11,
+   "thema": "Erfindungen",
+   "frage": "Welche bahnbrechende Sicherheitserfindung für die Luftfahrt wurde 1953 vom Australier David Warren entwickelt?",
+   "antworten": [
+    "Der Schleudersitz",
+    "Die Schwimmweste",
+    "Der Flugschreiber („Black Box“)",
+    "Die Sauerstoffmaske"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 12,
+   "tag": 12,
+   "thema": "Überzahl der Beuteltiere",
+   "frage": "Wie viele Kängurus leben schätzungsweise in Australien (Verhältnis zu ca. 26 Mio. Menschen)?",
+   "antworten": [
+    "Ca. 10–15 Millionen",
+    "Ca. 20–25 Millionen",
+    "Ca. 40–50 Millionen",
+    "Ca. 90–100 Millionen"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 13,
+   "tag": 13,
+   "thema": "Inselwelt",
+   "frage": "Fraser Island (K'gari) ist die größte... was der Welt?",
+   "antworten": [
+    "Vulkaninsel",
+    "Sandinsel",
+    "Koralleninsel",
+    "Binneninsel"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 14,
+   "tag": 14,
+   "thema": "Tierische Superlative",
+   "frage": "Welche Schlange gilt nach dem Landungswert des Toxin-Tests als das giftigste Landtier der Welt?",
+   "antworten": [
+    "Schwarze Mamba",
+    "Königskobra",
+    "Inlandtaipan",
+    "Östliche Braunschlange"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 15,
+   "tag": 15,
+   "thema": "Straßen-Giganten",
+   "frage": "Wie lang ist der Highway 1, der einmal komplett um das australische Festland herumführt (längster nationaler Highway der Welt)?",
+   "antworten": [
+    "Ca. 8.500 km",
+    "Ca. 11.000 km",
+    "Ca. 14.500 km",
+    "Ca. 22.000 km"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 16,
+   "tag": 16,
+   "thema": "Schafslogik",
+   "frage": "Wie hoch war das historische Spitzenverhältnis von Schafen zu Menschen in Australien im 20. Jahrhundert?",
+   "antworten": [
+    "3 zu 1",
+    "5 zu 1",
+    "Etwa 10 zu 1",
+    "25 zu 1"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 17,
+   "tag": 17,
+   "thema": "Steuer-Kuriose",
+   "frage": "Warum erfand ein australischer Brauer 1922 die Paste „Vegemite“?",
+   "antworten": [
+    "Um ein Mittel gegen Kater zu verkaufen",
+    "Aus Abfallprodukten der Bierherstellung (Hefehefe)",
+    "Als Militärverpflegung für den Dschungel",
+    "Aus Mangel an Erdnussbutter"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 18,
+   "tag": 18,
+   "thema": "Das rote Zentrum",
+   "frage": "Uluru (Ayers Rock) ist ein Monolith. Wie viel Prozent des Felsens liegen schätzungsweise unter der Erdoberfläche?",
+   "antworten": [
+    "Ca. 10 %",
+    "Ca. 30 %",
+    "Ca. 50 %",
+    "Ca. 85 %"
+   ],
+   "richtig": 3
+  },
+  {
+   "id": 19,
+   "tag": 19,
+   "thema": "Gesetze aus alten Zeiten",
+   "frage": "In welchem Bundesstaat war es früher gesetzlich verboten, sonntags nach 12 Uhr mittags pinke Hotpants zu tragen?",
+   "antworten": [
+    "New South Wales",
+    "Victoria",
+    "Queensland",
+    "Tasmania"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 20,
+   "tag": 20,
+   "thema": "Tödliche Minis",
+   "frage": "Die Irukandji-Qualle ist extrem giftig und löst das gefürchtete Irukandji-Syndrom aus. Wie groß ist ihr Schirm?",
+   "antworten": [
+    "Ca. 30–40 cm",
+    "Ca. 15–20 cm",
+    "Ca. 1–2 cm (Fingernagelgröße)",
+    "Nur mikroskopisch sichtbar"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 21,
+   "tag": 21,
+   "thema": "Tech-Geschichte",
+   "frage": "Welches heute alltägliche drahtlose Netzwerkverfahren basiert maßgeblich auf Patenten der australischen Wissenschaftsbehörde CSIRO?",
+   "antworten": [
+    "Bluetooth",
+    "Wi-Fi (WLAN)",
+    "5G",
+    "GPS"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 22,
+   "tag": 22,
+   "thema": "Pinke Seen",
+   "frage": "Warum ist der berühmte Lake Hillier auf Middle Island dauerhaft knallpink gefärbt?",
+   "antworten": [
+    "Durch chemische Abfälle",
+    "Durch Algen (Dunaliella salina) und extremen Salzgehalt",
+    "Durch Lichtbrechung von Korallen",
+    "Durch rotes vulkanisches Gestein"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 23,
+   "tag": 23,
+   "thema": "Wahltag ist Pflicht",
+   "frage": "Australien hat eine Wahlpflicht für Staatsbürger. Wie hoch ist das Bußgeld beim ersten unentschuldigten Nichtwählen bei einer Bundeswahl in etwa?",
+   "antworten": [
+    "5 AUD",
+    "20 AUD",
+    "250 AUD",
+    "1.000 AUD"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 24,
+   "tag": 24,
+   "thema": "Rekord-Station",
+   "frage": "Die größte Rinderfarm Australiens (Anna Creek Station) ist größer als welches europäische Land?",
+   "antworten": [
+    "Luxemburg",
+    "Slowakei",
+    "Belgien",
+    "Dänemark"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 25,
+   "tag": 25,
+   "thema": "Ungebetene Gäste",
+   "frage": "Wie viele Cane Toads (Akrabröten) wurden 1935 ursprünglich freigelassen, um Käfer im Zuckerrohr zu bekämpfen (heute sind es Hunderte Millionen)?",
+   "antworten": [
+    "102 Stück",
+    "102 Stück",
+    "5.000 Stück",
+    "50.000 Stück"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 26,
+   "tag": 26,
+   "thema": "Das Great Barrier Reef",
+   "frage": "Das Great Barrier Reef ist so riesig, dass man es aus dem Weltall sehen kann. Aus wie vielen Einzelriffen besteht es etwa?",
+   "antworten": [
+    "Ca. 500",
+    "Ca. 1.200",
+    "Ca. 2.900",
+    "Ca. 10.000"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 27,
+   "tag": 27,
+   "thema": "Zeitzonen-Mischmasch",
+   "frage": "Einige Orte in Australien (wie Eucla oder Lord Howe Island) haben eine sehr ungewöhnliche Zeitzone. Was zeichnet sie aus?",
+   "antworten": [
+    "Sie ändern die Uhrzeit alle 3 Monate",
+    "Sie haben Abweichungen von 30 oder 45 Minuten zur Weltzeit",
+    "Sie nutzen keine Sommerzeit, stellen aber die Uhren rückwärts",
+    "Sie richten sich strikt nach der Sonnenwende"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 28,
+   "tag": 28,
+   "thema": "Känguru-Physiologie",
+   "frage": "Was können Kängurus aufgrund der Anatomie ihrer Hinterbeine und des Schwanzes fast gar nicht?",
+   "antworten": [
+    "Schwimmen",
+    "Springen",
+    "Rückwärtsgehen",
+    "Schneller als 20 km/h laufen"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 29,
+   "tag": 29,
+   "thema": "Ein Volk von Glücksspielern",
+   "frage": "Welchen Anteil an den weltweiten Spielautomaten („Pokies“) besaß Australien jahrelang im Verhältnis zu seiner kleinen Bevölkerung?",
+   "antworten": [
+    "Ca. 2 %",
+    "Ca. 5 %",
+    "Ca. 20 % (ohne Casino-Mekkas wie Las Vegas)",
+    "Ca. 50 %"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 30,
+   "tag": 30,
+   "thema": "Das tote Zentrum",
+   "frage": "Wie viel Prozent des australischen Kontinents gelten als Wüste oder arides/semi-arides Land?",
+   "antworten": [
+    "Ca. 25 %",
+    "Ca. 45 %",
+    "Ca. 70 %",
+    "Ca. 90 %"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 31,
+   "tag": 31,
+   "thema": "Historische Post",
+   "frage": "Wer wurde 1810 der erste offizielle Postmeister von New South Wales – und war eigentlich ein verurteilter Sträfling?",
+   "antworten": [
+    "Arthur Phillip",
+    "Isaac Nichols",
+    "Ned Kelly",
+    "Lachlan Macquarie"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 32,
+   "tag": 32,
+   "thema": "Beuteltier-Beutel",
+   "frage": "Bei welcher Beuteltierart öffnet sich der Beutel nach HINTEN (nach unten), damit beim Graben kein Dreck hineingerät?",
+   "antworten": [
+    "Koala",
+    "Känguru",
+    "Wombat",
+    "Quokka"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 33,
+   "tag": 33,
+   "thema": "Tödliche Schnecken",
+   "frage": "Welche hübsche Meeresschnecke in den Gewässern von Queensland kann mit ihren Giftfeilen für Menschen tödlich sein?",
+   "antworten": [
+    "Tiger-Porzellanschnecke",
+    "Kegelschnecke (Cone Snail)",
+    "Nacktschnecke",
+    "Fechterschnecke"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 34,
+   "tag": 34,
+   "thema": "Die Eisenbahn",
+   "frage": "Der Zug „The Ghan“ durchquert Australien von Nord nach Süd. Wovon leitet sich der Name ab?",
+   "antworten": [
+    "Von einer Ureinwohner-Sprache",
+    "Von den afghanischen Kamelführern im 19. Jahrhundert",
+    "Vom Wort „Giant Highway Across Nation“",
+    "Vom Ingenieur Arthur Ghan"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 35,
+   "tag": 35,
+   "thema": "Schnellstraße ohne Limit",
+   "frage": "Auf welchem berühmten australischen Highway (Stuart Highway) gab es im Northern Territory stellenweise lange Zeit kein Tempolimit?",
+   "antworten": [
+    "Pacific Highway",
+    "Stuart Highway",
+    "Great Ocean Road",
+    "Bruce Highway"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 36,
+   "tag": 36,
+   "thema": "Tierischer Nachwuchs",
+   "frage": "Wie groß ist ein Känguru-Baby (Joey) direkt nach der Geburt?",
+   "antworten": [
+    "So groß wie eine Katze",
+    "So groß wie eine Ratte",
+    "So groß wie eine Gummi-Bärchen / Erdbeere (ca. 2 cm)",
+    "So groß wie ein Basketball"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 37,
+   "tag": 37,
+   "thema": "Pflanzliche Giganten",
+   "frage": "Der Eukalyptusbaum macht den Hauptteil der australischen Wälder aus. Wie viele verschiedene Eukalyptusarten gibt es in Australien?",
+   "antworten": [
+    "Ca. 50",
+    "Ca. 200",
+    "Über 700",
+    "Über 3.000"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 38,
+   "tag": 38,
+   "thema": "Goldrausch",
+   "frage": "Im Jahr 1869 wurde in Victoria der größte jemals gefundene Gold-Nugget entdeckt. Wie hieß er?",
+   "antworten": [
+    "Australian Star",
+    "Welcome Stranger",
+    "Golden Eagle",
+    "Big Bertha"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 39,
+   "tag": 39,
+   "thema": "Das Lachen des Outbacks",
+   "frage": "Welcher Vogel ist bekannt für seinen Ruf, der wie ein hohnlachender Mensch klingt?",
+   "antworten": [
+    "Kakadu",
+    "Cassowary",
+    "Kookaburra (Lachender Hans)",
+    "Magpie"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 40,
+   "tag": 40,
+   "thema": "Dingo-Mythen",
+   "frage": "Auf welcher berühmten Insel ist das Füttern oder Annähern an die dort reingezüchteten wilden Dingos strengstens verboten?",
+   "antworten": [
+    "Tasmania",
+    "Kangaroo Island",
+    "K'gari (Fraser Island)",
+    "Rottnest Island"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 41,
+   "tag": 41,
+   "thema": "Das freundlichste Tier",
+   "frage": "Die Quokkas sind für ihr Dauerlächeln berühmt. Auf welcher westaustralischen Insel leben sie hauptsächlich?",
+   "antworten": [
+    "Christmas Island",
+    "Rottnest Island",
+    "Magnetic Island",
+    "Phillip Island"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 42,
+   "tag": 42,
+   "thema": "Straßenzeichen-Kuriosum",
+   "frage": "Was bedeutet das australische Verkehrszeichen mit der Aufschrift „Road Trains Give Way“?",
+   "antworten": [
+    "Road Trains müssen Vorfahrt gewähren",
+    "ACHTUNG: Du musst den riesigen Lkw mit bis zu 53 m Länge Vorfahrt/Platz machen!",
+    "Straße ist für Road Trains gesperrt",
+    "Überholen von Überlängen ist verboten"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 43,
+   "tag": 43,
+   "thema": "Abgeschiedenheit",
+   "frage": "Welche australische Großstadt gilt geografisch als die isolierteste Millionenstadt der Welt?",
+   "antworten": [
+    "Darwin",
+    "Brisbane",
+    "Perth",
+    "Adelaide"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 44,
+   "tag": 44,
+   "thema": "Sydney Opera House",
+   "frage": "Aus wie vielen Keramikfliesen besteht das Dach des berühmten Sydney Opera House?",
+   "antworten": [
+    "Ca. 100.000",
+    "Ca. 500.000",
+    "Über 1,05 Millionen",
+    "Ca. 5 Millionen"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 45,
+   "tag": 45,
+   "thema": "Der gefährlichste Vogel",
+   "frage": "Welcher unflugfähige Vogel im Regenwald Queenslands gilt wegen seiner messerscharfen Dolch-Krallen als der gefährlichste Vogel der Welt?",
+   "antworten": [
+    "Emu",
+    "Helmkasuar (Cassowary)",
+    "Strauß",
+    "Kiwi"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 46,
+   "tag": 46,
+   "thema": "Bier-Marken-Mythos",
+   "frage": "Welches Bier gilt weltweit als „das australische Bier“, wird aber von den Einheimischen (Aussies) selbst kaum getrunken?",
+   "antworten": [
+    "VB (Victoria Bitter)",
+    "XXXX Gold",
+    "Fosters",
+    "Coopers"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 47,
+   "tag": 47,
+   "thema": "Sträflings-Erbe",
+   "frage": "Wie viele Sträflinge (Convicts) wurden zwischen 1788 und 1868 von Großbritannien nach Australien deportiert?",
+   "antworten": [
+    "Ca. 25.000",
+    "Ca. 80.000",
+    "Ca. 162.000",
+    "Ca. 500.000"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 48,
+   "tag": 48,
+   "thema": "Tödliche Spinnen",
+   "frage": "Seit wann gab es in Australien trotz hunderter Bisse keinen einzigen dokumentierten Todesfall durch einen Trichternetzspinnen-Biss (Funnel-web spider) mehr dank Gegengift?",
+   "antworten": [
+    "Seit 1950",
+    "Seit 1981",
+    "Seit 2005",
+    "Es gibt bis heute jedes Jahr Tote"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 49,
+   "tag": 49,
+   "thema": "Kuriose Insel-Krabben",
+   "frage": "Auf welcher australischen Außengebiets-Insel wandern jedes Jahr Millionen roter Landkrabben vom Wald zum Meer?",
+   "antworten": [
+    "Norfolk Island",
+    "Christmas Island (Weihnachtsinsel)",
+    "Cocos Islands",
+    "Macquarie Island"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 50,
+   "tag": 50,
+   "thema": "Das tote Telefon",
+   "frage": "Welche Organisation nutzte früher Pedal-Generatoren für Radios, um medizinische Versorgung im riesigen Outback sicherzustellen?",
+   "antworten": [
+    "Bush Doctors Oz",
+    "Royal Flying Doctor Service (RFDS)",
+    "Outback Rescue 911",
+    "Flying Ambulance Australia"
+   ],
+   "richtig": 1
+  }
+ ],
+ "levels": [
+  {
+   "min": 0,
+   "max": 10,
+   "stufe": 1,
+   "titel": "Fresh off the Plane (Der Touri)",
+   "text": "Du dachtest wahrscheinlich, Sydney sei die Hauptstadt und Kängurus reiten Kinder zur Schule. Wenn du ins Outback gehst, überlebst du keine 20 Minuten, weil dich eine Wanderspinne mit einem bösen Blick erledigt. Schnapp dir ein Pils und fang von vorne an, Mate!",
+   "emoji": "🛬"
+  },
+  {
+   "min": 11,
+   "max": 20,
+   "stufe": 2,
+   "titel": "Sausage Sizzler (Der Backyard-Griller)",
+   "text": "Du hast schon mal ein Vegemite-Toast gesehen (und vermutlich wieder ausgespuckt). Du weißt, wo Down Under liegt, aber bei den harten Fakten verwechselst du noch Eimermonster mit niedlichen Wombats. Besser noch nicht ohne Führer in den Busch wagen!",
+   "emoji": "🌭"
+  },
+  {
+   "min": 21,
+   "max": 30,
+   "stufe": 3,
+   "titel": "Bush-Walker (Der Outback-Erfahrener)",
+   "text": "Respect! Du kennst dich aus. Du weißt, dass man Kasuaren nicht umarmt und dass Bob Hawke eine Legende war. Du würdest eine Woche im Red Centre überleben, ohne deine eigenen Schuhe essen zu müssen. Solid Mate!",
+   "emoji": "🥾"
+  },
+  {
+   "min": 31,
+   "max": 40,
+   "stufe": 4,
+   "titel": "True Blue Mate (Echter Kumpel)",
+   "text": "Crikey! Du bist beinahe ein Einheimischer. Du sprichst fließend „Aussie-Slang“, kennst die finsteren Ecken der Geschichte und spuckst Giftspinnen locker im hohen Bogen aus. Selbst die Krokodile im Northern Territory nicken dir respektvoll zu.",
+   "emoji": "🦘"
+  },
+  {
+   "min": 41,
+   "max": 50,
+   "stufe": 5,
+   "titel": "Vollblut-Aussie / Bush-Ranger Supreme",
+   "text": "Fair dinkum, Mate! Dir macht keiner was vor – du hast das Land ja quasi mit aufgebaut! Du trinkst Schlangen-Toxin zum Frühstück, hast 1932 persönlich gegen die Emus gekämpft und weißt genau, wie man auf einem Känguru rückwärts einparkt. Du bist nicht nur ein Experte, du BIST Australien!",
+   "emoji": "🪃"
+  }
+ ]
+}

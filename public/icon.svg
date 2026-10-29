@@ -1,0 +1,28 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a3b1e"/>
+      <stop offset="0.45" stop-color="#b5601f"/>
+      <stop offset="0.7" stop-color="#d98a3d"/>
+      <stop offset="1" stop-color="#e8c079"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff4d6"/>
+      <stop offset="1" stop-color="#ffe08a"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#sky)"/>
+  <circle cx="256" cy="232" r="86" fill="url(#sun)"/>
+  <!-- Horizont -->
+  <path d="M0 330 L512 330" stroke="rgba(43,38,33,0.25)" stroke-width="4"/>
+  <!-- Route -->
+  <polyline points="96,412 176,372 256,398 336,352 416,388"
+    fill="none" stroke="#fbf8f3" stroke-width="12"
+    stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 26"/>
+  <polyline points="96,412 176,372 256,398 336,352 416,388"
+    fill="none" stroke="rgba(251,248,243,0.5)" stroke-width="4"
+    stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Pin am Ende -->
+  <circle cx="416" cy="388" r="17" fill="#fbf8f3"/>
+  <circle cx="416" cy="388" r="8" fill="#c0392b"/>
+</svg>

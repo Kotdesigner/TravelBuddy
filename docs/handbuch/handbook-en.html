@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>TravelBuddy · Manual</title>
+<!-- Template for public/handbook.pdf (English). Regenerate: sh scripts/handbuch-pdf.sh
+     Inhalt nach dem Code der Basic-Fassung (Stand 29.10.2026). Texte ohne Gedankenstriche in Sätzen. -->
+<style>
+  @font-face { font-family: 'Anton'; src: url('../../public/fonts/anton.woff2') format('woff2'); }
+  @page { size: A4; margin: 18mm 17mm 18mm 17mm; }
+  @page :first { margin: 0; }
+  :root { --terra: #8a3f16; --terra-hell: #c1662f; --sand: #f6efe3; --ink: #2b2621; --muted: #5a5248; --gold: #f0b453; --linie: #e5ddd0; --petrol: #1a5f6a; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font: 10.6pt/1.55 'Iowan Old Style', 'Charter', Georgia, serif; color: var(--ink); }
+  h1, h2, h3 { font-family: 'Anton', Impact, sans-serif; font-weight: 400; letter-spacing: 0.02em; color: var(--terra); }
+  h1 { font-size: 30pt; margin: 0 0 4mm; line-height: 1.05; border-bottom: 1.2pt solid var(--terra); padding-bottom: 2mm; }
+  h2 { font-size: 15pt; margin: 7mm 0 2.5mm; padding-left: 3mm; border-left: 3pt solid var(--gold); break-after: avoid; }
+  h3 { font-size: 10.5pt; color: var(--petrol); margin: 4mm 0 1.5mm; text-transform: uppercase; letter-spacing: 0.06em; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  ul, ol { margin: 0 0 3mm; padding-left: 5mm; }
+  li { margin: 0.8mm 0; }
+  b { color: var(--terra); }
+  code, .k { font: 8.8pt/1.4 Menlo, 'SF Mono', monospace; background: #f4ede2; border: 0.5pt solid var(--linie); border-radius: 3pt; padding: 0 3pt; white-space: nowrap; color: var(--ink); }
+  .teil { font: 8.5pt Menlo, monospace; letter-spacing: 0.3em; color: var(--terra-hell); text-transform: uppercase; margin-top: 2mm; }
+  .seite { break-before: page; }
+  .kasten { background: #faf5ec; border: 0.6pt solid var(--linie); border-left: 3pt solid var(--petrol); border-radius: 4pt; padding: 3mm 4mm; margin: 3mm 0 4mm; break-inside: avoid; }
+  .kasten.warn { border-left-color: var(--terra); background: #fdf1e6; }
+  .kasten p:last-child, .kasten ul:last-child { margin-bottom: 0; }
+  ol.schritte { list-style: none; padding: 0; counter-reset: s; }
+  ol.schritte > li { counter-increment: s; position: relative; padding-left: 8mm; margin: 1.6mm 0; }
+  ol.schritte > li::before { content: counter(s); position: absolute; left: 0; top: 0.2mm; width: 5mm; height: 5mm; border-radius: 50%; background: var(--terra); color: #fff; font: 700 8pt/5mm system-ui, sans-serif; text-align: center; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9.6pt; break-inside: avoid; }
+  th, td { text-align: left; vertical-align: top; padding: 1.6mm 2mm; border-bottom: 0.5pt solid var(--linie); }
+  th { font: 400 9pt 'Anton', sans-serif; letter-spacing: 0.04em; color: var(--petrol); text-transform: uppercase; }
+  td:first-child { white-space: nowrap; font-weight: 600; }
+  .zwei { columns: 2; column-gap: 8mm; }
+  .zwei > * { break-inside: avoid; }
+
+  /* Deckblatt */
+  .deck { height: 297mm; padding: 0 22mm; display: flex; flex-direction: column; justify-content: center; color: #f6efe3;
+    background: radial-gradient(ellipse at 75% 18%, rgba(240,180,83,0.55), transparent 45%), linear-gradient(170deg, #1f2a31 0%, #3a2a1f 26%, #6e3518 48%, #9a4a1c 64%, #c8782e 84%, #dc9a45 100%); }
+  .deck .klein { font: 9pt Menlo, monospace; letter-spacing: 0.35em; text-transform: uppercase; color: #f3dcb8; }
+  .deck .titel { font: 64pt/0.95 'Anton', sans-serif; margin: 6mm 0 0; color: #f6efe3; }
+  .deck .titel span { color: var(--gold); display: block; }
+  .deck .striche { margin: 7mm 0; display: flex; gap: 6mm; }
+  .deck .striche i { width: 11mm; height: 1.6mm; background: var(--gold); display: block; }
+  .deck .unter { font-size: 15pt; line-height: 1.45; max-width: 120mm; color: #fbefe0; }
+  .deck .meta { font: 9pt/1.7 Menlo, monospace; margin-top: 14mm; color: #f8e6cc; }
+
+  /* Inhalt */
+  .inhalt { columns: 2; column-gap: 10mm; margin-top: 6mm; }
+  .inhalt div { display: flex; gap: 3mm; padding: 1.8mm 0; border-bottom: 0.5pt dotted #cdbfa8; break-inside: avoid; }
+  .inhalt span { font: 9pt Menlo, monospace; color: var(--terra-hell); min-width: 7mm; }
+</style>
+</head>
+<body>
+
+
+<section class="deck">
+  <div class="klein">Manual · How to use it</div>
+  <div class="titel">Travel<span>Buddy</span></div>
+  <div class="striche"><i></i><i></i><i></i><i></i></div>
+  <div class="unter">Trip planner, logbook and companion for the road trip through Western Australia, on the Mac and on the iPhone, even without signal.</div>
+  <div class="meta">Basic version · as of 29 October 2026</div>
+</section>
+
+<section class="seite">
+  <h1>Contents</h1>
+  <div class="inhalt">
+    <div><span>1</span>Getting started on Mac and iPhone</div>
+    <div><span>2</span>Layout and controls</div>
+    <div><span>3</span>Today</div>
+    <div><span>4</span>Plan: legs and routes</div>
+    <div><span>5</span>What the app works out for a route</div>
+    <div><span>6</span>Map, hikes, calendar</div>
+    <div><span>7</span>Places</div>
+    <div><span>8</span>Logbook and journal</div>
+    <div><span>9</span>More: emergency to quiz</div>
+    <div><span>10</span>Getting vouchers and documents onto the device</div>
+    <div><span>11</span>Backing up and syncing Mac with iPhone</div>
+    <div><span>12</span>Offline in the outback</div>
+    <div><span>13</span>When something goes wrong</div>
+  </div>
+  <div class="kasten">
+    <p><b>In short:</b> plan on the Mac, set up the iPhone once with internet, use the iPhone on the road. Syncing works with a backup file that is merged when you import it. Nothing ends up on someone else's server, there is no account and no advertising.</p>
+  </div>
+  <div class="kasten">
+    <p><b>The first time you open it</b> a short introduction walks you through the app: set the trip start, create your first stage, paste a booking, load documents onto the device, discover places. You can skip any step. <b>More → 🧭 Show the introduction again</b> starts it once more.</p>
+  </div>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 1</div>
+  <h1>Getting started</h1>
+
+  <h2>1 · On the Mac</h2>
+  <ol class="schritte">
+    <li>Open the address of the app you were given in Safari or Chrome.</li>
+    <li>The introduction starts by itself. After that everything is stored in this browser.</li>
+  </ol>
+
+  <h2>On the iPhone</h2>
+  <ol class="schritte">
+    <li>Open the address of the app in <b>Safari</b>.</li>
+    <li>Tap <b>Share</b>, then “Add to Home Screen” and “Add”. The “TravelBuddy” icon appears.</li>
+    <li>Open the app from the home screen once with internet. After that it also starts in flight mode.</li>
+  </ol>
+  <div class="kasten">
+    <p><b>Safari and the home screen have separate storage.</b> What you enter in the Safari tab isn't visible in the home screen app and vice versa. On the road, only use the app from the home screen. iOS doesn't delete its data by itself.</p>
+  </div>
+
+  <h3>New version</h3>
+  <p>When a new version has been uploaded, the app loads it by itself the next time you open it with internet. Your entries stay. Which version is running is shown at the very bottom in the footer, for example “Basic · Build 29/10/2026, 9:29 pm”.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 2</div>
+  <h1>Layout and controls</h1>
+
+  <h2>2 · Five sections</h2>
+  <table>
+    <tr><th>Section</th><th>What's there</th></tr>
+    <tr><td>Today</td><td>Countdown or travel day, the drive of the day, cockpit, facts and figures, costs, the globe</td></tr>
+    <tr><td>Plan</td><td>Legs and routes, hikes, offline map, calendar</td></tr>
+    <tr><td>Places</td><td>144 places in the South, North and East Coast, My places, route ideas</td></tr>
+    <tr><td>Logbook</td><td>Travel days, reading and printing the journal, wildlife, notes</td></tr>
+    <tr><td>More</td><td>Emergency, trip preparation, hazards, packing list, tips, music, share travel report, quiz, plus backup, import, manual, theme and language</td></tr>
+  </table>
+
+  <h3>iPhone</h3>
+  <ul>
+    <li>At the bottom the floating bar with the five sections, with the round <b>search button</b> next to it on the right.</li>
+    <li>“More” opens a sheet from the bottom. To close it, tap next to it or swipe down.</li>
+    <li>At the top, below the title, the sub-pages of the section as a swipeable bar.</li>
+    <li>Back: swipe from the left edge.</li>
+  </ul>
+  <h3>Mac (from 900 pixels wide)</h3>
+  <ul>
+    <li>On the left a sidebar with the same sections and their sub-pages, at the bottom backup, import, manual, theme (auto, light, dark) and language.</li>
+    <li>Search with <code>⌘K</code> or <code>/</code>. Back works with the browser's back button.</li>
+  </ul>
+  <h3>Language</h3>
+  <p>German or English, by default the device language. Switch at the bottom of the sidebar (Mac) or under “🌐 Language” in the More sheet (iPhone).</p>
+
+  <h2>Search</h2>
+  <p>Searches places, days, animals, hikes, bookings, legs, notes and lists. A date like <code>3/12</code> or <code>Day 5</code> shows that day. Below the search field, the labels <b>MUST-SEE</b>, <b>HIDDEN GEM</b>, <b>4WD ONLY</b>, <b>EXPEDITION</b> and <b>MY PLACE</b> filter the list. A result jumps to its tile and briefly highlights it. On the iPhone the search field sits at the bottom above the keyboard. At the bottom of the sheet you set the date for the sun times of all places.</p>
+
+  <p>The app asks before anything is deleted (red button). After an import, “Undo” reverses the change.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 3</div>
+  <h1>Today</h1>
+  <h2>3 · What “Today” shows</h2>
+  <table>
+    <tr><th>When</th><th>Content</th></tr>
+    <tr><td>Before the trip</td><td>Days until departure, the next three bookings, how far your trip preparation is</td></tr>
+    <tr><td>On the road</td><td>“Day N of M”, the leg, what's booked today and tomorrow, the <b>drive of the day</b> and the button “Write today's logbook entry”</td></tr>
+    <tr><td>Afterwards</td><td>Days on the road, how many of them are in the logbook, the way to the journal</td></tr>
+  </table>
+  <h3>Drive of the day</h3>
+  <p>If there's a drive today, one line shows the distance, the driving time including breaks and the <b>latest departure</b> to arrive before sunset. At dusk there's a lot of wildlife on Australian roads. If it gets too tight, the line warns you and suggests splitting the drive over several days, with exact sections.</p>
+  <h3>Cockpit, facts and figures</h3>
+  <ul>
+    <li>Quiz level and, from the first logbook day, travel days, km, temperature, flies, kangaroos and roadkill.</li>
+    <li>Km driven and flown, fuel and fuel costs (estimated at 13 litres per 100 km), hours at the wheel, comparisons.</li>
+  </ul>
+  <h3>Costs and budget</h3>
+  <p>Enter a budget in euros. The app adds up the costs from the logbook and the advance costs and shows everything in euros and AU$, converted at each day's rate. Without signal it uses an approximate rate and says so. All the amounts shown add up exactly to the total shown.</p>
+  <h3>My trip map</h3>
+  <ul>
+    <li>A globe with all legs and routes. Two fingers turn it, one finger scrolls the page.</li>
+    <li><b>“Play trip”</b> flies to the legs one after the other. <b>“🎬 Film”</b> records a portrait video from it, with up to three photos per leg, to share or save.</li>
+    <li>Tap a route: an info window with km, driving time, photos and logbook. “To the trip” jumps into the plan.</li>
+    <li>If the device is too slow for the globe, the map switches to flat by itself. The 🗺️/🌍 button switches by hand.</li>
+  </ul>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 4</div>
+  <h1>Plan</h1>
+  <h2>4 · Legs and routes</h2>
+  <div class="kasten">
+    <p><b>Leg</b> = a period of time with fixed dates, for example “Road trip Western Australia, 13 Dec to 27 Jan”. Most of them come from your travel calendar.</p>
+    <p><b>Route</b> = a way with stops within a leg, for example “Coral Coast: Perth → Exmouth”. A route doesn't make the trip longer.</p>
+  </div>
+  <ul>
+    <li><b>Legs</b>: a list with dates, km, routes, hikes, bookings and how many days are in the logbook. The app points out gaps and overlaps.</li>
+    <li>Tap a leg: name, colour, dates, bookings with 📎 vouchers, routes, hikes, logbook.</li>
+    <li><b>“+ New”</b> adds a leg, route, hike or logbook day, with only the fields you really need.</li>
+  </ul>
+  <h3>Editing a route</h3>
+  <ol class="schritte">
+    <li>Expand the route, choose 🚗 car or ✈️ flight at the top.</li>
+    <li>“Add stop” searches all places and WA towns. A new stop goes where it makes the smallest detour.</li>
+    <li>Drag the handle ≡ to change the order. Tapping a stop shows its photo and “remove”.</li>
+    <li>“📍 Open in Google Maps” hands the route over for navigation (up to 11 stops).</li>
+  </ol>
+  <p>Every stop shows “x km from …”. All sections together add up exactly to the km at the top of the route.</p>
+  <h3>Planning in a place from your collection</h3>
+  <p>On a place tile, “➕ Plan in”: the app offers your routes by proximity, with the distance from the route, plus “New route with this place” and “Save as hike”.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 5</div>
+  <h1>What the app works out for a route</h1>
+  <h2>5 · Road route and straight line</h2>
+  <div class="kasten warn">
+    <p><b>The real road route comes online</b> (OSRM service): km, driving time and the way itself. <b>Without signal, stops can still be added</b> and the app estimates the route straight away from the straight-line distance, then fits it to the real road as soon as there is signal. Open each route once with internet, then km and hints are saved. “Ready for the road?” shows which routes are still missing.</p>
+  </div>
+  <table>
+    <tr><th>Hint</th><th>What it says</th></tr>
+    <tr><td>⛽ Fuel stations</td><td>The longest stretch without a fuel station and every long stretch with the last and next fuel station by name. Red if it's longer than your range (adjustable, default 500 km).</td></tr>
+    <tr><td>Supplies on the road</td><td>Fuel stations, water, toilets, camps, rest areas, shops, mechanics and clinics along the route with their route km, by section. Long stretches without fuel or water in red. Offline from OpenStreetMap.</td></tr>
+    <tr><td>Driving days</td><td>For each driving day the km, driving time with breaks and the latest departure before sunset. Days that are too long come with a suggestion for splitting them.</td></tr>
+    <tr><td>Worth seeing</td><td>Places from your collection up to 25 km from the route, plan them in at the right point with “+” or hide them.</td></tr>
+    <tr><td>🌦️ Weather</td><td>Forecast along the route for the next three days (needs signal).</td></tr>
+    <tr><td>Warnings</td><td>Official warnings within the set radius around the route.</td></tr>
+  </table>
+  <h3>How the numbers fit together</h3>
+  <ul>
+    <li>All route km of a route are calibrated to its length according to the road route. The destination is exactly at the km at the top.</li>
+    <li>Each position is rounded once to whole km, lengths are the difference. “from km 528 to 826” therefore means exactly 298 km.</li>
+    <li>The fuel hint and the supplies always show the same number, because they come from the same calculation.</li>
+  </ul>
+  <p>Fuel stations count up to 5 km from the route, everything else up to 3 km. Check opening hours and whether the water is drinkable on site.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 6</div>
+  <h1>Map, hikes, calendar</h1>
+  <h2>6 · Offline map (Plan → Map)</h2>
+  <ul>
+    <li>One map for all of Australia. When you zoom in it loads the more detailed map area by itself: west coast, east coast, Melbourne, Cairns, Whitsundays.</li>
+    <li><b>“📥 Save all of Australia”</b> puts all map areas on the device (about 80 MB). Tap it once on Wi-Fi and wait.</li>
+    <li>The “Show” bar: places, ⛽ fuel stations, 💧 water, 🅿️ rest areas, 🏕️ camping, 🚻 toilets, 🛒 shops, 🔧 mechanics, 🏥 clinics, with the number in view. Tap a point: name, coordinates, Google Maps or Apple Maps.</li>
+    <li>The terrain shading is only available online.</li>
+  </ul>
+  <h2>Hikes</h2>
+  <p>Wish list, planned or done. Date and time, starting point with navigation, length, duration, elevation gain, water, difficulty, rating and photos. Hikes with a date appear in the logbook on the right day.</p>
+  <h2>Calendar</h2>
+  <p>“My overall plan” with all legs, bookings and hikes. <b>📄 PDF</b> creates a print version, <b>📊 Excel</b> a spreadsheet with one row per event. Below it the original suggestion for reference.</p>
+
+</section>
+
+<section class="seite">
+  <div class="teil">Part 7</div>
+  <h1>Places</h1>
+  <h2>7 · The place tile</h2>
+  <ul>
+    <li>Photo, labels, description and what applies there in December and January (season).</li>
+    <li><b>Sun and weather</b>: sunrise and sunset, blue and golden hour, weather (online) and the <b>night sky</b>: moon, darkness, Milky Way.</li>
+    <li>A warning badge when an official warning affects the place.</li>
+    <li>💬 opens your note, photos and the logbook days for this place.</li>
+  </ul>
+  <h3>Adding a place</h3>
+  <p><b>“+ Add place”</b> (in South, North, East Coast and My places) first asks which place you mean: as you type, suggestions from OpenStreetMap appear with their type and state, for example “Margaret River · Town · Western Australia”. If the place is already in the app, it's shown at the top. Without signal you add it by hand.</p>
+  <p>Then you check and adjust: name, icon, description, coordinates, labels and group. The app fetches the photo and description from Wikipedia and picks the <b>group</b> (South, North, East Coast with region) by the nearest stored place. Sun times, stars, weather and hazards come from the coordinates, just like for every other place. The place then appears in its group and under “My places”.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 8</div>
+  <h1>Logbook and journal</h1>
+  <h2>8 · Days</h2>
+  <p>Every travel day is a dot on the coloured band of its leg: filled = written, ring = still open, small = still to come. Today is larger and is jumped to when you open it.</p>
+  <h3>Writing a day</h3>
+  <ol class="schritte">
+    <li>“Write today's logbook entry” on Today, or “+ Day” in the logbook.</li>
+    <li>Choose the place or route of the day, then the text.</li>
+    <li>Add photos, a 🎙️ voice note, quick stats (km, weather, flies, signal, mood, road trains) and 16 topics from costs to the night sky.</li>
+  </ol>
+  <h3>Sorting photos</h3>
+  <p>Choose several photos at once. The app reads the date and location from the image data and puts each photo on the right day, in an existing or a new entry.</p>
+  <h2>Wildlife</h2>
+  <p>A collector's album with 20 animals. Add a sighting with number, date, place and photo, also directly in the day's entry.</p>
+  <h2>Read: the journal</h2>
+  <ul>
+    <li>A chapter per leg with a globe, routes, places and hikes. You choose at the top what's shown.</li>
+    <li><b>📊 Summary</b>: travel days, days written, km, costs, animals.</li>
+    <li><b>🖨️ Print as journal or PDF</b> and <b>✨ Collage</b> as a slideshow of your photos.</li>
+  </ul>
+  <h2>Notes</h2>
+  <p>Categories notes, shopping, route tips, admin and contacts, to tick off and to export as a text file.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 9</div>
+  <h1>More</h1>
+  <h2>9 · 🆘 Emergency (completely offline)</h2>
+  <div class="kasten warn">
+    <p><b>Real emergency: call 000 first.</b> 112 works on any mobile network, 106 is the emergency SMS service, the Royal Flying Doctors are on 1800 625 800. Without mobile coverage only a satellite device helps.</p>
+  </div>
+  <p>Your location to read out and copy, the nearest fuel station, water point, clinic and mechanic with direction, plus “Share location” and “✅ I'm OK”.</p>
+  <h2>🧳 Trip preparation</h2>
+  <ul>
+    <li>Checklist “Weeks before”, “Shortly before”, “Departure day” with your own items.</li>
+    <li>Documents with expiry dates, bookings with vouchers (part 10), advance costs.</li>
+    <li><b>“+ From email”</b>: paste the text of a booking email. Type, title, date, time, place, booking number and price are recognised. You check and import it.</li>
+    <li><b>“Ready for the road?”</b> checks five points: offline maps, app and supply points offline, routes calculated, Spotify connected, last backup.</li>
+  </ul>
+  <h2>⚠️ Hazards</h2>
+  <p>Official warnings from WA, Victoria and Queensland for fire, flood and severe weather within the set radius around your places, plus the <b>WA road conditions</b> (closures from Main Roads, split into “on your route” and “nearby”). Without signal the last status stays visible. The weather hints below are derived, not official warnings.</p>
+  <h2>🎒 Packing list · 🛠️ Tips · 📤 Share · 🇦🇺 Quiz</h2>
+  <p>A packing list for the outback to tick off, print and export as a spreadsheet. Tips on permits, fuel and tyres. <b>Share travel report</b> makes a single file for family and friends with legs, routes, places and the photos you choose, without bookings, costs, documents, contacts and exact coordinates. The quiz has 50 questions in five levels.</p>
+  <h2>🎵 Music on the road</h2>
+  <p>Collects local music in a Spotify playlist of your own as you travel: bands from the area (MusicBrainz), your favourite styles first, with your own Last.fm key also charts. Needs <b>Spotify Premium</b> and your own free Spotify app on developer.spotify.com: enter the redirect address shown under More → Music there, copy the client ID into the app and “Connect to Spotify” once. Music is only collected while the app is open and “turned on”, in developer mode for at most five accounts.</p>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 10</div>
+  <h1>Getting vouchers and documents onto the device</h1>
+  <div class="kasten warn">
+    <p><b>The vouchers are not online.</b> Tickets, hotel confirmations, passport and visa carry names and booking numbers. That's why the uploaded app contains not a single voucher. You put them onto each device once yourself.</p>
+  </div>
+  <ol class="schritte">
+    <li>Open the app with internet: expand <b>More → Trip preparation → 🎟️ Bookings</b>.</li>
+    <li><b>“📂 Choose PDFs”</b> → open the folder with your vouchers in the Files app → “Select” at the top → all → “Open”. Photos of tickets go through “Photos”. On the Mac, “whole folder” also works.</li>
+    <li>The app suggests the matching appointment for each file. Confirm it or pick one yourself, including “🪪 Own documents” for passport and visa.</li>
+  </ol>
+  <p>After that every 📎 on a booking opens its PDF, even offline. Passport, visa, driver's licence and insurance appear in green under <b>🪪 Own documents</b>.</p>
+  <ul>
+    <li>A ticket that only exists as a photo or screenshot: <b>“🖼️ Photo of a ticket”</b> → choose or take the photo → in the list pick the booking under “Belongs to” → save. The same goes for any file the app doesn't recognise by itself.</li>
+    <li>The vouchers do <b>not</b> go into the backup. After a new device or deleting the app, simply choose the folder again.</li>
+    <li>“delete” removes all vouchers from this device again. The files in iCloud stay.</li>
+    <li><b>🔒 Protect vouchers:</b> “Protect with Face ID” (Mac: Touch ID) shows an <b>emergency code</b>. Write it on paper, type it in, confirm with Face ID. From then on the vouchers are stored encrypted and only open after Face ID or with the code, offline too. Once unlocked they stay open for five minutes. Set it up once on the iPhone and once on the Mac.</li>
+  </ul>
+
+  <div class="teil" style="margin-top:9mm">Part 11</div>
+  <h1>Backing up and syncing</h1>
+  <h2>11 · Backup and import</h2>
+  <ul>
+    <li><b>💾 Backup</b> saves a file <code>WA-Reiseplan-Backup_YYYY-MM-DD.json</code> and opens the share menu (AirDrop, mail).</li>
+    <li><b>📂 Import</b> first shows a preview and <b>merges</b>: new things are added, additions are taken over, nothing on this device is deleted. Afterwards “Undo” works.</li>
+    <li>Entries you deliberately deleted are passed on too. An empty field never overwrites a filled one.</li>
+    <li>The import recognises a file from the calendar app by itself and builds the legs and bookings from it.</li>
+  </ul>
+  <div class="kasten">
+    <p><b>Mac and iPhone don't sync automatically.</b> The way: backup on one device, send it via AirDrop, import on the other. If you change the order of stops on the same route on both devices, sync first. Vouchers and music data are not in the backup.</p>
+  </div>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 12</div>
+  <h1>Offline in the outback</h1>
+  <h2>12 · What works without signal</h2>
+  <div class="zwei">
+    <div>
+      <h3>Works offline</h3>
+      <ul>
+        <li>All your data, plan, logbook, journal</li>
+        <li>Saved routes with km and hints</li>
+        <li>Adding stops (the route is estimated straight away)</li>
+        <li>Offline map (saved areas)</li>
+        <li>Supplies along the route, driving days</li>
+        <li>Sun times, night sky</li>
+        <li>Emergency, packing list, quiz</li>
+        <li>Vouchers stored on the device</li>
+        <li>Last status of the hazards</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Needs signal</h3>
+      <ul>
+        <li>The real road route (until then an estimate)</li>
+        <li>Weather and weather along the route</li>
+        <li>New warnings and road conditions</li>
+        <li>Daily exchange rate (otherwise approximate)</li>
+        <li>Suggestions, photo and details for new places</li>
+        <li>Terrain shading, map on the globe</li>
+        <li>Music on the road</li>
+      </ul>
+    </div>
+  </div>
+  <h2>Before you leave</h2>
+  <ol class="schritte">
+    <li>Get the new version onto the iPhone (open the app once with internet).</li>
+    <li>Import the latest backup from the Mac.</li>
+    <li>Load and assign the vouchers.</li>
+    <li>Plan → Map → “Save all of Australia”.</li>
+    <li>Open each route once with signal until the km and hints appear.</li>
+    <li>“Ready for the road?” shows five of five points.</li>
+    <li><b>Flight mode test</b>: open the app, tap a voucher, zoom in on the map.</li>
+  </ol>
+</section>
+
+<section class="seite">
+  <div class="teil">Part 13</div>
+  <h1>When something goes wrong</h1>
+  <table>
+    <tr><th>Problem</th><th>Solution</th></tr>
+    <tr><td>Old version</td><td>Close the app and open it again with internet. If that doesn't help: add <code>/reset.html</code> to the app's address, open it and press the button. The red button also deletes maps and vouchers.</td></tr>
+    <tr><td>Data missing</td><td>Is the Safari tab running instead of the home screen app? They have separate storage. On the Mac: is it the same browser you set it up in?</td></tr>
+    <tr><td>Route only a straight line</td><td>Open the route with signal or tap “🔄 Recalculate”.</td></tr>
+    <tr><td>“x of 6 map areas”</td><td>On Wi-Fi, tap “Save all of Australia” and wait until everything has loaded.</td></tr>
+    <tr><td>📎 opens nothing</td><td>The vouchers aren't on this device yet: part 10.</td></tr>
+    <tr><td>Print or PDF doesn't start</td><td>Allow pop-ups for the app.</td></tr>
+    <tr><td>Spotify isn't collecting</td><td>More → Music: connected? “turned on”? Signal? “Catch up now” fetches waiting places.</td></tr>
+    <tr><td>Wrong language</td><td>Switch it at the bottom of the sidebar (Mac) or in the More sheet (iPhone).</td></tr>
+  </table>
+  <h2>Three little extras</h2>
+  <p>Type <code>sn4ke</code>, <code>xoxo</code> or <code>4444</code> into the search field.</p>
+  <p style="margin-top:12mm; color: var(--muted); font-size: 9pt">Roadtrip designer by Kotdesigner · TravelBuddy Basic · as of 29 October 2026</p>
+</section>
+
+</body>
+</html>

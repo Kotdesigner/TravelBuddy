@@ -1,0 +1,54 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Karten offline sichern</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:420px;height:820px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let z=[]
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=60000,st=400){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+document.getElementById('f').onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('.karten .offline-zeile'),60000)){p('ABBRUCH: Offline-Zeile fehlt',false);return}
+
+  // Ausgangslage: Cache leeren, damit der Knopf wirklich etwas zu tun hat
+  await w.caches.delete('karten-pmtiles-v2')
+  await warte(1200)
+
+  const zeile=()=>d.querySelector('.karten .offline-zeile').textContent.replace(/\s+/g,' ').trim()
+  p('Zeile vorher: '+zeile(), true)
+  const btn=await bis(()=>d.querySelector('.karten .off-btn'),15000)
+  p('Knopf „Fehlende laden" vorhanden'+(btn?': '+btn.textContent.trim():''), !!btn)
+  if(!btn) return
+
+  klick(btn)
+  p('Sicherung gestartet — das dauert (75,8 MB)')
+  const fertig=await bis(()=>d.querySelector('.karten .off-ok'), 240000, 1500)
+  p('Alle Regionen gesichert: '+zeile(), !!fertig)
+
+  const c=await w.caches.open('karten-pmtiles-v2')
+  const keys=await c.keys()
+  let bytes=0
+  for(const k of keys){ const r=await c.match(k); bytes+=(await r.clone().arrayBuffer()).byteLength }
+  p('Im Cache: '+keys.length+' Regionen · '+(bytes/1048576).toFixed(1)+' MB', keys.length===6)
+  p('   '+keys.map(k=>k.url.split('/').pop()).join(', '), true)
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=z.filter(x=>x[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

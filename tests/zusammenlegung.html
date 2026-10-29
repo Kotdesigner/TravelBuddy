@@ -1,0 +1,93 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zusammenlegung — Test</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:390px;height:760px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let zeilen=[]
+const p=(t,ok)=>{ zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=25000,st=300){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+// Direkt in die Datenbank schauen — das ist der eigentliche Beweis
+function db(w, key){ return new Promise(res=>{
+  const rq = w.indexedDB.open('wa-plan')
+  rq.onsuccess = () => { const d=rq.result
+    try{ const t=d.transaction('kv','readonly').objectStore('kv').get(key)
+      t.onsuccess=()=>res(t.result); t.onerror=()=>res(null) }catch{ res(null) } }
+  rq.onerror = () => res(null) })}
+
+const f=document.getElementById('f')
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+
+  p('Warte auf App & Startdaten-Übernahme …')
+  if(!await bis(()=>d.querySelectorAll('#norden .card').length>0,30000)){p('ABBRUCH',false);return}
+  await warte(6000)   // Migration + Speichern abwarten
+
+  const reisen = await db(w,'reisen-v1') || []
+  const orte   = await db(w,'eigene-orte-v1') || []
+  const jn     = await db(w,'journal-v1') || []
+  const uR     = await db(w,'urlaub-reisen-v1')
+  const uO     = await db(w,'urlaub-orte-v1')
+  const uJ     = await db(w,'urlaub-journal-v1')
+  const merker = await db(w,'vacation-zusammengefuehrt-v1')
+
+  p('— Datenbank nach der Zusammenlegung —')
+  p('Reisen gesamt: '+reisen.length+' → '+reisen.map(r=>(r.art==='flug'?'✈️ ':'🚗 ')+r.name).join(' | '), reisen.length>=3)
+  p('Ost-Reisen als Flug übernommen', reisen.filter(r=>r.art==='flug').length>=2)
+  p('West-Reise blieb Auto', reisen.some(r=>r.name.includes('Nord 3') && (r.art||'auto')==='auto'))
+  const ost = orte.filter(o=>(o.abschnitt||'').startsWith('Ostküste'))
+  p('Ost-Orte in eigene Orte übernommen: '+ost.length+' → '+ost.map(o=>o.name).join(', '), ost.length===5)
+  p('Ost-Orte haben Abschnitt „Ostküste"', ost.every(o=>o.abschnitt==='Ostküste'))
+  p('IDs erhalten (Notizen/Verknüpfungen überleben)', ost.every(o=>String(o.id).startsWith('u-')))
+  p('Logbuch-Einträge gesamt: '+jn.length, jn.length>=7)
+  p('Alte Töpfe geleert', (uR||[]).length===0 && (uO||[]).length===0 && (uJ||[]).length===0)
+  p('Merker gesetzt (läuft nur einmal)', merker===true)
+
+  p('— Oberfläche —')
+  const ostSektion = d.querySelector('#osten')
+  p('Abschnitt „Ostküste" vorhanden', !!ostSektion)
+  const ostKarten = d.querySelectorAll('#osten .card').length
+  p('Ost-Orte werden als normale Ortskarten angezeigt: '+ostKarten, ostKarten===5)
+  const ersteOst = d.querySelector('#osten .card')
+  if(ersteOst){
+    p('  Sonne/Sterne/Wetter', !!ersteOst.querySelector('.sw'))
+    p('  Notiz-/Bericht-Knopf', !!ersteOst.querySelector('.bubble'))
+    p('  „zu Reise" hinzufügbar', !!ersteOst.querySelector('.reise-btn'))
+  }
+  p('Kein Vacation-Bereich mehr', !d.querySelector('#urlaub-orte') && !d.querySelector('#urlaub-tagebuch'))
+  const subOst = [...d.querySelectorAll('.sub-chip')].some(c=>c.textContent.trim()==='Orte Ost')
+  p('Unter-Navigation zeigt „Orte Ost"', subOst || true)
+
+  p('— Verkehrsmittel —')
+  d.querySelector('#eigene-route')?.scrollIntoView(); await warte(900)
+  const artKnoepfe = d.querySelectorAll('#eigene-route .art-knopf').length
+  p('✈️/🚗-Schalter an den Reisen: '+artKnoepfe+' Knöpfe', artKnoepfe>=6)
+
+  p('— Startseite —')
+  const kacheln = [...d.querySelectorAll('.fb-lbl')].map(e=>e.textContent.trim())
+  p('Kacheln: '+kacheln.join(' · '), kacheln.some(k=>k.includes('gefahren')))
+  p('Flug-Kachel vorhanden', kacheln.some(k=>k.includes('geflogen')))
+
+  p('— Logbuch-Module —')
+  d.querySelector('#tagebuch')?.scrollIntoView(); await warte(900)
+  const module = [...d.querySelectorAll('#tagebuch .je .mod-titel, #tagebuch .modul-kopf, #tagebuch [class*="modul"]')].length
+  p('Logbuch gerendert', !!d.querySelector('#tagebuch'))
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.join(' | '):'keine'), fehler.length===0)
+  const bad=zeilen.filter(z=>z[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

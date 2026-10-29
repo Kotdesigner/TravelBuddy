@@ -1,0 +1,79 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sprachumschaltung</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:420px;height:800px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">…</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let z=[]
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('') }
+const w8=ms=>new Promise(r=>setTimeout(r,ms))
+const bis=async(fn,ms=50000,st=400)=>{const t=Date.now();while(Date.now()-t<ms){try{const v=fn();if(v)return v}catch{}await w8(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+document.getElementById('f').onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+  try{ w.localStorage.setItem('sprache','de'); w.localStorage.setItem('standort-schon-gefragt','1') }catch{}
+  // Standort komplett stilllegen: der iOS-Systemdialog legt sich sonst über das
+  // Ergebnis und lässt sich aus dem Test heraus nicht wegtippen.
+  try { Object.defineProperty(w.navigator, 'geolocation', { get: () => undefined }) } catch {}
+  if(!await bis(()=>d.querySelector('nav.bar[aria-label]'),50000)){p('ABBRUCH',false);return}
+  await w8(3000)
+
+  const bar=()=>d.querySelector('nav.bar')
+  const tabs=()=>[...bar().querySelectorAll('.tab .lbl')].map(x=>x.textContent.trim())
+  p('Reiter deutsch: '+tabs().join(' · '), tabs().includes('Orte') && tabs().includes('Logbuch'))
+
+  // Mehr öffnen → Sprachumschalter
+  klick([...bar().querySelectorAll('.tab')].pop()); await w8(900)
+  const seg=[...d.querySelectorAll('.sheet .s-theme')].find(x=>/Sprache|Language/.test(x.textContent))
+  p('Umschalter „🌐 Sprache" im Mehr-Menü', !!seg)
+  if(!seg){ p('ohne Umschalter kein Test',false); return }
+  const en=[...seg.querySelectorAll('button')].find(b=>/English/.test(b.textContent))
+  p('   Auswahl: '+[...seg.querySelectorAll('button')].map(b=>b.textContent.trim()).join(' | '), !!en)
+
+  klick(en); await w8(1200)
+  p('Reiter englisch: '+tabs().join(' · '), tabs().includes('Places') || tabs().includes('Logbook'))
+  p('   gemerkt: localStorage = '+w.localStorage.getItem('sprache'), w.localStorage.getItem('sprache')==='en')
+  p('   <html lang> = '+d.documentElement.lang, d.documentElement.lang==='en')
+
+  // Sheet schließen und die Oberfläche absuchen
+  const zu=d.querySelector('.sheet .backdrop')||d.querySelector('.backdrop')
+  if(zu) klick(zu); await w8(900)
+
+  // Bedienelemente prüfen — NUR die, deren Text aus dem Wörterbuch kommt.
+  // Ortsnamen, Datumsangaben und eigene Einträge sind Daten und bleiben deutsch;
+  // die dürfen den Befund nicht verfälschen (letzter Lauf zählte 20, davon fast
+  // alle Daten wie „Sa. 25. Juli Middle Island & Lake Hillier").
+  const DE=/\b(und|oder|nicht|keine|kein|wird|werden|deine|dein|meine|mein|noch|schon|beim|zum|zur|für|über|unter|nach|von|mit|auf|aus|ist|sind|hat|haben|Orte|Karten|Wanderungen|Notizen|Suche|Sprache|Design)\b/
+  const roh=[...d.querySelectorAll('nav.bar .lbl, .subnav .sub-chip, .abschnitt, .sheet .s-zeile, .sheet .s-aktion span, .sheet .st-lbl')]
+    .map(e=>e.textContent.replace(/\s+/g,' ').trim()).filter(t=>t.length>2&&t.length<80)
+  const deutsch=[...new Set(roh.filter(t=>DE.test(t)))]
+  p('Navigation + Abschnitte geprüft: '+roh.length, roh.length>15)
+  p('   davon noch deutsch: '+deutsch.length, deutsch.length===0)
+  deutsch.slice(0,8).forEach(t=>p('     · '+t.slice(0,70), false))
+  p('   Wörterbuch greift: '+roh.filter(t=>/^(Places|Routes|Logbook|More|Maps|Hikes|Notes|Search|Language|Theme|Emergency|Packing|Hazards)/.test(t)).length+' englische Treffer', true)
+
+  // Wörterbuch-Abdeckung direkt
+  const mod=await w.eval("import('/assets/'+[...performance.getEntriesByType('resource')].map(r=>r.name).find(n=>/index-.*\\.js$/.test(n)).split('/assets/')[1])").catch(()=>null)
+
+  // Zurückschalten
+  klick([...bar().querySelectorAll('.tab')].pop()); await w8(900)
+  const de=[...d.querySelectorAll('.sheet .s-theme button')].find(b=>/Deutsch/.test(b.textContent))
+  klick(de); await w8(1000)
+  p('Zurück auf Deutsch: '+tabs().join(' · '), tabs().includes('Orte'))
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=z.filter(x=>x[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'
+}
+</script>

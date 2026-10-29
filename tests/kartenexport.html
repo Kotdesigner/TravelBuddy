@@ -1,0 +1,130 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Karten-Export</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:430px;height:800px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+ img.vor{max-width:380px;border:1px solid #999;border-radius:6px;margin-top:6px;display:block}
+</style>
+<div id="log">starte …</div>
+<div id="bilder"></div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let z=[]
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=60000,st=400){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+
+document.getElementById('f').onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('.rk canvas, .reisekarte canvas, canvas'),60000)){p('ABBRUCH: keine Karte',false);return}
+  await warte(6000)
+
+  // Downloads abfangen statt wirklich speichern
+  const geholt=[]
+  const echterClick=w.HTMLAnchorElement.prototype.click
+  w.HTMLAnchorElement.prototype.click=function(){
+    if(this.download) geholt.push({name:this.download,href:this.href})
+    else echterClick.call(this)
+  }
+
+  // Modul direkt benutzen — so testen wir die Erzeugung, nicht nur den Knopf
+  const mod=await bis(async()=>{
+    const n=[...w.performance.getEntriesByType('resource')].map(r=>r.name).find(x=>/index-.*\.js$/.test(x))
+    return n? await w.eval(`import(${JSON.stringify(n)})`).catch(()=>null) : null
+  },20000).catch(()=>null)
+
+  // Knöpfe in der Oberfläche
+  // Der Auslöser ist jetzt ein Kartensteuerelement im Zoom-Stapel, kein Textknopf mehr.
+  const ctrl=[...d.querySelectorAll('.maplibregl-ctrl-group button')]
+    .filter(b=>/als Bild speichern/.test(b.getAttribute('aria-label')||''))
+  p('Export-Steuerelemente auf den Karten: '+ctrl.length, ctrl.length>=1)
+  const rkBtn=ctrl[0]
+  if(rkBtn){
+    const r=rkBtn.getBoundingClientRect()
+    p('   Größe: '+Math.round(r.width)+' × '+Math.round(r.height)+' px (Zoomknopf-Maß)', r.width<=44 && r.height<=44 && r.width>20)
+    const gruppe=rkBtn.closest('.maplibregl-ctrl-group')
+    const zoom=[...d.querySelectorAll('.maplibregl-ctrl-group')].find(g=>g!==gruppe && g.querySelector('.maplibregl-ctrl-zoom-in'))
+    if(zoom){ const zr=zoom.getBoundingClientRect()
+      p('   sitzt unter den Zoomknöpfen · gleiche Spalte', Math.abs(r.left-zr.left)<3 && r.top>zr.top) }
+    // elementFromPoint misst NUR im sichtbaren Fenster. Ohne dieses Scrollen prüft
+    // man eine Stelle ausserhalb des Bildschirms und bekommt immer „nicht getroffen".
+    rkBtn.scrollIntoView({block:'center'}); await warte(900)
+    const r2=rkBtn.getBoundingClientRect()
+    const imBild = r2.top>=0 && r2.bottom<=w.innerHeight
+    const oben=imBild ? d.elementFromPoint(r2.left+r2.width/2, r2.top+r2.height/2) : null
+    p('   antippbar (nichts liegt davor)', imBild && !!oben && (oben===rkBtn||rkBtn.contains(oben)))
+  }
+
+  if(!rkBtn){ p('Ohne Knopf kein weiterer Test',false); return }
+  rkBtn.click(); await warte(800)
+  const auswahl=[...d.querySelectorAll('.exp-box select')]
+  p('Auswahl Format + Dateityp: '+auswahl.length, auswahl.length===2)
+  if(auswahl.length===2){
+    p('   Formate: '+[...auswahl[0].options].map(o=>o.text).join(' | '), true)
+    p('   Typen  : '+[...auswahl[1].options].map(o=>o.text).join(' | '), true)
+  }
+  // Zwei echte Druckläufe: A4 quer als JPG und als TIFF.
+  async function lauf(fmt, typ){
+    const a=[...d.querySelectorAll('.exp-box select')]
+    a[0].value=fmt; a[0].dispatchEvent(new Event('change',{bubbles:true}))
+    a[1].value=typ; a[1].dispatchEvent(new Event('change',{bubbles:true}))
+    await warte(400)
+    const vorher=geholt.length
+    const g=[...d.querySelectorAll('.exp-box button')].find(b=>/Speichern/.test(b.textContent))
+    g.click()
+    await bis(()=>geholt.length>vorher || /Fehlgeschlagen/.test(d.querySelector('.exp-msg')?.textContent||''), 120000, 1000)
+    const m=d.querySelector('.exp-msg')?.textContent||''
+    const neu=geholt[geholt.length-1]
+    p(fmt+' / '+typ.toUpperCase()+': '+(m||'—'), /✓/.test(m) && geholt.length>vorher)
+    return neu
+  }
+  p('Export läuft — die Karte wird in Druckgröße neu gerendert …')
+  const jpgA4 = await lauf('a4-quer','jpg')
+  const tif   = await lauf('a4-quer','tiff')
+  p('Dateinamen: '+geholt.map(x=>x.name).join(' · '), geholt.length===2)
+
+  if(tif){
+    const tb=await (await w.fetch(tif.href)).blob()
+    p('TIFF: '+(tb.size/1048576).toFixed(1)+' MB · '+tb.type, tb.size>5000000)
+    const kopf=new Uint8Array(await tb.slice(0,4).arrayBuffer())
+    p('   gültiger TIFF-Kopf (II*\\0): '+[...kopf].join(','), kopf[0]===73&&kopf[1]===73&&kopf[2]===42&&kopf[3]===0)
+  }
+  if(geholt.length){
+    geholt[0]=jpgA4
+    // Ist wirklich Bild drin — oder eine leere Leinwand?
+    const blob=await (await w.fetch(geholt[0].href)).blob()
+    p('   Größe: '+(blob.size/1048576).toFixed(2)+' MB · Typ: '+blob.type, blob.size>40000)
+    const bmp=await w.createImageBitmap(blob)
+    p('   Bildmaße: '+bmp.width+' × '+bmp.height+' (A4 quer bei 300 dpi = 3508 × 2480)', bmp.width>=3400)
+    // Pixel prüfen: mehr als eine Farbe = echtes Kartenbild
+    const cv=document.createElement('canvas'); cv.width=bmp.width; cv.height=bmp.height
+    cv.getContext('2d').drawImage(bmp,0,0)
+    const px=cv.getContext('2d').getImageData(0,0,bmp.width,bmp.height).data
+    // Streng: ein schwarzes Bild hat auch „viele Farbtöne", wenn die Beschriftung drin ist.
+    // Also den ANTEIL nicht-schwarzer Fläche messen und die Ozeanfarbe suchen.
+    const farben=new Set(); let hell=0, n=0, ozean=0
+    for(let i=0;i<px.length;i+=4*397){
+      n++; const r=px[i],g=px[i+1],b=px[i+2]
+      farben.add(r+','+g+','+b)
+      if(r+g+b>60) hell++
+      if(Math.abs(r-168)<26 && Math.abs(g-202)<26 && Math.abs(b-223)<26) ozean++
+    }
+    const anteil=(100*hell/n).toFixed(0)
+    p('   nicht schwarze Fläche: '+anteil+'% · Farbtöne '+farben.size, hell/n>0.5)
+    p('   Ozeanfarbe der Karte gefunden: '+(100*ozean/n).toFixed(0)+'%', ozean/n>0.05)
+    const img=document.createElement('img'); img.className='vor'; img.src=URL.createObjectURL(blob)
+    document.getElementById('bilder').appendChild(img)
+  }
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=z.filter(x=>x[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

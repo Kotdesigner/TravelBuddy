@@ -1,0 +1,696 @@
+{
+ "fragen": [
+  {
+   "id": 1,
+   "tag": 1,
+   "thema": "The shape of things",
+   "frage": "What unique shape is wombat poo?",
+   "antworten": [
+    "Star-shaped",
+    "Cube-shaped",
+    "Pyramid-shaped",
+    "Perfectly round"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 2,
+   "tag": 2,
+   "thema": "Famous drinkers",
+   "frage": "Which future Australian prime minister set a world record for speed beer drinking in 1954 (1.4 litres in 11 seconds)?",
+   "antworten": [
+    "John Howard",
+    "Paul Keating",
+    "Bob Hawke",
+    "Kevin Rudd"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 3,
+   "tag": 3,
+   "thema": "City history",
+   "frage": "What was Melbourne briefly called when it was founded in 1835?",
+   "antworten": [
+    "New London",
+    "Batmania",
+    "Cooktown",
+    "Kangaroo City"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 4,
+   "tag": 4,
+   "thema": "Strange wars",
+   "frage": "In 1932 the Australian army officially declared “war” on an animal species – and lost. Which one?",
+   "antworten": [
+    "Dingo",
+    "Emu",
+    "Red kangaroo",
+    "Cane toad"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 5,
+   "tag": 5,
+   "thema": "Lost at sea",
+   "frage": "In 1967 the serving prime minister Harold Holt vanished without a trace while swimming. What was named after him?",
+   "antworten": [
+    "An airport",
+    "A shark protection zone",
+    "A swimming pool (Harold Holt Memorial Swimming Centre)",
+    "A submarine base"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 6,
+   "tag": 6,
+   "thema": "Numbers, please! (Beaches)",
+   "frage": "Australia has a gigantic coastline. Roughly how many beaches are there on the continent?",
+   "antworten": [
+    "About 2,500",
+    "About 5,000",
+    "About 8,200",
+    "About 10,600"
+   ],
+   "richtig": 3
+  },
+  {
+   "id": 7,
+   "tag": 7,
+   "thema": "Ships of the desert",
+   "frage": "Which country exports camels to Saudi Arabia because it has the world's largest wild camel population?",
+   "antworten": [
+    "Egypt",
+    "Australia",
+    "Sudan",
+    "Tunisia"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 8,
+   "tag": 8,
+   "thema": "Venomous",
+   "frage": "The platypus is one of the few venomous mammals. Where is the male's venom?",
+   "antworten": [
+    "In its teeth",
+    "In the spurs on its hind legs",
+    "At the base of its tail",
+    "In the claws of its front feet"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 9,
+   "tag": 9,
+   "thema": "Gigantic fences",
+   "frage": "How long is Australia's famous Dingo Fence, the longest fence in the world?",
+   "antworten": [
+    "About 1,200 km",
+    "About 3,400 km",
+    "About 5,600 km",
+    "About 8,900 km"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 10,
+   "tag": 10,
+   "thema": "Snow in the tropics?",
+   "frage": "Believe it or not: in winter the Australian Alps get snow over a larger area on average than which European country?",
+   "antworten": [
+    "Austria",
+    "Switzerland",
+    "Norway",
+    "Italy"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 11,
+   "tag": 11,
+   "thema": "Inventions",
+   "frage": "Which ground-breaking aviation safety invention was developed by the Australian David Warren in 1953?",
+   "antworten": [
+    "The ejection seat",
+    "The life jacket",
+    "The flight recorder (“black box”)",
+    "The oxygen mask"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 12,
+   "tag": 12,
+   "thema": "Marsupials outnumber us",
+   "frage": "Roughly how many kangaroos live in Australia (compared with about 26 million people)?",
+   "antworten": [
+    "About 10–15 million",
+    "About 20–25 million",
+    "About 40–50 million",
+    "About 90–100 million"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 13,
+   "tag": 13,
+   "thema": "Island world",
+   "frage": "Fraser Island (K'gari) is the world's largest... what?",
+   "antworten": [
+    "Volcanic island",
+    "Sand island",
+    "Coral island",
+    "Inland island"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 14,
+   "tag": 14,
+   "thema": "Animal superlatives",
+   "frage": "Based on toxicity tests, which snake is considered the most venomous land animal in the world?",
+   "antworten": [
+    "Black mamba",
+    "King cobra",
+    "Inland taipan",
+    "Eastern brown snake"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 15,
+   "tag": 15,
+   "thema": "Road giants",
+   "frage": "How long is Highway 1, which runs all the way around the Australian mainland (the longest national highway in the world)?",
+   "antworten": [
+    "About 8,500 km",
+    "About 11,000 km",
+    "About 14,500 km",
+    "About 22,000 km"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 16,
+   "tag": 16,
+   "thema": "Sheep logic",
+   "frage": "What was the historic peak ratio of sheep to people in Australia in the 20th century?",
+   "antworten": [
+    "3 to 1",
+    "5 to 1",
+    "About 10 to 1",
+    "25 to 1"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 17,
+   "tag": 17,
+   "thema": "Odd origins",
+   "frage": "Why did an Australian brewer invent the spread “Vegemite” in 1922?",
+   "antworten": [
+    "To sell a hangover cure",
+    "From brewing by-products (brewer's yeast)",
+    "As military rations for the jungle",
+    "Because of a shortage of peanut butter"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 18,
+   "tag": 18,
+   "thema": "The Red Centre",
+   "frage": "Uluru (Ayers Rock) is a monolith. Roughly what percentage of the rock is thought to lie below the surface?",
+   "antworten": [
+    "About 10 %",
+    "About 30 %",
+    "About 50 %",
+    "About 85 %"
+   ],
+   "richtig": 3
+  },
+  {
+   "id": 19,
+   "tag": 19,
+   "thema": "Laws from the old days",
+   "frage": "In which state was it once illegal to wear pink hot pants after midday on a Sunday?",
+   "antworten": [
+    "New South Wales",
+    "Victoria",
+    "Queensland",
+    "Tasmania"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 20,
+   "tag": 20,
+   "thema": "Deadly minis",
+   "frage": "The Irukandji jellyfish is extremely venomous and causes the dreaded Irukandji syndrome. How big is its bell?",
+   "antworten": [
+    "About 30–40 cm",
+    "About 15–20 cm",
+    "About 1–2 cm (fingernail-sized)",
+    "Only visible under a microscope"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 21,
+   "tag": 21,
+   "thema": "Tech history",
+   "frage": "Which wireless networking technology we use every day is largely based on patents of the Australian science agency CSIRO?",
+   "antworten": [
+    "Bluetooth",
+    "Wi-Fi",
+    "5G",
+    "GPS"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 22,
+   "tag": 22,
+   "thema": "Pink lakes",
+   "frage": "Why is the famous Lake Hillier on Middle Island permanently bright pink?",
+   "antworten": [
+    "Because of chemical waste",
+    "Because of algae (Dunaliella salina) and extreme salinity",
+    "Because of light refracted by corals",
+    "Because of red volcanic rock"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 23,
+   "tag": 23,
+   "thema": "Voting is compulsory",
+   "frage": "Australia has compulsory voting for citizens. Roughly how much is the fine for not voting in a federal election for the first time without an excuse?",
+   "antworten": [
+    "5 AUD",
+    "20 AUD",
+    "250 AUD",
+    "1,000 AUD"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 24,
+   "tag": 24,
+   "thema": "Record station",
+   "frage": "Australia's largest cattle station (Anna Creek Station) is bigger than which European country?",
+   "antworten": [
+    "Luxembourg",
+    "Slovakia",
+    "Belgium",
+    "Denmark"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 25,
+   "tag": 25,
+   "thema": "Uninvited guests",
+   "frage": "How many cane toads were originally released in 1935 to fight beetles in the sugar cane (today there are hundreds of millions)?",
+   "antworten": [
+    "102",
+    "102",
+    "5,000",
+    "50,000"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 26,
+   "tag": 26,
+   "thema": "The Great Barrier Reef",
+   "frage": "The Great Barrier Reef is so huge it can be seen from space. Roughly how many individual reefs is it made of?",
+   "antworten": [
+    "About 500",
+    "About 1,200",
+    "About 2,900",
+    "About 10,000"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 27,
+   "tag": 27,
+   "thema": "Time zone jumble",
+   "frage": "Some places in Australia (such as Eucla or Lord Howe Island) have a very unusual time zone. What makes it special?",
+   "antworten": [
+    "They change the time every 3 months",
+    "They are offset from UTC by 30 or 45 minutes",
+    "They don't use daylight saving, but turn their clocks back",
+    "They follow the solstice strictly"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 28,
+   "tag": 28,
+   "thema": "Kangaroo physiology",
+   "frage": "Because of the anatomy of their hind legs and tail, what can kangaroos hardly do at all?",
+   "antworten": [
+    "Swim",
+    "Jump",
+    "Walk backwards",
+    "Run faster than 20 km/h"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 29,
+   "tag": 29,
+   "thema": "A nation of gamblers",
+   "frage": "For years, what share of the world's poker machines (“pokies”) did Australia have relative to its small population?",
+   "antworten": [
+    "About 2 %",
+    "About 5 %",
+    "About 20 % (excluding casino meccas like Las Vegas)",
+    "About 50 %"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 30,
+   "tag": 30,
+   "thema": "The Dead Centre",
+   "frage": "What percentage of the Australian continent counts as desert or arid/semi-arid land?",
+   "antworten": [
+    "About 25 %",
+    "About 45 %",
+    "About 70 %",
+    "About 90 %"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 31,
+   "tag": 31,
+   "thema": "Historic post",
+   "frage": "Who became the first official postmaster of New South Wales in 1810 – and was actually a convict?",
+   "antworten": [
+    "Arthur Phillip",
+    "Isaac Nichols",
+    "Ned Kelly",
+    "Lachlan Macquarie"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 32,
+   "tag": 32,
+   "thema": "Marsupial pouches",
+   "frage": "In which marsupial does the pouch open BACKWARDS (downwards), so no dirt gets in while digging?",
+   "antworten": [
+    "Koala",
+    "Kangaroo",
+    "Wombat",
+    "Quokka"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 33,
+   "tag": 33,
+   "thema": "Deadly snails",
+   "frage": "Which pretty sea snail in Queensland waters can kill people with its venomous harpoons?",
+   "antworten": [
+    "Tiger cowrie",
+    "Cone snail",
+    "Sea slug",
+    "Conch"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 34,
+   "tag": 34,
+   "thema": "The railway",
+   "frage": "The train “The Ghan” crosses Australia from north to south. Where does its name come from?",
+   "antworten": [
+    "From an Aboriginal language",
+    "From the Afghan cameleers of the 19th century",
+    "From “Giant Highway Across Nation”",
+    "From the engineer Arthur Ghan"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 35,
+   "tag": 35,
+   "thema": "Highway without a limit",
+   "frage": "On which famous Australian highway (Stuart Highway) were there long stretches in the Northern Territory without a speed limit for a long time?",
+   "antworten": [
+    "Pacific Highway",
+    "Stuart Highway",
+    "Great Ocean Road",
+    "Bruce Highway"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 36,
+   "tag": 36,
+   "thema": "Animal babies",
+   "frage": "How big is a baby kangaroo (joey) right after birth?",
+   "antworten": [
+    "The size of a cat",
+    "The size of a rat",
+    "The size of a jelly bean / strawberry (about 2 cm)",
+    "The size of a basketball"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 37,
+   "tag": 37,
+   "thema": "Plant giants",
+   "frage": "Eucalypts make up most of Australia's forests. How many different eucalyptus species are there in Australia?",
+   "antworten": [
+    "About 50",
+    "About 200",
+    "Over 700",
+    "Over 3,000"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 38,
+   "tag": 38,
+   "thema": "Gold rush",
+   "frage": "In 1869 the largest gold nugget ever found was discovered in Victoria. What was it called?",
+   "antworten": [
+    "Australian Star",
+    "Welcome Stranger",
+    "Golden Eagle",
+    "Big Bertha"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 39,
+   "tag": 39,
+   "thema": "The laugh of the outback",
+   "frage": "Which bird is known for a call that sounds like a person laughing out loud?",
+   "antworten": [
+    "Cockatoo",
+    "Cassowary",
+    "Kookaburra (laughing jackass)",
+    "Magpie"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 40,
+   "tag": 40,
+   "thema": "Dingo myths",
+   "frage": "On which famous island is it strictly forbidden to feed or approach the purebred wild dingoes living there?",
+   "antworten": [
+    "Tasmania",
+    "Kangaroo Island",
+    "K'gari (Fraser Island)",
+    "Rottnest Island"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 41,
+   "tag": 41,
+   "thema": "The friendliest animal",
+   "frage": "Quokkas are famous for their permanent smile. On which Western Australian island do they mainly live?",
+   "antworten": [
+    "Christmas Island",
+    "Rottnest Island",
+    "Magnetic Island",
+    "Phillip Island"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 42,
+   "tag": 42,
+   "thema": "Road sign oddity",
+   "frage": "What does the Australian road sign “Road Trains Give Way” mean?",
+   "antworten": [
+    "Road trains must give way",
+    "CAREFUL: you have to give way/make room for the huge trucks up to 53 m long!",
+    "The road is closed to road trains",
+    "Overtaking oversize vehicles is prohibited"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 43,
+   "tag": 43,
+   "thema": "Isolation",
+   "frage": "Which Australian city is geographically considered the most isolated city of over a million people in the world?",
+   "antworten": [
+    "Darwin",
+    "Brisbane",
+    "Perth",
+    "Adelaide"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 44,
+   "tag": 44,
+   "thema": "Sydney Opera House",
+   "frage": "How many ceramic tiles make up the roof of the famous Sydney Opera House?",
+   "antworten": [
+    "About 100,000",
+    "About 500,000",
+    "Over 1.05 million",
+    "About 5 million"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 45,
+   "tag": 45,
+   "thema": "The most dangerous bird",
+   "frage": "Which flightless bird of the Queensland rainforest is considered the most dangerous bird in the world because of its razor-sharp dagger claws?",
+   "antworten": [
+    "Emu",
+    "Southern cassowary",
+    "Ostrich",
+    "Kiwi"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 46,
+   "tag": 46,
+   "thema": "Beer brand myth",
+   "frage": "Which beer is known around the world as “the Australian beer”, but is hardly drunk by Aussies themselves?",
+   "antworten": [
+    "VB (Victoria Bitter)",
+    "XXXX Gold",
+    "Fosters",
+    "Coopers"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 47,
+   "tag": 47,
+   "thema": "Convict heritage",
+   "frage": "How many convicts were transported from Great Britain to Australia between 1788 and 1868?",
+   "antworten": [
+    "About 25,000",
+    "About 80,000",
+    "About 162,000",
+    "About 500,000"
+   ],
+   "richtig": 2
+  },
+  {
+   "id": 48,
+   "tag": 48,
+   "thema": "Deadly spiders",
+   "frage": "Since when, thanks to antivenom, has there been not a single documented death from a funnel-web spider bite in Australia, despite hundreds of bites?",
+   "antworten": [
+    "Since 1950",
+    "Since 1981",
+    "Since 2005",
+    "People still die every year"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 49,
+   "tag": 49,
+   "thema": "Strange island crabs",
+   "frage": "On which Australian external territory island do millions of red land crabs migrate from the forest to the sea every year?",
+   "antworten": [
+    "Norfolk Island",
+    "Christmas Island",
+    "Cocos Islands",
+    "Macquarie Island"
+   ],
+   "richtig": 1
+  },
+  {
+   "id": 50,
+   "tag": 50,
+   "thema": "The pedal radio",
+   "frage": "Which organisation once used pedal-powered generators for radios to provide medical care in the vast outback?",
+   "antworten": [
+    "Bush Doctors Oz",
+    "Royal Flying Doctor Service (RFDS)",
+    "Outback Rescue 911",
+    "Flying Ambulance Australia"
+   ],
+   "richtig": 1
+  }
+ ],
+ "levels": [
+  {
+   "min": 0,
+   "max": 10,
+   "stufe": 1,
+   "titel": "Fresh off the Plane (the tourist)",
+   "text": "You probably thought Sydney was the capital and kangaroos give kids a lift to school. In the outback you wouldn't last 20 minutes before a huntsman finished you off with a dirty look. Grab a cold one and start again, mate!",
+   "emoji": "🛬"
+  },
+  {
+   "min": 11,
+   "max": 20,
+   "stufe": 2,
+   "titel": "Sausage Sizzler (the backyard barbecuer)",
+   "text": "You've seen Vegemite on toast before (and probably spat it out again). You know where Down Under is, but on the hard facts you still mix up bunyips with cute wombats. Better not head into the bush without a guide just yet!",
+   "emoji": "🌭"
+  },
+  {
+   "min": 21,
+   "max": 30,
+   "stufe": 3,
+   "titel": "Bush Walker (the outback regular)",
+   "text": "Respect! You know your stuff. You know not to hug a cassowary and that Bob Hawke was a legend. You'd survive a week in the Red Centre without having to eat your own shoes. Solid, mate!",
+   "emoji": "🥾"
+  },
+  {
+   "min": 31,
+   "max": 40,
+   "stufe": 4,
+   "titel": "True Blue Mate (a real mate)",
+   "text": "Crikey! You're almost a local. You speak fluent Aussie slang, know the dark corners of the history and flick venomous spiders away without blinking. Even the crocs in the Northern Territory give you a respectful nod.",
+   "emoji": "🦘"
+  },
+  {
+   "min": 41,
+   "max": 50,
+   "stufe": 5,
+   "titel": "Full-blooded Aussie / Bush Ranger Supreme",
+   "text": "Fair dinkum, mate! Nobody can fool you – you practically helped build the place! You have snake venom for breakfast, personally fought the emus in 1932 and know exactly how to reverse-park a kangaroo. You're not just an expert, you ARE Australia!",
+   "emoji": "🪃"
+  }
+ ]
+}

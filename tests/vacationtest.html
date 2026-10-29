@@ -1,0 +1,91 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vacation-Orte — Strukturvergleich</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:390px;height:760px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let zeilen=[]
+const p=(t,ok)=>{ zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=20000,st=400){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+function struktur(card){return{
+  bild:!!card.querySelector('.img img'),
+  badge:card.querySelector('.badge')?.textContent?.trim()||'',
+  pills:[...card.querySelectorAll('.tagpill')].map(e=>e.textContent.trim()),
+  text:(card.querySelector('.desc')?.textContent||'').trim().length,
+  sonne:!!card.querySelector('.sw'),
+  notiz:!!card.querySelector('.bubble'),
+  maps:!!card.querySelector('.maps'),
+  zuReise:!!card.querySelector('.reise-btn'),
+}}
+const zeige=s=>`Bild ${s.bild?'✓':'✗'} · Badge „${s.badge||'—'}" · Tags [${s.pills.join(',')||'—'}] · Text ${s.text} Z. · Sonne/Wetter ${s.sonne?'✓':'✗'} · Notiz ${s.notiz?'✓':'✗'} · Maps ${s.maps?'✓':'✗'} · zu Reise ${s.zuReise?'✓':'✗'}`
+
+const f=document.getElementById('f')
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelectorAll('#norden .card').length>0 && d.querySelector('#urlaub-orte'),30000)){p('ABBRUCH',false);return}
+
+  const ref=struktur(d.querySelector('#norden .card'))
+  p('Hinterlegter Ort (Vorbild):',true); p('   '+zeige(ref))
+
+  d.querySelector('#urlaub-orte').scrollIntoView(); await warte(800)
+  const karten=await bis(()=>{const k=d.querySelectorAll('#urlaub-orte .uo-card .card'); return k.length?k:null},10000)
+  p('Vacation-Orte nutzen die gemeinsame Ortskarte: '+(karten?karten.length:0),!!karten&&karten.length>0)
+  if(!karten)return
+
+  // Sammelknopf da? Dann Beschreibung + Bild für alle holen
+  const voll=await bis(()=>[...d.querySelectorAll('#urlaub-orte .btn')].find(b=>b.textContent.includes('vervollständigen')),6000)
+  p('Knopf „Orte vervollständigen" vorhanden: '+(voll?voll.textContent.trim():'—'),!!voll)
+  if(voll){ klick(voll)
+    p('Hole Beschreibungen & Bilder aus dem Netz (bis 150 s) …')
+    await bis(()=>{const k=[...d.querySelectorAll('#urlaub-orte .uo-card .card')]
+      return k.length && k.every(c=>c.querySelector('.img img'))},150000,2000)
+    await warte(2500) }
+
+  const alle=[...d.querySelectorAll('#urlaub-orte .uo-card .card')]
+  let mitBild=0, mitText=0, mitSonne=0
+  for(const c of alle){ const s=struktur(c)
+    if(s.bild) mitBild++; if(s.text>20) mitText++; if(s.sonne) mitSonne++ }
+  const erst=struktur(alle[0])
+  p('Erster Vacation-Ort ('+(alle[0].querySelector('.name')?.textContent||'?')+'):',true); p('   '+zeige(erst))
+
+  p('— Vergleich mit dem Vorbild —')
+  p('Vorschaubild: '+mitBild+'/'+alle.length,mitBild===alle.length)
+  p('Beschreibung: '+mitText+'/'+alle.length,mitText===alle.length)
+  p('Sonne/Sterne/Wetter: '+mitSonne+'/'+alle.length,mitSonne===alle.length)
+  p('Badge auf dem Bild',!!erst.badge)
+  p('Tag-Pillen: '+(erst.pills.join(', ')||'—'),erst.pills.length>0)
+  p('Notiz-/Bericht-Knopf',erst.notiz)
+  p('Google Maps',erst.maps)
+  p('„zu Reise" hinzufügbar',erst.zuReise)
+
+  // Ostküsten-Reisen im Menü — nicht die Westküsten-Reisen
+  klick(alle[0].querySelector('.reise-btn')); await warte(600)
+  const menue=[...alle[0].querySelectorAll('.reise-menu button')].map(b=>b.textContent.trim())
+  p('„zu Reise" zeigt die Ostküsten-Reisen: '+menue.join(' | '),
+    menue.some(m=>m.includes('Hinflug')||m.includes('Neue Reise')) && !menue.some(m=>m.includes('Nord 3')))
+  klick(alle[0].querySelector('.reise-btn')); await warte(300)
+
+  // Westküste darf nicht kaputt sein
+  const west=struktur(d.querySelector('#norden .card'))
+  p('Westküsten-Karte unverändert: '+zeige(west),west.bild&&west.sonne&&west.pills.length>0&&west.zuReise)
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.join(' | '):'keine'),fehler.length===0)
+  const bad=zeilen.filter(z=>z[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————',bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

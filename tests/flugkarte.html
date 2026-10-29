@@ -1,0 +1,105 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flug & Karten — Test</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:1000px;height:800px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let zeilen=[]
+const p=(t,ok)=>{ zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=25000,st=300){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+const waehle=(sel,v)=>{const s=Object.getOwnPropertyDescriptor(sel.ownerDocument.defaultView.HTMLSelectElement.prototype,'value').set
+  s.call(sel,v); sel.dispatchEvent(new Event('change',{bubbles:true}))}
+
+const f=document.getElementById('f')
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('#eigene-route') && d.querySelectorAll('#eigene-route article.reise').length>0,30000)){p('ABBRUCH',false);return}
+  await warte(5000)
+
+  const reisen=[...d.querySelectorAll('#eigene-route article.reise')]
+  p('Reisen gefunden: '+reisen.length, reisen.length>=3)
+
+  // Die Ostküsten-Flugreise finden (Melbourne → Airlie Beach)
+  const flug = reisen.find(a=>(a.querySelector('.name')?.value||'').toLowerCase().includes('hinflug')) || reisen[0]
+  const west = reisen.find(a=>(a.querySelector('.name')?.value||'').toLowerCase().includes('nord'))
+  p('Flugreise: '+(flug.querySelector('.name')?.value||'?'), !!flug)
+  p('Westreise: '+(west?.querySelector('.name')?.value||'—'), !!west)
+
+  // — Verkehrsmittel-Schalter —
+  const knoepfe=[...flug.querySelectorAll('.art-knopf')].map(b=>b.textContent.trim())
+  p('Schalter an der Flugreise: '+knoepfe.join(' / '), knoepfe.length===2)
+  const anFlug=[...flug.querySelectorAll('.art-knopf')].find(b=>b.classList.contains('an'))?.textContent.trim()
+  p('Aktiv: '+anFlug, (anFlug||'').includes('Flug'))
+
+  // — Mini-Vorschau: liegen die Stopps im Bild? —
+  klick(flug.querySelector('.aufklapp')); await warte(1500)
+  const svg = flug.querySelector('.preview svg')
+  p('Vorschau vorhanden', !!svg)
+  if(svg){
+    const kreise=[...svg.querySelectorAll('circle')]
+    const drin = kreise.length>0 && kreise.every(c=>{
+      const x=+c.getAttribute('cx'), y=+c.getAttribute('cy')
+      return x>=0 && x<=152 && y>=0 && y<=226 })
+    p('  Stopps liegen im Bild: '+kreise.length+' → '+kreise.map(c=>Math.round(c.getAttribute('cx'))+','+Math.round(c.getAttribute('cy'))).join(' '), drin)
+    p('  Küstenlinie gezeichnet: '+svg.querySelectorAll('path').length+' Teil(e)', svg.querySelectorAll('path').length>0)
+    const pl=svg.querySelector('polyline')
+    p('  Route gestrichelt (Flug)', !!pl && !!pl.getAttribute('stroke-dasharray'))
+  }
+  const fuss = flug.querySelector('.r-fuss')?.textContent || ''
+  p('Beschriftung: '+fuss.trim(), fuss.includes('Flugstrecke'))
+
+  // Westreise zum Vergleich
+  if(west){
+    klick(west.querySelector('.aufklapp')); await warte(1500)
+    const wsvg=west.querySelector('.preview svg')
+    const wk=[...(wsvg?.querySelectorAll('circle')||[])]
+    const wdrin = wk.length>0 && wk.every(c=>{const x=+c.getAttribute('cx'),y=+c.getAttribute('cy'); return x>=0&&x<=152&&y>=0&&y<=226})
+    p('Westreise-Vorschau: '+wk.length+' Stopps im Bild', wdrin)
+    const wpl=wsvg?.querySelector('polyline')
+    p('  Route durchgezogen (Auto)', !!wpl && !wpl.getAttribute('stroke-dasharray'))
+    const wfuss=west.querySelector('.r-fuss')?.textContent||''
+    p('  Beschriftung: '+wfuss.trim(), wfuss.includes('Straßenroute'))
+  }
+
+  // — Offline-Karte —
+  d.querySelector('#karten')?.scrollIntoView(); await warte(1200)
+  const cv = await bis(()=>{const c=d.querySelector('#karten canvas'); return c&&c.width>50?c:null},25000)
+  p('Offline-Karte rendert: '+(cv?cv.width+'×'+cv.height:'—'), !!cv)
+
+  const sel = d.querySelector('#karten .route-sel select')
+  p('Routen-Auswahl vorhanden', !!sel)
+  if(sel && cv){
+    const opts=[...sel.options].map(o=>({v:o.value,t:o.textContent.trim()}))
+    // Flugroute wählen → Hinweis statt Linie ins Meer
+    const oFlug=opts.find(o=>o.t.toLowerCase().includes('hinflug'))
+    if(oFlug){ waehle(sel,oFlug.v); await warte(3000)
+      const warn=d.querySelector('#karten .rs-warn')
+      p('Flugroute außerhalb der Regionen → Hinweis statt Linie: '+(warn?warn.textContent.trim().slice(0,60):'KEIN Hinweis'), !!warn) }
+    // Westroute wählen → Region Western Australia, Route wird gezeichnet
+    const oWest=opts.find(o=>o.t.toLowerCase().includes('nord'))
+    if(oWest){ waehle(sel,oWest.v); await warte(4000)
+      const warn2=d.querySelector('#karten .rs-warn')
+      const aktiveRegion=[...d.querySelectorAll('#karten .reg-btn, #karten .regionen button')].find(b=>b.classList.contains('an'))?.textContent.trim()
+      p('Westroute: kein Hinweis (liegt in einer Region)', !warn2)
+      p('  Aktive Region: '+(aktiveRegion||'?'), true) }
+  }
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.join(' | '):'keine'), fehler.length===0)
+  const bad=zeilen.filter(z=>z[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

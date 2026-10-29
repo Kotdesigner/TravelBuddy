@@ -1,0 +1,91 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Offline-Karten — Regionen</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:1000px;height:820px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let zeilen=[]
+const p=(t,ok)=>{ zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=30000,st=300){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+const ERWARTET=[
+  {name:'Westküste',      z:10, punkte:[['Perth',115.86,-31.95],['Marble Bar',119.75,-21.17]]},
+  {name:'Ostküste',       z:10, punkte:[['Melbourne',144.96,-37.81],['Cairns',145.77,-16.92],['Sydney',151.21,-33.87],['Brisbane',153.03,-27.47]]},
+  {name:'Melbourne & Kinglake', z:13, punkte:[['Kinglake',145.34,-37.53],['Marysville',145.75,-37.51],['Phillip Island',145.24,-38.49]]},
+  {name:'Cairns & Tablelands',  z:13, punkte:[['Cape Tribulation',145.46,-16.08],['Millaa Millaa',145.61,-17.51],['Mission Beach',146.10,-17.87]]},
+  {name:'Whitsundays & Palm Bay', z:13, punkte:[['Palm Bay',148.868,-20.354],['Bowen',148.25,-20.01]]},
+  {name:'Australien (grob)', z:8, punkte:[['Uluru',131.04,-25.34],['Darwin',130.84,-12.46],['Hobart',147.33,-42.88]]},
+]
+
+const f=document.getElementById('f')
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('.karten'),40000)){
+    // Kartenbereich evtl. erst über Navigation erreichbar
+    const nav=[...d.querySelectorAll('button,a')].find(b=>/karte/i.test(b.textContent))
+    if(nav) klick(nav)
+    if(!await bis(()=>d.querySelector('.karten'),25000)){p('ABBRUCH: Kartenbereich nicht gefunden',false);return}
+  }
+  await warte(1500)
+  d.querySelector('.karten').scrollIntoView(); await warte(600)
+
+  const tabs=[...d.querySelectorAll('.karten .tab')]
+  p('Reiter: '+tabs.map(t=>t.textContent.trim()).join(' | '), tabs.length===6)
+
+  let gesamtMB=0
+  for(const soll of ERWARTET){
+    const tab=[...d.querySelectorAll('.karten .tab')].find(t=>t.textContent.trim()===soll.name)
+    if(!tab){ p(soll.name+' — Reiter fehlt',false); continue }
+    klick(tab)
+    // warten bis die Karte fertig ist
+    const okk=await bis(()=>{
+      const c=d.querySelector('.karten canvas')
+      const lad=d.querySelector('.karten .laedt, .karten .spinner')
+      return c && !lad ? c : null
+    },40000)
+    await warte(2600)
+    const fehlt=d.querySelector('.karten .fehler, .karten .ladefehler')
+    p(`${soll.name}`, !!okk && !fehlt)
+    if(fehlt) p('   Fehlermeldung: '+fehlt.textContent.trim(), false)
+
+    // Sichtprüfung: enthält die Leinwand mehr als nur Hintergrundfarbe?
+    const cv=d.querySelector('.karten canvas')
+    if(cv){
+      try{
+        const g=cv.getContext('webgl2')||cv.getContext('webgl')
+        const px=new Uint8Array(4*64)
+        g.readPixels(Math.floor(cv.width/2)-4,Math.floor(cv.height/2)-4,8,8,g.RGBA,g.UNSIGNED_BYTE,px)
+        const farben=new Set(); for(let i=0;i<px.length;i+=4) farben.add(px[i]+','+px[i+1]+','+px[i+2])
+        p(`   Kartenbild gezeichnet (${farben.size} Farbtöne in der Mitte)`, farben.size>=1)
+      }catch(e){ p('   Leinwand nicht lesbar: '+e.message) }
+    }
+  }
+
+  // Was liegt im Offline-Cache?
+  const cache = await w.caches.open('karten-pmtiles-v2')
+  const keys = await cache.keys()
+  let bytes=0
+  for(const k of keys){ const r=await cache.match(k); const b=await r.clone().arrayBuffer(); bytes+=b.byteLength }
+  p(`Offline-Cache: ${keys.length} Regionen · ${(bytes/1048576).toFixed(1)} MB`, keys.length>=6)
+  p('   '+keys.map(k=>k.url.split('/').pop()).join(', '))
+  const alt = await w.caches.has('karten-pmtiles')
+  p('Alter Cache entfernt', alt===false)
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=zeilen.filter(z=>z[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

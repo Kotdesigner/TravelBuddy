@@ -1,0 +1,87 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neue Orte — Ostküste</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:393px;height:852px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let zeilen=[]
+const p=(t,ok)=>{ zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=45000,st=350){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+document.getElementById('f').onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+
+  // 1 · Datenbestand
+  const daten=await (await w.fetch('/orte.json')).json()
+  const ost=daten.filter(o=>o.abschnitt&&o.abschnitt.indexOf('Ostküste')===0)
+  // 142 bis 06.10.2037; seitdem + Nature's Window und Broad Arrow Tavern (beide WA)
+  p('orte.json: '+daten.length+' Orte, davon Ostküste '+ost.length, daten.length===144 && ost.length===54)
+  const gebiete=[...new Set(ost.map(o=>o.region))]
+  p('Gebiete: '+gebiete.length+' — '+gebiete.join(' · '), gebiete.length===9)
+  const ohneKoord=ost.filter(o=>typeof o.lat!=='number'||typeof o.lon!=='number')
+  p('alle mit Koordinaten', ohneKoord.length===0)
+  const ausserhalb=ost.filter(o=>o.lat>-9||o.lat<-44||o.lon<112||o.lon>154)
+  p('alle Koordinaten in Australien', ausserhalb.length===0)
+  // Der Saisonhinweis steckt seit dem Aufräumen der Kacheln in einem EIGENEN Feld,
+  // nicht mehr in der Beschreibung.
+  const mitSaison=ost.filter(o=>(o.saison||'').length>20)
+  p('Saison als eigenes Feld: '+mitSaison.length+'/'+ost.length, mitSaison.length===ost.length)
+  const nochDrin=ost.filter(o=>/Dez\/Jan:/.test(o.beschreibung||''))
+  p('   nicht mehr in der Beschreibung', nochDrin.length===0)
+  const langeTexte=ost.filter(o=>(o.beschreibung||'').length>700)
+  p('   keine ausufernden Kacheltexte mehr (>700 Zeichen): '+langeTexte.length, langeTexte.length===0)
+
+  // 2 · Bilder wirklich ladbar?
+  const mitBild=ost.filter(o=>o.bild)
+  let bildOk=0, bildWeg=[]
+  for(const o of mitBild){
+    const r=await w.fetch('/'+o.bild,{method:'HEAD'})
+    if(r.ok) bildOk++; else bildWeg.push(o.name)
+  }
+  p('Bilder erreichbar: '+bildOk+'/'+mitBild.length, bildOk===mitBild.length)
+  bildWeg.slice(0,3).forEach(n=>p('   ✗ '+n, false))
+  p('   ohne Bild (bewusst, statt falschem): '+(ost.length-mitBild.length), true)
+
+  // 3 · In der Oberfläche sichtbar?
+  if(!await bis(()=>d.querySelector('nav.bar[aria-label="Hauptnavigation"]'),45000)){p('ABBRUCH',false);return}
+  await warte(3000)
+  const orteTab=[...d.querySelectorAll('nav.bar .tab')].find(t=>/Orte/.test(t.textContent))
+  klick(orteTab); await warte(2500)
+  const ostChip=[...d.querySelectorAll('.sub-chip')].find(c=>c.dataset.sub==='osten')
+  p('Reiter „Orte Ost" vorhanden', !!ostChip)
+  if(ostChip){
+    klick(ostChip); await warte(3000)
+    const sek=d.getElementById('osten')
+    const karten=sek?sek.querySelectorAll('.karte, article, .ort'):[]
+    p('Ostküsten-Sektion zeigt Karten: '+karten.length, karten.length>=50)
+    const gruppen=sek?[...sek.querySelectorAll('.reg-kopf, .region h3, .gruppe h3')].map(e=>e.textContent.trim()):[]
+    if(gruppen.length) p('   Gruppen in der Anzeige: '+gruppen.length, gruppen.length>=8)
+    // Stichproben
+    for(const name of ['Millaa Millaa','Cape Tribulation','Steavenson Falls','Penguin Parade']){
+      const da=sek && sek.textContent.includes(name)
+      p('   „'+name+'" sichtbar', !!da)
+    }
+    // gerenderte Bilder ohne Fehler
+    const imgs=[...(sek?sek.querySelectorAll('img'):[])]
+    await warte(2500)
+    const kaputt=imgs.filter(i=>i.complete && i.naturalWidth===0)
+    p('   gerenderte Bilder: '+imgs.length+' · davon kaputt: '+kaputt.length, kaputt.length===0)
+  }
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=zeilen.filter(z=>z[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

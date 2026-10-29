@@ -1,0 +1,153 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Termine, Verknüpfung, Gefahrenlage</title>
+<style>body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+#log{white-space:pre-wrap;font:11.5px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+.ok{color:#1a7f37}.bad{color:#c62828;font-weight:700} iframe{width:420px;height:200px;border:1px solid #ccc}</style>
+<div id="log">…</div>
+<script>
+localStorage.setItem('standort-schon-gefragt','1')
+const f=document.createElement('iframe'); f.src='./index.html'; document.body.appendChild(f)
+const L=document.getElementById('log'); let z=[]
+const zeig=()=>L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('')
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t); zeig() }
+const w8=ms=>new Promise(r=>setTimeout(r,ms))
+const bis=async(fn,ms=45000)=>{const t=Date.now();while(Date.now()-t<ms){try{const v=fn();if(v)return v}catch{}await w8(300)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+const setzeWert=(el,v)=>{ el.value=v
+  el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true})) }
+
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]
+  w.addEventListener('error',e=>fehler.push((e.message||'')+' @'+(e.filename||'').split('/').pop()+':'+e.lineno))
+  w.addEventListener('unhandledrejection',e=>fehler.push('Promise: '+(e.reason?.message||e.reason)))
+  const ce=w.console.error; w.console.error=(...a)=>{fehler.push('console: '+a.map(x=>String(x?.message||x)).join(' ').slice(0,110)); ce.apply(w.console,a)}
+  try{ Object.defineProperty(w.navigator,'geolocation',{get:()=>undefined}) }catch{}
+  w.confirm = () => true                      // Löschen am Ende ohne Dialog
+
+  if(!await bis(()=>d.querySelector('nav.bar'))){p('ABBRUCH: App lädt nicht',false);return}
+  await w8(4000)
+
+  // ---------------------------------------------------------------- 1) Wanderung mit Datum
+  const wSek = await bis(()=>d.querySelector('#wanderungen'))
+  p('Sektion „Wanderungen" da', !!wSek)
+  if(!wSek){ z.push('———— ABBRUCH ————'); zeig(); return }
+
+  // Startdatum des Gesamtplans als Termin nehmen — dann MUSS er in Etappe 1 fallen.
+  const startInput = d.querySelector('#kalender .start input[type=date]')
+  const planStart = startInput?.value || ''
+  p('Gesamtplan-Start gelesen: '+(planStart||'—'), !!planStart)
+
+  const vorherKarten = d.querySelectorAll('#wanderungen .card').length
+  klick(d.querySelector('#wanderungen .neu')); await w8(900)
+  const karte = d.querySelector('#wanderungen .card.offen')
+  p('neue Wanderung angelegt ('+vorherKarten+' → '+d.querySelectorAll('#wanderungen .card').length+')', !!karte)
+  if(!karte){ z.push('———— ABBRUCH ————'); zeig(); return }
+
+  const dIn = karte.querySelector('input[type=date]')
+  const tIn = karte.querySelector('input[type=time]')
+  p('Feld „Datum" im Formular', !!dIn)
+  p('Feld „Uhrzeit" im Formular', !!tIn)
+  if(dIn && planStart){ setzeWert(dIn, planStart); await w8(700) }
+  if(tIn){ setzeWert(tIn, '07:30'); await w8(700) }
+
+  const nm = karte.querySelector('.c-name'); if(nm) setzeWert(nm,'TEST-Wanderung')
+  await w8(600)
+
+  const badge = karte.querySelector('.badge.termin')
+  p('   Termin-Marke auf der Kachel: '+(badge?badge.textContent.trim():'—'), !!badge)
+  const ok = karte.querySelector('.termin-ok')
+  p('   Einordnung: '+(ok?ok.textContent.replace(/\s+/g,' ').trim():'—'),
+    !!ok && /Gesamtplan/.test(ok.textContent))
+
+  // ---------------------------------------------------------------- 2) Zeitleiste
+  const wk = d.querySelectorAll('.tm-card.wanderung')
+  p('Zeitleiste: Wanderungs-Karte erscheint ('+wk.length+')', wk.length>0)
+  if(wk.length){
+    const txt = wk[wk.length-1].textContent.replace(/\s+/g,' ')
+    p('   Inhalt: '+txt.slice(0,72), /Wanderung/.test(txt))
+    // chronologisch richtig einsortiert?
+    const alle=[...d.querySelectorAll('.tm-card')]
+    p('   Position '+(alle.indexOf(wk[wk.length-1])+1)+' von '+alle.length+' Karten', true)
+  }
+
+  // ---------------------------------------------------------------- 3) Gesamtkalender
+  const term = d.querySelectorAll('#kalender .termin.wanderung')
+  p('Gesamtkalender: Termin unter der Etappe ('+term.length+')', term.length>0)
+  if(term.length) p('   '+term[0].textContent.replace(/\s+/g,' ').trim().slice(0,70), true)
+  const ausser = d.querySelector('#kalender .ausserhalb')
+  if(ausser){
+    const zeilen=[...ausser.querySelectorAll('.termin')].map(x=>x.textContent.replace(/\s+/g,' ').trim())
+    p('   „außerhalb"-Kasten: '+zeilen.length+' → '+zeilen.slice(0,3).join(' / ').slice(0,90),
+      !zeilen.some(x=>/TEST-Wanderung/.test(x)))   // die Test-Wanderung MUSS in der Etappe sein
+  } else p('   kein Termin außerhalb des Plans', true)
+
+  // ---------------------------------------------------------------- 4) Logbuch
+  const tSek = await bis(()=>d.querySelector('#tagebuch'))
+  p('Sektion „Logbuch" da', !!tSek)
+  klick(d.querySelector('#tagebuch .neu')); await w8(1200)
+  const je = d.querySelector('#tagebuch .je:not(.zu)')
+  p('neuer Reisetag offen', !!je)
+  if(je){
+    const sel = je.querySelector('select.verkn')
+    const grp = sel ? [...sel.querySelectorAll('optgroup')] : []
+    p('   „verknüpfen"-Liste hat Gruppen: '+grp.map(g=>g.label).join(' | '), grp.length>=1)
+    const reiseGrp = grp.filter(g=>/🧭/.test(g.label))
+    p('   davon Reisen: '+reiseGrp.length, reiseGrp.length>=1)
+
+    const rv = je.querySelector('.reise-verkn')
+    p('   Reise-Auswahl direkt unter der Kopfzeile', !!rv)
+    if(rv){
+      const kopf = je.querySelector('.kopf')
+      p('   steht wirklich oben (vor Wetter/Warnungen)',
+        !!kopf && (kopf.compareDocumentPosition(rv) & Node.DOCUMENT_POSITION_FOLLOWING) > 0)
+    }
+
+    // Reise-Stopp auswählen → Ort + Reise müssen gesetzt werden
+    const stopOpt = reiseGrp.length ? reiseGrp[0].querySelector('option') : null
+    if(stopOpt){
+      setzeWert(sel, stopOpt.value); await w8(900)
+      const ortFeld = je.querySelector('input.ort')
+      p('   Stopp „'+stopOpt.textContent+'" gewählt → Ort: „'+(ortFeld?.value||'')+'"',
+        ortFeld?.value === stopOpt.textContent)
+      const rSel = rv?.querySelector('select')
+      const gewaehlt = rSel ? rSel.options[rSel.selectedIndex]?.textContent : ''
+      p('   Reise automatisch mitgesetzt: '+gewaehlt, !!gewaehlt && gewaehlt!=='— keine —')
+    } else p('   keine Reise mit Stopps vorhanden — Stopp-Test übersprungen')
+
+    // Gefahrenlage-Knopf
+    const lb = je.querySelector('.lage-btn')
+    p('   Knopf „Amtliche Gefahrenlage übernehmen"', !!lb)
+    if(lb){
+      const grund = je.querySelector('.lage-grund')?.textContent.replace(/\s+/g,' ').trim() || ''
+      p('   Zustand: '+(lb.disabled?'gesperrt':'bereit')+' — '+grund.slice(0,64), true)
+      if(!lb.disabled){
+        klick(lb); await w8(1000)
+        const meld = je.querySelector('.lage-ok')?.textContent || ''
+        p('   nach Klick: '+meld, /✓/.test(meld))
+        const feld=[...je.querySelectorAll('.f-label')].find(x=>/Amtliche Lage/.test(x.textContent))
+        const ta = feld?.parentElement.querySelector('textarea')
+        p('   Text im Feld: '+(ta?.value||'').split('\n')[0].slice(0,58), !!(ta?.value||'').trim())
+      }
+    }
+    klick(je.querySelector('.del')); await w8(700)      // Testeintrag wieder weg
+  }
+
+  // Aufräumen: Test-Wanderung löschen
+  const weg = [...d.querySelectorAll('#wanderungen .card')].find(c=>/TEST-Wanderung/.test(c.querySelector('.c-name')?.value||''))
+  if(weg){ klick(weg.querySelector('.c-del')); await w8(700) }
+  p('aufgeräumt: '+d.querySelectorAll('#wanderungen .card').length+' Wanderungen (vorher '+vorherKarten+')',
+    d.querySelectorAll('#wanderungen .card').length === vorherKarten)
+
+  const schlecht = z.filter(x=>x[0]==='❌')
+  z.unshift('JS-FEHLER ('+fehler.length+'):')
+  fehler.slice(0,3).forEach((x,i)=>z.splice(1+i,0,'  ⤷ '+String(x).slice(0,100)))
+  // Fehlerzeilen ganz nach oben — auf dem iPhone verdeckt sonst jeder Systemdialog das Ergebnis.
+  schlecht.forEach((x,i)=>z.splice(i,0,x))
+  const bad = schlecht.length
+  z.push('———— '+((bad||fehler.length)?(bad+' FEHLER, '+fehler.length+' JS'):'ALLES OK')+' ————')
+  zeig(); f.style.display='none'
+}
+</script>

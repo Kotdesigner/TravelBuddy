@@ -1,0 +1,24 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kartenbild</title>
+<style>html,body{margin:0;height:100%;background:#111}iframe{width:100vw;height:100vh;border:0;display:block}</style>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const warte = ms => new Promise(r=>setTimeout(r,ms))
+const klick = el => { for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView})) }
+const modus = new URLSearchParams(location.search).get('m') || 'popup'
+document.getElementById('f').onload = async () => {
+  const d = document.getElementById('f').contentDocument
+  for(let i=0;i<80 && !d.querySelector('.rk');i++) await warte(250)
+  await warte(1500)
+  d.querySelector('.rk').scrollIntoView({block:'start'})
+  // Nachladende Inhalte darüber verschieben die Karte → erneut ausrichten
+  for(let i=0;i<10;i++){ await warte(500); d.querySelector('.rk')?.scrollIntoView({block:'start'}) }
+  for(let i=0;i<60;i++){ const c=d.querySelector('.rk-map canvas'); if(c&&c.width>50) break; await warte(250) }
+  await warte(3500)                       // Kacheln laden lassen
+  d.querySelector('.rk')?.scrollIntoView({block:'start'})
+  if (modus !== 'nur-karte') { const b = d.querySelector('.rk-leg'); if(b){ klick(b); await warte(1600) } }
+  if (modus === 'gross') { klick(d.querySelector('.rk-btn')); await warte(2200) }
+}
+</script>

@@ -1,0 +1,2262 @@
+[
+ {
+  "id": "cape_leeuwin_lighthouse",
+  "name": "Cape Leeuwin Lighthouse",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Margaret River & Augusta",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Höchster Leuchtturm auf dem australischen Festland (~39 m). Hier treffen Indischer und Südlicher Ozean aufeinander. Turmführung ca. $23.",
+  "emoji": "🗼",
+  "mapsQuery": "Cape Leeuwin Lighthouse, Western Australia",
+  "bild": "bilder/cape_leeuwin_lighthouse.jpg",
+  "lat": -34.37499,
+  "lon": 115.13633
+ },
+ {
+  "id": "jewel_cave",
+  "name": "Jewel Cave",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Margaret River & Augusta",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Größte Schauhöhle der Region, nur geführt begehbar (~1 Std.), spektakuläre Formationen, Fossilienfunde.",
+  "emoji": "🕳️",
+  "mapsQuery": "Jewel Cave, Western Australia",
+  "bild": "bilder/jewel_cave.jpg",
+  "lat": -34.27377,
+  "lon": 115.09836
+ },
+ {
+  "id": "hamelin_bay",
+  "name": "Hamelin Bay",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Margaret River & Augusta",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Kurzschwanz-Stachelrochen schwimmen oft direkt am Ufer/Bootssteg. Bei Ebbe Schiffswrackreste sichtbar.",
+  "emoji": "🐟",
+  "mapsQuery": "Hamelin Bay, Western Australia",
+  "bild": "bilder/hamelin_bay.jpg",
+  "lat": -34.22028,
+  "lon": 115.03135
+ },
+ {
+  "id": "boranup_forest_drive",
+  "name": "Boranup Forest Drive",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Margaret River & Augusta",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Einer der schönsten Karri-Waldabschnitte der Region mit Aussichtsturm — die Fahrt selbst ist die Attraktion.",
+  "emoji": "🌲",
+  "mapsQuery": "Boranup Forest Drive, Western Australia",
+  "bild": "bilder/boranup_forest_drive.jpg",
+  "lat": -34.1749,
+  "lon": 115.06063
+ },
+ {
+  "id": "canal_rocks",
+  "name": "Canal Rocks",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Margaret River & Augusta",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Schmale, kanalartige Felsformation mit Boardwalk direkt am Meer, Yallingup.",
+  "emoji": "🌊",
+  "mapsQuery": "Canal Rocks, Western Australia",
+  "bild": "bilder/canal_rocks.jpg",
+  "lat": -33.66923,
+  "lon": 114.99455
+ },
+ {
+  "id": "sugarloaf_rock",
+  "name": "Sugarloaf Rock",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Margaret River & Augusta",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Markanter Granitfelsen vor Cape Naturaliste, Brutkolonie des seltenen Roten Tropikvogels.",
+  "emoji": "🪨",
+  "mapsQuery": "Sugarloaf Rock, Western Australia",
+  "bild": "bilder/sugarloaf_rock.jpg",
+  "lat": -33.55936,
+  "lon": 115.00515
+ },
+ {
+  "id": "injidup_natural_spa",
+  "name": "Injidup Natural Spa",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Margaret River & Augusta",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Natürliches Felsenbecken, durch Granit vor der Brandung geschützt — bei ruhiger See traumhaft.",
+  "emoji": "💦",
+  "mapsQuery": "Injidup Natural Spa, Western Australia",
+  "bild": "bilder/injidup_natural_spa.jpg",
+  "lat": -33.68,
+  "lon": 114.98,
+  "ungenau": true
+ },
+ {
+  "id": "mammoth_cave",
+  "name": "Mammoth Cave",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Margaret River & Augusta",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Einzige selbstgeführte Schauhöhle der Region (Audio-Tour), bekannt für fossile Megafauna-Funde.",
+  "emoji": "🦴",
+  "mapsQuery": "Mammoth Cave, Western Australia",
+  "bild": "bilder/mammoth_cave.jpg",
+  "lat": -34.05872,
+  "lon": 115.02972
+ },
+ {
+  "id": "busselton_jetty",
+  "name": "Busselton Jetty",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Margaret River & Augusta",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "1.841 m — längste hölzerne Seebrücke der Südhalbkugel, am Ende Unterwasser-Observatorium mit Korallen.",
+  "emoji": "🚶",
+  "mapsQuery": "Busselton Jetty, Western Australia",
+  "bild": "bilder/busselton_jetty.jpg",
+  "lat": -33.64489,
+  "lon": 115.34617
+ },
+ {
+  "id": "gloucester_tree",
+  "name": "Gloucester Tree",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Pemberton, Northcliffe & Warren NP",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Begehbarer ehem. Feuerwacht-Baum. Seit 2023 gesperrt, am 27. Juni 2026 mit neuer, niedrigerer Plattform (37 m) wiedereröffnet — Status vor Abreise prüfen.",
+  "emoji": "🌳",
+  "mapsQuery": "Gloucester Tree, Western Australia",
+  "bild": "bilder/gloucester_tree.jpg",
+  "lat": -34.44765,
+  "lon": 116.05585
+ },
+ {
+  "id": "dave_evans_bicentennial_tree",
+  "name": "Dave Evans Bicentennial Tree",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Pemberton, Northcliffe & Warren NP",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "75 m hoher begehbarer Baum in Warren NP, aktuell nur bis zur ersten Plattform (20 m) offen (Sanierung).",
+  "emoji": "🌳",
+  "mapsQuery": "Dave Evans Bicentennial Tree, Western Australia",
+  "bild": "bilder/dave_evans_bicentennial_tree.jpg",
+  "lat": -34.49527,
+  "lon": 115.97504
+ },
+ {
+  "id": "heartbreak_trail_heartbreak_crossing",
+  "name": "Heartbreak Trail / Heartbreak Crossing",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Pemberton, Northcliffe & Warren NP",
+  "tags": [
+   "MUSS-SEHEN",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Malerische Fahrt entlang des Warren River durch Karri-Wald. Die Flussfurt selbst ist ausdrücklich nur mit 4WD zu queren.",
+  "emoji": "🚙",
+  "mapsQuery": "Heartbreak Trail / Heartbreak Crossing, Western Australia",
+  "bild": "bilder/heartbreak_trail_heartbreak_crossing.jpg",
+  "lat": -34.50879,
+  "lon": 115.95308
+ },
+ {
+  "id": "yeagarup_dunes",
+  "name": "Yeagarup Dunes",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Pemberton, Northcliffe & Warren NP",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Riesiges, ca. 10 km langes Wander-Dünensystem zwischen Yeagarup Lake und Yeagarup Beach. Zwingend 4WD, kein Anhänger, Reifendruck anpassen. Kein Permit nötig.",
+  "emoji": "🏜️",
+  "mapsQuery": "Yeagarup Dunes, Western Australia",
+  "bild": "bilder/yeagarup_dunes.jpg",
+  "lat": -34.55,
+  "lon": 115.98,
+  "ungenau": true
+ },
+ {
+  "id": "windy_harbour_salmon_beach",
+  "name": "Windy Harbour & Salmon Beach",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Pemberton, Northcliffe & Warren NP",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Wilde Steilküste und Dünenlandschaft am D'Entrecasteaux NP, komplett auf versiegelter Straße erreichbar (2WD).",
+  "emoji": "🏖️",
+  "mapsQuery": "Windy Harbour & Salmon Beach, Western Australia",
+  "bild": "bilder/windy_harbour_salmon_beach.jpg",
+  "lat": -34.83566,
+  "lon": 116.02713
+ },
+ {
+  "id": "valley_of_the_giants_tree_top_walk",
+  "name": "Valley of the Giants Tree Top Walk",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Walpole",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Hängebrücken-Pfad in ~40 m Höhe durch Tingle-Baumkronen (weltweit nur hier). Erw. $21, 26. Dez.–26. Jan. verlängerte Öffnungszeiten 8–17 Uhr.",
+  "emoji": "🌉",
+  "mapsQuery": "Valley of the Giants Tree Top Walk, Western Australia",
+  "bild": "bilder/valley_of_the_giants_tree_top_walk.jpg",
+  "lat": -34.97635,
+  "lon": 116.895
+ },
+ {
+  "id": "circular_pool",
+  "name": "Circular Pool",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Walpole",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Ruhiges, kreisrundes Becken des Frankland River, umgeben von Karri- und Tingle-Bäumen.",
+  "emoji": "🔵",
+  "mapsQuery": "Circular Pool, Western Australia",
+  "bild": "bilder/circular_pool.jpg",
+  "lat": -34.94456,
+  "lon": 116.80149
+ },
+ {
+  "id": "conspicuous_cliffs",
+  "name": "Conspicuous Cliffs",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Walpole",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Spektakuläre Steilküste mit Aussichtsplattform und Strandzugang.",
+  "emoji": "🌊",
+  "mapsQuery": "Conspicuous Cliffs, Western Australia",
+  "bild": "bilder/conspicuous_cliffs.jpg",
+  "lat": -35.03264,
+  "lon": 116.85537
+ },
+ {
+  "id": "peaceful_bay",
+  "name": "Peaceful Bay",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Walpole",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Kleine, geschützte Bucht mit ruhigem Wasser, gutes Angeln.",
+  "emoji": "⛵",
+  "mapsQuery": "Peaceful Bay, Western Australia",
+  "bild": "bilder/peaceful_bay.jpg",
+  "lat": -35.03897,
+  "lon": 116.9265
+ },
+ {
+  "id": "mandalay_beach",
+  "name": "Mandalay Beach",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Walpole",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Wilder Dünenstrand mit sichtbaren Resten des Schiffswracks 'Mandalay' (1911).",
+  "emoji": "⚓",
+  "mapsQuery": "Mandalay Beach, Western Australia",
+  "bild": "bilder/mandalay_beach.jpg",
+  "lat": -35.00184,
+  "lon": 116.53373
+ },
+ {
+  "id": "greens_pool",
+  "name": "Greens Pool",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Denmark",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Von Granitfelsen lagunenartig geschütztes, türkises Wasser — ganzjährig sicher zum Schwimmen.",
+  "emoji": "🏊",
+  "mapsQuery": "Greens Pool, Western Australia",
+  "bild": "bilder/greens_pool.jpg",
+  "lat": -35.0241,
+  "lon": 117.2341
+ },
+ {
+  "id": "elephant_rocks",
+  "name": "Elephant Rocks",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Denmark",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Riesige, elefantenförmige Granitrundungen, die ein kleines Badebecken einrahmen. Direkt neben Greens Pool.",
+  "emoji": "🐘",
+  "mapsQuery": "Elephant Rocks, Western Australia",
+  "bild": "bilder/elephant_rocks.jpg",
+  "lat": -35.02628,
+  "lon": 117.23767
+ },
+ {
+  "id": "lights_beach",
+  "name": "Lights Beach",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Denmark",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Wilder, unberührter Strand, Teil des Bibbulmun Track, weniger überlaufen als Greens Pool.",
+  "emoji": "🏄",
+  "mapsQuery": "Lights Beach, Western Australia",
+  "bild": "bilder/lights_beach.jpg",
+  "lat": -35.02273,
+  "lon": 117.27482
+ },
+ {
+  "id": "mount_shadforth_lookout",
+  "name": "Mount Shadforth Lookout",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Denmark",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Aussicht über Denmark und die Küste, Teil der Scenic Drive mit Weingütern unterwegs.",
+  "emoji": "🍇",
+  "mapsQuery": "Mount Shadforth Lookout, Western Australia",
+  "bild": "bilder/mount_shadforth_lookout.jpg",
+  "lat": -34.94,
+  "lon": 117.29,
+  "ungenau": true
+ },
+ {
+  "id": "the_gap_and_natural_bridge",
+  "name": "The Gap and Natural Bridge",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Albany",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Glasplattform über 24 m tiefer Felsspalte mit tosender Brandung, Torndirrup NP.",
+  "emoji": "🌉",
+  "mapsQuery": "The Gap and Natural Bridge, Western Australia",
+  "bild": "bilder/the_gap_and_natural_bridge.jpg",
+  "lat": -35.1179,
+  "lon": 117.89302
+ },
+ {
+  "id": "little_beach_two_peoples_bay",
+  "name": "Little Beach, Two Peoples Bay",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Albany",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Oft als einer der schönsten Strände Australiens gelistet. Naturreservat, Schutzgebiet des Gilbert's Honeyfressers.",
+  "emoji": "🏖️",
+  "mapsQuery": "Little Beach, Two Peoples Bay, Western Australia",
+  "bild": "bilder/little_beach_two_peoples_bay.jpg",
+  "lat": -34.9736,
+  "lon": 118.19562
+ },
+ {
+  "id": "muttonbird_beach",
+  "name": "Muttonbird Beach",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Albany",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Bei Ebbe/über Felsen erreichbare kleine Insel mit türkisem Wasser, Frenchman Bay Road.",
+  "emoji": "🐦",
+  "mapsQuery": "Muttonbird Beach, Western Australia",
+  "bild": "bilder/muttonbird_beach.jpg",
+  "lat": -35.06,
+  "lon": 117.71,
+  "ungenau": true
+ },
+ {
+  "id": "shelley_beach_west_cape_howe_np",
+  "name": "Shelley Beach, West Cape Howe NP",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Albany",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Südlichster Punkt Westaustraliens. Shelley Beach selbst 2WD erreichbar.",
+  "emoji": "🏖️",
+  "mapsQuery": "Shelley Beach, West Cape Howe NP, Western Australia",
+  "bild": "bilder/shelley_beach_west_cape_howe_np.jpg",
+  "lat": -35.11117,
+  "lon": 117.62922
+ },
+ {
+  "id": "golden_gate_dunsky_beach",
+  "name": "Golden Gate & Dunsky Beach",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Albany",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Wildeste Steilküste von West Cape Howe NP — nur mit echtem 4WD (Sand, Reifendruck reduzieren), deutlich weniger besucht als Shelley Beach.",
+  "emoji": "🚙",
+  "mapsQuery": "Golden Gate & Dunsky Beach, Western Australia",
+  "bild": "bilder/golden_gate_dunsky_beach.jpg",
+  "lat": -35.1025,
+  "lon": 117.6133
+ },
+ {
+  "id": "castle_rock_granite_skywalk",
+  "name": "Castle Rock Granite Skywalk",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Porongurup & Stirling Range",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Wanderung durch Karri-Wald zu freistehender Granitkuppel mit Stahl-Skywalk-Plattform über den Felsen.",
+  "emoji": "🧗",
+  "mapsQuery": "Castle Rock Granite Skywalk, Western Australia",
+  "bild": "bilder/castle_rock_granite_skywalk.jpg",
+  "lat": -34.68,
+  "lon": 117.88,
+  "ungenau": true
+ },
+ {
+  "id": "bluff_knoll",
+  "name": "Bluff Knoll",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Porongurup & Stirling Range",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Mit 1.099 m höchster Gipfel im Süden WAs. Anspruchsvolle 6 km-Wanderung (3–4 Std.), im Sommer früh starten (Hitze, wenig Schatten).",
+  "emoji": "⛰️",
+  "mapsQuery": "Bluff Knoll, Western Australia",
+  "bild": "bilder/bluff_knoll.jpg",
+  "lat": -34.37461,
+  "lon": 118.2561
+ },
+ {
+  "id": "east_mount_barren",
+  "name": "East Mount Barren",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Fitzgerald River National Park",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Bunt gebänderter Quarzit-Berg, kurze steile Wanderung, Panoramablick. 2WD erreichbar.",
+  "emoji": "⛰️",
+  "mapsQuery": "East Mount Barren, Western Australia",
+  "bild": "bilder/east_mount_barren.jpg",
+  "lat": -33.92292,
+  "lon": 120.02271
+ },
+ {
+  "id": "west_mount_barren",
+  "name": "West Mount Barren",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Fitzgerald River National Park",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Ähnlich wie East Mount Barren, deutlich weniger besucht.",
+  "emoji": "⛰️",
+  "mapsQuery": "West Mount Barren, Western Australia",
+  "bild": "bilder/west_mount_barren.jpg",
+  "lat": -34.21656,
+  "lon": 119.43299
+ },
+ {
+  "id": "point_ann",
+  "name": "Point Ann",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Fitzgerald River National Park",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Bester Wal-Beobachtungspunkt der Region — ABER Saison ist Juni–Oktober. Im Dezember/Januar keine Wale, landschaftlich trotzdem ein Stopp wert.",
+  "emoji": "🐋",
+  "mapsQuery": "Point Ann, Western Australia",
+  "bild": "bilder/point_ann.jpg",
+  "lat": -34.17034,
+  "lon": 119.58992
+ },
+ {
+  "id": "great_ocean_drive_esperance",
+  "name": "Great Ocean Drive (Esperance)",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Esperance & Cape Le Grand",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "40 km versiegelte Küstenrunde ab Esperance: Ten Mile Lagoon, Observatory Point, Twilight Beach, Blue Haven, Chapmans Point.",
+  "emoji": "🚗",
+  "mapsQuery": "Great Ocean Drive (Esperance), Western Australia",
+  "bild": "bilder/great_ocean_drive_esperance.jpg",
+  "lat": -33.85823,
+  "lon": 121.89316
+ },
+ {
+  "id": "lucky_bay",
+  "name": "Lucky Bay",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Esperance & Cape Le Grand",
+  "tags": [
+   "MUSS-SEHEN",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Extrem weißer Sand, Kängurus am Strand. Parkplatz 2WD, Fahren auf dem Sand selbst nur 4WD.",
+  "emoji": "🦘",
+  "mapsQuery": "Lucky Bay, Western Australia",
+  "bild": "bilder/lucky_bay.jpg",
+  "lat": -33.99729,
+  "lon": 122.2344
+ },
+ {
+  "id": "frenchman_peak",
+  "name": "Frenchman Peak",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Esperance & Cape Le Grand",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Kegelförmige Felsformation mit Höhlen-Durchgang nahe dem Gipfel, Wanderung 1,5–2 Std.",
+  "emoji": "🏔️",
+  "mapsQuery": "Frenchman Peak, Western Australia",
+  "bild": "bilder/frenchman_peak.jpg",
+  "lat": -33.96807,
+  "lon": 122.16636
+ },
+ {
+  "id": "hellfire_bay",
+  "name": "Hellfire Bay",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Esperance & Cape Le Grand",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Kleine, sehr fotogene Bucht mit türkisem Wasser.",
+  "emoji": "🏖️",
+  "mapsQuery": "Hellfire Bay, Western Australia",
+  "bild": "bilder/hellfire_bay.jpg",
+  "lat": -34.00808,
+  "lon": 122.16527
+ },
+ {
+  "id": "thistle_cove",
+  "name": "Thistle Cove",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Esperance & Cape Le Grand",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Ruhige Bucht mit Granitfelsen, weniger überlaufen.",
+  "emoji": "🪨",
+  "mapsQuery": "Thistle Cove, Western Australia",
+  "bild": "bilder/thistle_cove.jpg",
+  "lat": -34.0037,
+  "lon": 122.2036
+ },
+ {
+  "id": "le_grand_beach_rossiter_bay",
+  "name": "Le Grand Beach & Rossiter Bay",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Esperance & Cape Le Grand",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Langer, wilder Strand am Parkende. Weiterführende Strandpisten Richtung Rossiter Bay nur 4WD.",
+  "emoji": "🚙",
+  "mapsQuery": "Le Grand Beach & Rossiter Bay, Western Australia",
+  "bild": "bilder/le_grand_beach_rossiter_bay.jpg",
+  "lat": -33.90931,
+  "lon": 122.088
+ },
+ {
+  "id": "pink_lake_esperance",
+  "name": "Pink Lake (Esperance)",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Esperance & Cape Le Grand",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Achtung: seit ca. 2007 nicht mehr pink (Straßenbau + Salzabbau + Süßwasserzufluss senkten den Salzgehalt). Höchstens kurzer Fotostopp, kein Muss mehr.",
+  "emoji": "🧂",
+  "mapsQuery": "Pink Lake (Esperance), Western Australia",
+  "bild": "bilder/pink_lake_esperance.jpg",
+  "lat": -33.84735,
+  "lon": 121.81962
+ },
+ {
+  "id": "lake_hillier_middle_island",
+  "name": "Lake Hillier (Middle Island)",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Esperance & Cape Le Grand",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "DER echte pinke See der Region — dauerhaft pink, aber nur per Rundflug oder Boot ab Esperance erreichbar, nicht mit dem Auto.",
+  "emoji": "🩷",
+  "mapsQuery": "Lake Hillier (Middle Island), Western Australia",
+  "bild": "bilder/lake_hillier_middle_island.jpg",
+  "lat": -34.10173,
+  "lon": 123.1878
+ },
+ {
+  "id": "stokes_national_park",
+  "name": "Stokes National Park",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Ca. 80 km westlich von Esperance. Benwenerup Campground 2WD; Skippy Rock & Fanny Cove ausdrücklich nur 4WD (Reifendruck reduzieren). Achtung Tigerottern am Ästuar.",
+  "emoji": "🐊",
+  "mapsQuery": "Stokes National Park, Western Australia",
+  "bild": "bilder/stokes_national_park.jpg",
+  "lat": -33.83415,
+  "lon": 121.07475
+ },
+ {
+  "id": "quagi_beach",
+  "name": "Quagi Beach",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Ruhiger Campingstrand nahe Stokes NP (2WD-tauglich über Farrell Road), 18 Stellplätze.",
+  "emoji": "🏖️",
+  "mapsQuery": "Quagi Beach, Western Australia",
+  "bild": "bilder/quagi_beach.jpg",
+  "lat": -33.82896,
+  "lon": 121.29442
+ },
+ {
+  "id": "peak_charles_national_park",
+  "name": "Peak Charles National Park",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "651 m hoher, freistehender Granit-Monolith, 360°-Aussicht. Ca. 170 km nördlich von Esperance, letztes Stück Kies (bei Nässe rutschig). Gratis-Camping am Fuß, kein verlässliches Wasser, kein Permit nötig.",
+  "emoji": "🗻",
+  "mapsQuery": "Peak Charles National Park, Western Australia",
+  "bild": "bilder/peak_charles_national_park.jpg",
+  "lat": -32.90859,
+  "lon": 121.10828
+ },
+ {
+  "id": "cape_arid_national_park",
+  "name": "Cape Arid National Park",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Thomas River (2WD, Campground mit Wassertanks) als Basis; Tagon Bay/Yokinup Bay/Seal Creek/Mount Ragged nur 4WD, nach Regen z.T. gesperrt. 1080-Gift ausgelegt (Haustierverbot).",
+  "emoji": "🐬",
+  "mapsQuery": "Cape Arid National Park, Western Australia",
+  "bild": "bilder/cape_arid_national_park.jpg",
+  "lat": -33.85604,
+  "lon": 123.31656
+ },
+ {
+  "id": "duke_of_orleans_bay_wharton_beach",
+  "name": "Duke of Orleans Bay & Wharton Beach",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Caravan Park als letzter Versorgungsstopp (Laden, Treibstoff) vor Cape Arid/Israelite Bay. Wharton Beach: 4WD bis ans Wasser, deutlich ruhiger als Lucky Bay.",
+  "emoji": "⛺",
+  "mapsQuery": "Duke of Orleans Bay & Wharton Beach, Western Australia",
+  "bild": "bilder/duke_of_orleans_bay_wharton_beach.jpg",
+  "lat": -33.91726,
+  "lon": 122.58695
+ },
+ {
+  "id": "table_island_alexander_bay",
+  "name": "Table Island & Alexander Bay",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Table Island bei Ebbe zu Fuß erreichbar — Gezeiten unbedingt prüfen, aktive Hai-Warnschilder. Alexander Bay: 16 km Kies/Wellblech, bewirtschafteter Campingplatz (~20$/Nacht).",
+  "emoji": "⚠️",
+  "mapsQuery": "Table Island & Alexander Bay, Western Australia",
+  "bild": "bilder/table_island_alexander_bay.jpg",
+  "lat": -33.89136,
+  "lon": 122.79083
+ },
+ {
+  "id": "israelite_bay",
+  "name": "Israelite Bay",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD",
+   "EXPEDITION"
+  ],
+  "beschreibung": "Historische Telegraphenstation-Ruine (1876/1896). Nur 4WD, 190–200 km ab Esperance, 3,5–5 Std. für den härtesten Teil — keine Tagestour. 130+ L Tankkapazität empfohlen, letzte Tankstellen Condingup/Duke of Orleans Bay. Bei Nässe unpassierbar.",
+  "emoji": "📡",
+  "mapsQuery": "Israelite Bay, Western Australia",
+  "bild": "bilder/israelite_bay.jpg",
+  "lat": -33.41692,
+  "lon": 123.81275
+ },
+ {
+  "id": "nuytsland_nature_reserve_point_culver_baxter_cliffs",
+  "name": "Nuytsland Nature Reserve, Point Culver & Baxter Cliffs",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "tags": [
+   "NUR-4WD",
+   "EXPEDITION"
+  ],
+  "beschreibung": "Kein Permit nötig, aber riesig (6.253 km², ~500 km Küste) und extrem abgelegen. Baxter Cliffs bis 80 m hoch, fast 200 km lang. DBCA verlangt ausdrücklich 'advanced four-wheel driving skills'. Mehrtägig, PLB Pflicht, Konvoi empfohlen.",
+  "emoji": "🧭",
+  "mapsQuery": "Nuytsland Nature Reserve, Point Culver & Baxter Cliffs, Western Australia",
+  "bild": "bilder/nuytsland_nature_reserve_point_culver_baxter_cliffs.jpg",
+  "lat": -32.83897,
+  "lon": 124.74431
+ },
+ {
+  "id": "eyre_bird_observatory",
+  "name": "Eyre Bird Observatory",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Historische Telegraphenstation, jetzt Vogel-Observatorium. WICHTIG: Stand Juli 2026 vermutlich WEGEN Sicherheitsmängeln GESCHLOSSEN (kein Feuerschaden) — vor Abreise unbedingt direkt bei BirdLife Australia telefonisch bestätigen (+61 3 9347 0757). Falls offen: letzte 10 km + Abfahrt über Kanidal Sandpatch nur 4WD.",
+  "emoji": "🦅",
+  "mapsQuery": "Eyre Bird Observatory, Western Australia",
+  "bild": "bilder/eyre_bird_observatory.jpg",
+  "lat": -32.2465,
+  "lon": 126.30147
+ },
+ {
+  "id": "rottnest_island_wadjemup",
+  "name": "Rottnest Island (Wadjemup)",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Inseln im Süden — Perth & Esperance",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "DIE Quokka-Insel. Fähren: SeaLink & Rottnest Express ab Fremantle (~25 Min., Express auch ab Perth City), Rottnest Fast Ferries ab Hillarys. Rad mitbuchen, schnorcheln in The Basin/Little Salmon Bay. Übernachtung im Sommer Monate im Voraus, Tagesfähre 2–4 Wochen vorher.",
+  "emoji": "🐹",
+  "mapsQuery": "Rottnest Island (Wadjemup), Western Australia",
+  "bild": "bilder/rottnest_island_wadjemup.jpg",
+  "lat": -32.00727,
+  "lon": 115.50415
+ },
+ {
+  "id": "penguin_island_shoalwater_kajaktour",
+  "name": "Penguin Island & Shoalwater-Kajaktour",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Inseln im Süden — Perth & Esperance",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Ehrlicher Stand: Pinguin-Kolonie um >90 % eingebrochen, Discovery Centre seit 2023 dauerhaft zu, Fähre wegen versandetem Jetty unsicher (Saison 25/26 erst ab April). Der lohnende Weg heute: 6-Std.-Seekajaktour (Capricorn Seakayaking, ~A$190) zu Penguin & Seal Island — Seelöwen, Schnorcheln, Anlandung inklusive. Sandbank NIE zu Fuß queren (Todesfälle).",
+  "emoji": "🦭",
+  "mapsQuery": "Penguin Island & Shoalwater-Kajaktour, Western Australia",
+  "bild": "bilder/penguin_island_shoalwater_kajaktour.jpg",
+  "lat": -32.30544,
+  "lon": 115.69161
+ },
+ {
+  "id": "carnac_island",
+  "name": "Carnac Island",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Inseln im Süden — Perth & Esperance",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Seelöwen-Ruheplatz vor Fremantle — nur per Charter/Kajak/eigenem Boot. Anlanden nur am Oststrand erlaubt; das Inselinnere ist tabu (große Tigerschlangen-Population). Wer die Shoalwater-Kajaktour macht, kann Carnac auslassen.",
+  "emoji": "🦭",
+  "mapsQuery": "Carnac Island, Western Australia",
+  "bild": "bilder/carnac_island.jpg",
+  "lat": -32.12161,
+  "lon": 115.66253
+ },
+ {
+  "id": "woody_island_recherche_archipel",
+  "name": "Woody Island (Recherche-Archipel)",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Inseln im Süden — Perth & Esperance",
+  "tags": [
+   "MUSS-SEHEN",
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Die einzige besuchbare der ~105 Inseln des Archipels. Katamaran „Cetacean Explorer“ ab Esperance (48 Plätze, ca. 9–14 Uhr, Erwachsene A$95 inkl. Eintritt, Führung & Morning Tea) — unterwegs Seelöwen, Robben, Delfine, Seeadler. Schnorcheln in der Shearwater Bay, Island Top Walk (2,1 km). Zwergpinguine leben hier nur wenige und kommen erst nachts an Land: eine Chance gibt es nur beim Übernachten (Safari Huts/Eco-Zelte A$60–260).",
+  "saison": "Saison 2026/27 startet laut Betreiber im November; im Dez/Jan täglich (außer 25.12.), nur 48 Plätze — Wochen vorher buchen. Pinguine sind tagsüber auf See, auf der Tagestour also praktisch nie zu sehen. Sicher klappt es in Melbourne: St Kilda Breakwater (gratis) und Penguin Parade auf Phillip Island — beide in der App, Brutzeit Okt–Feb passt.",
+  "emoji": "🏝️",
+  "mapsQuery": "Woody Island (Recherche-Archipel), Western Australia",
+  "bild": "bilder/woody_island_recherche_archipel.jpg",
+  "lat": -33.96254,
+  "lon": 122.016
+ },
+ {
+  "id": "middle_island_lake_hillier_aus_der_luft",
+  "name": "Middle Island & Lake Hillier aus der Luft",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Inseln im Süden — Perth & Esperance",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Privates Anlanden verboten (streng geschütztes Reservat). Rundflug: Fly Esperance ab A$189 (Pink-Lakes-Route) bis ~1 Std. 40 Min. großer Archipel-Flug. Neu: HeliSpirit eröffnet die Esperance-Basis im Dezember 2026 wieder — Heli-Beach-Tour mit 1,5 Std. auf Middle Island inkl. Picknick, A$1.499.",
+  "emoji": "🩷",
+  "mapsQuery": "Middle Island & Lake Hillier aus der Luft, Western Australia",
+  "bild": "bilder/middle_island_lake_hillier_aus_der_luft.jpg",
+  "lat": -34.10173,
+  "lon": 123.1878
+ },
+ {
+  "id": "king_george_sound_safari_albany",
+  "name": "King George Sound Safari (Albany)",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Inseln im Süden — Perth & Esperance",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Anlanden auf Breaksea/Michaelmas Island gibt es nicht — aber Nov–April fährt die 2-Std.-Bootssafari durch den King George Sound (A$95, 3× täglich): Robben, Seevögel, Inselküsten. Wal-Saison ist erst wieder ab ca. Mai.",
+  "emoji": "⛵",
+  "mapsQuery": "King George Sound Safari (Albany), Western Australia",
+  "bild": "bilder/king_george_sound_safari_albany.jpg",
+  "lat": -35.02478,
+  "lon": 117.88361
+ },
+ {
+  "id": "lake_ballard_inside_australia",
+  "name": "Lake Ballard — „Inside Australia“",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Goldfields-Rückweg (Esperance → Perth)",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "51 Antony-Gormley-Skulpturen verstreut auf einem Salzsee bei Menzies — einer der surrealsten Orte Australiens. Straße inzwischen komplett asphaltiert; Rundgang völlig schattenlos, nur zu Sonnenauf-/-untergang.",
+  "emoji": "🗿",
+  "mapsQuery": "Lake Ballard — „Inside Australia“, Western Australia",
+  "bild": "bilder/lake_ballard_inside_australia.jpg",
+  "lat": -29.44894,
+  "lon": 120.60335
+ },
+ {
+  "id": "gwalia_ghost_town_hoover_house",
+  "name": "Gwalia Ghost Town & Hoover House",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Goldfields-Rückweg (Esperance → Perth)",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Verlassene Goldgräberstadt bei Leonora (aus deinen Screenshots!), Museum täglich 9–16 Uhr, Spendenbasis — über Weihnachten/Neujahr tageweise geschlossen, vorher prüfen.",
+  "emoji": "🏚️",
+  "mapsQuery": "Gwalia Ghost Town & Hoover House, Western Australia",
+  "bild": "bilder/gwalia_ghost_town_hoover_house.jpg",
+  "lat": -28.91,
+  "lon": 121.33,
+  "ungenau": true
+ },
+ {
+  "id": "kookynie_niagara_dam",
+  "name": "Kookynie & Niagara Dam",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Goldfields-Rückweg (Esperance → Perth)",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "„Lebende Geisterstadt“ (~10 Einwohner) mit betriebenem Grand Hotel; am Niagara Dam (1897) freies Camp mit Toiletten & BBQ.",
+  "emoji": "🍺",
+  "mapsQuery": "Kookynie & Niagara Dam, Western Australia",
+  "bild": "bilder/kookynie_niagara_dam.jpg",
+  "lat": -29.3369,
+  "lon": 121.49237
+ },
+ {
+  "id": "broad_arrow_tavern",
+  "name": "Broad Arrow Tavern",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Goldfields-Rückweg (Esperance → Perth)",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Letztes Gebäude der Goldrausch-Stadt Broad Arrow (1896), 38 km nördlich von Kalgoorlie an der Straße nach Leonora (aus deinen Screenshots). Fast jede Wand ist mit Botschaften früherer Gäste beschrieben — Stift mitnehmen und selbst unterschreiben. Bekannt für den „Broady“-Burger. Einst acht Hotels, zwei Brauereien und eine eigene Börse; 1971 Drehort von „Nickel Queen“.",
+  "saison": "Goldfields im Hochsommer: tagsüber 35–40 °C, also eher Mittagspause als Wanderziel. Öffnungszeiten (zuletzt täglich 11–19 Uhr) über Weihnachten/Neujahr vorher prüfen. Liegt auf dem Weg zu Lake Ballard, Kookynie und Gwalia.",
+  "emoji": "🍻",
+  "mapsQuery": "Broad Arrow Tavern, Broad Arrow, Western Australia",
+  "bild": "bilder/broad_arrow_tavern.jpg",
+  "lat": -30.44832,
+  "lon": 121.32969
+ },
+ {
+  "id": "lancelin_sand_dunes",
+  "name": "Lancelin Sand Dunes",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Perth → Coral Coast (Auftakt)",
+  "tags": [
+   "MUSS-SEHEN",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Sandboarding & 4WD-Dünenfahren — perfekter Auftakt und erster Sand-Test fürs Fahrzeug.",
+  "emoji": "🏜️",
+  "mapsQuery": "Lancelin Sand Dunes, Western Australia",
+  "bild": "bilder/lancelin_sand_dunes.jpg",
+  "lat": -31.01,
+  "lon": 115.33,
+  "ungenau": true
+ },
+ {
+  "id": "the_pinnacles_nambung_np",
+  "name": "The Pinnacles (Nambung NP)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Perth → Coral Coast (Auftakt)",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Tausende Kalksteinsäulen im Wüstenfeld — am besten früh morgens oder zum Sonnenuntergang.",
+  "emoji": "🪨",
+  "mapsQuery": "The Pinnacles (Nambung NP), Western Australia",
+  "bild": "bilder/the_pinnacles_nambung_np.jpg",
+  "lat": -30.58819,
+  "lon": 115.15579
+ },
+ {
+  "id": "kalbarri_np_murchison_station",
+  "name": "Kalbarri NP & Murchison Station",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Perth → Coral Coast (Auftakt)",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Nature's Window & Schluchten; übernachten auf Murchison Station (private Fluss-Camps, Tipp des Ortskundigen) statt in Kalbarri selbst.",
+  "emoji": "🏞️",
+  "mapsQuery": "Kalbarri NP & Murchison Station, Western Australia",
+  "bild": "bilder/kalbarri_np_murchison_station.jpg",
+  "lat": -27.61616,
+  "lon": 114.47554
+ },
+ {
+  "id": "natures_window_the_loop",
+  "name": "Nature's Window & The Loop",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Perth → Coral Coast (Auftakt)",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Das berühmte Felsfenster aus Tumblagooda-Sandstein über der Murchison-Schlucht (aus deinen Screenshots). Ab Kalbarri 38 km (~35 Min.) auf Asphalt bis zum Parkplatz „The Loop“ (Toiletten, Schattendach). Weg 1 km hin & zurück, 30–45 Min., am Ende leichte Kletterei — feste Schuhe. Kein Trinkwasser. Foto vor dem Fenster, nicht draufklettern. Eintritt 17 AU$ pro Auto (Park-Pass gilt).",
+  "saison": "Der Rundweg The Loop (9 km, 3–5 Std.) ist von November bis März ab 7 Uhr gesperrt — in der Schlucht bis 50 °C. Nature's Window selbst bleibt offen: zum Sonnenaufgang hin (auf der Zufahrt dann auf Emus und Kängurus achten) oder spät am Nachmittag. Wasser, Hut und Sonnencreme mitnehmen, Schatten gibt es kaum.",
+  "emoji": "🪟",
+  "mapsQuery": "Nature's Window, Kalbarri National Park, Western Australia",
+  "bild": "bilder/natures_window_the_loop.jpg",
+  "lat": -27.55302,
+  "lon": 114.44606
+ },
+ {
+  "id": "steep_point_edel_land",
+  "name": "Steep Point (Edel Land)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Shark Bay — Edel Land, Steep Point & Dirk Hartog",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Westlichster Punkt des australischen Festlands. ~140 km Useless Loop Road + 30 km weicher Dünentrack (Reifendruck ≤20 psi). Camping Shelter Bay vorab über DBCA Park Stay buchen — Ranger vor Ort.",
+  "emoji": "🧭",
+  "mapsQuery": "Steep Point (Edel Land), Western Australia",
+  "bild": "bilder/steep_point_edel_land.jpg",
+  "lat": -26.15228,
+  "lon": 113.15606
+ },
+ {
+  "id": "zuytdorp_cliffs_thunder_bay",
+  "name": "Zuytdorp Cliffs & Thunder Bay",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Shark Bay — Edel Land, Steep Point & Dirk Hartog",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Bis 200 m hohe Steilklippen über ~200 km Küste, Blowholes bei Thunder Bay/False Entrance. Absoluter Respekt-Abstand zur Kante.",
+  "emoji": "🌊",
+  "mapsQuery": "Zuytdorp Cliffs & Thunder Bay, Western Australia",
+  "bild": "bilder/zuytdorp_cliffs_thunder_bay.jpg",
+  "lat": -27,
+  "lon": 114.02,
+  "ungenau": true
+ },
+ {
+  "id": "dirk_hartog_island",
+  "name": "Dirk Hartog Island",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Shark Bay — Edel Land, Steep Point & Dirk Hartog",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Barge „Hartog Explorer“ ab Blackies Beach bei Steep Point (Fr–Mi vormittags, max. 20 Fahrzeuge/Tag auf der Insel, zwingend vorbuchen). Mehrere Tage einplanen, volle Autarkie.",
+  "emoji": "🏝️",
+  "mapsQuery": "Dirk Hartog Island, Western Australia",
+  "bild": "bilder/dirk_hartog_island.jpg",
+  "lat": -25.82038,
+  "lon": 113.05027
+ },
+ {
+  "id": "francois_peron_np_voll_loop",
+  "name": "Francois Peron NP (Voll-Loop)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Shark Bay — Edel Land, Steep Point & Dirk Hartog",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Big Lagoon → Cape Peron → Skipjack Point: ~50 km Tiefsand-Piste, Kompressor-Station am Peron Homestead. Von Skipjack Point sieht man Rochen, Haie und Dugongs vom Kliff. Ganztägig ab Denham.",
+  "emoji": "🦈",
+  "mapsQuery": "Francois Peron NP (Voll-Loop), Western Australia",
+  "bild": "bilder/francois_peron_np_voll_loop.jpg",
+  "lat": -25.69819,
+  "lon": 113.50724
+ },
+ {
+  "id": "monkey_mia_herald_bight",
+  "name": "Monkey Mia & Herald Bight",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Shark Bay — Edel Land, Steep Point & Dirk Hartog",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Delfinfütterung am Morgen; danach zum Insider-Strandcamp Herald Bight (keine Buchung, kaum Leute) oder Bottle Bay.",
+  "emoji": "🐬",
+  "mapsQuery": "Monkey Mia & Herald Bight, Western Australia",
+  "bild": "bilder/monkey_mia_herald_bight.jpg",
+  "lat": -25.79427,
+  "lon": 113.71891
+ },
+ {
+  "id": "quobba_blowholes",
+  "name": "Quobba Blowholes",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Quobba Coast — Blowholes bis Gnaraloo",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Bis 20 m hohe Fontänen am berüchtigten „KING WAVES KILL“-Schild — nie mit dem Rücken zum Ozean. Bis hierher Asphalt, danach Piste.",
+  "emoji": "💨",
+  "mapsQuery": "Quobba Blowholes, Western Australia",
+  "bild": "bilder/quobba_blowholes.jpg",
+  "lat": -24.48161,
+  "lon": 113.40739
+ },
+ {
+  "id": "red_bluff_quobba_station",
+  "name": "Red Bluff (Quobba Station)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Quobba Coast — Blowholes bis Gnaraloo",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Legendärer Surf-Point unter roten Klippen, Walk-in-Camps ganzjährig (keine Buchung nötig). Station-Store läuft im Sommer nur eingeschränkt — vorher anrufen, Vorräte mitbringen.",
+  "emoji": "🏄",
+  "mapsQuery": "Red Bluff (Quobba Station), Western Australia",
+  "bild": "bilder/red_bluff_quobba_station.jpg",
+  "lat": -24.39556,
+  "lon": 113.40549
+ },
+ {
+  "id": "gnaraloo_bay_3_mile_camp",
+  "name": "Gnaraloo Bay & 3 Mile Camp",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Quobba Coast — Blowholes bis Gnaraloo",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Ganzjährig offen — und im Dez/Jan sogar doppelt spannend: Windsaison (Kiter) und Loggerhead-Schildkröten-Nistsaison (Nov–Feb) direkt an der Gnaraloo Bay. Letzte Kilometer weicher Sand.",
+  "emoji": "🐢",
+  "mapsQuery": "Gnaraloo Bay & 3 Mile Camp, Western Australia",
+  "bild": "bilder/gnaraloo_bay_3_mile_camp.jpg",
+  "lat": -23.79,
+  "lon": 113.53,
+  "ungenau": true
+ },
+ {
+  "id": "kennedy_range_np_temple_gorge",
+  "name": "Kennedy Range NP (Temple Gorge)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Gascoyne-Outback — Kennedy Range & Mount Augustus",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD",
+   "EXPEDITION"
+  ],
+  "beschreibung": "Abgelegene Schluchten-Wände über der Ebene. NEU seit April 2026: Temple Gorge Campground muss online über Park Stay gebucht werden ($15/Nacht, kein Trinkwasser). Zufahrt ab Gascoyne Junction unbefestigt, nach Regen gesperrt.",
+  "emoji": "🏜️",
+  "mapsQuery": "Kennedy Range NP (Temple Gorge), Western Australia",
+  "bild": "bilder/kennedy_range_np_temple_gorge.jpg",
+  "lat": -24.66114,
+  "lon": 115.16951
+ },
+ {
+  "id": "mount_augustus_burringurrah",
+  "name": "Mount Augustus (Burringurrah)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Gascoyne-Outback — Kennedy Range & Mount Augustus",
+  "tags": [
+   "GEHEIMTIPP",
+   "EXPEDITION"
+  ],
+  "beschreibung": "Größter Monoklin der Welt — massiger als Uluru, aber fast ohne Besucher. WICHTIG: Der Summit Trail ist wegen mehrerer Hitzetoter vom 1. Nov. bis Ende Feb. KOMPLETT GESPERRT. Stattdessen: 49-km-Loop-Drive, Lookouts, kurze Dämmerungs-Walks. Tourist Park ganzjährig offen (Sprit!).",
+  "emoji": "⛰️",
+  "mapsQuery": "Mount Augustus (Burringurrah), Western Australia",
+  "bild": "bilder/mount_augustus_burringurrah.jpg",
+  "lat": -24.89565,
+  "lon": 116.95715
+ },
+ {
+  "id": "cattle_pool_goolinee_lyons_river",
+  "name": "Cattle Pool / Goolinee (Lyons River)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Gascoyne-Outback — Kennedy Range & Mount Augustus",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Permanentes Wasserloch mit Paperbark-Bäumen, 3 km vom Mount Augustus Tourist Park — DER Bade-/Abkühlspot der Region und vermutlich das, was viele mit dem „ewigen Pool im Nirgendwo“ verbinden.",
+  "emoji": "💧",
+  "mapsQuery": "Cattle Pool / Goolinee (Lyons River), Western Australia",
+  "bild": "bilder/cattle_pool_goolinee_lyons_river.jpg",
+  "lat": -24.06044,
+  "lon": 116.34188
+ },
+ {
+  "id": "warroora_maggies_camp",
+  "name": "Warroora / Maggies Camp",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Ningaloo & Exmouth",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Top-Tipp des Ortskundigen: Camp direkt am besten Teil des Riffs, buchbar über exploreparkswa — wenig Camper, viel Sand.",
+  "emoji": "🏕️",
+  "mapsQuery": "Warroora / Maggies Camp, Western Australia",
+  "bild": "bilder/warroora_maggies_camp.jpg",
+  "lat": -23.4815,
+  "lon": 113.79297
+ },
+ {
+  "id": "yardie_creek_track_coral_bay_cape_range",
+  "name": "Yardie Creek Track (Coral Bay ↔ Cape Range)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Ningaloo & Exmouth",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Küsten-Track mit Furt, nur bei Ebbe & Trockenheit — dahinter einsame Riffstrände, die vom Highway aus niemand sieht.",
+  "emoji": "🚙",
+  "mapsQuery": "Yardie Creek Track (Coral Bay ↔ Cape Range), Western Australia",
+  "bild": "bilder/yardie_creek_track_coral_bay_cape_range.jpg",
+  "lat": -22.32,
+  "lon": 113.81,
+  "ungenau": true
+ },
+ {
+  "id": "turquoise_bay_jurabi_turtle_centre",
+  "name": "Turquoise Bay & Jurabi Turtle Centre",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Ningaloo & Exmouth",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Drift-Schnorcheln vom Strand; abends/nachts Schildkröten-Saison an den Jurabi-Stränden (Eiablage Nov–Jan, Schlüpfen Jan–März) — Abstand halten, kein weißes Licht.",
+  "emoji": "🐢",
+  "mapsQuery": "Turquoise Bay & Jurabi Turtle Centre, Western Australia",
+  "bild": "bilder/turquoise_bay_jurabi_turtle_centre.jpg",
+  "lat": -22.09602,
+  "lon": 113.88762
+ },
+ {
+  "id": "charles_knife_canyon_shothole_canyon",
+  "name": "Charles Knife Canyon & Shothole Canyon",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Ningaloo & Exmouth",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Die vergessene Ostseite des Cape Range: Gratstraße mit Tiefblicken (Charles Knife, vorsichtig 2WD-tauglich) und Canyon-Boden-Piste durch Bachbetten (Shothole, High Clearance). 99 % der Ningaloo-Besucher fahren nur zur Riffseite.",
+  "emoji": "🧗",
+  "mapsQuery": "Charles Knife Canyon & Shothole Canyon, Western Australia",
+  "bild": "bilder/charles_knife_canyon_shothole_canyon.jpg",
+  "lat": -22.06,
+  "lon": 114.02,
+  "ungenau": true
+ },
+ {
+  "id": "coral_bay",
+  "name": "Coral Bay",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Ningaloo & Exmouth",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Mantas ganzjährig (Whale Sharks erst ab März). Schnorcheln direkt vom Strand.",
+  "emoji": "🐠",
+  "mapsQuery": "Coral Bay, Western Australia",
+  "bild": "bilder/coral_bay.jpg",
+  "lat": -23.14368,
+  "lon": 113.77017
+ },
+ {
+  "id": "karijini_np",
+  "name": "Karijini NP",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Pilbara — Karijini, Millstream & Ost-Pilbara-Expedition",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Dales Gorge, Fern Pool, Weano/Hancock (Handrail Pool) — im Sommer nur Dämmerungs-Starts, Gorge-Sperrungen nach Regen möglich.",
+  "emoji": "🏞️",
+  "mapsQuery": "Karijini NP, Western Australia",
+  "bild": "bilder/karijini_np.jpg",
+  "lat": -22.40684,
+  "lon": 118.47567
+ },
+ {
+  "id": "millstream_chichester_np",
+  "name": "Millstream Chichester NP",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Pilbara — Karijini, Millstream & Ost-Pilbara-Expedition",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Palmen-Oase am Fortescue: Python Pool & Deep Reach Pool. Abkürzung ab Tom Price über die Rio-Tinto-Bahnstraße — kostenloses 30-Tage-Permit online oder im Tom Price Visitor Centre.",
+  "emoji": "🌴",
+  "mapsQuery": "Millstream Chichester NP, Western Australia",
+  "bild": "bilder/millstream_chichester_np.jpg",
+  "lat": -21.45492,
+  "lon": 117.48029
+ },
+ {
+  "id": "marble_bar_carawine_gorge",
+  "name": "Marble Bar & Carawine Gorge",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Pilbara — Karijini, Millstream & Ost-Pilbara-Expedition",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD",
+   "EXPEDITION"
+  ],
+  "beschreibung": "„Heißester Ort Australiens“ + traumhafte Gorge am Oakover River mit Flussbett-Camp. Nur als Teil der Ost-Pilbara-Verlängerung — im Hochsommer grenzwertig.",
+  "emoji": "🔥",
+  "mapsQuery": "Marble Bar & Carawine Gorge, Western Australia",
+  "bild": "bilder/marble_bar_carawine_gorge.jpg",
+  "lat": -21.17149,
+  "lon": 119.74562
+ },
+ {
+  "id": "running_waters_eel_pool_oakover_river",
+  "name": "Running Waters / „Eel Pool“ (Oakover River)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Pilbara — Karijini, Millstream & Ost-Pilbara-Expedition",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD",
+   "EXPEDITION"
+  ],
+  "beschreibung": "Der Spot aus den Insider-Notizen — Lage jetzt verifiziert: Skull Springs Road zwischen Nullagine und Woodie Woodie, Ost-Pilbara (GPS -21.685, 121.126), NICHT im Gascoyne. Warmer, quellgespeister Permanent-Pool mit Paperbarks, ~5 Buschcamp-Plätze, letzte Meter felsig/Wasserdurchfahrt. Die Warnung deines Freundes gilt: nicht allein, im Sommer nur mit Konvoi + tagesaktuellem Road Report.",
+  "emoji": "💧",
+  "mapsQuery": "-21.68536,121.12598",
+  "bild": "bilder/running_waters_eel_pool_oakover_river.jpg",
+  "lat": -21.17149,
+  "lon": 119.74562
+ },
+ {
+  "id": "karlamilyi_rudall_river_np",
+  "name": "Karlamilyi (Rudall River) NP",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Pilbara — Karijini, Millstream & Ost-Pilbara-Expedition",
+  "tags": [
+   "EXPEDITION"
+  ],
+  "beschreibung": "Größter und abgelegenster NP Westaustraliens — im Dez/Jan LEBENSGEFÄHRLICH (40+ °C plus Regenzeit, Tracks binnen Stunden unpassierbar). Nicht in dieser Saison — Kandidat für eine spätere Trockenzeit-Reise.",
+  "emoji": "🚫",
+  "mapsQuery": "Karlamilyi (Rudall River) NP, Western Australia",
+  "bild": "bilder/karlamilyi_rudall_river_np.jpg",
+  "lat": -22.33438,
+  "lon": 122.73732
+ },
+ {
+  "id": "houtman_abrolhos_islands",
+  "name": "Houtman Abrolhos Islands",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Inseln im Norden — Abrolhos bis Dampier-Archipel",
+  "tags": [
+   "MUSS-SEHEN",
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "122 Korallen-Inseln, seit 2019 Nationalpark — keine Fähre, nur Flug-Tagestouren mit Landung auf East Wallabi + Schnorcheln in der Turtle Bay: ab Geraldton (Shine Aviation ganztags ~A$620, Geraldton Air Charter halbtags ab ~A$250) oder ab Kalbarri (Kalbarri Scenic Flights). Dazu die Batavia-Geschichte von 1629: Wrack am Morning Reef, „Batavia's Graveyard“ auf Beacon Island, Wiebbe-Hayes-Fort = ältestes europäisches Bauwerk Australiens. Im Januar machbar — früh fliegen, Ausweichtag einplanen.",
+  "emoji": "✈️",
+  "mapsQuery": "Houtman Abrolhos Islands, Western Australia",
+  "bild": "bilder/houtman_abrolhos_islands.jpg",
+  "lat": -28.46361,
+  "lon": 113.69756
+ },
+ {
+  "id": "muiron_islands_exmouth",
+  "name": "Muiron Islands (Exmouth)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Inseln im Norden — Abrolhos bis Dampier-Archipel",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "15 km vor dem North West Cape: Steilwände, Swim-throughs, Mantas. Tages-Tauch-/Schnorchelcharter ab Exmouth ~A$269–315 (Exmouth Dive & Whalesharks — ob Außenriff oder Muirons entscheidet das Wetter). Mit eigenem Boot einfaches DBCA-Camping möglich. Januar: machbar, aber Zyklon-Caveat + Schildkröten-Nistsaison (Strände nachts meiden).",
+  "emoji": "🤿",
+  "mapsQuery": "Muiron Islands (Exmouth), Western Australia",
+  "bild": "bilder/muiron_islands_exmouth.jpg",
+  "lat": -21.93244,
+  "lon": 114.12581
+ },
+ {
+  "id": "mackerel_islands_thevenard",
+  "name": "Mackerel Islands (Thevenard)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Inseln im Norden — Abrolhos bis Dampier-Archipel",
+  "tags": [
+   "EXPEDITION"
+  ],
+  "beschreibung": "Vor Onslow — aber: Resort schließt über die Zyklonsaison, Saison ca. April–Dezember → IM JANUAR ZU. Fähre ab Onslow wurde Ende Okt. 2025 eingestellt; künftig Charterflug ab Learmonth/Exmouth. Merkposten fürs nächste Mal (Trockenzeit).",
+  "emoji": "🚫",
+  "mapsQuery": "Mackerel Islands (Thevenard), Western Australia",
+  "bild": "bilder/mackerel_islands_thevenard.jpg",
+  "lat": -21.45746,
+  "lon": 114.99914
+ },
+ {
+  "id": "montebello_islands",
+  "name": "Montebello Islands",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Inseln im Norden — Abrolhos bis Dampier-Archipel",
+  "tags": [
+   "EXPEDITION"
+  ],
+  "beschreibung": "~120 km offshore, ehemaliges britisches Atomtestgebiet (Operation Hurricane 1952 + zwei Tests 1956). Nur Mehrtages-Charter ab Exmouth (z. B. Montebello Island Safaris, 6 Tage ~A$4.295), Saison April–November — im Januar keine Fahrten. Offizieller DBCA-Hinweis: auf Trimouille & Alpha max. 1 Std. Landgang pro Tag.",
+  "emoji": "☢️",
+  "mapsQuery": "Montebello Islands, Western Australia",
+  "bild": "bilder/montebello_islands.jpg",
+  "lat": -20.39946,
+  "lon": 115.57466
+ },
+ {
+  "id": "dampier_archipel_murujuga",
+  "name": "Dampier-Archipel & Murujuga",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Inseln im Norden — Abrolhos bis Dampier-Archipel",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "42 Inseln vor Karratha — Schnorchel-/Bootstouren (Pilbara Dive and Tours, im Januar wetterabhängig). Der eigentliche Pflichtstopp liegt am Festland und passt zur Route Nord 3: Ngajarli/Deep Gorge Boardwalk im Murujuga NP — eine der größten Felsgravuren-Sammlungen der Welt (>47.000 Jahre, seit Juli 2025 UNESCO-Welterbe), frei zugänglich, am besten früh morgens.",
+  "emoji": "🪨",
+  "mapsQuery": "Dampier-Archipel & Murujuga, Western Australia",
+  "bild": "bilder/dampier_archipel_murujuga.jpg",
+  "lat": -20.66,
+  "lon": 116.71,
+  "ungenau": true
+ },
+ {
+  "id": "masons_falls",
+  "name": "Masons Falls",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Kinglake & Toolangi",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Wasserfall im Kinglake-Nationalpark, rund 20 Fahrminuten von Kinglake. Vom Masons Falls Picnic Area führt ein 700 m langer Weg (1,4 km hin und zurück, etwa 45 Minuten) zu einer großen Aussichtsplattform gegenüber dem Fall; Zufahrt über Whittlesea-Kinglake Road, National Park Road, Masons Falls Road. Eintritt frei; Tische, Unterstände und Toiletten sind da, aber kein Trinkwasser, keine Mülleimer, und die Gasgrills sind laut Parks Victoria auf unbestimmte Zeit ausser Betrieb.",
+  "emoji": "💧",
+  "mapsQuery": "Masons Falls, Victoria, Australia",
+  "bild": "bilder/masons_falls.jpg",
+  "lat": -37.49466,
+  "lon": 145.24706,
+  "saison": "Im Dezember/Januar führt der Fall wenig Wasser - der Reiz ist der schattige Gully, nicht die Wassermenge. Kinglake National Park wird an Tagen mit Fire Danger Rating 'Catastrophic' komplett für den Publikumsverkehr geschlossen; Rating morgens in der VicEmergency-App prüfen. Früh am Morgen gehen, Schlangen sind aktiv, festes Schuhwerk, Trinkwasser mitnehmen."
+ },
+ {
+  "id": "mt_sugarloaf_kinglake",
+  "name": "Mount Sugarloaf Lookout",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Kinglake & Toolangi",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "563 m hoher Aussichtspunkt am Ende der Mt Sugarloaf Road; der Blick geht über die bewaldeten Südhänge von Kinglake und die Täler von Arthurs und Chads Creek bis zur Skyline von Melbourne rund 40 km südwestlich, bei klarer Sicht bis Port Phillip Bay und zu den You Yangs. Parkplatz und Picknicktische, aber kein Trinkwasser und keine Mülleimer - alles selbst mitbringen und wieder mitnehmen. Auch zu Fuß erreichbar: von Masons Falls über Wallaby Trail, Blackwood Picnic Area und Mt Sugarloaf Ridge Track.",
+  "emoji": "🌆",
+  "mapsQuery": "Mount Sugarloaf, Kinglake, Victoria, Australia",
+  "bild": "bilder/mt_sugarloaf_kinglake.jpg",
+  "lat": -37.53069,
+  "lon": 145.24326,
+  "saison": "Guter Sonnenuntergangsplatz im Hochsommer, weil man nur kurz aus dem Auto muss. Die Zufahrt ist eine Sackgasse mitten im Wald - an Tagen mit hoher Buschfeuergefahr ein schlechter Plan, weil es nur einen Weg hinaus gibt; an 'Catastrophic'-Tagen ist der Park ohnehin geschlossen. Bei Rauch in der Luft ist die Fernsicht weg."
+ },
+ {
+  "id": "jehosaphat_gully",
+  "name": "Jehosaphat Gully",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Kinglake & Toolangi",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Picknickplatz in einer grasigen Lichtung im Mountain-Ash-Wald, gut 2 km südöstlich von Kinglake und Startpunkt mehrerer Wege - der Stuart Judd Track ist ein 890 m langer Rundweg durch nachwachsenden Wald und Gullys mit großen Baumfarnen. Zufahrt über die Parkland Road, die von der Healesville-Kinglake Road abgeht; asphaltierter Parkplatz für rund 20 Autos, Gasgrills, Tische, Unterstände und barrierefreie Toilette. Kein Trinkwasser und keine Mülleimer.",
+  "emoji": "🌿",
+  "mapsQuery": "Jehosaphat Gully Picnic Area, Kinglake, Victoria, Australia",
+  "bild": "bilder/jehosaphat_gully.jpg",
+  "lat": -37.53703,
+  "lon": 145.35241,
+  "saison": "Die Gullys entlang der Wege sind schattig und kühler als die offene Hochebene; der Picknickplatz selbst liegt in der Sonne, also nicht als Mittagsziel an einem 40-Grad-Tag planen. Wasserstand im Januar niedrig. Handyempfang unzuverlässig - als Solo-Wanderer jemandem sagen, wohin du gehst; an 'Catastrophic'-Tagen ist der Nationalpark geschlossen."
+ },
+ {
+  "id": "wirrawilla_regenwald",
+  "name": "Wirrawilla Rainforest Walk",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Kinglake & Toolangi",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Rund 700 m langer Rundweg durch kühlen gemäßigten Regenwald, davon etwa 450 m breiter Bohlenweg (Grade 1, rollstuhlgeeignet, 2024 mit rutschfestem Belag und Handläufen erneuert) - Myrtenbuchen und Sassafras halten das Kronendach ganzjährig dicht, darunter Baumfarne und Moose. Am Parkplatz an der Sylvia Creek Road gibt es Toilette, Picknicktische und Unterstand; von dort starten auch der längere Myrtle Gully Circuit und der Tanglefoot Loop. Eintritt frei, etwa 45 Fahrminuten von Kinglake.",
+  "emoji": "🌳",
+  "mapsQuery": "Wirrawilla Rainforest Walk, Toolangi, Victoria, Australia",
+  "bild": "bilder/wirrawilla_regenwald.jpg",
+  "lat": -37.52717,
+  "lon": 145.5219,
+  "saison": "Genau der richtige Ort für einen 35-Grad-Tag: im Gully ist es spürbar kühler und durchgehend schattig. Die Zufahrtsstrassen sind Schotter und können nach Sturm durch umgestürzte Bäume blockiert sein. Auch Staatswälder werden an 'Catastrophic'-Tagen gesperrt, nicht nur Nationalparks. Blutegel nach Regen möglich."
+ },
+ {
+  "id": "mount_st_leonard",
+  "name": "Mount St Leonard",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Kinglake & Toolangi",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Gipfel über Toolangi mit Feuerwach- und Funkturm und Rundblick über die Yarra Ranges bis zur Cathedral Range, meist menschenleer. Anfahrt über die unbefestigte Monda Road ab Healesville/Myers Creek Road bis zu einem Tor, ab dort 1,2 km zu Fuß zum Gipfel; die lange Variante ist der Tanglefoot Track ab Toolangi mit gut 20 km. Auf dem Weg liegt der Kalatha Giant Tree (-37.4944 / 145.5363), ein mächtiger alter Mountain Ash mit kurzem Zuweg.",
+  "emoji": "🗼",
+  "mapsQuery": "Mount St Leonard, Toolangi, Victoria, Australia",
+  "bild": "bilder/mount_st_leonard.jpg",
+  "lat": -37.56741,
+  "lon": 145.52556,
+  "saison": "Der Feuerwachturm ist im Sommer besetzt - genau deshalb ist der lange Aufstieg an einem heissen Tag eine schlechte Idee: offener Grat, kein Wasser unterwegs, kein verlässlicher Empfang. Nur bei kühlem, ruhigem Wetter und niedriger Fire Danger Rating machen, sonst höchstens bis zum Kalatha Giant fahren. Die Schotterstrassen werden bei Feuerrisiko kurzfristig gesperrt."
+ },
+ {
+  "id": "black_spur_fernshaw",
+  "name": "Black Spur / Fernshaw Picnic Ground",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Yarra Ranges, Black Spur & Marysville",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Der Black Spur ist der kurvige Abschnitt des Maroondah Highway zwischen Healesville und Narbethong, beidseitig 60-70 m hohe Mountain-Ash-Eukalypten mit Baumfarnen darunter. Das Fernshaw Picnic Ground am Watts River, etwa 15 Fahrminuten von Healesville am Fuß des Anstiegs, ist der beste Halt zum Aussteigen: Picknicktische, Gasgrill, Toilettenblock und Infohütte. Der Dom Dom Saddle Picnic Ground weiter oben ist eine zweite Möglichkeit, seine Toiletten sind aber dauerhaft geschlossen.",
+  "emoji": "🛣️",
+  "mapsQuery": "Fernshaw Picnic Ground, Narbethong, Victoria, Australia",
+  "bild": "bilder/black_spur_fernshaw.jpg",
+  "lat": -37.61441,
+  "lon": 145.60473,
+  "saison": "Ganzjährig befahrbar und im Schatten deutlich kühler als das offene Tal; vormittags fahren, dann ist weniger Motorrad- und Wohnmobilverkehr. Der Highway kann bei Buschfeuer oder umgestürzten Bäumen kurzfristig gesperrt werden und es gibt keine gute Ausweichroute - vor der Fahrt VicTraffic und VicEmergency prüfen."
+ },
+ {
+  "id": "healesville_sanctuary",
+  "name": "Healesville Sanctuary",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Yarra Valley & Healesville",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Wildpark von Zoos Victoria ausschliesslich für australische Arten, in natürlichem Buschland bei Healesville: Schnabeltiere (seit 2025 mit eigener Auswilderungsstation), Wombats, Koalas, Tasmanische Teufel und über 200 Vogelarten. Die Greifvogelvorführung 'Spirits of the Sky' läuft täglich um 12 und 15 Uhr und ist im Eintritt enthalten. Täglich 9-17 Uhr, Erwachsene je nach Verkaufsstelle rund 53-58 AUD, Adresse Glen Eadie Avenue, Healesville; halber bis ganzer Tag.",
+  "emoji": "🦘",
+  "mapsQuery": "Healesville Sanctuary, Victoria, Australia",
+  "bild": "bilder/healesville_sanctuary.jpg",
+  "lat": -37.68428,
+  "lon": 145.53134,
+  "saison": "Dezember/Januar sind Schulferien in Victoria - früh da sein, sonst voll. An sehr heissen Tagen sind viele Tiere ab Mittag inaktiv, und Vorführungen können bei extremem Wetter entfallen; das Gelände liegt im Busch und kann an 'Catastrophic'-Tagen geschlossen werden. Ob am 25. Dezember geöffnet ist, geben die Quellen widersprüchlich an - vorher direkt bei Zoos Victoria nachfragen."
+ },
+ {
+  "id": "maroondah_reservoir",
+  "name": "Maroondah Reservoir Park",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Yarra Ranges, Black Spur & Marysville",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Parkanlage im edwardianischen Stil rund um den Maroondah-Damm nördlich von Healesville, betrieben von Melbourne Water: gepflegte Rasenflächen, alte Bäume, Picknicktische, Grills, Toiletten und ein kurzer, steiler Aufstieg zum Maroondah Dam Lookout (-37.6407 / 145.5495) über Staumauer und See. Eintritt frei; die automatischen Tore sind von Anfang Oktober bis Anfang April 8-20 Uhr geöffnet. Unaufwändiger Halbtagesstopp direkt am Fuß des Black Spur.",
+  "emoji": "🏞️",
+  "mapsQuery": "Maroondah Reservoir Park, Healesville, Victoria, Australia",
+  "bild": "bilder/maroondah_reservoir.jpg",
+  "lat": -37.64434,
+  "lon": 145.55116,
+  "saison": "Im Hochsommer früh morgens oder abends - die Rasenflächen sind offen und weitgehend ohne Schatten. Baden ist verboten und das angrenzende Wassereinzugsgebiet gesperrt, es ist Melbournes Trinkwasser. Auf die Torzeiten achten: die Tore schliessen automatisch, sonst steht das Auto über Nacht im Park."
+ },
+ {
+  "id": "steavenson_falls",
+  "name": "Steavenson Falls",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Yarra Ranges, Black Spur & Marysville",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "84 m hoher, mehrstufiger Wasserfall rund 3 km ausserhalb von Marysville am Ende der asphaltierten Falls Road. Vom Parkplatz führt ein 350 m langer, befestigter all-abilities-Weg zur unteren Aussichtsplattform, weitere rund 800 m Stufen hinauf zum oberen Lookout; Picknicktische und Toiletten am Parkplatz, Eintritt frei. Von hier startet auch der Tree Fern Gully Track zurück nach Marysville.",
+  "emoji": "🌊",
+  "mapsQuery": "Steavenson Falls, Marysville, Victoria, Australia",
+  "bild": "bilder/steavenson_falls.jpg",
+  "lat": -37.53283,
+  "lon": 145.774,
+  "saison": "Im Januar deutlich weniger Wasser als im Winter, der Fall läuft aber ganzjährig. Der Gully ist schattig und kühl - eine der besseren Optionen an einem heissen Tag; abends ist der Fall bis Mitternacht angestrahlt, das ist im Hochsommer die angenehmste Uhrzeit. In den Schulferien vormittags kommen, der Parkplatz ist klein."
+ },
+ {
+  "id": "marysville_gedenkstaette",
+  "name": "Marysville Bushfire Memorial / Gallipoli Park",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Yarra Ranges, Black Spur & Marysville",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Marysville wurde am Black Saturday, 7. Februar 2009, fast vollständig zerstört; die rund 2018 eingeweihte Gedenkstätte nennt auf einer geschwungenen Wand die Namen von 40 Menschen aus Marysville und Narbethong, die dabei starben. Sie liegt an der Adresse 13 Falls Road mit Zugang über den wiederaufgebauten Gallipoli Park: drei gewundene Wege führen zu einem zentralen Platz, dazu Stahl-Portale und zwei Schattenskulpturen, die 'Black Saturday' und '07.02.2009' auf den Boden werfen. Im Park selbst der Reflective Garden, der Kin-Playspace und die New-Life-Skulptur des örtlichen Künstlers Bruno Torfs.",
+  "emoji": "🕯️",
+  "mapsQuery": "Gallipoli Park, Marysville, Victoria, Australia",
+  "bild": "bilder/marysville_gedenkstaette.jpg",
+  "lat": -37.5119,
+  "lon": 145.75026,
+  "saison": "Ganzjährig frei zugänglich, keine Oeffnungszeiten. Wer sechs Wochen in Kinglake wohnt, sollte das gesehen haben - Kinglake und Marysville waren 2009 die schwersten Verluste, und die Anlage macht sehr konkret, warum die Fire Danger Rating jeden Morgen zählt. Um die Mittagszeit schattenarm, also morgens oder abends hingehen."
+ },
+ {
+  "id": "rainforest_gallery",
+  "name": "Rainforest Gallery (Mount Donna Buang)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Yarra Ranges, Black Spur & Marysville",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "ACHTUNG, derzeit gesperrt: Parks Victoria hat den Steg der Rainforest Gallery wegen dringender Reparaturen bis auf Weiteres geschlossen (Stand Mitte 2026) - vor der Fahrt zwingend auf parks.vic.gov.au prüfen. Wenn geöffnet: eine 40 m lange Plattform 15 m über dem Waldboden im Kronendach, von dort rund 100 Stufen hinunter auf einen 350 m langen erhöhten Steg durch Regenwald mit bis zu 65 m hohen Mountain Ash und 300-400 Jahre alten Myrtenbuchen. Eintritt frei, die Plattform selbst ist vom Parkplatz aus barrierefrei, rund 10 Fahrminuten oberhalb von Warburton an der Donna Buang Road.",
+  "emoji": "🌲",
+  "mapsQuery": "Rainforest Gallery, Warburton, Victoria, Australia",
+  "bild": "bilder/rainforest_gallery.jpg",
+  "lat": -37.7109,
+  "lon": 145.70935,
+  "saison": "Wäre der beste Hitzefluchtort der Region - kühl, schattig, feucht, auch mittags angenehm -, ist aber aktuell gesperrt; falls bis Dezember 2026 nicht wieder offen, ist der Redwood Forest die Alternative. Teil des Yarra Ranges National Park, der an 'Catastrophic'-Tagen ganz geschlossen wird. Der Steg ist nach Regen rutschig."
+ },
+ {
+  "id": "mount_donna_buang",
+  "name": "Mount Donna Buang",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Yarra Ranges, Black Spur & Marysville",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Rund 1250 m hoher Gipfel über Warburton, über die durchgehend asphaltierte Donna Buang Road in 20-25 Minuten (17 km) erreichbar. Oben ein 21 m hoher Aussichtsturm mit Blick über Yarra Valley, Dandenongs, Cathedral Range und bis zu den Victorian Alps, dazu Picknicktische und Toiletten; die Gasgrills sind laut Parks Victoria bis auf Weiteres ausser Betrieb. Eintritt frei, direkt am Gipfel Platz für etwa 20 Autos, größere Parkplätze 300 m unterhalb.",
+  "emoji": "⛰️",
+  "mapsQuery": "Mount Donna Buang, Victoria, Australia",
+  "bild": "bilder/mount_donna_buang.jpg",
+  "lat": -37.70652,
+  "lon": 145.68118,
+  "saison": "Im Hochsommer schneefrei und meist mehrere Grad kühler als im Tal - ein guter Nachmittag, wenn es unten 38 Grad hat. Auf dem Gipfel kann es windig und plötzlich neblig werden, eine Jacke mitnehmen. Es ist eine Sackgassenstrasse im Nationalpark: an 'Catastrophic'-Tagen ist der Park geschlossen, und die Straße wird auch bei vollen Parkplätzen oder gefährlichen Bedingungen gesperrt."
+ },
+ {
+  "id": "redwood_forest_warburton",
+  "name": "Redwood Forest (Cement Creek)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Yarra Ranges, Black Spur & Marysville",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Um 1930 vom Board of Works gepflanzter Hain kalifornischer Küstenmammutbäume an der Cement Creek Road - schnurgerade Reihen, weicher Nadelboden, kaum Unterwuchs, akustisch fast still. Der Zugang ist barrierefrei ausgebaut: behindertengerechter Parkplatz, Toilette, Wege und Aussichtsplattform, Eintritt frei. Die Zufahrt ab Warburton über die Woods Point Road dauert etwa 15 Minuten und ist nur teilweise asphaltiert, stellenweise schmal und mit einer einspurigen Brücke.",
+  "emoji": "🌲",
+  "mapsQuery": "Redwood Forest, East Warburton, Victoria, Australia",
+  "bild": "bilder/redwood_forest_warburton.jpg",
+  "lat": -37.71802,
+  "lon": 145.75146,
+  "saison": "Kühl und dicht beschattet, deshalb auch mittags im Januar gut machbar. An Wochenenden und in den Sommerferien ist der Parkplatz oft schon gegen 10 Uhr voll - früh kommen und ausschliesslich auf den ausgewiesenen Flächen parken, die 'No Standing'-Schilder an der Cement Creek Road werden mit Bussgeld kontrolliert. Der Waldboden neben den befestigten Wegen ist uneben und nach Regen matschig."
+ },
+ {
+  "id": "tarrawarra",
+  "name": "TarraWarra Museum of Art & Estate",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Yarra Valley & Healesville",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Privates Museum für australische Kunst nach 1950 in einem markanten Betonbau über den Weinbergen zwischen Healesville und Yarra Glen - klimatisiert, ruhig, mit wechselnden Ausstellungen. Geöffnet Dienstag bis Sonntag 11-17 Uhr, montags geschlossen, an Feiertagen offen ausser am 25. und 26. Dezember; Eintritt 15 AUD für Erwachsene, Adresse 313 Healesville-Yarra Glen Road. Direkt daneben der Cellar Door des TarraWarra Estate mit Verkostung und Restaurant.",
+  "emoji": "🍷",
+  "mapsQuery": "TarraWarra Museum of Art, Healesville, Victoria, Australia",
+  "bild": "bilder/tarrawarra.jpg",
+  "lat": -37.65959,
+  "lon": 145.46919,
+  "saison": "Die richtige Antwort auf einen 40-Grad- oder 'Catastrophic'-Tag: im Tal statt im Wald, drinnen statt am Berg, und man muss nicht in die Ranges hinauffahren. Dezember/Januar ist Hochsaison im Yarra Valley, fürs Restaurant reservieren. Als Solo-Fahrer gilt in Victoria 0,05 Promille - bei Verkostungen ausspucken oder einen Fahrdienst nehmen."
+ },
+ {
+  "id": "flinders_street_station",
+  "name": "Flinders Street Station",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Der Kuppelbahnhof von 1910 mit der Uhrenreihe über dem Haupteingang ist Melbournes Wahrzeichen und der Knotenpunkt des gesamten Vorortnetzes. Zugang frei, als Sehenswürdigkeit 15-30 Minuten; gegenüber liegen Federation Square und St Paul's Cathedral, ringsum beginnt die kostenlose Free Tram Zone.",
+  "emoji": "🚉",
+  "mapsQuery": "Flinders Street Station, Melbourne, Victoria, Australia",
+  "bild": "bilder/flinders_street_station.jpg",
+  "lat": -37.81842,
+  "lon": 144.96648,
+  "saison": "Ganzjährig offen. An den Feiertagen 25./26.12. und 1.1. gilt Sonderfahrplan, in der Silvesternacht und während der Australian Open ist der Bahnhof extrem voll. Abends hell beleuchtet und stark frequentiert, solo unproblematisch."
+ },
+ {
+  "id": "queen_victoria_market",
+  "name": "Queen Victoria Market",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Marktareal von 1878 mit Deli Hall (Käse, Wurst, Feinkost), Obst- und Gemüsehallen sowie einer großen Non-Food-Halle. Eintritt frei, 1-2 Stunden. Wichtig für die Planung: Der Tagesmarkt ist montags und mittwochs geschlossen, offen sind Di, Do, Fr, Sa und So.",
+  "emoji": "🥬",
+  "mapsQuery": "Queen Victoria Market, Melbourne, Victoria, Australia",
+  "bild": "bilder/queen_victoria_market.jpg",
+  "lat": -37.80739,
+  "lon": 144.95739,
+  "saison": "Im Sommer läuft der Summer Night Market: mittwochs 17-22 Uhr, Eintritt frei, Streetfood und Livemusik - der einfachste Solo-Abend der Stadt. Anders als 2025/26 fallen Heiligabend und Silvester 2026 auf einen Donnerstag, die Nachtmärkte am 23. und 30.12.2026 sollten also stattfinden. Tagesmarkt an den Feiertagen geschlossen."
+ },
+ {
+  "id": "melbourne_skydeck",
+  "name": "Melbourne Skydeck (Eureka Tower)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Aussichtsplattform auf Level 88 des Eureka Tower in 285 m Höhe, 360-Grad-Blick über CBD, Port Phillip Bay und bei klarer Sicht bis zu den Dandenongs. Erwachsene ca. AU$33-43, online günstiger; Zusatzoption 'The Edge' ist ein Glaskubus, der aus der Fassade fährt. Etwa 1-1,5 Stunden.",
+  "emoji": "🌆",
+  "mapsQuery": "Melbourne Skydeck, Southbank, Victoria, Australia",
+  "bild": "bilder/melbourne_skydeck.jpg",
+  "lat": -37.82169,
+  "lon": 144.96452,
+  "saison": "Voll klimatisiert und damit die vernünftigste Adresse an einem 40-Grad-Tag. Sonnenuntergang in Melbourne: 13.12. ca. 20:36, um den 27.12. und Mitte Januar ca. 20:44, am 27.01. ca. 20:38 Uhr (AEDT) - Zeitfenster entsprechend legen. Im Januar wegen Australian Open früh online buchen."
+ },
+ {
+  "id": "hosier_lane",
+  "name": "Hosier Lane",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Kopfsteingepflasterte Gasse gegenüber dem Federation Square, komplett mit Street Art übersprüht; die Motive wechseln teils wöchentlich. Kostenlos, jederzeit zugänglich, 20-30 Minuten. In Gehweite liegen AC/DC Lane, Rutledge Lane, Union Lane und Centre Place.",
+  "emoji": "🎨",
+  "mapsQuery": "Hosier Lane, Melbourne, Victoria, Australia",
+  "bild": "bilder/hosier_lane.jpg",
+  "lat": -37.81636,
+  "lon": 144.96908,
+  "saison": "Ganzjährig; die enge Gasse liegt im Schatten der Hochhäuser und ist auch an Hitzetagen erträglich. Ehrlich gesagt polarisiert der Ort: durch permanentes Übersprühen ist vieles nur noch Tagging, und die Gasse dient teils als Müll- und Trinkerecke. Abends beleuchtet, Bars in der Gasse, solo mit normaler Großstadtvorsicht kein Problem."
+ },
+ {
+  "id": "ngv_international",
+  "name": "National Gallery of Victoria (NGV International)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Australiens meistbesuchtes Kunstmuseum an der St Kilda Road, erkennbar an der Wasserwand am Eingang und der Buntglasdecke von Leonard French im Great Hall. Die Dauerausstellung ist gratis, nur Sonderausstellungen kosten Eintritt. Zwei bis drei Stunden.",
+  "emoji": "🖼️",
+  "mapsQuery": "National Gallery of Victoria, St Kilda Road, Melbourne, Victoria, Australia",
+  "bild": "bilder/ngv_international.jpg",
+  "lat": -37.82291,
+  "lon": 144.96865,
+  "saison": "Die NGV Triennial 2026 läuft vom 13.12.2026 bis 11.04.2027 - fast 100 Künstler und Kollektive aus 35 Ländern, Eintritt frei, Zeitfenster-Ticket empfohlen. Klimatisiert, ideal bei Hitze; am 25.12. geschlossen."
+ },
+ {
+  "id": "royal_botanic_gardens_melbourne",
+  "name": "Royal Botanic Gardens Victoria - Melbourne Gardens",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "38 Hektar Parklandschaft über dem Yarra mit Ornamental Lake, Farnschlucht und Skyline-Blick; außen herum läuft der 'Tan Track', Melbournes bekannteste Laufstrecke. Eintritt frei, täglich ab 7:30 Uhr. Der geführte Aboriginal Heritage Walk (ca. AU$40, vorab buchen) erklärt die Pflanzennutzung der Kulin Nation.",
+  "emoji": "🌿",
+  "mapsQuery": "Royal Botanic Gardens Melbourne, South Yarra, Victoria, Australia",
+  "bild": "bilder/royal_botanic_gardens_melbourne.jpg",
+  "lat": -37.82946,
+  "lon": 144.98132,
+  "saison": "Im Sommer läuft hier abends das Moonlight Cinema unter freiem Himmel (üblicherweise Anfang Dezember bis März/April; Programm 2026/27 vorab prüfen, war zum Prüfzeitpunkt noch nicht veröffentlicht). Tagsüber bei 35-40 Grad nur früh morgens oder ab 18 Uhr - Schatten ist stellenweise knapp, UV-Index im Hochsommer extrem, Wasser und Hut mitnehmen."
+ },
+ {
+  "id": "melbourne_cricket_ground",
+  "name": "Melbourne Cricket Ground (MCG)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Stadion mit rund 100.000 Plätzen, Hauptstadion der Olympischen Spiele 1956 und Nationalheiligtum des australischen Sports. Ohne Spiel gibt es Führungen plus Australian Sports Museum für ca. AU$40 (ca. 2 Stunden), zu Fuß 15 Minuten von Flinders Street.",
+  "emoji": "🏏",
+  "mapsQuery": "Melbourne Cricket Ground, East Melbourne, Victoria, Australia",
+  "bild": "bilder/melbourne_cricket_ground.jpg",
+  "lat": -37.81991,
+  "lon": 144.98323,
+  "saison": "Höhepunkt der Reisezeit: Boxing Day Test Australien gegen Neuseeland vom 26. bis 30.12.2026, Beginn 10:30 Uhr - Tag 1 ist ein Volksfest, Tageskarten früh sichern, solo gut machbar. Nebenan im Melbourne Park die Australian Open 11.-31.01.2027; Halbfinale und Finale am 30./31.01."
+ },
+ {
+  "id": "rose_street_artists_market",
+  "name": "Rose Street Artists' Market (Fitzroy)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Samstag und Sonntag 10-16 Uhr verkaufen hier rund 70 lokale Designer, Keramiker und Illustratoren ihre Arbeiten selbst, darüber liegt eine Rooftop-Bar. Eintritt frei. Drumherum Brunswick Street und Gertrude Street mit Plattenläden, Buchcafés und Bars; Tram 11 oder 96 ab CBD.",
+  "emoji": "🛍️",
+  "mapsQuery": "Rose Street Artists' Market, 60 Rose Street, Fitzroy, Victoria, Australia",
+  "bild": "bilder/rose_street_artists_market.jpg",
+  "lat": -37.79593,
+  "lon": 144.97722,
+  "saison": "Ganzjährig, nur am 25.12. geschlossen. Im Sommer sind die Hinterhof-Biergärten von Fitzroy abends das Angenehmste der Stadt. Tram 11 und 96 fahren bis weit nach Mitternacht, freitags und samstags läuft das Night Network durch - solo abends belebt und unproblematisch."
+ },
+ {
+  "id": "st_kilda_pier_penguins",
+  "name": "St Kilda Breakwater (Zwergpinguin-Kolonie)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Auf den Felsen des Wellenbrechers hinter dem 2024 neu gebauten Pier lebt eine wilde Kolonie von rund 1.000-1.400 Zwergpinguinen - kostenlos, ohne Ticket, mit ehrenamtlichen Guides von Earthcare St Kilda vor Ort. Regeln strikt einhalten: kein Blitz, keine Taschenlampe, leise bleiben, auf dem Weg bleiben, nicht anfassen, keine Hunde. Dazu Luna Park, die Kuchenläden der Acland Street und die Strandpromenade.",
+  "emoji": "🐧",
+  "mapsQuery": "St Kilda Breakwater, St Kilda, Victoria, Australia",
+  "bild": "bilder/st_kilda_pier_penguins.jpg",
+  "lat": -37.86473,
+  "lon": 144.96477,
+  "saison": "Oktober bis Februar ist Brutsaison. Im Dezember/Januar geht die Sonne erst gegen 20:40 Uhr unter und die Vögel kommen erst bei Dunkelheit an Land, realistisch ab ca. 21:15 bis 21:45 Uhr. Tram 96 fährt bis nach Mitternacht zurück ins Zentrum - wer danach noch nach Kinglake fährt, sitzt ab Mitternacht auf Landstraßen mit Kängurus und Wombats."
+ },
+ {
+  "id": "brighton_bathing_boxes",
+  "name": "Brighton Bathing Boxes (Dendy Street Beach)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "82 bunt bemalte viktorianische Badehäuschen stehen in einer Reihe direkt im Sand von Dendy Street Beach. Kostenlos und frei zugänglich, realistisch 20-30 Minuten plus Baden; die Boxen sind Privatbesitz und nicht begehbar. Anfahrt mit dem Zug (Sandringham-Linie) bis Brighton Beach, dann 10 Minuten zu Fuß.",
+  "emoji": "🏖️",
+  "mapsQuery": "Brighton Bathing Boxes, Brighton, Victoria, Australia",
+  "bild": "bilder/brighton_bathing_boxes.jpg",
+  "lat": -37.91851,
+  "lon": 144.98716,
+  "saison": "Bestes Licht am späten Nachmittag, die Bucht ist im Hochsommer warm genug zum Schwimmen. Nach starkem Regen kann die Wasserqualität in der Port Phillip Bay durch Regenwassereinleitung kippen - vor dem Baden den EPA Beach Report prüfen. Kein Schatten am Strand: Hut, Sonnencreme, Wasser. An Wochenenden und um Weihnachten sehr voll, werktags früh ist es ruhig."
+ },
+ {
+  "id": "werribee_open_range_zoo",
+  "name": "Werribee Open Range Zoo",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Melbourne & Bucht",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Safari-Park nach afrikanischem Vorbild: Der 40-minütige Safari-Bus durch die Savanne mit Nashörnern, Giraffen, Zebras und Antilopen ist im Eintritt enthalten. Erwachsene ab ca. AU$55 an Wochentagen, an Wochenenden, Feiertagen und in den Ferien deutlich teurer. Tickets ausschließlich online vorab, am Tor wird nicht verkauft. Nebenan Werribee Park Mansion von 1877 und der Victoria State Rose Garden.",
+  "emoji": "🦁",
+  "mapsQuery": "Werribee Open Range Zoo, Werribee South, Victoria, Australia",
+  "bild": "bilder/werribee_open_range_zoo.jpg",
+  "lat": -37.92334,
+  "lon": 144.66864,
+  "saison": "Bei 35-40 Grad ziehen sich die Tiere zurück - unbedingt die erste Safari am Vormittag buchen. Zoos Victoria schließt Werribee an Tagen mit extremer Brandgefahr bzw. Code Red, morgens die Website prüfen. Der Rosengarten blüht November/Dezember am schönsten. Dezember und Januar sind viktorianische Sommerferien, also Höchstpreise und frühes Ausbuchen."
+ },
+ {
+  "id": "puffing_billy_belgrave",
+  "name": "Puffing Billy Railway (Bahnhof Belgrave)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Dandenong Ranges",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Historische Schmalspur-Dampfbahn von 1900, die sich durch Farnwälder und über das hölzerne Monbulk-Creek-Viadukt schlängelt. Belgrave-Lakeside und zurück dauert gut 3 Stunden (je eine Stunde Fahrt plus rund eine Stunde am Emerald Lake Park) und kostet ca. AU$61-64. Nur online buchbar, Check-in 60 Minuten vor Abfahrt; Anfahrt mit dem Vorortzug ab Flinders Street (ca. 70 Min.) bis Belgrave, der Schmalspurbahnhof liegt gegenüber.",
+  "emoji": "🚂",
+  "mapsQuery": "Puffing Billy Railway Belgrave Station, Belgrave, Victoria, Australia",
+  "bild": "bilder/puffing_billy_belgrave.jpg",
+  "lat": -37.90768,
+  "lon": 145.35659,
+  "saison": "Fährt täglich außer am 25.12. An Total-Fire-Ban-Tagen wird auf Diesel umgestellt oder der Betrieb eingestellt, an Code-Red-Tagen fällt er aus und die Wanderwege im Dandenong Ranges National Park schließen komplett - morgens Website und CFA-Warnstufe prüfen. In den Sommerferien oft Wochen im Voraus ausgebucht."
+ },
+ {
+  "id": "peninsula_hot_springs",
+  "name": "Peninsula Hot Springs",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Phillip Island & Mornington Peninsula",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Über 50 geothermale Becken in der Hügellandschaft von Fingal, Herzstück ist der Hilltop Pool mit Rundumblick über die Halbinsel. Bath House ab ca. AU$55-70 je nach Wochentag und Ankunftszeit, Earlybird (vor 8:30/9:00 Uhr) und Twilight (ab 18 Uhr) sind am günstigsten; vorab buchen, am Anreisetag 10 Prozent Aufschlag. Nur mit Auto sinnvoll erreichbar, rund 1,5 Stunden ab Melbourne.",
+  "emoji": "♨️",
+  "mapsQuery": "Peninsula Hot Springs, Fingal, Victoria, Australia",
+  "bild": "bilder/peninsula_hot_springs.jpg",
+  "lat": -38.4075,
+  "lon": 144.84083,
+  "saison": "Im Hochsommer sind die Twilight-Slots ab 18 Uhr klar die beste Wahl - 40 Grad Luft plus 40 Grad Wasser ist tagsüber Kreislaufstress, nicht Erholung. Über Weihnachten, Neujahr und die Sommerferien Wochen im Voraus ausgebucht. Auf dem Rückweg lohnen Cape Schanck und der Bushrangers Bay Track."
+ },
+ {
+  "id": "phillip_island_penguin_parade",
+  "name": "Penguin Parade, Phillip Island",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Phillip Island & Mornington Peninsula",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Jeden Abend nach Sonnenuntergang watscheln hunderte Zwergpinguine vom Meer über den Summerland Beach zu ihren Bauten, beobachtet von Tribünen und Boardwalks. General Viewing ca. AU$34, Penguins Plus ca. AU$93, Underground-Viewing auf Augenhöhe ca. AU$84-103. Fotografieren und Filmen sind während der Parade komplett verboten. Fahrzeit ab Melbourne rund 2 Stunden, ohne Auto nur mit geführter Tour.",
+  "emoji": "🎟️",
+  "mapsQuery": "Penguin Parade, Summerlands, Phillip Island, Victoria, Australia",
+  "bild": "bilder/phillip_island_penguin_parade.jpg",
+  "lat": -38.51055,
+  "lon": 145.15016,
+  "saison": "UNBEDINGT VORBUCHEN - über Weihnachten, Neujahr und die Sommerferien ausverkauft, zwei bis drei Monate im Voraus buchen. Im Dezember/Januar beginnt die Parade erst gegen 21:00-21:30 Uhr. Rückfahrt nach Melbourne also gegen Mitternacht, nach Kinglake eher gegen 1:30 Uhr: als Solo-Fahrer sind Müdigkeit und Wildtiere auf unbeleuchteten Landstraßen das eigentliche Risiko des Abends - realistisch ist eine Übernachtung in Cowes."
+ },
+ {
+  "id": "cairns_esplanade_lagoon",
+  "name": "Cairns Esplanade Lagoon",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Kostenlose Salzwasser-Badelagune von 4.800 m² direkt an der Esplanade, während der Öffnungszeiten von Rettungsschwimmern bewacht. Do–Di 6–21 Uhr, Mi erst ab 12 Uhr (wöchentliche Reinigung); Toiletten, Duschen, Grillplätze und 2,5 km Uferpromenade rundherum. Ein bis zwei Stunden, Handtuch genügt.",
+  "emoji": "🏊",
+  "mapsQuery": "Cairns Esplanade Lagoon, Queensland, Australia",
+  "bild": "bilder/cairns_esplanade_lagoon.jpg",
+  "lat": -16.91966,
+  "lon": 145.77799,
+  "saison": "die einzige verlässlich sichere Bademöglichkeit in der Stadt: umschlossenes, aufbereitetes Becken ohne Meerzugang, damit quallenfrei. Das Meer davor ist Wattfläche und Mangrove — dort weder baden noch waten (Salzwasserkrokodile im Trinity Inlet, Würfelquallen in der Saison 1. Nov–31. Mai)."
+ },
+ {
+  "id": "jack_barnes_mangrove_boardwalk",
+  "name": "Jack Barnes Bicentennial Mangrove Boardwalk",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Zwei kostenlose Holzstege (Nord- und Südschleife) führen neben dem Flughafen mitten durch den Mangrovenwald — Schlammspringer, Winkerkrabben, Stelzwurzeln, Infotafeln, 30–45 Minuten. Eigener Parkplatz an der Airport Avenue, etwa 10 Minuten vom Zentrum. Benannt nach dem Cairnser Arzt Jack Barnes, der 1961 im Selbstversuch die winzige Würfelqualle als Auslöser des Irukandji-Syndroms nachwies.",
+  "emoji": "🌿",
+  "mapsQuery": "Jack Barnes Bicentennial Mangrove Boardwalk, Cairns, Queensland, Australia",
+  "bild": "bilder/jack_barnes_mangrove_boardwalk.jpg",
+  "lat": -16.88372,
+  "lon": 145.76114,
+  "saison": "Regenzeit heißt hier Moskitos und Sandfliegen in Massen — Repellent ist Pflicht, lange Kleidung hilft. In den Prielen leben Salzwasserkrokodile: auf dem Steg bleiben, niemals ins Wasser oder in den Schlick. Der Steg war 2019–2022 wegen Sanierung komplett gesperrt und kann nach Sturm kurzfristig zu sein — vorher kurz prüfen."
+ },
+ {
+  "id": "crystal_cascades",
+  "name": "Crystal Cascades",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Der Süßwasser-Badeplatz der Einheimischen: ein rund 1,2 km langer betonierter Weg folgt dem Freshwater Creek zu mehreren Kaskaden und Felsbecken. Kostenlos, Parkplatz am Ende der Crystal Cascades Road, etwa 20–25 Minuten vom Zentrum, Picknicktische am Eingang. Zeitbedarf 1,5–2 Stunden.",
+  "emoji": "💦",
+  "mapsQuery": "Crystal Cascades, Cairns, Queensland, Australia",
+  "bild": "bilder/crystal_cascades.jpg",
+  "lat": -16.96167,
+  "lon": 145.67944,
+  "saison": "Süßwasser weit oberhalb der Gezeitenzone: keine Quallen, kein Stinger-Anzug nötig, Krokodile sind hier oben bislang nicht nachgewiesen (weiter flussabwärts Richtung Barron River dagegen sehr wohl). Im Dez/Jan steigt der Bach nach Starkregen binnen Minuten stark an — bei brauner, schneller Strömung nicht ins Wasser, Absperrungen und Warnschilder ernst nehmen, Felsen extrem rutschig."
+ },
+ {
+  "id": "palm_cove",
+  "name": "Palm Cove",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Der ruhigste der nördlichen Strandorte: Melaleuca-Bäume bis an den Sand, Holzsteg, Restaurantzeile an der Williams Esplanade. 25–30 Autominuten oder Buslinie 110 ab Cairns, Strand kostenlos. Gut für einen halben Tag oder ein Abendessen.",
+  "emoji": "🌴",
+  "mapsQuery": "Palm Cove, Queensland, Australia",
+  "bild": "bilder/palm_cove.jpg",
+  "lat": -16.74447,
+  "lon": 145.67103,
+  "saison": "ist volle Quallensaison. Am Hauptstrand vor dem Lifeguard-Turm steht Nov–Mai ein Stinger-Netz (relativ klein, ca. 100 × 50 m), Rettungsschwimmer sind in dieser Zeit täglich 9–17 Uhr im Dienst. Baden nur im Netz und zwischen den Flaggen: Das Netz hält die große Würfelqualle ab, die winzigen Irukandji NICHT — Ganzkörper-Lycra-Anzug tragen (vor Ort leihbar). Krokodilwarnschilder gelten: nicht in der Dämmerung, nicht an den Bachmündungen an den Strandenden."
+ },
+ {
+  "id": "rex_lookout",
+  "name": "Rex Lookout",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Daintree & Port Douglas",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Aussichtsplattform direkt am Captain Cook Highway mit Blick auf Küstenschwung, Wangetti Beach und Korallenmeer, zugleich Startrampe für Gleitschirmflieger. Kostenlos, Parkbuchten am Highway, Stopp von 15–20 Minuten, rund 45 Minuten nördlich von Cairns.",
+  "emoji": "🪂",
+  "mapsQuery": "Rex Lookout, Wangetti, Queensland, Australia",
+  "bild": "bilder/rex_lookout.jpg",
+  "lat": -16.64636,
+  "lon": 145.56554,
+  "saison": "Ganzjährig frei zugänglich; in der Regenzeit ziehen häufig Schauer und tiefe Wolken durch, morgens sind die Chancen auf Fernsicht am besten. Der Strand unterhalb (Wangetti) ist unbewacht und hat kein Stinger-Netz — dort im Dez/Jan nicht ins Wasser, auch nicht kurz."
+ },
+ {
+  "id": "green_island",
+  "name": "Green Island",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Korallen-Sandinsel (Cay) mit Regenwaldkern, Strand und Riff direkt in Ufernähe — 45–60 Minuten mit dem Katamaran ab Reef Fleet Terminal. Halb- und Ganztagestouren, Schnorchelausrüstung meist inklusive, Glasbodenboot für Nichtschwimmer. Preise variieren stark (grob ab 120 AUD), dazu kommt die Riffabgabe EMC.",
+  "emoji": "🏝️",
+  "mapsQuery": "Green Island, Queensland, Australia",
+  "bild": "bilder/green_island.jpg",
+  "lat": -16.75918,
+  "lon": 145.9739,
+  "saison": "Kein Stinger-Netz. Dez/Jan nur mit Ganzkörper-Lycra-Anzug ins Wasser (wird von den Veranstaltern gestellt oder verliehen) — Irukandji treten auch an den Inseln und weit draußen am Riff auf, Würfelquallen sind dort seltener, aber nicht ausgeschlossen. Wasser um 29 °C, nach Starkregen kann die Sicht trüb sein; Krokodile sind hier kein Thema."
+ },
+ {
+  "id": "fitzroy_island",
+  "name": "Fitzroy Island",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Bergige Kontinentalinsel, rund 45 Minuten per Fähre ab Cairns (hin und zurück grob 100 AUD): Korallenkies-Strand Nudey Beach (15 Minuten zu Fuß), Summit Track mit Weitblick (1,5–2 h retour), Leuchtturmweg und die Schildkröten-Auffangstation mit Führungen nach Anmeldung. Gut als Tagestrip mit Schnorcheln direkt vom Strand.",
+  "emoji": "🐢",
+  "mapsQuery": "Fitzroy Island, Queensland, Australia",
+  "bild": "bilder/fitzroy_island.jpg",
+  "lat": -16.93291,
+  "lon": 145.99394,
+  "saison": "Kein Stinger-Netz an den Stränden. Von Nov–Mai empfiehlt der Betreiber ausdrücklich den Ganzkörper-Lycra-Anzug (Verleih vor Ort); Würfelquallen sind bei 4 km Abstand zum Festland unwahrscheinlich, aber schon vorgekommen, Irukandji sind möglich. Wanderungen wegen Schwüle und Nachmittagsgewittern früh starten, reichlich Wasser mitnehmen."
+ },
+ {
+  "id": "michaelmas_cay",
+  "name": "Michaelmas Cay",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Winzige Sandbank rund 40 km nordöstlich von Cairns, etwa 1,5–2 Stunden per Segelkatamaran, mit einem der bedeutendsten Seevogel-Brutplätze der Region (in der Sommer-Brutzeit bis zu 20.000 Vögel, über 20 Arten) und Schnorchelriff rings um den Cay. Nur mit Tour erreichbar; an Land ist nur der abgeseilte Strandstreifen freigegeben, üblicherweise zwischen 9:30 und 15:00 Uhr.",
+  "emoji": "🐦",
+  "mapsQuery": "Michaelmas Cay, Queensland, Australia",
+  "bild": "bilder/michaelmas_cay.jpg",
+  "lat": -16.60645,
+  "lon": 145.97407,
+  "saison": "ist Brutzeit — hinter der Absperrung bleiben, Vögel nicht aufscheuchen, der Nationalparkteil des Cay ist komplett gesperrt. Im Wasser Stinger-Anzug tragen, Irukandji kommen auch weit draußen am Riff vor (Anzüge werden gestellt). Bei Monsun-Starkwind oder Zyklonwarnung fallen Ausfahrten aus, der Seegang kann kräftig sein — Reisetablette einplanen."
+ },
+ {
+  "id": "babinda_boulders",
+  "name": "Babinda Boulders (The Boulders)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Riesige, glatt geschliffene Granitblöcke im Regenwald am Babinda Creek, rund 1 Stunde südlich von Cairns; kostenlos, mit Picknickplatz und gratis Übernachtungsplatz für Camper. Gebadet wird ausschließlich im ausgeschilderten Hauptbecken oberhalb — The Chute, Devils Pool und Washing Machine sind zum Schwimmen verboten (zwischen 1959 und 2023 sind dort 21 Menschen ertrunken), von einem 600-m-Rundweg mit Plattformen aber gut einsehbar. 1–2 Stunden.",
+  "emoji": "🪨",
+  "mapsQuery": "Babinda Boulders, Babinda, Queensland, Australia",
+  "bild": "bilder/babinda_boulders.jpg",
+  "lat": -17.34242,
+  "lon": 145.86983,
+  "saison": "Süßwasser: keine Quallen, kein Anzug nötig, Krokodile im Oberlauf sehr unwahrscheinlich (im Unterlauf des Babinda Creek dagegen möglich). Dez/Jan führt der Bach am meisten Wasser — und genau dann wird das Hauptbecken bei Hochwasser gesperrt, die Strömung zieht unberechenbar und die Felsen sind lebensgefährlich rutschig. Bei trübem, schnellem Wasser gar nicht erst hinein, Absperrungen nie übersteigen."
+ },
+ {
+  "id": "josephine_falls",
+  "name": "Josephine Falls",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "600 m ebener Weg vom Parkplatz zu mehreren Becken und der bekannten natürlichen Felsrutsche am Fuß des Bartle Frere. Kostenlos, Toiletten am Parkplatz, 1–1,5 Stunden, gut mit Babinda zu kombinieren. Weg und Aussichtsplattformen bleiben auch dann geöffnet, wenn das Baden gesperrt ist.",
+  "emoji": "💧",
+  "mapsQuery": "Josephine Falls, Wooroonooran, Queensland, Australia",
+  "bild": "bilder/josephine_falls.jpg",
+  "lat": -17.43185,
+  "lon": 145.85929,
+  "saison": "Süßwasser, keine Quallen, keine Krokodile — die Gefahr ist das Wasser selbst. Vor Ort gibt es eine Sturzflutwarnanlage mit roten Blinklichtern; der Pegel steigt in Minuten. WICHTIG: Seit dem 15.04.2026 gilt für den Josephine Creek eine behördliche Badesperre 'bis auf Weiteres', und in der Regenzeit ist eine Sperrung eher Regel als Ausnahme. Vor der Fahrt die Park-Alerts auf parks.qld.gov.au prüfen, keinesfalls über Absperrungen steigen — an der Rutsche hat es mehrere Todesfälle gegeben."
+ },
+ {
+  "id": "mount_bartle_frere",
+  "name": "Mount Bartle Frere (Südgipfel, 1.622 m)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "EXPEDITION"
+  ],
+  "beschreibung": "Queenslands höchster Berg, Aufstieg vom Trailhead bei Josephine Falls: rund 15 km hin und zurück, etwa 1.500 Höhenmeter durch Regenwald, offiziell zwei Tage empfohlen (Camp Broken Nose/Big Rock), als Tagestour 10–12 harte Stunden. Kostenlos, aber Selbstregistrierung und Campgenehmigung über QPWS nötig, kein Handyempfang, Notfunkbake (PLB) dringend angeraten.",
+  "emoji": "🗻",
+  "mapsQuery": "Mount Bartle Frere, Queensland, Australia",
+  "bild": "bilder/mount_bartle_frere.jpg",
+  "lat": -17.39926,
+  "lon": 145.81841,
+  "saison": "ist die denkbar schlechteste Zeit: Monsunregen, dauerhaft nasse Wurzeln und Granitplatten, Blutegel, extreme Schwüle, Bachquerungen nach Regen unpassierbar, der Gipfel steckt fast immer in Wolken. Für einen Solo-Reisenden ohne Partner in dieser Saison ist der Gipfel keine vertretbare Option — realistisch bleibt allenfalls der untere Abschnitt bis Richtung Broken Nose, und auch das nur mit PLB, Wetterprüfung und hinterlegter Rückmeldezeit."
+ },
+ {
+  "id": "innisfail",
+  "name": "Innisfail",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Zuckerrohrstadt am Johnstone River, nach dem Zyklon von 1918 im Art-déco- und Streamline-Stil wiederaufgebaut — geschlossenes Straßenbild mit Shire Hall, Kino und Ladenfronten der 1930er Jahre, dazu der chinesische Tempel Lit Sung Goong (heutiger Bau von 1940, Zugang nur eingeschränkt, von außen einplanen). Zu Fuß in 1–2 Stunden, kostenlos; guter Mittagsstopp auf dem Weg nach Mission Beach, rund 1,5 Stunden südlich von Cairns.",
+  "emoji": "🏛️",
+  "mapsQuery": "Innisfail, Queensland, Australia",
+  "bild": "bilder/innisfail.jpg",
+  "lat": -17.5238,
+  "lon": 146.0311,
+  "saison": "Innisfail zählt mit gut 3.200 mm Jahresniederschlag zu den nassesten Orten Australiens, Dez/Jan ist der Höhepunkt — dafür lässt sich das Zentrum unter durchgehenden Vordächern trocken ablaufen, also ein brauchbares Schlechtwetterziel. Im Johnstone River leben Salzwasserkrokodile: nicht baden, nicht dicht an die Uferkante treten, nicht vom Ufer angeln."
+ },
+ {
+  "id": "etty_bay",
+  "name": "Etty Bay",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Kleine, von Regenwaldhügeln eingerahmte Bucht rund 15 km östlich von Innisfail, an der wilde Kasuare regelmäßig über den Strand laufen — die zuverlässigste Chance der Region, einen zu sehen (früh morgens und spätnachmittags). Kostenlos, Kiosk und Campingplatz direkt am Strand, kurvige schmale Anfahrt, halber Tag.",
+  "emoji": "🦤",
+  "mapsQuery": "Etty Bay, Queensland, Australia",
+  "bild": "bilder/etty_bay.jpg",
+  "lat": -17.55952,
+  "lon": 146.0922,
+  "saison": "Nov–Mai steht vor dem Surf Club ein Stinger-Netz. Aber Vorsicht mit der Bewachung: Der Vereins-Patrouillendienst läuft nur April–November; im Dez/Jan sind ausschließlich während der Weihnachtsferien bezahlte SLSQ-Rettungsschwimmer im Dienst, sonst schwimmt man unbewacht. Baden nur im Netz, zwischen den Flaggen und mit Lycra-Anzug; außerhalb des Netzes im Dez/Jan gar nicht. Krokodilgebiet — Warnschilder ernst nehmen, nicht in der Dämmerung ins Wasser. Kasuare nicht füttern, deutlich Abstand halten, bei Annäherung langsam hinter einen Baum zurückweichen; die Vögel können schwer verletzen."
+ },
+ {
+  "id": "mission_beach",
+  "name": "Mission Beach",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Cairns & Küste",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "14 km palmengesäumter Strand mit Blick auf die Family Islands, Kerngebiet der Kasuare (Licuala Fan Palm Walk) und bekannter Absetzplatz für Fallschirmspringer mit Landung am Strand. Von Wongaling Beach bzw. Clump Point fährt das Wassertaxi in 10–45 Minuten nach Dunk Island (Erwachsene grob 40 AUD, Tagestransfer typischerweise gegen 8:30 hin und 14:30/15:30 zurück); dort Mt-Kootaloo-Wanderung (etwa 3 Stunden) und Campingplatz, das alte Resort ist seit Zyklon Yasi Ruine. Rund 2 Stunden südlich von Cairns.",
+  "emoji": "🥥",
+  "mapsQuery": "Mission Beach, Queensland, Australia",
+  "bild": "bilder/mission_beach.jpg",
+  "lat": -17.86723,
+  "lon": 146.10718,
+  "saison": "Nov–Mai steht am Hauptstrand ein Stinger-Netz des Surf Life Saving Club. Der Verein patrouilliert regulär aber nur April–November; im Dez/Jan sind Rettungsschwimmer nur während der Weihnachtsferien vor Ort. Also ausschließlich im Netz und zwischen den Flaggen baden, Lycra-Anzug tragen, außerhalb des Netzes gar nicht. An den Flussmündungen (u.a. Hull River, South Mission) leben Salzwasserkrokodile — dort weder baden noch waten. Dez/Jan ist zugleich Zyklonsaison: vor der Fahrt Wetter- und Fährinfos prüfen, das Wassertaxi fällt bei Sturm aus."
+ },
+ {
+  "id": "kuranda_skyrail",
+  "name": "Kuranda (Skyrail & Scenic Railway)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Atherton Tablelands",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Regenwaldort auf rund 330 m über Cairns, üblich als Rundreise: hinauf mit der Skyrail-Seilbahn (7,5 km über das Kronendach, zwei Zwischenstationen mit Boardwalks), zurück mit der Kuranda Scenic Railway durch 15 Tunnel und die Barron-Schlucht. Im Ort Märkte, Schmetterlingshaus, Birdworld und Koala Gardens. Einfache Fahrt je rund 60–80 AUD, Kombiticket rund 130–150 AUD; realistisch ein ganzer Tag.",
+  "emoji": "🚡",
+  "mapsQuery": "Kuranda, Queensland, Australia",
+  "bild": "bilder/kuranda_skyrail.jpg",
+  "lat": -16.82093,
+  "lon": 145.63328,
+  "saison": "Beide Betriebe fahren auch in der Regenzeit, die Schlucht führt dann am meisten Wasser. Konkret geschlossen sind laut Betreiber Skyrail am 8. und 25.12.2026 sowie die Bahn am 25.12.2026 — vor der Buchung auf skyrail.com.au/visitor-information/notices erneut prüfen, die Seilbahn hatte 2026 ein Umbauprogramm. Bei Gewitter hält die Gondel zeitweise an; sehr schwül, Regenjacke einpacken."
+ },
+ {
+  "id": "barron_falls",
+  "name": "Barron Falls (Din Din) Lookout",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Atherton Tablelands",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "260 m hoher Wasserfall in der Barron-Schlucht, einsehbar von der Aussichtsplattform auf der Kuranda-Seite (kostenlos, Parkplatz, 5 Minuten Fußweg) oder von der Skyrail-Station Barron Falls mit dem Edge Lookout. Oberhalb zweigt ein Wasserkraftwerk Wasser ab, weshalb der Fall in der Trockenzeit fast versiegt.",
+  "emoji": "💦",
+  "mapsQuery": "Barron Falls, Kuranda, Queensland, Australia",
+  "bild": "bilder/barron_falls.jpg",
+  "lat": -16.83361,
+  "lon": 145.64359,
+  "saison": "Dezember bis Februar läuft er auf Maximum — genau dann lohnt sich der Weg. Die Plattform bleibt geöffnet, nur bei Extremhochwasser wird die Zufahrt gesperrt. Kein Zugang zum Wasser, und das ist gut so: die Schlucht ist bei Hochwasser nicht begehbar."
+ },
+ {
+  "id": "mossman_gorge",
+  "name": "Mossman Gorge",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Daintree & Port Douglas",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Klarer Gebirgsfluss zwischen Granitblöcken im Süden des Daintree. Privatautos parken am Mossman Gorge Centre, weiter geht es nur mit dem Shuttle (rund 15 AUD, den Tag über beliebig oft); vor Ort der 2,4 km lange Rainforest Circuit über die Rex Creek Hängebrücke sowie geführte Ngadiku Dreamtime Walks der Kuku Yalanji. Rechne mit 2–3 Stunden.",
+  "emoji": "🌿",
+  "mapsQuery": "Mossman Gorge Centre, Mossman, Queensland, Australia",
+  "bild": "bilder/mossman_gorge.jpg",
+  "lat": -16.47422,
+  "lon": 145.34833,
+  "saison": "Im Dez/Jan schwillt der Mossman River nach Gewittern binnen Minuten an — Schwimmen ist dann lebensgefährlich, Hängebrücke und Rundweg werden bei Hochwasser gesperrt. Park-Alerts auf parks.qld.gov.au am Vortag prüfen. Salzwasserkrokodile sind oberhalb des Tidenbereichs nicht das Hauptrisiko, im Unterlauf des Mossman River dagegen sehr wohl; die eigentliche Gefahr an der Gorge ist die Sturzflut."
+ },
+ {
+  "id": "four_mile_beach",
+  "name": "Four Mile Beach, Port Douglas",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Daintree & Port Douglas",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Gut sechs Kilometer Sandstrand am Rand von Port Douglas, mit Flagstaff Hill Lookout am Südende und der Macrossan Street mit Restaurants und Sonntagsmarkt dahinter. Kostenlos zugänglich, Parkplätze an mehreren Zugängen.",
+  "emoji": "🏖️",
+  "mapsQuery": "Four Mile Beach, Port Douglas, Queensland, Australia",
+  "bild": "bilder/four_mile_beach.jpg",
+  "lat": -16.50708,
+  "lon": 145.46738,
+  "saison": "liegt mitten in der Quallensaison (Nov–Mai): Box Jellyfish und Irukandji. Nur innerhalb des Stinger-Netzes und nur während der Patrouillenzeiten der Surf Life Savers ins Wasser — und dort im Ganzkörper-Stingeranzug, denn das Netz hält Box Jellyfish zurück, die nur fingernagelgroßen Irukandji aber nicht zuverlässig. Salzwasserkrokodile werden auch an diesem Strand gemeldet; außerhalb des Netzes gar nicht baden."
+ },
+ {
+  "id": "daintree_river_cruise",
+  "name": "Daintree River (Krokodilfahrt ab Daintree Village)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Daintree & Port Douglas",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Ab Daintree Village starten mehrere kleine Anbieter zu einstündigen Flussfahrten (rund 30–40 AUD) zu Salzwasserkrokodilen, Baumschlangen, Eisvögeln und Flughundkolonien in den Mangroven. Frühe Fahrten am Morgen und späte am Nachmittag sind am ergiebigsten; Fernglas mitnehmen.",
+  "emoji": "🐊",
+  "mapsQuery": "Daintree Village, Queensland, Australia",
+  "bild": "bilder/daintree_river_cruise.jpg",
+  "lat": -16.2484,
+  "lon": 145.31975,
+  "saison": "Dezember und Januar sind Paarungs- und Nistzeit der Salties: die Tiere sind aktiv und territorial, bei Hochwasser aber schlechter zu sehen. Nach Starkregen führt der Fluss Flut und Touren fallen aus. Niemals ans Ufer treten oder Boote verlassen — der gesamte Unterlauf ist Krokodilrevier."
+ },
+ {
+  "id": "cape_tribulation",
+  "name": "Cape Tribulation",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Daintree & Port Douglas",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Stelle, an der einer der ältesten durchgehend bestehenden Regenwälder der Erde direkt an die Küste des Great Barrier Reef reicht. Die kostenlosen Boardwalks Dubuji und Kulki führen durch Mangroven und Fächerpalmen zum Kap-Lookout; Anfahrt über die Daintree-Fähre (rund 40–50 AUD Rückfahrt mit Pkw, Betrieb rund 19 Stunden täglich ab 5 Uhr), Straße bis Cape Trib asphaltiert. Von Port Douglas gut zwei Stunden inklusive Fähre.",
+  "emoji": "🌴",
+  "mapsQuery": "Cape Tribulation, Queensland, Australia",
+  "bild": "bilder/cape_tribulation.jpg",
+  "lat": -16.07743,
+  "lon": 145.47476,
+  "saison": "Regenzeit: Die Daintree-Fähre stellt bei Hochwasser oder Zyklon den Betrieb ein — dann kommt man weder hin noch zurück. Wetter und Fährstatus täglich prüfen und keine knappen Anschlüsse planen. Nördlich beginnt der Bloomfield Track (nur 4WD, keine Anhänger oder Camper), der im Dez/Jan durch Bachdurchfahrten und Erdrutsche regelmäßig gesperrt ist. Nicht im Meer baden: Quallensaison und Salzwasserkrokodile, kein Stinger-Netz, keine Rettungsschwimmer."
+ },
+ {
+  "id": "granite_gorge",
+  "name": "Granite Gorge Nature Park",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Atherton Tablelands",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Privates Naturreservat westlich von Mareeba: eine Schlucht aus rundgeschliffenen Granitblöcken, in der Mareeba-Felskängurus leben (Futter an der Rezeption). Eintritt rund 20 AUD pro Person, markierte Rundwege für 1–2 Stunden, kleines Wasserloch zum Abkühlen.",
+  "emoji": "🦘",
+  "mapsQuery": "Granite Gorge Nature Park, Mareeba, Queensland, Australia",
+  "bild": "bilder/granite_gorge.jpg",
+  "lat": -17.04179,
+  "lon": 145.35125,
+  "saison": "Liegt im Regenschatten westlich der Berge und ist oft sonnig, wenn Cairns im Dauerregen steht — ein brauchbarer Plan B im Januar. Dafür sehr heiß, über 35 °C sind normal: früh hin, viel Wasser mitnehmen, mittags keine Runde gehen. Nach Gewittern kann der Granite Creek kurzzeitig anschwellen."
+ },
+ {
+  "id": "curtain_fig_tree",
+  "name": "Curtain Fig Tree",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Atherton Tablelands",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Würgefeige mit geschätzt über 500 Jahren, deren Luftwurzeln einen rund 15 m hohen, fast senkrechten Vorhang bilden. Kostenloser Boardwalk direkt vom Parkplatz, 15 Minuten. Lohnt auch nach Einbruch der Dunkelheit mit Taschenlampe: Possums und Baumkängurus.",
+  "emoji": "🌳",
+  "mapsQuery": "Curtain Fig Tree, Yungaburra, Queensland, Australia",
+  "bild": "bilder/curtain_fig_tree.jpg",
+  "lat": -17.28603,
+  "lon": 145.57398,
+  "saison": "Ganzjährig offen, der Boardwalk ist befestigt und auch bei Regen begehbar. Im Dez/Jan viele Mücken, Repellent einpacken. Gut kombinierbar mit Yungaburra und der Schnabeltier-Plattform am Peterson Creek in der Dämmerung."
+ },
+ {
+  "id": "cathedral_fig_tree",
+  "name": "Cathedral Fig Tree",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Atherton Tablelands",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Große Würgefeige (Ficus virens) von rund 45 m Höhe im Danbulla-Wald am Lake Tinaroo, deutlich ruhiger als die Curtain Fig. Kurzer kostenloser Boardwalk vom Parkplatz, etwa 20 Minuten, gut kombinierbar mit dem Danbulla Forest Drive rund um den Stausee.",
+  "emoji": "🌲",
+  "mapsQuery": "Cathedral Fig Tree, Danbulla, Queensland, Australia",
+  "bild": "bilder/cathedral_fig_tree.jpg",
+  "lat": -17.17751,
+  "lon": 145.65876,
+  "saison": "Zufahrt über unbefestigte Pisten (Boar Pocket Road bzw. Danbulla Forest Drive): bei trockenem Wetter auch mit Pkw machbar, in der Regenzeit schlammig, ausgewaschen und nach Starkregen zeitweise komplett gesperrt. Im Dez/Jan also Allrad einplanen und die Straßeninfos am Reisetag prüfen."
+ },
+ {
+  "id": "lake_eacham",
+  "name": "Lake Eacham (Crater Lakes National Park)",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Atherton Tablelands",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Vulkanischer Kratersee mit klarem Wasser, Badeplattform, Picknickplätzen und einem 3 km langen Rundweg durch Regenwald, Eintritt frei. Schildkröten kommen bis an die Stufen. Der Nachbarsee Lake Barrine liegt 10 Autominuten entfernt und hat ein Teehaus sowie zwei sehr alte Kauri-Fichten.",
+  "emoji": "🏊",
+  "mapsQuery": "Lake Eacham, Queensland, Australia",
+  "bild": "bilder/lake_eacham.jpg",
+  "lat": -17.28484,
+  "lon": 145.62546,
+  "saison": "Baden ist im Dez/Jan angenehm: keine Salzwasserkrokodile, keine Quallen. Im See lebt aber ein Süßwasserkrokodil — laut QPWS scheu und nicht lebensbedrohlich, es kann jedoch beißen, wenn man es stört: nicht nähern, nicht bedrängen, Schilder am Steg beachten, Sichtungen an CrocWatch 1300 130 372 melden. Nach Regen sind die Uferwege rutschig, Blutegel und Mücken sind aktiv."
+ },
+ {
+  "id": "millaa_millaa_falls",
+  "name": "Millaa Millaa Falls & Waterfall Circuit",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Atherton Tablelands",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Von Farnen umrahmter Wasserfall mit Badebecken direkt am Parkplatz, Teil des 17 km langen Waterfall Circuit über die Theresa Creek Road, der auch die Zillie Falls (Blick von oben) und die Ellinjaa Falls (kurzer Abstieg zu Basaltterrassen) einschließt. Alles kostenlos, für die Runde mit Fotostopps rund zwei Stunden einplanen.",
+  "emoji": "💧",
+  "mapsQuery": "Millaa Millaa Falls, Queensland, Australia",
+  "bild": "bilder/millaa_millaa_falls.jpg",
+  "lat": -17.49578,
+  "lon": 145.6106,
+  "saison": "bringt die größte Wassermenge und den eindrucksvollsten Anblick. Bei anhaltendem Regen wird das Becken unter dem Fall durch Strömung und Treibholz gefährlich — dann nur schauen. Die schmale, kurvige Theresa Creek Road liegt oft in Nebel und Nieselregen; das Tafelland auf rund 800 m ist deutlich kühler als die Küste."
+ },
+ {
+  "id": "hypipamee_crater",
+  "name": "Mount Hypipamee Crater & Dinner Falls",
+  "abschnitt": "Ostküste: Melbourne, Cairns & Whitsundays",
+  "region": "Atherton Tablelands",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Schmaler vulkanischer Explosionskrater, der rund 60 m senkrecht in den Fels abfällt und unten von einer dichten Decke aus Wasserlinsen bedeckt ist. Direkt daneben führt ein Weg zu den dreistufigen Dinner Falls am jungen Barron River. Eintritt frei, Rundweg rund 1,5 km, gut eine Stunde.",
+  "emoji": "🕳️",
+  "mapsQuery": "Mount Hypipamee National Park, Queensland, Australia",
+  "bild": "bilder/hypipamee_crater.jpg",
+  "lat": -17.42573,
+  "lon": 145.48655,
+  "saison": "Auf rund 1000 m Höhe angenehm kühl, wenn es unten drückend schwül ist. In der Regenzeit laufen die Dinner Falls kräftig, die Wege sind dann rutschig und Blutegel unterwegs — feste Schuhe. Am frühen Morgen oder in der Dämmerung gute Chance auf Lumholtz-Baumkängurus im Kronendach."
+ }
+]

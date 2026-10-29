@@ -1,0 +1,491 @@
+{
+ "cape_leeuwin_lighthouse": {
+  "beschreibung": "Tallest lighthouse on the Australian mainland (~39 m). This is where the Indian and Southern Oceans meet. Tower tour about $23."
+ },
+ "jewel_cave": {
+  "beschreibung": "Largest show cave in the region, guided tours only (~1 hr), spectacular formations, fossil finds."
+ },
+ "hamelin_bay": {
+  "beschreibung": "Smooth stingrays often swim right by the shore and jetty. At low tide, remains of shipwrecks are visible."
+ },
+ "boranup_forest_drive": {
+  "beschreibung": "One of the most beautiful stretches of karri forest in the region, with a lookout tower — the drive itself is the attraction."
+ },
+ "canal_rocks": {
+  "beschreibung": "Narrow, canal-like rock formation with a boardwalk right by the sea, Yallingup."
+ },
+ "sugarloaf_rock": {
+  "beschreibung": "Striking granite rock off Cape Naturaliste, breeding colony of the rare red-tailed tropicbird."
+ },
+ "injidup_natural_spa": {
+  "beschreibung": "Natural rock pool, sheltered from the surf by granite — magical when the sea is calm."
+ },
+ "mammoth_cave": {
+  "beschreibung": "The region's only self-guided show cave (audio tour), known for fossil megafauna finds."
+ },
+ "busselton_jetty": {
+  "beschreibung": "1,841 m — the longest timber jetty in the southern hemisphere, with an underwater observatory and corals at the end."
+ },
+ "gloucester_tree": {
+  "beschreibung": "Climbable former fire lookout tree. Closed since 2023, reopened on 27 June 2026 with a new, lower platform (37 m) — check the status before you leave."
+ },
+ "dave_evans_bicentennial_tree": {
+  "beschreibung": "75 m climbable tree in Warren NP, currently open only to the first platform (20 m) because of repairs."
+ },
+ "heartbreak_trail_heartbreak_crossing": {
+  "beschreibung": "Scenic drive along the Warren River through karri forest. The river crossing itself is strictly 4WD only."
+ },
+ "yeagarup_dunes": {
+  "beschreibung": "Huge, roughly 10 km long system of moving dunes between Yeagarup Lake and Yeagarup Beach. 4WD essential, no trailers, adjust tyre pressure. No permit needed."
+ },
+ "windy_harbour_salmon_beach": {
+  "beschreibung": "Wild cliffs and dunes in D'Entrecasteaux NP, reachable entirely on sealed roads (2WD)."
+ },
+ "valley_of_the_giants_tree_top_walk": {
+  "beschreibung": "Suspension walkway ~40 m up through the crowns of tingle trees (found only here in the world). Adults $21, extended opening hours 8 am–5 pm from 26 Dec to 26 Jan."
+ },
+ "circular_pool": {
+  "beschreibung": "Calm, perfectly round pool on the Frankland River, surrounded by karri and tingle trees."
+ },
+ "conspicuous_cliffs": {
+  "beschreibung": "Spectacular cliffs with a viewing platform and beach access."
+ },
+ "peaceful_bay": {
+  "beschreibung": "Small, sheltered bay with calm water, good fishing."
+ },
+ "mandalay_beach": {
+  "beschreibung": "Wild dune beach with visible remains of the shipwreck 'Mandalay' (1911)."
+ },
+ "greens_pool": {
+  "beschreibung": "Turquoise water sheltered like a lagoon by granite boulders — safe for swimming all year."
+ },
+ "elephant_rocks": {
+  "beschreibung": "Huge, elephant-shaped granite boulders framing a small swimming pool. Right next to Greens Pool."
+ },
+ "lights_beach": {
+  "beschreibung": "Wild, untouched beach on the Bibbulmun Track, less crowded than Greens Pool."
+ },
+ "mount_shadforth_lookout": {
+  "beschreibung": "View over Denmark and the coast, part of the scenic drive with wineries along the way."
+ },
+ "the_gap_and_natural_bridge": {
+  "beschreibung": "Glass platform over a 24 m deep rock chasm with roaring surf, Torndirrup NP."
+ },
+ "little_beach_two_peoples_bay": {
+  "beschreibung": "Often listed as one of Australia's most beautiful beaches. Nature reserve, habitat of Gilbert's honeyeater."
+ },
+ "muttonbird_beach": {
+  "beschreibung": "Small island with turquoise water, reachable at low tide over the rocks, Frenchman Bay Road."
+ },
+ "shelley_beach_west_cape_howe_np": {
+  "beschreibung": "Southernmost point of Western Australia. Shelley Beach itself is reachable by 2WD."
+ },
+ "golden_gate_dunsky_beach": {
+  "beschreibung": "The wildest cliffs in West Cape Howe NP — real 4WD only (sand, lower your tyre pressure), far fewer visitors than Shelley Beach."
+ },
+ "castle_rock_granite_skywalk": {
+  "beschreibung": "Walk through karri forest to a free-standing granite dome with a steel skywalk platform above the rocks."
+ },
+ "bluff_knoll": {
+  "beschreibung": "At 1,099 m the highest peak in the south of WA. Demanding 6 km walk (3–4 hrs), start early in summer (heat, little shade)."
+ },
+ "east_mount_barren": {
+  "beschreibung": "Colourfully banded quartzite mountain, short steep walk, panoramic views. Reachable by 2WD."
+ },
+ "west_mount_barren": {
+  "beschreibung": "Similar to East Mount Barren, far fewer visitors."
+ },
+ "point_ann": {
+  "beschreibung": "Best whale-watching spot in the region — BUT the season is June–October. No whales in December/January, still worth a stop for the scenery."
+ },
+ "great_ocean_drive_esperance": {
+  "beschreibung": "40 km sealed coastal loop from Esperance: Ten Mile Lagoon, Observatory Point, Twilight Beach, Blue Haven, Chapmans Point."
+ },
+ "lucky_bay": {
+  "beschreibung": "Extremely white sand, kangaroos on the beach. Car park 2WD, driving on the sand itself 4WD only."
+ },
+ "frenchman_peak": {
+  "beschreibung": "Cone-shaped rock formation with a cave passage near the summit, walk 1.5–2 hrs."
+ },
+ "hellfire_bay": {
+  "beschreibung": "Small, very photogenic bay with turquoise water."
+ },
+ "thistle_cove": {
+  "beschreibung": "Calm bay with granite rocks, less crowded."
+ },
+ "le_grand_beach_rossiter_bay": {
+  "beschreibung": "Long, wild beach at the end of the park. The beach tracks on towards Rossiter Bay are 4WD only."
+ },
+ "pink_lake_esperance": {
+  "beschreibung": "Note: no longer pink since about 2007 (road building, salt mining and fresh water inflow lowered the salt content). At most a quick photo stop, no longer a must."
+ },
+ "lake_hillier_middle_island": {
+  "beschreibung": "THE real pink lake of the region — pink all year, but only reachable by scenic flight or boat from Esperance, not by car."
+ },
+ "stokes_national_park": {
+  "beschreibung": "About 80 km west of Esperance. Benwenerup Campground 2WD; Skippy Rock & Fanny Cove strictly 4WD only (lower your tyre pressure). Watch out for tiger snakes at the estuary."
+ },
+ "quagi_beach": {
+  "beschreibung": "Quiet camping beach near Stokes NP (2WD access via Farrell Road), 18 sites."
+ },
+ "peak_charles_national_park": {
+  "beschreibung": "651 m free-standing granite monolith, 360° views. About 170 km north of Esperance, last stretch gravel (slippery when wet). Free camping at the foot, no reliable water, no permit needed."
+ },
+ "cape_arid_national_park": {
+  "beschreibung": "Thomas River (2WD, campground with water tanks) as a base; Tagon Bay/Yokinup Bay/Seal Creek/Mount Ragged 4WD only, sometimes closed after rain. 1080 poison baits laid (no pets)."
+ },
+ "duke_of_orleans_bay_wharton_beach": {
+  "beschreibung": "Caravan park as the last supply stop (shop, fuel) before Cape Arid/Israelite Bay. Wharton Beach: 4WD right down to the water, much quieter than Lucky Bay."
+ },
+ "table_island_alexander_bay": {
+  "beschreibung": "Table Island can be reached on foot at low tide — be sure to check the tides, active shark warning signs. Alexander Bay: 16 km of gravel/corrugations, managed campground (~$20/night)."
+ },
+ "israelite_bay": {
+  "beschreibung": "Ruins of a historic telegraph station (1876/1896). 4WD only, 190–200 km from Esperance, 3.5–5 hrs for the toughest part — not a day trip. 130+ L fuel capacity recommended, last fuel stations Condingup/Duke of Orleans Bay. Impassable when wet."
+ },
+ "nuytsland_nature_reserve_point_culver_baxter_cliffs": {
+  "beschreibung": "No permit needed, but huge (6,253 km², ~500 km of coast) and extremely remote. Baxter Cliffs up to 80 m high, almost 200 km long. DBCA explicitly requires 'advanced four-wheel driving skills'. Several days, PLB a must, convoy recommended."
+ },
+ "eyre_bird_observatory": {
+  "beschreibung": "Historic telegraph station, now a bird observatory. IMPORTANT: as of July 2026 probably CLOSED because of safety issues (not fire damage) — be sure to confirm by phone directly with BirdLife Australia before you leave (+61 3 9347 0757). If open: the last 10 km + the descent via Kanidal Sandpatch are 4WD only."
+ },
+ "rottnest_island_wadjemup": {
+  "beschreibung": "THE quokka island. Ferries: SeaLink & Rottnest Express from Fremantle (~25 min, Express also from Perth City), Rottnest Fast Ferries from Hillarys. Book a bike with it, snorkel at The Basin/Little Salmon Bay. Overnight stays in summer months ahead, day ferry 2–4 weeks ahead."
+ },
+ "penguin_island_shoalwater_kajaktour": {
+  "beschreibung": "Honest status: the penguin colony has collapsed by >90 %, the Discovery Centre has been closed permanently since 2023, the ferry is uncertain because of the silted jetty (2025/26 season only from April). The worthwhile way today: a 6-hour sea kayak tour (Capricorn Seakayaking, ~A$190) to Penguin & Seal Island — sea lions, snorkelling, landing included. NEVER cross the sandbar on foot (deaths have occurred)."
+ },
+ "carnac_island": {
+  "beschreibung": "Sea lion resting place off Fremantle — only by charter/kayak/your own boat. Landing is allowed only on the east beach; the island's interior is off limits (large tiger snake population). If you do the Shoalwater kayak tour, you can skip Carnac."
+ },
+ "woody_island_recherche_archipel": {
+  "beschreibung": "The only one of the archipelago's ~105 islands you can visit. Catamaran “Cetacean Explorer” from Esperance (48 seats, about 9 am–2 pm, adults A$95 incl. entry, guided walk & morning tea) — sea lions, seals, dolphins and sea eagles along the way. Snorkelling in Shearwater Bay, Island Top Walk (2.1 km). Only a few little penguins live here and they only come ashore at night: the only chance is an overnight stay (safari huts/eco tents A$60–260).",
+  "saison": "According to the operator, the 2026/27 season starts in November; daily in Dec/Jan (except 25 Dec), only 48 seats — book weeks ahead. The penguins are at sea during the day, so you'll practically never see them on the day tour. A sure thing is Melbourne: St Kilda Breakwater (free) and the Penguin Parade on Phillip Island — both in the app, breeding season Oct–Feb fits."
+ },
+ "middle_island_lake_hillier_aus_der_luft": {
+  "beschreibung": "Private landings are forbidden (strictly protected reserve). Scenic flight: Fly Esperance from A$189 (pink lakes route) up to the ~1 hr 40 min big archipelago flight. New: HeliSpirit reopens its Esperance base in December 2026 — heli beach tour with 1.5 hrs on Middle Island incl. picnic, A$1,499."
+ },
+ "king_george_sound_safari_albany": {
+  "beschreibung": "There are no landings on Breaksea/Michaelmas Island — but Nov–April the 2-hour boat safari runs through King George Sound (A$95, 3× daily): seals, seabirds, island coasts. Whale season only starts again around May."
+ },
+ "lake_ballard_inside_australia": {
+  "beschreibung": "51 Antony Gormley sculptures scattered across a salt lake near Menzies — one of the most surreal places in Australia. The road is now fully sealed; the walk has no shade at all, so only go at sunrise/sunset."
+ },
+ "gwalia_ghost_town_hoover_house": {
+  "beschreibung": "Abandoned gold-mining town near Leonora (from your screenshots!), museum daily 9 am–4 pm, by donation — closed on some days over Christmas/New Year, check beforehand."
+ },
+ "kookynie_niagara_dam": {
+  "beschreibung": "“Living ghost town” (~10 residents) with a working Grand Hotel; free camp with toilets & BBQ at Niagara Dam (1897)."
+ },
+ "broad_arrow_tavern": {
+  "beschreibung": "The last building of the gold-rush town of Broad Arrow (1896), 38 km north of Kalgoorlie on the road to Leonora (from your screenshots). Almost every wall is covered in messages from earlier guests — bring a pen and sign it yourself. Known for the “Broady” burger. Once had eight hotels, two breweries and its own stock exchange; filming location of “Nickel Queen” in 1971.",
+  "saison": "The Goldfields in high summer: 35–40 °C during the day, so more of a lunch stop than a destination for walks. Check opening hours (most recently daily 11 am–7 pm) over Christmas/New Year beforehand. On the way to Lake Ballard, Kookynie and Gwalia."
+ },
+ "lancelin_sand_dunes": {
+  "beschreibung": "Sandboarding & 4WD dune driving — the perfect start and a first sand test for the vehicle."
+ },
+ "the_pinnacles_nambung_np": {
+  "beschreibung": "Thousands of limestone pillars in a desert field — best early in the morning or at sunset."
+ },
+ "kalbarri_np_murchison_station": {
+  "beschreibung": "Nature's Window & gorges; stay at Murchison Station (private river camps, a local's tip) instead of in Kalbarri itself."
+ },
+ "natures_window_the_loop": {
+  "beschreibung": "The famous rock window of Tumblagooda sandstone above the Murchison gorge (from your screenshots). 38 km (~35 min) on sealed road from Kalbarri to “The Loop” car park (toilets, shade shelter). Path 1 km return, 30–45 min, light scrambling at the end — sturdy shoes. No drinking water. Take your photo in front of the window, don't climb on it. Entry 17 AU$ per car (park pass valid).",
+  "saison": "The Loop walk (9 km, 3–5 hrs) is closed from 7 am between November and March — up to 50 °C in the gorge. Nature's Window itself stays open: go for sunrise (watch for emus and kangaroos on the access road) or late in the afternoon. Bring water, a hat and sunscreen, there's hardly any shade."
+ },
+ "steep_point_edel_land": {
+  "beschreibung": "Westernmost point of the Australian mainland. ~140 km of Useless Loop Road + 30 km of soft dune track (tyre pressure ≤20 psi). Book camping at Shelter Bay in advance via DBCA Park Stay — rangers on site."
+ },
+ "zuytdorp_cliffs_thunder_bay": {
+  "beschreibung": "Cliffs up to 200 m high along ~200 km of coast, blowholes at Thunder Bay/False Entrance. Keep a very respectful distance from the edge."
+ },
+ "dirk_hartog_island": {
+  "beschreibung": "Barge “Hartog Explorer” from Blackies Beach near Steep Point (Fri–Wed mornings, max. 20 vehicles a day on the island, booking essential). Allow several days, fully self-sufficient."
+ },
+ "francois_peron_np_voll_loop": {
+  "beschreibung": "Big Lagoon → Cape Peron → Skipjack Point: ~50 km of deep sand track, compressor station at Peron Homestead. From Skipjack Point you can see rays, sharks and dugongs from the cliff. Full day from Denham."
+ },
+ "monkey_mia_herald_bight": {
+  "beschreibung": "Dolphin feeding in the morning; then on to the insider beach camp at Herald Bight (no booking, hardly anyone there) or Bottle Bay."
+ },
+ "quobba_blowholes": {
+  "beschreibung": "Spouts up to 20 m high by the infamous “KING WAVES KILL” sign — never turn your back on the ocean. Sealed road up to here, then gravel."
+ },
+ "red_bluff_quobba_station": {
+  "beschreibung": "Legendary surf point below red cliffs, walk-in camps all year (no booking needed). The station store only runs on limited hours in summer — call ahead and bring supplies."
+ },
+ "gnaraloo_bay_3_mile_camp": {
+  "beschreibung": "Open all year — and in Dec/Jan even twice as exciting: wind season (kiters) and loggerhead turtle nesting season (Nov–Feb) right on Gnaraloo Bay. The last kilometres are soft sand."
+ },
+ "kennedy_range_np_temple_gorge": {
+  "beschreibung": "Remote gorge walls above the plain. NEW since April 2026: Temple Gorge Campground must be booked online via Park Stay ($15/night, no drinking water). Unsealed access from Gascoyne Junction, closed after rain."
+ },
+ "mount_augustus_burringurrah": {
+  "beschreibung": "The world's largest monocline — bigger than Uluru, but with hardly any visitors. IMPORTANT: the Summit Trail is COMPLETELY CLOSED from 1 Nov to the end of Feb after several heat deaths. Instead: the 49 km loop drive, lookouts, short walks at dusk. Tourist park open all year (fuel!)."
+ },
+ "cattle_pool_goolinee_lyons_river": {
+  "beschreibung": "Permanent waterhole with paperbark trees, 3 km from the Mount Augustus Tourist Park — THE spot in the region for a swim to cool off, and probably what many think of as the “endless pool in the middle of nowhere”."
+ },
+ "warroora_maggies_camp": {
+  "beschreibung": "A local's top tip: camp right on the best part of the reef, bookable via exploreparkswa — few campers, lots of sand."
+ },
+ "yardie_creek_track_coral_bay_cape_range": {
+  "beschreibung": "Coastal track with a creek crossing, only at low tide & when dry — behind it lonely reef beaches nobody sees from the highway."
+ },
+ "turquoise_bay_jurabi_turtle_centre": {
+  "beschreibung": "Drift snorkelling from the beach; in the evening/at night turtle season on the Jurabi beaches (nesting Nov–Jan, hatching Jan–March) — keep your distance, no white light."
+ },
+ "charles_knife_canyon_shothole_canyon": {
+  "beschreibung": "The forgotten eastern side of Cape Range: a ridge road with deep views (Charles Knife, carefully doable in 2WD) and a canyon-floor track through creek beds (Shothole, high clearance). 99 % of Ningaloo visitors only drive to the reef side."
+ },
+ "coral_bay": {
+  "beschreibung": "Mantas all year (whale sharks only from March). Snorkelling straight off the beach."
+ },
+ "karijini_np": {
+  "beschreibung": "Dales Gorge, Fern Pool, Weano/Hancock (Handrail Pool) — in summer only start at dawn or dusk, gorge closures possible after rain."
+ },
+ "millstream_chichester_np": {
+  "beschreibung": "Palm oasis on the Fortescue: Python Pool & Deep Reach Pool. Shortcut from Tom Price via the Rio Tinto rail road — free 30-day permit online or at the Tom Price Visitor Centre."
+ },
+ "marble_bar_carawine_gorge": {
+  "beschreibung": "“Hottest place in Australia” + a stunning gorge on the Oakover River with a riverbed camp. Only as part of the East Pilbara extension — borderline in high summer."
+ },
+ "running_waters_eel_pool_oakover_river": {
+  "beschreibung": "The spot from the insider notes — location now verified: Skull Springs Road between Nullagine and Woodie Woodie, East Pilbara (GPS -21.685, 121.126), NOT in the Gascoyne. Warm, spring-fed permanent pool with paperbarks, ~5 bush camp sites, the last metres rocky/a water crossing. Your friend's warning stands: not alone, in summer only in a convoy + with that day's road report."
+ },
+ "karlamilyi_rudall_river_np": {
+  "beschreibung": "The largest and most remote national park in Western Australia — in Dec/Jan LIFE-THREATENING (40+ °C plus the wet season, tracks impassable within hours). Not this season — a candidate for a later dry-season trip."
+ },
+ "houtman_abrolhos_islands": {
+  "beschreibung": "122 coral islands, a national park since 2019 — no ferry, only fly-in day tours with a landing on East Wallabi + snorkelling in Turtle Bay: from Geraldton (Shine Aviation full day ~A$620, Geraldton Air Charter half day from ~A$250) or from Kalbarri (Kalbarri Scenic Flights). Plus the Batavia story of 1629: wreck on Morning Reef, “Batavia's Graveyard” on Beacon Island, Wiebbe Hayes' fort = the oldest European building in Australia. Doable in January — fly early, allow a spare day."
+ },
+ "muiron_islands_exmouth": {
+  "beschreibung": "15 km off the North West Cape: walls, swim-throughs, mantas. Day dive/snorkel charter from Exmouth ~A$269–315 (Exmouth Dive & Whalesharks — the weather decides between the outer reef and the Muirons). With your own boat, basic DBCA camping is possible. January: doable, but cyclone caveat + turtle nesting season (avoid the beaches at night)."
+ },
+ "mackerel_islands_thevenard": {
+  "beschreibung": "Off Onslow — but: the resort closes over the cyclone season, season about April–December → CLOSED IN JANUARY. The ferry from Onslow stopped at the end of Oct 2025; charter flights from Learmonth/Exmouth in future. A note for next time (dry season)."
+ },
+ "montebello_islands": {
+  "beschreibung": "~120 km offshore, a former British nuclear test site (Operation Hurricane 1952 + two tests in 1956). Only multi-day charters from Exmouth (e.g. Montebello Island Safaris, 6 days ~A$4,295), season April–November — no trips in January. Official DBCA advice: max. 1 hr ashore per day on Trimouille & Alpha."
+ },
+ "dampier_archipel_murujuga": {
+  "beschreibung": "42 islands off Karratha — snorkelling/boat tours (Pilbara Dive and Tours, weather-dependent in January). The real must-see is on the mainland and fits route North 3: the Ngajarli/Deep Gorge boardwalk in Murujuga NP — one of the world's largest collections of rock engravings (>47,000 years, UNESCO World Heritage since July 2025), free to visit, best early in the morning."
+ },
+ "masons_falls": {
+  "beschreibung": "Waterfall in Kinglake National Park, about 20 minutes' drive from Kinglake. From the Masons Falls Picnic Area a 700 m path (1.4 km return, about 45 minutes) leads to a large viewing platform opposite the falls; access via Whittlesea-Kinglake Road, National Park Road, Masons Falls Road. Free entry; tables, shelters and toilets are there, but no drinking water, no bins, and according to Parks Victoria the gas barbecues are out of order indefinitely.",
+  "saison": "In December/January the falls carry little water - the appeal is the shady gully, not the amount of water. Kinglake National Park closes completely to the public on days with a 'Catastrophic' fire danger rating; check the rating in the VicEmergency app in the morning. Go early in the morning, snakes are active, wear sturdy shoes, bring drinking water."
+ },
+ "mt_sugarloaf_kinglake": {
+  "beschreibung": "563 m lookout at the end of Mt Sugarloaf Road; the view stretches over the forested southern slopes of Kinglake and the valleys of Arthurs and Chads Creek to the Melbourne skyline about 40 km to the south-west, and on a clear day to Port Phillip Bay and the You Yangs. Car park and picnic tables, but no drinking water and no bins - bring everything yourself and take it with you. Also reachable on foot: from Masons Falls via the Wallaby Trail, Blackwood Picnic Area and Mt Sugarloaf Ridge Track.",
+  "saison": "A good sunset spot in high summer, because you only have to get out of the car briefly. The access road is a dead end in the middle of the forest - a bad plan on days with high bushfire danger, because there is only one way out; on 'Catastrophic' days the park is closed anyway. With smoke in the air, the long views are gone."
+ },
+ "jehosaphat_gully": {
+  "beschreibung": "Picnic area in a grassy clearing in mountain ash forest, a good 2 km south-east of Kinglake and the start of several walks - the Stuart Judd Track is an 890 m loop through regrowing forest and gullies with large tree ferns. Access via Parkland Road, off the Healesville-Kinglake Road; sealed car park for about 20 cars, gas barbecues, tables, shelters and an accessible toilet. No drinking water and no bins.",
+  "saison": "The gullies along the paths are shady and cooler than the open plateau; the picnic area itself is in the sun, so don't plan it as a lunch stop on a 40-degree day. Low water in January. Mobile coverage is unreliable - as a solo walker, tell someone where you're going; on 'Catastrophic' days the national park is closed."
+ },
+ "wirrawilla_regenwald": {
+  "beschreibung": "A loop of about 700 m through cool temperate rainforest, about 450 m of it a wide boardwalk (Grade 1, wheelchair-friendly, renewed in 2024 with a non-slip surface and handrails) - myrtle beech and sassafras keep the canopy dense all year, with tree ferns and mosses below. At the car park on Sylvia Creek Road there are a toilet, picnic tables and a shelter; the longer Myrtle Gully Circuit and the Tanglefoot Loop also start here. Free entry, about 45 minutes' drive from Kinglake.",
+  "saison": "Just the right place for a 35-degree day: in the gully it's noticeably cooler and shady all the way. The access roads are gravel and can be blocked by fallen trees after storms. State forests also close on 'Catastrophic' days, not just national parks. Leeches possible after rain."
+ },
+ "mount_st_leonard": {
+  "beschreibung": "Summit above Toolangi with a fire lookout and radio tower and views over the Yarra Ranges to the Cathedral Range, usually deserted. Drive via the unsealed Monda Road from Healesville/Myers Creek Road to a gate, then 1.2 km on foot to the summit; the long version is the Tanglefoot Track from Toolangi at a good 20 km. On the way is the Kalatha Giant Tree (-37.4944 / 145.5363), a mighty old mountain ash with a short access path.",
+  "saison": "The fire lookout is staffed in summer - which is exactly why the long climb on a hot day is a bad idea: open ridge, no water on the way, no reliable coverage. Only do it in cool, calm weather with a low fire danger rating, otherwise at most drive to the Kalatha Giant. The gravel roads are closed at short notice when there's a fire risk."
+ },
+ "black_spur_fernshaw": {
+  "beschreibung": "The Black Spur is the winding stretch of the Maroondah Highway between Healesville and Narbethong, lined on both sides by 60-70 m mountain ash with tree ferns below. Fernshaw Picnic Ground on the Watts River, about 15 minutes' drive from Healesville at the foot of the climb, is the best place to get out: picnic tables, gas barbecue, toilet block and information hut. Dom Dom Saddle Picnic Ground further up is a second option, but its toilets are permanently closed.",
+  "saison": "Open all year and much cooler in the shade than the open valley; drive in the morning, when there are fewer motorbikes and campervans. The highway can be closed at short notice because of bushfire or fallen trees and there's no good alternative route - check VicTraffic and VicEmergency before you go."
+ },
+ "healesville_sanctuary": {
+  "beschreibung": "Zoos Victoria wildlife park exclusively for Australian species, in natural bushland near Healesville: platypuses (with their own rewilding facility since 2025), wombats, koalas, Tasmanian devils and over 200 bird species. The 'Spirits of the Sky' bird of prey show runs daily at 12 noon and 3 pm and is included in admission. Daily 9 am-5 pm, adults about 53-58 AUD depending on where you buy, address Glen Eadie Avenue, Healesville; half to a full day.",
+  "saison": "December/January is the Victorian school holidays - be there early, otherwise it's packed. On very hot days many animals are inactive from midday, and shows can be cancelled in extreme weather; the grounds are in the bush and can close on 'Catastrophic' days. Sources disagree on whether it's open on 25 December - ask Zoos Victoria directly beforehand."
+ },
+ "maroondah_reservoir": {
+  "beschreibung": "Edwardian-style park around the Maroondah Dam north of Healesville, run by Melbourne Water: well-kept lawns, old trees, picnic tables, barbecues, toilets and a short, steep climb to the Maroondah Dam Lookout (-37.6407 / 145.5495) above the dam wall and lake. Free entry; the automatic gates are open 8 am-8 pm from early October to early April. An easy half-day stop right at the foot of the Black Spur.",
+  "saison": "In high summer go early in the morning or in the evening - the lawns are open and mostly without shade. Swimming is forbidden and the adjoining catchment is closed, it's Melbourne's drinking water. Watch the gate times: the gates close automatically, otherwise your car stays in the park overnight."
+ },
+ "steavenson_falls": {
+  "beschreibung": "84 m multi-tiered waterfall about 3 km outside Marysville at the end of the sealed Falls Road. From the car park a 350 m sealed all-abilities path leads to the lower viewing platform, another 800 m or so of steps up to the upper lookout; picnic tables and toilets at the car park, free entry. The Tree Fern Gully Track back to Marysville also starts here.",
+  "saison": "Much less water in January than in winter, but the falls run all year. The gully is shady and cool - one of the better options on a hot day; in the evening the falls are lit until midnight, the most pleasant time in high summer. In the school holidays come in the morning, the car park is small."
+ },
+ "marysville_gedenkstaette": {
+  "beschreibung": "Marysville was almost completely destroyed on Black Saturday, 7 February 2009; the memorial, opened around 2018, names on a curved wall the 40 people from Marysville and Narbethong who died. It's at 13 Falls Road, with access through the rebuilt Gallipoli Park: three winding paths lead to a central square, with steel portals and two shadow sculptures that cast 'Black Saturday' and '07.02.2009' onto the ground. In the park itself are the Reflective Garden, the Kin playspace and the New Life sculpture by local artist Bruno Torfs.",
+  "saison": "Freely accessible all year, no opening hours. If you're staying in Kinglake for six weeks, you should see it - Kinglake and Marysville suffered the heaviest losses in 2009, and the memorial makes it very clear why the fire danger rating matters every morning. Little shade around midday, so go in the morning or evening."
+ },
+ "rainforest_gallery": {
+  "beschreibung": "NOTE, currently closed: Parks Victoria has closed the Rainforest Gallery walkway until further notice for urgent repairs (as of mid-2026) - be sure to check parks.vic.gov.au before you go. When open: a 40 m platform 15 m above the forest floor in the canopy, from there about 100 steps down to a 350 m raised walkway through rainforest with mountain ash up to 65 m tall and myrtle beech 300-400 years old. Free entry, the platform itself is step-free from the car park, about 10 minutes' drive above Warburton on Donna Buang Road.",
+  "saison": "It would be the region's best escape from the heat - cool, shady, damp, pleasant even at midday - but it's currently closed; if it hasn't reopened by December 2026, the Redwood Forest is the alternative. Part of Yarra Ranges National Park, which closes completely on 'Catastrophic' days. The walkway is slippery after rain."
+ },
+ "mount_donna_buang": {
+  "beschreibung": "Summit of about 1,250 m above Warburton, reached via the fully sealed Donna Buang Road in 20-25 minutes (17 km). At the top a 21 m lookout tower with views over the Yarra Valley, the Dandenongs, the Cathedral Range and as far as the Victorian Alps, plus picnic tables and toilets; according to Parks Victoria the gas barbecues are out of order until further notice. Free entry, room for about 20 cars right at the summit, larger car parks 300 m below.",
+  "saison": "Free of snow in high summer and usually several degrees cooler than the valley - a good afternoon when it's 38 degrees down below. The summit can get windy and suddenly foggy, bring a jacket. It's a dead-end road in the national park: on 'Catastrophic' days the park is closed, and the road is also closed when the car parks are full or conditions are dangerous."
+ },
+ "redwood_forest_warburton": {
+  "beschreibung": "Grove of Californian coast redwoods on Cement Creek Road, planted by the Board of Works around 1930 - dead-straight rows, soft needle floor, hardly any undergrowth, almost silent. Access is step-free: accessible parking, toilet, paths and viewing platform, free entry. The drive from Warburton via Woods Point Road takes about 15 minutes and is only partly sealed, narrow in places and with a single-lane bridge.",
+  "saison": "Cool and densely shaded, so it works even at midday in January. On weekends and in the summer holidays the car park is often full by 10 am - come early and park only in the marked areas, the 'No Standing' signs on Cement Creek Road are enforced with fines. The forest floor beside the paths is uneven and muddy after rain."
+ },
+ "tarrawarra": {
+  "beschreibung": "Private museum of Australian art since 1950 in a striking concrete building above the vineyards between Healesville and Yarra Glen - air-conditioned, quiet, with changing exhibitions. Open Tuesday to Sunday 11 am-5 pm, closed Mondays, open on public holidays except 25 and 26 December; adults 15 AUD, address 313 Healesville-Yarra Glen Road. Right next door is the TarraWarra Estate cellar door with tastings and a restaurant.",
+  "saison": "The right answer to a 40-degree or 'Catastrophic' day: in the valley rather than the forest, indoors rather than on the mountain, and no need to drive up into the ranges. December/January is peak season in the Yarra Valley, book the restaurant. As a solo driver the limit in Victoria is 0.05 - spit at tastings or use a driver service."
+ },
+ "flinders_street_station": {
+  "beschreibung": "The domed station from 1910 with the row of clocks above the main entrance is Melbourne's landmark and the hub of the whole suburban network. Free access, 15-30 minutes as a sight; opposite are Federation Square and St Paul's Cathedral, and the Free Tram Zone starts all around.",
+  "saison": "Open all year. A special timetable applies on the public holidays 25/26 Dec and 1 Jan; on New Year's Eve and during the Australian Open the station is extremely busy. Brightly lit and busy in the evening, no problem solo."
+ },
+ "queen_victoria_market": {
+  "beschreibung": "Market site from 1878 with the Deli Hall (cheese, sausage, delicatessen), fruit and vegetable halls and a large non-food hall. Free entry, 1-2 hours. Important for planning: the day market is closed on Mondays and Wednesdays, open Tue, Thu, Fri, Sat and Sun.",
+  "saison": "In summer the Summer Night Market runs: Wednesdays 5-10 pm, free entry, street food and live music - the easiest solo evening in the city. Unlike 2025/26, Christmas Eve and New Year's Eve 2026 fall on a Thursday, so the night markets on 23 and 30 Dec 2026 should go ahead. Day market closed on public holidays."
+ },
+ "melbourne_skydeck": {
+  "beschreibung": "Viewing platform on level 88 of the Eureka Tower at 285 m, 360-degree views over the CBD, Port Phillip Bay and on a clear day to the Dandenongs. Adults about AU$33-43, cheaper online; the extra 'The Edge' is a glass cube that slides out of the facade. About 1-1.5 hours.",
+  "saison": "Fully air-conditioned and so the most sensible place on a 40-degree day. Sunset in Melbourne: 13 Dec about 8:36 pm, around 27 Dec and mid-January about 8:44 pm, on 27 Jan about 8:38 pm (AEDT) - plan your time slot accordingly. In January book online early because of the Australian Open."
+ },
+ "hosier_lane": {
+  "beschreibung": "Cobbled laneway opposite Federation Square, completely covered in street art; some works change weekly. Free, always open, 20-30 minutes. Within walking distance are AC/DC Lane, Rutledge Lane, Union Lane and Centre Place.",
+  "saison": "All year; the narrow lane is in the shade of the high-rises and bearable even on hot days. Honestly, opinions are divided: constant overpainting has turned much of it into tagging, and the lane is partly used as a rubbish and drinking corner. Lit in the evening, bars in the lane, no problem solo with normal big-city caution."
+ },
+ "ngv_international": {
+  "beschreibung": "Australia's most visited art museum on St Kilda Road, recognisable by the water wall at the entrance and Leonard French's stained-glass ceiling in the Great Hall. The permanent collection is free, only special exhibitions charge admission. Two to three hours.",
+  "saison": "The NGV Triennial 2026 runs from 13 Dec 2026 to 11 Apr 2027 - almost 100 artists and collectives from 35 countries, free entry, timed ticket recommended. Air-conditioned, ideal in the heat; closed on 25 Dec."
+ },
+ "royal_botanic_gardens_melbourne": {
+  "beschreibung": "38 hectares of parkland above the Yarra with the Ornamental Lake, a fern gully and skyline views; around the outside runs the 'Tan Track', Melbourne's best-known running track. Free entry, daily from 7:30 am. The guided Aboriginal Heritage Walk (about AU$40, book ahead) explains how the Kulin Nation used the plants.",
+  "saison": "In summer the open-air Moonlight Cinema runs here in the evenings (usually early December to March/April; check the 2026/27 programme beforehand, it hadn't been published yet when checked). In the daytime at 35-40 degrees only early in the morning or after 6 pm - shade is scarce in places, the UV index is extreme in high summer, bring water and a hat."
+ },
+ "melbourne_cricket_ground": {
+  "beschreibung": "Stadium with about 100,000 seats, main stadium of the 1956 Olympic Games and a national shrine of Australian sport. On non-match days there are tours plus the Australian Sports Museum for about AU$40 (about 2 hours), a 15-minute walk from Flinders Street.",
+  "saison": "Highlight of the trip: the Boxing Day Test Australia v New Zealand from 26 to 30 Dec 2026, start 10:30 am - day 1 is a big festival, secure day tickets early, very doable solo. Next door in Melbourne Park the Australian Open 11-31 Jan 2027; semi-finals and final on 30/31 Jan."
+ },
+ "rose_street_artists_market": {
+  "beschreibung": "Saturday and Sunday 10 am-4 pm, about 70 local designers, ceramicists and illustrators sell their own work here, with a rooftop bar above. Free entry. Around it are Brunswick Street and Gertrude Street with record shops, book cafés and bars; tram 11 or 96 from the CBD.",
+  "saison": "All year, closed only on 25 Dec. In summer Fitzroy's backyard beer gardens are the most pleasant part of the city in the evening. Trams 11 and 96 run until well after midnight, on Fridays and Saturdays the Night Network runs all night - busy and no problem solo in the evening."
+ },
+ "st_kilda_pier_penguins": {
+  "beschreibung": "On the rocks of the breakwater behind the pier, rebuilt in 2024, lives a wild colony of about 1,000-1,400 little penguins - free, no ticket, with volunteer guides from Earthcare St Kilda on site. Follow the rules strictly: no flash, no torch, stay quiet, stay on the path, don't touch, no dogs. Plus Luna Park, the cake shops of Acland Street and the beach promenade.",
+  "saison": "October to February is breeding season. In December/January the sun only sets around 8:40 pm and the birds only come ashore after dark, realistically from about 9:15 to 9:45 pm. Tram 96 runs back to the city until after midnight - anyone driving on to Kinglake afterwards will be on country roads with kangaroos and wombats after midnight."
+ },
+ "brighton_bathing_boxes": {
+  "beschreibung": "82 colourfully painted Victorian bathing boxes stand in a row right on the sand of Dendy Street Beach. Free and open to all, realistically 20-30 minutes plus a swim; the boxes are privately owned and can't be entered. Get there by train (Sandringham line) to Brighton Beach, then a 10-minute walk.",
+  "saison": "Best light in the late afternoon, the bay is warm enough for swimming in high summer. After heavy rain the water quality in Port Phillip Bay can drop because of stormwater run-off - check the EPA Beach Report before swimming. No shade on the beach: hat, sunscreen, water. Very busy on weekends and around Christmas, quiet early on weekdays."
+ },
+ "werribee_open_range_zoo": {
+  "beschreibung": "Safari park modelled on Africa: the 40-minute safari bus through the savannah with rhinos, giraffes, zebras and antelopes is included in admission. Adults from about AU$55 on weekdays, much more on weekends, public holidays and in the school holidays. Tickets only online in advance, none sold at the gate. Next door are Werribee Park Mansion from 1877 and the Victoria State Rose Garden.",
+  "saison": "At 35-40 degrees the animals retreat - be sure to book the first safari in the morning. Zoos Victoria closes Werribee on days of extreme fire danger or Code Red, check the website in the morning. The rose garden is at its best in November/December. December and January are the Victorian summer holidays, so peak prices and early sell-outs."
+ },
+ "puffing_billy_belgrave": {
+  "beschreibung": "Historic narrow-gauge steam railway from 1900 that winds through fern forests and over the wooden Monbulk Creek trestle bridge. Belgrave-Lakeside and back takes a good 3 hours (an hour's ride each way plus about an hour at Emerald Lake Park) and costs about AU$61-64. Bookable online only, check-in 60 minutes before departure; get there by suburban train from Flinders Street (about 70 min) to Belgrave, the narrow-gauge station is opposite.",
+  "saison": "Runs daily except 25 Dec. On total fire ban days it switches to diesel or stops running, on Code Red days it's cancelled and the walking tracks in Dandenong Ranges National Park close completely - check the website and the CFA rating in the morning. In the summer holidays often booked out weeks ahead."
+ },
+ "peninsula_hot_springs": {
+  "beschreibung": "More than 50 geothermal pools in the hills of Fingal, centrepiece is the Hilltop Pool with views across the peninsula. Bath House from about AU$55-70 depending on the day and arrival time, earlybird (before 8:30/9:00 am) and twilight (from 6 pm) are the cheapest; book ahead, 10 per cent surcharge on the day. Only sensibly reachable by car, about 1.5 hours from Melbourne.",
+  "saison": "In high summer the twilight slots from 6 pm are clearly the best choice - 40-degree air plus 40-degree water during the day is stress on the body, not relaxation. Booked out weeks ahead over Christmas, New Year and the summer holidays. On the way back, Cape Schanck and the Bushrangers Bay Track are worth it."
+ },
+ "phillip_island_penguin_parade": {
+  "beschreibung": "Every evening after sunset, hundreds of little penguins waddle from the sea across Summerland Beach to their burrows, watched from stands and boardwalks. General viewing about AU$34, Penguins Plus about AU$93, underground viewing at eye level about AU$84-103. Taking photos and filming is completely forbidden during the parade. About 2 hours' drive from Melbourne, without a car only on a guided tour.",
+  "saison": "BOOK AHEAD - sold out over Christmas, New Year and the summer holidays, book two to three months in advance. In December/January the parade only starts around 9:00-9:30 pm. So the drive back to Melbourne is around midnight, to Kinglake more like 1:30 am: as a solo driver, tiredness and wildlife on unlit country roads are the real risk of the evening - realistically, stay overnight in Cowes."
+ },
+ "cairns_esplanade_lagoon": {
+  "beschreibung": "Free 4,800 m² saltwater swimming lagoon right on the Esplanade, patrolled by lifeguards during opening hours. Thu–Tue 6 am–9 pm, Wed only from 12 noon (weekly cleaning); toilets, showers, barbecues and 2.5 km of waterfront promenade around it. One to two hours, a towel is enough.",
+  "saison": "the only reliably safe place to swim in the city: an enclosed, treated pool with no access to the sea, so free of stingers. The sea in front is mudflat and mangrove — don't swim or wade there (saltwater crocodiles in Trinity Inlet, box jellyfish in season 1 Nov–31 May)."
+ },
+ "jack_barnes_mangrove_boardwalk": {
+  "beschreibung": "Two free timber boardwalks (northern and southern loops) lead right through the mangrove forest next to the airport — mudskippers, fiddler crabs, stilt roots, information boards, 30–45 minutes. Own car park on Airport Avenue, about 10 minutes from the centre. Named after the Cairns doctor Jack Barnes, who in 1961 proved in an experiment on himself that a tiny box jellyfish causes Irukandji syndrome.",
+  "saison": "The wet season here means mosquitoes and sandflies en masse — repellent is a must, long clothing helps. Saltwater crocodiles live in the creeks: stay on the boardwalk, never go into the water or the mud. The boardwalk was completely closed for repairs from 2019–2022 and can be closed at short notice after storms — check briefly beforehand."
+ },
+ "crystal_cascades": {
+  "beschreibung": "The locals' freshwater swimming spot: a concrete path of about 1.2 km follows Freshwater Creek to several cascades and rock pools. Free, car park at the end of Crystal Cascades Road, about 20–25 minutes from the centre, picnic tables at the entrance. Allow 1.5–2 hours.",
+  "saison": "Fresh water well above the tidal zone: no stingers, no stinger suit needed, no crocodiles have been recorded up here so far (further downstream towards the Barron River, very much so). In Dec/Jan the creek rises sharply within minutes after heavy rain — with brown, fast water don't go in, take barriers and warning signs seriously, the rocks are extremely slippery."
+ },
+ "palm_cove": {
+  "beschreibung": "The quietest of the northern beach towns: melaleuca trees down to the sand, a timber jetty, a row of restaurants on Williams Esplanade. 25–30 minutes by car or bus route 110 from Cairns, beach free. Good for half a day or dinner.",
+  "saison": "is the peak of stinger season. At the main beach in front of the lifeguard tower there's a stinger net Nov–May (fairly small, about 100 × 50 m), lifeguards are on duty daily 9 am–5 pm during this time. Only swim in the net and between the flags: the net keeps out the large box jellyfish, but NOT the tiny Irukandji — wear a full-body lycra suit (available to hire there). Crocodile warning signs apply: not at dusk, not at the creek mouths at either end of the beach."
+ },
+ "rex_lookout": {
+  "beschreibung": "Viewing platform right on the Captain Cook Highway with views of the curving coast, Wangetti Beach and the Coral Sea, also a launch ramp for paragliders. Free, parking bays on the highway, a 15–20 minute stop, about 45 minutes north of Cairns.",
+  "saison": "Freely accessible all year; in the wet season showers and low cloud often pass through, mornings give the best chance of a clear view. The beach below (Wangetti) is unpatrolled and has no stinger net — don't go in the water there in Dec/Jan, not even briefly."
+ },
+ "green_island": {
+  "beschreibung": "Coral sand island (cay) with a rainforest core, beach and reef close to shore — 45–60 minutes by catamaran from the Reef Fleet Terminal. Half-day and full-day tours, snorkelling gear usually included, glass-bottom boat for non-swimmers. Prices vary a lot (roughly from 120 AUD), plus the EMC reef charge.",
+  "saison": "No stinger net. In Dec/Jan only go into the water in a full-body lycra suit (provided or hired out by the operators) — Irukandji also occur at the islands and far out on the reef, box jellyfish are rarer there but can't be ruled out. Water around 29 °C, visibility can be murky after heavy rain; crocodiles aren't an issue here."
+ },
+ "fitzroy_island": {
+  "beschreibung": "Mountainous continental island, about 45 minutes by ferry from Cairns (return roughly 100 AUD): coral rubble beach Nudey Beach (15 minutes on foot), Summit Track with wide views (1.5–2 h return), lighthouse walk and the turtle rehabilitation centre with tours by registration. Good as a day trip with snorkelling straight off the beach.",
+  "saison": "No stinger net on the beaches. From Nov–May the operator strongly recommends a full-body lycra suit (hire on site); with the mainland 4 km away box jellyfish are unlikely but have occurred, Irukandji are possible. Start walks early because of the humidity and afternoon storms, bring plenty of water."
+ },
+ "michaelmas_cay": {
+  "beschreibung": "Tiny sandbank about 40 km north-east of Cairns, about 1.5–2 hours by sailing catamaran, with one of the most important seabird breeding sites in the region (up to 20,000 birds of more than 20 species in the summer breeding season) and a snorkelling reef all around the cay. Reachable only on a tour; on land only the roped-off strip of beach is open, usually between 9:30 am and 3:00 pm.",
+  "saison": "is breeding season — stay behind the barrier, don't disturb the birds, the national park part of the cay is completely closed. Wear a stinger suit in the water, Irukandji also occur far out on the reef (suits are provided). Trips are cancelled in strong monsoon winds or cyclone warnings, the sea can be rough — bring seasickness tablets."
+ },
+ "babinda_boulders": {
+  "beschreibung": "Huge, smoothly polished granite boulders in the rainforest on Babinda Creek, about 1 hour south of Cairns; free, with a picnic area and a free overnight spot for campers. Swimming only in the signposted main pool above — The Chute, Devils Pool and Washing Machine are off limits for swimming (21 people drowned there between 1959 and 2023), but can be seen well from a 600 m loop with platforms. 1–2 hours.",
+  "saison": "Fresh water: no stingers, no suit needed, crocodiles very unlikely in the upper reaches (possible in the lower reaches of Babinda Creek, though). In Dec/Jan the creek carries the most water — and that's exactly when the main pool closes during floods, the current pulls unpredictably and the rocks are deadly slippery. With murky, fast water don't go in at all, never climb over barriers."
+ },
+ "josephine_falls": {
+  "beschreibung": "600 m level path from the car park to several pools and the well-known natural rock slide at the foot of Bartle Frere. Free, toilets at the car park, 1–1.5 hours, combines well with Babinda. The path and viewing platforms stay open even when swimming is closed.",
+  "saison": "Fresh water, no stingers, no crocodiles — the danger is the water itself. There's a flash flood warning system on site with flashing red lights; the level rises within minutes. IMPORTANT: since 15 Apr 2026 an official swimming ban applies to Josephine Creek 'until further notice', and in the wet season a closure is more the rule than the exception. Check the park alerts on parks.qld.gov.au before you go, never climb over barriers — there have been several deaths at the slide."
+ },
+ "mount_bartle_frere": {
+  "beschreibung": "Queensland's highest mountain, climbed from the trailhead at Josephine Falls: about 15 km return, around 1,500 m of climbing through rainforest, officially two days recommended (camps Broken Nose/Big Rock), 10–12 hard hours as a day walk. Free, but self-registration and a camping permit from QPWS are needed, no mobile coverage, a personal locator beacon (PLB) is strongly advised.",
+  "saison": "is the worst possible time: monsoon rain, constantly wet roots and granite slabs, leeches, extreme humidity, creek crossings impassable after rain, and the summit is almost always in cloud. For a solo traveller without a partner the summit is not a responsible option in this season — at most the lower section towards Broken Nose is realistic, and even that only with a PLB, a weather check and a return time left with someone."
+ },
+ "innisfail": {
+  "beschreibung": "Sugar cane town on the Johnstone River, rebuilt in Art Deco and Streamline style after the 1918 cyclone — a consistent streetscape with the Shire Hall, cinema and 1930s shopfronts, plus the Chinese temple Lit Sung Goong (current building from 1940, limited access, plan to see it from outside). 1–2 hours on foot, free; a good lunch stop on the way to Mission Beach, about 1.5 hours south of Cairns.",
+  "saison": "With a good 3,200 mm of rain a year Innisfail is one of the wettest places in Australia, and Dec/Jan is the peak — but you can walk the centre under continuous awnings and stay dry, so it's a useful bad-weather destination. Saltwater crocodiles live in the Johnstone River: don't swim, don't go close to the water's edge, don't fish from the bank."
+ },
+ "etty_bay": {
+  "beschreibung": "Small bay framed by rainforest hills about 15 km east of Innisfail, where wild cassowaries regularly walk across the beach — the most reliable chance in the region to see one (early morning and late afternoon). Free, kiosk and campground right on the beach, winding narrow access road, half a day.",
+  "saison": "Nov–May there's a stinger net in front of the surf club. But be careful about patrols: the club patrols only run April–November; in Dec/Jan paid SLSQ lifeguards are on duty only during the Christmas holidays, otherwise you swim unpatrolled. Only swim in the net, between the flags and in a lycra suit; outside the net, not at all in Dec/Jan. Crocodile country — take the warning signs seriously, don't go in the water at dusk. Don't feed cassowaries, keep a clear distance, if one approaches back away slowly behind a tree; the birds can cause serious injuries."
+ },
+ "mission_beach": {
+  "beschreibung": "14 km of palm-lined beach looking out to the Family Islands, core cassowary habitat (Licuala Fan Palm Walk) and a well-known skydiving drop zone with beach landings. From Wongaling Beach or Clump Point the water taxi takes 10–45 minutes to Dunk Island (adults roughly 40 AUD, day transfer typically around 8:30 am out and 2:30/3:30 pm back); there the Mt Kootaloo walk (about 3 hours) and a campground, the old resort has been a ruin since Cyclone Yasi. About 2 hours south of Cairns.",
+  "saison": "Nov–May the surf life saving club has a stinger net at the main beach. But the club only patrols regularly April–November; in Dec/Jan lifeguards are only there during the Christmas holidays. So only swim in the net and between the flags, wear a lycra suit, outside the net not at all. Saltwater crocodiles live at the river mouths (Hull River, South Mission and others) — don't swim or wade there. Dec/Jan is also cyclone season: check the weather and ferry information before you go, the water taxi doesn't run in storms."
+ },
+ "kuranda_skyrail": {
+  "beschreibung": "Rainforest village at about 330 m above Cairns, usually done as a round trip: up on the Skyrail cableway (7.5 km over the canopy, two stops with boardwalks), back on the Kuranda Scenic Railway through 15 tunnels and the Barron Gorge. In the village, markets, a butterfly house, Birdworld and Koala Gardens. One way about 60–80 AUD each, combined ticket about 130–150 AUD; realistically a whole day.",
+  "saison": "Both run in the wet season too, when the gorge carries the most water. According to the operators, Skyrail is closed on 8 and 25 Dec 2026 and the railway on 25 Dec 2026 — check again on skyrail.com.au/visitor-information/notices before booking, the cableway had a refurbishment programme in 2026. During storms the gondola stops at times; very humid, pack a rain jacket."
+ },
+ "barron_falls": {
+  "beschreibung": "260 m waterfall in the Barron Gorge, seen from the viewing platform on the Kuranda side (free, car park, 5-minute walk) or from the Skyrail Barron Falls station with the Edge Lookout. Above it a hydro power station diverts water, which is why the falls almost dry up in the dry season.",
+  "saison": "From December to February it runs at full flow — exactly when it's worth the trip. The platform stays open, only in extreme floods is the access road closed. No access to the water, and that's a good thing: the gorge can't be entered in floods."
+ },
+ "mossman_gorge": {
+  "beschreibung": "Clear mountain river between granite boulders in the south of the Daintree. Private cars park at the Mossman Gorge Centre, from there only by shuttle (about 15 AUD, as often as you like all day); on site the 2.4 km Rainforest Circuit over the Rex Creek suspension bridge and guided Ngadiku Dreamtime Walks by the Kuku Yalanji. Allow 2–3 hours.",
+  "saison": "In Dec/Jan the Mossman River swells within minutes after storms — swimming is then life-threatening, and the suspension bridge and loop close in floods. Check the park alerts on parks.qld.gov.au the day before. Saltwater crocodiles are not the main risk above the tidal zone, but very much so in the lower Mossman River; the real danger at the gorge is the flash flood."
+ },
+ "four_mile_beach": {
+  "beschreibung": "A good six kilometres of sandy beach on the edge of Port Douglas, with Flagstaff Hill Lookout at the southern end and Macrossan Street with restaurants and the Sunday market behind it. Free access, parking at several entry points.",
+  "saison": "falls right in stinger season (Nov–May): box jellyfish and Irukandji. Only go into the water inside the stinger net and only during the surf lifesavers' patrol hours — and wear a full-body stinger suit there, because the net keeps out box jellyfish but not reliably the fingernail-sized Irukandji. Saltwater crocodiles are also reported at this beach; don't swim outside the net at all."
+ },
+ "daintree_river_cruise": {
+  "beschreibung": "Several small operators start one-hour river cruises (about 30–40 AUD) from Daintree Village to see saltwater crocodiles, tree snakes, kingfishers and flying fox colonies in the mangroves. Early morning and late afternoon trips are the most rewarding; bring binoculars.",
+  "saison": "December and January are mating and nesting season for salties: the animals are active and territorial, but harder to see in floods. After heavy rain the river is in flood and tours are cancelled. Never step onto the bank or leave the boat — the whole lower river is crocodile territory."
+ },
+ "cape_tribulation": {
+  "beschreibung": "The place where one of the oldest continuously surviving rainforests on Earth reaches right down to the coast of the Great Barrier Reef. The free Dubuji and Kulki boardwalks lead through mangroves and fan palms to the cape lookout; access via the Daintree ferry (about 40–50 AUD return with a car, running about 19 hours a day from 5 am), road sealed to Cape Trib. A good two hours from Port Douglas including the ferry.",
+  "saison": "Wet season: the Daintree ferry stops running in floods or cyclones — then you can't get there or back. Check the weather and ferry status daily and don't plan tight connections. To the north the Bloomfield Track begins (4WD only, no trailers or campervans), regularly closed in Dec/Jan by creek crossings and landslides. Don't swim in the sea: stinger season and saltwater crocodiles, no stinger net, no lifeguards."
+ },
+ "granite_gorge": {
+  "beschreibung": "Private nature reserve west of Mareeba: a gorge of rounded granite boulders where Mareeba rock-wallabies live (food at reception). Entry about 20 AUD per person, marked loops for 1–2 hours, a small waterhole to cool off.",
+  "saison": "It's in the rain shadow west of the mountains and often sunny when Cairns is in constant rain — a useful plan B in January. But very hot, over 35 °C is normal: go early, bring plenty of water, don't walk at midday. After storms Granite Creek can briefly swell."
+ },
+ "curtain_fig_tree": {
+  "beschreibung": "Strangler fig estimated at over 500 years old, whose aerial roots form an almost vertical curtain about 15 m high. Free boardwalk straight from the car park, 15 minutes. Also worth it after dark with a torch: possums and tree kangaroos.",
+  "saison": "Open all year, the boardwalk is sealed and walkable in rain too. Lots of mosquitoes in Dec/Jan, pack repellent. Combines well with Yungaburra and the platypus platform at Peterson Creek at dusk."
+ },
+ "cathedral_fig_tree": {
+  "beschreibung": "Large strangler fig (Ficus virens) about 45 m tall in the Danbulla forest on Lake Tinaroo, much quieter than the Curtain Fig. Short free boardwalk from the car park, about 20 minutes, combines well with the Danbulla Forest Drive around the lake.",
+  "saison": "Access via unsealed tracks (Boar Pocket Road or Danbulla Forest Drive): doable in a car in dry weather, muddy and washed out in the wet season and at times completely closed after heavy rain. So in Dec/Jan plan on 4WD and check road information on the day."
+ },
+ "lake_eacham": {
+  "beschreibung": "Volcanic crater lake with clear water, swimming platform, picnic areas and a 3 km loop through rainforest, free entry. Turtles come right up to the steps. The neighbouring Lake Barrine is 10 minutes away by car and has a tea house and two very old kauri pines.",
+  "saison": "Swimming is pleasant in Dec/Jan: no saltwater crocodiles, no stingers. But a freshwater crocodile lives in the lake — shy and not life-threatening according to QPWS, but it can bite if disturbed: don't approach, don't crowd it, follow the signs at the jetty, report sightings to CrocWatch 1300 130 372. After rain the lakeside paths are slippery, leeches and mosquitoes are active."
+ },
+ "millaa_millaa_falls": {
+  "beschreibung": "Fern-framed waterfall with a swimming pool right by the car park, part of the 17 km Waterfall Circuit along Theresa Creek Road, which also includes Zillie Falls (seen from above) and Ellinjaa Falls (short descent to basalt terraces). All free, allow about two hours for the circuit with photo stops.",
+  "saison": "brings the most water and the most impressive sight. In prolonged rain the pool below the falls becomes dangerous because of the current and driftwood — then just look. The narrow, winding Theresa Creek Road is often in fog and drizzle; the tableland at about 800 m is much cooler than the coast."
+ },
+ "hypipamee_crater": {
+  "beschreibung": "Narrow volcanic explosion crater that drops about 60 m vertically into the rock and is covered at the bottom by a dense layer of duckweed. Right next to it a path leads to the three-tiered Dinner Falls on the young Barron River. Free entry, loop about 1.5 km, a good hour.",
+  "saison": "At about 1,000 m it's pleasantly cool when it's oppressively humid down below. In the wet season Dinner Falls run strongly, the paths are then slippery and leeches are about — sturdy shoes. Early in the morning or at dusk there's a good chance of Lumholtz's tree kangaroos in the canopy."
+ }
+}

@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Standort beim Start</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:420px;height:760px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">…</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let z=[]
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('') }
+const w8=ms=>new Promise(r=>setTimeout(r,ms))
+const bis=async(fn,ms=50000,st=400)=>{const t=Date.now();while(Date.now()-t<ms){try{const v=fn();if(v)return v}catch{}await w8(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+document.getElementById('f').onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+
+  // Standortabfrage abfangen, damit der Test nicht am Systemdialog hängt
+  let gefragt=0
+  w.navigator.geolocation.getCurrentPosition=(ok)=>{ gefragt++
+    setTimeout(()=>ok({coords:{latitude:-31.9523,longitude:115.8613,accuracy:12}}),200) }
+  try{ w.localStorage.removeItem('standort-schon-gefragt') }catch{}
+
+  p('sicherer Kontext (HTTPS/localhost): '+w.isSecureContext, w.isSecureContext===true)
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('.gefahren'),50000)){p('ABBRUCH',false);return}
+
+  // Beim Start wird höchstens EINMAL gefragt
+  await bis(()=>gefragt>0, 20000)
+  p('beim Start abgefragt: '+gefragt+'×', gefragt===1)
+  p('Merker gesetzt (fragt nicht wieder): '+w.localStorage.getItem('standort-schon-gefragt'),
+    w.localStorage.getItem('standort-schon-gefragt')==='1')
+
+  const zeile=await bis(()=>d.querySelector('.gefahren .ort-zeile'),15000)
+  p('Standortzeile in der Gefahrenlage', !!zeile)
+  const ok=await bis(()=>d.querySelector('.gefahren .oz-ok'),20000)
+  p('Position übernommen: '+(ok?ok.textContent.replace(/\s+/g,' ').trim():'—'), !!ok)
+  if(ok) p('   zeigt Koordinaten und Genauigkeit', /-31\.95/.test(ok.textContent) && /±\d+ m/.test(ok.textContent))
+
+  // Erneut anfordern
+  const vor=gefragt
+  const btn=d.querySelector('.gefahren .oz-btn')
+  p('Knopf „neu bestimmen"', !!btn)
+  if(btn){ klick(btn); await w8(1200)
+    p('   fragt auf Knopfdruck erneut: '+(gefragt-vor)+'×', gefragt-vor===1) }
+
+  // Ablehnung: darf beim nächsten Start NICHT erneut fragen
+  w.navigator.geolocation.getCurrentPosition=(ok,err)=>{ gefragt++; setTimeout(()=>err({code:1,message:'denied'}),150) }
+  klick(btn); await w8(1200)
+  const hin=d.querySelector('.gefahren .oz-hinweis')
+  p('Ablehnung erklärt statt stumm: '+(hin?hin.textContent.replace(/\s+/g,' ').trim().slice(0,74):'—'),
+    !!hin && /abgelehnt|erlauben/i.test(hin.textContent))
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=z.filter(x=>x[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'
+}
+</script>

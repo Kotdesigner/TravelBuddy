@@ -1,0 +1,88 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Easter-Egg xoxo</title>
+<style>body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+#log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+.ok{color:#1a7f37}.bad{color:#c62828;font-weight:700} iframe{width:100%;height:330px;border:1px solid #ccc}</style>
+<div id="log">…</div>
+<script>
+localStorage.setItem('standort-schon-gefragt','1')
+const f=document.createElement('iframe'); f.src='./index.html'; document.body.appendChild(f)
+const L=document.getElementById('log'); let z=[]
+const zeig=()=>L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('')
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t); zeig() }
+const w8=ms=>new Promise(r=>setTimeout(r,ms))
+const bis=async(fn,ms=30000)=>{const t=Date.now();while(Date.now()-t<ms){try{const v=fn();if(v)return v}catch{}await w8(250)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument, fehler=[]
+  w.addEventListener('error',e=>fehler.push(e.message||''))
+  w.addEventListener('unhandledrejection',e=>fehler.push('Promise: '+(e.reason?.message||e.reason)))
+  try{ Object.defineProperty(w.navigator,'geolocation',{get:()=>undefined}) }catch{}
+  if(!await bis(()=>d.querySelector('nav.bar'))){p('ABBRUCH: App lädt nicht',false);return}
+  await w8(3000)
+
+  const such = d.querySelector('input.search')
+  p('Suchfeld vorhanden', !!such)
+  p('   vorher kein Spiel offen', !d.querySelector('.xoxo-card'))
+
+  // Buchstabe für Buchstabe tippen — so wie ein Mensch es tut
+  for(const ch of ['x','xo','xox','xoxo']){
+    such.value = ch; such.dispatchEvent(new Event('input',{bubbles:true})); await w8(120)
+  }
+  const karte = await bis(()=>d.querySelector('.xoxo-card'), 5000)
+  p('„xoxo" getippt → Spiel öffnet sich', !!karte)
+  if(!karte){ z.push('———— ABBRUCH ————'); zeig(); return }
+  p('   Suchfeld wieder geleert: „'+such.value+'"', such.value==='')
+  p('   Titel: '+karte.querySelector('.xoxo-titel')?.textContent.replace(/\s+/g,' ').trim(), true)
+  const zellen=[...karte.querySelectorAll('.zelle')]
+  p('   Spielfeld mit 9 Feldern', zellen.length===9)
+
+  // Auch in Großbuchstaben?
+  // (wird unten geprüft, nachdem dieses Spiel durch ist)
+
+  // Spielen: Mitte nehmen, Computer muss antworten
+  klick(zellen[4]); await w8(900)
+  const x=karte.querySelectorAll('.zelle .x').length, o=karte.querySelectorAll('.zelle .o').length
+  p('   mein Zug in die Mitte: ✕ '+x+' · Computer antwortet: ◯ '+o, x===1 && o===1)
+
+  // Bis zum Ende spielen — immer das erste freie Feld
+  for(let n=0;n<5;n++){
+    if(!karte.querySelector('.xoxo-hint')) break
+    const frei=[...karte.querySelectorAll('.zelle')].find(b=>!b.disabled)
+    if(!frei) break
+    klick(frei); await w8(800)
+  }
+  const erg=karte.querySelector('.xoxo-ergebnis')?.textContent.trim()
+  p('   Partie endet mit Ergebnis: '+(erg||'—'), !!erg)
+  p('   danach sind alle Felder gesperrt', [...karte.querySelectorAll('.zelle')].every(b=>b.disabled))
+
+  // Schließen
+  klick(karte.querySelector('.xoxo-close')); await w8(500)
+  p('✕ schließt das Spiel', !d.querySelector('.xoxo-card'))
+
+  // Großschreibung und Leerzeichen
+  such.value='  XOXO '; such.dispatchEvent(new Event('input',{bubbles:true}))
+  p('auch „  XOXO " öffnet es', !!await bis(()=>d.querySelector('.xoxo-card'),4000))
+  // Hintergrund-Tipp schließt
+  klick(d.querySelector('.xoxo-back')); await w8(500)
+  p('   Tipp daneben schließt es', !d.querySelector('.xoxo-card'))
+
+  // Nicht versehentlich auslösen
+  such.value='xoxo beach'; such.dispatchEvent(new Event('input',{bubbles:true})); await w8(400)
+  p('„xoxo beach" löst NICHT aus (normale Suche bleibt möglich)', !d.querySelector('.xoxo-card'))
+  such.value=''; such.dispatchEvent(new Event('input',{bubbles:true}))
+
+  // Passt es aufs iPhone?
+  such.value='xoxo'; such.dispatchEvent(new Event('input',{bubbles:true}))
+  const k2=await bis(()=>d.querySelector('.xoxo-card'),4000)
+  if(k2){ const r=k2.getBoundingClientRect()
+    p('Spielkarte passt in die Breite: '+Math.round(r.width)+' von '+w.innerWidth+' px', r.left>=0 && r.right<=w.innerWidth+1) }
+
+  const bad=z.filter(x=>x[0]==='❌')
+  z.unshift('JS-FEHLER ('+fehler.length+')')
+  bad.forEach((x,i)=>z.splice(i,0,x))
+  z.push('———— '+((bad.length||fehler.length)?(bad.length+' FEHLER, '+fehler.length+' JS'):'ALLES OK')+' ————')
+  zeig()
+}
+</script>

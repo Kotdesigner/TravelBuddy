@@ -1,0 +1,83 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Routen auf beiden Karten</title>
+<style>body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+#log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+.ok{color:#1a7f37}.bad{color:#c62828;font-weight:700} iframe{width:420px;height:300px;border:1px solid #ccc}</style>
+<div id="log">…</div>
+<script>
+localStorage.setItem('standort-schon-gefragt','1')
+const f=document.createElement('iframe'); f.src='./index.html'; document.body.appendChild(f)
+const L=document.getElementById('log'); let z=[]
+const p=(t,ok)=>{ z.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('') }
+const w8=ms=>new Promise(r=>setTimeout(r,ms))
+const bis=async(fn,ms=60000)=>{const t=Date.now();while(Date.now()-t<ms){try{const v=fn();if(v)return v}catch{}await w8(400)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+f.onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]
+  w.addEventListener('error',e=>fehler.push((e.message||'')+' @ '+(e.filename||'').split('/').pop()+':'+e.lineno))
+  w.addEventListener('unhandledrejection',e=>fehler.push('Promise: '+(e.reason?.message||e.reason)))
+  const echterFehler=w.console.error
+  w.console.error=(...a)=>{ fehler.push('console: '+a.map(x=>String(x?.message||x)).join(' ').slice(0,150)); echterFehler.apply(w.console,a) }
+  try{ Object.defineProperty(w.navigator,'geolocation',{get:()=>undefined}) }catch{}
+  if(!await bis(()=>d.querySelector('nav.bar'))){p('ABBRUCH',false);return}
+  await w8(4000)
+
+  // ---- 1 · Übersichtskarte: Flüge gestrichelt ----
+  const legende=[...d.querySelectorAll('.rk-linie')]
+  p('Legende der Übersichtskarte: '+legende.length+' Einträge', legende.length>0)
+  const flug=legende.filter(e=>e.classList.contains('flug'))
+  p('   davon als Flug gekennzeichnet: '+flug.length, flug.length>0)
+  if(flug.length){
+    const bg=w.getComputedStyle(flug[0]).backgroundImage
+    p('   Flug-Legende gestrichelt', /repeating-linear-gradient/.test(bg))
+  }
+  const fahrt=legende.filter(e=>!e.classList.contains('flug'))
+  if(fahrt.length){
+    const bg=w.getComputedStyle(fahrt[0]).backgroundImage
+    p('   Fahrt-Legende durchgezogen', !/repeating/.test(bg))
+  }
+
+  // ---- 2 · Offline-Karte: Mehrfachauswahl ----
+  const nav=[...d.querySelectorAll('a,button')].find(x=>/Offline-Karten & Regionen/.test(x.textContent))
+  if(nav) nav.click()
+  await bis(()=>d.querySelector('.karten canvas')); await w8(6000)
+  const chips=()=>[...d.querySelectorAll('.route-sel .rs-chip')]
+  p('Routen-Chips: '+chips().length+' — '+chips().map(c=>c.textContent.trim().slice(0,18)).join(' | '), chips().length>=3)
+  const alle=chips().find(c=>/^Alle/.test(c.textContent.trim()))
+  const keine=chips().find(c=>/^Keine/.test(c.textContent.trim()))
+  p('   „Alle" und „Keine" vorhanden', !!alle && !!keine)
+  const reise=chips().filter(c=>!/^(Alle|Keine)/.test(c.textContent.trim()))
+  p('   Reisen wählbar: '+reise.length, reise.length>0)
+
+  const gew=()=>chips().filter(c=>c.classList.contains('an')&&!/^(Alle|Keine)/.test(c.textContent.trim())).length
+  klick(alle); await w8(2500)
+  p('„Alle" wählt alle: '+gew()+'/'+reise.length, gew()===reise.length)
+  const info=d.querySelector('.route-sel .rs-info')
+  p('   Zusammenfassung: '+(info?info.textContent.replace(/\s+/g,' ').trim().slice(0,58):'—'), !!info)
+
+  klick(reise[0]); await w8(1800)
+  p('einzelne abwählbar: '+gew()+'/'+reise.length, gew()===reise.length-1)
+  klick(reise[0]); await w8(1500)
+  p('wieder anwählbar: '+gew()+'/'+reise.length, gew()===reise.length)
+  klick(keine); await w8(1500)
+  p('„Keine" leert die Auswahl: '+gew(), gew()===0)
+
+  // Zwei gleichzeitig
+  klick(reise[0]); await w8(1200); klick(reise[1]); await w8(2500)
+  p('zwei gleichzeitig gewählt: '+gew(), gew()===2)
+
+  // Fehler GANZ OBEN ausgeben — der iOS-Standortdialog verdeckt sonst genau die Zeilen,
+  // die man lesen will.
+  z.unshift('JS-FEHLER ('+fehler.length+'):')
+  fehler.slice(0,4).forEach((x,i)=>z.splice(1+i,0,'  ⤷ '+String(x).slice(0,120)))
+  p('', true); z.pop()
+  L.innerHTML=z.map(x=>`<div class="${x[0]==='✅'?'ok':x[0]==='❌'?'bad':''}">${x}</div>`).join('')
+  const bad=z.filter(x=>x[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'
+}
+</script>

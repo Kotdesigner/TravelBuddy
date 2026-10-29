@@ -1,0 +1,94 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gefahren — 3 Bundesstaaten & Umkreis</title>
+<style>
+ body{font:13px -apple-system,sans-serif;margin:0;padding:8px;background:#faf7f2}
+ #log{white-space:pre-wrap;font:12px ui-monospace,monospace;background:#fff;border:1px solid #ddd;padding:8px;border-radius:8px}
+ .ok{color:#1a7f37}.bad{color:#c62828;font-weight:700}
+ iframe{width:420px;height:800px;border:1px solid #ccc;border-radius:8px;margin-top:8px}
+</style>
+<div id="log">starte …</div>
+<iframe id="f" src="./index.html"></iframe>
+<script>
+const L=document.getElementById('log'); let zeilen=[]
+const p=(t,ok)=>{ zeilen.push((ok===true?'✅ ':ok===false?'❌ ':'   ')+t)
+  L.innerHTML=zeilen.map(z=>`<div class="${z[0]==='✅'?'ok':z[0]==='❌'?'bad':''}">${z}</div>`).join('') }
+const warte=ms=>new Promise(r=>setTimeout(r,ms))
+async function bis(fn,ms=45000,st=400){const t0=Date.now();while(Date.now()-t0<ms){try{const v=fn();if(v)return v}catch{}await warte(st)}return null}
+const klick=el=>{for(const t of ['pointerdown','mousedown','pointerup','mouseup','click'])
+  el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:el.ownerDocument.defaultView}))}
+
+document.getElementById('f').onload=async()=>{
+  const w=f.contentWindow, d=f.contentDocument
+  const fehler=[]; w.addEventListener('error',e=>fehler.push(e.message))
+
+  p('Warte auf App …')
+  if(!await bis(()=>d.querySelector('.gefahren'),45000)){p('ABBRUCH: Gefahren-Bereich nicht gefunden',false);return}
+
+  // 1 · Quelle direkt prüfen — holt die App wirklich alle drei Bundesstaaten?
+  const mod = await w.eval(`import('/assets/' + [...performance.getEntriesByType('resource')]
+    .map(r=>r.name).filter(n=>/index-.*\\.js$/.test(n))[0].split('/assets/')[1])`).catch(()=>null)
+
+  // 2 · Auf geladene Warnungen warten. WICHTIG: nicht auf die „keine Warnungen"-Zeile
+  // hereinfallen — die steht schon da, solange der Netzabruf noch läuft.
+  const liste = await bis(()=>d.querySelectorAll('.gefahren .w-karte').length ? true : null, 75000)
+  p('Gefahrenlage geladen (Netzabruf abgeschlossen)', !!liste)
+  await warte(800)
+
+  // Liste ganz aufklappen — sonst sieht man nur die ersten drei.
+  const mehr=[...d.querySelectorAll('.gefahren .mehr')][0]
+  if(mehr){ klick(mehr); await warte(900) }
+  const karten=[...d.querySelectorAll('.gefahren .w-karte')]
+  p('Amtliche Warnungen angezeigt: '+karten.length, true)
+  const staaten=[...new Set([...d.querySelectorAll('.gefahren .w-staat')].map(e=>e.textContent.trim()))]
+  p('Bundesstaaten in der Liste: '+(staaten.join(', ')||'—'), staaten.length>0)
+  const kmAngaben=[...d.querySelectorAll('.gefahren .w-km')].map(e=>e.textContent.trim())
+  p('  Entfernung je Warnung: '+(kmAngaben.slice(0,3).join(' | ')||'—'), kmAngaben.length>0)
+  p('  erste Warnung ist die nächstgelegene', /an einem deiner Orte|km vom/.test(kmAngaben[0]||''))
+  p('  Victoria dabei', staaten.includes('Victoria'))
+  p('  Queensland dabei', staaten.includes('Queensland'))
+
+  // 3 · Umkreis-Regler
+  const reg=d.querySelector('.gefahren .umkreis input[type=range]')
+  p('Umkreis-Regler vorhanden'+(reg?' (Vorgabe '+reg.value+' km)':''), !!reg)
+  const wertEl=d.querySelector('.gefahren .umk-wert')
+
+  const zaehleBetroffen=()=>d.querySelectorAll('.gefahren .betroffen-box .bo-z').length
+  if(reg){
+    const setz=async(v)=>{ reg.value=String(v)
+      reg.dispatchEvent(new Event('input',{bubbles:true}))
+      reg.dispatchEvent(new Event('change',{bubbles:true})); await warte(1200) }
+    await setz(0);   const b0=zaehleBetroffen();   const t0=wertEl?.textContent.trim()
+    await setz(150); const b150=zaehleBetroffen(); const t150=wertEl?.textContent.trim()
+    await setz(300); const b300=zaehleBetroffen(); const t300=wertEl?.textContent.trim()
+    p('Regler wirkt: 0 km → '+b0+' Orte ("'+t0+'") · 150 km → '+b150+' ("'+t150+'") · 300 km → '+b300+' ("'+t300+'")',
+      b300>=b150 && b150>=b0)
+    p('  Umkreis wächst ⇒ mehr oder gleich viele betroffene Orte', b300>=b0)
+    // Entfernungsangabe sichtbar?
+    const mitKm=[...d.querySelectorAll('.gefahren .bo-z')].filter(e=>/\d+\s*km entfernt|direkt betroffen/.test(e.textContent))
+    p('  Entfernung je Ort ausgewiesen: '+mitKm.length+'/'+zaehleBetroffen(), zaehleBetroffen()===0 || mitKm.length>0)
+    await setz(150)
+  }
+
+  // 4 · Merkt sich die App den Umkreis?
+  p('Umkreis gespeichert: '+w.localStorage.getItem('gefahren-umkreis')+' km',
+    w.localStorage.getItem('gefahren-umkreis')==='150')
+
+  // 5 · Warnung an der Ortskarte
+  const badge=[...d.querySelectorAll('.warn')].find(e=>/Advice|Watch|Emergency|Hinweis/.test(e.textContent))
+  p('Amtliches Warn-Abzeichen an einer Ortskarte: '+(badge?badge.textContent.trim():'— keins'), true)
+
+  // 6 · Waldbrandstufe / Feuerverbot (Victoria)
+  const bed=d.querySelectorAll('.gefahren .bedingungen .bed')
+  p('Waldbrandstufe/Feuerverbot Victoria: '+(bed.length?bed.length+' auffällig':'nichts auffällig (australischer Winter)'), true)
+
+  // 7 · Quellenfehler?
+  const qf=d.querySelector('.gefahren .q-fehler')
+  p('Alle Quellen erreichbar'+(qf?': NEIN — '+qf.textContent.trim():''), !qf)
+
+  p('JavaScript-Fehler: '+(fehler.length?fehler.slice(0,3).join(' | '):'keine'), fehler.length===0)
+  const bad=zeilen.filter(z=>z[0]==='❌').length
+  p('———— '+(bad?bad+' FEHLER':'ALLES OK')+' ————', bad===0)
+  f.style.display='none'; window.scrollTo(0,0)
+}
+</script>

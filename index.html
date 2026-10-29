@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <script>
+      // V7: Gesamtgröße am iPhone schon vor dem ersten Bild (Browser übernehmen den Zoom nur am Anfang).
+      // Gleiche Rechnung wie viewportInhalt() in src/lib/darstellung.js; ändert man sie, lädt die App neu.
+      try {
+        var d = JSON.parse(localStorage.getItem('tb-darstellung') || 'null')
+        var g = { kompakt: 0.9, gross: 1.1, sehrgross: 1.2 }[d && d.gesamt]
+        if (g && matchMedia('(pointer: coarse)').matches) {
+          var quer = matchMedia('(orientation: landscape)').matches
+          var b = quer ? Math.max(screen.width, screen.height) : Math.min(screen.width, screen.height)
+          document.querySelector('meta[name=viewport]').setAttribute('content', 'width=' + Math.round(b / g) + ', initial-scale=' + g + ', minimum-scale=' + g + ', viewport-fit=cover')
+        }
+      } catch (e) {}
+    </script>
+    <meta name="theme-color" content="#7a3b1e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="WA Reise" />
+    <title>TravelBuddy · Western Australia</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+// Regeln der „einen Karte": welcher Kartenteil wird bei welchem Ausschnitt geladen,
+// und wie werden Routen auf das Kartengebiet zugeschnitten.
+// Ausführen: node tests/eine-karte.test.mjs
+import fs from 'node:fs'
+import { REGIONEN, KARTENGEBIET, kartenteilFuer, schneideZu, imGebiet }
+  from '../src/lib/karten-config.js'
+
+let ok = 0, bad = 0
+const p = (name, bed, zusatz = '') => {
+  if (bed) { ok++; console.log(`  ✓ ${name}`) }
+  else { bad++; console.log(`  ✗ ${name}${zusatz ? '  → ' + zusatz : ''}`) }
+}
+const R = Object.fromEntries(REGIONEN.map((r) => [r.id, r]))
+
+// Sichtbarer Ausschnitt einer Karte mit b × h Pixeln (512er-Kacheln wie in MapLibre).
+function ausschnitt(lon, lat, zoom, b = 375, h = 500) {
+  const gradProPx = 360 / (512 * 2 ** zoom)
+  const dLon = b * gradProPx, dLat = h * gradProPx * Math.cos(lat * Math.PI / 180)
+  return [lon - dLon / 2, lat - dLat / 2, lon + dLon / 2, lat + dLat / 2]
+}
+const teil = (lon, lat, zoom, aktuell = null, verfuegbar, b, h) =>
+  kartenteilFuer(ausschnitt(lon, lat, zoom, b, h), zoom, aktuell, verfuegbar)?.id
+
+console.log('\n1  Start und Überblick')
+p('ganz Australien auf dem iPhone → grob', teil(134, -26, 3.1) === 'australien', teil(134, -26, 3.1))
+p('ganz Australien auf dem Mac → grob', teil(134, -26, 4, null, undefined, 1200, 550) === 'australien')
+p('Weltansicht (nichts deckt) → größte Überdeckung: grob', teil(90, 0, 1) === 'australien', teil(90, 0, 1))
+
+console.log('\n2  Hineinzoomen wählt den feinsten Teil')
+p('Melbourne, Zoom 11 → Melbourne & Kinglake', teil(145.0, -37.8, 11, R.australien) === 'melbourne')
+p('Perth, Zoom 11 → Westküste', teil(115.86, -31.95, 11, R.australien) === 'wa')
+p('Cairns, Zoom 12 → Cairns & Tablelands', teil(145.77, -16.92, 12, R.australien) === 'cairns')
+p('Airlie Beach, Zoom 12 → Whitsundays', teil(148.72, -20.27, 12, R.australien) === 'whitsundays')
+p('Brisbane, Zoom 11 → Ostküste', teil(153.03, -27.47, 11, R.australien) === 'ostkueste')
+p('Uluru, Zoom 10 → grob (nichts Feineres vorhanden)', teil(131.04, -25.34, 10, R.australien) === 'australien')
+p('Grenze WA/NT, Zoom 9 → grob, weil Westküste sie nicht ganz deckt',
+  teil(129.2, -20, 9, R.wa) === 'australien', teil(129.2, -20, 9, R.wa))
+
+console.log('\n3  Kein unnötiger Wechsel (jeder Wechsel = bis 25 MB in den Speicher)')
+p('grob bleibt bis Zoom 8,9 über Perth', teil(115.86, -31.95, 8.9, R.australien) === 'australien')
+p('ab Zoom 9 → Westküste', teil(115.86, -31.95, 9, R.australien) === 'wa')
+p('Ostküste bleibt bei Zoom 10,5 über Melbourne (hat Zoom-10-Kacheln)',
+  teil(145.0, -37.8, 10.5, R.ostkueste) === 'ostkueste')
+p('Ostküste → Melbourne erst ab Zoom 11', teil(145.0, -37.8, 11, R.ostkueste) === 'melbourne')
+p('herauszoomen: Melbourne bleibt, solange es deckt (Zoom 9)', teil(145.0, -37.8, 9, R.melbourne) === 'melbourne')
+p('weiter heraus (Zoom 7): Melbourne deckt nicht mehr → Ostküste (reicht bis 144° Ost)',
+  teil(145.0, -37.8, 7, R.melbourne) === 'ostkueste', teil(145.0, -37.8, 7, R.melbourne))
+p('noch weiter (Zoom 6): auch Ostküste deckt nicht mehr → grob', teil(145.0, -37.8, 6, R.ostkueste) === 'australien',
+  teil(145.0, -37.8, 6, R.ostkueste))
+p('Melbourne → Gippsland schieben, Zoom 12 → Ostküste', teil(146.5, -38.0, 12, R.melbourne) === 'ostkueste',
+  teil(146.5, -38.0, 12, R.melbourne))
+// Gemessen im Browser: „Nord 3" eingepasst → Zoom ≈ 4,55, Ausschnitt ragt über 112,5° West hinaus.
+p('WA-Route eingepasst, Rand knapp draußen: grob bleibt (kein 10-MB-Wechsel ohne Gewinn)',
+  teil(117, -26.5, 4.55, R.australien) === 'australien', teil(117, -26.5, 4.55, R.australien))
+p('   ohne aktuellen Teil nimmt er den mit der größten Überdeckung', teil(117, -26.5, 4.55) === 'wa',
+  teil(117, -26.5, 4.55))
+p('knapp an der Grenze (4 % Luft) kein Hin und Her',
+  teil(145.93, -37.8, 11, R.melbourne) === 'melbourne', teil(145.93, -37.8, 11, R.melbourne))
+
+console.log('\n4  Offline: nur was gespeichert ist')
+const nurGrob = [R.australien]
+p('Melbourne Zoom 12, nur „grob" gespeichert → grob', teil(145.0, -37.8, 12, R.australien, nurGrob) === 'australien')
+p('dasselbe mit allen Teilen → Melbourne (daraus entsteht der Hinweis „mehr Details …")',
+  teil(145.0, -37.8, 12, R.australien) === 'melbourne')
+p('nichts gespeichert → null', kartenteilFuer(ausschnitt(145, -37.8, 12), 12, null, []) === null)
+p('nur Westküste gespeichert, Blick auf Melbourne → Westküste als einziger (leer, aber kein Absturz)',
+  teil(145.0, -37.8, 12, null, [R.wa]) === 'wa')
+
+console.log('\n5  Routen auf das Kartengebiet zuschneiden')
+const perthBroome = [[115.86, -31.95], [117.88, -22.0], [122.24, -17.96]]
+const innen = schneideZu(perthBroome)
+p('ganz innen: ein Stück, alle Punkte unverändert',
+  innen.length === 1 && JSON.stringify(innen[0]) === JSON.stringify(perthBroome))
+const dohaMelb = schneideZu([[51.53, 25.29], [144.96, -37.81]])
+p('Flug Doha → Melbourne: ein Stück', dohaMelb.length === 1)
+p('   beginnt am Westrand des Kartengebiets', Math.abs(dohaMelb[0][0][0] - KARTENGEBIET[0]) < 1e-9,
+  JSON.stringify(dohaMelb[0][0]))
+p('   endet in Melbourne', JSON.stringify(dohaMelb[0][1]) === JSON.stringify([144.96, -37.81]))
+p('Frankfurt → Doha: nichts', schneideZu([[8.57, 50.03], [51.53, 25.29]]).length === 0)
+const rausRein = schneideZu([[115, -30], [100, -30], [100, -20], [115, -20]])
+p('hinaus und wieder herein: zwei Stücke', rausRein.length === 2, JSON.stringify(rausRein))
+p('ein Punkt allein ergibt keine Linie', schneideZu([[115, -30]]).length === 0)
+p('imGebiet: Perth ja, Doha nein', imGebiet([115.86, -31.95]) && !imGebiet([51.53, 25.29]))
+
+console.log('\n6  Kartenstil: Flüsse sind Linien, keine Flächen')
+// 06.10.2037: Flüsse liegen in „water" als Linien. Eine Füllung ohne Filter schloss jede
+// Flusslinie zur Fläche → blaue Keile übers Land (Margaret River, Kalbarri, York, Fitzroy).
+const stil = fs.readFileSync(new URL('../src/lib/Karte.svelte', import.meta.url), 'utf8')
+const ebene = (id) => (stil.match(new RegExp(`\\{ id: '${id}'[^\\n]*`)) || [''])[0]
+p('Wasser-Füllung nimmt nur Flächen', /type: 'fill'/.test(ebene('wasser')) && ebene('wasser').includes("filter: ['==', '$type', 'Polygon']"), ebene('wasser'))
+p('Flüsse als eigene Linien-Ebene', /type: 'line'/.test(ebene('fluesse')) && ebene('fluesse').includes("'source-layer': 'water'") && ebene('fluesse').includes("filter: ['==', '$type', 'LineString']"), ebene('fluesse'))
+
+console.log(`\n${'═'.repeat(46)}\n  ${ok} bestanden · ${bad} gescheitert\n`)
+process.exit(bad ? 1 : 0)

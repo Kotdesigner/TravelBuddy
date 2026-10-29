@@ -1,0 +1,64 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font:14px ui-monospace,monospace;padding:10px;background:#faf7f2}
+#o{white-space:pre-wrap;background:#fff;border:1px solid #ccc;padding:10px;border-radius:8px;font-size:12.5px}
+.ok{color:#1a7f37;font-weight:700}.bad{color:#c62828;font-weight:700}iframe{width:100%;height:110px;border:1px solid #ccc}</style>
+<div id="o">messe …</div><iframe id="f" src="./index.html"></iframe>
+<script>
+const O=document.getElementById('o'),f=document.getElementById('f');let L=[]
+const say=(t,k)=>{L.push(k?`<span class="${k}">${t}</span>`:t);O.innerHTML=L.join('\n')}
+const w8=ms=>new Promise(r=>setTimeout(r,ms))
+const bis=async(fn,ms=30000)=>{const t=Date.now();while(Date.now()-t<ms){try{const v=fn();if(v)return v}catch{}await w8(300)}return null}
+f.onload=async()=>{
+  const d=f.contentDocument,w=f.contentWindow
+  try{Object.defineProperty(w.navigator,'geolocation',{get:()=>undefined})}catch{}
+  await bis(()=>d.querySelector('nav.bar'));await w8(3500)
+  say('Breite '+w.innerWidth+' px · Media-Query greift: '+w.matchMedia('(max-width: 520px)').matches,
+      w.matchMedia('(max-width: 520px)').matches?'ok':'bad')
+  const raster=await bis(()=>[...d.querySelectorAll('.grid')].filter(g=>g.querySelectorAll('article.card').length>3),25000)
+  if(!raster){say('KEIN Ortsraster','bad');return}
+  const g=raster[0]
+  const sp=w.getComputedStyle(g).gridTemplateColumns
+  say('Spalten: '+sp+' → '+sp.trim().split(/\s+/).length, sp.trim().split(/\s+/).length===2?'ok':'bad')
+  say('')
+  say('── Marken ──')
+  const alleK=[...raster.flatMap(r=>[...r.querySelectorAll('article.card')])]
+  const sicht=el=>el.offsetParent!==null&&el.getBoundingClientRect().width>0
+  const marken=c=>[...c.querySelectorAll('.marken > *')].filter(sicht)
+  const mit=alleK.filter(c=>marken(c).length>0)
+  say('Kacheln gesamt '+alleK.length+' · mit Marken '+mit.length)
+  let ueber=0,drueber=0,proben=[]
+  for(const c of mit){
+    const m=marken(c), r=m.map(x=>x.getBoundingClientRect()), kr=c.getBoundingClientRect()
+    for(let i=0;i<r.length;i++)for(let j=i+1;j<r.length;j++){const a=r[i],b=r[j]
+      if(a.left<b.right-1&&b.left<a.right-1&&a.top<b.bottom-1&&b.top<a.bottom-1)ueber++}
+    for(const x of r) if(x.right>kr.right+1||x.left<kr.left-1||x.bottom>kr.bottom+1) drueber++
+    if(proben.length<5&&m.length>1) proben.push(m.map(x=>x.textContent.trim()).join('  +  '))
+  }
+  say('überlappende Marken: '+ueber, ueber===0?'ok':'bad')
+  say('aus der Kachel ragend: '+drueber, drueber===0?'ok':'bad')
+  const mehr=mit.filter(c=>marken(c).length>1)
+  say('Kacheln mit mehreren Marken: '+mehr.length)
+  if(mehr.length){const m=marken(mehr[0])
+    const y=new Set(m.map(x=>Math.round(x.getBoundingClientRect().top)))
+    say('  Beispiel „'+mehr[0].querySelector('.name').textContent.trim().slice(0,18)+'“: '+m.length+' Marken, '+y.size+' Zeile(n)')}
+  proben.forEach(x=>say('  · '+x))
+  const lang=[...d.querySelectorAll('.marken .lang')].filter(x=>w.getComputedStyle(x).display!=='none').length
+  say('sichtbare Lang-Beschriftungen (soll 0): '+lang, lang===0?'ok':'bad')
+  say('')
+  say('── Bild und Dubletten ──')
+  let quillt=0, dublette=0
+  for(const c of alleK){
+    const box=c.querySelector('.img'), bild=c.querySelector('.img img, .fallback')
+    if(box&&bild){ const b=box.getBoundingClientRect(), i=bild.getBoundingClientRect()
+      if(i.height>b.height+1||i.bottom>b.bottom+1) quillt++ }
+    const texte=[...c.querySelectorAll('.marken > *, .tags > *')].filter(sicht).map(x=>x.textContent.trim().toUpperCase())
+    if(new Set(texte).size!==texte.length) dublette++
+  }
+  say('Kacheln mit überquellendem Bild: '+quillt, quillt===0?'ok':'bad')
+  say('Kacheln mit doppeltem Etikett: '+dublette, dublette===0?'ok':'bad')
+  const bs=alleK[0]
+  if(bs){const b=bs.querySelector('.img').getBoundingClientRect(), i=bs.querySelector('.img img, .fallback')?.getBoundingClientRect()
+    say('Beispiel: Rahmen '+Math.round(b.height)+' px · Bild '+Math.round(i?.height||0)+' px')}
+  f.style.display='none'
+}
+</script>

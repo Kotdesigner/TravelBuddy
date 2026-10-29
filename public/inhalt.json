@@ -1,0 +1,75 @@
+{
+  "tour": {
+    "svg": "<svg viewBox=\"0 0 152 226\" width=\"300\" xmlns=\"http://www.w3.org/2000/svg\" style=\"display:block;\"><rect x=\"0\" y=\"0\" width=\"152\" height=\"226\" fill=\"#eaf2f6\" rx=\"6\"/><polygon points=\"150.3,16.0 136.8,9.0 131.4,6.0 121.5,12.0 113.4,22.0 108.9,31.0 101.7,40.0 89.5,46.6 82.8,58.0 69.3,66.0 56.5,70.1 40.9,74.4 25.3,83.4 18.9,86.5 16.7,85.0 14.9,90.0 13.2,98.4 10.2,111.8 12.2,115.8 9.9,122.0 7.7,128.5 12.6,133.0 16.7,144.1 20.8,154.7 24.9,172.0 27.3,177.2 32.0,186.5 30.8,192.3 30.1,200.3 27.4,203.5 24.5,202.3 24.2,206.5 25.6,210.7 29.7,212.5 33.6,215.3 39.9,216.8 45.4,216.6 50.2,217.2 55.8,216.0 63.9,211.0 70.4,206.5 86.3,205.6 98.1,206.0 104.2,203.1 111.6,197.0 123.3,190.0 136.8,187.0 149.4,184.0 150.3,183.9\" fill=\"#f5eddc\" stroke=\"#c9b995\" stroke-width=\"1\"/><polyline points=\"32.0,186.5 24.9,206.5 25.7,210.1 33.7,211.4 39.9,216.8 45.4,216.6 50.2,217.2 52.2,210.8 70.4,206.5 86.3,205.6 88.4,206.8 97.7,206.2\" fill=\"none\" stroke=\"#2f6b4f\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\" opacity=\"1.0\"/><polyline points=\"86.3,205.6 85.3,189.0 82.5,174.5 78.6,163.9 63.3,179.3 32.0,186.5\" fill=\"none\" stroke=\"#a8842b\" stroke-width=\"2.2\" stroke-dasharray=\"4,3\" stroke-linejoin=\"round\" stroke-linecap=\"round\" opacity=\"1.0\"/><polyline points=\"32.0,186.5 24.9,172.0 16.7,144.1 7.7,128.5 11.1,126.3 12.2,115.8 10.2,111.8 11.1,104.6 13.2,98.4 13.6,90.3 16.5,86.3\" fill=\"none\" stroke=\"#c1662f\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\" opacity=\"1.0\"/><polyline points=\"12.2,115.8 26.2,117.5 41.4,110.2 49.4,93.9 56.2,91.8 42.8,82.8 40.9,74.4\" fill=\"none\" stroke=\"#7a2e1a\" stroke-width=\"2.2\" stroke-dasharray=\"4,3\" stroke-linejoin=\"round\" stroke-linecap=\"round\" opacity=\"1.0\"/><circle cx=\"32.0\" cy=\"186.5\" r=\"4\" fill=\"#2b2621\" stroke=\"#fff\" stroke-width=\"1.2\"/><text x=\"32.0\" y=\"188.1\" font-size=\"4.6\" font-weight=\"bold\" fill=\"#fff\" text-anchor=\"middle\" font-family=\"Arial,sans-serif\">P</text></svg>",
+    "legende": [
+      {
+        "stil": "background:#2f6b4f",
+        "text": "Süd-Schleife (Tag 3–16)"
+      },
+      {
+        "stil": "background:repeating-linear-gradient(90deg,#a8842b 0 6px,transparent 6px 10px)",
+        "text": "Goldfields-Rückweg (Tag 17–19)"
+      },
+      {
+        "stil": "background:#c1662f",
+        "text": "Nord-Schleife Küste (Tag 21–43)"
+      },
+      {
+        "stil": "background:repeating-linear-gradient(90deg,#7a2e1a 0 6px,transparent 6px 10px)",
+        "text": "Outback-Option Gascoyne/Pilbara"
+      }
+    ],
+    "text": "<p>Zwei Schleifen ab Perth, dazwischen ein Ruhetag-Reset in der Stadt. Die <b>Süd-Schleife</b> läuft über die\n      Küsten-Klassiker bis Esperance und je nach Mut bis Cape Arid oder Israelite Bay — zurück geht es nicht\n      dieselbe Strecke, sondern durch die <b>Goldfields</b> (Geisterstädte, Lake-Ballard-Skulpturen).</p> <p>Die <b>Nord-Schleife</b> gibt es in drei Ausbaustufen: vom entspannten Küsten-Klassiker über die\n      <b>Halbinsel-Expedition</b> (Steep Point, Dirk Hartog, Quobba — die Empfehlung) bis zur\n      <b>Outback-Expedition</b> durchs Gascoyne nach Karijini und in die Ost-Pilbara zum „Eel Pool“ aus den\n      Insider-Notizen.</p> <p>Jeder Ort unten trägt Markierungen (Muss-Sehen / Geheimtipp / Nur 4WD / Expedition), jede Route hat\n      eine Kartenvorschau und einen Klick-Link in die echte Google-Maps-Ansicht.</p>"
+  },
+  "kalender": [
+    {
+      "datum": "Tag 1–2",
+      "tage": "2 Tage",
+      "titel": "Perth — Ankunft & Vorbereitung",
+      "text": "Fahrzeugübernahme, Großeinkauf, Park Pass & Buchungen (Shelter Bay, Temple Gorge, Dirk-Hartog-Barge) final prüfen."
+    },
+    {
+      "datum": "Tag 3–16",
+      "tage": "14 Tage",
+      "titel": "Süd-Schleife — Route Süd 2 „Erweitert“",
+      "text": "Margaret River bis Esperance/Cape Arid inkl. Yeagarup Dunes & Stokes NP — mit 2 Tagen mehr Luft als der 12-Tage-Kern (z. B. Bade-/Puffertage in Esperance)."
+    },
+    {
+      "datum": "Tag 17–19",
+      "tage": "3 Tage",
+      "titel": "Rückweg als Goldfields-Schleife (oder direkt in 2 Tagen)",
+      "text": "Esperance → Kalgoorlie → Lake Ballard → Gwalia → Perth. Alternativ direkt via Wave Rock (2 Tage, 1 Tag mehr Puffer)."
+    },
+    {
+      "datum": "Tag 19–20",
+      "tage": "≈2 Tage",
+      "titel": "Perth — Halbzeit & Reset",
+      "text": "Fahrzeug-Check, Wäsche, Vorräte für den Norden — oder Rottnest-Tag (Fähre vorbuchen!)."
+    },
+    {
+      "datum": "Tag 21–43",
+      "tage": "23 Tage",
+      "titel": "Nord-Schleife — Route Nord 1, 2 oder 3",
+      "text": "Empfehlung: Nord 2 „Halbinsel-Expedition“ (17–20 Tage, 3–6 Tage Puffer). Nord 3 nur für voll autarke Crews (füllt das Fenster komplett)."
+    },
+    {
+      "datum": "Tag 44–46",
+      "tage": "3 Tage",
+      "titel": "Perth — Puffer & Abflug",
+      "text": "Fahrzeugrückgabe/-reinigung, Reserve für Wetter-Verzögerungen, Rückflug."
+    }
+  ],
+  "kalenderBox": "",
+  "praxisWarnung": "<div class=\"box-title\">⚠ Die drei harten Regeln für Dez/Jan",
+  "praxisListe": [
+    "<b>Vorab buchen (teils Monate):</b> Shelter Bay/Steep Point (DBCA Park Stay), Dirk-Hartog-Barge\n    (ab Blackies Beach, max. 20 Fahrzeuge auf der Insel), Temple Gorge/Kennedy Range (buchungspflichtig seit\n    April 2026), Maggies Camp/Warroora — und bei den Inseln: Rottnest-Fähre (Januar = Schulferien!),\n    Woody-Island-Boot/Hütten, Abrolhos-Flugtour.",
+    "<b>Permits:</b> Rio-Tinto-Bahnstraße Tom Price → Millstream: kostenloses 30-Tage-Permit (online oder\n    Tom Price Visitor Centre). Sonst keine Spezial-Permits auf den Nordrouten nötig.",
+    "<b>Park Pass:</b> Holiday Pass 4 Wochen $70 deckt beide Schleifen ab — vorab auf shop.dbca.wa.gov.au.",
+    "<b>Treibstoff Norden:</b> Gascoyne Junction, Mount Augustus Tourist Park und Tom Price sind die einzigen\n    Quellen im Hinterland — Reichweite 600+ km einplanen. Gnaraloo tankt nur nach 24-h-Voranmeldung.",
+    "<b>Reifen:</b> Tiefsand (Steep Point, Peron, Gnaraloo, Yardie): auf 16–20 psi ablassen; Kompressor\n    am Peron Homestead, sonst eigenen mitführen.",
+    "<b>Buschfeuer Süden:</b> An Total-Fire-Ban-Tagen keine offenen Feuer/Grills; EmergencyWA täglich.",
+    "<b>Gwalia-Museum:</b> Über Weihnachten/Neujahr tageweise geschlossen — in der Zeit vorher\n    anrufen."
+  ],
+  "quellen": "Explore Parks WA / DBCA (Edel Land, Shelter Bay, Mount Augustus inkl. Summit-Sperrung Nov–Feb, Temple Gorge Buchungspflicht, Millstream, Karlamilyi, Park Fees) · Coroner's Court WA (Mount-Augustus-Inquest) · Dirk Hartog Island (Barge ab Blackies Beach) · Quobba Station / Gnaraloo Station (Sommeröffnung, Schildkröten-Nistsaison) · Rio Tinto Rail Access Road Permit (Visit Ashburton) · 4WDing Australia / ExplorOz (Running Waters GPS -21.685, 121.126, Skull Springs Rd; Israelite Bay; Charles Knife) · Shire of Menzies (Lake-Ballard-Straße asphaltiert) · Gwalia Museum (Öffnungszeiten) · Main Roads WA / DFES / BOM (Gibb River Road Sperrung, Total Fire Ban, Zyklon-Tracker) · Wikipedia/Wikimedia Commons (Ortsartikel & Bilder — Lizenz je Dateiseite) · Details & Links: siehe Projekt-Notizen.",
+  "fussnote": "Erstellt aus Insider-Notizen, ~68 gespeicherten Screenshots, einem früheren Reisetagebuch und aktueller Recherche (Stand Juli 2026). Karten sind schematische Vorschauen — die Buttons öffnen die echte Route in Google Maps. Sicherheitsrelevante Punkte kurz vor Abreise gegenprüfen."
+}
