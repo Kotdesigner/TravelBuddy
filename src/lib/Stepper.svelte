@@ -1,6 +1,6 @@
 <script>
   import { t } from './i18n.js'
-  // Stepper (New Style Phase 2b): −/＋ statt fummeligem Zahlenfeld.
+  // Stepper: −/＋ statt fummeligem Zahlenfeld.
   // Tippen = ±step · Wert bleibt direkt editierbar · 38-px-Ziele.
   let {
     value = 1,
@@ -8,7 +8,7 @@
     max = 999,
     step = 1,
     einheit = '',
-    label = t('Anzahl'),          // für VoiceOver — das Zahlenfeld hatte keinen Namen (Prüfung 19.09.)
+    label = t('Anzahl'),          // zugänglicher Name des Zahlenfelds (VoiceOver)
     onchange = () => {},
   } = $props()
 

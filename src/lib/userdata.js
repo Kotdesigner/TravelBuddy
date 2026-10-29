@@ -80,8 +80,8 @@ export function uid() {
 export const userData = writable({})
 /** Gespeicherte Reisen: [{ id, name, farbe, tage, imGesamtplan, stops: [{name,lat,lon,img}] }] */
 export const reisen = writable([])
-// V4: Altbestand ohne `typ` (aus V3, aus einem alten Backup, aus dem Notspeicher) wird
-// sofort zu Etappe/Route umgebaut — egal auf welchem Weg er hereinkommt.
+// Einträge im Altformat ohne `typ` (aus einem alten Backup oder dem Notspeicher) werden
+// sofort zu Etappe/Route umgebaut — egal auf welchem Weg sie hereinkommen.
 let planUmbauAktiv = false
 function planNachziehen() {
   const cur = get(reisen)
@@ -228,7 +228,7 @@ export async function initUserData() {
     if (Array.isArray(wd)) wanderungen.set(nachruesten(wd))
     const ci = await idbGet(KEY_CHECKINS)
     if (Array.isArray(ci)) checkins.set(ci)
-    // Ostküste: früher eigene Töpfe — einmalig in die Haupttöpfe überführen.
+    // Ostküste: getrennte Töpfe des Altformats einmalig in die Haupttöpfe überführen.
     const schonZusammen = await idbGet(KEY_ZUSAMMEN)
     const ur = await idbGet(KEY_U_REISEN)
     const uo = await idbGet(KEY_U_ORTE)
@@ -307,11 +307,9 @@ function beobachteSkalar(store, feld) {
 }
 
 // ---------- Notspeicher ----------
-// Scheiterte das Speichern in IndexedDB, schrieb persist() den Wert in den localStorage —
-// gelesen wurde er dort aber nie wieder. Genau das passierte beim zusammenführenden Import
-// (Svelte-Proxys lassen sich nicht in IndexedDB ablegen): auf dem Bildschirm stand alles,
-// nach dem Neuladen war es weg (gefunden 18.09.2026). Jetzt wird beim Start zurückgeholt,
-// und zwar ZUSAMMENGEFÜHRT mit dem, was in der Datenbank steht — nichts wird überschrieben.
+// Scheitert das Speichern in IndexedDB (z. B. weil ein Svelte-Proxy nicht strukturiert klonbar
+// ist), schreibt persist() den Wert in den localStorage. Beim Start wird er von dort
+// zurückgeholt und mit dem Stand der Datenbank ZUSAMMENGEFÜHRT — nichts wird überschrieben.
 const NOTSPEICHER = {
   [KEY]: 'daten', [KEY_REISEN]: 'reisen', [KEY_ORTE]: 'eigeneOrte', [KEY_JOURNAL]: 'journal',
   [KEY_PACK]: 'packliste', [KEY_NOTIZEN]: 'notizen', [KEY_WANDER]: 'wanderungen',
@@ -350,9 +348,9 @@ export function loescheVorabKosten(id) { vorabKosten.update((ks) => ks.filter((k
 
 // ---------- Haken (Packliste, Vorbereitung) ----------
 // Format { an, ts } — so überträgt sich auch das ABWÄHLEN beim Zusammenführen.
-// Früher: `true` bzw. Schlüssel gelöscht. Das Zusammenführen schreibt aber { an, ts },
-// und die Listen fragten nur „steht da etwas?" — ein abgewählter Haken { an: false }
-// hätte als gesetzt gegolten, und ein hier gelöschter kam beim nächsten Import zurück.
+// Ein bloßes `true` bzw. ein gelöschter Schlüssel ließe sich beim Zusammenführen nicht von
+// „nie gesetzt“ unterscheiden: ein abgewählter Haken käme beim nächsten Import zurück.
+// Deshalb prüfen die Listen immer `istAn()` statt „steht da etwas?“.
 /** Ist ein Haken gesetzt? Versteht altes (`true`) und neues Format ({ an, ts }). */
 export const istAn = (v) => v === true || !!(v && typeof v === 'object' && v.an)
 const haken = (an) => ({ an, ts: jetzt() })
@@ -613,7 +611,7 @@ export function neueReise(vorlage = {}) {
     name: vorlage.name || (typ === 'route' ? t('Neue Route') : t('Neue Etappe')),
     farbe: vorlage.farbe || naechsteFarbe(),
     tage: vorlage.tage ?? 3,
-    // V3 liest nur imGesamtplan: Etappen stehen im Plan, Routen nie.
+    // Für das Altformat: Etappen stehen im Gesamtplan, Routen nie.
     imGesamtplan: typ === 'etappe',
     stops: vorlage.stops || [],
   }
@@ -634,8 +632,8 @@ export function updateReise(id, patch) {
 
 /**
  * Reihenfolge der Liste = Reihenfolge im Plan: Etappen nach Datum, jede Route direkt
- * hinter ihrer Etappe, Routen ohne Etappe am Ende. V3 stapelt die Etappen in dieser
- * Reihenfolge — so stimmen dort die Termine auch mit einem V4-Stand.
+ * hinter ihrer Etappe, Routen ohne Etappe am Ende. Das Altformat stapelt die Etappen in dieser
+ * Reihenfolge — so stimmen die Termine auch dort.
  */
 export function sortiereReisen(rs) {
   const etappen = rs.filter((r) => r && r.typ === 'etappe')
@@ -673,8 +671,7 @@ export function verschiebeReise(id, richtung) {
 
 /**
  * Stopp zu einer Route hinzufügen — an der Stelle mit dem kleinsten Umweg
- * (Ende zählt mit). Bis V3 landete jeder Ort am Ende, auch wenn er mitten
- * auf der Strecke lag (Fehler B aus UX-Recherche/27).
+ * (Ende zählt mit), statt ihn immer ans Ende zu hängen.
  * @returns { index, nach } wo er gelandet ist (nach = Name des vorigen Stopps)
  */
 export function stopHinzufuegen(reiseId, stop, { ans = 'passend' } = {}) {
@@ -850,7 +847,7 @@ export function importiereReisekalender(kalender, { orte = [], reisenAnlegen = t
       const behalten = rs.filter((r) => r.quelle !== 'reisekalender')
       ersetzt = alte.length
       eigene = behalten.length
-      // V4: Routen hängen an Etappen. Ein Neu-Import vergibt neue IDs — die Routen
+      // Routen hängen an Etappen. Ein Neu-Import vergibt neue IDs — die Routen
       // ziehen mit (gleicher Name, sonst größte Überschneidung), statt zu verwaisen.
       umzug = zuordnungNachImport(alte, neue)
       const umgehaengt = behalten.map((r) => (r.etappeId && umzug.has(r.etappeId)
@@ -943,9 +940,8 @@ export function loescheEigeneBuchung(id) {
 // ---------- Kalender-Berechnung ----------
 
 /**
- * Gesamtplan aus den Etappen (V4: festes Datum je Etappe, Routen zählen nicht mit).
- * Gleiche Form wie bis V3 — von/bis als Date um 00:00 Ortszeit —, damit Kalender,
- * Export und Karte unverändert weiterarbeiten.
+ * Gesamtplan aus den Etappen (festes Datum je Etappe, Routen zählen nicht mit).
+ * von/bis als Date um 00:00 Ortszeit; Kalender, Export und Karte arbeiten mit dieser Form.
  */
 export function berechneKalender(alleReisen, startDatum) {
   const e = etappenMitDatum(alleReisen || [], startDatum || START_DEFAULT)
@@ -1015,7 +1011,7 @@ function baueBackupPayload() {
     buchungen: get(buchungen),
     grabsteine: get(grabsteine),
     skalarStand: get(skalarStand),
-    // Seit 29.10.2026: Musik-Einstellungen ohne „eingeschaltet“ (Feld fehlt in älteren Dateien)
+    // Musik-Einstellungen ohne „eingeschaltet“ (Feld fehlt in älteren Dateien)
     musikEinstellungen: musikFuerBackup(),
   }
 }

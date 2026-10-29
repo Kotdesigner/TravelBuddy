@@ -1,4 +1,4 @@
-// TravelBuddy für den Mac (29.10.2026): eigenes Fenster statt Browser-Tab.
+// TravelBuddy für den Mac: eigenes Fenster statt Browser-Tab.
 //
 // Die App liefert die fertige Web-App (dist/, im Bundle unter Resources/web) über einen kleinen
 // Server auf 127.0.0.1:8990 aus und zeigt sie in einem WKWebView. Kein Node, kein Python, kein Netz

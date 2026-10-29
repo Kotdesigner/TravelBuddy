@@ -2,15 +2,14 @@
   import { t, tn } from './i18n.js'
   import { blattRaus, ausblenden } from './motion.js'
   // Suche als Blatt — iPhone: geöffnet über den runden Such-Knopf rechts in der unteren Leiste;
-  // das SUCHFELD STEHT UNTEN, direkt über der Tastatur, Treffer darüber (iOS-26-Standard,
-  // Wunsch Steve 19.09.: „neuer Standard ist Suchleiste direkt unten — besser bedienbar").
+  // das SUCHFELD STEHT UNTEN, direkt über der Tastatur, Treffer darüber (wie in iOS 26:
+  // im Daumenbereich besser erreichbar).
   // Mac: Fenster in der Mitte mit Feld oben (wie Spotlight), geöffnet über „Suchen", ⌘K oder „/".
-  // Vorher (bis 19.09.2026): Suchfeld, Etiketten und Sonnen-Datum als feste Leiste oben.
   import { untrack } from 'svelte'
   import { modal } from './modal.js'
   import { reiseDatum } from './reisedatum.js'
   import { sucheOrte } from './suche.js'
-  // Seit 29.10.2026 sucht das Blatt auch Tage, Tiere, Wanderungen, Buchungen, Etappen, Notizen,
+  // Neben den Orten durchsucht das Blatt Tage, Tiere, Wanderungen, Buchungen, Etappen, Notizen,
   // Packliste und Vorbereitung (gesamtsuche.js). Orte bleiben oben, mit Etiketten und Kacheln.
   import { gesamtsuche } from './gesamtsuche.js'
   import { journal, wanderungen, buchungen, notizen, reisen, gesamtStart, packliste, vorbereitung, dokumente } from './userdata.js'
@@ -69,7 +68,7 @@
   function springe(ziel) { ongeh(ziel) }
 
   // Easter-Eggs: „xoxo" → Tic-Tac-Toe, „sn4ke" → Snake, „4444" → Vier in einer Reihe.
-  // Snake hörte bis 29.10.2026 auf „snake"; das Wort bleibt jetzt frei für die Suche nach Schlangen.
+  // Bewusst nicht „snake“: das Wort bleibt frei für die Suche nach Schlangen.
   $effect(() => {
     const wort = q.trim().toLowerCase()
     if (wort === 'xoxo') { q = ''; onxoxo() }

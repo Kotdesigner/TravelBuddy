@@ -1,6 +1,6 @@
 // Ort hinzufügen: Vorschläge aus OpenStreetMap und Einordnung in Süden/Norden/Ostküste.
-// Anlass 15.10.2037: Steve will beim Anlegen gefragt werden, welcher Ort gemeint ist, und
-// der Ort soll automatisch in der richtigen Gruppe stehen (z. B. Margaret River im Süden).
+// Anforderung: Beim Anlegen wird nachgefragt, welcher Ort gemeint ist, und der Ort landet
+// automatisch in der richtigen Gruppe (z. B. Margaret River im Süden).
 // Ausführen: node tests/orte-neu.test.mjs
 import fs from 'node:fs'
 import { setzeVorlagen, rubrikFuer, naechsteRubrik, alleRubriken, rubrikPatch } from '../src/lib/rubrik.js'

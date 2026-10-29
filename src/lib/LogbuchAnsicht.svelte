@@ -1,7 +1,7 @@
 <script>
   import { t, tn } from './i18n.js'
   import { heuteTag } from './heute.js'
-  // Logbuch (V4): die ganze Reise chronologisch, Etappe für Etappe, Tag für Tag.
+  // Logbuch: die ganze Reise chronologisch, Etappe für Etappe, Tag für Tag.
   // Am Tag steht alles, was dazu gehört: dein Eintrag, Gebuchtes, Wanderungen,
   // Orts-Notizen, Notizen. Das Band links trägt die Farbe der Etappe; ein voller Punkt
   // heißt „geschrieben“, ein Ring „noch offen“, ein kleiner Punkt „kommt noch“.

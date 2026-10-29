@@ -164,7 +164,7 @@ export const ART_TEXT = {
 export const istGehoert = (t) => t.art === 'beliebt' || t.art === 'gegend'
 
 /**
- * Bands aus der Gegend nach Beliebtheit ordnen (29.10.2026): Hörer ihres meistgehörten Titels bei
+ * Bands aus der Gegend nach Beliebtheit ordnen: Hörer ihres meistgehörten Titels bei
  * Last.fm, und genau dieser Titel wird gesucht. Gefragt wird über die MusicBrainz-ID, nicht über den
  * Namen: sonst bekäme die kleine Band „Sons“ aus Broome die Hörer einer berühmten Band gleichen Namens.
  * Ohne ID oder ohne Treffer bleibt die Band dabei, nur ohne Hörerzahl (dann sucht Spotify ihren Titel).

@@ -1,4 +1,4 @@
-// Reiseplan V4: Etappen, Routen, Umbau des Altbestands, Logbuch-Chronik.
+// Reiseplan: Etappen, Routen, Umbau des Altformats, Logbuch-Chronik.
 // Ausführen: node tests/plan.test.mjs
 import {
   istRoute, istEtappe, etappenMitDatum, planUeberblick, etappeAm, planMigrieren, besteEinfuegeStelle,

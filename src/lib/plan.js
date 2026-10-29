@@ -1,16 +1,16 @@
-// Reiseplan V4: Etappen und Routen.
+// Reiseplan: Etappen und Routen.
 //
 // ETAPPE = ein Zeitabschnitt im Kalender mit festem Datum (von + Tage).
-//          Beispiel: „Melbourne" 30.11.–3.12. Kommt meist aus dem Reisekalender.
+//          Beispiel: „Ankommen in Perth“, 3 Tage. Kommt oft aus dem Reisekalender.
 // ROUTE  = eine Strecke mit Stopps INNERHALB einer Etappe.
-//          Beispiel: „Nord 3" Perth → … → Marble Bar im Roadtrip.
+//          Beispiel: „Coral Coast“ Perth → … → Exmouth im Roadtrip.
 //
-// Bis V3 war beides eine „Reise", und der Gesamtplan reihte alles hintereinander.
-// Eine Route im Plan verlängerte deshalb die Reise, statt in ihre Etappe zu fallen.
+// Im Altformat war beides eine „Reise“, und der Gesamtplan reihte alles hintereinander;
+// eine Route verlängerte so die Reise, statt in ihre Etappe zu fallen. Daher die Trennung.
 //
 // Gespeichert wird weiter im Topf `reisen` — nur mit zusätzlichen Feldern:
 //   typ: 'etappe' | 'route'   von: 'YYYY-MM-DD' (Etappe)   etappeId (Route)
-// So kann V3 einen V4-Stand weiter lesen, und ein Backup bleibt zwischen beiden
+// Das Altformat bleibt damit lesbar, und Backups bleiben zwischen beiden Formaten
 // austauschbar. Reine Funktionen ohne Stores: jede Regel einzeln prüfbar.
 
 // ---------- Datum als Text (keine Zeitzonen-Fallen) ----------
@@ -57,7 +57,7 @@ export const tageVon = (r) => Math.max(1, Math.round(Number(r?.tage) || 1))
 
 /**
  * Etappen mit Datum, sortiert. Etappen mit `von` stehen fest; Altbestand ohne `von`
- * reiht sich wie in V3 hinter die vorige ein (Startdatum = gesamtStart).
+ * (Altformat) reiht sich hinter die vorige ein (Startdatum = gesamtStart).
  * @returns [{ reise, von, bis, tage }]  von/bis als 'YYYY-MM-DD'
  */
 export function etappenMitDatum(reisen, gesamtStart = vorgabeStart()) {
@@ -167,17 +167,17 @@ export function vermuteEtappe(route, etappen) {
   return kand[0]
 }
 
-// ---------- Umbau des Altbestands (V3 → V4) ----------
+// ---------- Umbau des Altformats ----------
 /**
  * Ergänzt typ, von und etappeId. Ändert KEIN `geaendert`: der Umbau ist keine
  * Bearbeitung. Sonst gälte jede Reise als frisch bearbeitet und gewönne beim
  * nächsten Abgleich gegen echte Änderungen vom anderen Gerät.
- * Die Termine bleiben genau die, die V3 angezeigt hat.
+ * Die Termine bleiben genau die, die das Altformat ergeben hat.
  */
 export function planMigrieren(reisen, gesamtStart) {
   const liste = reisen || []
   let geaendert = 0
-  // Termine so, wie V3 sie gerechnet hat (Reihenfolge × Tage ab Startdatum,
+  // Termine so, wie das Altformat sie ergibt (Reihenfolge × Tage ab Startdatum,
   // importierte Etappen mit ihren Kalenderdaten).
   const v3 = etappenMitDatum(liste.map((r) => (r.typ ? r : { ...r })), gesamtStart)
   const vonV3 = new Map(v3.map((e) => [e.reise.id, e.von]))

@@ -1,6 +1,6 @@
 // Fehlermeldungen verständlich machen. Browser melden Netzprobleme auf Englisch und je nach
 // Gerät anders („Failed to fetch“ in Chrome, „Load failed“ in Safari, „NetworkError …“ in
-// Firefox). Prüfung 10.10.: genau das stand so in der Gefahrenlage und beim Wetter.
+// Firefox). Solche Rohmeldungen sollen nie unübersetzt in der Oberfläche landen.
 import { t } from './i18n.js'
 const NETZ = /failed to fetch|load failed|networkerror|network request failed|network error|err_internet|err_network/i
 

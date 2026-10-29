@@ -1,6 +1,6 @@
 <script>
   import { t, LOCALE } from './i18n.js'
-  // Ortswahl per Suche (V4). Ersetzt die Auswahlliste mit 51 WA-Orten und die
+  // Ortswahl per Suche. Ersetzt die Auswahlliste mit 51 WA-Orten und die
   // Lat/Lon-Felder: eine Suche über alle Orte der App (144 + eigene), die Städte
   // für die Routenplanung und die Stopps deiner Routen. Koordinaten von Hand nur noch
   // als Ausweg unter „Eigene Koordinaten“.

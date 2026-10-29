@@ -18,7 +18,7 @@
 
   let { warnungen = [], umkreisKm = 150, orte = [] } = $props()
 
-  // ---------- Hinweise entlang der Route (Wunsch Steve 19.09.) ----------
+  // ---------- Hinweise entlang der Route ----------
   // Lange Strecken ohne Tankstelle · Sehenswertes nahe der Route · Wetter an der Strecke.
   // Rechnen komplett offline (Route + Tankstellen + Orte liegen auf dem Gerät), nur das
   // Wetter braucht Netz.
@@ -196,10 +196,10 @@
       rechnet[r.id] = false
     }
   }
-  // ---- Auto-Routing (New Style): „online = sofort aktuell" ----
+  // ---- Auto-Routing: „online = sofort aktuell" ----
   // Sobald online, werden fehlende/veraltete Routen automatisch nachgerechnet
   // (debounced; je Stopp-Signatur nur EIN Versuch → kein Hämmern bei Fehlern).
-  // Der Knopf bleibt als manueller Fallback. Ref: UX-Recherche/08.
+  // Der Knopf bleibt als manueller Fallback.
   const autoVersucht = new Map() // reise.id -> zuletzt automatisch versuchte Signatur
   let autoTimer
   $effect(() => {
@@ -235,7 +235,7 @@
   }
 
   // Verknüpfte Tagebuch-Einträge (Gegenrichtung zur Reise-Verknüpfung im Tagebuch).
-  // ---- Reise-Hub (New Style V2): alles Verknüpfte einer Reise einsammeln ----
+  // ---- Reise-Hub: alles Verknüpfte einer Reise einsammeln ----
   function wanderungenZuReise(r) {
     return $wanderungen.filter((w) => w.reiseId === r.id)
   }
@@ -502,7 +502,7 @@
             </div>
           {/if}
 
-          <!-- Reise-Hub (V2): Wanderungen & Vorab-Kosten dieser Reise -->
+          <!-- Reise-Hub: Wanderungen & Vorab-Kosten dieser Reise -->
           {#if wanderungenZuReise(r).length}
             <div class="tb-verkn">
               <div class="tb-titel">{t('🥾 Wanderungen — {length}', { length: wanderungenZuReise(r).length })}</div>
@@ -554,7 +554,7 @@
   .name { flex: 1 1 140px; font-size: calc(15px * var(--schrift, 1)); font-weight: 700; color: var(--ink); border: 1px solid transparent; border-radius: 6px; padding: 4px 6px; background: transparent; }
   .name:hover, .name:focus { border-color: #e0d3ba; background: var(--eingabe); }
   .tage, .plan { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 600; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
-  /* ≥ 32 px: vorher 25 × 22 (unter WCAG 2.5.8, Prüfung 19.09.) */
+  /* ≥ 32 px Zielgröße (WCAG 2.5.8) */
   .ord button, .del { border: 1px solid var(--line-stark); background: var(--card); border-radius: 8px; cursor: pointer; font-size: calc(14px * var(--schrift, 1)); min-width: 34px; min-height: 34px; padding: 0 8px; }
   .ord button:disabled { opacity: 0.3; }
   .del { color: var(--danger-text); border-color: #e3b7b0; }
@@ -582,7 +582,7 @@
   .r-tank { color: var(--ok-text); } .r-tank.warn { color: var(--danger-text); }
   .r-warn { font-size: calc(12px * var(--schrift, 1)); color: #7a2317; background: #fbeee7; border: 1px solid var(--danger-linie); border-radius: 6px; padding: 6px 9px; margin: 4px 0; }
   .r-warn b { color: var(--danger-text); }
-  /* Farben als Tokens: im dunklen Design stand hier ein heller Kasten (Prüfung 19.09.) */
+  /* Farben als Tokens: im dunklen Design stand hier ein heller Kasten */
   .r-gefahr { font-size: calc(12px * var(--schrift, 1)); color: var(--ink); background: var(--danger-flaeche); border: 1px solid var(--danger-linie); border-radius: 8px; padding: 8px 10px; margin: 4px 0; }
   .rg-w { margin-top: 4px; } .rg-w b { font-weight: 800; }
   .rg-stufe { display: inline-block; font-size: calc(12px * var(--schrift, 1)); font-weight: 800; padding: 1px 7px; border-radius: 8px; }
@@ -617,7 +617,7 @@
   .acts input { display: none; }
   @media (max-width: 520px) { .preview { flex: 1 1 100%; } }
 .rg-km{opacity:.7;font-size:.92em}
-  /* Hinweise entlang der Route (19.09.) */
+  /* Hinweise entlang der Route */
   .r-hw { margin: 6px 0; border: 1px solid var(--line); border-radius: 10px; background: var(--flaeche); }
   .r-hw.rot { border-color: var(--danger-linie); background: var(--danger-flaeche); }
   .r-hw summary { cursor: pointer; padding: 10px 12px; min-height: 44px; display: flex; align-items: center; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; color: var(--ink); list-style-position: inside; }

@@ -32,7 +32,7 @@
     ...$wanderungen.filter((w) => w.datum).flatMap((w) => (w.fotos || []).map((src) => ({ src, datum: w.datum, ort: w.name }))),
   ])
 
-  // ---- Was ins Tagebuch kommt (Wunsch 10.10.): alles aus dem Plan zuschaltbar ----
+  // ---- Was ins Tagebuch kommt: alles aus dem Plan zuschaltbar ----
   // Etappen: Kapitelkopf mit Datum, Routen, Stopps und Gebuchtem, auch für Etappen, zu
   // denen noch nichts geschrieben ist. Wanderungen und Orte: eigene Abschnitte. Weltkugeln:
   // eine auf dem Deckblatt, eine je Etappe.
@@ -50,7 +50,7 @@
   // solchen Fotos ist eine Tagebuchseite, auch ohne Logbuch-Eintrag.
   const geraetFotos = $derived(zeige.geraet ? $tagebuchFotos : [])
 
-  // ---- V4: dieselbe Chronik wie das Logbuch. Kapitel = Etappen, darin die Tage. ----
+  // ---- Dieselbe Chronik wie das Logbuch. Kapitel = Etappen, darin die Tage. ----
   // Ein Tag kommt ins Tagebuch, wenn es etwas zu erzählen gibt: einen Logbuch-Eintrag,
   // eine gemachte (oder beschriebene) Wanderung oder eine alte Orts-Notiz. Gebuchtes
   // allein ist kein Tagebuchtag, steht aber als Zeile über dem Tag, wenn er drin ist.

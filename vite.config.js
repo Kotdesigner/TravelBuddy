@@ -13,9 +13,6 @@ import { join, resolve } from 'node:path'
 // Beim Kopieren werden die Dateinamen auf NFC normalisiert. macOS legt sie als NFD
 // ab („ä" = a + ̈ ), die Kalender-Datei verweist aber in NFC. Ohne diesen Schritt
 // liefe jeder Verweis mit Umlaut ins Leere.
-// Die Belege liegen einmal in TravelBuddy_V3/_Documente (nicht doppelt). Gesucht wird im
-// eigenen Ordner, eine Ebene höher (V4/V5 liegen in V3) und neben V3 (V6 liegt in 00_Planung).
-// Ohne Fund fehlt im Build die Größentabelle, und das iPhone erkennt umbenannte Belege nicht.
 // Basic-Fassung: nur ein eigener Ordner `_Documente` (gibt es hier nicht). Nie in fremden Ordnern suchen,
 // sonst landete eine Größentabelle fremder Belege im Build.
 const DOK_QUELLE = '_Documente'
@@ -131,11 +128,8 @@ function reisedokumente() {
       const dateien = kopiereBaum(DOK_QUELLE, ziel)
       // Kennzeichen fuer die App: WELCHE Ordner wurden ausgelassen?
       //
-      // Hier stand vorher die vollstaendige Dateiliste. Das war ein Fehler: die Datei
-      // ist oeffentlich abrufbar und war damit ein fertiges Inhaltsverzeichnis aller
-      // Belege — jeder Fremde konnte daraus die exakten Pfade zu Flugtickets und
-      // Hotelbestaetigungen ablesen. Netlify liefert selbst keine Verzeichnislisten;
-      // diese Datei hat das ausgehebelt.
+      // Bewusst KEINE Dateiliste: Die Datei ist öffentlich abrufbar und wäre sonst ein
+      // Inhaltsverzeichnis aller Belege mit ihren genauen Pfaden.
       //
       // Die App braucht die Liste gar nicht. Sie muss nur wissen, welcher Ordner
       // fehlt, um dafuer keinen toten Link anzubieten. Das verraet nichts.
@@ -151,7 +145,7 @@ function reisedokumente() {
 // registerType 'autoUpdate' => neue Version wird geladen, sobald wieder online.
 // Build-Kennung: erscheint in der Fußzeile. So ist auf einen Blick erkennbar,
 // ob der Browser noch eine alte, vom Service-Worker gecachte Fassung zeigt.
-// Als Zeitstempel, die App schreibt ihn in ihrer Sprache („15.10.2026, 21:29“ / „15/10/2026, 9:29 pm“).
+// Als Zeitstempel, die App schreibt ihn in ihrer Sprache („1.5.2027, 21:29“ / „1/5/2027, 9:29 pm“).
 const BUILD = new Date().toISOString()
 
 export default defineConfig({
@@ -165,7 +159,7 @@ export default defineConfig({
       manifest: {
         name: 'TravelBuddy · Western Australia',
         short_name: 'TravelBuddy',
-        description: 'Offline-Reiseplaner für den Westaustralien-Roadtrip.',
+        description: 'Roadtrip-Planer und Reisetagebuch für Western Australia, auch offline.',
         lang: 'de',
         start_url: '/',
         display: 'standalone',

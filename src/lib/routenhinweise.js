@@ -1,6 +1,6 @@
 // Hinweise entlang einer berechneten Route — reine Funktionen (ohne Netz, testbar).
 //
-// Wunsch Steve 19.09.2026:
+// Ermittelt werden:
 //   · Tankstellen: nicht nur die EINE größte Lücke, sondern jede lange Strecke ohne Tankstelle,
 //     mit der letzten und der nächsten Tankstelle beim Namen.
 //   · Sehenswertes: Orte aus der Sammlung, die an oder nahe der Route liegen, aber kein Stopp
@@ -24,7 +24,7 @@ function km(lon1, lat1, lon2, lat2) {
  * Die Linie gleichmäßig abtasten: [{ x, y, km }] mit km = Strecke ab Start.
  * Mit `gesamtKm` (Länge laut Straßenroute) werden alle km darauf geeicht: Das Ziel liegt dann
  * genau bei der Länge, die die App für die Route anzeigt. Die eigene Messung entlang der Linie
- * weicht sonst um einige km ab (Coral Coast: 1.924,7 statt 1.927,8 km, 15.10.2026).
+ * weicht sonst um einige km ab (Größenordnung 0,2 %).
  */
 export function stichproben(geometrie, abstandKm = 1, gesamtKm = null) {
   const out = []
@@ -120,8 +120,8 @@ export function aufRoute(gitter, lon, lat, maxKm, abKm = -Infinity) {
 
 /**
  * JEDER Durchgang der Route an einem Punkt vorbei. Fährt die Route zweimal an derselben
- * Tankstelle vorbei (hin und zurück, Karijini zweimal), zählt sie für beide Male — sonst
- * entstand eine Schein-Lücke von 990 km (gefunden am echten „Nord 3", 19.09.).
+ * Tankstelle vorbei (hin und zurück), zählt sie für beide Male. Würde nur der nächstgelegene
+ * Durchgang gezählt, entstünde auf dem Rückweg eine Schein-Lücke von mehreren hundert km.
  */
 export function durchgaenge(gitter, lon, lat, maxKm) {
   const c = inDerNaehe(gitter, lon, lat, maxKm).sort((a, b) => a.km - b.km)
@@ -190,7 +190,7 @@ export function orteAnRoute(geometrie, orte, stopps, { maxKm = 25, ignoriert = [
   if (!proben.length) return []
   const gitter = baueGitter(proben)
   // Wo liegen die Stopps auf der Route? IN IHRER REIHENFOLGE: jeder Stopp wird erst hinter dem
-  // vorigen gesucht — sonst landete der zweite Besuch in Karijini auf dem ersten (19.09.).
+  // vorigen gesucht — sonst fiele ein zweiter Besuch desselben Orts auf den ersten.
   // Stopps ohne Koordinaten übernehmen die Lage des Vorgängers.
   const stoppKm = []
   let letzt = 0

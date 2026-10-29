@@ -6,7 +6,7 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <script>
-      // V7: Gesamtgröße am iPhone schon vor dem ersten Bild (Browser übernehmen den Zoom nur am Anfang).
+      // Gesamtgröße am iPhone schon vor dem ersten Bild (Browser übernehmen den Zoom nur am Anfang).
       // Gleiche Rechnung wie viewportInhalt() in src/lib/darstellung.js; ändert man sie, lädt die App neu.
       try {
         var d = JSON.parse(localStorage.getItem('tb-darstellung') || 'null')

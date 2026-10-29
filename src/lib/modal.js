@@ -1,8 +1,6 @@
 // Svelte-Aktion für eigene Dialoge und Blätter:  <div role="dialog" use:modal={{ onclose }}>
 //
-// Prüfung 19.09.2026 (WCAG 2.4.3 / 2.1.2): der Fokus blieb beim Öffnen hinter dem Dialog,
-// Escape schloss nicht, dahinter blieben 1.606 Elemente bedienbar — mit VoiceOver merkte
-// man nicht einmal, dass ein Dialog offen ist. Jetzt:
+// Umsetzung von WCAG 2.4.3 (Fokusreihenfolge) und 2.1.2 (keine Tastaturfalle):
 //   · Fokus springt hinein (erstes Feld/Knopf, sonst der Dialog selbst)
 //   · Tab bleibt im Dialog, Escape schließt
 //   · Rest der Seite ist `inert` (für Tastatur und VoiceOver gesperrt)

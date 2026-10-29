@@ -1,5 +1,5 @@
-// Einheitliches Toast-System (New Style Phase 3) — EIN Meldungsweg für die
-// ganze App. typ: 'ok' | 'fehler' | 'info'. Ref: UX-Recherche/04+06.
+// Einheitliches Toast-System — EIN Meldungsweg für die
+// ganze App. typ: 'ok' | 'fehler' | 'info'.
 import { writable } from 'svelte/store'
 
 export const toasts = writable([])

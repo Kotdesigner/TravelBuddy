@@ -84,7 +84,7 @@ function imZeitraum(iso, z, puffer = 45) {
 /** Jahr ergänzen, wenn die Mail keins nennt („Sat, 12 Dec“). */
 function mitJahr(m, t, kontext) {
   const { zeitraum, heute } = kontext
-  const basis = Number((zeitraum?.von || heute || '2026-01-01').slice(0, 4))
+  const basis = Number((zeitraum?.von || heute || String(new Date().getFullYear())).slice(0, 4))
   for (const j of [basis, basis + 1, basis - 1]) {
     if (!gueltig(j, m, t)) continue
     const iso = isoDatum(j, m, t)

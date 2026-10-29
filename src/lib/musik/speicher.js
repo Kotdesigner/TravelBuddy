@@ -1,7 +1,7 @@
 // Musik unterwegs: Speicher und Laufzeit.
 //
 // Zustand im selben IndexedDB-Topf wie die App (Schlüssel `musik-v1`), Einstellungen in
-// localStorage. Der Zustand bleibt auf dem Gerät. Die Einstellungen wandern seit 29.10.2026
+// localStorage. Der Zustand bleibt auf dem Gerät. Die Einstellungen wandern
 // mit dem Backup aufs andere Gerät (außer „eingeschaltet“), damit man sie am iPhone nicht
 // noch einmal eintippen muss. Spotify-Anmeldung und Token bleiben immer je Gerät.
 

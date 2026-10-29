@@ -1,12 +1,12 @@
 // Amtliche Warnungen — drei Bundesstaaten, alle direkt aus dem Browser abrufbar
-// (CORS erlaubt, kein Schlüssel, kein eigener Server nötig; am 02.08.2026 live geprüft).
+// (CORS erlaubt, kein Schlüssel, kein eigener Server nötig).
 //
 //   WA   DFES / EmergencyWA      Polygone
 //   VIC  VicEmergency OSOM       Polygone + Punkte, dazu Fire Danger Rating & Total Fire Ban
 //   QLD  QFD OCS Warnings        Polygone (ArcGIS, f=geojson)
 //   QLD  Severe Weather/Flut/Zyklon (ArcGIS) — wichtig für Cairns in der Zyklonsaison
 //
-// Anders als früher zählt nicht mehr nur „Punkt liegt im Warngebiet". Für einen Roadtrip
+// Es zählt nicht nur „Punkt liegt im Warngebiet“. Für einen Roadtrip
 // ist die ENTFERNUNG entscheidend: ein Feuer 60 km die Straße hoch geht einen etwas an.
 // Deshalb liefert jede Warnung eine Abstandsrechnung (0 km = man steht mitten drin).
 import { t } from './i18n.js'
@@ -238,7 +238,7 @@ export function abstandKm(w, lat, lon) {
   return min
 }
 
-/** Liegt der Punkt IM Warngebiet? (unverändertes Verhalten von früher) */
+/** Liegt der Punkt IM Warngebiet? (strenge Prüfung ohne Umkreis) */
 export function betrifftOrt(w, lat, lon) {
   return (w.ringe || []).some((ring) => imRing(lon, lat, ring))
 }

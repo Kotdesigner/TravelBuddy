@@ -1,4 +1,4 @@
-// Fotos fürs Tagebuch, die NUR auf diesem Gerät liegen (29.10.2026).
+// Fotos fürs Tagebuch, die NUR auf diesem Gerät liegen.
 //
 // Warum es das gibt: Logbuch-Fotos stecken als data-URL im Journal (2000 px, siehe
 // thumbnail.js) und wandern mit jedem Backup. Für eine Handvoll Fotos unterwegs passt das.

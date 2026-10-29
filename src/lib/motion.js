@@ -1,4 +1,4 @@
-// Motion-Werkzeuge (New Style Phase 4). Ref: UX-Recherche/04.
+// Motion-Werkzeuge.
 // Beide respektieren prefers-reduced-motion (dann: sofort Endzustand).
 import { LOCALE } from './i18n.js'
 

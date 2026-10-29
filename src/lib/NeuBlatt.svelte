@@ -2,7 +2,7 @@
   import { t } from './i18n.js'
   import { blattRaus, ausblenden } from './motion.js'
   import { heuteTag } from './heute.js'
-  // Schnell anlegen (V4): Etappe, Route, Wanderung oder Logbuch-Tag mit den wenigen
+  // Schnell anlegen: Etappe, Route, Wanderung oder Logbuch-Tag mit den wenigen
   // Angaben, die man wirklich sofort braucht. Alles Weitere steht danach in der Detailansicht.
   import { reisen, gesamtStart, journal, neueEtappe, neueRoute, neueWanderung, neuerJournalEintrag } from './userdata.js'
   import { etappenMitDatum, planUeberblick, etappeAm, plusTage, ymd, gueltigesDatum } from './plan.js'

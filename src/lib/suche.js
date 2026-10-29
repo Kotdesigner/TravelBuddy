@@ -1,7 +1,7 @@
 // Suche über alle Orte — EINE Logik für das Suchblatt und die Kachel-Ansicht,
 // damit beide garantiert dasselbe finden.
 //
-// Neu 19.09.2026: Groß/klein, Umlaute und Akzente spielen keine Rolle („Hamelin" = „hamelin",
+// Groß/klein, Umlaute und Akzente spielen keine Rolle („Hamelin" = „hamelin",
 // „Cote" findet „Côte"); die Treffer kommen nach Güte sortiert: Name beginnt mit dem Begriff
 // → Name enthält ihn → Region → Beschreibung/Abschnitt.
 import { LOCALE } from './i18n.js'

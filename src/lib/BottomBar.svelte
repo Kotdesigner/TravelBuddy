@@ -2,12 +2,11 @@
   import { t, LOCALE, sprache, setzeSprache } from './i18n.js'
   import { ZWEI } from './format.js'
   import { blattRaus, ausblenden } from './motion.js'
-  // Mobile Bottom-Tab-Bar (New Style, Phase 1) — Thumb-Zone-Navigation.
+  // Mobile Bottom-Tab-Bar: Navigation im Daumenbereich.
   // 5 Tabs: Start · Orte · Roadtrip · Logbuch · Mehr (Bottom-Sheet) — und rechts daneben,
-  // abgesetzt, der runde Such-Knopf (wie die Suche in iOS 26). Wunsch Steve 19.09.:
-  // „Die Suchfunktion muss nach unten wandern, schnell aktivieren mit einem Knopf unten“.
+  // abgesetzt, der runde Such-Knopf (wie die Suche in iOS 26).
   // Monochrome SVG-Icons (einfärbbar für Aktiv-Zustand), Glass-Look,
-  // Safe-Area unten, gleitender Indikator. Ref: UX-Recherche/05.
+  // Safe-Area unten, gleitender Indikator.
   import { online } from './netz.js'
   import { haptic } from './haptik.js'
   import { theme, setzeTheme } from './theme.js'
@@ -172,7 +171,7 @@
       </div>
     </div>
 
-    <!-- V7: Schrift (nur Texte) und Gesamtgröße (alles), je Gerät gemerkt (darstellung.js) -->
+    <!-- Schrift (nur Texte) und Gesamtgröße (alles), je Gerät gemerkt (darstellung.js) -->
     <div class="s-stufen">
       <span class="st-lbl">{t('🔠 Schrift')}</span>
       <div class="segment s-vier" role="group" aria-label={t('Schriftgröße')}>
@@ -267,9 +266,8 @@
   .sheet {
     position: fixed; left: 0; right: 0; z-index: var(--z-sheet);
     bottom: 0; padding: 6px 14px calc(14px + 60px + env(safe-area-inset-bottom, 0px));
-    /* Nie höher als der sichtbare Bereich: im Safari-Tab des iPhone 17 Pro ragte das Blatt
-       oben 9 pt hinaus, auf kleineren iPhones und quer wären Notfall & Co. unerreichbar
-       gewesen (15.10.2026). Passt es nicht, scrollt der Inhalt. */
+    /* Nie höher als der sichtbare Bereich, sonst wären auf kleinen iPhones und im Querformat
+       die unteren Einträge unerreichbar. Passt es nicht, scrollt der Inhalt. */
     max-height: calc(100dvh - max(env(safe-area-inset-top, 0px), 10px) - 6px);
     overflow-y: auto; overscroll-behavior: contain;
     background: var(--card); border-radius: var(--radius-l) var(--radius-l) 0 0;

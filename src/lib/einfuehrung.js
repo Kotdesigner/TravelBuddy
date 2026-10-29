@@ -1,4 +1,4 @@
-// Einführung beim ersten Öffnen (Basic, 29.10.2026). Hier nur der Stand und die Regeln,
+// Einführung beim ersten Öffnen. Hier nur der Stand und die Regeln,
 // die Oberfläche steht in Einfuehrung.svelte. Je Gerät in localStorage, nicht im Backup.
 import { writable } from 'svelte/store'
 

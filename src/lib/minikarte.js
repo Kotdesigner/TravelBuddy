@@ -1,9 +1,7 @@
 // Mini-Vorschau einer Route als SVG.
 //
-// Vorher lag hier eine fest auf Westaustralien geeichte Projektion
-// (proj = lon - 112.3). Eine Ostküsten-Route landete damit außerhalb der
-// Zeichenfläche und war schlicht nicht darstellbar. Jetzt wird der Ausschnitt
-// aus den Punkten der Route berechnet — funktioniert überall in Australien.
+// Der Ausschnitt wird aus den Punkten der Route berechnet, nicht aus einer fest geeichten
+// Projektion. So passt jede Route in die Zeichenfläche, egal wo in Australien sie liegt.
 
 import { AUS_RINGS } from './geo-australia.js'
 

@@ -25,7 +25,7 @@ document.getElementById('f').onload=async()=>{
   // 1 · Datenbestand
   const daten=await (await w.fetch('/orte.json')).json()
   const ost=daten.filter(o=>o.abschnitt&&o.abschnitt.indexOf('Ostküste')===0)
-  // 142 bis 06.10.2037; seitdem + Nature's Window und Broad Arrow Tavern (beide WA)
+  // 144 Orte, davon 54 an der Ostküste
   p('orte.json: '+daten.length+' Orte, davon Ostküste '+ost.length, daten.length===144 && ost.length===54)
   const gebiete=[...new Set(ost.map(o=>o.region))]
   p('Gebiete: '+gebiete.length+' — '+gebiete.join(' · '), gebiete.length===9)

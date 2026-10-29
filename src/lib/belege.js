@@ -13,7 +13,7 @@
 // Eigene Datenbank (nicht der `wa-plan`-Topf der Nutzerdaten): so braucht es keine
 // Versionsanhebung an einer Stelle, an der Logbuch und Notizen liegen.
 //
-// Seit 29.10.2026 optional verschlüsselt (tresor.js): ist der Tresor eingerichtet, steht statt
+// Optional verschlüsselt (tresor.js): ist der Tresor eingerichtet, steht statt
 // `blob` ein `verschluesselt`-Paket im Eintrag, dazu `typ`. Lesen geht dann nur entsperrt.
 import { writable } from 'svelte/store'
 import { zumAnzeigen } from './pdf-portfolio.js'
@@ -331,9 +331,8 @@ export function eigeneBelegeUebernehmen(alteEvents = [], neueEvents = []) {
  * Wählt man am Mac einen ganzen Ordner, liefert der Browser mit `webkitRelativePath`
  * sogar den vollen Pfad; dann braucht es die Größe gar nicht.
  *
- * Stufe 4 (seit 06.10.2026): Passt der Name zu gar keinem Beleg — etwa im Sammelordner
- * „TravelBuddy-Belege", wo die Dateien umbenannt sind („Hotel – Palm Bay – Buchungs-
- * bestätigung.pdf"), weil sieben gleiche Namen nicht in einen Ordner passen —, entscheidet
+ * Stufe 4: Passt der Name zu gar keinem Beleg — etwa in einem Sammelordner, in dem die
+ * Dateien umbenannt sind, weil mehrere gleichnamige Bestätigungen nicht in einen Ordner passen —, entscheidet
  * die Größe allein. Das gilt nur, wenn GENAU EIN noch freier Beleg diese Größe hat; alle
  * 45 Belege sind verschieden groß. Grund: Die Dateiauswahl am iPhone kann nur einen Ordner
  * auf einmal markieren, die Belege lagen in 18 Unterordnern.

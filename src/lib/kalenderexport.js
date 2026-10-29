@@ -78,8 +78,7 @@ export function baueEintraege({ plan, buchungen, wanderungen = [], journal = [] 
     const a = etappeFuer(e.datum)
     e.abschnitt = a?.name || '—'
     e.farbe = a?.farbe || '#8a8178'
-    // Vor dem Reisebeginn gibt es keinen Reisetag — sonst stand im Export „Tag -126"
-    // (Logbuch-Testeinträge vom Juli, gefunden 18.09.).
+    // Vor dem Reisebeginn gibt es keinen Reisetag (sonst erschiene im Export z. B. „Tag -126“).
     const nr = start ? Math.round((tag(e.datum) - tag(start)) / 86400000) + 1 : 0
     e.tagNr = nr >= 1 ? nr : ''
     e.wochentag = wtag(e.datum)

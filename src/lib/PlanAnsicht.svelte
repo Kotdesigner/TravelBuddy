@@ -2,7 +2,7 @@
   import { t, tn } from './i18n.js'
   import { merkeMorph, istMorph, morphName } from './motion.js'
   import { heuteTag } from './heute.js'
-  // Plan (V4): alle Etappen mit Datum, darunter ihre Routen. Antippen öffnet die Etappe.
+  // Plan: alle Etappen mit Datum, darunter ihre Routen. Antippen öffnet die Etappe.
   // Ersetzt „Meine Reisen“ mit seinen 12 aufgeklappten Bearbeiten-Karten.
   import { reisen, gesamtStart, reiseTage, buchungen, wanderungen, journal, wandleReiseUm, loescheReise } from './userdata.js'
   import { etappenMitDatum, planUeberblick, routenDerEtappe, istRoute, ymd, vermuteEtappe, reiseZeitraum, gueltigesDatum } from './plan.js'
@@ -32,8 +32,8 @@
     return { routen, wand: wand.length, buch: buch.length, tage, km }
   }
 
-  // Etappen nach dem Rückflug ohne eigene Buchungen: meist alte Entwürfe (bei Steve:
-  // „Hinflug Austalia“ und eine leere „Neue Reise“, die den Plan auf 66 Tage zogen).
+  // Etappen nach dem Rückflug ohne eigene Buchungen sind meist liegengebliebene Entwürfe,
+  // die den Gesamtzeitraum künstlich verlängern. Die Ansicht bietet an, sie aufzuräumen.
   const nachRueckflug = $derived.by(() => {
     const bis = $buchungen?.bis
     if (!bis) return []

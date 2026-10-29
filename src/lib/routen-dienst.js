@@ -1,9 +1,8 @@
-// Routen-Dienst (V4): alles, was eine Strecke ausrechnet — Straßenroute, Tank-Lücken,
+// Routen-Dienst: alles, was eine Strecke ausrechnet — Straßenroute, Tank-Lücken,
 // Sehenswertes an der Route, Wetter an der Strecke.
 //
-// Bis V3 steckte das in „Meine Reisen" und lief nur, solange dieser Abschnitt auf der
-// Seite stand. Jetzt gibt es eigene Bildschirme; die Rechnung darf nicht davon abhängen,
-// welcher gerade offen ist. Deshalb hier als Modul mit Stores, angestoßen einmal von
+// Die Rechnung darf nicht davon abhängen, welcher Bildschirm gerade offen ist. Deshalb
+// ein Modul mit Stores, angestoßen einmal von
 // RoutenDienst.svelte (in App.svelte eingebunden), gelesen von jedem RouteEditor.
 import { fehlerText } from './fehlertext.js'
 import { writable, get } from 'svelte/store'
@@ -20,7 +19,7 @@ export const routeMsg = writable({})    // reise.id -> Fehlermeldung
 export const hinweise = writable({})    // reise.id -> { key, tank, vorschlaege, ohneTankdaten }
 export const wetter = writable({})      // reise.id -> { laedt, stand, treffer, punkte, fehler }
 
-// Reichweite pro Tankfüllung — merkt sich die Wahl (vorher nach jedem Neuladen 500).
+// Reichweite pro Tankfüllung, die Wahl bleibt über Neustarts erhalten (Vorgabe 500 km).
 const RW_KEY = 'tb-reichweite-km'
 let rwStart = 500
 try { rwStart = Number(localStorage.getItem(RW_KEY)) || 500 } catch {}

@@ -17,7 +17,7 @@ const p = (name, bed, zusatz = '') => {
 }
 const nah = (a, b, tol) => Math.abs(a - b) <= tol
 
-// Echtes Beispiel (Antwort vom 11.10.2037), Geometrie vereinfacht: Mullewa → Mount Magnet.
+// Echtes Antwortformat, Geometrie vereinfacht: Mullewa → Mount Magnet.
 const ECHT = {
   type: 'Feature',
   geometry: { type: 'LineString', coordinates: [[115.51, -28.54], [116.5, -28.3], [117.84, -28.06]] },

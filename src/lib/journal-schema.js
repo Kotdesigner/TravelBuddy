@@ -141,7 +141,7 @@ export const MODULE = [
     ],
   },
 
-  // ---- Aus dem früheren Ostküsten-Logbuch übernommen ----
+  // ---- Insel, Strand und Genuss ----
   // Stehen jetzt an jedem Reisetag zur Verfügung, egal ob Outback oder Küste.
   {
     id: 'menschen', titel: t('Menschen & Wiedersehen'), icon: '👥',

@@ -1,4 +1,4 @@
-// Reisebericht zum Teilen (11.10.): eine einzige HTML-Datei, die man verschicken kann.
+// Reisebericht zum Teilen: eine einzige HTML-Datei, die man verschicken kann.
 // Alles steckt in der Datei (Text, Weltkugeln als PNG, Fotos als JPEG, Schrift), sie
 // enthält kein Skript und lädt nichts nach.
 //

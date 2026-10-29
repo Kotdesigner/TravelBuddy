@@ -122,8 +122,8 @@
     e.target.value = ''
     // Ein Ordner bringt Systemdateien mit (.DS_Store und Co.), die gehören nicht dazu.
     const dateien = alle.filter((f) => !f.name.startsWith('.') && f.size > 0)
-    // Früher kehrte die App hier still zurück. Am iPhone kam aus manchem Ordner nichts
-    // an, und es sah aus, als passiere nichts. Jetzt steht da, was los ist.
+    // Leere Auswahl nicht still übergehen: Am iPhone liefert manche Ordnerauswahl keine
+    // Dateien. Die Meldung erklärt, wie es zuverlässig klappt.
     if (!dateien.length) {
       ergebnis = alle.length
         ? t('In der Auswahl war keine Datei, die als Beleg taugt.')
@@ -132,7 +132,7 @@
     }
 
     // Was die App selbst erkennt, landet gleich am Termin. Der Rest kommt in die Maske.
-    // Fotos (seit 29.10.2026: Ticket abfotografiert oder Bildschirmfoto) nur über Name oder Pfad,
+    // Fotos (abfotografiertes Ticket, Bildschirmfoto) nur über Name oder Pfad,
     // nie über die Größe allein: ein Foto könnte zufällig so groß sein wie ein PDF aus dem Kalender.
     const pdfs = dateien.filter((f) => !istBildDatei(f)), bilder = dateien.filter(istBildDatei)
     const leer = (u) => ({ zugeordnet: [], unklar: [], unbekannt: u, fehlend: [] })
@@ -607,8 +607,7 @@
       <div class="bu-priv">
         <div class="bu-priv-titel">{t('🪪 Eigene Dokumente')}</div>
         {#if ohneBelege}
-          <!-- Öffentliche Fassung: Hinweis nur, solange noch nichts auf dem Gerät liegt
-               (06.10.2026: stand vorher auch nach „43 von 43“ noch da — mit npm-Befehl) -->
+          <!-- Öffentliche Fassung: Hinweis nur, solange noch nichts auf dem Gerät liegt -->
           {#if !$buchungen.persoenlich.some((d) => istLokal(d.datei))}
             <div class="bu-priv-warn">
               {t('🔒 Ausweise und Belege liegen aus Datenschutz')} <b>{t('nicht im Netz')}</b>{t('. Lade sie oben mit „📂 PDFs auswählen“ auf dieses Gerät.')}

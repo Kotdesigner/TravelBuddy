@@ -1,4 +1,4 @@
-// Schriftgröße und Gesamtgröße einstellen (V7, 29.10.2026). Je Gerät in localStorage, nicht im Backup:
+// Schriftgröße und Gesamtgröße einstellen. Je Gerät in localStorage, nicht im Backup:
 // Mac und iPhone haben verschiedene Bildschirme, jedes stellt man für sich ein.
 //
 // Schrift: nur die Texte. Alle Schriftgrößen der Bildschirm-Stile rechnen „Größe × --schrift“

@@ -65,10 +65,10 @@
   let hTimer
   function flash(m) { hinzugefuegt = m; clearTimeout(hTimer); hTimer = setTimeout(() => (hinzugefuegt = ''), 2200) }
 
-  // V4: Einplanen = in eine Route (die passendste zuerst), neue Route, oder als Wanderung.
+  // Einplanen = in eine Route (die passendste zuerst), neue Route, oder als Wanderung.
   const routen = $derived(alleReisen.filter(istRoute))
   const routenNachNaehe = $derived(routen.map((r) => ({ r, km: abstandZurRoute(r, ort) })).sort((a, b) => a.km - b.km))
-  // In welchen Routen steckt dieser Ort schon? (Vorschlag 5 aus UX-Recherche/27)
+  // In welchen Routen steckt dieser Ort schon?
   const inRouten = $derived(routen.filter((r) => (r.stops || []).some((s) => norm(s.name) === norm(ort.name)
     || (s.lat != null && ort.lat != null && Math.abs(s.lat - ort.lat) < 0.02 && Math.abs(s.lon - ort.lon) < 0.02))))
   function zuReise(rid, rname) {
@@ -126,7 +126,7 @@
     updateOrt(ort.id, { bilder })
   }
 
-  // --- Tagebuch (New Style V3): EIN Tagebuch — hier nur Verweis + Alt-Einträge ---
+  // --- Tagebuch: EIN Tagebuch — hier nur Verweis + Alt-Einträge ---
   // Neue Reisetage entstehen im großen Reisetagebuch (mit Orts-Verknüpfung);
   // alte Orts-Einträge bleiben lesbar/löschbar.
   const grossesTagebuch = $derived(allesJournal.filter((e) => e.ortId === ort.id))
@@ -262,7 +262,7 @@
           <input type="file" accept="image/*" onchange={addFoto} />
         </label>
 
-        <!-- Tagebuch (V3): EIN Tagebuch — Verweis ins große Reisetagebuch -->
+        <!-- Tagebuch: EIN Tagebuch — Verweis ins große Reisetagebuch -->
         <div class="tb">
           <div class="tb-titel">{t('📓 Logbuch')}</div>
           <div class="tb-verweis">
@@ -433,7 +433,7 @@
     border-radius: 9px; padding: 4px 9px; min-height: 26px; cursor: pointer;
     transition: background var(--t-fast) var(--ease-out);
   }
-  /* Aus: lesbar, aber deutlich als „nicht gewählt“ — früher 32 % Deckkraft (1,5 : 1). */
+  /* Aus: lesbar (Kontrast ≥ 3 : 1), aber deutlich als „nicht gewählt“. */
   .e-tag:not(.an) { background: var(--card); color: var(--muted); box-shadow: inset 0 0 0 1.5px var(--line-stark); }
   .eigen-daten { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .e-btn { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 8px 12px; min-height: 44px; border: 1px solid var(--ok-linie);
@@ -487,7 +487,7 @@
     overflow: hidden;
   }
   .mehr-btn {
-    /* 32 px hoch statt 19 — auf dem iPhone traf man „mehr“ kaum (Prüfung 19.09.) */
+    /* 32 px hoch statt 19 — auf dem iPhone traf man „mehr“ kaum */
     display: inline-flex; align-items: center; min-height: 32px; position: relative;
     background: none; border: none; padding: 0 6px 0 0; margin: -4px 0 2px;
     color: var(--brand-text); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; cursor: pointer;
@@ -544,7 +544,7 @@
     .km { font-weight: 700; }
   }
 
-  /* V4: Tippflächen nach Apple-Maß (44 pt) für die Hauptaktionen der Kachel */
+  /* Tippflächen nach Apple-Maß (44 pt) für die Hauptaktionen der Kachel */
   .maps, .reise-btn { min-height: 44px; display: inline-flex; align-items: center; }
   .bubble { min-height: 44px; min-width: 44px; }
   /* Größere Tippfläche ohne größere Optik (Apple: 44 pt) */

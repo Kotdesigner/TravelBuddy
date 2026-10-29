@@ -1,4 +1,4 @@
-// Regeln hinter der Bedienbarkeits-Überarbeitung vom 19.09.2037:
+// Regeln der Bedienbarkeit (WCAG 2.2 AA, iOS Human Interface Guidelines):
 //   · Suche: dieselbe Logik fürs Suchblatt und die Kachel-Ansicht (lib/suche.js)
 //   · Kontrast: lesbare Schrift auf JEDER Laufzeit-Farbe der App (lib/kontrast.js)
 //   · Suchfeld am iPhone unten (Suchblatt.svelte, BottomBar.svelte, modal.js)
@@ -65,7 +65,7 @@ console.log('\n3  Suchfeld unten am iPhone (iOS 26), oben am Mac')
   p('iPhone: Suchfeld steht ganz unten (höchste Reihenfolge)', reihe['s-kopf'] === Math.max(...Object.values(reihe)), JSON.stringify(reihe))
   p('iPhone: Treffer über den Etiketten, Etiketten über dem Feld', reihe['s-liste'] < reihe['s-tags'] && reihe['s-tags'] < reihe['s-kopf'])
   p('Mac: keine Umsortierung — Feld oben wie Spotlight', !/order:/.test(mac))
-  // Seit V7 mit einstellbarer Schrift: „max(16px, calc(17px * var(--schrift)))“ hält die 16 px auch bei kleiner Schrift
+  // Mit einstellbarer Schrift: „max(16px, calc(17px * var(--schrift)))“ hält die 16 px auch bei kleiner Schrift
   const suchSchrift = /\.s-kopf input \{[^}]*font-size: (?:max\(16px, calc\()?(\d+)px/.exec(blatt)
   p('Suchfeld ≥ 16 px (sonst zoomt Safari beim Antippen)', +suchSchrift?.[1] >= 16 && (/max\(16px/.test(suchSchrift?.[0] || '') || !/var\(--schrift/.test(suchSchrift?.[0] || '')))
   p('Blatt folgt dem sichtbaren Bereich (Tastatur) über visualViewport', /visualViewport/.test(blatt) && /--vv-hoehe/.test(blatt))

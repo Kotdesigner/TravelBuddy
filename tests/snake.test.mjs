@@ -83,7 +83,7 @@ console.log('\n6  Rand-Fälle')
 
 console.log('\n7  Fenster am iPhone (Statusleiste, Dynamic Island)')
 {
-  // 06.10.2037: Steve konnte Snake am iPhone nicht über ✕ schließen — es lag unter der Uhr.
+  // Das ✕ darf am iPhone nicht unter Statusleiste oder Dynamic Island liegen.
   const src = fs.readFileSync(new URL('../src/lib/SnakeSpiel.svelte', import.meta.url), 'utf8')
   const css = src.slice(src.indexOf('<style>'))
   const regel = (sel) => (css.match(new RegExp('\\n  ' + sel.replace('.', '\\.') + ' \\{[\\s\\S]*?\\n  \\}')) || [''])[0]

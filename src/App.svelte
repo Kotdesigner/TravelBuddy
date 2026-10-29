@@ -79,7 +79,7 @@
   let inhalt = $state(null)
   let quizData = $state({ fragen: [], levels: [] })
   let zeigeLevel = $state(false)
-  // V7: Statistik auf Heute aufklappbar (Standard: oben steht, was als Nächstes kommt). Nichts fällt
+  // Statistik auf Heute aufklappbar (Standard: oben steht, was als Nächstes kommt). Nichts fällt
   // weg; offen oder zu merkt sich das Gerät, zu stehen die wichtigsten Zahlen in der Zeile.
   let zahlenOffen = $state((() => { try { return localStorage.getItem('tb-heute-zahlen') === 'offen' } catch { return false } })())
   $effect(() => { try { localStorage.setItem('tb-heute-zahlen', zahlenOffen ? 'offen' : 'zu') } catch {} })
@@ -90,7 +90,7 @@
   let aktiveTags = $state([])
 
   const ALLE_TAGS = ['MUSS-SEHEN', 'GEHEIMTIPP', 'NUR-4WD', 'EXPEDITION', 'MEIN ORT']
-  // ---- Navigation V4: eigene Bildschirme statt einer 140-Bildschirme-Seite ----
+  // ---- Navigation: jeder Bereich ist ein eigener Bildschirm ----
   // Adresse hinter dem # (navigation.js). Zurück-Wischen und Zurück-Taste funktionieren.
   let ansicht = $state(leseAdresse())
   let hauptEl = $state(null)
@@ -134,11 +134,11 @@
     plan: [['plan', t('Etappen')], ['plan/wanderungen', t('Wanderungen')], ['plan/karte', t('Karte')], ['plan/kalender', t('Kalender')]],
     orte: [['orte/sueden', t('Süden')], ['orte/norden', t('Norden')], ['orte/osten', t('Ostküste')], ['orte/meine', t('Meine Orte')], ['orte/routen', t('Routen-Ideen')]],
     logbuch: [['logbuch', t('Tage')], ['logbuch/lesen', t('Lesen')], ['logbuch/tiere', t('Tierwelt')], ['logbuch/notizen', t('Notizen')]],
-    // V7: dieselben Namen und Zeichen wie im Mehr-Blatt am iPhone und in den Seitentiteln
+    // Dieselben Namen und Zeichen wie im Mehr-Blatt am iPhone und in den Seitentiteln
     mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
   }
   const TITEL = { heute: t('Heute'), plan: t('Plan'), orte: t('Orte'), logbuch: t('Logbuch'), mehr: t('Mehr') }
-  // Eine Zeile je Punkt unter „Mehr“: was steckt dahinter (Prüfung 10.10.: nur Namen, kein Wort dazu)
+  // Eine Zeile je Punkt unter „Mehr“: was steckt dahinter (nur Namen, kein Wort dazu)
   const MEHR_INFO = {
     'mehr/notfall': t('Notrufnummern, nächste Hilfe und dein Standort zum Durchsagen. Geht auch offline.'),
     'mehr/vorbereitung': t('Checkliste bis zur Abreise, Dokumente, Buchungen und Ausgaben vorab.'),
@@ -294,8 +294,7 @@
   const strassenZahl = $derived(zaehleStrassen($strassenlage.meldungen, { orte: [...orte, ...$eigeneOrte], position: $standort, umkreisKm, reisen: $reisen }))
 
   // Prüfen, sobald Daten da sind UND es Netz gibt — auch nach jeder Rückkehr aus dem
-  // Funkloch. Früher lief das genau einmal je App-Start: wer im Outback offline war und
-  // in der nächsten Stadt wieder Empfang hatte, bekam von allein keine neuen Warnungen.
+  // Funkloch, damit nach längerer Offline-Phase sofort der aktuelle Stand geholt wird.
   // Mindestabstand, damit wackliger Empfang nicht dauernd Abrufe auslöst.
   // Standort gleich beim Start — erteilte Freigabe wird still genutzt, sonst genau
   // einmal gefragt (siehe standort.js). Danach steht er für Gefahren im Umkreis und
@@ -454,7 +453,7 @@
     }
   })
 
-  // Beträge für die Anzeige auf ganze € und AU$, OHNE Rundungsfehler (15.10.2026): alle
+  // Beträge für die Anzeige auf ganze € und AU$, OHNE Rundungsfehler: alle
   // Kategorien gemeinsam so gerundet, dass sie genau den angezeigten Gesamtbetrag ergeben.
   // Jede Zwischensumme (Verkehr, Short/Long-Values) ist die Summe angezeigter Kategorien,
   // „vor der Reise“ + „unterwegs“ = „Gesamt“. Gerechnet wird weiter genau (oben).
@@ -485,8 +484,8 @@
     zuOrt(neu)
   }
   // Nächstgelegenen der 88 Orte finden → dessen Abschnitt + Region übernehmen.
-  // Früher angelegte eigene Orte hatten weder Rubrik noch Kennzeichen und standen
-  // deshalb nur unter „Meine Orte“ statt mit unter „Orte Nord/Süd“. Einmalig nachziehen.
+  // Eigene Orte ohne Rubrik oder Kennzeichen (ältere Datenstände) werden einmalig ergänzt,
+  // damit sie auch unter „Süden“ bzw. „Norden“ erscheinen und nicht nur unter „Meine Orte“.
   function eigeneOrteNachruesten() {
     for (const o of $eigeneOrte) {
       const patch = {}
@@ -575,7 +574,7 @@
 
   const sueden = $derived(regionen([...orte, ...$eigeneOrte].filter((o) => o.abschnitt?.startsWith('Süden') && passt(o))))
   const norden = $derived(regionen([...orte, ...$eigeneOrte].filter((o) => o.abschnitt?.startsWith('Norden') && passt(o))))
-  // Ostküste: früher der eigene „Vacation“-Bereich, jetzt ein Abschnitt wie Süden/Norden.
+  // Ostküste: ein Abschnitt wie Süden und Norden.
   const osten = $derived(regionen([...orte, ...$eigeneOrte].filter((o) => o.abschnitt?.startsWith('Ostküste') && passt(o))))
   const treffer = $derived(regionen([...orte, ...$eigeneOrte].filter(passt)))
   const routenSued = $derived(routen.filter((r) => r.gruppe === 'sued'))
@@ -619,7 +618,7 @@
   function dockZu() { clearTimeout(dockTimer); dockOffen = false }
 
   // Suche: vom Dock aus hochspringen & fokussieren; ✕ leert das Feld.
-  // ---- Suche: Blatt statt Leiste oben (Wunsch Steve 19.09.) ----
+  // ---- Suche: Blatt statt Leiste oben ----
   // iPhone: runder Knopf unten rechts · Mac: „Suchen“ oben, ⌘K oder /
   let sucheOffen = $state(false)
   function zurSuche() { dockZu(); sucheOffen = true }
@@ -710,7 +709,7 @@
   // ---- Zusammenführender Import ----
   let importOffen = $state(false)
   // .raw: die eingelesene Datei darf KEIN Svelte-Proxy werden — sonst scheitert später das
-  // Speichern in IndexedDB still (so geschehen bis 18.09.2026, siehe userdata.js → Notspeicher).
+  // Speichern in IndexedDB ohne Fehlermeldung (Proxies sind nicht strukturiert klonbar, siehe userdata.js).
   let importDatei = $state.raw(null)
   let importVorschau = $state(null)
   let importLaeuft = $state(false)
@@ -762,9 +761,7 @@
     navigator.clipboard?.writeText(teile.join('\n\n')).then(() => flash(t('kopiert ({n})', { n: teile.length })))
   }
 
-  // Einheitliches Toast-System (Phase 3): flash() leitet an zeigeToast weiter.
-  // Zeitraum in der Kopfzeile aus dem Gesamtplan — stand bis 18.09. fest auf
-  // „13. Dez 2026 – 27. Jan 2027“, einem Planungsstand vom Frühjahr.
+  // Einheitliches Toast-System: flash() leitet an zeigeToast weiter.
   // Titelbild: Reisebeginn plus Reisedauer (Einführung, Plan), erweitert um die Etappen
   const kopfZeit = $derived(reiseZeitraum($gesamtStart, $reiseTage, planUeberblick(etappenMitDatum($reisen, $gesamtStart))))
   const kopfDatum = (s) => new Date(s + 'T00:00:00').toLocaleDateString(LOCALE, { day: 'numeric', month: 'short', year: 'numeric' }).replace(/(\p{L})\./u, '$1')
@@ -833,8 +830,8 @@
       <!-- Roadtrip-Cockpit: die wichtigsten Kennzahlen auf einen Blick -->
       <div class="cockpit">
         {#if quizData.fragen.length}
-          <!-- Kachel = Knopf zum Aufklappen + Panel daneben (vorher lag der Quiz-Link IM Knopf:
-               ungültig und für VoiceOver nicht erreichbar, Prüfung 19.09.) -->
+          <!-- Kachel = Knopf zum Aufklappen + Panel daneben. Ein Link im Knopf wäre ungültiges HTML
+               und für Screenreader nicht erreichbar. -->
           <div class="kachel klick quiz-kachel" class:offen={zeigeLevel}>
             <button type="button" class="qk-toggle" aria-expanded={zeigeLevel} onclick={() => (zeigeLevel = !zeigeLevel)}>
               <span class="k-zahl">{quizErgebnis.level?.emoji} {quizErgebnis.level?.stufe}<span class="k-plus">/{quizData.levels.length}</span></span>
@@ -1207,8 +1204,7 @@
     <div class="imp-akt">
       <button class="imp-ok" onclick={() => (importBericht = null)}>{t('Fertig')}</button>
       <!-- Nur wenn DIESER Import etwas geändert hat. Sonst gehörte der Schnappschuss zu einem
-           früheren Import, und „Rückgängig“ würfe dessen Ergebnis weg (gefunden 18.09.:
-           „zurück auf 0 Reisetage“ nach einem wirkungslosen zweiten Import). -->
+           früheren Import, und „Rückgängig“ würfe dessen Ergebnis weg. -->
       {#if importBericht.summe.neu || importBericht.summe.ergaenzt || importBericht.summe.geloescht}
         <button class="imp-ab" onclick={importZurueck}>
           {t('Rückgängig')}{#if $schnappschuss?.umfang} {t('(zurück auf {tagebuch} Reisetage)', { tagebuch: $schnappschuss.umfang.tagebuch })}{/if}
@@ -1286,7 +1282,7 @@
     letter-spacing: 3px; font-size: calc(12px * var(--schrift, 1)); text-transform: uppercase; font-weight: 700; opacity: 0.9; line-height: 1.4;
   }
   .hero .kicker .k-datum { text-align: center; transition: opacity var(--t-med, 0.25s) ease; }
-  /* bis die Daten geladen sind, nicht das Vorgabe-Datum aufblitzen lassen (war: kurz „13. Dez 2026“) */
+  /* bis die Daten geladen sind, nicht das Vorgabe-Datum aufblitzen lassen */
   .hero .kicker .k-datum.k-wartet { opacity: 0; }
   .hero .kicker .k-bis { display: block; }
   .hero h1 {
@@ -1301,7 +1297,7 @@
   .hero h1 .stretch { display: flex; justify-content: space-between; }
   .hero h1 .akz { color: #f0b453; }
   .app-footer {
-    /* Steht immer am unteren Rand. Vorher hing der beige Block auf kurzen Seiten mitten im Bild. */
+    /* Steht immer am unteren Rand, auch auf kurzen Seiten. */
     margin-top: auto; text-align: center; padding: 18px 16px calc(22px + env(safe-area-inset-bottom, 0px));
     font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); border-top: 1px solid var(--line);
   }
@@ -1316,7 +1312,7 @@
     background: var(--flaeche-2); border: 1px solid var(--line);
   }
   .fh-text { flex: 1; min-width: 0; font-weight: 700; color: var(--ink); overflow-wrap: anywhere; }
-  /* ---- V4: Rahmen. Mac: Seitenleiste links + Inhalt. iPhone: Inhalt + Leiste unten ---- */
+  /* ---- Rahmen. Mac: Seitenleiste links + Inhalt. iPhone: Inhalt + Leiste unten ---- */
   .app { display: flex; align-items: flex-start; min-height: 100dvh; }
   .inhalt { flex: 1; min-width: 0; min-height: 100dvh; display: flex; flex-direction: column; }
   .inhalt > main { width: 100%; }
@@ -1501,7 +1497,7 @@
   .mo-del { margin-top: 2px; min-height: 32px; padding: 0 6px 0 0; display: inline-flex; align-items: center; font-size: calc(12px * var(--schrift, 1)); color: var(--danger-text); background: none; border: none; cursor: pointer; align-self: flex-start; }
 
   .nach-oben {
-    /* V4: rechts unten. Links lag er über der Seitenleiste und verdeckte „Online“ (Prüfung 10.10.) */
+    /* Rechts unten. Links lag er über der Seitenleiste und verdeckte „Online“ */
     position: fixed; right: 20px; bottom: 20px; z-index: 100;
     animation: rein-auf var(--t-med) var(--ease-spring);
     width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer;
@@ -1520,7 +1516,7 @@
        fünf bis sechs auf einmal — man überfliegt sie, statt sie abzuarbeiten.
        minmax(0,1fr) statt 1fr: sonst sprengen lange Ortsnamen die Spalte. */
     .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 12px; }
-    /* V7: Mit großer Schrift passen zwei Karten nicht mehr nebeneinander (darstellung.js entscheidet) */
+    /* Mit großer Schrift passen zwei Karten nicht mehr nebeneinander (darstellung.js entscheidet) */
     :global(html[data-eine-spalte]) .grid { grid-template-columns: minmax(0, 1fr); }
     .region-titel { font-size: calc(13px * var(--schrift, 1)); }
     /* Kennzahl-Kacheln: 2 kleine nebeneinander, große (Quiz) volle Breite */

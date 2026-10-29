@@ -1,6 +1,6 @@
 <script>
   import { t } from './i18n.js'
-  // Ort hinzufügen (15.10.2026): erst fragen, welcher Ort gemeint ist (Vorschläge aus
+  // Ort hinzufügen: erst fragen, welcher Ort gemeint ist (Vorschläge aus
   // OpenStreetMap), dann prüfen und anpassen. Der neue Ort bekommt dasselbe wie die
   // hinterlegten: Koordinaten (daraus Sonne, Sterne, Wetter, Gefahrenlage), Bild und
   // Beschreibung aus Wikipedia/Commons und die passende Gruppe (Süden, Norden, Ostküste

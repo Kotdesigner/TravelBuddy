@@ -246,11 +246,11 @@ export function fuehreHaken(hier = {}, dort = {}) {
 /**
  * Einzelwert (Startdatum, Budget) mit eigenem Änderungsstempel.
  *
- * Früher entschied der Exportzeitpunkt der GANZEN Datei. „Hier" ist beim Import aber
- * immer „jetzt" — also gewann immer das Zielgerät, und ein Backup brachte Startdatum und
- * Budget nie mit, auch nicht auf ein frisch eingerichtetes Gerät (gefunden 18.09.2026).
+ * Der Exportzeitpunkt der ganzen Datei taugt als Maßstab nicht: „Hier“ ist beim Import immer
+ * „jetzt“, das Zielgerät gewänne also immer, und ein Backup brächte Startdatum und Budget nie
+ * mit, nicht einmal auf ein frisch eingerichtetes Gerät. Daher ein Stempel je Wert.
  *
- * Jetzt:  Grundwert hier (nie eingestellt) → Wert der Datei.   Grundwert in der Datei → hier bleibt.
+ * Regeln: Grundwert hier (nie eingestellt) → Wert der Datei.   Grundwert in der Datei → hier bleibt.
  *         Sonst gewinnt der jüngere Stempel dieses einen Werts; unbekannt → hier bleibt, mit Hinweis.
  */
 export function fuehreSkalar(hier, dort, hierTs, dortTs, name, { grundwert = null, nurErgaenzen = false, zeige = String } = {}) {

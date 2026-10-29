@@ -1,6 +1,6 @@
 <script>
   import { t } from './i18n.js'
-  // Ein Reisetag (V4): oben, was an dem Tag ohnehin feststeht (Gebuchtes, Wanderungen,
+  // Ein Reisetag: oben, was an dem Tag ohnehin feststeht (Gebuchtes, Wanderungen,
   // Notizen), darunter dein Logbuch-Eintrag mit allen Themen. Gibt es noch keinen,
   // legt ein Tipp ihn an, mit Datum und Etappe schon richtig gesetzt.
   import { reisen, gesamtStart, journal, wanderungen, buchungen, userData, notizen, neuerJournalEintrag } from './userdata.js'

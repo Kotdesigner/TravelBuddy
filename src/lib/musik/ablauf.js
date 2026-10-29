@@ -85,8 +85,8 @@ export async function suchlauf(z, region, { quellen, spotify, online = true, cfg
   }
 
   // 2. Erst lesen, was schon in der Playlist steht (Stand bei Spotify, nicht nur das Gedächtnis des
-  //    Geräts). Bis 29.10.2026 geschah das erst nach der Auswahl: standen 7 von 10 schon drin, kamen
-  //    nur 3 dazu, obwohl es mehr gab. Jetzt füllen neue Titel die „Titel je Ort“.
+  //    Geräts), und zwar VOR der Auswahl: So füllen neue Titel die „Titel je Ort“ voll auf, statt dass
+  //    bereits vorhandene Titel Plätze belegen.
   let inPlaylist = new Set()
   try { inPlaylist = new Set(await spotify.playlistIds(z.playlist.id)) } catch (e) { z = protolog(z, 'fehler', t('Playlist lesen: {message}', { message: e.message }), zeit) }
   const bekannt = bekannteIds(z)

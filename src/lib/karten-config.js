@@ -6,7 +6,7 @@
 //   fein (maxzoom 13)   — nur dort, wo wir uns wirklich aufhalten: Straßennamen, Wege, Gebäude
 //
 // Jede Stufe vervierfacht die Kachelzahl, deshalb ist fein nur örtlich bezahlbar.
-// Ausgeschnitten aus dem Protomaps-Planet-Build (Basemap v4.15.1), Stand 01.08.2026.
+// Ausgeschnitten aus dem Protomaps-Planet-Build (Basemap v4.15.1), Stand August 2026.
 // `mb` = Dateigröße in public/karten/ (für die Anzeige „noch x MB laden").
 import { t } from './i18n.js'
 export const REGIONEN = [

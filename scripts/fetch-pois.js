@@ -1,11 +1,8 @@
 // Holt Outback-POIs aus OpenStreetMap (Overpass) für einen Kartenteil und schreibt kompaktes JSON
 // nach public/pois-<id>.json.   Aufruf:  node scripts/fetch-pois.js melbourne
 //
-// 18.09.2026: Die Rechtecke kommen jetzt aus karten-config.js — vorher waren sie hier von Hand
-// kleiner eingetragen als die Detailkarten, und 11 von Steves Orten (Marysville, Phillip Island,
-// Mission Beach, Cape Tribulation …) lagen auf der Karte, aber ohne Tankstelle und Wasser.
-// Außerdem schrieb das Skript noch in den alten Ordner App/App/ und lief mit "type": "module"
-// gar nicht mehr (require).
+// Die Rechtecke der Kartenteile stammen aus karten-config.js (eine Quelle für Karte und POIs).
+// So deckt jede Detailkarte auch die Versorgungspunkte ihres ganzen Ausschnitts ab.
 import fs from 'node:fs'
 import { POI_REGIONEN } from '../src/lib/karten-config.js'
 

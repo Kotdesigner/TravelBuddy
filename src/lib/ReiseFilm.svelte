@@ -1,6 +1,6 @@
 <script>
   import { t, LOCALE, tn } from './i18n.js'
-  // Reise-Film (11.10.): ein kurzes Video im Hochformat aus der Reise. Titel, je Etappe ein
+  // Reise-Film: ein kurzes Video im Hochformat aus der Reise. Titel, je Etappe ein
   // Flug über die Weltkugel, die Route zeichnet sich ein, bis zu drei Fotos aus dem Logbuch,
   // am Ende die Bilanz. Gemalt wird auf ein eigenes Canvas (globus.js, kein MapLibre),
   // aufgenommen mit captureStream + MediaRecorder in Echtzeit.

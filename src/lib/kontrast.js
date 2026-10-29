@@ -1,7 +1,7 @@
 // Lesbare Schrift auf einer beliebigen Hintergrundfarbe.
 //
 // Viele Plaketten bekommen ihre Farbe erst zur Laufzeit (Warnstufe, Reisefarbe,
-// POI-Kategorie). Weiß darauf war auf Gelb/Orange kaum lesbar (Prüfung 19.09.: 1,9–3,0 : 1,
+// POI-Kategorie). Weiß darauf war auf Gelb/Orange kaum lesbar (1,9–3,0 : 1,
 // WCAG verlangt 4,5 : 1). Das offizielle australische Warnsystem setzt auf Gelb und
 // Orange deshalb selbst dunkle Schrift.
 

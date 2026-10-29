@@ -1,7 +1,7 @@
 // Straßenlage WA: Sperrungen und Hinweise von Main Roads WA (reine Logik, ohne Speicher).
 //
 // Quelle: „WebEOC Road Closures“, ein öffentlicher ArcGIS FeatureServer von Main Roads WA.
-// CORS erlaubt, kein Schlüssel (am 11.10.2026 in Safari und Chromium geprüft).
+// CORS erlaubt, kein Schlüssel (geprüft in Safari und Chromium).
 // Die Meldungen sind Linien (Straßenabschnitte), manchmal Punkte. Deshalb rechnet der
 // Abstand hier Punkt zu Strecke und nicht Punkt zu Punkt.
 //
@@ -133,7 +133,7 @@ export function datumPerth(wert) {
   return Number.isNaN(iso) ? null : iso
 }
 
-/** „11.10.2026, 12:24 Uhr“ in Perther Zeit. */
+/** Zeitpunkt als Text in Perther Zeit, z. B. „1.5.2027, 12:24 Uhr“. */
 export function formatPerth(ms) {
   if (ms == null || !Number.isFinite(ms)) return ''
   try {

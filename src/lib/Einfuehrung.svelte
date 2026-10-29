@@ -1,6 +1,6 @@
 <script>
   import { t, tn, je, sprache, setzeSprache } from './i18n.js'
-  // Einführung beim ersten Öffnen (Basic, 29.10.2026): führt einmal durch die App. Jeder Schritt
+  // Einführung beim ersten Öffnen: führt einmal durch die App. Jeder Schritt
   // erklärt kurz und lässt das Wichtigste gleich wirklich tun: Startdatum, erste Etappe, eine
   // Buchung, Dokumente aufs Gerät. Für die echten Blätter und Seiten tritt die Einführung zur
   // Seite; ist das Blatt zu oder tippt man unten auf „Weiter“, geht es mit dem nächsten Schritt
@@ -96,7 +96,7 @@
     {#if id === 'willkommen'}
       <p class="ef-icon" aria-hidden="true">🦘</p>
       <h2 id="ef-titel">{t('Willkommen bei TravelBuddy')}</h2>
-      <p id="ef-text">{t('Deine Reise-App für Western Australia: Orte, Routen, Plan, Buchungen, Logbuch und Notfall. Alles bleibt auf deinem Gerät, ohne Konto und ohne Anmeldung, und vieles geht auch offline.')}</p>
+      <p id="ef-text">{t('Deine Reise-App für Western Australia: Orte, Routen, Plan, Buchungen und Notfall. Und ganz nebenbei entsteht dein Reisetagebuch. Alles bleibt auf deinem Gerät, ohne Konto und ohne Anmeldung, und vieles geht auch offline.')}</p>
       <p class="ef-k">{t('In ein paar Schritten richtest du alles ein. Jeden Schritt kannst du überspringen.')}</p>
       <div class="segment ef-sprache" role="group" aria-label={t('Sprache')}>
         {#each [['de', 'Deutsch'], ['en', 'English']] as [s, l]}
@@ -173,8 +173,8 @@
 
     {:else if id === 'logbuch'}
       <p class="ef-icon" aria-hidden="true">📖</p>
-      <h2 id="ef-titel">{t('Unterwegs: das Logbuch')}</h2>
-      <p id="ef-text">{t('Auf der Reise schreibst du jeden Tag ins Logbuch: ein paar Zeilen, Fotos, Kilometer und die Tiere, die du gesehen hast. Unter Heute steht dann, was ansteht, und am Ende wird daraus dein Reisebericht.')}</p>
+      <h2 id="ef-titel">{t('Unterwegs entsteht dein Tagebuch')}</h2>
+      <p id="ef-text">{t('Jeden Abend ein paar Zeilen, Fotos, Kilometer und die Tiere des Tages ins Logbuch. Daraus baut TravelBuddy von selbst dein Reisetagebuch, fertig zum Drucken und zum Teilen mit der Familie. Unter Heute steht derweil, was ansteht.')}</p>
       <div class="ef-knoepfe">
         <button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>
         <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>

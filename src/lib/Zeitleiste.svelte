@@ -76,8 +76,8 @@
       const cc = cr.left + cr.width / 2
       const a = Math.max(-3.4, Math.min(3.4, (cc - center) / UNIT))
       const abs = Math.abs(a)
-      // New Style: einen Hauch dezenter (flachere Winkel, weniger Tiefe) —
-      // besser lesbar & flüssiger auf älteren Geräten. Ref: UX-Recherche/04.
+      // Einen Hauch dezenter (flachere Winkel, weniger Tiefe) —
+      // besser lesbar & flüssiger auf älteren Geräten.
       const ry = Math.max(-48, Math.min(48, -a * 26)) // zur Mitte fächern
       const tz = -abs * 150 // in die Tiefe staffeln
       const tx = -a * 58 // zur Mitte ziehen → Karten stapeln sich hintereinander

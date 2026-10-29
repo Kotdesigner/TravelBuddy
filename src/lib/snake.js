@@ -1,4 +1,4 @@
-// Spiellogik für das Snake-Easter-Egg („snake" in die Suche, Wunsch Steve 06.10.2026).
+// Spiellogik für das Snake-Easter-Egg („snake" in die Suche,).
 // Bewusst ohne Oberfläche: reine Funktionen, damit tests/snake.test.mjs sie prüfen kann.
 //
 // Regeln: feste Bande — wer gegen den Rand fährt, verliert (KEIN Durchtauchen auf die

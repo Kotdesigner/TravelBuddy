@@ -1,4 +1,4 @@
-// TravelBuddy für Windows (29.10.2026): eine einzige TravelBuddy.exe.
+// TravelBuddy für Windows: eine einzige TravelBuddy.exe.
 //
 // Die fertige Web-App (dist/) steckt in der exe. Beim Start liefert sie ein kleiner Server auf
 // 127.0.0.1:8990 aus, und Microsoft Edge zeigt sie als eigenes Fenster ohne Adressleiste

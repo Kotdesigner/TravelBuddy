@@ -1,7 +1,7 @@
 // Keine Rundungsfehler: Teile ergeben genau die angezeigte Summe, Längen passen zu den
 // angezeigten Positionen, Routenhinweis und Versorgung zeigen dieselbe Tank-Lücke.
-// Anlass 15.10.2037, Route Coral Coast: Abschnitte 1.930 km gegen Route 1.928 km,
-// Tank-Lücke einmal 297, einmal 298 km.
+// Beispiel Coral Coast: Abschnitte 1.930 km gegen Route 1.928 km, Tank-Lücke einmal 297,
+// einmal 298 km — genau das darf nicht passieren.
 // Ausführen: node tests/runden.test.mjs
 import fs from 'node:fs'
 import { rundeAufSumme, gleicheTeile } from '../src/lib/runden.js'

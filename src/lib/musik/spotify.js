@@ -4,7 +4,7 @@
 // Client-ID einer eigenen Spotify-Entwickler-App; ein Client Secret kommt nie in den Code.
 // Das Token liegt nur auf diesem Gerät (localStorage) und lässt sich jederzeit trennen.
 //
-// Stand der Spotify-Schnittstelle laut Änderungsliste Februar 2026 (geprüft am 10.10.2026):
+// Stand der Spotify-Schnittstelle laut Änderungsliste Februar 2026 (geprüft Oktober 2026):
 //   - Hinzufügen:      POST /v1/playlists/{id}/items  (früher …/tracks)
 //   - Inhalt lesen:    GET  /v1/playlists/{id}/items  (nur eigene Playlists)
 //   - Suche:           GET  /v1/search?type=track, höchstens 10 Treffer je Abruf
@@ -245,7 +245,7 @@ export const spotify = {
   },
 
   /**
-   * Was in der Gegend gehört wird (29.10.2026): öffentliche Playlisten, die nach dem Ort heißen
+   * Was in der Gegend gehört wird: öffentliche Playlisten, die nach dem Ort heißen
    * („Broome Vibes“, „Perth Summer“), und deren Titel. Spotifys eigene Listen lässt Spotify
    * Entwickler-Apps nicht lesen; die werden übersprungen. Liefert schon fertige Spotify-Titel.
    */

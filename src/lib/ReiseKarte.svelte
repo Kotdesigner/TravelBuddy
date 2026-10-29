@@ -3,14 +3,14 @@
   import { fehlerText } from './fehlertext.js'
   import { FORMATE, DATEITYPEN, exportiereKarte, speichere } from './kartenexport.js'
   import { schriftAuf } from './kontrast.js'
-  // Reise-Karte der Startseite (New Style): echte Karte statt Schema.
+  // Reise-Karte der Startseite: echte Karte statt Schema.
   // • MapLibre mit Online-Kartenkacheln; offline Rückfall auf die echte
   //   Australien-Küstenlinie (liegt lokal vor) — funktioniert also immer.
   // • Alle Routen (Roadtrip + Vacation) mit nummerierten Stopps.
   // • Klick auf Route/Nummer öffnet ein Infofenster: Kennzahlen, Fotos zum
   //   Durchblättern, Logbuch-Einträge, Link zur Reise.
   // • Klick auf die Karte (bzw. ⤢) vergrößert sie auf Vollbild.
-  // V4 (Wunsch 10.10.): die Karte ist eine Weltkugel. Beim Öffnen fliegt sie von
+  // Die Karte ist eine Weltkugel. Beim Öffnen fliegt sie von
   // Deutschland nach Australien und zeichnet dabei die Flüge nach. „Reise abspielen“
   // fährt die Etappen der Reihe nach ab. Herangezoomt wird sie wie bisher zur flachen
   // Karte mit Straßen (OpenStreetMap, nur online). Offline bleibt die gemalte Kugel.
@@ -29,7 +29,7 @@
     reisen = [], journal = [], orte = [], eigeneOrte = [], springeZu = () => {},
   } = $props()
 
-  // Reise-Film (11.10.): Video im Hochformat aus der Reise, eigenes Blatt
+  // Reise-Film: Video im Hochformat aus der Reise, eigenes Blatt
   let filmAuf = $state(false)
   function oeffneFilm() { if (spielt) anhalten(); filmAuf = true; haptic() }
 
@@ -417,7 +417,7 @@
   // Schutz für schwache Geräte: Kommt der Browser in den ersten Sekunden mit dem Zeichnen
   // nicht hinterher (kein neues Bild über eine Sekunde lang, obwohl die Seite sonst läuft),
   // wird die Kugel zur flachen Karte und der Einflug fällt aus. Gefunden in der Testumgebung
-  // ohne Grafikkarte (10.10.); auf Mac und iPhone sollte es nie greifen.
+  // ohne Grafikkarte; auf Mac und iPhone sollte es nie greifen.
   let flachGeschaltet = $state(false)
   // Wahl Kugel oder flache Karte, merkt sich das Gerät
   let flach = $state((() => { try { return localStorage.getItem('tb-karte-flach') === '1' } catch { return false } })())
@@ -622,7 +622,7 @@
 
   const beruehrung = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches
   function toggleGross() { gross = !gross; haptic() }
-  // V4: direkt zur Etappe bzw. Route im Plan, nicht nur an den Anfang der Liste
+  // Direkt zur Etappe bzw. Route im Plan, nicht nur an den Anfang der Liste
   function zurReise() {
     const r = gewaehlt?.reise
     const ziel = !r ? 'plan' : r.typ === 'route' ? (r.etappeId ? `plan/etappe/${r.etappeId}/${r.id}` : 'plan/route/' + r.id) : 'plan/etappe/' + r.id
@@ -929,7 +929,7 @@
   .exp-msg { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: #1a7f37; width: 100%; }
   /* Sichtbar kraeftig, ausgeblendet blass. Die geoeffnete Route bekommt zusaetzlich einen
      Rahmen, damit „ausgewaehlt" und „sichtbar" nicht verwechselt werden. */
-  /* aus: lesbar, aber gestrichelt — früher 45 % Deckkraft (2,7 : 1, Prüfung 19.09.) */
+  /* aus: lesbar (Kontrast ≥ 3 : 1), aber gestrichelt */
   .rk-leg:not(.an) { color: var(--muted); border-style: dashed; }
   .rk-leg.offen { box-shadow: inset 0 0 0 2px var(--brand); }
   .rk-alle.an { background: var(--brand); color: #fff; }

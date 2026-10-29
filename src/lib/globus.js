@@ -1,4 +1,4 @@
-// Weltkugel (V4): Geometrie und ein kleiner Renderer für gemalte 3D-Globen.
+// Weltkugel: Geometrie und ein kleiner Renderer für gemalte 3D-Globen.
 //
 // Zwei Nutzer:
 //  - die Reise-Karte (MapLibre im Globus-Modus) braucht Großkreise für Flüge und ein
@@ -89,7 +89,7 @@ export function weltGeojson() {
   }
 }
 // Ringe, die über die Datumsgrenze laufen (Fidschi, Tschukotka, Antarktis), zogen in
-// MapLibre einen Streifen einmal um die Welt (Prüfung 10.10.). Längen fortlaufend
+// MapLibre einen Streifen einmal um die Welt. Längen fortlaufend
 // schreiben; die Antarktis über den Südpol schließen.
 function ringOhneSprung(ring) {
   const p = entwirren(ring)

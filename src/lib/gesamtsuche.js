@@ -1,4 +1,4 @@
-// Suche über alles außer den Orten (29.10.2026): Logbuch-Tage, Tiere, Wanderungen, Buchungen,
+// Suche über alles außer den Orten: Logbuch-Tage, Tiere, Wanderungen, Buchungen,
 // Etappen und Routen, Notizen, Packliste, Vorbereitung. Die Orte sucht weiter suche.js (eigene
 // Rangfolge, Etiketten, „als Kacheln“); das Suchblatt zeigt beides untereinander.
 //

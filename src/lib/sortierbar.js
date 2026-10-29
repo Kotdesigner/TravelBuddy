@@ -1,4 +1,4 @@
-// Liste per Ziehen umsortieren (V4) — für Stopps einer Route.
+// Liste per Ziehen umsortieren — für Stopps einer Route.
 //
 //   <ol use:sortierbar={{ onbewege: (von, nach) => … }}>
 //     <li data-zeile> … <button data-griff aria-label="Verschieben">≡</button> … </li>

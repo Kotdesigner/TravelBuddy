@@ -7,8 +7,8 @@
 }
 
 /* ============================================================
-   Design-Tokens (New Style) — EIN Ort für Farben, Radien,
-   Schatten, Abstände, Dauern & Ebenen. Referenz: UX-Recherche/
+   Design-Tokens — EIN Ort für Farben, Radien,
+   Schatten, Abstände, Dauern & Ebenen.
    ============================================================ */
 :root {
   /* Flächen & Text */
@@ -28,7 +28,7 @@
   --danger: #c0392b;       /* Gefahr / Löschen */
   --danger-text: #b3261e;  /* Rot als SCHRIFT (dunkel: heller, siehe unten) */
 
-  /* Flächen-System (Phase 5): vereinheitlichte Oberflächen, dark-fähig */
+  /* Flächen-System: vereinheitlichte Oberflächen, dark-fähig */
   --flaeche: #faf5ec;      /* ruhige Sandfläche (Panels, Kopfzeilen) */
   --flaeche-2: #f2e8d8;    /* kräftiger (Chips, Controls) */
   --eingabe: #fffdfa;      /* Input-/Textarea-Hintergrund */
@@ -75,7 +75,7 @@
   color-scheme: light;
 }
 
-/* Dunkles Set — wird erst in Phase 5 aktiviert (data-theme / System).
+/* Dunkles Set — aktiv über data-theme oder die Systemeinstellung.
    Warmes Braunschwarz statt Neutralgrau: bleibt „Outback". */
 :root[data-theme='dark'] {
   --bg: #1e150e;
@@ -95,7 +95,7 @@
   --danger-flaeche: #3b201d; --danger-linie: #6a3730;
   --warn-flaeche: #3b2d17;
   --info-flaeche: #1d2c38; --info-linie: #2f4a5e; --info-text: #8ec2e8;
-  /* Terrakotta-Schrift auf Dunkelbraun: #8a3f16 hatte 2,1 : 1 (Prüfung 19.09., 250 Stellen).
+  /* Terrakotta-Schrift auf Dunkelbraun: #8a3f16 erreicht nur 2,1 : 1 (unter WCAG 1.4.3).
      #e89a63 erreicht auf allen dunklen Flächen 5,9–7,9 : 1. Flächen behalten --brand. */
   --brand-text: #e89a63;
   --danger-text: #ff8f80;  /* #c0392b auf Dunkelbraun: 2,95 : 1 */
@@ -234,7 +234,7 @@ html[data-richtung='zurueck'] ::view-transition-old(haupt) { animation: vt-raus-
   white-space: nowrap;
 }
 
-/* ============ Buttons: 3 Hierarchien (Phase 2) ============ */
+/* ============ Buttons: 3 Hierarchien ============ */
 .btn {
   font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 7px 13px; border: 1px solid var(--line-stark);
   background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 8px; cursor: pointer;
@@ -260,16 +260,16 @@ html[data-richtung='zurueck'] ::view-transition-old(haupt) { animation: vt-raus-
 }
 .btn-danger:hover { background: #fdecec; }
 
-/* ============ Eingaben: komfortable Ziele (Phase 2) ============ */
+/* ============ Eingaben: komfortable Ziele ============ */
 select,
 textarea,
 input:where([type='text'], [type='search'], [type='number'], [type='date'],
   [type='email'], [type='url'], [type='tel'], :not([type])) {
-  min-height: 44px;   /* V7: Apple-Mindestmaß 44 pt (vorher 38) */
+  min-height: 44px;   /* Apple-Mindestmaß 44 pt */
   border-radius: var(--radius-s);
   accent-color: var(--brand);
   /* Ein Feld darf in einer Zeile schrumpfen. Ohne das behält es seine Mindestbreite
-     (Prüfung 10.10.: „Eigenen Punkt hinzufügen“ schob die Seite am iPhone 7 px zu breit). */
+     und kann eine Zeile über den Bildschirmrand schieben. */
   min-width: 0;
 }
 input[type='checkbox'], input[type='radio'] { accent-color: var(--brand); width: 22px; height: 22px; }
@@ -280,7 +280,7 @@ input[type='checkbox'], input[type='radio'] { accent-color: var(--brand); width:
   input:not([type='checkbox']):not([type='radio']):not([type='range']), select, textarea { font-size: max(16px, calc(16px * var(--schrift, 1))) !important; }
 }   /* 18 → 22 px (Tippfläche) */
 
-/* ============ Aufklapp-System (Phase 2b) ============ */
+/* ============ Aufklapp-System ============ */
 /* Deutlich sichtbarer Disclosure-Toggle: Kreisfläche + rotierender Chevron.
    Als <button class="aufklapp"> (eigenständig) oder <span class="aufklapp klein">
    innerhalb einer klickbaren Kopfzeile. .offen = aufgeklappt (dreht nach unten). */

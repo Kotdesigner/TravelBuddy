@@ -2,7 +2,7 @@
 // Abnehmen am Termin, Erhalt beim Neu-Import des Reisekalenders (lib/belege.js).
 // Ausführen: node tests/belege-zuordnen.test.mjs
 //
-// Hintergrund (29.10.2026): Dateien, die die App nicht selbst erkannte, verwarf sie still.
+// Hintergrund: Dateien, die die App nicht selbst erkannte, verwarf sie still.
 // Aus einem Ordner am iPhone kam so scheinbar nichts an. Jetzt kommen sie in eine Maske.
 // Alle Termine hier sind ausgedacht.
 import { schlageZielVor, eigenerPfad, belegLabel, haengeBelegeAn, nimmBelegAb, eigeneBelegeUebernehmen, istBildDatei, kameraName, ordneZu, pfadHash } from '../src/lib/belege.js'
@@ -78,7 +78,7 @@ const zweimal = eigeneBelegeUebernehmen(neu.events, nach)
 p('zweimal übernommen → trotzdem nur einmal', zweimal.find((e) => e.id === 'rk-3').docs.length === 1)
 p('Termin, den es nicht mehr gibt: nichts bricht', eigeneBelegeUebernehmen(neu.events, neuImport.filter((e) => e.id !== 'rk-3')).length === neuImport.length - 1)
 
-console.log('\nFotos vom Ticket (seit 29.10.2026)')
+console.log('\nFotos vom Ticket')
 {
   const f = (name, type = '', size = 1000) => ({ name, type, size, webkitRelativePath: '' })
   p('Foto erkannt an Typ oder Endung', istBildDatei(f('IMG_1.jpeg', 'image/jpeg')) && istBildDatei(f('scan.HEIC')) && istBildDatei(f('x.png', '')) && istBildDatei(f('ohne', 'image/webp')))

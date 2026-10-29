@@ -1,7 +1,7 @@
 <script>
   import { t, tn } from './i18n.js'
   import { heuteTag } from './heute.js'
-  // Heute (V4): was jetzt wichtig ist. Vor der Reise: wie lange noch, was ansteht, was
+  // Heute: was jetzt wichtig ist. Vor der Reise: wie lange noch, was ansteht, was
   // noch zu erledigen ist. Unterwegs: welcher Tag, welche Etappe, was heute und morgen
   // gebucht ist, und der Knopf, um den Tag ins Logbuch zu schreiben.
   import { reisen, gesamtStart, buchungen, wanderungen, journal, vorbereitung, istAn, neuerJournalEintrag } from './userdata.js'

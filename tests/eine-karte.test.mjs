@@ -83,8 +83,8 @@ p('ein Punkt allein ergibt keine Linie', schneideZu([[115, -30]]).length === 0)
 p('imGebiet: Perth ja, Doha nein', imGebiet([115.86, -31.95]) && !imGebiet([51.53, 25.29]))
 
 console.log('\n6  Kartenstil: Flüsse sind Linien, keine Flächen')
-// 06.10.2037: Flüsse liegen in „water" als Linien. Eine Füllung ohne Filter schloss jede
-// Flusslinie zur Fläche → blaue Keile übers Land (Margaret River, Kalbarri, York, Fitzroy).
+// Flüsse liegen in „water“ als Linien. Eine Füllung ohne Filter schließt jede Flusslinie
+// zur Fläche → blaue Keile übers Land (z. B. Margaret River, Murchison bei Kalbarri).
 const stil = fs.readFileSync(new URL('../src/lib/Karte.svelte', import.meta.url), 'utf8')
 const ebene = (id) => (stil.match(new RegExp(`\\{ id: '${id}'[^\\n]*`)) || [''])[0]
 p('Wasser-Füllung nimmt nur Flächen', /type: 'fill'/.test(ebene('wasser')) && ebene('wasser').includes("filter: ['==', '$type', 'Polygon']"), ebene('wasser'))

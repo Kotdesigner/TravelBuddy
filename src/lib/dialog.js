@@ -1,4 +1,4 @@
-// Eigene Rückfragen statt confirm()/alert() (V4).
+// Eigene Rückfragen statt confirm()/alert().
 //
 // Die Systemdialoge sehen auf dem iPhone aus wie eine Fehlermeldung von Safari, zeigen
 // die Webadresse als Titel, und „Abbrechen“ steht an einer anderen Stelle als in der

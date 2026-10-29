@@ -1,7 +1,7 @@
 <script>
   import { t, LOCALE, tn } from './i18n.js'
   import { ZWEI } from './format.js'
-  // Feld-Beschriftungen mit ihren Eingaben verbinden (VoiceOver las nur „Textfeld“, Prüfung 19.09.)
+  // Feld-Beschriftungen mit ihren Eingaben verbinden (VoiceOver las nur „Textfeld“)
   const feldUid = Math.random().toString(36).slice(2, 8)
   const lblId = (fid) => `lf-${feldUid}-${fid}`
   import { warnungenFuer } from './warnungen.js'
@@ -26,7 +26,7 @@
   // Seite unbenutzbar — also grundsaetzlich zugeklappt.
   // NUR der gerade angelegte Tag startet offen. „Leer = offen“ waere falsch: bei den
   // vorhandenen Tagen sind mehrere noch leer, die klappten dann alle auf und die Seite
-  // waere wieder so lang wie vorher (gemessen: 5 von 7 offen).
+  // waere wieder unübersichtlich lang.
   let aufgeklappt = $state(false)
   let zuerst = true
   $effect(() => { if (zuerst) { zuerst = false; aufgeklappt = neuAngelegt || immerOffen } })
@@ -219,7 +219,7 @@
     if (eintrag.legIdx == null) return rt.km
     return stimmigeLegs(rt)[eintrag.legIdx]?.km ?? null
   })
-  // ---- V4: Etappe ergibt sich aus dem Datum; Route/Abschnitt nur noch für die km ----
+  // ---- Etappe ergibt sich aus dem Datum; Route/Abschnitt nur noch für die km ----
   const etappeHeute = $derived(etappeAm(eintraege, eintrag.datum))
   const routenHeute = $derived(etappeHeute ? routenDerEtappe(reisen, etappeHeute.reise.id) : [])
   // Wahlmöglichkeiten „Strecke des Tages“: die Etappe selbst (falls sie Stopps hat), jede Route ganz, jeder Abschnitt
@@ -400,7 +400,7 @@
       <span class="k-pfeil">▾</span>
     </button>
   {:else}
-  <!-- Kopf V4: Datum → Etappe automatisch; Ort per Suche; Strecke nur, wenn es um km geht -->
+  <!-- Kopf: Datum → Etappe automatisch; Ort per Suche; Strecke nur, wenn es um km geht -->
   <div class="k4">
     {#if !immerOffen}<button class="je-zu" onclick={() => (aufgeklappt = false)} title={t('Eintrag zuklappen')} aria-label={t('Eintrag zuklappen')}>▲</button>{/if}
     <label class="k4-datum">{t('Datum')}<input class="datum" type="date" value={eintrag.datum} onchange={(e) => setDatum(e.target.value)} /></label>
@@ -549,7 +549,7 @@
       </div>
     {/each}
   </div>
-  <!-- V7: Löschen ans Ende, abgesetzt (vorher ein 🗑 oben neben dem Datum, leicht zu treffen). Fragt weiter nach. -->
+  <!-- Löschen am Ende und abgesetzt, damit es nicht versehentlich getroffen wird. Mit Rückfrage. -->
   <div class="je-loeschen"><button type="button" class="btn-danger" onclick={loeschen}>🗑 {t('Diesen Eintrag löschen')}</button></div>
   {/if}
 </article>
@@ -685,7 +685,7 @@
     cursor: pointer; padding: 4px 6px; align-self: flex-start;
   }
 
-  /* V4: Sterne, Fliegen und Umschalter groß genug für den Daumen (auch mit Sonnencreme) */
+  /* Sterne, Fliegen und Umschalter groß genug für den Daumen (auch mit Sonnencreme) */
   .r-icon { min-width: 44px; min-height: 44px; font-size: calc(22px * var(--schrift, 1)); }
   .t-opt { min-height: 44px; }
   .f-in input, .f-in textarea, .feld select { min-height: 44px; }

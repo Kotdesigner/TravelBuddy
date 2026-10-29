@@ -1,10 +1,10 @@
-// Navigation (V4): jeder Bildschirm hat eine Adresse hinter dem #, z. B. #/plan/etappe/<id>
+// Navigation: jeder Bildschirm hat eine Adresse hinter dem #, z. B. #/plan/etappe/<id>
 // oder #/logbuch/tag/2037-12-14. Damit funktionieren Zurück-Wischen und die Zurück-Taste,
 // und jede Stelle der App kann direkt dorthin springen, ohne Eigenschaften durchzureichen.
 
 export const TABS = ['heute', 'plan', 'orte', 'logbuch', 'mehr']
 
-// Alte Sprungmarken aus V3 (Links in Komponenten, gespeicherte Lesezeichen)
+// Sprungmarken des Altformats (ältere Links und gespeicherte Lesezeichen) → heutige Adressen
 export const ALT = {
   ueberblick: 'heute', sueden: 'orte/sueden', 'routen-sued': 'orte/routen', norden: 'orte/norden',
   'routen-nord': 'orte/routen', osten: 'orte/osten', 'meine-orte': 'orte/meine', 'eigene-route': 'plan',

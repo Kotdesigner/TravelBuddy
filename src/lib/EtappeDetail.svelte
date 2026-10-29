@@ -1,6 +1,6 @@
 <script>
   import { t, tn } from './i18n.js'
-  // Eine Etappe (V4): Name und Datum, Buchungen, Routen mit Stopps, Wanderungen, Logbuch.
+  // Eine Etappe: Name und Datum, Buchungen, Routen mit Stopps, Wanderungen, Logbuch.
   // Ist keine Etappe gewählt (Route ohne Etappe), zeigt sie nur diese Route.
   import { reisen, gesamtStart, buchungen, wanderungen, journal, updateReise, loescheReise, neueRoute, wandleReiseUm } from './userdata.js'
   import { etappenMitDatum, routenDerEtappe, tageZwischen, gueltigesDatum, ymd } from './plan.js'
@@ -209,7 +209,7 @@
   .ed-zurueck span { font-size: calc(28px * var(--schrift, 1)); line-height: 1; margin-top: -3px; }
   .ed-kopf { display: flex; align-items: center; gap: 10px; border-left: 6px solid var(--farbe); padding-left: 12px; transition: border-color var(--t-med) var(--ease-out); }
   .ed-name-feld { position: relative; display: flex; align-items: center; flex: 1; min-width: 0; }
-  /* Farbe ist Nebensache: ein kleiner Knopf statt acht großer Kreise über dem Datum (Prüfung 10.10.) */
+  /* Farbe ist Nebensache: ein kleiner Knopf statt acht großer Kreise über dem Datum */
   .ed-farbknopf { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px 0 8px; border: 1px solid var(--line); border-radius: 22px; background: var(--card); color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
   .ed-farbpunkt { width: 18px; height: 18px; border-radius: 50%; background: var(--farbe); box-shadow: 0 0 0 2px var(--card), 0 0 0 3px var(--line-stark); }
   .ed-name {

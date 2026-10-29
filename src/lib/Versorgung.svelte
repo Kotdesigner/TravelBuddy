@@ -46,7 +46,7 @@
   const startName = $derived((r?.stops || []).find((s) => s.lat != null)?.name || t('Start'))
   const zielName = $derived([...(r?.stops || [])].reverse().find((s) => s.lat != null)?.name || t('Ziel'))
   // Tank-Lücken NICHT hier neu rechnen: genau das Ergebnis des Routenhinweises übernehmen
-  // (routen-dienst.js), damit beide Stellen immer dieselbe Zahl zeigen (15.10.2026: 297 / 298 km).
+  // (routen-dienst.js), damit beide Stellen immer dieselbe Zahl zeigen (sonst Abweichungen um 1 km).
   const lueckenFuel = $derived(liste && !fehlt ? ($hinweise[r.id]?.tank?.luecken || []).map((l) => ({ k: 'fuel', ...l })) : [])
   const lueckenWasser = $derived(liste && !fehlt ? luecken(liste, gesamtKm, 'wasser', { start: startName, ziel: zielName }) : [])
   const zaehler = $derived(Object.fromEntries(KATEGORIEN.map((k) => [k.k, (liste || []).filter((x) => x.k === k.k).length])))

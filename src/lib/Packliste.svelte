@@ -115,7 +115,7 @@
   .k-titel { flex: 1; font-size: calc(14.5px * var(--schrift, 1)); font-weight: 800; color: var(--brand-text); }
   .k-zahl { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: #1f1408; background: var(--brand-2); padding: 1px 8px; border-radius: 9px; }
   .items { list-style: none; padding: 0; margin: 0; }
-  /* Zeilen 44 px wie in iOS-Listen, Kästchen 22 px (vorher 17 px bei 3 px Abstand) */
+  /* Zeilen 44 px wie in iOS-Listen, Kästchen 22 px */
   .item { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 2px 0; min-height: 44px; }
   .item label { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 1; min-height: 44px; }
   .item input { margin: 0; width: 22px; height: 22px; accent-color: #2f7a63; flex: 0 0 auto; }

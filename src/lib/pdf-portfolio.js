@@ -1,4 +1,4 @@
-// PDF-Portfolios öffnen (29.10.2026).
+// PDF-Portfolios öffnen.
 //
 // Outlook mit Adobe „PDFMaker“ speichert Mails als PDF-Portfolio: eine Hülle mit nur einer
 // Deckseite („Zur optimalen Anzeige dieses PDF-Portfolios … Acrobat“), die eigentliche Mail

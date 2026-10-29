@@ -1,7 +1,7 @@
 <script>
   import { t, tn } from './i18n.js'
   import { kurzZeit } from './format.js'
-  // Eine Strecke bearbeiten (V4): Stopps per Suche hinzufügen, per Griff umsortieren,
+  // Eine Strecke bearbeiten: Stopps per Suche hinzufügen, per Griff umsortieren,
   // Route, Tank-Lücken, Sehenswertes und Wetter an der Strecke.
   // Die Rechnungen selbst laufen in routen-dienst.js — hier nur Anzeige und Bedienung.
   import { updateReise, stopHinzufuegen } from './userdata.js'
@@ -21,7 +21,7 @@
     veraltet, artVon, tagText } from './routen-dienst.js'
 
   let { r, orte = [], reisen = [], warnungen = [], umkreisKm = 150 } = $props()
-  // Vorschläge an der Strecke: zugeklappt, damit die Route nicht endlos lang wird (Wunsch 10.10.)
+  // Vorschläge an der Strecke: zugeklappt, damit die Route nicht endlos lang wird
   let vorschlaegeOffen = $state(false)
   const bildVon = (o) => o?.bildData || (o?.bild ? '/' + String(o.bild).replace(/^\//, '') : o?.img || null)
   const namenText = (vs) => {
@@ -231,7 +231,7 @@
         <div class="r-hint">{t('🛣️ etwa {luftlinieKm} km Luftlinie{wert}', { luftlinieKm: luftlinieKm(r.stops), wert: $online ? t(', Straßenroute wird berechnet …') : t('. Echte km und Fahrzeit, sobald Netz da ist.') })}</div>
       {/if}
 
-      <!-- Fahrtag-Planer (V5): spätestens losfahren, um vor Sonnenuntergang anzukommen -->
+      <!-- Fahrtag-Planer: spätestens losfahren, um vor Sonnenuntergang anzukommen -->
       {#if artVon(r) !== 'flug' && st.filter((s) => s.lat != null).length >= 2}
         <Fahrtag {r} aktuell={!alt} />
       {/if}

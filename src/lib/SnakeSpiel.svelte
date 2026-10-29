@@ -1,6 +1,6 @@
 <script>
   import { t, tn } from './i18n.js'
-  // Verstecktes Mini-Spiel 2 (Easter-Egg, Wunsch Steve 06.10.2026): „snake" in die Suche.
+  // Verstecktes Mini-Spiel 2 (Easter-Egg,): „snake" in die Suche.
   // Spielfeld ≈ ¾ des Bildschirms mit fester Bande — kein Durchtauchen, Rand berührt = Ende.
   // Steuerung: Wischen auf dem Feld oder Steuerkreuz darunter (iPhone), Pfeiltasten/WASD (Mac).
   // Leertaste oder P = Pause, Enter = nochmal, Escape = schließen. Rekord je Gerät.
@@ -217,7 +217,7 @@
               {#if phase === 'bereit'}
                 <p class="sn-gross">{t('🐍 Snake')}</p>
                 <p class="sn-text">{t('Fang die Mäuse! Wischen oder Pfeiltasten.')}<br>{t('Die Bande ist hart: Rand berührt = Ende.')}</p>
-                <!-- „Schließen" auch hier, mitten im Bild — nicht nur das ✕ oben am Rand (06.10.2026) -->
+                <!-- „Schließen" auch hier, mitten im Bild — nicht nur das ✕ oben am Rand -->
                 <div class="sn-reihe">
                   <button class="sn-los" use:fokus onclick={start}>{t('Los')}</button>
                   <button class="sn-zweit" onclick={onClose}>{t('Schließen')}</button>
@@ -259,7 +259,7 @@
     background: rgba(18, 12, 6, 0.62); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
     touch-action: none; animation: sn-ein 0.2s ease;
     /* Die App läuft randlos (viewport-fit=cover, Statusleiste durchsichtig). Ohne diesen Rand
-       lag das ✕ unter Uhr/Dynamic Island — dort fängt iOS jeden Tipp ab (06.10.2026). */
+       läge das ✕ unter Uhr/Dynamic Island — dort fängt iOS jeden Tipp ab. */
     --sicher-oben: env(safe-area-inset-top, 0px);
     --sicher-unten: env(safe-area-inset-bottom, 0px);
     --sicher-links: env(safe-area-inset-left, 0px);

@@ -1,6 +1,6 @@
 <script>
   import { t } from './i18n.js'
-  // Verstecktes Mini-Spiel 3 (Easter-Egg, Wunsch Steve 29.10.2026): „4444“ in die Suche.
+  // Verstecktes Mini-Spiel 3 (Easter-Egg,): „4444“ in die Suche.
   // Vier in einer Reihe gegen den Computer. Du bist gelb, der Computer türkis, wer anfängt,
   // wechselt jede Partie. Gewinnst du, wird der Computer stärker; verlierst du zweimal
   // hintereinander, nimmt er sich eine Stufe zurück. Jede Partie spielt er in einem anderen Stil.

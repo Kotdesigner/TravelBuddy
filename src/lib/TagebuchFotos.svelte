@@ -1,6 +1,6 @@
 <script>
   import { t, tn } from './i18n.js'
-  // Fotos fürs Tagebuch (29.10.2026): viele Fotos auf einmal, nur auf diesem Gerät.
+  // Fotos fürs Tagebuch: viele Fotos auf einmal, nur auf diesem Gerät.
   // Wie „Fotos einsortieren“ im Logbuch: Aufnahmedatum und Ort aus den Bilddaten lesen,
   // jedes Foto seinem Tag und seiner Etappe zuordnen, vorher zeigen, was passiert.
   // Gespeichert wird in einer eigenen Datenbank (tagebuch-fotos.js), nicht im Logbuch und

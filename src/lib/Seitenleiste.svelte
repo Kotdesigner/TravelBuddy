@@ -1,6 +1,6 @@
 <script>
   import { t, LOCALE, sprache, setzeSprache } from './i18n.js'
-  // Seitenleiste am Mac (V4): dieselben fünf Bereiche wie unten am iPhone, darunter die
+  // Seitenleiste am Mac: dieselben fünf Bereiche wie unten am iPhone, darunter die
   // Unterpunkte des offenen Bereichs. Ersetzt die Leiste oben mit ihren Aufklappmenüs
   // und das ⋯-Dock unten rechts (Backup, Import, Design wohnen jetzt hier).
   import { online } from './netz.js'
@@ -63,7 +63,7 @@
         <button class:an={sprache === s} aria-pressed={sprache === s} lang={s} onclick={() => setzeSprache(s)}>{l}</button>
       {/each}
     </div>
-    <!-- V7: Schrift (nur Texte) und Gesamtgröße (alles), je Gerät gemerkt (darstellung.js) -->
+    <!-- Schrift (nur Texte) und Gesamtgröße (alles), je Gerät gemerkt (darstellung.js) -->
     <div class="sl-groesse">
       <label>{t('Schrift')}<select value={$darstellung.schrift} onchange={(e) => setzeSchrift(e.currentTarget.value)}>{#each SCHRIFT as s (s.id)}<option value={s.id}>{SCHRIFT_NAME[s.id]}</option>{/each}</select></label>
       <label>{t('Größe')}<select value={$darstellung.gesamt} onchange={(e) => setzeGesamt(e.currentTarget.value)}>{#each GESAMT as s (s.id)}<option value={s.id}>{GESAMT_NAME[s.id]}</option>{/each}</select></label>

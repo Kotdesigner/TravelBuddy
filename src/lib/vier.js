@@ -1,4 +1,4 @@
-// Spiellogik für „Vier in einer Reihe“ (Easter-Egg „4444“ in der Suche, Wunsch Steve 29.10.2026).
+// Spiellogik für „Vier in einer Reihe“ (Easter-Egg „4444“ in der Suche,).
 // Reine Funktionen ohne Oberfläche, damit tests/vier.test.mjs sie prüfen kann. Gerechnet wird
 // im Web Worker (vier-rechner.js), damit die Seite beim Nachdenken nicht stockt.
 //

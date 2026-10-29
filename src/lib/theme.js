@@ -1,4 +1,4 @@
-// Theme-Steuerung (New Style Phase 5): 'auto' | 'hell' | 'dunkel'.
+// Theme-Steuerung: 'auto' | 'hell' | 'dunkel'.
 // auto = folgt dem System. Persistiert in localStorage, setzt data-theme
 // am <html> und die Browser-Chrome-Farbe (theme-color).
 import { writable } from 'svelte/store'

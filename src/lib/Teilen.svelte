@@ -1,6 +1,6 @@
 <script>
   import { t, LOCALE, tn } from './i18n.js'
-  // Reisebericht teilen (11.10.): eine einzelne HTML-Datei zum Verschicken. Man wählt
+  // Reisebericht teilen: eine einzelne HTML-Datei zum Verschicken. Man wählt
   // Etappen, ob Tagebuchtexte mitkommen und welche Fotos; Weltkugeln und Fotos werden
   // eingebettet. Private Daten (Buchungen, Kosten, Dokumente, Notfall, Koordinaten)
   // kommen gar nicht erst ins Modell, siehe reisebericht.js.

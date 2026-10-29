@@ -1,9 +1,9 @@
 // Runden ohne Rundungsfehler.
 //
 // Werden Teile einzeln gerundet, passt ihre Summe oft nicht zur gerundeten Gesamtzahl.
-// Gefunden am 15.10.2026 an der Route Coral Coast: acht Abschnitte, einzeln gerundet
-// 127 + 78 + 410 + 413 + 351 + 74 + 263 + 214 = 1.930 km, die Route selbst 1.928 km.
-// Und die Tank-Lücke stand zweimal da, einmal mit 297 und einmal mit 298 km.
+// Beispiel: acht Abschnitte, einzeln gerundet 127 + 78 + 410 + 413 + 351 + 74 + 263 + 214
+// = 1.930 km, die Route selbst 1.928 km. Dieselbe Größe darf an zwei Stellen nicht
+// unterschiedlich erscheinen (etwa 297 und 298 km).
 //
 // Regeln für alle Zahlen, die die App nebeneinander zeigt:
 //   1. Teile werden so gerundet, dass ihre Summe genau die gerundete Gesamtzahl ist

@@ -1,6 +1,6 @@
-// Haptik (New Style Phase 3) — Progressive Enhancement, nie vorausgesetzt.
+// Haptik — Progressive Enhancement, nie vorausgesetzt.
 // Android: navigator.vibrate. iOS 17.4–26.4: Switch-Checkbox-Trick (Safari/PWA).
-// iOS ≥ 26.5 / Desktop: stilles No-op. Ref: UX-Recherche/02_Haptik.md
+// iOS ≥ 26.5 / Desktop: stilles No-op.
 let lbl = null
 
 function iosTick() {

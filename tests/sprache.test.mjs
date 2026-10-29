@@ -1,6 +1,6 @@
 // Englische Fassung: jeder Text hat eine Übersetzung, Platzhalter stimmen, Datumsformate und
 // Mehrzahl sind englisch, die englischen Inhaltsdateien passen zu den deutschen.
-// Anlass 15.10.2037: Steve will die ganze App auf Englisch (Umschalter, australisch/britisch).
+// Anforderung: die ganze App auf Englisch (Umschalter, australisches/britisches Englisch).
 // Ausführen: node tests/sprache.test.mjs
 import fs from 'node:fs'
 import { execFileSync } from 'node:child_process'

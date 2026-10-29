@@ -59,7 +59,7 @@ export async function berechneRoute(stops) {
   if (data.code !== 'Ok' || !data.routes?.length) throw new Error(t('Keine Straßenroute gefunden.'))
   const rt = data.routes[0]
   // Abschnitte zwischen den Stopps (km + Fahrzeit). Gerundet so, dass sie zusammen genau die
-  // Gesamtwerte ergeben (vorher einzeln gerundet: Coral Coast 1.930 statt 1.928 km).
+  // Gesamtwerte ergeben (runden.js).
   const legs = rt.legs?.length
     ? stimmigeAbschnitte(rt.legs.map((l) => l.distance / 1000), rt.legs.map((l) => l.duration / 60))
     : []
@@ -82,7 +82,7 @@ function stimmigeAbschnitte(genauKm, genauMin) {
 
 /**
  * Abschnitte einer gespeicherten Route, die genau zur Gesamtlänge und Gesamtfahrzeit passen.
- * Routen, die vor dem 15.10.2026 berechnet wurden, haben einzeln gerundete Abschnitte
+ * Ältere gespeicherte Routen haben einzeln gerundete Abschnitte
  * (Summe bis zu einigen km daneben); hier wird der Unterschied auf die längsten Abschnitte
  * verteilt. Fehlende Fahrzeiten werden anteilig nach km ergänzt. Neue Routen bleiben unverändert.
  * @returns [{ km, dauerMin }] oder [] ohne Abschnitte
@@ -101,7 +101,7 @@ export function stimmigeLegs(rt) {
 }
 
 // Größte Tank-Lücke entlang der Route (Tankstellen im Korridor auf die Route projiziert).
-// Tank-Analyse: seit 19.09. über routenhinweise.js — zählt Tankstellen bei JEDEM Vorbeifahren
+// Tank-Analyse über routenhinweise.js — zählt Tankstellen bei JEDEM Vorbeifahren
 // und tastet die Route alle 1 km ab. Die alte Fassung sah jede Tankstelle nur einmal und maß
 // nur bis zum nächsten Stützpunkt; am echten „Nord 3" ergab das eine Schein-Lücke von 990 km.
 export function tankAnalyse(geometry, fuelPois, reichweiteKm, gesamtKm = null) {

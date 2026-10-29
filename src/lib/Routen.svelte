@@ -46,7 +46,7 @@
     return (r.steps || []).length || 3
   }
 
-  // V4: Eine Routen-Idee wird eine Route in der passenden Etappe (meist der Roadtrip)
+  // Eine Routen-Idee wird eine Route in der passenden Etappe (meist der Roadtrip)
   function uebernehmen(r) {
     const stops = stoppsAusRoute(r)
     const etappe = vermuteEtappe({ stops }, etappenMitDatum(get(reisen), get(gesamtStart)))

@@ -1,9 +1,9 @@
-// Tresor für die Belege (29.10.2026): Tickets, Pass, Visum und alle anderen Belege liegen auf dem
+// Tresor für die Belege: Tickets, Pass, Visum und alle anderen Belege liegen auf dem
 // Gerät verschlüsselt und sind erst nach Face ID (iPhone) oder Touch ID (Mac) lesbar. Ohne Netz.
 //
 // Wie: Beim Einrichten entsteht ein Schlüsselpaar (ECDH P-256). Der öffentliche Teil liegt offen
-// und verschlüsselt jeden neuen Beleg, ohne zu fragen; Belege hinzufügen bleibt also so einfach
-// wie vorher. Der private Teil liegt zweimal verschlüsselt da:
+// und verschlüsselt jeden neuen Beleg, ohne zu fragen; Belege hinzufügen braucht also keine
+// Entsperrung. Der private Teil liegt zweimal verschlüsselt da:
 //   · mit einem Schlüssel aus dem Passkey. Die WebAuthn-Erweiterung „PRF“ gibt nach Face ID oder
 //     Touch ID ein festes Geheimnis heraus (Safari ab 18, iOS ab 18). Das Gerät prüft selbst.
 //   · mit dem Notfall-Code, den man beim Einrichten aufschreibt (PBKDF2, 600 000 Runden).

@@ -17,7 +17,7 @@
 
   let { orte = [], reisen = [], fokusId = null, onneu = null } = $props()
 
-  // V4: aus dem Plan, dem Tag oder „+ Neu“ direkt auf eine Wanderung springen
+  // Aus dem Plan, dem Tag oder „+ Neu“ direkt auf eine Wanderung springen
   $effect(() => {
     if (!fokusId) return
     filter = 'alle'
@@ -33,7 +33,7 @@
 
   const orteSort = $derived([...orte].filter((o) => o.lat != null).sort((a, b) => a.name.localeCompare(b.name, LOCALE)))
 
-  // V4: nach Datum, wie im Logbuch; ohne Datum (Wunschliste) danach in der bisherigen Reihenfolge
+  // Nach Datum, wie im Logbuch; ohne Datum (Wunschliste) danach in der bisherigen Reihenfolge
   const sortiert = $derived([...$wanderungen].map((w, i) => [w, i]).sort((x, y) => {
     const a = x[0].datum || '9999', b = y[0].datum || '9999'
     return a.localeCompare(b) || (x[0].zeit || '').localeCompare(y[0].zeit || '') || x[1] - y[1]
@@ -166,7 +166,7 @@
 
         {#if offen[w.id]}
           <div class="c-body" transition:klapp={{ duration: dauer(220) }}>
-            <!-- V4: zuerst wann und wo, dann die Zahlen -->
+            <!-- Zuerst wann und wo, dann die Zahlen -->
             <div class="block">
               <span class="b-cap">{t('📅 Wann (optional)')}</span>
               <div class="grid">

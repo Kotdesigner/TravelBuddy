@@ -5,7 +5,8 @@
 ### The road trip companion for the stretches where the signal ends.
 
 Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no account, no cloud.<br>
-**One app for the whole trip. It does it all.**
+**One app for the whole trip. It does it all.**<br>
+📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
 **Version 1 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
@@ -38,8 +39,20 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 | 📍 **144 hand-picked places** | With photos, seasonal tips, sun times and labels like "must-see", "hidden gem" or "4WD only". |
 | 📷 **Thinks like a photographer** | Golden and blue hour, sunrise, sunset and a star photography rating for every place and every day of your trip. |
 | 🎵 **Plays where you are** | Collects music from every place you pass into your own Spotify playlist: local bands, their most-played song first. |
-| 📖 **Keeps what you experience** | A logbook with 16 modules, from the fly factor to the roadkill counter, that turns into a travel journal, a trip film and a travel report. |
+| 📔 **Writes your travel diary** | A logbook with 16 modules, from the fly factor to the roadkill counter, that turns into a travel journal, a trip film and a travel report. |
 | 🔒 **Yours alone** | No account, no server, no tracking. All data stays on your device. |
+
+---
+
+## 📔 Not just a planner. A diary maker.
+
+Most travel apps stop when the trip begins. TravelBuddy really gets going then.
+
+Every evening you note a few lines, add your photos, tap in the kilometres and the animals you saw. That's all. From it, TravelBuddy builds your **finished travel diary**: cover, photo grids, quotes, a summary for every day, painted globes for every stage and the big trip summary at the end. Ready to print as a photo book, as a PDF, as a single file for the family, or as a trip film for the group chat.
+
+> **You travel. TravelBuddy writes it down.** At the end you don't hold a list of bookings, you hold the story of your trip.
+
+<div align="center"><img src="bilder/assistent-7.jpg" width="260" alt="On the road, your diary takes shape"></div>
 
 ---
 
@@ -405,7 +418,8 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 ### Dein Roadtrip-Begleiter für die Strecken, auf denen das Netz aufhört.
 
 Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne Konto und ohne Cloud.<br>
-**Eine App für die ganze Reise. Sie kann alles.**
+**Eine App für die ganze Reise. Sie kann alles.**<br>
+📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
 **Version 1 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
@@ -426,8 +440,18 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 | 📍 **144 handverlesene Orte** | Mit Bildern, Saison-Tipps, Sonnenzeiten und Markierungen wie „Muss-Sehen“, „Geheimtipp“ oder „Nur 4WD“. |
 | 📷 **Denkt wie ein Fotograf** | Goldene und blaue Stunde, Auf- und Untergang und eine Bewertung für Sternenfotos an jedem Ort und für jeden Reisetag. |
 | 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
-| 📖 **Hält fest, was du erlebst** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
+| 📔 **Schreibt dein Reisetagebuch** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
 | 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
+
+## 📔 Nicht nur ein Planer. Ein Tagebuch-Macher.
+
+Die meisten Reise-Apps hören auf, wenn die Reise beginnt. TravelBuddy legt dann erst richtig los.
+
+Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du gesehen hast. Mehr nicht. Daraus baut TravelBuddy dein **fertiges Reisetagebuch**: Deckblatt, Foto-Raster, Zitate, die Bilanz jedes Tages, gemalte Weltkugeln für jede Etappe und am Ende die große Reise-Bilanz. Fertig zum Drucken als Fotobuch, als PDF, als eine Datei für die Familie oder als Reise-Film für den Gruppenchat.
+
+> **Du reist. TravelBuddy schreibt mit.** Am Ende hältst du keine Liste von Buchungen in der Hand, sondern die Geschichte deiner Reise.
+
+<div align="center"><img src="bilder/assistent-7.jpg" width="260" alt="Unterwegs entsteht dein Tagebuch"></div>
 
 ## 🚀 Alles, was TravelBuddy kann
 

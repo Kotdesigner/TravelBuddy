@@ -13,7 +13,7 @@
   import { userData, journal } from './userdata.js'
 
   let { orte = [], reisen = [] } = $props()
-  // Mehrere Routen gleichzeitig. Vorher ging genau eine — „alle sehen" war unmöglich.
+  // Mehrere Routen gleichzeitig sichtbar (Menge der gewählten Reise-IDs).
   let gewaehlteReisen = $state(new Set())
   const istGewaehlt = (id) => gewaehlteReisen.has(id)
   function toggleReise(id) {
@@ -24,8 +24,8 @@
   }
   const alleReisen = () => { beruehrt = true; gewaehlteReisen = new Set(reisen.map((r) => r.id)) }
   const keineReisen = () => { beruehrt = true; gewaehlteReisen = new Set() }
-  // V4: Beim Öffnen gleich alle Strecken innerhalb Australiens zeigen. Bis V3 stand „Keine“
-  // vorgewählt, die Karte zeigte also erst einmal gar keine Route (Prüfung 10.10.).
+  // Beim Öffnen alle Strecken innerhalb Australiens zeigen, solange der Nutzer die Auswahl
+  // nicht selbst geändert hat (`beruehrt`).
   let beruehrt = false
   const inAustralien = (r) => {
     const p = (r.stops || []).filter((x) => x.lat != null)
@@ -137,8 +137,7 @@
         { id: 'erde', type: 'fill', source: 'protomaps', 'source-layer': 'earth', paint: { 'fill-color': '#f6f0e2' } },
         { id: 'landuse-gruen', type: 'fill', source: 'protomaps', 'source-layer': 'landuse', paint: { 'fill-color': '#d7e6c4', 'fill-opacity': 0.6 } },
         // Flüsse liegen in „water" als LINIEN. Ohne Filter schließt die Füllung jede Flusslinie
-        // zur Fläche — gerade Kante von Anfang bis Ende → blaue Keile übers Land (06.10.2026:
-        // Margaret River, Murchison bei Kalbarri, Avon bei York, Fitzroy Crossing).
+        // zur Fläche — gerade Kante von Anfang bis Ende → blaue Keile übers Land. Daher nur Polygone.
         { id: 'wasser', type: 'fill', source: 'protomaps', 'source-layer': 'water', filter: ['==', '$type', 'Polygon'], paint: { 'fill-color': '#a2cae0' } },
         { id: 'fluesse', type: 'line', source: 'protomaps', 'source-layer': 'water', filter: ['==', '$type', 'LineString'], paint: { 'line-color': '#8fbdd6', 'line-width': 1 } },
         { id: 'strassen', type: 'line', source: 'protomaps', 'source-layer': 'roads', paint: { 'line-color': '#e2b877', 'line-width': 1 } },
@@ -204,9 +203,8 @@
   }
 
   // ---------- Offline-POIs (Tankstellen, Wasser, Rastplätze … aus OpenStreetMap) ----------
-  // Vorher: 11-px-Emoji ohne Hintergrund, und jedes Symbol, das ein anderes berührt hätte,
-  // fiel weg — eingeblendete Tankstellen waren kaum zu sehen, viele gar nicht.
-  // Jetzt zwei Ebenen:
+  // Kleine Emoji ohne Hintergrund wären kaum lesbar, und MapLibre blendet sich berührende
+  // Symbole aus. Deshalb zwei Ebenen:
   //   Punkt  — JEDER Eintrag, immer, genau an seiner Koordinate, Farbe je Kategorie.
   //   Plakette ab Zoom 10 — weißer Kreis mit Farbring und Emoji; ab Zoom 13 mit Namen.
   //            Wo es eng wird, gewinnt die wichtigere Kategorie (`rang`); der Punkt darunter
@@ -441,10 +439,9 @@
     if (!coords || coords.length < 2) return null
     return { type: 'Feature', geometry: { type: 'LineString', coordinates: coords }, properties: {} }
   }
-  // Früher galt „alles oder nichts": passten nicht ALLE gewählten Routen in EINEN
-  // Kartenteil, blieb die Karte leer — mit „Alle" also immer, weil Frankfurt und Doha
-  // in keinem liegen. Jetzt wird jede Route gezeichnet, soweit sie im Kartengebiet liegt;
-  // was draußen liegt, steht als Hinweis unter der Karte.
+  // Jede Route wird gezeichnet, soweit sie im Kartengebiet liegt; Abschnitte außerhalb
+  // (etwa Anreise über Asien oder Europa) stehen als Hinweis unter der Karte. Würde nur
+  // gezeichnet, wenn alle Routen in einen Kartenteil passen, bliebe die Karte bei „Alle“ leer.
   let routeHinweis = $state({ draussen: [], ohneLinie: [] })
   const kurzListe = (l) => (l.length > 4 ? l.slice(0, 4).join(', ') + ' …' : l.join(', '))
 
@@ -455,8 +452,7 @@
     // Quellen und Ebenen aber schon, sonst wirft MapLibre „Style is not done loading".
     // Geprüft wird nur, ob der Stil selbst steht. `isStyleLoaded()` wartet zusätzlich auf
     // alle Kacheln: schlägt eine fehl (Gelände ohne Netz), bleibt es falsch, und das alte
-    // `once('idle')` kam nie wieder. Dann fehlten die Routen, bis man die Karte bewegte
-    // (Prüfung 10.10.).
+    // `once('idle')` käme nie. Dann fehlten die Routen, bis man die Karte bewegt.
     clearTimeout(routeTimer)
     const stilSteht = map.style ? map.style._loaded !== false : map.isStyleLoaded()
     if (!stilSteht) { routeTimer = setTimeout(zeigeRoute, 250); return }
@@ -789,8 +785,8 @@
     width: 14px; height: 14px; background: #c0392b; border: 2px solid #fff;
     border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 1px 3px rgba(0,0,0,0.4); cursor: pointer;
   }
-  /* Das Kartenfenster ist immer hell — im dunklen Design erbte der Text die helle Schrift
-     der Seite und war auf Weiß kaum zu lesen (gefunden 18.09.). Farben deshalb fest. */
+  /* Das Kartenfenster ist immer hell. Im dunklen Design erbte der Text sonst die helle Schrift
+     der Seite und wäre auf Weiß kaum lesbar. Farben deshalb fest. */
   :global(.maplibregl-popup-content) { font-family: inherit; padding: 8px 12px; border-radius: 8px; color: #2b2620; background: #fffdf8; }
   :global(.maplibregl-popup-content b) { color: #2b2620; }
   :global(.maplibregl-popup-content a) { color: #1864ab; font-weight: 600; }

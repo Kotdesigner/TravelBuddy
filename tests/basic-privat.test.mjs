@@ -1,4 +1,4 @@
-// Basic-Fassung zum Weitergeben: nichts Privates aus Steves Reise darf drinstecken.
+// Öffentliche Fassung: keine persönlichen Daten aus der privaten Reiseplanung.
 // Prüft Inhalte, Vorgaben und Build-Einstellungen; nach `npm run build` auch dist/.
 // Ausführen: node tests/basic-privat.test.mjs
 import fs from 'node:fs'
@@ -43,14 +43,15 @@ console.log('\n1  Inhalte (Orte, Routen, Bilder, Praxis, Quiz)')
 
 console.log('\n1b Ganzes Repo (öffentlich): Tests, Werkzeuge, Notizen')
 {
-  // Steves Reisezeitraum lag Ende Nov. 2026 bis Ende Jan. 2027; Beispieldaten nutzen Mai 2027 und 2037/2038
-  const ZEITRAUM = /2026-1[12]-\d\d|2027-0[12]-\d\d|\d\d?\.1[12]\.2026|\d\d?\.0?[12]\.2027/
+  // Konkrete Kalenderdaten 2026/2027 verraten Reisepläne. Erlaubt sind nur die Beispielreise
+  // (Mai 2027) und die Testdaten (2037/2038).
+  const ZEITRAUM = /\b2026-\d\d-\d\d\b|\b2027-(?!05)\d\d-\d\d\b|\b\d\d?\.\d\d?\.2026\b|\b\d\d?\.(?!0?5\.)\d\d?\.2027\b/
   const PRIVATE_DATEIEN = /Reisekalender-Stand|TravelBuddy-Nachtrag|00_Docs\/|IMMI|Palm Bay Resort/
   const alle = ['tests', 'scripts', 'docs', 'src'].flatMap((o) => dateien(o, /\.(js|mjs|svelte|html|md|json)$/))
     .concat(['README.md', 'HOCHLADEN.md', 'vite.config.js', 'index.html'].map((f) => path.join(wurzel, f)).filter((f) => fs.existsSync(f)))
     .filter((f) => !/basic-privat\.test|sprache\/|geo-/.test(f))
   const imZeitraum = alle.filter((f) => ZEITRAUM.test(fs.readFileSync(f, 'utf8')))
-  p(`keine Daten aus dem echten Reisezeitraum in ${alle.length} Dateien`, !imZeitraum.length, imZeitraum.map((f) => path.relative(wurzel, f)).join(', '))
+  p(`keine konkreten Daten aus 2026/2027 in ${alle.length} Dateien`, !imZeitraum.length, imZeitraum.map((f) => path.relative(wurzel, f)).join(', '))
   const privat = alle.filter((f) => PRIVATE_DATEIEN.test(fs.readFileSync(f, 'utf8')))
   p('keine Verweise auf private Dateien (Kalender, Nachträge, Ausweise)', !privat.length, privat.map((f) => path.relative(wurzel, f)).join(', '))
   const adressen = alle.filter((f) => ADRESSEN.test(fs.readFileSync(f, 'utf8')))
