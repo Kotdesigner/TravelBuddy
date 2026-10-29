@@ -1,0 +1,21 @@
+# Netlify baut TravelBuddy direkt aus GitHub: Add new site → Import an existing project → GitHub →
+# Kotdesigner/TravelBuddy. Jeder Push auf main veröffentlicht die neue Fassung.
+[build]
+  command = "npm ci && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Der Service Worker muss immer frisch geholt werden, sonst bleiben Geräte auf dem alten Stand
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+# Offline-Karten: groß und unveränderlich, die App lädt sie stückweise (Range-Anfragen)
+[[headers]]
+  for = "/karten/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+    Access-Control-Allow-Origin = "*"

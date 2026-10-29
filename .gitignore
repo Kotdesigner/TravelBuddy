@@ -58,3 +58,4 @@ __pycache__/
 
 # Upload-Paket (wird aus dist/ erzeugt)
 *Netlify.zip
+mac/build/

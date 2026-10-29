@@ -16,8 +16,14 @@ Reisedaten oder privaten Adressen im Build stecken.
 
 ## 2 · Hochladen (Netlify)
 
+**Am einfachsten direkt aus GitHub:** Auf app.netlify.com **Add new site → Import an existing project →
+GitHub** und das Repo wählen. Build-Befehl und Ordner stehen schon in `netlify.toml`, nichts eintragen.
+Jeder Push auf `main` baut und veröffentlicht die Seite neu.
+
+**Ohne GitHub-Anbindung:** Unter Releases liegt `TravelBuddy-Netlify.zip`, der fertige Ordner `dist`.
+
 1. Auf app.netlify.com anmelden: **Sites → Add new site → Deploy manually**.
-2. Den Ordner **`dist`** in das Feld ziehen. Alternativ als ZIP:
+2. Die ZIP-Datei oder den selbst gebauten Ordner **`dist`** in das Feld ziehen. Eigenes ZIP bauen:
    `cd dist && zip -q -r -X ../TravelBuddy-Netlify.zip . -x '.DS_Store'`
 3. **Site configuration → Change site name** wählen, zum Beispiel `travelbuddy-wa`.
 
@@ -44,3 +50,12 @@ Im Code sind keine Spotify-Zugänge hinterlegt. Wer Musik sammeln will, braucht 
 eigene, kostenlose App auf developer.spotify.com. Dort als **Redirect URI** die Adresse eintragen, die in
 TravelBuddy unter Mehr → Musik steht, und die **Client-ID** in TravelBuddy übernehmen. Die Playlist legt
 die App dann im eigenen Konto an. Ein Last.fm-Schlüssel bringt zusätzlich die Charts des Landes.
+
+## 6 · Mac-App
+
+`sh mac/baue-mac-app.sh` baut `mac/build/TravelBuddy.app` und `mac/build/TravelBuddy-Mac.zip` (braucht Xcode).
+Die App bringt die fertige Web-App mit und zeigt sie über einen eingebauten Server auf `127.0.0.1:8990` in
+einem eigenen Fenster. Daten liegen im Speicher der App und bleiben über Neustarts erhalten.
+
+Unterschiede zum Browser: Die Sperre mit Touch ID für Belege braucht einen Browser (Safari, Chrome), in der
+App steht sie nicht zur Verfügung. Backups landen in „Downloads“, Links nach draußen öffnet der Standardbrowser.

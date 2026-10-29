@@ -17,6 +17,12 @@ Planen, navigieren, festhalten. Auf iPhone und Mac, komplett offline, ohne Konto
 
 > Alle Bilder zeigen eine ausgedachte **Beispielreise**. Echte Reisedaten, Buchungen oder Dokumente sind darin nicht zu sehen.
 
+<div align="center">
+
+**[⬇️ Mac-App laden](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Web-App für Netlify](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[🚀 Eigene Seite in 5 Minuten](docs/VEROEFFENTLICHEN.md)**
+
+</div>
+
 ---
 
 ## Warum TravelBuddy
@@ -126,12 +132,25 @@ Beim ersten Öffnen führt dich TravelBuddy in acht kurzen Schritten durch alles
 
 ---
 
+## Herunterladen
+
+| | |
+|---|---|
+| 🖥️ **Mac-App** | `TravelBuddy-Mac.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, in „Programme“ ziehen, öffnen. Läuft auf Apple Silicon und Intel ab macOS 13, ohne Internet und ohne weitere Programme. |
+| 🌐 **Web-App** | `TravelBuddy-Netlify.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): bei Netlify unter „Deploy manually“ hineinziehen. Danach am iPhone in Safari öffnen und „Zum Home-Bildschirm“. |
+| 🔁 **Direkt aus GitHub** | Bei Netlify „Import an existing project“ und dieses Repo wählen. Die Einstellungen stehen in `netlify.toml`, jeder Push veröffentlicht die neue Fassung. |
+
+Die Mac-App ist nicht von Apple beglaubigt. Beim ersten Öffnen meldet macOS deshalb, dass der Entwickler nicht überprüft werden kann: einmal **Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“** wählen, danach startet sie normal.
+
+---
+
 ## Selbst bauen
 
 ```
 npm install
 npm run dev        # Entwicklung
 npm run build      # fertige App in dist/
+sh mac/baue-mac-app.sh   # Mac-App in mac/build/ (braucht Xcode)
 ```
 
 TravelBuddy ist eine statische Web-App: `dist/` auf einen beliebigen Webspace mit HTTPS legen, fertig. Schritt für Schritt mit Netlify: **[docs/VEROEFFENTLICHEN.md](docs/VEROEFFENTLICHEN.md)**. Das Handbuch liegt in `docs/handbuch/` und als PDF in der App.
@@ -159,7 +178,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Insgesamt sind es
 
 - [x] **Version 1: Western Australia** mit Planung, Logbuch, Offline-Karte, Versorgung und Gefahrenlage
 - [x] Einführung beim ersten Öffnen, Schrift- und Gesamtgröße einstellbar
-- [x] Quellcode hier auf GitHub
+- [x] Quellcode hier auf GitHub, Mac-App zum Herunterladen
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder
