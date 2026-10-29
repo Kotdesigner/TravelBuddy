@@ -85,10 +85,14 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 - 🦘 **Wildlife album** with 20 animals to collect
 - 👃 **Senses, people, food, campfire and night sky** captured every day
 - 🏛️ **Official situation of the day** saved automatically in the logbook
-- 📚 **Travel journal** to print, with painted globes and trip summary
+- 📚 **Automatic travel journal:** your logbook becomes a finished travel magazine by itself
+- 🖨️ **Photo book ready** to print or as a PDF, short or detailed
+- 🖼️ **Photo library built in:** pick hundreds of photos, each lands on its day by itself
+- ☁️ **All your iCloud photos** on the Mac, in photo-book quality
 - 🎞️ **Animated photo collage**, offline and without AI
 - 🎬 **Trip film** in portrait format, recorded in the app
-- 💌 **Travel report** for family and friends, without bookings or exact coordinates
+- 👨‍👩‍👧 **Share with family:** the travel report as one file via Messages, WhatsApp, Mail or AirDrop
+- 💌 **Opens anywhere:** no app, no account, even offline, without bookings or exact coordinates
 - 🎵 **Spotify soundtrack:** music from every place lands in your playlist automatically
 - 🎸 **Local bands first**, each with their most-played song
 - 📴 **Music offline too:** places are noted and caught up later
@@ -237,6 +241,19 @@ One entry per day (or several), sorted by stage, with text, photos and a **voice
 - **Animated photo collage** of all your photos, offline and without AI.
 - **Trip film** in portrait format, recorded right in the app.
 - **Travel report** as a single file for family and friends, deliberately without bookings, costs and exact coordinates.
+
+### 📚 Your travel journal writes itself
+- **Automatic travel journal:** from your logbook, TravelBuddy builds a finished travel magazine on its own: cover, photo grids, quote blocks, the summary for every day and painted globes for every stage. You don't have to lay out anything.
+- **Two versions:** "short" with picture, text and key figures per day, or "detailed" with every module you filled in, your notes and the full trip summary.
+- **Photo book ready:** print it or save it as a PDF, sorted oldest or newest first.
+- **Your photo library built in:** pick many photos from your library at once. TravelBuddy reads the capture date and place, puts every photo on its day and stage, and shows you beforehand what will happen. Photos without a date go to a day you choose.
+- **On the Mac with all your iCloud photos:** the picker shows your whole library under "Media". Journal photos are kept at 3,000 px, sharp enough for a printed photo book, and stay on your device without bloating the backup.
+
+### 👨‍👩‍👧 Share with family and friends
+- **Travel report as one file:** choose stages, whether the journal texts come along and which photos. Globes, photos and fonts are inside the file, so it opens anywhere, even offline, without an app and without an account.
+- **Send it straight away** with the share sheet: Messages, WhatsApp, Mail or AirDrop.
+- **Private by design:** bookings, booking numbers, documents, costs, emergency contacts and coordinates never get into the report, and codes, phone numbers and email addresses are removed from free texts.
+- **Trip film** in portrait format, ready for the family chat or your story: a flight over the globe for every stage, the route drawing itself in, your best photos and the summary at the end.
 
 ### 🎵 Spotify: the soundtrack of your trip
 TravelBuddy collects the music of the places you pass through, **automatically, while you drive**.
@@ -454,10 +471,14 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 - 🦘 **Tier-Album** mit 20 Tieren zum Sammeln
 - 👃 **Sinne, Menschen, Essen, Lagerfeuer und Nachthimmel**, jeden Tag festgehalten
 - 🏛️ **Amtliche Lage des Tages**, automatisch im Logbuch gespeichert
-- 📚 **Reisetagebuch** zum Drucken, mit gemalten Weltkugeln und Reise-Bilanz
+- 📚 **Automatisches Reisetagebuch:** Aus dem Logbuch wird von selbst ein fertiges Reisemagazin
+- 🖨️ **Fertig fürs Fotobuch** zum Drucken oder als PDF, kurz oder ausführlich
+- 🖼️ **Fotomediathek eingebunden:** Hunderte Fotos wählen, jedes landet von selbst an seinem Tag
+- ☁️ **Alle iCloud-Fotos** am Mac, in Fotobuch-Qualität
 - 🎞️ **Animierte Foto-Kollage**, offline und ohne KI
 - 🎬 **Reise-Film** im Hochformat, in der App aufgenommen
-- 💌 **Reisebericht** für Familie und Freunde, ohne Buchungen und genaue Koordinaten
+- 👨‍👩‍👧 **Mit der Familie teilen:** der Reisebericht als eine Datei über Nachrichten, WhatsApp, Mail oder AirDrop
+- 💌 **Öffnet sich überall:** ohne App, ohne Konto, auch offline, ohne Buchungen und genaue Koordinaten
 - 🎵 **Spotify-Soundtrack:** Musik von jedem Ort landet automatisch in deiner Playlist
 - 🎸 **Lokale Bands zuerst**, jeweils mit ihrem meistgehörten Song
 - 📴 **Musik auch offline:** Orte werden vorgemerkt und später nachgeholt
@@ -567,6 +588,19 @@ Ein Eintrag je Tag (oder mehrere), sortiert nach Etappe, mit Text, Fotos und **S
 - **Animierte Foto-Kollage** aus allen Fotos, offline und ohne KI.
 - **Reise-Film** im Hochformat, direkt in der App aufgenommen.
 - **Reisebericht** als eine Datei für Familie und Freunde, bewusst ohne Buchungen, Kosten und genaue Koordinaten.
+
+### 📚 Das Reisetagebuch schreibt sich selbst
+- **Automatisches Reisetagebuch:** Aus deinem Logbuch baut TravelBuddy von selbst ein fertiges Reisemagazin: Deckblatt, Foto-Raster, Zitat-Blöcke, die Bilanz jedes Tages und gemalte Weltkugeln für jede Etappe. Gestalten musst du nichts.
+- **Zwei Fassungen:** „kurz“ mit Bild, Text und Kennzahlen je Tag oder „ausführlich“ mit allen ausgefüllten Modulen, deinen Notizen und der ganzen Reise-Bilanz.
+- **Fertig fürs Fotobuch:** drucken oder als PDF sichern, älteste oder neueste zuerst.
+- **Deine Fotomediathek eingebunden:** viele Fotos auf einmal aus der Mediathek wählen. TravelBuddy liest Aufnahmedatum und Ort, legt jedes Foto an seinen Tag und seine Etappe und zeigt vorher, was passiert. Fotos ohne Datum landen an einem Tag deiner Wahl.
+- **Am Mac mit allen iCloud-Fotos:** Das Auswahlfenster zeigt unter „Medien“ die ganze Mediathek. Tagebuchfotos bleiben in 3.000 px, scharf genug fürs gedruckte Fotobuch, und liegen nur auf deinem Gerät, ohne das Backup aufzublähen.
+
+### 👨‍👩‍👧 Mit Familie und Freunden teilen
+- **Reisebericht als eine Datei:** Etappen wählen, ob die Tagebuchtexte mitkommen und welche Fotos. Weltkugeln, Fotos und Schrift stecken in der Datei, sie öffnet sich überall, auch offline, ohne App und ohne Konto.
+- **Sofort verschicken** über das Teilen-Menü: Nachrichten, WhatsApp, Mail oder AirDrop.
+- **Privat aus Prinzip:** Buchungen, Buchungsnummern, Dokumente, Kosten, Notfallkontakte und Koordinaten kommen gar nicht erst in den Bericht, und aus Freitexten werden Codes, Telefonnummern und Mailadressen entfernt.
+- **Reise-Film** im Hochformat, fertig für den Familien-Chat oder die Story: je Etappe ein Flug über die Weltkugel, die Route zeichnet sich ein, deine besten Fotos und am Ende die Bilanz.
 
 ### 🎵 Spotify: der Soundtrack deiner Reise
 TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, während du fährst**.
