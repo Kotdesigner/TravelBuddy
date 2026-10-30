@@ -84,6 +84,11 @@
   let zahlenOffen = $state((() => { try { return localStorage.getItem('tb-heute-zahlen') === 'offen' } catch { return false } })())
   $effect(() => { try { localStorage.setItem('tb-heute-zahlen', zahlenOffen ? 'offen' : 'zu') } catch {} })
   let handbuchOffen = $state(false)
+  const imAppFenster = () => navigator.standalone === true || matchMedia('(display-mode: standalone)').matches
+  // Der Fokus liegt beim Lesen in der Seite im Rahmen, Escape muss auch von dort schließen
+  function handbuchGeladen(e) {
+    e.currentTarget.contentWindow.addEventListener('keydown', (k) => { if (k.key === 'Escape') handbuchOffen = false })
+  }
   let laden = $state(true)
   let fehler = $state(null)
   let suche = $state('')
@@ -1249,13 +1254,14 @@
   <!-- Hintergrund zum Wegtippen; Tastatur: Escape (use:modal) -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div class="hb-overlay" role="presentation" onclick={(e) => { if (e.target === e.currentTarget) handbuchOffen = false }}>
-    <div class="hb-box" role="dialog" aria-label={t('Handbuch')} use:modal={{ onclose: () => (handbuchOffen = false) }}>
+    <div class="hb-box" role="dialog" aria-label={t('Handbuch')} use:modal={{ onclose: () => (handbuchOffen = false), fokus: '.hb-zu' }}>
       <div class="hb-kopf">
         <span class="hb-titel">{t('📖 Handbuch')}</span>
-        <a class="hb-tab" href={istEn ? "/handbook.pdf" : "/handbuch.pdf"} target="_blank" rel="noopener">{t('↗︎ Neuer Tab')}</a>
+        <!-- Auf dem Home-Bildschirm gäbe es von dort keinen Weg zurück in die App -->
+        {#if !imAppFenster()}<a class="hb-tab" href={istEn ? "/handbook.pdf" : "/handbuch.pdf"} target="_blank" rel="noopener">{t('↗︎ PDF')}</a>{/if}
         <button class="hb-zu" onclick={() => (handbuchOffen = false)}>{t('✕ Schließen')}</button>
       </div>
-      <iframe class="hb-frame" src={istEn ? "/handbook.pdf" : "/handbuch.pdf"} title={t('WA-Reiseplan Handbuch')}></iframe>
+      <iframe class="hb-frame" src={istEn ? "/handbook.html" : "/handbuch.html"} title={t('WA-Reiseplan Handbuch')} onload={handbuchGeladen}></iframe>
     </div>
   </div>
 {/if}
@@ -1473,7 +1479,7 @@
   .hb-titel { font-size: calc(14px * var(--schrift, 1)); font-weight: 800; color: #fff; flex: 1; }
   .hb-tab { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: #f0e4d3; text-decoration: none; padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.12); }
   .hb-zu { font-size: calc(13px * var(--schrift, 1)); font-weight: 800; color: #fff; background: var(--brand); border: none; border-radius: 8px; padding: 7px 14px; cursor: pointer; }
-  .hb-frame { flex: 1; width: 100%; border: none; background: #525659; }
+  .hb-frame { flex: 1; width: 100%; border: none; background: #fff; }
   .region { margin: 16px 0 24px; }
   .region-titel {
     color: #fff; font-weight: 700; font-size: calc(15px * var(--schrift, 1)); padding: 9px 16px; border-radius: 8px 8px 0 0;

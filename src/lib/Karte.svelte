@@ -3,7 +3,7 @@
   import { dezimal } from './format.js'
   import { fehlerText } from './fehlertext.js'
   import 'maplibre-gl/dist/maplibre-gl.css'
-  import { onMount } from 'svelte'
+  import { onMount, untrack } from 'svelte'
   import { schriftAuf } from './kontrast.js'
   import { REGIONEN, POI_REGIONEN, KARTENGEBIET, imGebiet, kartenteilFuer, schneideZu, detailStufe }
     from './karten-config.js'
@@ -560,7 +560,9 @@
       } catch {}
     }
   }
-  $effect(() => { gewaehlteReisen; reisen.length; if (mapGeladen) zeigeRoute() })
+  // untrack: fitBounds kann `moveend` sofort auslösen, wenn der Ausschnitt schon passt. Was dabei
+  // gelesen und geschrieben wird, darf nicht an diesem Effect hängen, sonst ruft er sich endlos selbst auf.
+  $effect(() => { gewaehlteReisen; reisen; if (mapGeladen) untrack(zeigeRoute) })
 
   let laedt = $state(false)
 

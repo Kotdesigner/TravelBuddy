@@ -124,5 +124,12 @@ console.log('\n7  Kartenstil: Straßen nach Rang, mit Rand und Nummern')
   p('Zoom nur ganz außen in den Breiten (MapLibre-Regel)', !/\['\+', breite\(/.test(stil))
 }
 
+console.log('\n8  Keine Endlosschleife und kein Absturz')
+{
+  p('Route zeigen hängt nicht am eigenen Effect (fitBounds löst moveend sofort aus)', stil.includes('untrack(zeigeRoute)'))
+  const etappe = fs.readFileSync(new URL('../src/lib/EtappeDetail.svelte', import.meta.url), 'utf8')
+  p('Etappe löschen liest den Namen vor dem Löschen', !/loescheReise\(etappe\.id\)/.test(etappe) && etappe.includes('const { id, name } = etappe'))
+}
+
 console.log(`\n${'═'.repeat(46)}\n  ${ok} bestanden · ${bad} gescheitert\n`)
 process.exit(bad ? 1 : 0)

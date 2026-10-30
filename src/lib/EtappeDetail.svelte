@@ -67,13 +67,16 @@
   async function etappeLoeschen() {
     const n = routen.length
     const zusatz = n ? tn(n, 'Die Route darin bleibt erhalten und steht danach unter „Routen ohne Etappe“.', 'Die {n} Routen darin bleiben erhalten und stehen danach unter „Routen ohne Etappe“.') : t('Das lässt sich nicht rückgängig machen.')
-    if (await loeschFrage(t('Etappe „{name}“', { name: etappe.name }), zusatz)) {
-      loescheReise(etappe.id); zeigeToast(t('Etappe „{name}“ gelöscht', { name: etappe.name }), 'info'); onzurueck()
+    // Nach dem Löschen ist `etappe` null, deshalb Name und ID vorher festhalten
+    const { id, name } = etappe
+    if (await loeschFrage(t('Etappe „{name}“', { name }), zusatz)) {
+      loescheReise(id); zeigeToast(t('Etappe „{name}“ gelöscht', { name }), 'info'); onzurueck()
     }
   }
   function zurRoute() {
-    wandleReiseUm(etappe.id, 'route', null)
-    zeigeToast(t('„{name}“ ist jetzt eine Route ohne Etappe', { name: etappe.name }), 'ok')
+    const { id, name } = etappe
+    wandleReiseUm(id, 'route', null)
+    zeigeToast(t('„{name}“ ist jetzt eine Route ohne Etappe', { name }), 'ok')
     onzurueck()
   }
   const farben = ['#2f6b4f', '#1a7a8a', '#a8842b', '#7a3b1e', '#7a5c8e', '#c1662f', '#4a4038', '#a83c6e']

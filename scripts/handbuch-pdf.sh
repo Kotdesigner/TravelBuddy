@@ -1,8 +1,11 @@
 #!/bin/sh
 # Erzeugt public/handbuch.pdf aus docs/handbuch/handbuch.html und die englische Fassung
 # public/handbook.pdf aus docs/handbuch/handbook-en.html (Chrome ohne Fenster).
+# Dazu die Seiten für die Ansicht in der App: public/handbuch.html und public/handbook.html.
 # Danach `npm run build`, damit das Handbuch in dist/ landet.
 cd "$(dirname "$0")/.." || exit 1
+sed 's#\.\./\.\./public/fonts/#/fonts/#' docs/handbuch/handbuch.html > public/handbuch.html
+sed 's#\.\./\.\./public/fonts/#/fonts/#' docs/handbuch/handbook-en.html > public/handbook.html
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 [ -x "$CHROME" ] || { echo "Google Chrome nicht gefunden: $CHROME"; exit 1; }
 "$CHROME" --headless=new --disable-gpu --no-pdf-header-footer --virtual-time-budget=4000 \

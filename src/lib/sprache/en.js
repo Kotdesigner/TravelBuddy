@@ -361,7 +361,7 @@ export default {
  "↑ {n} hm": "↑ {n} m",
  "↑{max}° ↓{min}° · 💨 {wind} km/h · 💧 {feuchte}%": "↑{max}° ↓{min}° · 💨 {wind} km/h · 💧 {feuchte}%",
  "↓ Speichern": "↓ Save",
- "↗︎ Neuer Tab": "↗︎ New tab",
+ "↗︎ PDF": "↗︎ PDF",
  "↳ fehlt noch: {label}": "↳ still missing: {label}",
  "↺ Reset": "↺ Reset",
  "↻ Aktualisieren": "↻ Refresh",
