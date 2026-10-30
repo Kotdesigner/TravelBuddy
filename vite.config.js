@@ -141,6 +141,40 @@ function reisedokumente() {
   }
 }
 
+// Große Karte (`npm run build:gross`): die vier WA-Teile auf Stufe 14 liegen wegen ihrer Größe
+// (zusammen gut 200 MB) nicht in public/, sondern in karten-gross/. Nur dieser Build kopiert sie
+// nach dist/karten/; der normale Build bleibt klein. Fehlt eine Datei, bricht der Build ab,
+// sonst zeigte die App Kartenteile an, die es auf dem Server nicht gibt.
+const GROSS = process.env.VITE_KARTE === 'gross'
+const GROSS_QUELLE = 'karten-gross'
+const GROSS_DATEIEN = ['wa-sued.pmtiles', 'wa-mitte.pmtiles', 'wa-nordwest.pmtiles', 'wa-kimberley.pmtiles']
+
+function grosseKarte() {
+  return {
+    name: 'grosse-karte',
+    buildStart() {
+      if (!GROSS) return
+      const fehlt = GROSS_DATEIEN.filter((d) => !existsSync(join(GROSS_QUELLE, d)))
+      if (fehlt.length) this.error(`Große Karte: es fehlt ${fehlt.join(', ')} in ${GROSS_QUELLE}/. Erst \`sh karten-gross/holen.sh\` ausführen.`)
+    },
+    configureServer(server) {
+      if (!GROSS) return
+      server.middlewares.use('/karten/', (req, res, next) => {
+        const name = (req.url || '').split('?')[0].replace(/^\/+/, '')
+        if (!GROSS_DATEIEN.includes(name)) return next()
+        res.setHeader('Content-Type', 'application/octet-stream')
+        res.end(readFileSync(join(GROSS_QUELLE, name)))
+      })
+    },
+    closeBundle() {
+      if (!GROSS) return
+      mkdirSync(join('dist', 'karten'), { recursive: true })
+      for (const d of GROSS_DATEIEN) copyFileSync(join(GROSS_QUELLE, d), join('dist', 'karten', d))
+      console.log(`\n  ✓ Große Karte: ${GROSS_DATEIEN.length} Teile auf Stufe 14 nach dist/karten/`)
+    },
+  }
+}
+
 // PWA: App-Hülle + Inhalte + Bilder werden für Offline-Betrieb gecacht.
 // registerType 'autoUpdate' => neue Version wird geladen, sobald wieder online.
 // Build-Kennung: erscheint in der Fußzeile. So ist auf einen Blick erkennbar,
@@ -153,6 +187,7 @@ export default defineConfig({
   plugins: [
     svelte(),
     reisedokumente(),
+    grosseKarte(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],

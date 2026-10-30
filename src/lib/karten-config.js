@@ -4,6 +4,8 @@
 // Zwei Sorten:
 //   grob (maxzoom 8-10) — deckt große Flächen ab, damit KEINE Route mehr ins Leere zeigt
 //   fein (maxzoom 13)   — nur dort, wo wir uns wirklich aufhalten: Straßennamen, Wege, Gebäude
+//   groß (maxzoom 14)   — nur im Build mit großer Karte (`npm run build:gross`): ganz Western
+//                         Australia mit allen Straßen und Pisten, in vier Teilen (siehe WA_GROSS)
 //
 // Jede Stufe vervierfacht die Kachelzahl, deshalb ist fein nur örtlich bezahlbar.
 // Ausgeschnitten aus dem Protomaps-Planet-Build (Basemap v4.15.1), Stand August 2026.
@@ -42,6 +44,36 @@ export const REGIONEN = [
   },
 ]
 
+// Große Karte: Western Australia auf Stufe 14 in vier Teilen (je unter 100 MB, 0,5° Überlappung),
+// damit das iPhone nur den Teil lädt, in dem man gerade ist. Die Dateien liegen nicht im Repo,
+// sondern in `karten-gross/` (holen: `sh karten-gross/holen.sh`) und kommen nur mit
+// `npm run build:gross` in den Build. Quelle: Protomaps Basemap v4.15.2 (Build 20261029).
+export const WA_GROSS = [
+  {
+    id: 'wa-sued', name: t('Südwesten & Perth'), datei: 'wa-sued.pmtiles', mb: 75.5,
+    center: [117.5, -33.2], zoom: 6.0, maxzoom: 14,
+    bounds: [112.5, -35.5, 129.2, -31.0],
+  },
+  {
+    id: 'wa-mitte', name: t('Mittlere Westküste'), datei: 'wa-mitte.pmtiles', mb: 35.5,
+    center: [116.0, -28.7], zoom: 6.0, maxzoom: 14,
+    bounds: [112.5, -31.5, 129.2, -26.0],
+  },
+  {
+    id: 'wa-nordwest', name: t('Pilbara & Coral Coast'), datei: 'wa-nordwest.pmtiles', mb: 61.0,
+    center: [117.0, -23.2], zoom: 6.0, maxzoom: 14,
+    bounds: [112.5, -26.5, 129.2, -20.0],
+  },
+  {
+    id: 'wa-kimberley', name: t('Kimberley & Broome'), datei: 'wa-kimberley.pmtiles', mb: 32.7,
+    center: [124.0, -17.0], zoom: 6.0, maxzoom: 14,
+    bounds: [112.5, -20.5, 129.2, -13.5],
+  },
+]
+// Vite setzt VITE_KARTE beim Bauen ein; in Node (Tests) gibt es import.meta.env nicht.
+export const GROSSE_KARTE = import.meta.env?.VITE_KARTE === 'gross'
+if (GROSSE_KARTE) REGIONEN.splice(1, 0, ...WA_GROSS)
+
 // Alles, wofür es überhaupt Kartendaten gibt. Außerhalb ist die Karte leer (nur Wasserfarbe).
 export const KARTENGEBIET = [
   Math.min(...REGIONEN.map((r) => r.bounds[0])),
@@ -70,7 +102,8 @@ export function detailStufe(region) {
 //
 //  1. Beim aktuellen bleiben, solange er den Ausschnitt deckt und genug Details hat.
 //     Jeder Wechsel liest eine Datei (bis 25 MB) in den Speicher — nicht ohne Not.
-//  2. Sonst der feinste Teil, der den Ausschnitt ganz deckt.
+//  2. Sonst der gröbste Teil, der den Ausschnitt ganz deckt und für diesen Zoom genügt; genügt
+//     keiner, der feinste. So lädt die App die großen Stufe-14-Teile erst beim Hineinzoomen.
 //  3. Deckt keiner ganz (weit herausgezoomt, Südspitze Tasmaniens …): der Teil mit der
 //     größten Überdeckung, damit möglichst wenig leer bleibt.
 //
@@ -92,6 +125,8 @@ export function kartenteilFuer(ausschnitt, zoom, aktuell, verfuegbar = REGIONEN)
   const aktuellDa = aktuell && kandidaten.some((r) => r.id === aktuell.id)
   if (aktuellDa && Math.floor(zoom) <= aktuell.maxzoom) return aktuell
   if (kandidaten.length) {
+    const genuegt = kandidaten.filter((r) => Math.floor(zoom) <= r.maxzoom)
+    if (genuegt.length) return [...genuegt].sort((a, b) => a.maxzoom - b.maxzoom || flaeche(a) - flaeche(b))[0]
     return [...kandidaten].sort((a, b) => b.maxzoom - a.maxzoom || flaeche(a) - flaeche(b))[0]
   }
   const ueberdeckung = (r) => {

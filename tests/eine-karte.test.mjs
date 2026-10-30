@@ -2,7 +2,7 @@
 // und wie werden Routen auf das Kartengebiet zugeschnitten.
 // Ausführen: node tests/eine-karte.test.mjs
 import fs from 'node:fs'
-import { REGIONEN, KARTENGEBIET, kartenteilFuer, schneideZu, imGebiet }
+import { REGIONEN, WA_GROSS, GROSSE_KARTE, KARTENGEBIET, kartenteilFuer, schneideZu, imGebiet }
   from '../src/lib/karten-config.js'
 
 let ok = 0, bad = 0
@@ -43,8 +43,8 @@ p('Ostküste bleibt bei Zoom 10,5 über Melbourne (hat Zoom-10-Kacheln)',
   teil(145.0, -37.8, 10.5, R.ostkueste) === 'ostkueste')
 p('Ostküste → Melbourne erst ab Zoom 11', teil(145.0, -37.8, 11, R.ostkueste) === 'melbourne')
 p('herauszoomen: Melbourne bleibt, solange es deckt (Zoom 9)', teil(145.0, -37.8, 9, R.melbourne) === 'melbourne')
-p('weiter heraus (Zoom 7): Melbourne deckt nicht mehr → Ostküste (reicht bis 144° Ost)',
-  teil(145.0, -37.8, 7, R.melbourne) === 'ostkueste', teil(145.0, -37.8, 7, R.melbourne))
+p('weiter heraus (Zoom 7): Melbourne deckt nicht mehr → gröbster Teil, der genügt (Überblick)',
+  teil(145.0, -37.8, 7, R.melbourne) === 'australien', teil(145.0, -37.8, 7, R.melbourne))
 p('noch weiter (Zoom 6): auch Ostküste deckt nicht mehr → grob', teil(145.0, -37.8, 6, R.ostkueste) === 'australien',
   teil(145.0, -37.8, 6, R.ostkueste))
 p('Melbourne → Gippsland schieben, Zoom 12 → Ostküste', teil(146.5, -38.0, 12, R.melbourne) === 'ostkueste',
@@ -65,6 +65,23 @@ p('dasselbe mit allen Teilen → Melbourne (daraus entsteht der Hinweis „mehr 
 p('nichts gespeichert → null', kartenteilFuer(ausschnitt(145, -37.8, 12), 12, null, []) === null)
 p('nur Westküste gespeichert, Blick auf Melbourne → Westküste als einziger (leer, aber kein Absturz)',
   teil(145.0, -37.8, 12, null, [R.wa]) === 'wa')
+
+console.log('\n4b Große Karte (npm run build:gross)')
+{
+  const G = Object.fromEntries(WA_GROSS.map((r) => [r.id, r]))
+  const alle = [...REGIONEN, ...WA_GROSS]
+  const gt = (lon, lat, zoom, aktuell = R.australien) => kartenteilFuer(ausschnitt(lon, lat, zoom), zoom, aktuell, alle)?.id
+  p('normaler Build ohne große Teile', !GROSSE_KARTE && !REGIONEN.some((r) => G[r.id]))
+  p('vier Teile, jeder unter 100 MB (GitHub-Grenze)', WA_GROSS.length === 4 && WA_GROSS.every((r) => r.mb < 100 && r.maxzoom === 14))
+  p('Perth, Zoom 10 → noch die kleine Westküste (lädt nicht 75 MB)', gt(115.86, -31.95, 10) === 'wa', gt(115.86, -31.95, 10))
+  p('Perth, Zoom 11 → Südwesten & Perth', gt(115.86, -31.95, 11) === 'wa-sued', gt(115.86, -31.95, 11))
+  p('Kalbarri, Zoom 12 → Mittlere Westküste', gt(114.16, -27.71, 12) === 'wa-mitte', gt(114.16, -27.71, 12))
+  p('Exmouth, Zoom 12 → Pilbara & Coral Coast', gt(114.13, -21.93, 12) === 'wa-nordwest', gt(114.13, -21.93, 12))
+  p('Broome, Zoom 13 → Kimberley & Broome', gt(122.24, -17.96, 13) === 'wa-kimberley', gt(122.24, -17.96, 13))
+  p('Melbourne bleibt unberührt', gt(145.0, -37.8, 12) === 'melbourne')
+  p('Nachbarn überlappen sich (keine Lücke an den Grenzen)',
+    G['wa-sued'].bounds[3] > G['wa-mitte'].bounds[1] && G['wa-mitte'].bounds[3] > G['wa-nordwest'].bounds[1] && G['wa-nordwest'].bounds[3] > G['wa-kimberley'].bounds[1])
+}
 
 console.log('\n5  Routen auf das Kartengebiet zuschneiden')
 const perthBroome = [[115.86, -31.95], [117.88, -22.0], [122.24, -17.96]]

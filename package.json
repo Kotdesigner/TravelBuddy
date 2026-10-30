@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:gross": "VITE_KARTE=gross vite build",
     "preview": "vite preview"
   },
   "devDependencies": {

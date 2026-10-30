@@ -62,3 +62,6 @@ mac/build/
 win/build/
 win/web/
 win/*.syso
+
+# Große Karte (Stufe 14): zu groß fürs Repo, holen mit karten-gross/holen.sh
+karten-gross/*.pmtiles

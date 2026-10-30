@@ -312,7 +312,7 @@ TravelBuddy collects the music of the places you pass through, **automatically, 
 |---|---|
 | 🖥️ **Mac** | `TravelBuddy-Mac.zip` from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, move to Applications, open. Apple Silicon and Intel, macOS 13 or newer. |
 | 🪟 **Windows** | `TravelBuddy-Windows.zip` from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, double-click `TravelBuddy.exe`. Windows 10 and 11 (64-bit). Opens in its own Microsoft Edge window. |
-| 📱 **iPhone and any browser** | `TravelBuddy-Netlify.zip` from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): drag into Netlify's "Deploy manually" ([step by step](#-put-it-online-with-netlify-for-iphone)). Then open the address in Safari and choose "Add to Home Screen". |
+| 📱 **iPhone and any browser** | `TravelBuddy-Netlify.zip` (small map) or `TravelBuddy-Netlify-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): drag into Netlify's "Deploy manually" ([step by step](#-put-it-online-with-netlify-for-iphone)). Then open the address in Safari and choose "Add to Home Screen". |
 | 🔁 **Straight from GitHub** | In Netlify, choose "Import an existing project" and pick this repo. The settings are in `netlify.toml`, and every push publishes the new version. |
 
 The Mac and Windows apps need no internet and no extra software. They are not signed by Apple or Microsoft, so the first launch shows a warning:
@@ -325,12 +325,21 @@ The Mac and Windows apps need no internet and no extra software. They are not si
 
 iPhones only install web apps from an **HTTPS** address. A free Netlify site is the easiest way to get one. The folder **`dist`** is the complete, ready-built app, offline maps included (about 100 MB). There is nothing to configure: the rules for caching and the offline maps are already inside.
 
+### Small or large map?
+
+| | Download | Size | Offline map of Western Australia |
+|---|---|---|---|
+| 🗺️ **Small map** | `TravelBuddy-Netlify.zip` | ≈ 100 MB | up to zoom level 10: highways and main roads, towns. Enough for planning and the big picture. |
+| 🛣️ **Large map** | `TravelBuddy-Netlify-Grosse-Karte.zip` | ≈ 280 MB | up to zoom level 14: **every road, gravel road and track**, street names and buildings. Best for the road itself. |
+
+The large map is cut into four parts (Southwest & Perth, Central west coast, Pilbara & Coral Coast, Kimberley & Broome). The phone only loads a part once you zoom in there. Saving everything for offline takes about 270 MB on the phone instead of about 66 MB.
+
 ### Option A: ready-made `dist` from Releases (nothing to install)
 
-1. Download **`TravelBuddy-Netlify.zip`** from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest). This is the `dist` folder, zipped.
+1. Download **`TravelBuddy-Netlify.zip`** or **`TravelBuddy-Netlify-Grosse-Karte.zip`** from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest). Each is the complete `dist` folder, zipped.
 2. Sign up for free at **[app.netlify.com](https://app.netlify.com)** (email or GitHub account).
 3. **Sites → Add new site → Deploy manually.**
-4. Drag the ZIP file into the box. Netlify unpacks it itself. Wait until it says **Published** (one to two minutes for 100 MB).
+4. Drag the ZIP file into the box. Netlify unpacks it itself. Wait until it says **Published** (a few minutes, longer for the large map).
 5. **Site configuration → Change site name**, for example `travelbuddy-wa`. Your address is then **https://travelbuddy-wa.netlify.app**.
 
 ### Option B: build `dist` yourself
@@ -343,7 +352,9 @@ npm run build
 node tests/basic-privat.test.mjs
 ```
 
-The last command must report "0 gescheitert" (0 failed). Then drag the **`dist` folder itself** into "Deploy manually", not the project folder: `index.html` has to sit at the top level.
+The last command must report "0 gescheitert" (0 failed). For the **large map**, first install [pmtiles](https://github.com/protomaps/go-pmtiles/releases) (Mac: `brew install pmtiles`), then run `sh karten-gross/holen.sh` once (downloads the four parts, about 205 MB) and build with `npm run build:gross` instead of `npm run build`.
+
+Then drag the **`dist` folder itself** into "Deploy manually", not the project folder: `index.html` has to sit at the top level.
 
 ### Option C: connect GitHub (updates itself)
 
@@ -351,7 +362,7 @@ The last command must report "0 gescheitert" (0 failed). Then drag the **`dist` 
 2. On Netlify: **Add new site → Import an existing project → GitHub** and pick your fork.
 3. Leave all fields as they are. `netlify.toml` already sets the build command `npm ci && npm run build`, the publish folder `dist` and Node 22. Click **Deploy**.
 
-From then on, every push to `main` builds and publishes the new version.
+From then on, every push to `main` builds and publishes the new version. This way builds the small map, because the large map parts are too big for the repo.
 
 ### On the iPhone
 
@@ -763,7 +774,7 @@ TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, wäh
 |---|---|
 | 🖥️ **Mac** | `TravelBuddy-Mac.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, in „Programme“ ziehen, öffnen. Apple Silicon und Intel, ab macOS 13. |
 | 🪟 **Windows** | `TravelBuddy-Windows.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, Doppelklick auf `TravelBuddy.exe`. Windows 10 und 11 (64 Bit). Öffnet sich in einem eigenen Fenster von Microsoft Edge. |
-| 📱 **iPhone und jeder Browser** | `TravelBuddy-Netlify.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): bei Netlify unter „Deploy manually“ hineinziehen ([Schritt für Schritt](#-mit-netlify-ins-netz-stellen-für-das-iphone)). Danach die Adresse in Safari öffnen und „Zum Home-Bildschirm“. |
+| 📱 **iPhone und jeder Browser** | `TravelBuddy-Netlify.zip` (kleine Karte) oder `TravelBuddy-Netlify-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): bei Netlify unter „Deploy manually“ hineinziehen ([Schritt für Schritt](#-mit-netlify-ins-netz-stellen-für-das-iphone)). Danach die Adresse in Safari öffnen und „Zum Home-Bildschirm“. |
 | 🔁 **Direkt aus GitHub** | Bei Netlify „Import an existing project“ und dieses Repo wählen. Die Einstellungen stehen in `netlify.toml`, jeder Push veröffentlicht die neue Fassung. |
 
 Mac- und Windows-App brauchen kein Internet und keine weiteren Programme. Sie sind nicht von Apple oder Microsoft signiert, deshalb kommt beim ersten Start eine Warnung:
@@ -776,12 +787,21 @@ Mac- und Windows-App brauchen kein Internet und keine weiteren Programme. Sie si
 
 Web-Apps installiert das iPhone nur von einer **HTTPS**-Adresse. Am einfachsten bekommst du die mit einer kostenlosen Netlify-Seite. Der Ordner **`dist`** ist die fertig gebaute App, samt Offline-Karten (etwa 100 MB). Einstellen musst du nichts: Die Regeln für Zwischenspeicher und Offline-Karten stecken schon drin.
 
+### Kleine oder große Karte?
+
+| | Download | Größe | Offline-Karte von Western Australia |
+|---|---|---|---|
+| 🗺️ **Kleine Karte** | `TravelBuddy-Netlify.zip` | ≈ 100 MB | bis Zoomstufe 10: Highways und Hauptstraßen, Orte. Reicht zum Planen und für den Überblick. |
+| 🛣️ **Große Karte** | `TravelBuddy-Netlify-Grosse-Karte.zip` | ≈ 280 MB | bis Zoomstufe 14: **jede Straße, Schotterpiste und jeder Track**, Straßennamen und Gebäude. Am besten für unterwegs. |
+
+Die große Karte ist in vier Teile geschnitten (Südwesten & Perth, Mittlere Westküste, Pilbara & Coral Coast, Kimberley & Broome). Das Handy lädt einen Teil erst, wenn du dort hineinzoomst. Alles offline sichern braucht auf dem Handy dann etwa 270 MB statt etwa 66 MB.
+
 ### Weg A: fertiges `dist` aus den Releases (nichts installieren)
 
-1. **`TravelBuddy-Netlify.zip`** unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest) herunterladen. Das ist der Ordner `dist` als ZIP.
+1. **`TravelBuddy-Netlify.zip`** oder **`TravelBuddy-Netlify-Grosse-Karte.zip`** unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest) herunterladen. Beides ist der komplette Ordner `dist` als ZIP.
 2. Kostenlos anmelden auf **[app.netlify.com](https://app.netlify.com)** (mit E-Mail oder GitHub-Konto).
 3. **Sites → Add new site → Deploy manually.**
-4. Die ZIP-Datei in das Feld ziehen. Netlify packt sie selbst aus. Warten, bis **Published** dasteht (bei 100 MB ein bis zwei Minuten).
+4. Die ZIP-Datei in das Feld ziehen. Netlify packt sie selbst aus. Warten, bis **Published** dasteht (ein paar Minuten, bei der großen Karte länger).
 5. **Site configuration → Change site name**, zum Beispiel `travelbuddy-wa`. Deine Adresse ist dann **https://travelbuddy-wa.netlify.app**.
 
 ### Weg B: `dist` selbst bauen
@@ -794,7 +814,9 @@ npm run build
 node tests/basic-privat.test.mjs
 ```
 
-Der letzte Befehl muss „0 gescheitert“ melden. Dann den **Ordner `dist` selbst** in „Deploy manually“ ziehen, nicht den Projektordner: `index.html` muss ganz oben liegen.
+Der letzte Befehl muss „0 gescheitert“ melden. Für die **große Karte** vorher [pmtiles](https://github.com/protomaps/go-pmtiles/releases) installieren (Mac: `brew install pmtiles`), einmal `sh karten-gross/holen.sh` ausführen (lädt die vier Teile, etwa 205 MB) und mit `npm run build:gross` statt `npm run build` bauen.
+
+Dann den **Ordner `dist` selbst** in „Deploy manually“ ziehen, nicht den Projektordner: `index.html` muss ganz oben liegen.
 
 ### Weg C: GitHub verbinden (aktualisiert sich selbst)
 
@@ -802,7 +824,7 @@ Der letzte Befehl muss „0 gescheitert“ melden. Dann den **Ordner `dist` selb
 2. Bei Netlify: **Add new site → Import an existing project → GitHub** und deinen Fork wählen.
 3. Alle Felder so lassen. `netlify.toml` setzt schon den Build-Befehl `npm ci && npm run build`, den Ordner `dist` und Node 22. Auf **Deploy** klicken.
 
-Ab dann baut und veröffentlicht jeder Push auf `main` die neue Fassung.
+Ab dann baut und veröffentlicht jeder Push auf `main` die neue Fassung. Dieser Weg baut die kleine Karte, weil die Teile der großen Karte zu groß fürs Repo sind.
 
 ### Am iPhone
 
