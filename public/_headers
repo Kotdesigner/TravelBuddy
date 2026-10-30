@@ -1,0 +1,7 @@
+# Gilt, wenn dist von Hand zu Netlify hochgeladen wird (dieselben Regeln wie in netlify.toml)
+/sw.js
+  Cache-Control: no-cache
+
+/karten/*
+  Cache-Control: public, max-age=604800
+  Access-Control-Allow-Origin: *

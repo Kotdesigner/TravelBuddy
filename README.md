@@ -15,7 +15,7 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 
 <br>
 
-**[⬇️ Mac app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[🌐 Web app for Netlify](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[🚀 Everything it can do](#-everything-travelbuddy-can-do)** · **[🛠️ Run it yourself](#run-it-without-the-ready-made-apps)**
+**[⬇️ Mac app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[🌐 Web app for Netlify](#-put-it-online-with-netlify-for-iphone)** · **[🚀 Everything it can do](#-everything-travelbuddy-can-do)** · **[🛠️ Run it yourself](#run-it-without-the-ready-made-apps)**
 
 <br>
 
@@ -312,12 +312,68 @@ TravelBuddy collects the music of the places you pass through, **automatically, 
 |---|---|
 | 🖥️ **Mac** | `TravelBuddy-Mac.zip` from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, move to Applications, open. Apple Silicon and Intel, macOS 13 or newer. |
 | 🪟 **Windows** | `TravelBuddy-Windows.zip` from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, double-click `TravelBuddy.exe`. Windows 10 and 11 (64-bit). Opens in its own Microsoft Edge window. |
-| 📱 **iPhone and any browser** | `TravelBuddy-Netlify.zip` from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): drag into Netlify's "Deploy manually". Then open the address in Safari and choose "Add to Home Screen". |
+| 📱 **iPhone and any browser** | `TravelBuddy-Netlify.zip` from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): drag into Netlify's "Deploy manually" ([step by step](#-put-it-online-with-netlify-for-iphone)). Then open the address in Safari and choose "Add to Home Screen". |
 | 🔁 **Straight from GitHub** | In Netlify, choose "Import an existing project" and pick this repo. The settings are in `netlify.toml`, and every push publishes the new version. |
 
 The Mac and Windows apps need no internet and no extra software. They are not signed by Apple or Microsoft, so the first launch shows a warning:
 - **Mac:** System Settings → Privacy & Security → "Open Anyway".
 - **Windows:** "Windows protected your PC" → "More info" → "Run anyway".
+
+---
+
+## 🌐 Put it online with Netlify (for iPhone)
+
+iPhones only install web apps from an **HTTPS** address. A free Netlify site is the easiest way to get one. The folder **`dist`** is the complete, ready-built app, offline maps included (about 100 MB). There is nothing to configure: the rules for caching and the offline maps are already inside.
+
+### Option A: ready-made `dist` from Releases (nothing to install)
+
+1. Download **`TravelBuddy-Netlify.zip`** from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest). This is the `dist` folder, zipped.
+2. Sign up for free at **[app.netlify.com](https://app.netlify.com)** (email or GitHub account).
+3. **Sites → Add new site → Deploy manually.**
+4. Drag the ZIP file into the box. Netlify unpacks it itself. Wait until it says **Published** (one to two minutes for 100 MB).
+5. **Site configuration → Change site name**, for example `travelbuddy-wa`. Your address is then **https://travelbuddy-wa.netlify.app**.
+
+### Option B: build `dist` yourself
+
+```
+git clone https://github.com/Kotdesigner/TravelBuddy.git
+cd TravelBuddy
+npm ci
+npm run build
+node tests/basic-privat.test.mjs
+```
+
+The last command must report "0 gescheitert" (0 failed). Then drag the **`dist` folder itself** into "Deploy manually", not the project folder: `index.html` has to sit at the top level.
+
+### Option C: connect GitHub (updates itself)
+
+1. Fork this repo on GitHub.
+2. On Netlify: **Add new site → Import an existing project → GitHub** and pick your fork.
+3. Leave all fields as they are. `netlify.toml` already sets the build command `npm ci && npm run build`, the publish folder `dist` and Node 22. Click **Deploy**.
+
+From then on, every push to `main` builds and publishes the new version.
+
+### On the iPhone
+
+1. Open your address in **Safari** (not in an in-app browser like WhatsApp or Instagram).
+2. **Share → Add to Home Screen**, then always start TravelBuddy from the icon.
+3. While online, open **Plan → Map** once and tap **"Save all of Australia"**. The offline maps are then on the phone.
+4. Test it: switch on flight mode and open the app. It starts anyway.
+
+### Publishing a new version
+
+Always upload to the **same** site: **Deploys** → drag the new `dist` (or ZIP) in. Never create a new site for an update. Data lives in the browser under exactly one address, so a new address means an empty app. Phones pick up the new version the next time they are online.
+
+### If something doesn't work
+
+| Problem | Fix |
+|---|---|
+| "Page not found" right after uploading | You uploaded the project folder. Upload `dist` or the ZIP, so `index.html` is at the top level. |
+| Maps stay empty | Open `https://<your-site>.netlify.app/karten/wa.pmtiles`. If it doesn't download, the `karten` folder is missing from the upload. |
+| The iPhone keeps showing an old version | Open `https://<your-site>.netlify.app/reset.html` and press the button. Your data stays. |
+| No "Add to Home Screen" | Open the address in Safari itself, not inside another app. |
+
+More detail (in German): **[docs/VEROEFFENTLICHEN.md](docs/VEROEFFENTLICHEN.md)**.
 
 ---
 
@@ -354,7 +410,7 @@ Good to know:
 
 ### On the iPhone
 
-iPhones only install web apps from an **HTTPS** address. The simplest free way is Netlify: connect this repo or drag the `dist` folder in. Step by step: **[docs/VEROEFFENTLICHEN.md](docs/VEROEFFENTLICHEN.md)** (German).
+iPhones only install web apps from an **HTTPS** address. Step by step: **[Put it online with Netlify](#-put-it-online-with-netlify-for-iphone)**.
 
 ### Build the apps yourself
 
@@ -707,12 +763,70 @@ TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, wäh
 |---|---|
 | 🖥️ **Mac** | `TravelBuddy-Mac.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, in „Programme“ ziehen, öffnen. Apple Silicon und Intel, ab macOS 13. |
 | 🪟 **Windows** | `TravelBuddy-Windows.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, Doppelklick auf `TravelBuddy.exe`. Windows 10 und 11 (64 Bit). Öffnet sich in einem eigenen Fenster von Microsoft Edge. |
-| 📱 **iPhone und jeder Browser** | `TravelBuddy-Netlify.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): bei Netlify unter „Deploy manually“ hineinziehen. Danach die Adresse in Safari öffnen und „Zum Home-Bildschirm“. |
+| 📱 **iPhone und jeder Browser** | `TravelBuddy-Netlify.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): bei Netlify unter „Deploy manually“ hineinziehen ([Schritt für Schritt](#-mit-netlify-ins-netz-stellen-für-das-iphone)). Danach die Adresse in Safari öffnen und „Zum Home-Bildschirm“. |
 | 🔁 **Direkt aus GitHub** | Bei Netlify „Import an existing project“ und dieses Repo wählen. Die Einstellungen stehen in `netlify.toml`, jeder Push veröffentlicht die neue Fassung. |
 
 Mac- und Windows-App brauchen kein Internet und keine weiteren Programme. Sie sind nicht von Apple oder Microsoft signiert, deshalb kommt beim ersten Start eine Warnung:
 - **Mac:** Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“.
 - **Windows:** „Der Computer wurde durch Windows geschützt“ → „Weitere Informationen“ → „Trotzdem ausführen“.
+
+---
+
+## 🌐 Mit Netlify ins Netz stellen (für das iPhone)
+
+Web-Apps installiert das iPhone nur von einer **HTTPS**-Adresse. Am einfachsten bekommst du die mit einer kostenlosen Netlify-Seite. Der Ordner **`dist`** ist die fertig gebaute App, samt Offline-Karten (etwa 100 MB). Einstellen musst du nichts: Die Regeln für Zwischenspeicher und Offline-Karten stecken schon drin.
+
+### Weg A: fertiges `dist` aus den Releases (nichts installieren)
+
+1. **`TravelBuddy-Netlify.zip`** unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest) herunterladen. Das ist der Ordner `dist` als ZIP.
+2. Kostenlos anmelden auf **[app.netlify.com](https://app.netlify.com)** (mit E-Mail oder GitHub-Konto).
+3. **Sites → Add new site → Deploy manually.**
+4. Die ZIP-Datei in das Feld ziehen. Netlify packt sie selbst aus. Warten, bis **Published** dasteht (bei 100 MB ein bis zwei Minuten).
+5. **Site configuration → Change site name**, zum Beispiel `travelbuddy-wa`. Deine Adresse ist dann **https://travelbuddy-wa.netlify.app**.
+
+### Weg B: `dist` selbst bauen
+
+```
+git clone https://github.com/Kotdesigner/TravelBuddy.git
+cd TravelBuddy
+npm ci
+npm run build
+node tests/basic-privat.test.mjs
+```
+
+Der letzte Befehl muss „0 gescheitert“ melden. Dann den **Ordner `dist` selbst** in „Deploy manually“ ziehen, nicht den Projektordner: `index.html` muss ganz oben liegen.
+
+### Weg C: GitHub verbinden (aktualisiert sich selbst)
+
+1. Dieses Repo auf GitHub forken.
+2. Bei Netlify: **Add new site → Import an existing project → GitHub** und deinen Fork wählen.
+3. Alle Felder so lassen. `netlify.toml` setzt schon den Build-Befehl `npm ci && npm run build`, den Ordner `dist` und Node 22. Auf **Deploy** klicken.
+
+Ab dann baut und veröffentlicht jeder Push auf `main` die neue Fassung.
+
+### Am iPhone
+
+1. Die Adresse in **Safari** öffnen (nicht im Browser von WhatsApp oder Instagram).
+2. **Teilen → Zum Home-Bildschirm**, TravelBuddy danach immer über das Symbol starten.
+3. Einmal mit Internet **Plan → Karte** öffnen und **„Ganz Australien sichern“** tippen. Dann liegen die Offline-Karten auf dem Handy.
+4. Ausprobieren: Flugmodus an und die App öffnen. Sie startet trotzdem.
+
+### Neue Fassung veröffentlichen
+
+Immer auf **dieselbe** Seite laden: **Deploys** → das neue `dist` (oder die ZIP) hineinziehen. Für ein Update nie eine neue Seite anlegen. Die Daten liegen im Browser unter genau einer Adresse, eine neue Adresse ist eine leere App. Die Handys holen sich die neue Fassung, sobald sie wieder online sind.
+
+### Wenn etwas nicht klappt
+
+| Problem | Lösung |
+|---|---|
+| „Page not found“ direkt nach dem Hochladen | Du hast den Projektordner hochgeladen. `dist` oder die ZIP nehmen, damit `index.html` ganz oben liegt. |
+| Karten bleiben leer | `https://<deine-seite>.netlify.app/karten/wa.pmtiles` öffnen. Lädt das nicht, fehlt der Ordner `karten` im Upload. |
+| Das iPhone zeigt weiter eine alte Fassung | `https://<deine-seite>.netlify.app/reset.html` öffnen und den Knopf drücken. Deine Daten bleiben. |
+| Kein „Zum Home-Bildschirm“ | Die Adresse direkt in Safari öffnen, nicht in einer anderen App. |
+
+Mehr Einzelheiten: **[docs/VEROEFFENTLICHEN.md](docs/VEROEFFENTLICHEN.md)**.
+
+---
 
 ## Ohne die fertigen Apps ausführen
 
@@ -747,7 +861,7 @@ Gut zu wissen:
 
 ### Auf dem iPhone
 
-Web-Apps installiert das iPhone nur von einer **HTTPS**-Adresse. Am einfachsten und kostenlos geht das mit Netlify: dieses Repo verbinden oder den Ordner `dist` hineinziehen. Schritt für Schritt: **[docs/VEROEFFENTLICHEN.md](docs/VEROEFFENTLICHEN.md)**.
+Web-Apps installiert das iPhone nur von einer **HTTPS**-Adresse. Schritt für Schritt: **[Mit Netlify ins Netz stellen](#-mit-netlify-ins-netz-stellen-für-das-iphone)**.
 
 ### Die Apps selbst bauen
 
