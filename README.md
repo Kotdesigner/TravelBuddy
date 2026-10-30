@@ -310,10 +310,12 @@ TravelBuddy collects the music of the places you pass through, **automatically, 
 
 | | |
 |---|---|
-| 🖥️ **Mac** | `TravelBuddy-Mac.zip` from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, move to Applications, open. Apple Silicon and Intel, macOS 13 or newer. |
-| 🪟 **Windows** | `TravelBuddy-Windows.zip` from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, double-click `TravelBuddy.exe`. Windows 10 and 11 (64-bit). Opens in its own Microsoft Edge window. |
+| 🖥️ **Mac** | `TravelBuddy-Mac.zip` (small map) or `TravelBuddy-Mac-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, move to Applications, open. Apple Silicon and Intel, macOS 13 or newer. |
+| 🪟 **Windows** | `TravelBuddy-Windows.zip` (small map) or `TravelBuddy-Windows-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, double-click `TravelBuddy.exe`. Windows 10 and 11 (64-bit). Opens in its own Microsoft Edge window. |
 | 📱 **iPhone and any browser** | `TravelBuddy-Netlify.zip` (small map) or `TravelBuddy-Netlify-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): drag into Netlify's "Deploy manually" ([step by step](#-put-it-online-with-netlify-for-iphone)). Then open the address in Safari and choose "Add to Home Screen". |
 | 🔁 **Straight from GitHub** | In Netlify, choose "Import an existing project" and pick this repo. The settings are in `netlify.toml`, and every push publishes the new version. |
+
+**Small or large map?** Every download comes in two versions. The small one (≈ 100 MB) shows Western Australia up to zoom level 10 with the main roads. The large one (≈ 280 MB) goes up to zoom level 14 with every road, gravel road and track, street names and buildings. Your data stays when you switch from one Mac or Windows version to the other.
 
 The Mac and Windows apps need no internet and no extra software. They are not signed by Apple or Microsoft, so the first launch shows a warning:
 - **Mac:** System Settings → Privacy & Security → "Open Anyway".
@@ -429,6 +431,8 @@ iPhones only install web apps from an **HTTPS** address. Step by step: **[Put it
 sh mac/baue-mac-app.sh     # → mac/build/TravelBuddy.app and TravelBuddy-Mac.zip (needs Xcode)
 sh win/baue-windows.sh     # → win/build/TravelBuddy.exe and TravelBuddy-Windows.zip (needs Go, works on Mac/Linux too)
 ```
+
+For the large map, run `sh karten-gross/holen.sh` once, then put `KARTE=gross` in front: `KARTE=gross sh mac/baue-mac-app.sh` or `KARTE=gross sh win/baue-windows.sh`. The packages end up in `mac/build-gross/` and `win/build-gross/`.
 
 The Windows build embeds the icon with `rsrc`: install it once with `go install github.com/akavel/rsrc@v0.10.2`.
 
@@ -772,10 +776,12 @@ TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, wäh
 
 | | |
 |---|---|
-| 🖥️ **Mac** | `TravelBuddy-Mac.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, in „Programme“ ziehen, öffnen. Apple Silicon und Intel, ab macOS 13. |
-| 🪟 **Windows** | `TravelBuddy-Windows.zip` unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, Doppelklick auf `TravelBuddy.exe`. Windows 10 und 11 (64 Bit). Öffnet sich in einem eigenen Fenster von Microsoft Edge. |
+| 🖥️ **Mac** | `TravelBuddy-Mac.zip` (kleine Karte) oder `TravelBuddy-Mac-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, in „Programme“ ziehen, öffnen. Apple Silicon und Intel, ab macOS 13. |
+| 🪟 **Windows** | `TravelBuddy-Windows.zip` (kleine Karte) oder `TravelBuddy-Windows-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, Doppelklick auf `TravelBuddy.exe`. Windows 10 und 11 (64 Bit). Öffnet sich in einem eigenen Fenster von Microsoft Edge. |
 | 📱 **iPhone und jeder Browser** | `TravelBuddy-Netlify.zip` (kleine Karte) oder `TravelBuddy-Netlify-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): bei Netlify unter „Deploy manually“ hineinziehen ([Schritt für Schritt](#-mit-netlify-ins-netz-stellen-für-das-iphone)). Danach die Adresse in Safari öffnen und „Zum Home-Bildschirm“. |
 | 🔁 **Direkt aus GitHub** | Bei Netlify „Import an existing project“ und dieses Repo wählen. Die Einstellungen stehen in `netlify.toml`, jeder Push veröffentlicht die neue Fassung. |
+
+**Kleine oder große Karte?** Jeder Download kommt in zwei Fassungen. Die kleine (≈ 100 MB) zeigt Western Australia bis Zoomstufe 10 mit den Hauptstraßen. Die große (≈ 280 MB) geht bis Zoomstufe 14 mit jeder Straße, Schotterpiste und jedem Track, Straßennamen und Gebäuden. Deine Daten bleiben erhalten, wenn du am Mac oder unter Windows von einer Fassung zur anderen wechselst.
 
 Mac- und Windows-App brauchen kein Internet und keine weiteren Programme. Sie sind nicht von Apple oder Microsoft signiert, deshalb kommt beim ersten Start eine Warnung:
 - **Mac:** Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“.
@@ -891,6 +897,8 @@ Web-Apps installiert das iPhone nur von einer **HTTPS**-Adresse. Schritt für Sc
 sh mac/baue-mac-app.sh     # → mac/build/TravelBuddy.app und TravelBuddy-Mac.zip (braucht Xcode)
 sh win/baue-windows.sh     # → win/build/TravelBuddy.exe und TravelBuddy-Windows.zip (braucht Go, geht auch auf Mac/Linux)
 ```
+
+Für die große Karte einmal `sh karten-gross/holen.sh` ausführen und dann `KARTE=gross` davorsetzen: `KARTE=gross sh mac/baue-mac-app.sh` oder `KARTE=gross sh win/baue-windows.sh`. Die Pakete liegen dann in `mac/build-gross/` und `win/build-gross/`.
 
 Das Symbol der Windows-App bettet `rsrc` ein: einmal `go install github.com/akavel/rsrc@v0.10.2`.
 

@@ -1,6 +1,8 @@
 #!/bin/sh
 # Baut TravelBuddy.app für den Mac (Apple Silicon und Intel) aus der fertigen Web-App.
 #   sh mac/baue-mac-app.sh          → mac/build/TravelBuddy.app und mac/build/TravelBuddy-Mac.zip
+#   KARTE=gross sh mac/baue-mac-app.sh → mac/build-gross/… und TravelBuddy-Mac-Grosse-Karte.zip
+#     (braucht die Dateien in karten-gross/, siehe karten-gross/holen.sh)
 # Braucht Xcode (für swiftc). Die App ist nicht notariell beglaubigt: beim ersten Öffnen
 # Rechtsklick → Öffnen, oder Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“.
 set -e
@@ -10,10 +12,13 @@ cd "$(dirname "$0")/.."
 VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo 1.0.0)
 [ "$VERSION" = "0.0.0" ] && VERSION=1.0.0
 ZIEL=mac/build
+BUILD=build
+PAKET=TravelBuddy-Mac.zip
+if [ "$KARTE" = "gross" ]; then ZIEL=mac/build-gross; BUILD=build:gross; PAKET=TravelBuddy-Mac-Grosse-Karte.zip; fi
 APP="$ZIEL/TravelBuddy.app"
 
 echo "▶︎ Web-App bauen"
-npm run build >/dev/null 2>&1
+npm run "$BUILD" >/dev/null 2>&1
 node tests/basic-privat.test.mjs >/dev/null || { echo "✗ Datenschutz-Test gescheitert, keine App gebaut"; exit 1; }
 
 echo "▶︎ Programm übersetzen (arm64 + x86_64)"
@@ -58,5 +63,5 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 PLIST
 
 codesign --force --deep -s - "$APP" 2>/dev/null
-(cd "$ZIEL" && ditto -c -k --keepParent TravelBuddy.app TravelBuddy-Mac.zip)
-echo "✓ $APP ($(du -sh "$APP" | cut -f1)), Paket: $ZIEL/TravelBuddy-Mac.zip ($(du -h "$ZIEL/TravelBuddy-Mac.zip" | cut -f1))"
+(cd "$ZIEL" && ditto -c -k --keepParent TravelBuddy.app "$PAKET")
+echo "✓ $APP ($(du -sh "$APP" | cut -f1)), Paket: $ZIEL/$PAKET ($(du -h "$ZIEL/$PAKET" | cut -f1))"

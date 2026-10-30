@@ -59,7 +59,9 @@ __pycache__/
 # Upload-Paket (wird aus dist/ erzeugt)
 *Netlify.zip
 mac/build/
+mac/build-gross/
 win/build/
+win/build-gross/
 win/web/
 win/*.syso
 
