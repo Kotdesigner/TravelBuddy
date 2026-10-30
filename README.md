@@ -19,7 +19,7 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 
 <br>
 
-<img src="bilder/mac-heute.jpg" alt="TravelBuddy on the Mac: Today with countdown, upcoming bookings and trip stats" width="900">
+<img src="bilder/en/mac-heute.jpg" alt="TravelBuddy on the Mac: Today with countdown, upcoming bookings and trip stats" width="900">
 
 </div>
 
@@ -52,7 +52,7 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 
 > **You travel. TravelBuddy writes it down.** At the end you don't hold a list of bookings, you hold the story of your trip.
 
-<div align="center"><img src="bilder/assistent-7.jpg" width="260" alt="On the road, your diary takes shape"></div>
+<div align="center"><img src="bilder/en/assistent-7.jpg" width="260" alt="On the road, your diary takes shape"></div>
 
 ---
 
@@ -154,14 +154,14 @@ The first time you open TravelBuddy, a setup assistant walks you through eight s
 
 <table>
 <tr>
-<td align="center"><img src="bilder/assistent-1.jpg" width="230" alt="Setup: welcome"><br><b>Welcome</b><br>German or English</td>
-<td align="center"><img src="bilder/assistent-2.jpg" width="230" alt="Setup: start and length"><br><b>When and how long</b><br>appears in the header image</td>
-<td align="center"><img src="bilder/assistent-3.jpg" width="230" alt="Setup: first stage"><br><b>First stage</b><br>right in the real form</td>
+<td align="center"><img src="bilder/en/assistent-1.jpg" width="230" alt="Setup: welcome"><br><b>Welcome</b><br>German or English</td>
+<td align="center"><img src="bilder/en/assistent-2.jpg" width="230" alt="Setup: start and length"><br><b>When and how long</b><br>appears in the header image</td>
+<td align="center"><img src="bilder/en/assistent-3.jpg" width="230" alt="Setup: first stage"><br><b>First stage</b><br>right in the real form</td>
 </tr>
 <tr>
-<td align="center"><img src="bilder/assistent-4.jpg" width="230" alt="Setup: bookings"><br><b>Bookings</b><br>paste the email text, done</td>
-<td align="center"><img src="bilder/assistent-5.jpg" width="230" alt="Setup: documents"><br><b>Tickets and documents</b><br>offline, optionally with Face ID</td>
-<td align="center"><img src="bilder/assistent-8.jpg" width="230" alt="Setup: finish"><br><b>Finish</b><br>home screen and backup</td>
+<td align="center"><img src="bilder/en/assistent-4.jpg" width="230" alt="Setup: bookings"><br><b>Bookings</b><br>paste the email text, done</td>
+<td align="center"><img src="bilder/en/assistent-5.jpg" width="230" alt="Setup: documents"><br><b>Tickets and documents</b><br>offline, optionally with Face ID</td>
+<td align="center"><img src="bilder/en/assistent-8.jpg" width="230" alt="Setup: finish"><br><b>Finish</b><br>home screen and backup</td>
 </tr>
 </table>
 
@@ -171,19 +171,19 @@ The first time you open TravelBuddy, a setup assistant walks you through eight s
 
 <table>
 <tr>
-<td align="center"><img src="bilder/iphone-heute.jpg" width="220" alt="Today"><br><b>Today</b><br>trip dates, countdown, what's next</td>
-<td align="center"><img src="bilder/iphone-plan.jpg" width="220" alt="Plan"><br><b>Plan</b><br>stages, routes, bookings per stage</td>
-<td align="center"><img src="bilder/iphone-route.jpg" width="220" alt="Route"><br><b>Route</b><br>stops, km per leg, car or flight</td>
+<td align="center"><img src="bilder/en/iphone-heute.jpg" width="220" alt="Today"><br><b>Today</b><br>trip dates, countdown, what's next</td>
+<td align="center"><img src="bilder/en/iphone-plan.jpg" width="220" alt="Plan"><br><b>Plan</b><br>stages, routes, bookings per stage</td>
+<td align="center"><img src="bilder/en/iphone-route.jpg" width="220" alt="Route"><br><b>Route</b><br>stops, km per leg, car or flight</td>
 </tr>
 <tr>
-<td align="center"><img src="bilder/iphone-orte.jpg" width="220" alt="Places"><br><b>Places</b><br>144 places with photo and season</td>
-<td align="center"><img src="bilder/iphone-karte.jpg" width="220" alt="Offline map"><br><b>Offline map</b><br>fuel, water, camps, rest areas</td>
-<td align="center"><img src="bilder/iphone-logbuch.jpg" width="220" alt="Logbook"><br><b>Logbook</b><br>every travel day on its stage</td>
+<td align="center"><img src="bilder/en/iphone-orte.jpg" width="220" alt="Places"><br><b>Places</b><br>144 places with photo and season</td>
+<td align="center"><img src="bilder/en/iphone-karte.jpg" width="220" alt="Offline map"><br><b>Offline map</b><br>fuel, water, camps, rest areas</td>
+<td align="center"><img src="bilder/en/iphone-logbuch.jpg" width="220" alt="Logbook"><br><b>Logbook</b><br>every travel day on its stage</td>
 </tr>
 </table>
 
 <div align="center">
-<img src="bilder/mac-route.jpg" width="760" alt="Route on the Mac">
+<img src="bilder/en/mac-route.jpg" width="760" alt="Route on the Mac">
 <br><sub>Route with stops on the Mac</sub>
 </div>
 
@@ -424,9 +424,13 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 **Version 1 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
+<br>
+
+<img src="bilder/de/mac-heute.jpg" alt="TravelBuddy auf dem Mac: Heute mit Countdown, nächsten Buchungen und Zahlen zur Reise" width="900">
+
 </div>
 
-> Alle Bilder oben zeigen eine ausgedachte **Beispielreise**. Echte Reisedaten, Buchungen oder Dokumente sind darin nicht zu sehen.
+> Alle Bilder zeigen eine ausgedachte **Beispielreise**. Echte Reisedaten, Buchungen oder Dokumente sind darin nicht zu sehen.
 
 ## Warum TravelBuddy
 
@@ -451,7 +455,7 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 
 > **Du reist. TravelBuddy schreibt mit.** Am Ende hältst du keine Liste von Buchungen in der Hand, sondern die Geschichte deiner Reise.
 
-<div align="center"><img src="bilder/assistent-7.jpg" width="260" alt="Unterwegs entsteht dein Tagebuch"></div>
+<div align="center"><img src="bilder/de/assistent-7.jpg" width="260" alt="Unterwegs entsteht dein Tagebuch"></div>
 
 ## 🚀 Alles, was TravelBuddy kann
 
@@ -545,7 +549,44 @@ Tipp ein geheimes Wort ins Suchfeld, und ein Spiel geht auf:
 
 ## In einer Minute startklar
 
-Beim ersten Öffnen führt dich ein Einrichtungsassistent in acht kurzen Schritten durch alles, und du legst dabei gleich deine Reise an: Reisebeginn und Reisedauer (stehen sofort oben im Titelbild), die erste Etappe, eine Buchung aus der Bestätigungsmail, Tickets und Dokumente aufs Gerät. Jeder Schritt lässt sich überspringen. Die Bilder dazu stehen oben im englischen Teil.
+Beim ersten Öffnen führt dich ein Einrichtungsassistent in acht kurzen Schritten durch alles, und du legst dabei gleich deine Reise an: Reisebeginn und Reisedauer (stehen sofort oben im Titelbild), die erste Etappe, eine Buchung aus der Bestätigungsmail, Tickets und Dokumente aufs Gerät. Jeder Schritt lässt sich überspringen.
+
+<table>
+<tr>
+<td align="center"><img src="bilder/de/assistent-1.jpg" width="230" alt="Einrichtung: Willkommen"><br><b>Willkommen</b><br>Deutsch oder Englisch</td>
+<td align="center"><img src="bilder/de/assistent-2.jpg" width="230" alt="Einrichtung: Reisebeginn und Dauer"><br><b>Wann und wie lange</b><br>steht sofort im Titelbild</td>
+<td align="center"><img src="bilder/de/assistent-3.jpg" width="230" alt="Einrichtung: erste Etappe"><br><b>Erste Etappe</b><br>direkt im echten Formular</td>
+</tr>
+<tr>
+<td align="center"><img src="bilder/de/assistent-4.jpg" width="230" alt="Einrichtung: Buchungen"><br><b>Buchungen</b><br>Mailtext einfügen, fertig</td>
+<td align="center"><img src="bilder/de/assistent-5.jpg" width="230" alt="Einrichtung: Dokumente"><br><b>Tickets und Dokumente</b><br>offline, auf Wunsch mit Face ID</td>
+<td align="center"><img src="bilder/de/assistent-8.jpg" width="230" alt="Einrichtung: Abschluss"><br><b>Abschluss</b><br>Home-Bildschirm und Sicherung</td>
+</tr>
+</table>
+
+---
+
+## Auf dem iPhone
+
+<table>
+<tr>
+<td align="center"><img src="bilder/de/iphone-heute.jpg" width="220" alt="Heute"><br><b>Heute</b><br>Reisedaten, Countdown, als Nächstes</td>
+<td align="center"><img src="bilder/de/iphone-plan.jpg" width="220" alt="Plan"><br><b>Plan</b><br>Etappen, Routen, Buchungen je Etappe</td>
+<td align="center"><img src="bilder/de/iphone-route.jpg" width="220" alt="Route"><br><b>Route</b><br>Stopps, km je Abschnitt, Auto oder Flug</td>
+</tr>
+<tr>
+<td align="center"><img src="bilder/de/iphone-orte.jpg" width="220" alt="Orte"><br><b>Orte</b><br>144 Orte mit Bild und Saison</td>
+<td align="center"><img src="bilder/de/iphone-karte.jpg" width="220" alt="Offline-Karte"><br><b>Offline-Karte</b><br>Tanken, Wasser, Camps, Rastplätze</td>
+<td align="center"><img src="bilder/de/iphone-logbuch.jpg" width="220" alt="Logbuch"><br><b>Logbuch</b><br>jeder Reisetag an seiner Etappe</td>
+</tr>
+</table>
+
+<div align="center">
+<img src="bilder/de/mac-route.jpg" width="760" alt="Route auf dem Mac">
+<br><sub>Route mit Stopps auf dem Mac</sub>
+</div>
+
+---
 
 ## Was die App kann
 
