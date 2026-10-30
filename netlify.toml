@@ -7,6 +7,15 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Sicherheits-Header für alle Seiten (dieselben Regeln wie in public/_headers)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), payment=(), usb=()"
+
 # Der Service Worker muss immer frisch geholt werden, sonst bleiben Geräte auf dem alten Stand
 [[headers]]
   for = "/sw.js"

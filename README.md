@@ -929,6 +929,6 @@ Kartendaten © [OpenStreetMap](https://www.openstreetmap.org/copyright)-Mitwirke
 
 <div align="center">
 
-**Roadtrip-Designer by Kotdesigner**
+**TravelBuddy by [Kotdesigner](https://github.com/Kotdesigner)**
 
 </div>

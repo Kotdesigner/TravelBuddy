@@ -12,7 +12,7 @@
 
 import { abstandKm, warnungenFuer } from './warnungen.js'
 import { stichproben } from './routenhinweise.js'
-import { LOCALE, t, tn, istEn } from './i18n.js'
+import { LOCALE, t, tn, istEn, jeSprache } from './i18n.js'
 import { ZWEI } from './format.js'
 
 export const MAINROADS_URL =
@@ -22,12 +22,12 @@ export const QUELLE_NAME = 'Main Roads WA'
 
 // ---------- Einstufung ----------
 // 3 gesperrt · 2 teilweise gesperrt oder eingeschränkt · 1 befahrbar mit Vorsicht · 0 Hinweis
-export const STRASSEN_STUFE = {
+export const STRASSEN_STUFE = jeSprache(() => ({
   3: { label: t('gesperrt'), farbe: '#c0392b', icon: '⛔' },
   2: { label: t('teilweise gesperrt'), farbe: '#e8730c', icon: '🚧' },
   1: { label: t('befahrbar mit Vorsicht'), farbe: '#e0a800', icon: '⚠️' },
   0: { label: t('Hinweis'), farbe: '#8a7565', icon: 'ℹ️' },
-}
+}))
 
 /** Rang aus ClosureTyp (und zur Not IncidentTy). Unbekannte Werte landen bei 1. */
 export function stufeAus(closureTyp, incidentTy = '') {
@@ -45,7 +45,7 @@ export function stufeAus(closureTyp, incidentTy = '') {
 
 // ---------- Kurzübersetzung ----------
 // Reihenfolge zählt: längere Wendungen zuerst, ein Treffer verbraucht seinen Text.
-const GLOSSAR = [
+const GLOSSAR = jeSprache(() => ([
   [/road closed to heavy vehicles|closed to heavy vehicles|heavy vehicles? (only )?restrict\w*/, t('für Lkw und Gespanne gesperrt')],
   [/road open with caution|open with caution/, t('befahrbar mit Vorsicht')],
   [/partial(ly)? clos\w*|partially closed/, t('teilweise gesperrt')],
@@ -83,7 +83,7 @@ const GLOSSAR = [
   [/bridge/, t('Brücke betroffen')],
   [/\bevent\b/, t('Veranstaltung')],
   [/isolated|in places/, 'stellenweise'],
-]
+]))
 
 /** Gängige englische Begriffe als kurze deutsche Stichworte (ohne Dubletten). */
 export function uebersetze(...texte) {

@@ -12,15 +12,15 @@
 
 // ---------- Arten ----------
 import { dezimal } from './format.js'
-import { t, tn, LOCALE } from './i18n.js'
-export const ARTEN = [
+import { t, tn, LOCALE, jeSprache } from './i18n.js'
+export const ARTEN = jeSprache(() => ([
   { id: 'flug', label: t('Flug'), kat: 'flight', emoji: '✈️', vorab: 'kosten_flug' },
   { id: 'unterkunft', label: t('Unterkunft'), kat: 'hotel', emoji: '🏨', vorab: 'kosten_unterkunft' },
   { id: 'fahrzeug', label: t('Camper / Mietwagen'), kat: 'camper', emoji: '🚐', vorab: 'kosten_mietfahrzeug' },
   { id: 'tour', label: t('Tour'), kat: 'tour', emoji: '🎟️', vorab: 'kosten_attraktion' },
   { id: 'faehre', label: t('Fähre'), kat: 'boat', emoji: '⛴️', vorab: 'kosten_boot' },
   { id: 'sonstiges', label: t('Sonstiges'), kat: '', emoji: '📌', vorab: 'kosten_sonstiges' },
-]
+]))
 export const artInfo = (id) => ARTEN.find((a) => a.id === id) || ARTEN[ARTEN.length - 1]
 
 // ---------- Datum ----------

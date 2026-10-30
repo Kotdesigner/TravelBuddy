@@ -7,7 +7,7 @@
 // Lieber ein Eintrag doppelt als einer weg.
 //
 // Reine Funktionen ohne Stores und ohne DOM: so lässt sich jede Regel einzeln prüfen.
-import { LOCALE, t, tn } from './i18n.js'
+import { LOCALE, t, tn, jeSprache } from './i18n.js'
 import { eur } from './format.js'
 
 export const URZEIT = '2000-01-01T00:00:00.000Z'
@@ -275,7 +275,7 @@ export const SKALAR_GRUND = { gesamtStart: null, reiseBudget: 0, reiseTage: 0 }
 // Gesamtlauf
 // ---------------------------------------------------------------------------
 
-const LISTEN = [
+const LISTEN = jeSprache(() => ([
   ['journal', t('Logbuch'), true],
   ['wanderungen', t('Wanderungen'), false],
   ['eigeneOrte', t('Eigene Orte'), false],
@@ -284,7 +284,7 @@ const LISTEN = [
   ['vorabKosten', t('Vorab-Ausgaben'), false],
   ['reisen', t('Reisen'), false],
   ['checkins', t('Check-ins'), false],
-]
+]))
 
 /**
  * Trockenlauf UND echter Lauf benutzen dieselbe Funktion — die Vorschau zeigt

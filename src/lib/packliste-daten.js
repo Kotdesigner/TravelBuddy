@@ -1,7 +1,7 @@
 // Kuratierte Packliste für eine Solo-Outback-Autoreise (WA/Australien).
 // Umfangreich, aber bewusst nicht überladen. krit:true = überlebenswichtig im Outback.
-import { t } from './i18n.js'
-export const PACK_VORLAGE = [
+import { t, jeSprache } from './i18n.js'
+export const PACK_VORLAGE = jeSprache(() => ([
   {
     id: 'fahrzeug', titel: t('Fahrzeug & Recovery'), icon: '🚙',
     items: [
@@ -125,4 +125,4 @@ export const PACK_VORLAGE = [
       { id: 'kopien', text: t('Kopien/Scans aller Dokumente (offline + Cloud)') },
     ],
   },
-]
+]))

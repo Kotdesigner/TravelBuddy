@@ -1,6 +1,6 @@
 // Wetter von Open-Meteo (kostenlos, kein Key) — nur ONLINE nutzbar.
-import { t } from './i18n.js'
-const WMO = {
+import { t, jeSprache } from './i18n.js'
+const WMO = jeSprache(() => ({
   0: ['☀️', t('Klar')], 1: ['🌤️', t('Überwiegend klar')], 2: ['⛅', t('Teils bewölkt')], 3: ['☁️', t('Bewölkt')],
   45: ['🌫️', t('Nebel')], 48: ['🌫️', t('Reifnebel')],
   51: ['🌦️', t('Leichter Niesel')], 53: ['🌦️', t('Niesel')], 55: ['🌦️', t('Starker Niesel')],
@@ -9,7 +9,7 @@ const WMO = {
   71: ['🌨️', t('Leichter Schnee')], 73: ['🌨️', t('Schnee')], 75: ['🌨️', t('Starker Schnee')],
   80: ['🌦️', t('Schauer')], 81: ['🌧️', t('Kräftige Schauer')], 82: ['⛈️', t('Heftige Schauer')],
   95: ['⛈️', t('Gewitter')], 96: ['⛈️', t('Gewitter mit Hagel')], 99: ['⛈️', t('Starkes Gewitter')],
-}
+}))
 
 export async function holeWetter(lat, lon) {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`

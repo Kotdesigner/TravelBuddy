@@ -1,9 +1,9 @@
 // Datengetriebenes Schema fürs Roadtrip-Tagebuch.
 // Feld-Typen: text | textlang | zahl | rating | dropdown | tags | toggle | farbe
 // Widgets werden im Editor je nach Typ gerendert.
-import { t } from './i18n.js'
+import { t, jeSprache } from './i18n.js'
 
-export const MODULE = [
+export const MODULE = jeSprache(() => ([
   {
     id: 'meta', titel: t('Quick-Stats'), icon: '📍', immer: true,
     felder: [
@@ -182,11 +182,10 @@ export const MODULE = [
       { id: 'drink', label: t('Drink des Tages'), typ: 'text', icon: '🍹' },
     ],
   },
-]
+]))
 
 // Schnellzugriff auf ein Feld per id (für Ansicht/Zeitleiste).
-export const FELD = {}
-for (const m of MODULE) for (const f of m.felder) FELD[f.id] = { ...f, modul: m.id }
+export const FELD = jeSprache(() => Object.fromEntries(MODULE.flatMap((m) => m.felder.map((f) => [f.id, { ...f, modul: m.id }]))))
 
 // Felder für die Header-Quick-Stats-Leiste.
 export const QUICKSTATS = ['distance_km', 'temp_celsius', 'fly_factor', 'connectivity', 'soundtrack']

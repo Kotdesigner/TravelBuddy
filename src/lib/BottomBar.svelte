@@ -215,7 +215,7 @@
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 10px 30px rgba(60, 38, 18, 0.16), 0 2px 6px rgba(60, 38, 18, 0.08);
   }
   :global([data-theme='dark']) .tabs, :global([data-theme='dark']) .such-knopf {
-    background: color-mix(in srgb, var(--card) 86%, transparent);
+    background: color-mix(in srgb, var(--card) 90%, transparent);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.45);
   }
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {

@@ -6,9 +6,9 @@
 //   foto  = verkleinertes Bild (data:-URL) oder fehlt
 // Das Datum ist das des Eintrags. Weil das Feld am Eintrag hängt, laufen Backup,
 // Import und Zusammenführen ohne Zusatzarbeit mit.
-import { LOCALE, t } from './i18n.js'
+import { LOCALE, t, jeSprache } from './i18n.js'
 
-export const ARTEN = [
+export const ARTEN = jeSprache(() => ([
   { id: 'kaenguru', name: t('Känguru'), emoji: '🦘' },
   { id: 'wallaby', name: t('Wallaby'), emoji: '🦘' },
   { id: 'quokka', name: t('Quokka'), emoji: '🐹', hinweis: t('Rottnest Island') },
@@ -29,8 +29,8 @@ export const ARTEN = [
   { id: 'manta', name: t('Mantarochen'), emoji: '🐟', hinweis: t('Coral Bay') },
   { id: 'schildkroete', name: t('Meeresschildkröte'), emoji: '🐢' },
   { id: 'seeloewe', name: t('Seelöwe'), emoji: '🦭' },
-]
-export const ART = Object.fromEntries(ARTEN.map((a) => [a.id, a]))
+]))
+export const ART = jeSprache(() => Object.fromEntries(ARTEN.map((a) => [a.id, a])))
 
 // Schlagworte aus „Lebend gesehen“ (Modul Straßenrand), die zu einer Art im Album passen.
 export const AUS_STRASSENRAND = {

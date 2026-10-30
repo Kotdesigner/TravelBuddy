@@ -8,7 +8,7 @@
 //   land        – außerhalb Australiens: das Land (soweit bekannt), sonst „unbekannt"
 // Die Zuordnung zum Bundesstaat ist eine Näherung über Rechtecke. Für die Musiksuche
 // reicht das; als Grenze im Sinne der Landkarte taugt es nicht.
-import { t } from '../i18n.js'
+import { t, jeSprache } from '../i18n.js'
 
 const R = 6371
 export function km(a, b) {
@@ -18,7 +18,7 @@ export function km(a, b) {
   return 2 * R * Math.asin(Math.sqrt(s))
 }
 
-export const STAATEN = [
+export const STAATEN = jeSprache(() => ([
   { id: 'TAS', name: t('Tasmanien'), test: (la, lo) => la < -39.4 && lo > 143 && lo < 149 },
   { id: 'WA', name: t('Westaustralien'), test: (la, lo) => lo >= 112 && lo < 129 },
   { id: 'NT', name: t('Northern Territory'), test: (la, lo) => lo >= 129 && lo < 138 && la >= -26 },
@@ -26,7 +26,7 @@ export const STAATEN = [
   { id: 'QLD', name: t('Queensland'), test: (la, lo) => lo >= 138 && la >= -29 },
   { id: 'VIC', name: t('Victoria'), test: (la, lo) => lo >= 141 && lo < 150.2 && la < -34 && la >= -39.4 && !(lo > 148 && la > -37.5) },
   { id: 'NSW', name: t('New South Wales'), test: (la, lo) => lo >= 141 && la < -29 && la >= -37.6 },
-]
+]))
 const IN_AUSTRALIEN = (la, lo) => lo > 112 && lo < 154.5 && la < -9.5 && la > -44
 
 export function staatFuer({ lat, lon }) {

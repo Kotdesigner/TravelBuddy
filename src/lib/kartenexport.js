@@ -10,20 +10,20 @@
 //     dem Frame leer und `toDataURL()` liefert ein durchsichtiges Bild.
 //  2. Die Herkunftsangabe („© OpenStreetMap") gehört ins Bild — beim Ausdruck ist sonst
 //     nicht mehr erkennbar, woher die Karte stammt. Sie wird unten eingebrannt.
-import { t } from './i18n.js'
+import { t, jeSprache } from './i18n.js'
 
-export const FORMATE = [
+export const FORMATE = jeSprache(() => ([
   { id: 'a4-quer', label: t('A4 quer'), breite: 3508, hoehe: 2480 },   // 297 × 210 mm bei 300 dpi
   { id: 'a4-hoch', label: t('A4 hoch'), breite: 2480, hoehe: 3508 },
   { id: 'a5-quer', label: t('A5 quer'), breite: 2480, hoehe: 1748 },
   { id: 'bildschirm', label: t('Bildschirm (2×)'), breite: 2048, hoehe: 1536 },
-]
+]))
 
-export const DATEITYPEN = [
+export const DATEITYPEN = jeSprache(() => ([
   { id: 'jpg', label: 'JPG', endung: 'jpg', mime: 'image/jpeg', hinweis: t('klein, überall druckbar') },
   { id: 'png', label: 'PNG', endung: 'png', mime: 'image/png', hinweis: 'verlustfrei' },
   { id: 'tiff', label: 'TIFF', endung: 'tif', mime: null, hinweis: t('unkomprimiert, für Druckereien') },
-]
+]))
 
 /** Baseline-TIFF (unkomprimiert, RGB). Browser können TIFF nicht selbst schreiben. */
 export function alsTiff(imageData) {

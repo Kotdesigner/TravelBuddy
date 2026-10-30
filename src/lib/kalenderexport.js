@@ -14,7 +14,7 @@
 
 import { katInfo } from './reisekalender.js'
 import { dauerText } from './wanderungen-daten.js'
-import { LOCALE, t, tn, istEn } from './i18n.js'
+import { LOCALE, t, tn, istEn, jeSprache } from './i18n.js'
 import { wochentag, ZWEI } from './format.js'
 
 const tag = (s) => new Date(s + 'T12:00')
@@ -286,7 +286,7 @@ const spalte = (i) => { let s = '', n = i; do { s = String.fromCharCode(65 + (n 
 // Excel zählt Tage ab dem 30.12.1899.
 const excelDatum = (s) => Math.round((tag(s) - new Date(1899, 11, 30, 12)) / 86400000)
 
-const SPALTEN = [
+const SPALTEN = jeSprache(() => ([
   { titel: t('Datum'), breite: 12, typ: 'datum' },
   { titel: t('Tag'), breite: 6, typ: 'zahl' },
   { titel: t('Wo.'), breite: 6 },
@@ -298,7 +298,7 @@ const SPALTEN = [
   { titel: t('Buchungsnummer'), breite: 18 },
   { titel: t('Belege'), breite: 24 },
   { titel: t('Quelle'), breite: 11 },
-]
+]))
 
 // Füllfarben je Quelle — Buchung blau, Wanderung grün, Logbuch orange.
 const FUELL = { Buchung: 4, Wanderung: 5, Logbuch: 6 }

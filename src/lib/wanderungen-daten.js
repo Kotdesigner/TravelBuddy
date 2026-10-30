@@ -1,28 +1,28 @@
 // Stammdaten für Wanderungen: Schwierigkeit, Wegart, Status.
-import { t } from './i18n.js'
+import { t, jeSprache } from './i18n.js'
 
-export const SCHWIERIGKEIT = [
+export const SCHWIERIGKEIT = jeSprache(() => ([
   { id: 'leicht', label: t('Leicht'), emoji: '🟢' },
   { id: 'mittel', label: t('Mittel'), emoji: '🟡' },
   { id: 'schwer', label: t('Schwer'), emoji: '🟠' },
   { id: 'sehr-schwer', label: t('Sehr schwer'), emoji: '🔴' },
-]
+]))
 
-export const WEGART = [
+export const WEGART = jeSprache(() => ([
   { id: 'rundweg', label: t('Rundweg'), emoji: '🔄' },
   { id: 'hin-zurueck', label: t('Hin & zurück'), emoji: '↔️' },
   { id: 'strecke', label: t('Strecke'), emoji: '➡️' },
-]
+]))
 
-export const WANDER_STATUS = [
+export const WANDER_STATUS = jeSprache(() => ([
   { id: 'wunsch', label: t('Wunschliste'), emoji: '⭐' },
   { id: 'geplant', label: t('Geplant'), emoji: '📌' },
   { id: 'gemacht', label: t('Gemacht'), emoji: '✅' },
-]
+]))
 
-export const S_MAP = Object.fromEntries(SCHWIERIGKEIT.map((s) => [s.id, s]))
-export const ART_MAP = Object.fromEntries(WEGART.map((s) => [s.id, s]))
-export const STATUS_MAP = Object.fromEntries(WANDER_STATUS.map((s) => [s.id, s]))
+export const S_MAP = jeSprache(() => Object.fromEntries(SCHWIERIGKEIT.map((s) => [s.id, s])))
+export const ART_MAP = jeSprache(() => Object.fromEntries(WEGART.map((s) => [s.id, s])))
+export const STATUS_MAP = jeSprache(() => Object.fromEntries(WANDER_STATUS.map((s) => [s.id, s])))
 
 // Minuten -> "3 h 20 min"
 export function dauerText(min) {

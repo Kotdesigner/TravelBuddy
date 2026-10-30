@@ -56,17 +56,18 @@
   /* Ansicht in der App (der PDF-Druck nutzt nur die Regeln oben) */
   @media screen {
     html { background: #fff; -webkit-text-size-adjust: 100%; }
-    body { font-size: 16px; padding: 0 18px 48px; max-width: 760px; margin: 0 auto; overflow-wrap: anywhere; }
+    body { font-size: calc(16px * var(--schrift, 1)); padding: 0 18px 48px; max-width: 760px; margin: 0 auto; overflow-wrap: anywhere; }
     h1 { font-size: 32px; margin-top: 32px; }
     h2 { font-size: 21px; margin: 26px 0 8px; }
     h3 { font-size: 14px; margin: 18px 0 6px; }
     code, .k { font-size: 14px; }
-    .teil { font-size: 12px; }
+    .teil { font-size: 12px; color: #a8521f; }
     .deck { height: auto; min-height: 70vh; margin: 0 -18px; padding: 48px 24px; }
     .deck .titel { font-size: clamp(56px, 18vw, 84px); }
     .deck .unter { font-size: 18px; max-width: none; }
     .deck .klein, .deck .meta { font-size: 12px; }
     .zwei, .inhalt { columns: 1; }
+    .inhalt span { color: #a8521f; }
     table { display: block; overflow-x: auto; font-size: 14px; }
     th { font-size: 13px; }
     td:first-child { white-space: normal; }
@@ -419,7 +420,7 @@
   </table>
   <h2>Drei kleine Extras</h2>
   <p>Tippe <code>sn4ke</code>, <code>xoxo</code> oder <code>4444</code> ins Suchfeld.</p>
-  <p style="margin-top:12mm; color: var(--muted); font-size: 9pt">Roadtrip-Designer by Kotdesigner · TravelBuddy Basic · Stand 29. Oktober 2026</p>
+  <p style="margin-top:12mm; color: var(--muted); font-size: 9pt">TravelBuddy Basic by Kotdesigner · Stand 29. Oktober 2026</p>
 </section>
 
 </body>

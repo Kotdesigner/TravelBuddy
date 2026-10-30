@@ -68,7 +68,7 @@
         const f = fotos[i++]
         const bu = [f.ort, f.datum ? kurzDat(f.datum) : ''].filter(Boolean).join(' · ')
         kacheln.push(`<figure class="ka" style="grid-column:${feld[0]}/span ${feld[2]};grid-row:${feld[1]}/span ${feld[3]}">
-          <img src="${f.src}">${bu ? `<figcaption>${esc(bu)}</figcaption>` : ''}</figure>`)
+          <img src="${esc(f.src)}">${bu ? `<figcaption>${esc(bu)}</figcaption>` : ''}</figure>`)
       }
       seiten.push(`<section class="seite"><div class="raster">${kacheln.join('')}</div>
         <div class="seitenzahl">${seiten.length + 1}</div></section>`)

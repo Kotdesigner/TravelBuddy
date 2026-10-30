@@ -56,12 +56,13 @@
   import { quizAntworten } from './lib/userdata.js'
   import { auswerten } from './lib/quiz.js'
   import { istReisekalender, leseReisekalender, kalenderInfo, baueAbschnitte } from './lib/reisekalender.js'
-  import { initUserData, userData, exportBackup, leseBackup, wendeBackupAn, backupInfo, datenStand, syncZeiten,
+  import { initUserData, userData, exportBackup, leseBackup, saeubereBackup, wendeBackupAn, backupInfo, datenStand, syncZeiten,
     eigeneOrte, updateEigenenOrt, loescheEigenenOrt, gefahrenCache, journal, reisen, reiseBudget, vorabKosten, buchungen, importiereReisekalender,
     vorschauZusammenfuehren, fuehreBackupZusammen, importRueckgaengig, schnappschuss, rettung,
     gesamtStart, reiseTage, ready } from './lib/userdata.js'
   import { get } from 'svelte/store'
   import { modal } from './lib/modal.js'
+  import Handbuch from './lib/Handbuch.svelte'
   import { holeOrtsdaten } from './lib/ortdaten.js'
   import { FELD } from './lib/journal-schema.js'
   import { haversine, luftlinieKm } from './lib/routing.js'
@@ -83,12 +84,6 @@
   // weg; offen oder zu merkt sich das Gerät, zu stehen die wichtigsten Zahlen in der Zeile.
   let zahlenOffen = $state((() => { try { return localStorage.getItem('tb-heute-zahlen') === 'offen' } catch { return false } })())
   $effect(() => { try { localStorage.setItem('tb-heute-zahlen', zahlenOffen ? 'offen' : 'zu') } catch {} })
-  let handbuchOffen = $state(false)
-  const imAppFenster = () => navigator.standalone === true || matchMedia('(display-mode: standalone)').matches
-  // Der Fokus liegt beim Lesen in der Seite im Rahmen, Escape muss auch von dort schließen
-  function handbuchGeladen(e) {
-    e.currentTarget.contentWindow.addEventListener('keydown', (k) => { if (k.key === 'Escape') handbuchOffen = false })
-  }
   let laden = $state(true)
   let fehler = $state(null)
   let suche = $state('')
@@ -126,7 +121,8 @@
       if (r === null) { await umschalten(); return }
       // Bevorzugt: View Transition (der Browser blendet zwischen zwei Bildern über, ohne
       // Layout je Bild). Sonst die bisherige Einblendung des neuen Inhalts.
-      if (bildwechsel(hauptEl, r, umschalten)) return
+      // Nicht bei Tabs und Bereichen (r = 0): das Bild der ganzen langen Seite ruckelt am iPhone
+      if (r !== 0 && bildwechsel(hauptEl, r, umschalten)) return
       await umschalten()
       wechsel(hauptEl, r)
     }
@@ -134,6 +130,9 @@
     return () => window.removeEventListener('hashchange', neu)
   })
   const aktivTab = $derived(ansicht.tab)
+  // main.js wartet beim Sprachwechsel darauf
+  let { onbereit = () => {} } = $props()
+  $effect(() => { if (!laden && $ready) tick().then(onbereit) })
   // Unterpunkte je Bereich: oben als Umschalter (iPhone) und in der Seitenleiste (Mac)
   const UNTER = {
     plan: [['plan', t('Etappen')], ['plan/wanderungen', t('Wanderungen')], ['plan/karte', t('Karte')], ['plan/kalender', t('Kalender')]],
@@ -628,7 +627,7 @@
   let sucheOffen = $state(false)
   function zurSuche() { dockZu(); sucheOffen = true }
   function globaleTaste(e) {
-    if (sucheOffen || importOffen || importBericht || handbuchOffen || xoxoOffen || snakeOffen || vierOffen) return
+    if (sucheOffen || importOffen || importBericht || xoxoOffen || snakeOffen || vierOffen) return
     const imFeld = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName || '') || e.target?.isContentEditable
     if ((e.metaKey || e.ctrlKey) && !e.altKey && e.key.toLowerCase() === 'k') { e.preventDefault(); sucheOffen = true }
     else if (e.key === '/' && !imFeld && !e.metaKey && !e.ctrlKey) { e.preventDefault(); sucheOffen = true }
@@ -682,8 +681,10 @@
       if (istReisekalender(p)) { await onKalenderImport(p); return }
 
       // Statt zu ersetzen: Trockenlauf zeigen, dann entscheiden lassen.
-      importDatei = p
-      importVorschau = vorschauZusammenfuehren(p, herkunftName(p))
+      const sauber = saeubereBackup(p)
+      if (!sauber) throw new Error('kein Backup')
+      importDatei = sauber
+      importVorschau = vorschauZusammenfuehren(sauber, herkunftName(sauber))
       importOffen = true
     } catch { flash(t('Ungültige Datei')) }
   }
@@ -786,7 +787,7 @@
 <div class="app">
 <div class="sl-mac">
   <Seitenleiste {ansicht} unterpunkte={UNTER} {geh} onSuche={zurSuche} onBackup={onExport}
-    onImport={() => importInput.click()} onHandbuch={() => (handbuchOffen = true)} onEinfuehrung={einfuehrungStarten} />
+    onImport={() => importInput.click()} onHandbuch={() => geh('mehr/handbuch')} onEinfuehrung={einfuehrungStarten} />
 </div>
 
 <div class="inhalt">
@@ -800,13 +801,17 @@
   </h1>
 </header>
 {:else}
+  <!-- Unter Mehr gibt es am iPhone sonst nichts zum Zurückgehen; bleibt beim Scrollen stehen -->
+  {#if ansicht.tab === 'mehr' && ansicht.unter}
+    <div class="zurueck-leiste"><button class="zurueck-knopf" onclick={() => zurueck('mehr')}><span aria-hidden="true">‹</span> {t('Zurück')}</button></div>
+  {/if}
   <header class="sk">
-    <h1 class="sk-titel">{TITEL[ansicht.tab]}</h1>
+    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : TITEL[ansicht.tab]}</h1>
     <span class="sk-musik"><MusikSymbol {geh} /></span>
     {#if ansicht.tab === 'plan'}<button class="sk-neu" onclick={() => oeffneNeu(ansicht.unter === 'wanderungen' ? 'wanderung' : 'route')}>{t('+ Neu')}</button>{/if}
     {#if ansicht.tab === 'logbuch' && ansicht.unter !== 'notizen'}<button class="sk-neu" onclick={() => oeffneNeu('tag')}>{t('+ Tag')}</button>{/if}
   </header>
-  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag'].includes(ansicht.unter)}
+  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch'].includes(ansicht.unter)}
     <nav class="seg-leiste" aria-label={t('{wert}: Bereiche', { wert: TITEL[ansicht.tab] })} use:leisteRand={ansicht.pfad}>
       {#each UNTER[ansicht.tab] as [pfad, label] (pfad)}
         {@const an = ansicht.pfad === pfad || (pfad === ansicht.tab && (!ansicht.unter || ['etappe', 'route', 'tag'].includes(ansicht.unter))) || (ansicht.pfad.startsWith(pfad + '/') && pfad !== ansicht.tab) || (ansicht.tab === 'orte' && pfad === 'orte/' + orteUnter)}
@@ -1116,6 +1121,8 @@
     {:else if ansicht.unter === 'teilen'}
       <h2 class="abschnitt">{t('📤 Reisebericht teilen')}</h2>
       <Teilen orte={[...orte, ...$eigeneOrte]} />
+    {:else if ansicht.unter === 'handbuch'}
+      <Handbuch />
     {:else if ansicht.unter === 'quiz'}
       <h2 class="abschnitt">{t('🇦🇺 Australien-Quiz')} {#if quizErgebnis.beantwortet}<span class="count">{t('{richtig}/{gesamt} · {emoji} Stufe {stufe}', { richtig: quizErgebnis.richtig, gesamt: quizErgebnis.gesamt, emoji: quizErgebnis.level?.emoji, stufe: quizErgebnis.level?.stufe })}</span>{/if}</h2>
       <Quiz fragen={quizData.fragen} levels={quizData.levels} />
@@ -1129,7 +1136,7 @@
   {/if}
 </main>
 
-<footer class="app-footer">{t('Roadtrip-Designer')} <span class="af-by">{t('by Kotdesigner')}</span><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
+<footer class="app-footer">TravelBuddy <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
 </div>
 </div>
 
@@ -1139,7 +1146,7 @@
 <div class="bb-mobil">
   <BottomBar {aktivTab} onTab={tabZu} {springeZu}
     onSuche={zurSuche} onBackup={onExport} onImport={() => importInput.click()}
-    onHandbuch={() => (handbuchOffen = true)}
+    onHandbuch={() => geh('mehr/handbuch')}
     onEinfuehrung={einfuehrungStarten} />
 </div>
 
@@ -1250,22 +1257,6 @@
   <VierSpiel onClose={() => (vierOffen = false)} />
 {/if}
 
-{#if handbuchOffen}
-  <!-- Hintergrund zum Wegtippen; Tastatur: Escape (use:modal) -->
-  <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <div class="hb-overlay" role="presentation" onclick={(e) => { if (e.target === e.currentTarget) handbuchOffen = false }}>
-    <div class="hb-box" role="dialog" aria-label={t('Handbuch')} use:modal={{ onclose: () => (handbuchOffen = false), fokus: '.hb-zu' }}>
-      <div class="hb-kopf">
-        <span class="hb-titel">{t('📖 Handbuch')}</span>
-        <!-- Auf dem Home-Bildschirm gäbe es von dort keinen Weg zurück in die App -->
-        {#if !imAppFenster()}<a class="hb-tab" href={istEn ? "/handbook.pdf" : "/handbuch.pdf"} target="_blank" rel="noopener">{t('↗︎ PDF')}</a>{/if}
-        <button class="hb-zu" onclick={() => (handbuchOffen = false)}>{t('✕ Schließen')}</button>
-      </div>
-      <iframe class="hb-frame" src={istEn ? "/handbook.html" : "/handbuch.html"} title={t('WA-Reiseplan Handbuch')} onload={handbuchGeladen}></iframe>
-    </div>
-  </div>
-{/if}
-
 <style>
   .hero > .hero-musik { position: absolute; z-index: 2; top: calc(env(safe-area-inset-top, 0px) + 14px); right: 14px; text-shadow: none; }
   .sk-musik { margin-left: auto; display: inline-flex; }
@@ -1308,6 +1299,7 @@
     font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); border-top: 1px solid var(--line);
   }
   .app-footer .af-by { color: var(--brand-text); }
+  .app-footer .af-by a { color: inherit; text-decoration: underline; text-underline-offset: 2px; padding: 8px 2px; }
   /* Stand der geladenen Fassung — macht sofort sichtbar, wenn der Service-Worker
      noch eine ältere Version ausliefert. */
   .app-footer .af-build { display: block; margin-top: 4px; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }   /* vorher opacity .5: 2,2 : 1 */
@@ -1329,6 +1321,14 @@
     max-width: 1100px; width: 100%; margin: 0 auto; display: flex; align-items: center; gap: 12px;
     padding: 26px 28px 4px; padding-top: max(26px, calc(env(safe-area-inset-top, 0px) + 10px));
   }
+  .zurueck-leiste {
+    position: sticky; top: 0; z-index: 30; background: var(--bg);
+    padding: calc(env(safe-area-inset-top, 0px) + 4px) 8px 0;
+  }
+  .zurueck-leiste + .sk { padding-top: 0; }
+  .zurueck-knopf { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 12px 0 4px; border: none; background: none; color: var(--brand-text); font-size: calc(16px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
+  .zurueck-knopf span { font-size: calc(28px * var(--schrift, 1)); line-height: 1; margin-top: -3px; }
+  @media (min-width: 900px) { .zurueck-leiste { display: none; } .zurueck-leiste + .sk { padding-top: 26px; } }
   .sk-titel { min-height: 44px; display: flex; align-items: center; margin: 0; font-family: 'Anton', Impact, 'Arial Narrow', sans-serif; font-weight: 400; font-size: calc(40px * var(--schrift, 1)); line-height: 1.05; letter-spacing: 0.3px; color: var(--ink); }
   .sk-neu {
     margin-left: auto; min-height: 44px; padding: 0 18px; border-radius: 22px; border: none; cursor: pointer;
@@ -1465,21 +1465,6 @@
   .b-item { display: inline-block; background: #faf1e4; border-radius: 8px; padding: 2px 9px; margin: 0 5px 5px 0; color: var(--muted); }
   .b-item b { color: var(--warn-text); }
 
-  /* Handbuch-Overlay */
-  .hb-overlay {
-    position: fixed; inset: 0; z-index: 100; background: rgba(20,17,14,0.72);
-    display: flex; align-items: center; justify-content: center; padding: 3vh 2vw;
-    padding-top: max(3vh, env(safe-area-inset-top));
-  }
-  .hb-box {
-    background: var(--card); border-radius: 14px; width: min(900px, 100%); height: 100%;
-    display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-  }
-  .hb-kopf { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #2b2621; }
-  .hb-titel { font-size: calc(14px * var(--schrift, 1)); font-weight: 800; color: #fff; flex: 1; }
-  .hb-tab { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: #f0e4d3; text-decoration: none; padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.12); }
-  .hb-zu { font-size: calc(13px * var(--schrift, 1)); font-weight: 800; color: #fff; background: var(--brand); border: none; border-radius: 8px; padding: 7px 14px; cursor: pointer; }
-  .hb-frame { flex: 1; width: 100%; border: none; background: #fff; }
   .region { margin: 16px 0 24px; }
   .region-titel {
     color: #fff; font-weight: 700; font-size: calc(15px * var(--schrift, 1)); padding: 9px 16px; border-radius: 8px 8px 0 0;

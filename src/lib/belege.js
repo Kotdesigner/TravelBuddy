@@ -449,7 +449,9 @@ export function oeffneBeleg(pfad) {
 export function zeigeImFenster(fenster, anzeige, titel = '') {
   const offen = fenster && !fenster.closed
   if (anzeige.art === 'datei') {
-    const url = URL.createObjectURL(anzeige.blob)
+    // Nur PDF und Fotos direkt öffnen: HTML oder SVG liefe sonst als Teil der App
+    const sicher = /^(application\/pdf|image\/(?!svg))/i.test(anzeige.blob.type)
+    const url = URL.createObjectURL(sicher ? anzeige.blob : new Blob([anzeige.blob], { type: 'application/octet-stream' }))
     if (offen) { fenster.location = url; setTimeout(() => URL.revokeObjectURL(url), 60000) }
     else window.location.href = url          // Kein Fenster erlaubt → im selben Tab, die Seite wird verlassen
     return

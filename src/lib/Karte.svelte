@@ -248,7 +248,7 @@
       const m = new maplibregl.Marker({ element: el, anchor: 'bottom' })
         .setLngLat([o.lon, o.lat])
         .setPopup(new maplibregl.Popup({ offset: 12, closeButton: false })
-          .setHTML(`<b>${o.name}</b>${besucht ? ' 📖' : ''}<br><span style="font-size:12px;color:#777">${o.region || ''}</span>`))
+          .setHTML(`<b>${esc(o.name)}</b>${besucht ? ' 📖' : ''}<br><span style="font-size:12px;color:#777">${esc(o.region || '')}</span>`))
         .addTo(map)
       marker.push(m)
     }

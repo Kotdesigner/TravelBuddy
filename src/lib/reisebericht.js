@@ -149,7 +149,7 @@ function etappeHtml(e, kugel) {
   const orte = e.orte.length ? `<div class="orte" aria-label="${t('Orte')}">${e.orte.map((o) => `<span>${esc(o)}</span>`).join('')}</div>` : ''
   const texte = e.eintraege.map((t) => `<div class="tag"><h3>${esc(wochentagLang(t.datum))}, ${esc(tagMonatJahr(t.datum))}${t.ort ? `, ${esc(t.ort)}` : ''}</h3><p>${esc(t.text)}</p></div>`).join('')
   const fotos = e.fotos.length
-    ? `<div class="fotos">${e.fotos.map((f) => `<figure><img src="${f.src}" alt="${esc(f.ort || t('Reisefoto'))}" loading="lazy"><figcaption>${[f.ort, tagMonatJahr(f.datum)].filter(Boolean).map(esc).join(', ')}</figcaption></figure>`).join('')}</div>`
+    ? `<div class="fotos">${e.fotos.map((f) => `<figure><img src="${esc(f.src)}" alt="${esc(f.ort || t('Reisefoto'))}" loading="lazy"><figcaption>${[f.ort, tagMonatJahr(f.datum)].filter(Boolean).map(esc).join(', ')}</figcaption></figure>`).join('')}</div>`
     : ''
   return `<section class="etappe" style="--f:${esc(e.farbe)}"><div class="e-kopf">${kugel ? `<img src="${kugel}" alt="">` : ''}<div class="e-band"><h2>${esc(e.name)}</h2><p class="e-zeit">${esc(bereich(e.von, e.bis))}, ${esc(tageText(e.tage))}</p></div></div>${routen}${orte}${fotos}${texte}</section>`
 }

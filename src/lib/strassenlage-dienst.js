@@ -7,6 +7,7 @@
 
 import { writable, get } from 'svelte/store'
 import { holeStrassenlage } from './strassenlage.js'
+import { beiSprache } from './i18n.js'
 
 const DB = 'wa-plan', TOPF = 'kv', SCHLUESSEL = 'strassenlage-v1'
 export const ABSTAND_MS = 15 * 60 * 1000
@@ -79,6 +80,9 @@ export async function aktualisiereStrassenlage({ erzwingen = false, fetchFn, spe
   })()
   try { return await laeuft } finally { laeuft = null }
 }
+
+// Meldungen werden beim Abruf übersetzt: nach einem Sprachwechsel neu holen
+beiSprache(() => { if (get(strassenlage).zeit) aktualisiereStrassenlage({ erzwingen: true }) })
 
 /** Nur für Tests: Zustand zurücksetzen. */
 export function _zuruecksetzen() {

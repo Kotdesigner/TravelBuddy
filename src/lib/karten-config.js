@@ -10,8 +10,8 @@
 // Jede Stufe vervierfacht die Kachelzahl, deshalb ist fein nur örtlich bezahlbar.
 // Ausgeschnitten aus dem Protomaps-Planet-Build (Basemap v4.15.1), Stand August 2026.
 // `mb` = Dateigröße in public/karten/ (für die Anzeige „noch x MB laden").
-import { t } from './i18n.js'
-export const REGIONEN = [
+import { t, jeSprache } from './i18n.js'
+const GRUNDKARTEN = () => ([
   {
     id: 'wa', name: t('Westküste'), datei: 'wa.pmtiles', mb: 10.2,
     center: [122.0, -26.0], zoom: 4.2, maxzoom: 10,
@@ -42,13 +42,13 @@ export const REGIONEN = [
     center: [134.0, -26.0], zoom: 3.1, maxzoom: 8,
     bounds: [112.9, -43.7, 153.7, -9.1],
   },
-]
+])
 
 // Große Karte: Western Australia auf Stufe 14 in vier Teilen (je unter 100 MB, 0,5° Überlappung),
 // damit das iPhone nur den Teil lädt, in dem man gerade ist. Die Dateien liegen nicht im Repo,
 // sondern in `karten-gross/` (holen: `sh karten-gross/holen.sh`) und kommen nur mit
 // `npm run build:gross` in den Build. Quelle: Protomaps Basemap v4.15.2 (Build 20261029).
-export const WA_GROSS = [
+export const WA_GROSS = jeSprache(() => ([
   {
     id: 'wa-sued', name: t('Südwesten & Perth'), datei: 'wa-sued.pmtiles', mb: 75.5,
     center: [117.5, -33.2], zoom: 6.0, maxzoom: 14,
@@ -69,10 +69,14 @@ export const WA_GROSS = [
     center: [124.0, -17.0], zoom: 6.0, maxzoom: 14,
     bounds: [112.5, -20.5, 129.2, -13.5],
   },
-]
+]))
 // Vite setzt VITE_KARTE beim Bauen ein; in Node (Tests) gibt es import.meta.env nicht.
 export const GROSSE_KARTE = import.meta.env?.VITE_KARTE === 'gross'
-if (GROSSE_KARTE) REGIONEN.splice(1, 0, ...WA_GROSS)
+export const REGIONEN = jeSprache(() => {
+  const liste = GRUNDKARTEN()
+  if (GROSSE_KARTE) liste.splice(1, 0, ...WA_GROSS)
+  return liste
+})
 
 // Alles, wofür es überhaupt Kartendaten gibt. Außerhalb ist die Karte leer (nur Wasserfarbe).
 export const KARTENGEBIET = [
@@ -173,7 +177,7 @@ export function schneideZu(punkte, [w, s, e, n] = KARTENGEBIET) {
 // Für Tankstellen, Wasser, Rastplätze: es gibt `pois-<id>.json` NUR für diese vier.
 // Ohne diese Einschränkung gewänne „Ostküste" jeden Ostküsten-Punkt und die
 // Notfall-Liste bliebe leer, weil `pois-ostkueste.json` nicht existiert.
-export const POI_REGIONEN = REGIONEN.filter((r) => ['wa', 'melbourne', 'cairns', 'whitsundays'].includes(r.id))
+export const POI_REGIONEN = jeSprache(() => REGIONEN.filter((r) => ['wa', 'melbourne', 'cairns', 'whitsundays'].includes(r.id)))
 export function poiRegionFuer(punkte) {
   if (!punkte || !punkte.length) return null
   const flaeche = (r) => (r.bounds[2] - r.bounds[0]) * (r.bounds[3] - r.bounds[1])

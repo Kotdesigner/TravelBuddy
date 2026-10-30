@@ -352,7 +352,7 @@
     const stats = quickStats(e).map((s) => `<span class="stat">${s.icon} ${esc(s.text)}</span>`).join('')
     const fotos = e.fotos || []
     const gal = fotos.length
-      ? `<div class="galerie ${fotos.length > 2 ? 'viele' : ''} ${fotos.length === 1 ? 'solo' : ''}">${fotos.map((src) => `<figure class="g-foto"><img src="${src}"></figure>`).join('')}</div>`
+      ? `<div class="galerie ${fotos.length > 2 ? 'viele' : ''} ${fotos.length === 1 ? 'solo' : ''}">${fotos.map((src) => `<figure class="g-foto"><img src="${esc(src)}"></figure>`).join('')}</div>`
       : ''
     let mod = ''
     for (const m of themen) {
@@ -394,7 +394,7 @@
     let h = ''
     for (const w of wandDesTages(tg)) {
       const daten = [w.km ? w.km + ' km' : '', dauerText(w.dauerMin), w.hoehenmeter ? t('↑ {n} hm', { n: w.hoehenmeter }) : '', S_MAP[w.schwierigkeit]?.label, w.bewertung ? '★'.repeat(w.bewertung) : ''].filter(Boolean).join(' · ')
-      const fotos = (w.fotos || []).length ? `<div class="galerie ${w.fotos.length === 1 ? 'solo' : ''}">${w.fotos.map((src) => `<figure class="g-foto"><img src="${src}"></figure>`).join('')}</div>` : ''
+      const fotos = (w.fotos || []).length ? `<div class="galerie ${w.fotos.length === 1 ? 'solo' : ''}">${w.fotos.map((src) => `<figure class="g-foto"><img src="${esc(src)}"></figure>`).join('')}</div>` : ''
       h += `<section class="wand"><h4 class="m-titel">🥾 ${esc(t('Wanderung: {name}', { name: w.name }))}</h4>${daten ? `<div class="w-daten">${esc(daten)}</div>` : ''}${(w.beschreibung || '').trim() ? `<p class="w-text">${esc(w.beschreibung)}</p>` : ''}${fotos}</section>`
     }
     for (const o of ortTageDes(tg)) h += `<section class="wand"><h4 class="m-titel">📍 ${esc(o.ortName)}</h4>${(o.text || '').trim() ? `<p class="w-text">${esc(o.text)}</p>` : ''}</section>`

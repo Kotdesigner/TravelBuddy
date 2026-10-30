@@ -3,6 +3,7 @@
   import { frage } from './dialog.js'
   import { packliste, togglePack, addPackItem, delPackItem, packZuruecksetzen, istAn } from './userdata.js'
   import { PACK_VORLAGE } from './packliste-daten.js'
+  import { esc } from './reisebericht.js'
 
   let neuItem = $state({})
 
@@ -30,11 +31,11 @@
     const datum = new Date().toLocaleDateString(LOCALE)
     let body = `<h1>🚙 ${t('Packliste — Solo Outback')}</h1><p class="meta">${t('{erledigt}/{gesamt} erledigt ({prozent}%) · Stand {datum}', { erledigt, gesamt, prozent, datum })}</p>`
     for (const k of kategorien) {
-      body += `<h2>${k.icon} ${k.titel}</h2><ul>`
+      body += `<h2>${esc(k.icon)} ${esc(k.titel)}</h2><ul>`
       for (const i of k.alle) {
         const box = istAn($packliste.checked[i.id]) ? '☑' : '☐'
         const krit = i.krit ? ` <span class="krit">${t('★ wichtig')}</span>` : ''
-        body += `<li><span class="box">${box}</span> ${i.text}${krit}</li>`
+        body += `<li><span class="box">${box}</span> ${esc(i.text)}${krit}</li>`
       }
       body += '</ul>'
     }

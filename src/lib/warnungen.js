@@ -9,9 +9,9 @@
 // Es zählt nicht nur „Punkt liegt im Warngebiet“. Für einen Roadtrip
 // ist die ENTFERNUNG entscheidend: ein Feuer 60 km die Straße hoch geht einen etwas an.
 // Deshalb liefert jede Warnung eine Abstandsrechnung (0 km = man steht mitten drin).
-import { t } from './i18n.js'
+import { t, jeSprache } from './i18n.js'
 
-const QUELLEN = [
+const QUELLEN = jeSprache(() => ([
   {
     id: 'wa', staat: 'WA', name: t('DFES Westaustralien'),
     url: 'https://api.emergency.wa.gov.au/v1/warnings',
@@ -32,15 +32,15 @@ const QUELLEN = [
     url: 'https://services-ap1.arcgis.com/4z1c8UDtmlbV0cw9/arcgis/rest/services/Severe_Weather_Flood_Cyclone_Area_Public_View/FeatureServer/0/query?where=1%3D1&outFields=*&f=geojson',
     lies: liesQLD,
   },
-]
+]))
 
 // Australisches Warnsystem: drei Stufen, überall gleich benannt.
-const STUFE = {
+const STUFE = jeSprache(() => ({
   3: { label: 'Emergency Warning', farbe: '#c0392b', icon: '🚨' },
   2: { label: 'Watch & Act', farbe: '#e8730c', icon: '⚠️' },
   1: { label: 'Advice', farbe: '#e0a800', icon: 'ℹ️' },
   0: { label: t('Hinweis'), farbe: '#8a7565', icon: '•' },
-}
+}))
 function rangAus(...texte) {
   const s = texte.filter(Boolean).join(' ').toLowerCase()
   if (/emergency\s*warning/.test(s)) return 3

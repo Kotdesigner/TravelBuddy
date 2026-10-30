@@ -1,7 +1,7 @@
 // Vor-Abfahrt-Checkliste (vorbefüllt für Deutschland → Australien) + Dokumenttypen.
-import { t } from './i18n.js'
+import { t, jeSprache } from './i18n.js'
 
-export const VORBEREITUNG = [
+export const VORBEREITUNG = jeSprache(() => ([
   {
     gruppe: t('Wochen vorher'), items: [
       { id: 'flug', text: t('✈️ Flüge gebucht') },
@@ -35,7 +35,7 @@ export const VORBEREITUNG = [
       { id: 'transfer', text: t('🚕 Transfer zum Flughafen') },
     ],
   },
-]
+]))
 
 export const DOKUMENT_TYPEN = [
   'Reisepass', 'eTA / Visum', 'Auslandskrankenversicherung', 'Int. Führerschein',

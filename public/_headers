@@ -1,4 +1,10 @@
 # Gilt, wenn dist von Hand zu Netlify hochgeladen wird (dieselben Regeln wie in netlify.toml)
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), payment=(), usb=()
+
 /sw.js
   Cache-Control: no-cache
 

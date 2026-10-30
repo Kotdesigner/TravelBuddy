@@ -38,24 +38,28 @@ if (typeof window !== 'undefined') {
   window.addEventListener('pointerdown', (e) => { tippX = e.clientX; tippY = e.clientY }, { capture: true, passive: true })
 }
 
-/** Farbschema wechseln. Wo der Browser View Transitions kann, wächst das neue Schema als
-    Kreis aus dem Knopf heraus; sonst wechselt es sofort. */
+/** Farbschema wechseln */
 export function setzeTheme(m) {
-  const vorher = istDunkel(aktuell), nachher = istDunkel(m)
+  if (istDunkel(aktuell) === istDunkel(m)) { theme.set(m); return }
+  return kreisWechsel(() => theme.set(m))
+}
+
+/** Großer Wechsel (Farbschema, Sprache). Wo der Browser View Transitions kann, wächst das Neue
+    als Kreis aus dem Knopf heraus; sonst wechselt es sofort. */
+export function kreisWechsel(aendern) {
   const ruhig = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (vorher === nachher || ruhig || typeof document === 'undefined' || !document.startViewTransition || document.visibilityState !== 'visible') {
-    theme.set(m); return
-  }
+  if (ruhig || typeof document === 'undefined' || !document.startViewTransition || document.visibilityState !== 'visible') return aendern()
   const html = document.documentElement
   const x = tippX ?? innerWidth / 2, y = tippY ?? innerHeight / 2
   const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
   html.dataset.vt = 'theme'
   let vt
-  try { vt = document.startViewTransition(() => theme.set(m)) } catch { delete html.dataset.vt; theme.set(m); return }
+  try { vt = document.startViewTransition(aendern) } catch { delete html.dataset.vt; return aendern() }
   vt.ready.then(() => {
     html.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
       { duration: 520, easing: 'cubic-bezier(0.32, 0.72, 0, 1)', pseudoElement: '::view-transition-new(root)' })
   }).catch(() => {})
   const fertig = () => { delete html.dataset.vt }
   vt.finished.then(fertig, fertig)
+  return vt.updateCallbackDone
 }

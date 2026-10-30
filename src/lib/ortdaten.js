@@ -1,9 +1,9 @@
 // Automatische Orts-Daten (online): Koordinaten + Region via OpenStreetMap-Geocoding,
 // Kurzbeschreibung via Wikipedia. Best effort — fehlende Teile bleiben leer.
-import { t, istEn } from './i18n.js'
+import { t, istEn, jeSprache } from './i18n.js'
 
 // Wikipedia zuerst in der Sprache der App, dann in der anderen
-const SPRACHEN = istEn ? ['en', 'de'] : ['de', 'en']
+const SPRACHEN = jeSprache(() => (istEn ? ['en', 'de'] : ['de', 'en']))
 
 async function geocode(name) {
   try {

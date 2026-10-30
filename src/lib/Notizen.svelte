@@ -110,11 +110,11 @@
     display: flex; align-items: center; gap: 9px; background: var(--card); border: 1px solid var(--line);
     border-radius: 9px; padding: 9px 11px; box-shadow: var(--shadow);
   }
-  .check { border: none; background: none; cursor: pointer; font-size: calc(18px * var(--schrift, 1)); color: #2f7a63; line-height: 1; flex: none; }
+  .check { border: none; background: none; cursor: pointer; font-size: calc(18px * var(--schrift, 1)); color: #2f7a63; line-height: 1; flex: none; min-width: 36px; min-height: 36px; }
   .ic { font-size: calc(15px * var(--schrift, 1)); flex: none; }
   .txt { flex: 1; font-size: calc(14px * var(--schrift, 1)); color: var(--ink); word-break: break-word; }
-  .ts { font-size: calc(12px * var(--schrift, 1)); color: #a5967f; white-space: nowrap; flex: none; font-variant-numeric: tabular-nums; }
-  .del { border: none; background: none; cursor: pointer; font-size: calc(12px * var(--schrift, 1)); color: var(--danger-text); flex: none; opacity: 0.6; }
+  .ts { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); white-space: nowrap; flex: none; font-variant-numeric: tabular-nums; }
+  .del { border: none; background: none; cursor: pointer; font-size: calc(12px * var(--schrift, 1)); color: var(--danger-text); flex: none; opacity: 0.75; min-width: 36px; min-height: 36px; }
   .del:hover { opacity: 1; }
 
   /* erledigt: leicht ergraut & kleiner */

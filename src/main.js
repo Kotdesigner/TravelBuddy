@@ -1,8 +1,9 @@
-import { mount } from 'svelte'
+import { mount, unmount } from 'svelte'
 import './app.css'
 // Schrift- und Gesamtgröße vor dem ersten Bild setzen (sonst springt die Seite nach dem Start)
 import './lib/darstellung.js'
 import App from './App.svelte'
+import { beimSprachwechsel } from './lib/i18n.js'
 
 // Neue Fassung sofort übernehmen.
 //
@@ -33,8 +34,19 @@ if ('caches' in window) {
   caches.delete('karten-pmtiles').catch(() => {})
 }
 
-const app = mount(App, {
-  target: document.getElementById('app'),
+const ziel = document.getElementById('app')
+let app = mount(App, { target: ziel })
+
+// Sprachwechsel: alles neu aufbauen und an derselben Stelle stehen bleiben. Das Bild wechselt
+// erst, wenn die Daten da sind (der Kreis wartet darauf), spätestens nach drei Sekunden.
+beimSprachwechsel(async () => {
+  const stelle = window.scrollY
+  await unmount(app)
+  await Promise.race([
+    new Promise((fertig) => { app = mount(App, { target: ziel, props: { onbereit: fertig } }) }),
+    new Promise((fertig) => setTimeout(fertig, 3000)),
+  ])
+  window.scrollTo({ top: stelle, behavior: 'instant' })
 })
 
 export default app

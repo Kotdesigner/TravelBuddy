@@ -12,7 +12,7 @@ import { zeitzoneFuer } from './sonne.js'
 import { etappenMitDatum, etappeAm, routenDerEtappe, gueltigesDatum } from './plan.js'
 import { rundeAufSumme, gleicheTeile } from './runden.js'
 import { stimmigeLegs } from './routing.js'
-import { LOCALE, t } from './i18n.js'
+import { LOCALE, t, beiSprache } from './i18n.js'
 import { ZWEI } from './format.js'
 
 
@@ -248,4 +248,5 @@ export function heutigeFahrt({ reisen = [], gesamtStart, heute, journal = [], ak
   return null
 }
 
-export const WILDWECHSEL = t('In der Dämmerung und nachts sind Kängurus, Emus und Vieh oft auf oder neben der Straße, auf offenem Weideland auch Rinder. Prüf deinen Mietvertrag: Manche Vermieter zahlen bei Tierschäden nach Sonnenuntergang nicht.')
+export let WILDWECHSEL
+beiSprache(() => { WILDWECHSEL = t('In der Dämmerung und nachts sind Kängurus, Emus und Vieh oft auf oder neben der Straße, auf offenem Weideland auch Rinder. Prüf deinen Mietvertrag: Manche Vermieter zahlen bei Tierschäden nach Sonnenuntergang nicht.') })

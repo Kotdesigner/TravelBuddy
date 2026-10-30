@@ -759,7 +759,7 @@
   .bu-pfad { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-family: ui-monospace, monospace; }
   .b-kopf h3 { margin: 0; font-size: calc(15px * var(--schrift, 1)); font-weight: 800; color: var(--brand-text); }
   .fortschritt { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
-  .neu { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; padding: 6px 12px; border: 1px solid #2f7a63; background: #2f7a63; color: #fff; border-radius: 8px; cursor: pointer; }
+  .neu { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; min-height: 36px; padding: 6px 12px; border: 1px solid #2f7a63; background: #2f7a63; color: #fff; border-radius: 8px; cursor: pointer; }
   .bar { height: 8px; background: #ece2cf; border-radius: 5px; overflow: hidden; margin-bottom: 12px; }
   .bar-fill { height: 100%; background: #2f7a63; transform-origin: left; transition: transform var(--t-slow) var(--ease-spring); }
 

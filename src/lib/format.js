@@ -1,17 +1,18 @@
 // Kleine Formatierer für Datumstexte ('YYYY-MM-DD' rein, Text in der Sprache der App raus).
 // Deutsch: „30. Nov“, „Sa, 1. Mai“. Englisch (australisch): „30 Nov“, „Sat, 1 May“.
-import { LOCALE, istEn, tn } from './i18n.js'
-const MONATE = istEn
+import { LOCALE, istEn, tn, jeSprache, beiSprache } from './i18n.js'
+const MONATE = jeSprache(() => (istEn
   ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  : ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
-const TAGE = istEn ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
-const TAGE_LANG = istEn
+  : ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']))
+const TAGE = jeSprache(() => (istEn ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']))
+const TAGE_LANG = jeSprache(() => (istEn
   ? ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  : ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag']
+  : ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag']))
 const d = (s) => new Date(s + 'T12:00:00')
 const tagZahl = (n) => (istEn ? `${n}` : `${n}.`)
 // Für toLocaleString: Englisch ohne führende Null („1 May“, „5:38 am“), Deutsch wie gehabt („01. Mai“, „05:38“).
-export const ZWEI = istEn ? 'numeric' : '2-digit'
+export let ZWEI
+beiSprache(() => { ZWEI = istEn ? 'numeric' : '2-digit' })
 
 export const tagMonat = (s) => { if (!s) return ''; const x = d(s); return `${tagZahl(x.getDate())} ${MONATE[x.getMonth()]}` }
 export const tagMonatJahr = (s) => { if (!s) return ''; const x = d(s); return `${tagZahl(x.getDate())} ${MONATE[x.getMonth()]} ${x.getFullYear()}` }

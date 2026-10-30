@@ -1,8 +1,8 @@
 // Wetter-abgeleitete Gefahren-Einschätzung über Open-Meteo (online, ohne Server).
 // KEINE amtlichen Warnungen — nur Risiko-Indikatoren aus der Vorhersage.
-import { t } from './i18n.js'
+import { t, jeSprache } from './i18n.js'
 
-export const STUFEN = { 0: 'keine', 1: t('erhöht'), 2: 'hoch', 3: 'extrem' }
+export const STUFEN = jeSprache(() => ({ 0: 'keine', 1: t('erhöht'), 2: 'hoch', 3: 'extrem' }))
 export const STUFE_FARBE = { 1: '#c9a227', 2: '#d97a2b', 3: '#c0392b' }
 
 // Schwellen (australischer Sommer-Kontext), max über die nächsten Tage.

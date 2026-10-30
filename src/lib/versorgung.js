@@ -6,9 +6,9 @@
 // für beide Male, wie bei den Tank-Lücken in routenhinweise.js.
 import { stichproben, baueGitter, durchgaenge, stoppKmAufRoute, distanzKm, streckenOhne } from './routenhinweise.js'
 import { dezimal } from './format.js'
-import { t } from './i18n.js'
+import { t, jeSprache } from './i18n.js'
 
-export const KATEGORIEN = [
+export const KATEGORIEN = jeSprache(() => ([
   { k: 'fuel', label: t('Tankstelle'), mehrzahl: t('Tankstellen'), emoji: '⛽' },
   { k: 'wasser', label: t('Wasser'), mehrzahl: t('Wasser'), emoji: '💧' },
   { k: 'wc', label: t('Toilette'), mehrzahl: t('Toiletten'), emoji: '🚻' },
@@ -17,8 +17,8 @@ export const KATEGORIEN = [
   { k: 'laden', label: t('Laden'), mehrzahl: t('Läden'), emoji: '🛒' },
   { k: 'werkstatt', label: t('Werkstatt'), mehrzahl: t('Werkstätten'), emoji: '🔧' },
   { k: 'klinik', label: 'Klinik/Arzt', mehrzahl: t('Kliniken'), emoji: '🏥' },
-]
-export const KAT = Object.fromEntries(KATEGORIEN.map((k) => [k.k, k]))
+]))
+export const KAT = jeSprache(() => Object.fromEntries(KATEGORIEN.map((k) => [k.k, k])))
 
 /** Tankstellen dürfen etwas weiter weg liegen (wie bei den Tank-Lücken), der Rest 3 km. */
 export const KORRIDOR = { fuel: 5, standard: 3 }

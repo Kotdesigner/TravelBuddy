@@ -8,9 +8,9 @@
 // zeigt und leitet daraus ein Reise-Gerüst ab — schreibt aber nie zurück. Bei
 // Änderungen wird die Datei einfach neu importiert; ein erneuter Import ersetzt
 // genau das, was beim letzten Mal von hier kam, und lässt eigene Daten in Ruhe.
-import { t } from './i18n.js'
+import { t, jeSprache } from './i18n.js'
 
-export const KAT = {
+export const KAT = jeSprache(() => ({
   train:   { icon: '🚆', label: t('Bahn') },
   flight:  { icon: '✈️', label: t('Flug') },
   hotel:   { icon: '🏨', label: t('Unterkunft') },
@@ -21,7 +21,7 @@ export const KAT = {
   tour: { icon: '🎟️', label: t('Tour') },
   stay:    { icon: '🌴', label: t('Aufenthalt') },
   city:    { icon: '🏙️', label: t('Stadt') },
-}
+}))
 export const katInfo = (k) => KAT[k] || { icon: '📌', label: k || t('Termin') }
 
 /** Erkennt eine Datei aus der Kalender-App — bewusst streng, damit ein Backup nicht verwechselt wird. */

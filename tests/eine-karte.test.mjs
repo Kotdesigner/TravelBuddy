@@ -131,5 +131,19 @@ console.log('\n8  Keine Endlosschleife und kein Absturz')
   p('Etappe löschen liest den Namen vor dem Löschen', !/loescheReise\(etappe\.id\)/.test(etappe) && etappe.includes('const { id, name } = etappe'))
 }
 
+console.log('\n9  Kein Bildschirm ohne Weg zurück')
+{
+  const app = fs.readFileSync(new URL('../src/App.svelte', import.meta.url), 'utf8')
+  const buch = fs.readFileSync(new URL('../src/lib/Handbuch.svelte', import.meta.url), 'utf8')
+  const i18n = fs.readFileSync(new URL('../src/lib/i18n.js', import.meta.url), 'utf8')
+  p('Alle Seiten unter Mehr haben einen Zurück-Knopf', /ansicht\.tab === 'mehr' && ansicht\.unter\}\s*<div class="zurueck-leiste">/.test(app))
+  p('Der Knopf bleibt beim Scrollen stehen', /\.zurueck-leiste \{\s*position: sticky/.test(app))
+  p('Handbuch ist eine eigene Seite ohne Rahmen', app.includes("onHandbuch={() => geh('mehr/handbuch')}") && !app.includes('<iframe') && !buch.includes('<iframe'))
+  p('Sprachwechsel läuft ohne Neuladen, Neuladen nur als Notanker', /catch \(e\) \{ console\.error\(e\); location\.reload\(\) \}/.test(i18n) && !/^\s*location\.reload\(\)$/m.test(i18n))
+  p('Tabs ohne Bild der ganzen Seite', app.includes('r !== 0 && bildwechsel('))
+  p('Backup wird vor dem Übernehmen gesäubert', app.includes('saeubereBackup(p)'))
+  p('Druckfenster maskieren eigene Texte und Fotos', fs.readFileSync(new URL('../src/lib/Packliste.svelte', import.meta.url), 'utf8').includes('${esc(i.text)}') && fs.readFileSync(new URL('../src/lib/Kollage.svelte', import.meta.url), 'utf8').includes('${esc(f.src)}'))
+}
+
 console.log(`\n${'═'.repeat(46)}\n  ${ok} bestanden · ${bad} gescheitert\n`)
 process.exit(bad ? 1 : 0)

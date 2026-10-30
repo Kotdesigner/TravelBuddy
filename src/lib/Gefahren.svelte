@@ -233,7 +233,7 @@
 .bedingungen{background:var(--warn-flaeche);border:1px solid var(--danger-linie);color:var(--warn-text);border-radius:10px;padding:.6rem .7rem;margin-bottom:.7rem}
 .bed{font-size:.85rem;margin:.15rem 0}
 .bed-wert{font-weight:800;color: var(--danger-text)}
-.bed-fuss{font-size:.74rem;opacity:.75;margin-top:.35rem}
+.bed-fuss{font-size:.74rem;opacity:.9;margin-top:.35rem}
 .bo-z{margin:.2rem 0;font-size:.84rem}
 .w-staat{font-size:.72rem;opacity:.7;border:1px solid currentColor;border-radius:5px;padding:0 .3rem}
 .w-quellen{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.78rem;margin-top:.5rem}
@@ -244,6 +244,6 @@
 .oz-lauf { color: var(--brand-text); font-weight: 700; }
 .oz-hinweis { color: var(--muted); flex: 1; min-width: 160px; }
 .oz-hinweis.warn { color: var(--warn-text); font-weight: 600; width: 100%; flex: none; }
-.oz-btn { padding: 4px 10px; border: 1px solid var(--brand); background: none; color: var(--brand-text); border-radius: 13px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+.oz-btn { min-height: 36px; padding: 4px 12px; border: 1px solid var(--brand); background: none; color: var(--brand-text); border-radius: 18px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
 .oz-btn:disabled { opacity: .5; }
 </style>

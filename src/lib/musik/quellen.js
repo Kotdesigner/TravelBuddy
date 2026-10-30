@@ -15,7 +15,7 @@
 //
 // Wichtig für die Ehrlichkeit in der Oberfläche: `ebene` sagt, für welches Gebiet die Daten
 // gelten. Gibt es für Broome nur nationale Charts, steht dort „national“, nicht „Broome“.
-import { t } from '../i18n.js'
+import { t, jeSprache } from '../i18n.js'
 
 export class NichtEingerichtet extends Error {
   constructor(text) { super(text); this.name = 'NichtEingerichtet' }
@@ -74,7 +74,7 @@ export function mbKuenstler(artists, gebiet, land = 'AU') {
   })
 }
 
-export const QUELLEN = [
+export const QUELLEN = jeSprache(() => ([
   {
     id: 'lastfm',
     name: t('Charts des Landes (Last.fm)'),
@@ -145,20 +145,20 @@ export const QUELLEN = [
       return out
     },
   },
-]
+]))
 
-export const EBENE_TEXT = {
+export const EBENE_TEXT = jeSprache(() => ({
   stadt: t('aus der Stadt'),
   region: 'aus der Umgebung',
   weit: t('aus dem Umkreis'),
   bundesstaat: t('aus dem Bundesstaat'),
   national: t('ganzes Land'),
-}
-export const ART_TEXT = {
+}))
+export const ART_TEXT = jeSprache(() => ({
   beliebt: t('Charts'),
   herkunft: t('Local Hero'),
   gegend: t('Playlist der Gegend'),
-}
+}))
 
 /** Charts und Playlisten der Gegend: beides „was dort gehört wird“, im Gegensatz zu den Bands aus der Gegend. */
 export const istGehoert = (t) => t.art === 'beliebt' || t.art === 'gegend'

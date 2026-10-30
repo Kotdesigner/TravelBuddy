@@ -1094,6 +1094,23 @@ export function leseBackup(file) {
   })
 }
 
+// Fremde oder beschädigte Dateien: nur Felder der erwarteten Art kommen in die App, sonst
+// stürzt sie bei jedem Start über einzelne Einträge. Ohne ein einziges bekanntes Feld: null.
+const BACKUP_LISTEN = ['reisen', 'eigeneOrte', 'journal', 'notizen', 'wanderungen', 'checkins', 'dokumente', 'vorabKosten']
+const BACKUP_OBJEKTE = ['daten', 'quizAntworten', 'packliste', 'vorbereitung', 'buchungen', 'grabsteine']
+export function saeubereBackup(p) {
+  if (!p || typeof p !== 'object' || Array.isArray(p)) return null
+  if (![...BACKUP_LISTEN, ...BACKUP_OBJEKTE].some((k) => k in p)) return null
+  const sauber = { ...p }
+  for (const k of BACKUP_LISTEN) {
+    if (!(k in sauber)) continue
+    if (Array.isArray(sauber[k])) sauber[k] = sauber[k].filter((x) => x && typeof x === 'object')
+    else delete sauber[k]
+  }
+  for (const k of BACKUP_OBJEKTE) if (k in sauber && (!sauber[k] || typeof sauber[k] !== 'object')) delete sauber[k]
+  return sauber
+}
+
 // Ein eingelesenes Backup wirklich übernehmen (ersetzt die lokalen Daten).
 /**
  * Trockenlauf: was WÜRDE ein Zusammenführen tun? Ruft dieselbe Funktion auf wie der

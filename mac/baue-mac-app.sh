@@ -56,7 +56,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>LSMinimumSystemVersion</key><string>13.0</string>
   <key>LSApplicationCategoryType</key><string>public.app-category.travel</string>
   <key>NSHighResolutionCapable</key><true/>
-  <key>NSHumanReadableCopyright</key><string>Roadtrip-Designer by Kotdesigner</string>
+  <key>NSHumanReadableCopyright</key><string>TravelBuddy by Kotdesigner</string>
   <key>NSLocationWhenInUseUsageDescription</key><string>Für Warnungen, Wetter und Notfallhilfe in deiner Nähe.</string>
   <key>NSAppTransportSecurity</key><dict><key>NSAllowsLocalNetworking</key><true/></dict>
 </dict></plist>
