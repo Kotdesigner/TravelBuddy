@@ -8,7 +8,7 @@
   import { untrack } from 'svelte'
   import { dauer, klapp } from './motion.js'
   import { reisen, gesamtStart, journal, wanderungen, buchungen, userData, notizen } from './userdata.js'
-  import { etappenMitDatum, chronik, ymd, tagHatInhalt, planUeberblick, tageZwischen } from './plan.js'
+  import { etappenMitDatum, chronik, ymd, tagHatInhalt, planUeberblick, tageZwischen, offenerZeitraum } from './plan.js'
   import { bereich, tageText, wochentag, tagMonat, mitWochentag } from './format.js'
   import { katInfo } from './reisekalender.js'
   import { STATUS_MAP } from './wanderungen-daten.js'
@@ -116,6 +116,7 @@
             {@render tag(tg)}
           {/each}
         </ol>
+        <button class="lb-nachtragen" onclick={() => onneu('tag', offenerZeitraum(a.etappe, $journal, heute))}>{t('Mehrere Tage nachtragen')}</button>
       {/if}
     </section>
   {/each}
@@ -154,6 +155,7 @@
         {#if ist}<span class="lb-heute">{t('heute')}</span>{/if}
         {#each tg.journal as j (j.id)}
           {#if j.ort}<span class="lb-t-ort">{j.ort}</span>{/if}
+          {#if j.bis}<span class="lb-t-ort">{t('Eintrag {bereich}', { bereich: bereich(j.datum, j.bis) })}</span>{/if}
         {/each}
         {#if auszug(tg)}<span class="lb-t-text">{auszug(tg)}</span>{/if}
         {#if tg.buchungen.length || tg.wanderungen.length || tg.ortTage.length || tg.notizen.length || fotoZahl(tg)}
@@ -177,6 +179,7 @@
 <style>
   .lb { display: flex; flex-direction: column; gap: 12px; }
   .lb-werkzeug > :global(.fi) { width: 100%; }
+  .lb-nachtragen { display: block; margin: 2px 0 8px auto; min-height: 36px; padding: 0 4px; border: none; background: none; color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
   .lb-tiere { display: inline-flex; align-items: center; gap: 6px; }
   .lb-tiere-zahl { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
   .lb-k { margin: 0; font-size: calc(14.5px * var(--schrift, 1)); color: var(--muted); background: var(--flaeche); border-radius: var(--radius-m); padding: 12px 14px; }

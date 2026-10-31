@@ -29,7 +29,9 @@ reichweite.subscribe((v) => { try { localStorage.setItem(RW_KEY, String(v)) } ca
 const setze = (store, id, wert) => store.update((s) => ({ ...s, [id]: wert }))
 
 export const artVon = (r) => r.art || 'auto'
-export const artPasst = (r) => !r.route || (artVon(r) === 'flug') === !!r.route.flug
+/** Flug und Bahn werden als gerade Linie gezeichnet, nur das Auto braucht eine Straßenroute. */
+export const gerade = (r) => ['flug', 'bahn'].includes(artVon(r))
+export const artPasst = (r) => !r.route || gerade(r) === !!r.route.flug
 export const veraltet = (r) => !!(r.route && r.route.sig !== stopsSignatur(r.stops))
 export const stops = (r) => r.stops || []
 
@@ -67,8 +69,8 @@ export async function ladeTankstellen(regionId) {
 export async function routeRechnen(r) {
   setze(routeMsg, r.id, '')
   // Flug = Luftlinie, funktioniert auch ohne Netz und ohne Tank-Analyse.
-  if (artVon(r) === 'flug') {
-    try { updateReise(r.id, { route: flugRoute(r.stops) }) }
+  if (gerade(r)) {
+    try { updateReise(r.id, { route: flugRoute(r.stops, artVon(r) === 'bahn' ? { kmh: 130, puffer: 10 } : undefined) }) }
     catch (e) { setze(routeMsg, r.id, fehlerText(e)) }
     return
   }
@@ -110,7 +112,7 @@ export function autoRouten(rs, online) {
   for (const r of rs) {
     const koord = (r.stops || []).filter((s) => s.lat != null)
     if (koord.length < 2) continue
-    if (artVon(r) !== 'flug' && !online) continue   // Straßenroute braucht Netz, Flug nicht
+    if (!gerade(r) && !online) continue   // Straßenroute braucht Netz, Flug nicht
     const sig = stopsSignatur(r.stops)
     if (r.route && r.route.sig === sig && artPasst(r)) continue
     if (autoVersucht.get(r.id) === sig + '|' + artVon(r)) continue

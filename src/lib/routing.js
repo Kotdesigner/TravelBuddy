@@ -26,14 +26,14 @@ export function luftlinieKm(stops) {
 /** Flugstrecke: Luftlinie zwischen den Stopps, gleiche Form wie eine Straßenroute.
  *  Dauer grob geschätzt — Reisegeschwindigkeit ~800 km/h plus 45 min je Abschnitt
  *  für Rollen, Start und Landung. Reicht für die Reiseplanung. */
-export function flugRoute(stops) {
+export function flugRoute(stops, { kmh = 800, puffer = 45 } = {}) {
   const p = (stops || []).filter((s) => s.lat != null)
   if (p.length < 2) throw new Error(t('Mindestens 2 Stopps mit Koordinaten nötig.'))
   const genauKm = [], genauMin = []
   for (let i = 1; i < p.length; i++) {
     const km = haversine(p[i - 1].lat, p[i - 1].lon, p[i].lat, p[i].lon)
     genauKm.push(km)
-    genauMin.push((km / 800) * 60 + 45)
+    genauMin.push((km / kmh) * 60 + puffer)
   }
   const legs = stimmigeAbschnitte(genauKm, genauMin)
   return {

@@ -3,7 +3,9 @@
   // Eine Etappe: Name und Datum, Buchungen, Routen mit Stopps, Wanderungen, Logbuch.
   // Ist keine Etappe gewählt (Route ohne Etappe), zeigt sie nur diese Route.
   import { reisen, gesamtStart, buchungen, wanderungen, journal, updateReise, loescheReise, neueRoute, wandleReiseUm } from './userdata.js'
-  import { etappenMitDatum, routenDerEtappe, tageZwischen, gueltigesDatum, ymd } from './plan.js'
+  import { etappenMitDatum, routenDerEtappe, tageZwischen, gueltigesDatum, ymd, offenerZeitraum, eintragTage } from './plan.js'
+  import { lage } from './warnlage-dienst.js'
+  import WarnKnoepfe from './WarnKnoepfe.svelte'
   import { bereich, tageText, mitWochentag, zahl } from './format.js'
   import { katInfo } from './reisekalender.js'
   import { STATUS_MAP, S_MAP } from './wanderungen-daten.js'
@@ -41,7 +43,7 @@
   const gebucht = $derived(($buchungen?.events || []).filter((b) => !b.platzhalter && imZeitraum(b.datum)).sort((a, b) => a.datum.localeCompare(b.datum)))
   const ids = $derived(new Set([etappe?.id, ...routen.map((r) => r.id)].filter(Boolean)))
   const wand = $derived($wanderungen.filter((w) => (w.datum ? imZeitraum(w.datum) : ids.has(w.reiseId))))
-  const geschrieben = $derived(new Set($journal.filter((j) => imZeitraum(j.datum)).map((j) => j.datum)).size)
+  const geschrieben = $derived(new Set($journal.flatMap(eintragTage).filter(imZeitraum)).size)
   const vergangen = $derived(von && eintrag ? Math.max(0, Math.min(eintrag.tage, tageZwischen(von, ymd(new Date())) + 1)) : 0)
 
   function setVon(v) { if (gueltigesDatum(v)) updateReise(etappe.id, { von: v }) }
@@ -103,6 +105,14 @@
         {/each}
       </div>
     {/if}
+
+    {#each ($lage.proEtappe[etappe.id] || []) as w (w.id)}
+      <section class="ed-block ed-warn">
+        <p>{w.icon} <b>{w.level}</b>: {w.titel}</p>
+        <p class="ed-k">{w.km === 0 ? t('Liegt im Warngebiet') : t('{km} km daneben', { km: Math.round(w.km) })}</p>
+        <WarnKnoepfe {w} />
+      </section>
+    {/each}
 
     <section class="ed-block ed-zeit">
       <div class="ed-felder">
@@ -192,6 +202,7 @@
       <h2 class="ed-h">{t('Logbuch')}</h2>
       <p class="ed-k">{geschrieben ? t('{geschrieben} von {wert} Tagen geschrieben.', { geschrieben, wert: eintrag?.tage ?? etappe.tage }) : t('Noch kein Tag geschrieben.')}</p>
       <button class="btn ed-dazu" onclick={() => onlogbuch(etappe.id)}>{t('Im Logbuch ansehen')}</button>
+      {#if eintrag}<button class="btn ed-dazu" onclick={() => onneu('tag', offenerZeitraum(eintrag, $journal, ymd(new Date())))}>{t('Mehrere Tage nachtragen')}</button>{/if}
     </section>
 
     <section class="ed-block ed-ende">
@@ -225,6 +236,8 @@
   .ed-farbe { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--card); box-shadow: 0 0 0 1px var(--line-stark); cursor: pointer; padding: 0; }
   .ed-farbe.an { box-shadow: 0 0 0 3px var(--ink); }
   .ed-block { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-m); padding: 14px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow); }
+  .ed-block.ed-warn { background: var(--warn-flaeche); border-color: var(--danger-linie); }
+  .ed-warn p { margin: 0; }
   .ed-block .ed-h { margin: 0; font-size: calc(17px * var(--schrift, 1)); display: flex; align-items: center; gap: 8px; }
   .ed-zahl { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 800; background: var(--flaeche-2); color: var(--muted); padding: 1px 8px; border-radius: 10px; }
   .ed-felder { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; }

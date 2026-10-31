@@ -82,6 +82,8 @@
   const MEHR_SEKTIONEN = [
     { id: 'notfall', icon: '🆘', label: t('Notfall'), info: t('Notrufe, nächste Hilfe, dein Standort'), rot: true },
     { id: 'vorbereitung', icon: '🧳', label: t('Reisevorbereitung'), info: t('Checkliste, Dokumente, Buchungen') },
+    { id: 'fluege', icon: '✈️', label: t('Flüge & Bahn'), info: t('Status, Gate, Gleis und Verspätung') },
+    { id: 'kosten', icon: '💰', label: t('Kosten'), info: t('Wofür, je Etappe und pro Tag') },
     { id: 'gefahren', icon: '⚠️', label: t('Gefahrenlage'), info: t('Warnungen zu Feuer, Flut und Hitze') },
     { id: 'packliste', icon: '🎒', label: t('Packliste'), info: t('Zum Abhaken, fürs Outback') },
     { id: 'praxis', icon: '🛠️', label: t('Praxis & Sicherheit'), info: t('Vorab buchen, Permits, Tanken, Reifen') },

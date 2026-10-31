@@ -1,4 +1,6 @@
 <script>
+  import { lage } from './warnlage-dienst.js'
+  import WarnKnoepfe from './WarnKnoepfe.svelte'
   import { t, LOCALE, tn } from './i18n.js'
   import { ZWEI } from './format.js'
   // Wanderungen-Verwaltung: Wunschliste → geplant → gemacht.
@@ -156,6 +158,7 @@
               <span class="badge stat-{w.status}">{stx?.emoji} {stx?.label}</span>
               {#if w.datum}<span class="badge termin">📅 {fmtTag(w.datum, w.zeit)}</span>{/if}
               {#if s}<span class="badge sw">{s.emoji} {s.label}</span>{/if}
+              {#if $lage.proWanderung[w.id]}<span class="badge warnung">{$lage.proWanderung[w.id][0].icon} {$lage.proWanderung[w.id][0].km === 0 ? t('Im Warngebiet') : t('{km} km neben einer Warnung', { km: Math.round($lage.proWanderung[w.id][0].km) })}</span>{/if}
               {#if kurz(w)}<span class="c-kurz">{kurz(w)}</span>{/if}
             </div>
           </div>
@@ -166,6 +169,9 @@
 
         {#if offen[w.id]}
           <div class="c-body" transition:klapp={{ duration: dauer(220) }}>
+            {#each ($lage.proWanderung[w.id] || []) as x (x.id)}
+              <div class="w-warn"><b>{x.icon} {x.level}</b>: {x.titel}<WarnKnoepfe w={x} /></div>
+            {/each}
             <!-- Zuerst wann und wo, dann die Zahlen -->
             <div class="block">
               <span class="b-cap">{t('📅 Wann (optional)')}</span>
@@ -271,6 +277,8 @@
 {/if}
 
 <style>
+  .badge.warnung { background: var(--danger-flaeche); color: var(--danger-text); }
+  .w-warn { background: var(--warn-flaeche); border: 1px solid var(--danger-linie); border-radius: var(--radius-s); padding: 8px 10px; font-size: calc(13.5px * var(--schrift, 1)); }
   .kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
   .intro { color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); margin: 0; flex: 1 1 260px; }
   .btn { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 8px 14px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 8px; cursor: pointer; }

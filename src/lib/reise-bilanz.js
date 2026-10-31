@@ -2,6 +2,7 @@
 // Es kommt nur heraus, wofür es Daten gibt. Fehlt etwas, fehlt der Schlüssel ganz.
 import { kursFuer, inBeide } from './fx.js'
 import { album } from './tierwelt.js'
+import { eintragTage } from './plan.js'
 import { LOCALE, t, tn } from './i18n.js'
 import { dezimal, eur as euro, aud as audT } from './format.js'
 
@@ -38,7 +39,7 @@ const normOrt = (s) => String(s || '').trim().replace(/\s+/g, ' ')
 export function berechneBilanz({ journal = [], wanderungen = [], reisen = [], plan = null, kurse = {} } = {}) {
   const b = {}
   const js = (journal || []).filter(Boolean)
-  const geschrieben = new Set(js.filter((e) => e.datum && eintragHatInhalt(e)).map((e) => e.datum))
+  const geschrieben = new Set(js.filter((e) => e.datum && eintragHatInhalt(e)).flatMap(eintragTage))
 
   // Reisetage: aus dem Plan, sonst Spanne der geschriebenen Tage
   if (plan?.tage) b.reisetage = plan.tage

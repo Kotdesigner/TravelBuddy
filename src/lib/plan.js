@@ -236,6 +236,32 @@ export function zuordnungNachImport(alte, neue) {
   return map
 }
 
+// ---------- Logbuch: Einträge über mehrere Tage ----------
+
+const LAENGSTER_EINTRAG = 62
+
+/** Alle Tage eines Logbuch-Eintrags: `datum` bis `bis`, ohne `bis` nur der eine Tag. */
+export function eintragTage(e) {
+  if (!gueltigesDatum(e?.datum)) return []
+  if (!gueltigesDatum(e.bis) || e.bis <= e.datum) return [e.datum]
+  const n = Math.min(tageZwischen(e.datum, e.bis), LAENGSTER_EINTRAG)
+  return Array.from({ length: n + 1 }, (_, i) => plusTage(e.datum, i))
+}
+export const deckt = (e, tag) => eintragTage(e).includes(tag)
+
+/** Vorschlag zum Nachtragen in einer Etappe: der erste Block noch leerer Tage bis heute. */
+export function offenerZeitraum(etappe, journal = [], heute) {
+  const voll = new Set(journal.flatMap(eintragTage))
+  const ende = heute < etappe.bis ? heute : etappe.bis
+  let von = null, bis = null
+  for (let d = etappe.von; d <= ende; d = plusTage(d, 1)) {
+    if (voll.has(d)) { if (von) break; continue }
+    von ||= d; bis = d
+  }
+  if (!von) { von = etappe.von; bis = plusTage(von, Math.min(2, etappe.tage - 1)) }
+  return { datum: von, bis: bis > von ? bis : '', reiseId: etappe.reise.id }
+}
+
 // ---------- Logbuch: alles chronologisch ----------
 /**
  * Das Rückgrat des Logbuchs: jede Etappe mit ihren Tagen, an jedem Tag alles,
@@ -256,7 +282,7 @@ export function chronik({ eintraege = [], journal = [], wanderungen = [], buchun
     if (!proTag.has(d)) proTag.set(d, { datum: d, journal: [], wanderungen: [], buchungen: [], ortTage: [], notizen: [], fotos: [] })
     return proTag.get(d)
   }
-  for (const e of journal) if (gueltigesDatum(e?.datum)) tagObj(e.datum).journal.push(e)
+  for (const e of journal) for (const d of eintragTage(e)) tagObj(d).journal.push(e)
   for (const w of wanderungen) if (gueltigesDatum(w?.datum)) tagObj(w.datum).wanderungen.push(w)
   for (const b of buchungen) if (gueltigesDatum(b?.datum) && !b.platzhalter) tagObj(b.datum).buchungen.push(b)
   for (const t of ortTage) if (gueltigesDatum(t?.datum)) tagObj(t.datum).ortTage.push(t)

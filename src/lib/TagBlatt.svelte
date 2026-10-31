@@ -4,7 +4,7 @@
   // Notizen), darunter dein Logbuch-Eintrag mit allen Themen. Gibt es noch keinen,
   // legt ein Tipp ihn an, mit Datum und Etappe schon richtig gesetzt.
   import { reisen, gesamtStart, journal, wanderungen, buchungen, userData, notizen, neuerJournalEintrag } from './userdata.js'
-  import { etappenMitDatum, etappeAm, plusTage, tageZwischen, planUeberblick, ymd } from './plan.js'
+  import { etappenMitDatum, etappeAm, plusTage, tageZwischen, planUeberblick, ymd, deckt } from './plan.js'
   import { wochentagLang, tagMonatJahr, bereich } from './format.js'
   import { katInfo } from './reisekalender.js'
   import { STATUS_MAP, S_MAP, dauerText } from './wanderungen-daten.js'
@@ -19,7 +19,7 @@
   const etappe = $derived(etappeAm(eintraege, datum))
   const ueber = $derived(planUeberblick(eintraege))
   const nr = $derived(ueber.start && datum >= ueber.start && datum <= ueber.ende ? tageZwischen(ueber.start, datum) + 1 : null)
-  const eintraegeTag = $derived($journal.filter((j) => j.datum === datum))
+  const eintraegeTag = $derived($journal.filter((j) => deckt(j, datum)))
   const gebucht = $derived(($buchungen?.events || []).filter((b) => !b.platzhalter && b.datum === datum))
   const wand = $derived($wanderungen.filter((w) => w.datum === datum).sort((a, b) => (a.zeit || '12:00').localeCompare(b.zeit || '12:00')))
   const ortName = $derived(new Map(orte.map((o) => [o.id, o.name])))

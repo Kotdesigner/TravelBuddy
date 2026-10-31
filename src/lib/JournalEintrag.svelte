@@ -19,6 +19,8 @@
   import { fotoInfo, bereinigeMeta } from './foto-zuordnung.js'
   import FotoImport from './FotoImport.svelte'
   import TiereGesehen from './TiereGesehen.svelte'
+  import AusgabenListe from './AusgabenListe.svelte'
+  import { bereich } from './format.js'
 
   let { eintrag, orte = [], reisen = [], warnungen = [], umkreisKm = 150, neuAngelegt = false, immerOffen = false, eintraege = [] } = $props()
 
@@ -34,6 +36,7 @@
   // Was in der zugeklappten Zeile steht.
   const kurzDatum = $derived.by(() => {
     if (!eintrag.datum) return t('ohne Datum')
+    if (eintrag.bis) return bereich(eintrag.datum, eintrag.bis)
     try { return new Date(eintrag.datum + 'T12:00').toLocaleDateString(LOCALE, { weekday: 'short', day: ZWEI, month: 'short' }) }
     catch { return eintrag.datum }
   })
@@ -247,8 +250,11 @@
     if (!gueltigesDatum(d)) return
     // Zeigte der Tag nur auf seine Etappe (keine eigene Strecke gewählt), zieht er mit.
     const nurEtappe = !eintrag.reiseId || (etappeHeute && eintrag.reiseId === etappeHeute.reise.id)
-    setKopf(nurEtappe ? { datum: d, reiseId: null, legIdx: null } : { datum: d })
+    const bis = eintrag.bis > d ? eintrag.bis : undefined
+    setKopf(nurEtappe ? { datum: d, bis, reiseId: null, legIdx: null } : { datum: d, bis })
   }
+  // Über mehrere Tage: leeres oder früheres Bis macht wieder einen einzelnen Tag daraus
+  function setBis(d) { setKopf({ bis: gueltigesDatum(d) && d > eintrag.datum ? d : undefined }) }
   function ortGewaehlt(o) {
     setKopf({ ort: o.name, lat: o.lat ?? null, lon: o.lon ?? null, ortId: o.ortId || null })
     ortAendern = false
@@ -403,7 +409,8 @@
   <!-- Kopf: Datum → Etappe automatisch; Ort per Suche; Strecke nur, wenn es um km geht -->
   <div class="k4">
     {#if !immerOffen}<button class="je-zu" onclick={() => (aufgeklappt = false)} title={t('Eintrag zuklappen')} aria-label={t('Eintrag zuklappen')}>▲</button>{/if}
-    <label class="k4-datum">{t('Datum')}<input class="datum" type="date" value={eintrag.datum} onchange={(e) => setDatum(e.target.value)} /></label>
+    <label class="k4-datum">{eintrag.bis ? t('Von') : t('Datum')}<input class="datum" type="date" value={eintrag.datum} onchange={(e) => setDatum(e.target.value)} /></label>
+    <label class="k4-datum">{t('Bis (mehrere Tage)')}<input class="datum" type="date" min={eintrag.datum} value={eintrag.bis || ''} onchange={(e) => setBis(e.target.value)} /></label>
     {#if !immerOffen}
     <span class="k4-etappe">
       {#if etappeHeute}
@@ -544,7 +551,7 @@
           <span class="aufklapp klein" class:offen={offen[m.id]}></span>
         </button>
         {#if offen[m.id]}
-          <div class="m-body" transition:klapp={{ duration: dauer(200) }}>{#each m.felder as f}{@render feld(f)}{/each}</div>
+          <div class="m-body" transition:klapp={{ duration: dauer(200) }}>{#if m.id === 'kosten'}<AusgabenListe {eintrag} />{/if}{#each m.felder.filter((f) => !f.id.startsWith('kosten_')) as f}{@render feld(f)}{/each}</div>
         {/if}
       </div>
     {/each}

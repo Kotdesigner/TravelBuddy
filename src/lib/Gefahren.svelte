@@ -6,6 +6,10 @@
   import { online } from './netz.js'
   import Strassenlage from './Strassenlage.svelte'
   import { aktualisiereStrassenlage } from './strassenlage-dienst.js'
+  import { geh } from './navigation.js'
+  import WarnLage from './WarnLage.svelte'
+  import WarnKnoepfe from './WarnKnoepfe.svelte'
+  import WarnTest from './WarnTest.svelte'
 
   let { standort = null, laden = false, fehler = null, stand = null, ausCache = false, betroffene = [],
     warnungen = [], betroffeneWarnungen = [], onRefresh,
@@ -41,7 +45,7 @@
 
   <div class="ort-zeile">
     {#if meinOrt}
-      <span class="oz-ok">{t('📍 Standort aktiv · {toFixed}, {toFixed2}', { toFixed: meinOrt.lat.toFixed(3), toFixed2: meinOrt.lon.toFixed(3) })}
+      <span class="oz-ok">{meinOrt.test ? t('🧪 Teststandort · {toFixed}, {toFixed2}', { toFixed: meinOrt.lat.toFixed(3), toFixed2: meinOrt.lon.toFixed(3) }) : t('📍 Standort aktiv · {toFixed}, {toFixed2}', { toFixed: meinOrt.lat.toFixed(3), toFixed2: meinOrt.lon.toFixed(3) })}
         {#if meinOrt.genauigkeit}<span class="oz-gen">±{meinOrt.genauigkeit} m</span>{/if}</span>
       <button class="oz-btn" onclick={onOrt} disabled={ortStatus === 'laeuft'}>{t('↻ neu bestimmen')}</button>
       <!-- Die letzte bekannte Position bleibt stehen (besser als nichts), aber ein
@@ -58,6 +62,8 @@
       {/if}
     {/if}
   </div>
+
+  <div class="lage"><WarnLage gross {geh} /></div>
 
   {#if ausCache}
     <div class="cache-banner">📴 <b>{t('Letzter bekannter Stand')}</b>{#if stand}&nbsp;{t('von {stand}', { stand })}{/if}{#if !$online}&nbsp;{t('· offline')}{/if}{t('. Kann veraltet sein.')} {#if $online}{t('„Aktualisieren“ holt die aktuelle Lage.')}{/if}</div>
@@ -115,6 +121,7 @@
             <div class="w-titel">{w.titel}</div>
             {#if w.ort}<div class="w-ort">📍 {w.ort.slice(0, 160)}</div>{/if}
             {#if w.text}<div class="w-text">{w.text}</div>{/if}
+            <WarnKnoepfe {w} />
           </div>
         {/each}
       </div>
@@ -133,6 +140,8 @@
 
   <!-- Straßenlage WA (Main Roads WA): eigene Kategorie, eigene Zählung -->
   <Strassenlage {orte} {meinOrt} {umkreisKm} />
+
+  <WarnTest {orte} />
 
   <p class="disclaimer">{t('Amtliche Warnungen: DFES (WA), VicEmergency (VIC), Queensland Fire Department (QLD). Straßenlage: Main Roads WA. Der Wetter-Teil unten sind')} <b>{t('abgeleitete Indikatoren')}</b>{t(', keine Warnungen. Diese App ersetzt keine amtliche Warn-App. In der Feuersaison zusätzlich Emergency+, EmergencyWA und VicEmergency nutzen.')}</p>
 
@@ -233,6 +242,7 @@
 .bedingungen{background:var(--warn-flaeche);border:1px solid var(--danger-linie);color:var(--warn-text);border-radius:10px;padding:.6rem .7rem;margin-bottom:.7rem}
 .bed{font-size:.85rem;margin:.15rem 0}
 .bed-wert{font-weight:800;color: var(--danger-text)}
+.lage{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
 .bed-fuss{font-size:.74rem;opacity:.9;margin-top:.35rem}
 .bo-z{margin:.2rem 0;font-size:.84rem}
 .w-staat{font-size:.72rem;opacity:.7;border:1px solid currentColor;border-radius:5px;padding:0 .3rem}

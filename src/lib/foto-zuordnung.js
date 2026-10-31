@@ -6,6 +6,7 @@
 // Ein Meta-Eintrag hängt über `k` (Fingerabdruck der Bilddaten) am Foto, nicht über die
 // Position. So bleiben die Angaben richtig, wenn ein anderes Gerät beim Zusammenführen
 // Fotos ergänzt oder wenn ein Foto gelöscht wird. Alte Einträge ohne fotoMeta gehen weiter.
+import { deckt } from './plan.js'
 import { haversine } from './routing.js'
 import { t, tn } from './i18n.js'
 
@@ -101,7 +102,7 @@ export function zusammenfassung(plan) {
 
 /** Der Eintrag eines Tages, zu dem neue Fotos kommen: der erste mit diesem Datum. */
 export function zielEintrag(journal = [], datum) {
-  const alle = (journal || []).filter((e) => e && e.datum === datum)
+  const alle = (journal || []).filter((e) => e && deckt(e, datum))
   if (!alle.length) return null
   // Bei mehreren Einträgen am selben Tag der älteste: das ist der „Haupteintrag“.
   // Die Liste ist neueste zuerst gespeichert, also der letzte Treffer.

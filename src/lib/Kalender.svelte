@@ -1,6 +1,7 @@
 <script>
   import { t, LOCALE, tn } from './i18n.js'
   import { ZWEI } from './format.js'
+  import { eintragTage } from './plan.js'
   import { reisen, gesamtStart, berechneKalender, verschiebeReise, wanderungen, journal, buchungen, ymd } from './userdata.js'
   import { dauerText } from './wanderungen-daten.js'
   import { katInfo } from './reisekalender.js'
@@ -35,7 +36,7 @@
   // LOGBUCHTAGE sind ein Rückblick, kein Plan. Jeder Tag als eigene Zeile machte
   // aus dem Kalender eine zweite Zeitleiste. Hier steht deshalb nur, WIE VIEL einer
   // Etappe schon geschrieben ist — das zeigt die Lücken, ohne den Plan zuzuschütten.
-  const logbuchTage = $derived($journal.filter((e) => e.datum).map((e) => e.datum))
+  const logbuchTage = $derived($journal.flatMap(eintragTage))
 
   // GEBUCHTES aus dem Reisekalender — feste Punkte, die der Plan einhalten muss.
   const gebucht = $derived(

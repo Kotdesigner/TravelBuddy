@@ -57,6 +57,7 @@ export function leseReisekalender(p) {
       platzhalter: !!e.filler,
       special: e.special || '',
       flugNr: e.live?.mode === 'flight' ? (e.live.flightNo || '') : '',
+      zeit: /T(\d{2}:\d{2})/.exec(e.live?.when || '')?.[1] || '',
       docs: Array.isArray(e.docs)
         ? e.docs.filter((d) => d && d.file).map((d) => ({ label: d.label || t('Dokument'), datei: d.file, art: d.kind || 'doc' }))
         : [],

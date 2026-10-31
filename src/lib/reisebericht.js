@@ -87,7 +87,7 @@ export function berichtModell({ reisen = [], journal = [], gesamtStart, etappenI
     for (const j of eintraege) dazu(entschaerfe(String(j.ort || '').trim()))
     for (const x of routen) x.stopps.forEach(dazu)
     const tage = mitTexten
-      ? eintraege.filter((j) => String(j.text || '').trim()).map((j) => ({ datum: j.datum, ort: entschaerfe(j.ort || ''), text: entschaerfe(String(j.text).trim()) }))
+      ? eintraege.filter((j) => String(j.text || '').trim()).map((j) => ({ datum: j.datum, bis: j.bis || '', ort: entschaerfe(j.ort || ''), text: entschaerfe(String(j.text).trim()) }))
       : []
     const fotos = alleFotos.filter((f) => f.etappeId === r.id && fotoWahl.has(f.id)).map(({ id, src, datum, ort, geraetId }) => (geraetId ? { id, src, datum, ort, geraetId } : { id, src, datum, ort }))
     return { id: r.id, name: entschaerfe(r.name || t('Etappe')), farbe: /^#[0-9a-f]{3,8}$/i.test(r.farbe || '') ? r.farbe : '#8a3f16', von: e.von, bis: e.bis, tage: e.tage, routen, orte: orte.slice(0, 40), eintraege: tage, fotos }
@@ -147,7 +147,7 @@ function etappeHtml(e, kugel) {
     ? `<ul class="routen">${e.routen.map((r) => `<li><b>${r.art === 'flug' ? '✈️' : '🚐'} ${esc(r.name || (r.stopps.length > 1 ? r.stopps[0] + ' → ' + r.stopps.at(-1) : r.stopps[0]))}</b>${r.stopps.length ? `<small>${r.stopps.slice(0, 16).map(esc).join(' → ')}${r.stopps.length > 16 ? ' …' : ''}</small>` : ''}</li>`).join('')}</ul>`
     : ''
   const orte = e.orte.length ? `<div class="orte" aria-label="${t('Orte')}">${e.orte.map((o) => `<span>${esc(o)}</span>`).join('')}</div>` : ''
-  const texte = e.eintraege.map((t) => `<div class="tag"><h3>${esc(wochentagLang(t.datum))}, ${esc(tagMonatJahr(t.datum))}${t.ort ? `, ${esc(t.ort)}` : ''}</h3><p>${esc(t.text)}</p></div>`).join('')
+  const texte = e.eintraege.map((t) => `<div class="tag"><h3>${esc(t.bis ? bereich(t.datum, t.bis) : `${wochentagLang(t.datum)}, ${tagMonatJahr(t.datum)}`)}${t.ort ? `, ${esc(t.ort)}` : ''}</h3><p>${esc(t.text)}</p></div>`).join('')
   const fotos = e.fotos.length
     ? `<div class="fotos">${e.fotos.map((f) => `<figure><img src="${esc(f.src)}" alt="${esc(f.ort || t('Reisefoto'))}" loading="lazy"><figcaption>${[f.ort, tagMonatJahr(f.datum)].filter(Boolean).map(esc).join(', ')}</figcaption></figure>`).join('')}</div>`
     : ''

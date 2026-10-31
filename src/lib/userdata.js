@@ -336,10 +336,19 @@ function rettenAusNotspeicher() {
   // Der Notspeicher wird erst geleert, wenn der Wert wirklich in der Datenbank steht (persist).
 }
 
+function behalteErgaenztes(alte = [], neue = []) {
+  const vorher = new Map(alte.filter((e) => e.ergaenzt).map((e) => [e.id, e]))
+  return neue.map((e) => {
+    const a = vorher.get(e.id)
+    return a ? { ...e, ...Object.fromEntries(a.ergaenzt.map((k) => [k, a[k]])), ergaenzt: a.ergaenzt } : e
+  })
+}
+
 export function neueVorabKosten(vorlage = {}) {
   const heute = new Date()
   const datum = vorlage.datum || `${heute.getFullYear()}-${String(heute.getMonth() + 1).padStart(2, '0')}-${String(heute.getDate()).padStart(2, '0')}`
   const k = { id: uid(), text: vorlage.text || '', kat: vorlage.kat || 'kosten_sonstiges', betrag: vorlage.betrag ?? '', waehrung: vorlage.waehrung || 'EUR', datum, reiseId: vorlage.reiseId || null }
+  if (vorlage.keinTermin) k.keinTermin = true
   vorabKosten.update((ks) => [...ks, stempeln(k)])
   return k.id
 }
@@ -780,6 +789,7 @@ export function neuerJournalEintrag(vorlage = {}) {
   const datum = vorlage.datum || `${heute.getFullYear()}-${String(heute.getMonth() + 1).padStart(2, '0')}-${String(heute.getDate()).padStart(2, '0')}`
   const e = {
     id: uid(), datum,
+    ...(vorlage.bis > datum ? { bis: vorlage.bis } : {}),
     ort: vorlage.ort || '', lat: vorlage.lat ?? null, lon: vorlage.lon ?? null, ortId: vorlage.ortId || null,
     // Reise-Bezug von Anfang an im Objekt — sonst entsteht er erst beim ersten
     // Auswählen und fehlt in Backups älterer Einträge stillschweigend.
@@ -830,7 +840,7 @@ export function importiereReisekalender(kalender, { orte = [], reisenAnlegen = t
     stand: kalender.stand, von: kalender.von, bis: kalender.bis,
     // Eigene, aus Mails eingefügte Buchungen bleiben beim Neu-Import des Kalenders erhalten,
     // ebenso selbst zugeordnete Belege (am Termin mit derselben ID bzw. bei den eigenen Dokumenten)
-    events: [...eigeneBelegeUebernehmen(vorher?.events, kalender.events), ...((vorher?.events || []).filter((e) => e.quelle === 'eigen'))],
+    events: [...behalteErgaenztes(vorher?.events, eigeneBelegeUebernehmen(vorher?.events, kalender.events)), ...((vorher?.events || []).filter((e) => e.quelle === 'eigen'))],
     persoenlich: [...kalender.persoenlich, ...((vorher?.persoenlich || []).filter((d) => d.eigen))],
     // Damit „entfernen" wirklich zurücknimmt, was der Import angerichtet hat.
     startVorher: get(gesamtStart),
@@ -888,6 +898,11 @@ export function entferneReisekalender() {
 // `von`/`bis` des Topfs bleiben unangetastet: sie beschreiben den importierten
 // Reisekalender (Plan-Hinweis „Etappen nach dem Rückflug“ hängt daran).
 // `stand` rückt vor, damit das Zusammenführen diese Fassung als die neuere erkennt.
+
+/** Angaben an einem Termin ergänzen (Flugnummer, Sitzplatz …). `ergaenzt` schützt sie vor dem nächsten Kalender-Import. */
+export function aendereTermin(id, patch) {
+  buchungen.update((b) => b && ({ ...b, stand: new Date().toISOString(), events: b.events.map((e) => (e.id === id ? { ...e, ...patch, ergaenzt: Object.keys(patch) } : e)) }))
+}
 
 /** Fügt fertige Termine (siehe buchung-erkennen.js → alsBuchungen) hinzu. Gibt die Anzahl zurück. */
 export function buchungenEinfuegen(neue) {

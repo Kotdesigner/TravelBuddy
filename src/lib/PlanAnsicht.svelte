@@ -1,4 +1,5 @@
 <script>
+  import { lage } from './warnlage-dienst.js'
   import { t, tn } from './i18n.js'
   import { merkeMorph, istMorph, morphName } from './motion.js'
   import { heuteTag } from './heute.js'
@@ -50,7 +51,7 @@
       zeigeToast(t('„{name}“ gelöscht', { name: e.reise.name }), 'info')
     }
   }
-  const symbol = (r) => (artVon(r) === 'flug' ? '✈️' : '🚐')
+  const symbol = (r) => ({ flug: '✈️', bahn: '🚆' }[artVon(r)] || '🚐')
 </script>
 
 <div class="pl">
@@ -98,6 +99,7 @@
             <span class="pl-inhalt">
               <span class="pl-name">{e.reise.name}{#if jetzt}<span class="pl-jetzt">{t('heute')}</span>{/if}</span>
               <span class="pl-meta">
+                {#if $lage.proEtappe[e.reise.id]}<span class="pl-warn">{tn($lage.proEtappe[e.reise.id].length, '⚠️ {n} Warnung', '⚠️ {n} Warnungen')}</span>{/if}
                 {#if e.reise.route?.km}<span>{symbol(e.reise)} {zahl(e.reise.route.km)} km</span>{/if}
                 {#if z.routen.length}<span>🛣️ {tn(z.routen.length, '{n} Route', '{n} Routen')}{#if z.km}&nbsp;· {zahl(z.km)} km{/if}</span>{/if}
                 {#if z.wand}<span>🥾 {z.wand}</span>{/if}
@@ -149,6 +151,7 @@
 </div>
 
 <style>
+  .pl-warn { color: var(--danger-text); font-weight: 700; }
   .pl { display: flex; flex-direction: column; gap: 14px; }
   .pl-zeitraum { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
   .pl-zf { display: flex; flex-direction: column; gap: 5px; flex: 1 1 150px; min-width: 0; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }

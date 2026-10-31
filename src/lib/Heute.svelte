@@ -5,7 +5,7 @@
   // noch zu erledigen ist. Unterwegs: welcher Tag, welche Etappe, was heute und morgen
   // gebucht ist, und der Knopf, um den Tag ins Logbuch zu schreiben.
   import { reisen, gesamtStart, buchungen, wanderungen, journal, vorbereitung, istAn, neuerJournalEintrag } from './userdata.js'
-  import { etappenMitDatum, reiseStatus, plusTage, ymd, routenDerEtappe, tageZwischen } from './plan.js'
+  import { etappenMitDatum, reiseStatus, plusTage, ymd, routenDerEtappe, tageZwischen, eintragTage, deckt } from './plan.js'
   import { mitWochentag, tagMonatJahr, tageText, bereich, zahl } from './format.js'
   import { katInfo } from './reisekalender.js'
   import { STATUS_MAP } from './wanderungen-daten.js'
@@ -13,6 +13,10 @@
   import { VORBEREITUNG } from './vorbereitung-daten.js'
 
   import FahrtHeute from './FahrtHeute.svelte'
+  import FlugKarte from './FlugKarte.svelte'
+  import WarnLage from './WarnLage.svelte'
+  import { fluege, flugspeicher, uhr } from './flug-dienst.js'
+  import { flugImFokus, umstiege } from './flug.js'
   let { warnAnzahl = 0, sperrAnzahl = 0, sperrRoute = 0, onneu = () => {}, ontag = () => {}, geh = () => {} } = $props()
 
   const heute = $derived($heuteTag)
@@ -23,14 +27,22 @@
   const am = (d) => termine.filter((b) => b.datum === d)
   const naechste = $derived(termine.filter((b) => b.datum >= heute).sort((a, b) => a.datum.localeCompare(b.datum)).slice(0, 3))
   const wandAm = (d) => $wanderungen.filter((w) => w.datum === d)
-  const heuteGeschrieben = $derived($journal.some((j) => j.datum === heute))
+  const heuteGeschrieben = $derived($journal.some((j) => deckt(j, heute)))
   const vorbItems = $derived([...VORBEREITUNG.flatMap((g) => g.items), ...($vorbereitung.custom || [])])
   const vorbFertig = $derived(vorbItems.filter((i) => istAn($vorbereitung.checked[i.id])).length)
-  const geschriebenGesamt = $derived(new Set($journal.filter((j) => s.start && j.datum >= s.start && j.datum <= s.ende).map((j) => j.datum)).size)
+  const geschriebenGesamt = $derived(new Set($journal.flatMap(eintragTage).filter((d) => s.start && d >= s.start && d <= s.ende)).size)
   const routenJetzt = $derived(s.etappe ? routenDerEtappe($reisen, s.etappe.reise.id) : [])
+  const flugJetzt = $derived(flugImFokus($fluege.alle, $flugspeicher.staende, $uhr))
+  const umstiegJetzt = $derived(flugJetzt ? umstiege($fluege.fluege, $flugspeicher.staende).find((u) => u.nachFlug === flugJetzt.id) : null)
 </script>
 
 <section class="ht" aria-label={t('Heute')}>
+  <WarnLage {geh} />
+  {#if flugJetzt}
+    <a class="ht-flug" href="#/mehr/fluege">
+      <FlugKarte flug={flugJetzt} stand={$flugspeicher.staende[flugJetzt.id]} staende={$flugspeicher.staende} jetzt={$uhr} umstieg={umstiegJetzt} kurz />
+    </a>
+  {/if}
   {#if s.phase === 'leer'}
     <div class="ht-karte">
       <p class="ht-gross">{t('Willkommen.')}</p>
@@ -130,4 +142,5 @@
   .ht-band { width: 6px; align-self: stretch; border-radius: 3px; background: var(--farbe); flex: none; }
   .ht-schreiben { width: 100%; }
   .ht-warn { background: var(--danger-flaeche); border-color: var(--danger-linie); }
+  .ht-flug { display: block; color: inherit; text-decoration: none; animation: rein-unten var(--t-slow) var(--ease-out) backwards; }
 </style>

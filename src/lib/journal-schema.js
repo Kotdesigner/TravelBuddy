@@ -33,6 +33,7 @@ export const MODULE = jeSprache(() => ([
       { id: 'kosten_attraktion', label: t('Attraktionen / Touren'), typ: 'zahl', icon: '🎟️', einheit: '€' },
       { id: 'kosten_sonstiges', label: t('Sonstiges'), typ: 'zahl', icon: '🛒', einheit: '€' },
       // Short-Values (laufender Konsum)
+      { id: 'kosten_essen', label: t('Essen gehen'), typ: 'zahl', icon: '🍽️', einheit: '€' },
       { id: 'kosten_lebensmittel', label: t('Lebensmittel'), typ: 'zahl', icon: '🍎', einheit: '€' },
       { id: 'kosten_genuss', label: t('Genussmittel'), typ: 'zahl', icon: '🍺', einheit: '€' },
       { id: 'kosten_bedarf', label: t('Täglicher Bedarf'), typ: 'zahl', icon: '🧴', einheit: '€' },

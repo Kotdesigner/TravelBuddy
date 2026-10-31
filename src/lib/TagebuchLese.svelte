@@ -68,7 +68,8 @@
   const kapitel = $derived.by(() => {
     const k = []
     const dazu = (id, titel, untertitel, farbe, tage, etappe = null) => {
-      const g = tage.map((t) => ({ ...t, journal: t.journal.filter(eintragHatInhalt) })).filter(tagGilt)
+      // Ein Eintrag über mehrere Tage steht nur einmal im Buch, an seinem ersten Tag
+      const g = tage.map((t) => ({ ...t, journal: t.journal.filter((j) => eintragHatInhalt(j) && j.datum === t.datum) })).filter(tagGilt)
       // Mit „Etappen“ steht jede Etappe im Buch, auch wenn dort noch nichts geschrieben ist
       if (g.length || (etappe && zeige.etappen)) k.push({ id, titel, untertitel, farbe, tage: g, etappe })
     }
@@ -220,6 +221,7 @@
     try { return new Date(d + 'T00:00:00').toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) }
     catch { return d }
   }
+  const datumVon = (e) => (e.bis ? bereich(e.datum, e.bis) : datumLang(e.datum))
   function datumKurz(d) {
     if (!d) return ''
     try { return new Date(d + 'T00:00:00').toLocaleDateString(LOCALE, { day: 'numeric', month: 'short', year: 'numeric' }) }
@@ -379,7 +381,7 @@
       ? `<div class="t-route-print">${rt.stops.map((s) => `<span>${esc(s)}</span>`).join('<b>→</b>')}${rt.km ? ` <em>🛣️ ${rt.km} km</em>` : ''}</div>`
       : ''
     return `<article class="tag" style="--akz:${akzent(e)}">
-      <header class="t-kopf"><div class="t-meta">${nr}<span class="t-datum">${esc(datumLang(e.datum))}</span></div>
+      <header class="t-kopf"><div class="t-meta">${nr}<span class="t-datum">${esc(datumVon(e))}</span></div>
       ${reiseLine}${routeLine}
       ${vorspann}
       ${e.ort ? `<h3 class="t-ort">${esc(e.ort)}<span class="t-region">${reg}</span></h3>` : ''}
@@ -693,7 +695,7 @@
         <header class="t-kopf">
           <div class="t-meta">
             {#if nrAm.get(e.datum)}<span class="t-nr">{t('Tag {get}', { get: nrAm.get(e.datum) })}</span>{/if}
-            <span class="t-datum">{datumLang(e.datum)}</span>
+            <span class="t-datum">{datumVon(e)}</span>
             {#if rt}<span class="t-reise" style="--rf:{rt.farbe}">🧭 {rt.name}{rt.abschnitt}{#if rt.km && !rt.ganze}{' · '}🛣️ {rt.km} km{/if}</span>{/if}
           </div>
           {#if rt?.ganze && rt.stops?.length}

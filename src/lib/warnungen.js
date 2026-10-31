@@ -149,11 +149,13 @@ function bau(w) {
 }
 
 // ---------- Abruf ----------
+const WARTEZEIT = 20000   // eine hängende Quelle darf im Funkloch nicht alles aufhalten
+
 /** Holt alle Quellen parallel. Eine kaputte Quelle kippt nicht die anderen. */
 export async function holeWarnungen() {
   const ergebnisse = await Promise.allSettled(
     QUELLEN.map(async (q) => {
-      const r = await fetch(q.url)
+      const r = await fetch(q.url, AbortSignal.timeout ? { signal: AbortSignal.timeout(WARTEZEIT) } : {})
       if (!r.ok) throw new Error(`${q.name}: HTTP ${r.status}`)
       return { q, d: await r.json() }
     })
@@ -270,17 +272,95 @@ export function warnungenFuer(warnungen, lat, lon, umkreisKm = 0) {
     .sort((a, b) => b.rang - a.rang || a.km - b.km)
 }
 
-/** Warnungen entlang einer Route (Geometrie [[lon,lat], …]) im Umkreis. */
-export function warnungenAnRoute(warnungen, geometrie, umkreisKm = 0, schritt = 6) {
-  const treffer = new Map()
-  for (const w of warnungen || []) {
-    let min = Infinity
-    for (let i = 0; i < geometrie.length; i += schritt) {
-      const km = abstandKm(w, geometrie[i][1], geometrie[i][0])
-      if (km < min) min = km
-      if (min === 0) break
-    }
-    if (min <= umkreisKm) treffer.set(w.id, { ...w, km: min })
-  }
-  return [...treffer.values()].sort((a, b) => b.rang - a.rang || a.km - b.km)
+// Umriss einer Warnung als Rahmen [minLon, minLat, maxLon, maxLat], null ohne Geometrie
+export function warnRahmen(w) {
+  const alle = [...(w.ringe || []).flat(), ...(w.punkte || []), ...(w.linien || []).flat()]
+  if (!alle.length) return null
+  return [Math.min(...alle.map((p) => p[0])), Math.min(...alle.map((p) => p[1])), Math.max(...alle.map((p) => p[0])), Math.max(...alle.map((p) => p[1]))]
 }
+
+/** Die gemeldete Position: der Meldepunkt, sonst die Mitte des Gebiets. */
+export function warnMitte(w) {
+  if (w.punkte?.length) return { lat: w.punkte[0][1], lon: w.punkte[0][0] }
+  const r = warnRahmen(w)
+  return r ? { lat: (r[1] + r[3]) / 2, lon: (r[0] + r[2]) / 2 } : null
+}
+
+/** Größe des Warngebiets aus den Flächen. null, wenn nur ein Punkt gemeldet ist. */
+export function gebietGroesse(w) {
+  const ringe = w.ringe || []
+  if (!ringe.length) return null
+  const r = warnRahmen(w), cos = Math.cos((((r[1] + r[3]) / 2) * Math.PI) / 180)
+  let flaeche = 0
+  for (const ring of ringe) {
+    let f = 0
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) f += ring[j][0] * ring[i][1] - ring[i][0] * ring[j][1]
+    flaeche += Math.abs(f) / 2
+  }
+  return { flaecheKm2: flaeche * cos * GRAD_KM * GRAD_KM, breiteKm: (r[2] - r[0]) * cos * GRAD_KM, hoeheKm: (r[3] - r[1]) * GRAD_KM }
+}
+
+const ABTASTUNG_KM = 5
+
+// Das Stück der Teilstrecke a→b im Rahmen, als Anteile 0 bis 1. null, wenn sie ihn nicht berührt.
+function imRahmen(a, b, [x0, y0, x1, y1]) {
+  const dx = b[0] - a[0], dy = b[1] - a[1]
+  let von = 0, bis = 1
+  for (const [p, q] of [[-dx, a[0] - x0], [dx, x1 - a[0]], [-dy, a[1] - y0], [dy, y1 - a[1]]]) {
+    if (p === 0) { if (q < 0) return null; continue }
+    const r = q / p
+    if (p < 0) { if (r > bis) return null; if (r > von) von = r }
+    else { if (r < von) return null; if (r < bis) bis = r }
+  }
+  return [von, bis]
+}
+
+// Geht die Linie ab Punkt `start` ab, jede Teilstrecke, aber nur dort, wo sie dem Warngebiet nahekommt.
+// Ohne Umkreis prüft sie fein genug für kleine Gebiete auf langen Geraden.
+// Liefert die geringste Entfernung und die Kilometer entlang der Strecke bis zu dieser Stelle.
+function naeheZurLinie(w, geo, umkreisKm, start) {
+  const r = warnRahmen(w)
+  if (!r || geo.length < 2) return null
+  const cosR = Math.max(0.2, Math.cos((((r[1] + r[3]) / 2) * Math.PI) / 180))
+  const dLat = (umkreisKm + 10) / GRAD_KM, dLon = dLat / cosR
+  const rahmen = [r[0] - dLon, r[1] - dLat, r[2] + dLon, r[3] + dLat]
+  const klein = Math.min((r[2] - r[0]) * cosR, r[3] - r[1]) * GRAD_KM
+  const schritt = umkreisKm >= 10 ? ABTASTUNG_KM : Math.max(0.5, Math.min(ABTASTUNG_KM, klein / 3))
+  let km = Infinity, kmBis = null, gefahren = 0, seit = schritt
+  const pruefe = (a, b, f, bisher) => {
+    const d = abstandKm(w, a[1] + (b[1] - a[1]) * f, a[0] + (b[0] - a[0]) * f)
+    if (d < km) { km = d; kmBis = bisher }
+  }
+  // Echte Routen haben alle paar Meter einen Punkt: geprüft wird nach Strecke, nicht je Punkt
+  for (let i = Math.max(1, start + 1); i < geo.length; i++) {
+    const a = geo[i - 1], b = geo[i], cos = Math.cos((a[1] * Math.PI) / 180)
+    const laenge = Math.hypot((b[0] - a[0]) * cos, b[1] - a[1]) * GRAD_KM
+    const stueck = imRahmen(a, b, rahmen)
+    if (stueck) {
+      const [von, bis] = stueck, lang = (bis - von) * laenge
+      let pos = schritt - seit
+      while (pos <= lang) {
+        const f = von + (lang ? (bis - von) * (pos / lang) : 0)
+        pruefe(a, b, f, gefahren + laenge * f)
+        if (km === 0) return { km, kmBis }
+        pos += schritt
+      }
+      seit = lang - (pos - schritt)
+    } else seit = schritt
+    gefahren += laenge
+  }
+  return { km, kmBis }
+}
+
+/** Warnungen entlang einer Route (Geometrie [[lon,lat], …]) im Umkreis, ab Punkt `start`. */
+export function warnungenAnRoute(warnungen, geometrie, umkreisKm = 0, start = 0) {
+  const treffer = []
+  for (const w of warnungen || []) {
+    const n = naeheZurLinie(w, geometrie, umkreisKm, start)
+    if (n && n.km <= umkreisKm) treffer.push({ ...w, km: n.km, kmBis: n.kmBis ?? 0 })
+  }
+  return treffer.sort((a, b) => b.rang - a.rang || a.km - b.km)
+}
+
+/** Eine Warnung aus fertigen Angaben, zum Beispiel die Probe-Warnung im Testmodus. */
+export const bauWarnung = (w) => bau(w)

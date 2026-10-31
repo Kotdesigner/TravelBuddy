@@ -86,6 +86,8 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - 🗺️ **Offline map** for all of Australia, in detail where you travel
 - ⛺ **Supplies on the route:** fuel, water, toilets, camps, rest areas, shops, workshops, clinics
 - 🔥 **Official warnings** for fire, flood and storms in WA, VIC and QLD
+- 🚨 **Warnings along your route:** where you are, on the road ahead, on every stage and hike, even when a route runs through several danger zones
+- 📡 **Exact location of every warning:** size of the area, distance, Google Maps, and offline on your own map with radius and your position
 - 🚧 **WA road conditions** with closures right on your route
 - 🆘 **Emergency mode** fully offline: position, nearest help, emergency numbers
 - ✅ **"I'm OK" log** to export and share
@@ -115,7 +117,10 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - ✈️ **Trip preparation** with countdown and checklist
 - 🪪 **Document expiry warnings** for passport, visa and more
 - 💶 **Budget in euro and AU$** at the daily exchange rate
-- 🧾 **Costs per day** in 18 categories, straight into the budget
+- 🧾 **Costs per day** in 23 categories, as many single items as you like
+- 💰 **Cost analysis** by short values, long values, transport, stays and experiences, per stage and down to the single item
+- 🗒️ **Entries over several days** on stages and in the logbook, for when you did not write every day
+- 🛫 **Flights and trains live:** status, new times, terminal, gate, check-in desk, platform, baggage belt and connections
 - 🎒 **Outback packing list**
 - 🔄 **Backup and sync** between Mac and iPhone, merged safely
 - 🔎 **One search for everything:** places, days, animals, bookings, notes
@@ -222,16 +227,17 @@ TravelBuddy shows the light before you get there, at every one of the 144 places
 - **Offline map** for all of Australia, in detail the west coast, the east coast, Melbourne, Cairns and the Whitsundays.
 - **Supplies:** fuel, water, toilets, camps, rest areas, shops, workshops and clinics along the route, with the route kilometre.
 - **Hazards:** warnings from Western Australia, Victoria and Queensland in a radius you choose, plus **WA road conditions** with closures on your route.
+- **Warnings along your route:** the app checks your position, the road ahead, every stage and every hike. Each warning shows the size of the area and the distance. You can open it in **Google Maps** or see it offline on your own map, with radius and your position. One button on the map shows or hides the warnings. A test mode lets you try all of this with made-up warnings.
 - **Emergency,** fully offline: your GPS position ready to copy and read out, nearest help with distance and direction, emergency numbers, sharing your location and an **"I'm OK" log** you can export.
 - **"Ready to go?"** checks before you drive into a dead zone what is really stored offline on this device.
 
 ### 📖 The logbook
-One entry per day (or several), sorted by stage, with text, photos and a **voice memo**, or simply **dictate** it (online). Photos find their day, place and route kilometre on their own from the image data. And then it really starts: **16 modules with 72 fields**, fill in whatever fits.
+One entry per day (or several, or one covering a few days), sorted by stage, with text, photos and a **voice memo**, or simply **dictate** it (online). Photos find their day, place and route kilometre on their own from the image data. And then it really starts: **16 modules with 72 fields**, fill in whatever fits.
 
 | Module | What goes in |
 |---|---|
 | 📊 **Quick stats** | daily km, temperature and weather, the **fly factor**, signal, song of the day, mood, roadkill density, road trains counted |
-| 💸 **Costs and transport** | 18 categories from fuel to drone, in AU$ or euro, feeding straight into your budget |
+| 💸 **Costs and transport** | 23 categories from fuel to drone, as many single items as you like, in AU$ or euro, feeding straight into your budget and the cost analysis |
 | 👃 **Senses and atmosphere** | "the sound today was …", "I can still smell …", the dominant colour, how the heat and wind felt |
 | 🦘 **Roadside and wildlife** | animals seen alive (with photo, they go to your wildlife album), a **roadkill counter** for 12 species, a counter for **roadside curiosities**: Big Things, odd mailboxes, shoe fences, rust buckets, statues, strange warning signs, and how remote it is to the next stop |
 | 🚐 **Vanlife** | what the photos don't show, what was cooked on the gas stove (with a taste rating), why tonight's campsite was special |
@@ -284,6 +290,8 @@ TravelBuddy collects the music of the places you pass through, **automatically, 
 - **Tickets and documents** open offline, protected by **Face ID, Touch ID or Windows Hello** if you like. They never leave the device.
 - **Trip preparation** with a countdown and a ready-made checklist (weeks before, just before, departure day) plus your own points, **documents** with expiry dates and warnings.
 - **Budget in euro and AU$** at the daily rate, pre-trip costs, an outback **packing list**.
+- **Flights and trains:** add them under route, stage or pre-trip costs with number, booking, seat and document. Under More → Flights & trains you see status, new times, terminal, gate, check-in desk, platform, baggage belt and connections. It also shows up on the Today page and 24 hours before departure. Flights need your own free [AeroDataBox](https://aerodatabox.com) key from RapidAPI, German trains need none. Without internet you see the last status.
+- **Costs:** under More → Costs everything from pre-trip costs and logbook comes together: short values, long values, transport, stays and experiences, per stage and per item. Long values stay out of the daily average. Every list adds up exactly to the total.
 - **Backup and sync** between Mac and iPhone: importing merges and shows beforehand what will change. Nothing gets lost.
 - **One search for everything:** places, days, animals, bookings, notes.
 
@@ -438,7 +446,7 @@ The Windows build embeds the icon with `rsrc`: install it once with `go install 
 
 ### Tests
 
-Each test runs on its own, for example `node tests/plan.test.mjs`. There are **over 1,200 automated checks** in 27 test files, including a rule against rounding errors: the parts always add up to exactly the total shown. `node tests/basic-privat.test.mjs` makes sure no personal data ends up in the code or the build.
+Each test runs on its own, for example `node tests/plan.test.mjs`. There are **over 1,400 automated checks** in 30 test files, including a rule against rounding errors: the parts always add up to exactly the total shown. `node tests/basic-privat.test.mjs` makes sure no personal data ends up in the code or the build.
 
 ---
 
@@ -447,6 +455,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - No account, no server, no ads, no tracking.
 - All data stays in your device's storage. Sync Mac and iPhone with a backup file, for example via AirDrop. Importing merges, nothing gets deleted.
 - Tickets, IDs and journal photos stay on the device and are not part of the backup.
+- Live flight and train data are optional. Only then does the flight number with date go to AeroDataBox via RapidAPI, or the station name to DBF. Your key stays on this device and is not part of the backup.
 
 ---
 
@@ -458,7 +467,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 | Desktop | Mac: Swift with WKWebView and a built-in server · Windows: Go with an embedded server, window in Microsoft Edge |
 | Maps | [MapLibre GL](https://maplibre.org), offline tiles as [PMTiles](https://protomaps.com/docs/pmtiles) from [Protomaps](https://protomaps.com) and [OpenStreetMap](https://www.openstreetmap.org), globe from [Natural Earth](https://www.naturalearthdata.com) |
 | Routes | [OSRM](https://project-osrm.org) for road routes, own offline analysis for fuel and water gaps, supplies and driving days |
-| Live data | [Open-Meteo](https://open-meteo.com), DFES Emergency WA, VicEmergency, Queensland Fire Department, Main Roads WA, [frankfurter.app](https://frankfurter.app) |
+| Live data | [Open-Meteo](https://open-meteo.com), DFES Emergency WA, VicEmergency, Queensland Fire Department, Main Roads WA, [frankfurter.app](https://frankfurter.app), [AeroDataBox](https://aerodatabox.com) via RapidAPI for flights, [DBF](https://dbf.finalrewind.org) for German trains |
 | Places | Nominatim, Wikipedia and Wikimedia Commons |
 | Sun and moon | [SunCalc](https://github.com/mourner/suncalc), offline |
 | Security | WebAuthn with the PRF extension (Face ID, Touch ID, Windows Hello), AES-GCM, all in the browser |
@@ -471,6 +480,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - [x] **Version 1: Western Australia** with planning, logbook, offline map, supplies and hazards
 - [x] Setup assistant on first launch, trip dates in the header, adjustable text and overall size
 - [x] Source code here on GitHub, apps for Mac and Windows
+- [x] **Version 1.1:** flights and trains live, cost analysis, entries over several days, warnings along the route with offline map
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -558,6 +568,8 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - 🗺️ **Offline-Karte** für ganz Australien, im Detail dort, wo du unterwegs bist
 - ⛺ **Versorgung an der Route:** Tankstellen, Wasser, Toiletten, Camps, Rastplätze, Läden, Werkstätten, Kliniken
 - 🔥 **Amtliche Warnungen** zu Feuer, Flut und Unwetter in WA, VIC und QLD
+- 🚨 **Warnungen entlang der Route:** am Standort, auf der Strecke voraus, auf jeder Etappe und Wanderung, auch wenn die Strecke mehrere Gefahrengebiete kreuzt
+- 📡 **Genaue Lage jeder Warnung:** Größe des Gebiets, Entfernung, Google Maps und offline auf der eigenen Karte mit Umkreis und deinem Standort
 - 🚧 **Straßenlage WA** mit Sperrungen direkt auf deiner Route
 - 🆘 **Notfall-Modus** komplett offline: Standort, nächste Hilfe, Notrufnummern
 - ✅ **„Ich bin OK“-Protokoll** zum Exportieren und Teilen
@@ -587,7 +599,10 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - ✈️ **Reisevorbereitung** mit Countdown und Checkliste
 - 🪪 **Warnung vor Ablaufdaten** für Pass, Visum und mehr
 - 💶 **Budget in Euro und AU$** zum Tageskurs
-- 🧾 **Kosten je Tag** in 18 Kategorien, direkt im Budget
+- 🧾 **Kosten je Tag** in 23 Kategorien, beliebig viele einzelne Posten
+- 💰 **Kostenauswertung** nach Short-Values, Long-Values, Verkehr, Unterkunft und Erlebnissen, je Etappe und bis zum einzelnen Posten
+- 🗒️ **Einträge über mehrere Tage** an Etappe und Logbuch, wenn du nicht jeden Tag schreibst
+- 🛫 **Flüge und Züge live:** Status, neue Zeiten, Terminal, Gate, Schalter, Gleis, Gepäckband und Umstieg
 - 🎒 **Packliste fürs Outback**
 - 🔄 **Backup und Abgleich** zwischen Mac und iPhone, sicher zusammengeführt
 - 🔎 **Eine Suche für alles:** Orte, Tage, Tiere, Buchungen, Notizen
@@ -692,16 +707,17 @@ TravelBuddy zeigt das Licht, bevor du dort bist, an jedem der 144 Orte und an je
 - **Offline-Karte** für ganz Australien, im Detail Westküste, Ostküste, Melbourne, Cairns und Whitsundays.
 - **Versorgung:** Tankstellen, Wasserstellen, Toiletten, Camps, Rastplätze, Läden, Werkstätten und Kliniken entlang der Route mit Streckenkilometer.
 - **Gefahrenlage:** Warnungen aus Western Australia, Victoria und Queensland im Umkreis deiner Wahl, dazu die **Straßenlage WA** mit Sperrungen auf deiner Route.
+- **Warnungen entlang der Route:** Die App prüft deinen Standort, die Strecke voraus, jede Etappe und jede Wanderung. Zu jeder Warnung stehen die Größe des Gebiets und die Entfernung da. Du öffnest sie in **Google Maps** oder siehst sie offline auf der eigenen Karte mit Umkreis und deinem Standort. Ein Knopf auf der Karte blendet die Warnungen ein und aus. Im Testmodus probierst du das mit erfundenen Warnungen aus.
 - **Notfall,** komplett offline: GPS-Standort zum Kopieren und Vorlesen, nächste Hilfe mit Entfernung und Richtung, Notrufnummern, Standort teilen und ein **„Ich bin OK“-Protokoll** zum Exportieren.
 - **„Bereit für unterwegs?“** prüft vor der Fahrt ins Funkloch, was wirklich offline auf diesem Gerät liegt.
 
 ### 📖 Das Logbuch
-Ein Eintrag je Tag (oder mehrere), sortiert nach Etappe, mit Text, Fotos und **Sprachnotiz**, oder einfach **diktiert** (online). Fotos finden ihren Tag, ihren Ort und den Streckenkilometer anhand ihrer Bilddaten von selbst. Und dann geht es erst los: **16 Module mit 72 Feldern**, ausgefüllt wird, was passt.
+Ein Eintrag je Tag (oder mehrere, oder einer über ein paar Tage), sortiert nach Etappe, mit Text, Fotos und **Sprachnotiz**, oder einfach **diktiert** (online). Fotos finden ihren Tag, ihren Ort und den Streckenkilometer anhand ihrer Bilddaten von selbst. Und dann geht es erst los: **16 Module mit 72 Feldern**, ausgefüllt wird, was passt.
 
 | Modul | Was hineinkommt |
 |---|---|
 | 📊 **Quick-Stats** | Tageskilometer, Temperatur und Wetter, der **Fliegen-Faktor**, Empfang, Song des Tages, Stimmung, Roadkill-Dichte, gezählte Road-Trains |
-| 💸 **Kosten und Verkehr** | 18 Kategorien von Sprit bis Drohne, in AU$ oder Euro, direkt im Budget |
+| 💸 **Kosten und Verkehr** | 23 Kategorien von Sprit bis Drohne, beliebig viele einzelne Posten, in AU$ oder Euro, direkt im Budget und in der Kostenauswertung |
 | 👃 **Sinneseindrücke und Atmosphäre** | „Der Sound heute war …“, „Ich rieche sofort wieder …“, die dominierende Farbe, gefühlte Hitze, Luft und Wind |
 | 🦘 **Straßenrand und Wildlife** | lebend gesehene Tiere (mit Foto, sie landen im Tier-Album), ein **Roadkill-Zähler** für 12 Arten, ein Zähler für **Kuriositäten am Straßenrand**: Big Things, skurrile Briefkästen, Schuh-Zäune, Rostlauben, Statuen, kuriose Warnschilder, dazu wie abgeschieden es bis zum nächsten Stopp ist |
 | 🚐 **Vanlife-Alltag** | was die Fotos nicht zeigen, was auf dem Gaskocher gekocht wurde (mit Geschmacksnote), warum der Stellplatz besonders war |
@@ -754,6 +770,8 @@ TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, wäh
 - **Tickets und Dokumente** öffnen sich auch offline, auf Wunsch geschützt mit **Face ID, Touch ID oder Windows Hello**. Sie verlassen nie das Gerät.
 - **Reisevorbereitung** mit Countdown und fertiger Checkliste (Wochen vorher, kurz vorher, Abreisetag) plus eigenen Punkten, **Dokumente** mit Ablaufdatum und Warnung.
 - **Budget in Euro und AU$** zum Tageskurs, Vorab-Ausgaben, **Packliste** fürs Outback.
+- **Flüge und Züge:** Du trägst sie unter Route, Etappe oder Vorabausgaben ein, mit Nummer, Buchung, Sitzplatz und Dokument. Unter Mehr → Flüge & Bahn stehen Status, neue Zeiten, Terminal, Gate, Schalter, Gleis, Gepäckband und Umstieg. Das zeigt auch die Heute-Seite, und 24 Stunden vor dem Abflug kommt ein Hinweis. Für Flüge brauchst du einen eigenen kostenlosen [AeroDataBox](https://aerodatabox.com)-Schlüssel von RapidAPI, für deutsche Züge keinen. Ohne Netz siehst du den letzten Stand.
+- **Kosten:** Unter Mehr → Kosten läuft alles aus Vorabausgaben und Logbuch zusammen: Short-Values, Long-Values, Verkehr, Unterkunft und Erlebnisse, je Etappe und je Posten. Long-Values zählen nicht in den Tagesschnitt. Jede Liste ergibt genau die Gesamtsumme.
 - **Backup und Abgleich** zwischen Mac und iPhone: Der Import führt zusammen und zeigt vorher, was sich ändert. Nichts geht verloren.
 - **Eine Suche für alles:** Orte, Tage, Tiere, Buchungen, Notizen.
 
@@ -904,19 +922,21 @@ Das Symbol der Windows-App bettet `rsrc` ein: einmal `go install github.com/akav
 
 ### Tests
 
-Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1.200 automatische Prüfungen** in 27 Testdateien, darunter eine Regel gegen Rundungsfehler: Teile ergeben immer genau die angezeigte Summe. `node tests/basic-privat.test.mjs` wacht darüber, dass keine persönlichen Daten im Code oder im Build landen.
+Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1.400 automatische Prüfungen** in 30 Testdateien, darunter eine Regel gegen Rundungsfehler: Teile ergeben immer genau die angezeigte Summe. `node tests/basic-privat.test.mjs` wacht darüber, dass keine persönlichen Daten im Code oder im Build landen.
 
 ## Datenschutz
 
 - Kein Konto, kein Server, keine Werbung, kein Tracking.
 - Alle Daten bleiben im Speicher deines Geräts. Mac und iPhone gleichst du über eine Backup-Datei ab, zum Beispiel per AirDrop. Beim Import wird zusammengeführt, nichts wird gelöscht.
 - Tickets, Ausweise und Fotos fürs Tagebuch bleiben auf dem Gerät und kommen nicht ins Backup.
+- Live-Daten zu Flug und Bahn sind freiwillig. Nur dann geht die Flugnummer mit Datum über RapidAPI an AeroDataBox oder der Bahnhof an DBF. Dein Schlüssel bleibt auf diesem Gerät und kommt nicht ins Backup.
 
 ## Fahrplan
 
 - [x] **Version 1: Western Australia** mit Planung, Logbuch, Offline-Karte, Versorgung und Gefahrenlage
 - [x] Einrichtungsassistent beim ersten Öffnen, Reisezeitraum im Titelbild, Schrift- und Gesamtgröße einstellbar
 - [x] Quellcode hier auf GitHub, Apps für Mac und Windows
+- [x] **Version 1.1:** Flüge und Züge live, Kostenauswertung, Einträge über mehrere Tage, Warnungen entlang der Route mit Offline-Karte
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

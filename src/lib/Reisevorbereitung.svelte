@@ -25,6 +25,9 @@
            speichereBeleg, loescheAlleBelege, loescheBeleg, oeffneBeleg, zeigeImFenster,
            schlageZielVor, eigenerPfad, belegLabel, istBildDatei, kameraName } from './belege.js'
   import { fxKurse, kursFuer, inBeide } from './fx.js'
+  import { vorabArt, nummernImText, zugnummernImText } from './flug.js'
+  import { KOSTEN_CLUSTER } from './kosten.js'
+  import VerkehrBlock from './VerkehrBlock.svelte'
 
   // Kategorien für Vorab-Ausgaben (Keys = dieselben wie im Tagebuch-Kostenmodul).
   const KAT = [
@@ -38,6 +41,7 @@
     { key: 'kosten_technik', label: t('🎥 Technik') },
     { key: 'kosten_behoerde', label: t('🏛️ Behörde (Visum, Gebühren)') },
     { key: 'kosten_attraktion', label: t('🎟️ Tour / Aktivität') },
+    { key: 'kosten_essen', label: t('🍽️ Essen gehen') },
     { key: 'kosten_long', label: t('📦 Long-Value (Anschaffung)') },
     { key: 'kosten_short', label: t('🪙 Short-Value (Konsum)') },
     { key: 'kosten_sonstiges', label: t('🛒 Sonstiges') },
@@ -669,7 +673,11 @@
           <input class="vk-text" value={k.text} oninput={(e) => updateVorabKosten(k.id, { text: e.target.value })} placeholder={t('Wofür? (z.B. Flug FRA→MEL)')} />
           <div class="vk-z2">
             <select value={k.kat} onchange={(e) => updateVorabKosten(k.id, { kat: e.target.value })}>
-              {#each KAT as c}<option value={c.key}>{c.label}</option>{/each}
+              {#each KOSTEN_CLUSTER as g (g.id)}
+                <optgroup label={g.label}>
+                  {#each KAT.filter((c) => g.kats.includes(c.key)) as c}<option value={c.key}>{c.label}</option>{/each}
+                </optgroup>
+              {/each}
             </select>
             <input class="vk-betrag" type="number" min="0" step="any" value={k.betrag} oninput={(e) => updateVorabKosten(k.id, { betrag: e.target.value })} placeholder={t('Betrag')} />
             <select class="vk-waehrung" value={k.waehrung} onchange={(e) => updateVorabKosten(k.id, { waehrung: e.target.value })}>
@@ -685,6 +693,9 @@
                 {#each reiseOptionen as o}<option value={o.id}>{o.label}</option>{/each}
               </select>
             </label>
+          {/if}
+          {#if vorabArt(k.kat)}
+            <VerkehrBlock art={vorabArt(k.kat)} terminId={k.terminId} titel={k.text} nr={nummernImText(k.text)[0] || zugnummernImText(k.text)[0] || ''} onverknuepft={(id) => updateVorabKosten(k.id, { terminId: id })} />
           {/if}
         </div>
       {/each}

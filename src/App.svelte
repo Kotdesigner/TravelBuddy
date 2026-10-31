@@ -16,6 +16,11 @@
   import Teilen from './lib/Teilen.svelte'
   import OfflineCheck from './lib/OfflineCheck.svelte'
   import { strassenlage, starteStrassenlage, aktualisiereStrassenlage } from './lib/strassenlage-dienst.js'
+  import { starteFluege } from './lib/flug-dienst.js'
+  import Fluege from './lib/Fluege.svelte'
+  import Kosten from './lib/Kosten.svelte'
+  import { CLUSTER_KATS, kostenAuswertung } from './lib/kosten.js'
+  import { warnDaten, warnUmkreis, warnListe, meinePosition } from './lib/warnlage-dienst.js'
   import { zaehleStrassen } from './lib/strassenlage.js'
   import Heute from './lib/Heute.svelte'
   import NeuBlatt from './lib/NeuBlatt.svelte'
@@ -139,7 +144,7 @@
     orte: [['orte/sueden', t('Süden')], ['orte/norden', t('Norden')], ['orte/osten', t('Ostküste')], ['orte/meine', t('Meine Orte')], ['orte/routen', t('Routen-Ideen')]],
     logbuch: [['logbuch', t('Tage')], ['logbuch/lesen', t('Lesen')], ['logbuch/tiere', t('Tierwelt')], ['logbuch/notizen', t('Notizen')]],
     // Dieselben Namen und Zeichen wie im Mehr-Blatt am iPhone und in den Seitentiteln
-    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
+    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
   }
   const TITEL = { heute: t('Heute'), plan: t('Plan'), orte: t('Orte'), logbuch: t('Logbuch'), mehr: t('Mehr') }
   // Eine Zeile je Punkt unter „Mehr“: was steckt dahinter (nur Namen, kein Wort dazu)
@@ -180,7 +185,7 @@
   let umkreisKm = $state((() => {
     try { const raw = localStorage.getItem('gefahren-umkreis'); const v = Number(raw); return raw != null && raw !== '' && !isNaN(v) ? v : 150 } catch { return 150 }
   })())
-  $effect(() => { const v = String(umkreisKm); try { localStorage.setItem('gefahren-umkreis', v) } catch {} })
+  $effect(() => { const v = String(umkreisKm); warnUmkreis.set(umkreisKm); try { localStorage.setItem('gefahren-umkreis', v) } catch {} })
   let bedingungen = $state(null)
   let quellenFehler = $state([])
   let ausCache = $state(false) // Anzeige stammt aus Offline-Zwischenspeicher
@@ -206,6 +211,8 @@
     })
   }
 
+  const WETTER_ABSTAND_MS = 60 * 60 * 1000
+  let wetterZuletzt = 0
   async function pruefeGefahren(mitStandort = false) {
     if (gefahrenLaden) return
     gefahrenLaden = true; gefahrenFehler = null
@@ -213,16 +220,24 @@
     try {
       const mitKoord = [...orte, ...$eigeneOrte].filter((o) => o.lat != null)
       const punkte = mitKoord.map((o) => ({ id: o.id, lat: o.lat, lon: o.lon }))
-      // Amtliche Warnungen + Wetter parallel holen
-      const [karte, warn] = await Promise.all([
-        holeGefahren(punkte),
-        holeWarnungen().catch(() => []),
-      ])
-      ortGefahren = Object.fromEntries(karte)
-      warnungen = warn
-      bedingungen = warn.bedingungen || null
-      quellenFehler = warn.quellenFehler || []
-      ortWarnungen = ordneWarnungenZu(warn)
+      // Amtliche Warnungen zuerst und für sich: ein ausgefallener Wetterdienst darf sie nie mitreißen.
+      // Antwortet gar keine Quelle, bleibt der letzte Stand stehen und gilt nicht als neu.
+      const warn = await holeWarnungen().catch(() => null)
+      const keineQuelle = !warn || (!warn.length && warn.quellenFehler?.length >= 4)
+      if (keineQuelle) gefahrenFehler = t('Keine Warnquelle erreichbar. Es bleibt der letzte Stand.')
+      else {
+        warnungen = warn
+        bedingungen = warn.bedingungen || null
+        quellenFehler = warn.quellenFehler || []
+        ortWarnungen = ordneWarnungenZu(warn)
+        warnDaten.set({ liste: warn, zeit: Date.now() })
+      }
+      // Das Wetter für alle Orte kostet viele Abfragen je Anschluss, darum seltener als die Warnungen
+      if (mitStandort || Date.now() - wetterZuletzt >= WETTER_ABSTAND_MS) {
+        wetterZuletzt = Date.now()   // auch ein Fehlversuch zählt, sonst läuft man ins Tageslimit
+        try { ortGefahren = Object.fromEntries(await holeGefahren(punkte)) }
+        catch (e) { gefahrenFehler ||= t('Wetterdaten nicht geladen, amtliche Warnungen sind aktuell. ') + fehlerText(e) }
+      }
       // Standort NUR auf ausdrücklichen Wunsch abfragen (mitStandort=true).
       // Grund: iOS zeigt sonst gleich beim ersten App-Start einen blockierenden
       // Berechtigungs-Dialog, ohne dass der Nutzer weiß, wofür. Der Knopf
@@ -230,8 +245,9 @@
       if (mitStandort) {
         // Nutzt den gemeinsamen Standort-Speicher; fragt nur, wenn noch nichts da ist.
         const s = $standort || (await frageStandortAn({ hoheGenauigkeit: true }) ? $standort : null)
-        if (s) standortGefahr = await holeStandortGefahr(s.lat, s.lon)
+        if (s) standortGefahr = await holeStandortGefahr(s.lat, s.lon).catch(() => standortGefahr)
       }
+      if (keineQuelle) return
       gefahrenStand = standText(Date.now())
       ausCache = false
       // Für Offline: Stand als klonbaren Snapshot zwischenspeichern (IndexedDB-tauglich).
@@ -259,7 +275,7 @@
     cacheRestauriert = true
     const c = $gefahrenCache
     if (c.ortGefahren) ortGefahren = c.ortGefahren
-    if (c.warnungen) { warnungen = c.warnungen; ortWarnungen = ordneWarnungenZu(c.warnungen) }
+    if (c.warnungen) { warnungen = c.warnungen; ortWarnungen = ordneWarnungenZu(c.warnungen); warnDaten.set({ liste: c.warnungen, zeit: c.zeit || null }) }
     if (c.bedingungen) bedingungen = c.bedingungen
     if (c.standort) standortGefahr = c.standort
     if (c.zeit || c.stand) gefahrenStand = c.zeit ? standText(c.zeit) : c.stand
@@ -278,8 +294,8 @@
   // unsichtbar bleibt. Also: erst Stufe, dann Naehe zum naechsten EIGENEN Ort.
   const warnungenSortiert = $derived.by(() => {
     const punkte = [...orte, ...$eigeneOrte].filter((o) => o.lat != null)
-    if (!punkte.length) return warnungen
-    return warnungen
+    if (!punkte.length) return $warnListe
+    return $warnListe
       .map((w) => {
         let km = Infinity
         for (const o of punkte) { const d = abstandKm(w, o.lat, o.lon); if (d < km) km = d; if (km === 0) break }
@@ -309,6 +325,7 @@
     standortGestartet = true
     starteStandort()
     starteStrassenlage()
+    starteFluege()
     // Musik unterwegs: Zustand laden, Rücksprung von Spotify erkennen
     starteMusik({ meldung: (t, art) => zeigeToast(t, art || 'info', 4000) })
   })
@@ -328,6 +345,19 @@
     if (Date.now() - gefahrenZuletzt < GEFAHREN_ABSTAND_MS) return
     gefahrenZuletzt = Date.now()
     pruefeGefahren(false)
+  })
+  // Das iPhone hält die App oft stundenlang im Hintergrund, ohne dass sich etwas am Netz ändert.
+  // Darum auch beim Zurückkommen und alle paar Minuten im offenen Zustand nachsehen.
+  $effect(() => {
+    const nachsehen = () => {
+      if (document.visibilityState !== 'visible' || !navigator.onLine) return
+      if (Date.now() - gefahrenZuletzt < GEFAHREN_ABSTAND_MS) return
+      gefahrenZuletzt = Date.now()
+      pruefeGefahren(false)
+    }
+    const takt = setInterval(nachsehen, 60000)
+    document.addEventListener('visibilitychange', nachsehen)
+    return () => { clearInterval(takt); document.removeEventListener('visibilitychange', nachsehen) }
   })
 
   // Roadtrip-Bilanz aus dem Tagebuch
@@ -397,11 +427,10 @@
     }
   })
 
-  const VERKEHR_CATS = ['kosten_flug', 'kosten_sprit', 'kosten_boot', 'kosten_bahn', 'kosten_bus', 'kosten_mietfahrzeug']
-  const SONSTIG_CATS = ['kosten_unterkunft', 'kosten_attraktion', 'kosten_sonstiges', 'kosten_behoerde']
-  const SHORT_CATS = ['kosten_lebensmittel', 'kosten_genuss', 'kosten_bedarf', 'kosten_telefon', 'kosten_internet', 'kosten_short']
-  const LONG_CATS = ['kosten_drohne', 'kosten_kamera', 'kosten_kleidung', 'kosten_souvenir', 'kosten_technik', 'kosten_long']
+  const { verkehr: VERKEHR_CATS, erleben: SONSTIG_CATS, short: SHORT_CATS, long: LONG_CATS } = CLUSTER_KATS
   const KOSTEN_CATS = [...VERKEHR_CATS, ...SONSTIG_CATS, ...SHORT_CATS, ...LONG_CATS]
+  // Schnitt pro Tag wie unter Mehr → Kosten: ohne Vorabausgaben und ohne Long-Values
+  const schnittProTag = $derived(kostenAuswertung({ journal: $journal, kurse: $fxKurse }).proTag)
 
   // Tageskurse für alle Ausgabe-Tage sicherstellen (online holen, dann gecacht/offline).
   $effect(() => {
@@ -889,6 +918,7 @@
           {#if fakten.gesamtReise > fakten.km}
             <div class="fb-gesamt">{t('🌏 Die kumulierte Distanz (inkl. Anflug ab Frankfurt & Flüge) sind')} <b>{fakten.gesamtProzent.toFixed(0)} %</b> {t('einmal um die Erde.')}</div>
           {/if}
+          <a class="fb-mehr" href="#/mehr/kosten">{t('Alle Kosten ansehen ›')}</a>
           <div class="fb-hinweis">{t('Je Reise ist ✈️ Flug oder 🚗 Auto einstellbar. Nur gefahrene Strecken zählen in Sprit und Zeit am Steuer; geflogene nur in die kumulierte Distanz (inkl. Anflug ab Frankfurt). Sprit-Schätzung: {VERBRAUCH} L/100 km · ~{replace} AU$/L.', { VERBRAUCH, replace: dezimal(SPRIT_PREIS, 2) })}</div>
         {:else}
           <p class="fb-leer">{t('🧮 Noch keine berechnete Route. Leg im')} <b>{t('Plan')}</b> {t('eine Route mit Stopps an. km, Fahrzeit, Sprit & Fun-Facts erscheinen hier dann automatisch.')}</p>
@@ -909,7 +939,7 @@
                 <span>{t('ausgegeben')} <b>{eur(spent)}</b></span>
                 <span class:neg={rest < 0}>{rest >= 0 ? t('übrig') : t('über Budget')} <b>{eur(Math.abs(rest))}</b></span>
                 {#if anzeige.vorab.eur > 0}<span>{t('davon vorab')} <b>{eur(anzeige.vorab.eur)}</b></span>{/if}
-                {#if ausgaben.tage > 0 && anzeige.unterwegs.eur > 0}<span title={t('Nur unterwegs erfasste Kosten – ohne einmalige Vorab-Ausgaben')}>{t('Ø/Reisetag')} <b>{eur(ausgaben.unterwegs.eur / ausgaben.tage)}</b></span>{/if}
+                {#if schnittProTag}<span title={t('Nur unterwegs erfasste Kosten, ohne Vorabausgaben und ohne Long-Values')}>{t('Ø/Reisetag')} <b>{eur(schnittProTag.eur)}</b></span>{/if}
               </div>
             {/if}
           </div>
@@ -928,8 +958,8 @@
           </div>
           {#if anzeige.short.eur > 0 || anzeige.long.eur > 0}
             <div class="fb-split">
-              <span class="fs-zeile"><b>{t('🪙 Short-Values')}</b> <span class="fs-sub">{t('(Lebensmittel, Genuss, Bedarf, Telefon, Internet)')}</span> {eur(anzeige.short.eur)} · {aud(anzeige.short.aud)}</span>
-              <span class="fs-zeile"><b>{t('📦 Long-Values')}</b> <span class="fs-sub">{t('(Drohne, Kamera, Kleidung, Souvenirs)')}</span> {eur(anzeige.long.eur)} · {aud(anzeige.long.aud)}</span>
+              <span class="fs-zeile"><b>{t('🪙 Short-Values')}</b> <span class="fs-sub">{t('(Essen, Lebensmittel, Genuss, Bedarf, Telefon, Internet)')}</span> {eur(anzeige.short.eur)} · {aud(anzeige.short.aud)}</span>
+              <span class="fs-zeile"><b>{t('📦 Long-Values')}</b> <span class="fs-sub">{t('(Drohne, Kamera, Kleidung, Souvenirs, Technik)')}</span> {eur(anzeige.long.eur)} · {aud(anzeige.long.aud)}</span>
             </div>
           {/if}
           <ul class="fb-facts">
@@ -983,14 +1013,14 @@
       {@const teile = ansicht.id.split('/')}
       {#key ansicht.id}
         <EtappeDetail etappeId={ansicht.unter === 'etappe' ? teile[0] : null} routeId={ansicht.unter === 'etappe' ? (teile[1] || null) : teile[0]}
-          orte={[...orte, ...$eigeneOrte]} {warnungen} {umkreisKm}
+          orte={[...orte, ...$eigeneOrte]} warnungen={warnungenSortiert} {umkreisKm}
           onzurueck={() => zurueck('plan')} onneu={oeffneNeu}
           onlogbuch={(id) => geh('logbuch/etappe/' + id)} onwanderung={(id) => geh('plan/wanderungen/' + id)} />
       {/key}
     {:else if ansicht.unter === 'wanderungen'}
       <Wanderungen orte={[...orte, ...$eigeneOrte]} reisen={$reisen} fokusId={ansicht.id || null} onneu={() => oeffneNeu('wanderung')} />
     {:else if ansicht.unter === 'karte'}
-      <Karte {orte} reisen={$reisen} />
+      <Karte {orte} reisen={$reisen} warnFokus={ansicht.id?.startsWith('warnung/') ? ansicht.id.slice(8) : null} />
     {:else if ansicht.unter === 'kalender'}
       <Kalender kalender={inhalt?.kalender ?? []} box={inhalt?.kalenderBox ?? ''} />
     {:else}
@@ -1098,6 +1128,10 @@
       <h2 class="abschnitt">{t('🧳 Reisevorbereitung')}</h2>
       <OfflineCheck {geh} onbackup={onExport} />
       <Reisevorbereitung />
+    {:else if ansicht.unter === 'fluege'}
+      <Fluege />
+    {:else if ansicht.unter === 'kosten'}
+      <Kosten />
     {:else if ansicht.unter === 'gefahren'}
       <h2 class="abschnitt">{t('Gefahrenlage')} {#if warnungen.length}<span class="warnzahl">{t('{length} amtlich', { length: warnungen.length })}</span>{/if}{#if betroffene.length}<span class="count"> {t('· {length} Wetter-betroffen', { length: betroffene.length })}</span>{/if}{#if strassenZahl.sperrungen}<span class="count"> {t('· {sperrungen} Straßensperrungen', { sperrungen: strassenZahl.sperrungen })}</span>{/if}</h2>
       <Gefahren orte={[...orte, ...$eigeneOrte]} standort={standortGefahr} laden={gefahrenLaden} fehler={gefahrenFehler}
@@ -1105,7 +1139,7 @@
         warnungen={warnungenSortiert} betroffeneWarnungen={betroffeneWarnungen} onRefresh={() => pruefeGefahren(true)}
         bind:umkreisKm={umkreisKm} bedingungen={auffaelligeBedingungen(bedingungen)}
         quellenFehler={quellenFehler}
-        meinOrt={$standort} ortStatus={$standortStatus}
+        meinOrt={$meinePosition} ortStatus={$standortStatus}
         ortText={standortHinweis($standortStatus, $standortFehler)}
         onOrt={() => frageStandortAn({ hoheGenauigkeit: true, alterMs: 0 })} />
     {:else if ansicht.unter === 'packliste'}
@@ -1298,6 +1332,7 @@
     margin-top: auto; text-align: center; padding: 18px 16px calc(22px + env(safe-area-inset-bottom, 0px));
     font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); border-top: 1px solid var(--line);
   }
+  .fb-mehr { display: inline-block; padding: 8px 0; color: var(--brand-text); font-weight: 700; font-size: calc(13.5px * var(--schrift, 1)); }
   .app-footer .af-by { color: var(--brand-text); }
   .app-footer .af-by a { color: inherit; text-decoration: underline; text-underline-offset: 2px; padding: 8px 2px; }
   /* Stand der geladenen Fassung — macht sofort sichtbar, wenn der Service-Worker

@@ -145,7 +145,7 @@
     <tr><td>Plan</td><td>Legs and routes, hikes, offline map, calendar</td></tr>
     <tr><td>Places</td><td>144 places in the South, North and East Coast, My places, route ideas</td></tr>
     <tr><td>Logbook</td><td>Travel days, reading and printing the journal, wildlife, notes</td></tr>
-    <tr><td>More</td><td>Emergency, trip preparation, hazards, packing list, tips, music, share travel report, quiz, plus backup, import, manual, theme and language</td></tr>
+    <tr><td>More</td><td>Emergency, trip preparation, flights &amp; trains, costs, hazards, packing list, tips, music, share travel report, quiz, plus backup, import, manual, theme and language</td></tr>
   </table>
 
   <h3>iPhone</h3>
@@ -212,7 +212,7 @@
   </ul>
   <h3>Editing a route</h3>
   <ol class="schritte">
-    <li>Expand the route, choose 🚗 car or ✈️ flight at the top.</li>
+    <li>Expand the route, choose 🚗 car, ✈️ flight or 🚆 train at the top. For flights and trains the app asks right away for number, date, booking, seat and document.</li>
     <li>“Add stop” searches all places and WA towns. A new stop goes where it makes the smallest detour.</li>
     <li>Drag the handle ≡ to change the order. Tapping a stop shows its photo and “remove”.</li>
     <li>“📍 Open in Google Maps” hands the route over for navigation (up to 11 stops).</li>
@@ -255,6 +255,7 @@
     <li>One map for all of Australia. When you zoom in it loads the more detailed map area by itself: west coast, east coast, Melbourne, Cairns, Whitsundays.</li>
     <li><b>“📥 Save all of Australia”</b> puts all map areas on the device (about 80 MB). Tap it once on Wi-Fi and wait.</li>
     <li>The “Show” bar: places, ⛽ fuel stations, 💧 water, 🅿️ rest areas, 🏕️ camping, 🚻 toilets, 🛒 shops, 🔧 mechanics, 🏥 clinics, with the number in view. Tap a point: name, coordinates, Google Maps or Apple Maps.</li>
+    <li><b>Warning areas</b> sit on the map as shapes, with radius and your position. The button on the map shows or hides them.</li>
     <li>The terrain shading is only available online.</li>
   </ul>
   <h2>Hikes</h2>
@@ -288,8 +289,9 @@
   <ol class="schritte">
     <li>“Write today's logbook entry” on Today, or “+ Day” in the logbook.</li>
     <li>Choose the place or route of the day, then the text.</li>
-    <li>Add photos, a 🎙️ voice note, quick stats (km, weather, flies, signal, mood, road trains) and 16 topics from costs to the night sky.</li>
+    <li>Add photos, a 🎙️ voice note, quick stats (km, weather, flies, signal, mood, road trains) and 16 topics from costs to the night sky. Under “Costs &amp; transport” you add as many single expenses as you like.</li>
   </ol>
+  <p>Didn't write every day? “To (several days)” or “Add several days” on the leg and in the logbook adds one entry for the whole period. Its expenses count once.</p>
   <h3>Sorting photos</h3>
   <p>Choose several photos at once. The app reads the date and location from the image data and puts each photo on the right day, in an existing or a new entry.</p>
   <h2>Wildlife</h2>
@@ -321,6 +323,12 @@
   </ul>
   <h2>⚠️ Hazards</h2>
   <p>Official warnings from WA, Victoria and Queensland for fire, flood and severe weather within the set radius around your places, plus the <b>WA road conditions</b> (closures from Main Roads, split into “on your route” and “nearby”). Without signal the last status stays visible. The weather hints below are derived, not official warnings.</p>
+  <p>The app checks your position, the road ahead, every leg and every hike. Each warning shows the size of the area and the distance, plus buttons for Google Maps and the offline map with radius and your position. <b>Test mode</b> shows all of this with a position of your choice and made-up warnings.</p>
+  <h2>✈️ Flights &amp; trains</h2>
+  <p>All flights and trains of the trip with status, new times, terminal, gate, check-in desk, platform, baggage belt and connections. Add them under route, leg or pre-trip costs. Every entry with a number is checked by itself, more often as departure gets closer. 24 hours before, a notice appears on Today.</p>
+  <p>Flights need your own free RapidAPI key (AeroDataBox, Basic plan). It stays on the device and is not part of the backup, and the app shows your quota. German trains need no key, and the departure board looks about 3 hours ahead.</p>
+  <h2>💰 Costs</h2>
+  <p>Everything from pre-trip costs and the logbook: short values, long values, transport, stays and experiences, per leg and under “Analyse items” down to the single expense. Long values stay out of the daily average. Every list adds up exactly to the total.</p>
   <h2>🎒 Packing list · 🛠️ Tips · 📤 Share · 🇦🇺 Quiz</h2>
   <p>A packing list for the outback to tick off, print and export as a spreadsheet. Tips on permits, fuel and tyres. <b>Share travel report</b> makes a single file for family and friends with legs, routes, places and the photos you choose, without bookings, costs, documents, contacts and exact coordinates. The quiz has 50 questions in five levels.</p>
   <h2>🎵 Music on the road</h2>
@@ -376,7 +384,8 @@
         <li>Sun times, night sky</li>
         <li>Emergency, packing list, quiz</li>
         <li>Vouchers stored on the device</li>
-        <li>Last status of the hazards</li>
+        <li>Last status of the hazards, flights and trains</li>
+        <li>Warning areas on the offline map, costs</li>
       </ul>
     </div>
     <div>
@@ -385,6 +394,7 @@
         <li>The real road route (until then an estimate)</li>
         <li>Weather and weather along the route</li>
         <li>New warnings and road conditions</li>
+        <li>New status for flights and trains</li>
         <li>Daily exchange rate (otherwise approximate)</li>
         <li>Suggestions, photo and details for new places</li>
         <li>Terrain shading, map on the globe</li>

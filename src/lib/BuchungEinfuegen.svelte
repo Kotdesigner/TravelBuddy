@@ -89,7 +89,7 @@
     }))) return
     const n = buchungenEinfuegen(ev)
     if (alsVorab && vorabMoeglich) {
-      neueVorabKosten({ text: f.titel.trim(), kat: artInfo(f.art).vorab, betrag: betragZahl, waehrung: f.waehrung, reiseId: etappe?.reise.id || null })
+      neueVorabKosten({ text: f.titel.trim(), kat: artInfo(f.art).vorab, betrag: betragZahl, waehrung: f.waehrung, reiseId: etappe?.reise.id || null, keinTermin: true })
     }
     haptic.confirm()
     zeigeToast(n > 1 ? t('{n} Termine übernommen ✓', { n }) : t('Buchung übernommen ✓'), 'ok')

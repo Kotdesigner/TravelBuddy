@@ -144,7 +144,7 @@
     <tr><td>Plan</td><td>Etappen und Routen, Wanderungen, Offline-Karte, Kalender</td></tr>
     <tr><td>Orte</td><td>144 Orte in Süden, Norden und Ostküste, Meine Orte, Routen-Ideen</td></tr>
     <tr><td>Logbuch</td><td>Reisetage, Tagebuch lesen und drucken, Tierwelt, Notizen</td></tr>
-    <tr><td>Mehr</td><td>Notfall, Reisevorbereitung, Gefahrenlage, Packliste, Praxis, Musik, Reisebericht teilen, Quiz, dazu Backup, Import, Handbuch und Design</td></tr>
+    <tr><td>Mehr</td><td>Notfall, Reisevorbereitung, Flüge &amp; Bahn, Kosten, Gefahrenlage, Packliste, Praxis, Musik, Reisebericht teilen, Quiz, dazu Backup, Import, Handbuch und Design</td></tr>
   </table>
 
   <h3>iPhone</h3>
@@ -212,7 +212,7 @@
   </ul>
   <h3>Route bearbeiten</h3>
   <ol class="schritte">
-    <li>Route aufklappen, oben 🚗 Auto oder ✈️ Flug wählen.</li>
+    <li>Route aufklappen, oben 🚗 Auto, ✈️ Flug oder 🚆 Bahn wählen. Bei Flug und Bahn fragt die App gleich nach Nummer, Datum, Buchung, Sitzplatz und Dokument.</li>
     <li>„Stopp hinzufügen“ sucht über alle Orte und WA-Städte. Ein neuer Stopp landet dort, wo er den kleinsten Umweg macht.</li>
     <li>Reihenfolge am Griff ≡ ziehen. Stopp antippen zeigt Foto und Entfernen.</li>
     <li>„📍 In Google Maps öffnen“ übergibt die Route zum Navigieren (bis 11 Stopps).</li>
@@ -255,6 +255,7 @@
     <li>Eine Karte für ganz Australien. Beim Hineinzoomen lädt sie selbst den genaueren Kartenteil: Westküste, Ostküste, Melbourne, Cairns, Whitsundays.</li>
     <li><b>„📥 Ganz Australien sichern“</b> legt alle Kartenteile aufs Gerät (rund 80 MB). Einmal mit WLAN tippen und warten.</li>
     <li>Leiste „Zeigen“: Orte, ⛽ Tankstellen, 💧 Wasser, 🅿️ Rastplätze, 🏕️ Camping, 🚻 Toiletten, 🛒 Läden, 🔧 Werkstätten, 🏥 Kliniken, mit Anzahl im Ausschnitt. Punkt antippen: Name, Koordinaten, Google Maps oder Apple Karten.</li>
+    <li><b>Warngebiete</b> liegen als Flächen auf der Karte, mit Umkreis und deinem Standort. Der Knopf auf der Karte blendet sie ein und aus.</li>
     <li>Die Gelände-Schattierung kommt nur online.</li>
   </ul>
   <h2>Wanderungen</h2>
@@ -288,8 +289,9 @@
   <ol class="schritte">
     <li>„Heute ins Logbuch schreiben“ auf Heute oder „+ Tag“ im Logbuch.</li>
     <li>Ort oder Strecke des Tages wählen, dann der Text.</li>
-    <li>Dazu Fotos, eine 🎙️ Sprachnotiz, Kurzwerte (km, Wetter, Fliegen, Empfang, Stimmung, Road-Trains) und 16 Themen von Kosten bis Nachthimmel.</li>
+    <li>Dazu Fotos, eine 🎙️ Sprachnotiz, Kurzwerte (km, Wetter, Fliegen, Empfang, Stimmung, Road-Trains) und 16 Themen von Kosten bis Nachthimmel. Unter „Kosten &amp; Verkehr“ trägst du beliebig viele einzelne Ausgaben ein.</li>
   </ol>
+  <p>Nicht jeden Tag geschrieben? „Bis (mehrere Tage)“ oder „Mehrere Tage nachtragen“ an Etappe und Logbuch legt einen Eintrag für den ganzen Zeitraum an. Seine Ausgaben zählen einmal.</p>
   <h3>Fotos einsortieren</h3>
   <p>Mehrere Fotos auf einmal wählen. Die App liest Datum und Ort aus den Bilddaten und legt jedes Foto an den richtigen Tag, in einen vorhandenen oder einen neuen Eintrag.</p>
   <h2>Tierwelt</h2>
@@ -321,6 +323,12 @@
   </ul>
   <h2>⚠️ Gefahrenlage</h2>
   <p>Amtliche Warnungen aus WA, Victoria und Queensland zu Feuer, Flut und Unwetter im eingestellten Umkreis um deine Orte, dazu die <b>Straßenlage WA</b> (Sperrungen von Main Roads, getrennt nach „auf deiner Route“ und „in der Nähe“). Ohne Netz bleibt der letzte Stand sichtbar. Die Wetter-Hinweise darunter sind abgeleitet, keine amtlichen Warnungen.</p>
+  <p>Die App prüft deinen Standort, die Strecke voraus, jede Etappe und jede Wanderung. Zu jeder Warnung stehen die Größe des Gebiets und die Entfernung da, dazu die Knöpfe für Google Maps und die Offline-Karte mit Umkreis und deinem Standort. Der <b>Testmodus</b> zeigt das Ganze mit einem frei gewählten Standort und erfundenen Warnungen.</p>
+  <h2>✈️ Flüge &amp; Bahn</h2>
+  <p>Hier stehen alle Flüge und Züge der Reise mit Status, neuen Zeiten, Terminal, Gate, Schalter, Gleis, Gepäckband und Umstieg. Du trägst sie unter Route, Etappe oder Vorabausgaben ein. Jeder Termin mit Nummer wird von selbst abgefragt, je näher der Abflug, desto öfter. 24 Stunden vorher kommt ein Hinweis auf Heute.</p>
+  <p>Für Flüge brauchst du einen eigenen kostenlosen Schlüssel von RapidAPI (AeroDataBox, Tarif Basic). Er bleibt auf dem Gerät und kommt nicht ins Backup, das Kontingent zeigt die App an. Deutsche Züge brauchen keinen Schlüssel, die Abfahrtstafel reicht etwa 3 Stunden voraus.</p>
+  <h2>💰 Kosten</h2>
+  <p>Alles aus Vorabausgaben und Logbuch: Short-Values, Long-Values, Verkehr, Unterkunft und Erlebnisse, je Etappe und unter „Posten auswerten“ bis zur einzelnen Ausgabe. Long-Values zählen nicht in den Tagesschnitt. Jede Liste ergibt genau die Gesamtsumme.</p>
   <h2>🎒 Packliste · 🛠️ Praxis · 📤 Teilen · 🇦🇺 Quiz</h2>
   <p>Packliste fürs Outback zum Abhaken, zum Drucken und als Tabelle. Praxis mit Permits, Tanken und Reifen. <b>Reisebericht teilen</b> macht eine einzelne Datei für Familie und Freunde mit Etappen, Routen, Orten und den Fotos, die du auswählst, ohne Buchungen, Kosten, Dokumente, Kontakte und genaue Koordinaten. Das Quiz hat 50 Fragen in fünf Stufen.</p>
   <h2>🎵 Musik unterwegs</h2>
@@ -376,7 +384,8 @@
         <li>Sonnenzeiten, Sternenhimmel</li>
         <li>Notfall, Packliste, Quiz</li>
         <li>Belege, die auf dem Gerät liegen</li>
-        <li>Letzter Stand der Gefahrenlage</li>
+        <li>Letzter Stand der Gefahrenlage, der Flüge und der Züge</li>
+        <li>Warngebiete auf der Offline-Karte, Kosten</li>
       </ul>
     </div>
     <div>
@@ -385,6 +394,7 @@
         <li>Die echte Straßenroute (bis dahin geschätzt)</li>
         <li>Wetter und Wetter an der Strecke</li>
         <li>Neue Warnungen und Straßenlage</li>
+        <li>Neuer Stand zu Flug und Bahn</li>
         <li>Tageskurs (sonst Näherung)</li>
         <li>Vorschläge, Bild und Daten für neue Orte</li>
         <li>Gelände-Schattierung, Karte auf der Weltkugel</li>

@@ -4,8 +4,11 @@
   import { heuteTag } from './heute.js'
   // Schnell anlegen: Etappe, Route, Wanderung oder Logbuch-Tag mit den wenigen
   // Angaben, die man wirklich sofort braucht. Alles Weitere steht danach in der Detailansicht.
-  import { reisen, gesamtStart, journal, neueEtappe, neueRoute, neueWanderung, neuerJournalEintrag } from './userdata.js'
-  import { etappenMitDatum, planUeberblick, etappeAm, plusTage, ymd, gueltigesDatum } from './plan.js'
+  import { reisen, gesamtStart, journal, neueEtappe, neueRoute, neueWanderung, neuerJournalEintrag, updateReise } from './userdata.js'
+  import { verkehrOk } from './flug.js'
+  import { speichereVerkehr, leereAngaben } from './verkehr.js'
+  import VerkehrFormular from './VerkehrFormular.svelte'
+  import { etappenMitDatum, planUeberblick, etappeAm, plusTage, ymd, gueltigesDatum, deckt, tageZwischen } from './plan.js'
   import { bereich, mitWochentag } from './format.js'
   import { WANDER_STATUS } from './wanderungen-daten.js'
   import { modal } from './modal.js'
@@ -40,6 +43,7 @@
   let rName = $state('')
   let rEtappe = $state('')
   let rStops = $state(vorlage.stops || [])
+  let rArt = $state('auto')
   let rGesetzt = false   // nur einmal vorbelegen, damit „keine Etappe“ wählbar bleibt
   $effect(() => {
     if (rGesetzt || rEtappe || !eintraege.length) return
@@ -48,6 +52,17 @@
       || [...eintraege].sort((a, b) => (a.reise.art === 'flug') - (b.reise.art === 'flug') || b.tage - a.tage)[0]?.reise.id
     rEtappe = v || ''
   })
+
+  // Flug oder Zug: dieselben Angaben bei Etappe und Route
+  let vAngaben = $state(leereAngaben())
+  let vDatei = $state(null)
+  const vArt = $derived(typ === 'etappe' ? eArt : typ === 'route' ? rArt : 'auto')
+  const vStart = $derived(typ === 'etappe' ? eVon : eintraege.find((x) => x.reise.id === rEtappe)?.von || '')
+  $effect(() => { if (vArt !== 'auto' && !vAngaben.datum && vStart) vAngaben.datum = vStart })
+  async function verkehrSichern(id, titel) {
+    if (vArt === 'auto' || !verkehrOk(vArt, vAngaben)) return
+    updateReise(id, { terminId: await speichereVerkehr(vArt, vAngaben, { titel, datei: vDatei }) })
+  }
 
   // Wanderung
   let wName = $state(vorlage.name || '')
@@ -58,7 +73,10 @@
 
   // Tag
   let tDatum = $state(vorlage.datum || heute)
-  const tagGibtEs = $derived($journal.some((j) => j.datum === tDatum))
+  let tBis = $state(vorlage.bis || '')
+  const tMehrere = $derived(gueltigesDatum(tBis) && tBis > tDatum)
+  const tTage = $derived(tMehrere ? tageZwischen(tDatum, tBis) + 1 : 1)
+  const tagGibtEs = $derived(!tMehrere && $journal.some((j) => deckt(j, tDatum)))
   const tagEtappe = $derived(etappeAm(eintraege, tDatum))
 
   const kannAnlegen = $derived(
@@ -67,16 +85,18 @@
     : typ === 'wanderung' ? !!(wName.trim() || wOrt)
     : gueltigesDatum(tDatum))
 
-  function anlegen() {
+  async function anlegen() {
     if (!kannAnlegen) return
     haptic.confirm()
     if (typ === 'etappe') {
       const id = neueEtappe({ name: eName.trim() || undefined, von: eVon, tage: eTage, art: eArt })
+      await verkehrSichern(id, eName.trim())
       onfertig({ typ, id })
     } else if (typ === 'route') {
       const e = eintraege.find((x) => x.reise.id === rEtappe)?.reise
-      const id = neueRoute({ name: rName.trim() || (rStops.length >= 2 ? `${rStops[0].name} → ${rStops[rStops.length - 1].name}` : undefined),
-        etappeId: rEtappe || null, stops: rStops, farbe: e?.farbe, art: 'auto' })
+      const name = rName.trim() || (rStops.length >= 2 ? `${rStops[0].name} → ${rStops[rStops.length - 1].name}` : undefined)
+      const id = neueRoute({ name, etappeId: rEtappe || null, stops: rStops, farbe: e?.farbe, art: rArt })
+      await verkehrSichern(id, name)
       onfertig({ typ, id, etappeId: rEtappe || null })
     } else if (typ === 'wanderung') {
       const o = wOrt
@@ -85,13 +105,18 @@
         reiseId: vorlage.reiseId || (wDatum ? etappeAm(eintraege, wDatum)?.reise.id : null) || null })
       onfertig({ typ, id })
     } else {
-      if (!tagGibtEs) neuerJournalEintrag({ datum: tDatum, ...(vorlage.ort ? vorlage.ort : {}) })
+      if (!tagGibtEs) neuerJournalEintrag({ datum: tDatum, bis: tMehrere ? tBis : undefined, reiseId: vorlage.reiseId, ...(vorlage.ort ? vorlage.ort : {}) })
       onfertig({ typ, datum: tDatum })
     }
   }
   function stoppDazu(o) { rStops = [...rStops, { name: o.name, lat: o.lat, lon: o.lon, img: null }] }
-  const knopfText = $derived(typ === 'etappe' ? t('Etappe anlegen') : typ === 'route' ? t('Route anlegen') : typ === 'wanderung' ? t('Wanderung anlegen') : tagGibtEs ? t('Tag öffnen') : t('Tag anlegen'))
+  const knopfText = $derived(typ === 'etappe' ? t('Etappe anlegen') : typ === 'route' ? t('Route anlegen') : typ === 'wanderung' ? t('Wanderung anlegen') : tagGibtEs ? t('Tag öffnen') : tMehrere ? t('Eintrag für {n} Tage anlegen', { n: tTage }) : t('Tag anlegen'))
 </script>
+
+{#snippet verkehr()}
+  <VerkehrFormular art={vArt} bind:angaben={vAngaben} bind:datei={vDatei} />
+  <p class="nb-k">{t('Mit Nummer und Datum erscheint die Fahrt unter Flüge & Bahn und wird live abgefragt.')}</p>
+{/snippet}
 
 <div class="nb-hg" out:ausblenden data-dialog-hg onclick={onclose} aria-hidden="true"></div>
 <div class="nb" out:blattRaus role="dialog" aria-labelledby="nb-titel" use:modal={{ onclose }}>
@@ -121,9 +146,17 @@
       <div class="segment" role="group" aria-label={t('Verkehrsmittel')}>
         <button type="button" class:an={eArt === 'auto'} aria-pressed={eArt === 'auto'} onclick={() => (eArt = 'auto')}>{t('🚗 Auto')}</button>
         <button type="button" class:an={eArt === 'flug'} aria-pressed={eArt === 'flug'} onclick={() => (eArt = 'flug')}>{t('✈️ Flug')}</button>
+        <button type="button" class:an={eArt === 'bahn'} aria-pressed={eArt === 'bahn'} onclick={() => (eArt = 'bahn')}>{t('🚆 Bahn')}</button>
       </div>
+      {#if eArt !== 'auto'}{@render verkehr()}{/if}
     {:else if typ === 'route'}
       <p class="nb-k">{t('Eine Strecke mit Stopps innerhalb einer Etappe. Start und Ziel reichen fürs Erste, den Rest ergänzt du in der Route.')}</p>
+      <div class="segment" role="group" aria-label={t('Verkehrsmittel')}>
+        <button type="button" class:an={rArt === 'auto'} aria-pressed={rArt === 'auto'} onclick={() => (rArt = 'auto')}>{t('🚗 Auto')}</button>
+        <button type="button" class:an={rArt === 'flug'} aria-pressed={rArt === 'flug'} onclick={() => (rArt = 'flug')}>{t('✈️ Flug')}</button>
+        <button type="button" class:an={rArt === 'bahn'} aria-pressed={rArt === 'bahn'} onclick={() => (rArt = 'bahn')}>{t('🚆 Bahn')}</button>
+      </div>
+      {#if rArt !== 'auto'}{@render verkehr()}{/if}
       <label class="nb-f">{t('Etappe')}
         <select bind:value={rEtappe}>
           <option value="">{t('keine Etappe')}</option>
@@ -155,7 +188,11 @@
         {#each WANDER_STATUS as s}<button type="button" class:an={wStatus === s.id} aria-pressed={wStatus === s.id} onclick={() => (wStatus = s.id)}>{s.emoji} {s.label}</button>{/each}
       </div>
     {:else}
-      <label class="nb-f">{t('Datum')}<input type="date" bind:value={tDatum} /></label>
+      <div class="nb-zeile">
+        <label class="nb-f">{tMehrere ? t('Von') : t('Datum')}<input type="date" bind:value={tDatum} /></label>
+        <label class="nb-f">{t('Bis (mehrere Tage)')}<input type="date" min={tDatum} bind:value={tBis} /></label>
+      </div>
+      {#if tMehrere}<p class="nb-k">{t('Ein Eintrag für {bereich}. Alle {n} Tage gelten danach als geschrieben, Ausgaben zählen einmal.', { bereich: bereich(tDatum, tBis), n: tTage })}</p>{/if}
       <p class="nb-k">{mitWochentag(tDatum)}{#if tagEtappe}&nbsp;{t('· Etappe „{name}“', { name: tagEtappe.reise.name })}{:else}&nbsp;{t('· außerhalb der Etappen')}{/if}{#if tagGibtEs}{t('. Für diesen Tag gibt es schon einen Eintrag.')}{/if}</p>
     {/if}
 

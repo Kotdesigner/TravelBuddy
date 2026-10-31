@@ -18,7 +18,10 @@
   import Fahrtag from './Fahrtag.svelte'
   import { dauer, klapp } from './motion.js'
   import { rechnet, routeMsg, hinweise, wetter, reichweite, routeRechnen, setArt, tankNeu, wetterPruefen,
-    veraltet, artVon, tagText } from './routen-dienst.js'
+    veraltet, artVon, gerade, tagText } from './routen-dienst.js'
+  import VerkehrBlock from './VerkehrBlock.svelte'
+  import { lage } from './warnlage-dienst.js'
+  import { zahl } from './format.js'
 
   let { r, orte = [], reisen = [], warnungen = [], umkreisKm = 150 } = $props()
   // Vorschläge an der Strecke: zugeklappt, damit die Route nicht endlos lang wird
@@ -88,7 +91,8 @@
     const punkte = geo && geo.length > 1 && r.route.sig === stopsSignatur(r.stops) ? geo : p.map((x) => [x.lon, x.lat])
     return baueVorschau(punkte, p.map((x) => [x.lon, x.lat]))
   })
-  const routenWarnungen = $derived(r.route?.geometry && warnungen?.length ? warnungenAnRoute(warnungen, r.route.geometry, umkreisKm) : [])
+  const routeLage = $derived($lage.routen.find((x) => x.id === r.id) || null)
+  const routenWarnungen = $derived(routeLage?.treffer ?? (r.route?.geometry && warnungen?.length ? warnungenAnRoute(warnungen, r.route.geometry, umkreisKm) : []))
   const tagKlasse = (t) => 'tag-' + String(t).toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const kurz = kurzZeit
 </script>
@@ -98,7 +102,9 @@
     <div class="segment re-art" role="group" aria-label={t('Verkehrsmittel')}>
       <button class:an={artVon(r) === 'auto'} aria-pressed={artVon(r) === 'auto'} onclick={() => setArt(r, 'auto')}>{t('🚗 Auto')}</button>
       <button class:an={artVon(r) === 'flug'} aria-pressed={artVon(r) === 'flug'} onclick={() => setArt(r, 'flug')}>{t('✈️ Flug')}</button>
+      <button class:an={artVon(r) === 'bahn'} aria-pressed={artVon(r) === 'bahn'} onclick={() => setArt(r, 'bahn')}>{t('🚆 Bahn')}</button>
     </div>
+    {#if gerade(r)}<VerkehrBlock art={artVon(r)} terminId={r.terminId} titel={r.name} onverknuepft={(id) => updateReise(r.id, { terminId: id })} />{/if}
 
     {#if st.length}
       <ol class="stops" use:sortierbar={{ onbewege: (a, b) => setStops(verschiebe(st, a, b)) }} aria-label={t('Stopps')}>
@@ -221,7 +227,7 @@
         {/if}
         {#if routenWarnungen.length}
           <div class="r-gefahr">{tn(routenWarnungen.length, '⚠️ {n} amtliche Warnung auf der Route:', '⚠️ {n} amtliche Warnungen auf der Route:')}
-            {#each routenWarnungen as x}<div class="rg-w"><span class="rg-stufe" style="background:{x.farbe};color:{schriftAuf(x.farbe)}">{x.icon} {x.level}</span> {x.titel}</div>{/each}
+            {#each routenWarnungen as x}<div class="rg-w"><span class="rg-stufe" style="background:{x.farbe};color:{schriftAuf(x.farbe)}">{x.icon} {x.level}</span> {x.titel}<small class="rg-km">{routeLage?.aufRoute ? (x.kmBis < 10 ? t('Direkt vor dir') : t('In etwa {km} km voraus', { km: zahl(Math.round(x.kmBis / 10) * 10) })) : t('Nach etwa {km} km Strecke', { km: zahl(Math.round(x.kmBis / 10) * 10) })}{#if x.km > 0}&nbsp;· {t('{km} km neben der Strecke', { km: zahl(Math.round(x.km)) })}{/if}</small></div>{/each}
           </div>
         {/if}
         <div class="r-fuss">{t('berechnet {kurz} · {wert}', { kurz: kurz(r.route.berechnetAm), wert: r.route.flug ? t('Flugstrecke (Luftlinie, Zeit geschätzt)') : t('Straßenroute (OSRM)') })}</div>
@@ -232,7 +238,7 @@
       {/if}
 
       <!-- Fahrtag-Planer: spätestens losfahren, um vor Sonnenuntergang anzukommen -->
-      {#if artVon(r) !== 'flug' && st.filter((s) => s.lat != null).length >= 2}
+      {#if !gerade(r) && st.filter((s) => s.lat != null).length >= 2}
         <Fahrtag {r} aktuell={!alt} />
       {/if}
 
@@ -241,7 +247,7 @@
         <button class="btn" onclick={() => routeRechnen(r)} disabled={!$online || $rechnet[r.id] || st.filter((s) => s.lat != null).length < 2}>
           {$rechnet[r.id] ? t('rechnet …') : (r.route ? t('🔄 Neu berechnen') : t('🛣️ Route berechnen'))}
         </button>
-        {#if artVon(r) !== 'flug'}
+        {#if !gerade(r)}
           <span class="reich">⛽ <Stepper value={$reichweite} min={50} max={2000} step={50} einheit="km Reichweite" label={t('Reichweite pro Tankfüllung in km')}
             onchange={(v) => { reichweite.set(v); tankNeu(r) }} /></span>
         {/if}
@@ -256,7 +262,7 @@
         <rect x="0" y="0" width="152" height="226" fill="var(--info-flaeche)" rx="8" />
         {#each vorschau.land as d}<path {d} fill="var(--flaeche)" stroke="var(--line-stark)" stroke-width="1" />{/each}
         {#if vorschau.linie}<polyline points={vorschau.linie} fill="none" stroke={r.farbe} stroke-width="2.2"
-          stroke-linejoin="round" stroke-linecap="round" stroke-dasharray={artVon(r) === 'flug' ? '5 4' : null} />{/if}
+          stroke-linejoin="round" stroke-linecap="round" stroke-dasharray={gerade(r) ? '5 4' : null} />{/if}
         {#each vorschau.punkte as p, i}
           <circle cx={p[0]} cy={p[1]} r="3.4" fill={r.farbe} stroke="#fff" stroke-width="0.9" />
           <text x={p[0]} y={p[1] + 1.5} font-size={i >= 9 ? 3.4 : 4.2} font-weight="bold" fill="#fff" text-anchor="middle" font-family="Arial,sans-serif">{i + 1}</text>
@@ -273,6 +279,7 @@
   .preview svg { width: 100%; height: auto; display: block; }
   @media (max-width: 620px) { .preview { flex: 1 1 100%; max-width: 260px; margin: 0 auto; } }
   .re-art { align-self: flex-start; }
+  .rg-km { display: block; font-size: calc(12.5px * var(--schrift, 1)); opacity: 0.85; }
 
   .stops { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
   .stops li {

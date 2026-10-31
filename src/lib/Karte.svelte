@@ -11,8 +11,10 @@
   import { fahrzeitText } from './routing.js'
   import { FORMATE, DATEITYPEN, exportiereKarte, speichere } from './kartenexport.js'
   import { userData, journal } from './userdata.js'
+  import { warnListe, meinePosition, warnUmkreis } from './warnlage-dienst.js'
+  import { warnGeoJson, warnAusschnitt } from './warnlage.js'
 
-  let { orte = [], reisen = [] } = $props()
+  let { orte = [], reisen = [], warnFokus = null } = $props()
   // Mehrere Routen gleichzeitig sichtbar (Menge der gewählten Reise-IDs).
   let gewaehlteReisen = $state(new Set())
   const istGewaehlt = (id) => gewaehlteReisen.has(id)
@@ -431,7 +433,7 @@
     mapGeladen = true
     setzePins()
     // Gelände-Schattierung + Offline-POIs + Reise-Route nachladen, sobald die Karte bereit ist.
-    const bereit = () => { if ($online) { try { addHillshade() } catch (e) {} } try { addPois() } catch (e) {} try { zeigeRoute() } catch (e) {} pruefeTeil() }
+    const bereit = () => { if ($online) { try { addHillshade() } catch (e) {} } try { addPois() } catch (e) {} try { zeigeWarnungen() } catch (e) {} try { zeigeRoute() } catch (e) {} pruefeTeil() }
     map.on('load', bereit)
     map.once('idle', bereit)
     map.on('moveend', () => { zoomJetzt = map.getZoom(); pruefeTeil() })
@@ -524,7 +526,7 @@
       const teile = schneideZu(f.geometry.coordinates)
       if (!teile.length) continue
       feats.push({ type: 'Feature', geometry: { type: 'MultiLineString', coordinates: teile },
-        properties: { farbe: r.farbe || '#c0392b', flug: (r.art || 'auto') === 'flug' ? 1 : 0 } })
+        properties: { farbe: r.farbe || '#c0392b', flug: ['flug', 'bahn'].includes(r.art || 'auto') ? 1 : 0 } })
     }
     routeHinweis = { draussen: [...draussen], ohneLinie }
 
@@ -551,7 +553,7 @@
         paint: { 'line-color': ['get', 'farbe'], 'line-width': 5,
           'line-dasharray': [2.2, 1.6] } }, vor)
     }
-    if (feats.length) {
+    if (feats.length && !warnFokus) {
       try {
         const co = feats.flatMap((f) => f.geometry.coordinates.flat())
         const b = co.reduce((bb, c) => bb.extend(c), new maplibregl.LngLatBounds(co[0], co[0]))
@@ -563,6 +565,40 @@
   // untrack: fitBounds kann `moveend` sofort auslösen, wenn der Ausschnitt schon passt. Was dabei
   // gelesen und geschrieben wird, darf nicht an diesem Effect hängen, sonst ruft er sich endlos selbst auf.
   $effect(() => { gewaehlteReisen; reisen; if (mapGeladen) untrack(zeigeRoute) })
+
+  // Warngebiete, Umkreis und eigener Punkt liegen über allem. Sie kommen aus dem letzten Warnstand,
+  // die Karte darunter aus den gesicherten Kartenteilen: das geht beides ohne Netz.
+  // Der Knopf auf der Karte blendet Warngebiete und Umkreis aus, dein Punkt bleibt. Die Wahl bleibt gemerkt.
+  let warnAn = $state((() => { try { return localStorage.getItem('tb-karte-warn') !== 'aus' } catch { return true } })())
+  function warnUmschalten() {
+    warnAn = !warnAn
+    try { localStorage.setItem('tb-karte-warn', warnAn ? 'an' : 'aus') } catch {}
+  }
+  // Wer gezielt zu einer Warnung springt, will sie sehen
+  $effect(() => { if (warnFokus) warnAn = true })
+
+  let warnTimer = 0
+  function zeigeWarnungen() {
+    if (!map || !mapGeladen) return
+    clearTimeout(warnTimer)
+    const stilSteht = map.style ? map.style._loaded !== false : map.isStyleLoaded()
+    if (!stilSteht) { warnTimer = setTimeout(zeigeWarnungen, 250); return }
+    const daten = warnGeoJson(warnAn ? $warnListe : [], $meinePosition, warnAn ? $warnUmkreis : 0)
+    if (map.getSource('warnlage')) map.getSource('warnlage').setData(daten)
+    else {
+      map.addSource('warnlage', { type: 'geojson', data: daten })
+      const art = (a) => ['==', ['get', 'art'], a]
+      map.addLayer({ id: 'warn-flaeche', type: 'fill', source: 'warnlage', filter: art('flaeche'), paint: { 'fill-color': ['get', 'farbe'], 'fill-opacity': 0.32 } })
+      map.addLayer({ id: 'warn-rand', type: 'line', source: 'warnlage', filter: art('flaeche'), paint: { 'line-color': ['get', 'farbe'], 'line-width': 2.5 } })
+      map.addLayer({ id: 'warn-punkt', type: 'circle', source: 'warnlage', filter: art('punkt'), paint: { 'circle-color': ['get', 'farbe'], 'circle-radius': 9, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } })
+      map.addLayer({ id: 'warn-umkreis', type: 'line', source: 'warnlage', filter: art('umkreis'), paint: { 'line-color': '#1f6fd1', 'line-width': 2, 'line-dasharray': [2, 2] } })
+      map.addLayer({ id: 'warn-ich', type: 'circle', source: 'warnlage', filter: art('ich'), paint: { 'circle-color': '#1f6fd1', 'circle-radius': 8, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 3 } })
+    }
+    const w = warnFokus && $warnListe.find((x) => x.id === warnFokus)
+    const rahmen = w && warnAusschnitt(w, $meinePosition)
+    if (rahmen) { try { map.fitBounds(rahmen, { padding: 60, duration: 700, maxZoom: 11 }) } catch {} }
+  }
+  $effect(() => { $warnListe; $meinePosition; $warnUmkreis; warnFokus; warnAn; if (mapGeladen) untrack(zeigeWarnungen) })
 
   let laedt = $state(false)
 
@@ -730,6 +766,16 @@
   </div>
   <div class="map-wrap">
     <div class="map" bind:this={container}></div>
+    {#if $warnListe.length}
+      <button class="warn-knopf" class:aus={!warnAn} aria-pressed={warnAn} onclick={warnUmschalten}>{warnAn ? t('⚠️ Warngebiete ausblenden') : t('⚠️ Warngebiete einblenden')}</button>
+    {/if}
+    {#if ($warnListe.length && warnAn) || $meinePosition}
+      <p class="warn-legende">
+        {#if $warnListe.length && warnAn}<span><i class="wl-flaeche" aria-hidden="true"></i>{t('Warngebiet')}</span>{/if}
+        {#if $meinePosition}<span><i class="wl-ich" aria-hidden="true"></i>{t('Du')}</span>{/if}
+        {#if $meinePosition && $warnUmkreis && warnAn}<span><i class="wl-kreis" aria-hidden="true"></i>{t('Umkreis {km} km', { km: $warnUmkreis })}</span>{/if}
+      </p>
+    {/if}
     {#if laedt}
       <div class="map-overlay">{t('🗺️ Karte wird geladen …')}</div>
     {:else if ladeFehler}
@@ -749,7 +795,7 @@
       {#each reisen as r}
         <button class="rs-chip" class:an={istGewaehlt(r.id)} onclick={() => toggleReise(r.id)}
           style="--f:{r.farbe || '#c0392b'}">
-          <span class="rs-strich" class:flug={(r.art || 'auto') === 'flug'}></span>{r.name}{#if r.route}&nbsp;· {r.route.km} km{/if}
+          <span class="rs-strich" class:flug={['flug', 'bahn'].includes(r.art || 'auto')}></span>{r.name}{#if r.route}&nbsp;· {r.route.km} km{/if}
         </button>
       {/each}
       {#if gewaehlteReisen.size === 1}
@@ -816,6 +862,14 @@
     color: #4a4038; background: rgba(246, 240, 226, 0.94); box-shadow: 0 1px 3px rgba(0,0,0,.18);
     pointer-events: none;
   }
+  .warn-knopf { position: absolute; top: 10px; left: 10px; z-index: 2; min-height: 40px; padding: 0 12px; border: 1px solid var(--line-stark); border-radius: 20px; background: var(--card); color: var(--ink); font-weight: 700; font-size: calc(13px * var(--schrift, 1)); box-shadow: var(--shadow); cursor: pointer; }
+  .warn-knopf.aus { color: var(--muted); }
+  .warn-legende { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0 0; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
+  .warn-legende span { display: inline-flex; align-items: center; gap: 6px; }
+  .warn-legende i { display: inline-block; width: 14px; height: 14px; }
+  .wl-flaeche { background: rgba(232, 115, 12, 0.35); border: 2px solid #e8730c; border-radius: 3px; }
+  .wl-ich { background: #1f6fd1; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px #1f6fd1; }
+  .wl-kreis { border: 2px dashed #1f6fd1; border-radius: 50%; }
   .teil-pille.warn { color: var(--warn-text, #a05a1e); background: var(--warn-flaeche, #fdf1e0); }
   .teil-name { color: var(--muted); }
   .route-sel { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 10px; background: var(--flaeche-2); border-top: 1px solid var(--line); }

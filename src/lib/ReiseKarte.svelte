@@ -117,12 +117,12 @@
 
   // ---------- Reisen aufbereiten ----------
   const touren = $derived(reisen
-    .map((r) => ({ r, typ: (r.art || 'auto') === 'flug' ? t('Flug') : t('Fahrt'), farbe: r.farbe || '#c1662f' }))
+    .map((r) => ({ r, typ: (r.art || 'auto') === 'flug' ? t('Flug') : r.art === 'bahn' ? t('Bahn') : t('Fahrt'), farbe: r.farbe || '#c1662f' }))
     .map(({ r, typ, farbe }) => {
     const stops = (r.stops || []).filter((s) => s.lat != null && s.lon != null)
     // Echte Straßengeometrie bevorzugen, sonst Linie zwischen den Stopps.
     const roh = r.route?.geometry?.length >= 2 ? r.route.geometry : stops.map((s) => [s.lon, s.lat])
-    const flug = (r.art || 'auto') === 'flug'
+    const flug = ['flug', 'bahn'].includes(r.art || 'auto')
     const geo = verdichte(roh, flug)
       return { id: r.id, name: r.name, typ, farbe, reise: r, stops, geo, flug }
     }).filter((t) => t.stops.length > 0))
