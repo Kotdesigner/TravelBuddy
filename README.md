@@ -8,8 +8,10 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1 · built for Western Australia**<br>
+**Version 1.1 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
+
+**[✨ What's new in 1.1](#-new-in-version-11)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -27,6 +29,44 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 
 ---
 
+## ✨ New in version 1.1
+
+**TravelBuddy now warns you before you drive into danger, watches your flights and trains, and shows what the trip really costs.**
+
+<table>
+<tr>
+<td align="center"><img src="bilder/en/neu-warnung.jpg" width="240" alt="A warning about 110 km ahead on the route"><br><b>Warned in time</b><br>about 110 km ahead on your route</td>
+<td align="center"><img src="bilder/en/neu-karte.jpg" width="240" alt="Warning area, radius and position on the offline map"><br><b>On your own map</b><br>area, radius and you, offline</td>
+<td align="center"><img src="bilder/en/neu-fluege.jpg" width="240" alt="Flight card with delay, gate and baggage belt"><br><b>Flights and trains live</b><br>delay, gate, platform, connection</td>
+</tr>
+<tr>
+<td align="center"><img src="bilder/en/neu-kosten.jpg" width="240" alt="Cost overview with short and long values"><br><b>What it really costs</b><br>short and long values, per stage</td>
+<td align="center"><img src="bilder/en/neu-logbuch.jpg" width="240" alt="Logbook entry covering two days"><br><b>Several days at once</b><br>one entry, costs count once</td>
+<td align="center"><img src="bilder/en/neu-testreise.jpg" width="240" alt="First screen with the button for the test trip"><br><b>Test trip</b><br>one tap and the app is full</td>
+</tr>
+</table>
+
+### 🚨 It warns you before you drive in
+TravelBuddy doesn't only look at where you are right now. It checks your **whole route, stretch by stretch**, plus every stage and every hike, and tells you: *about 110 km ahead*. Even a narrow fire zone 700 km down the road gets caught. For every warning you see how large the area is and how far away, open it in **Google Maps**, or see it **on your own offline map** with the area, your radius and your position. One button shows or hides it all. Without signal you see the last status.
+
+Should the weather service ever fail, the official warnings still get through. And with **test mode** you can try all of it at any place you like, with made-up warnings and nothing to reprogram, even while you are in Australia.
+
+### ✈️ Your flights and trains, live
+Status, new times, terminal, gate, check-in desk, platform, baggage belt and connection time, on their own page, on **Today** and in a notice 24 hours before departure. Enter a flight or train once, under route, stage or pre-trip costs, with number, booking, seat and ticket. **Every new booking is checked by itself**: rarely at first, more often as departure gets closer, so the free plan lasts. The app checks while it is open.
+
+Flights need your own free [AeroDataBox](https://aerodatabox.com) key from RapidAPI, and it stays on your device. German trains need no key.
+
+### 💰 What the trip really costs
+Every expense on its own line, in 23 categories, in euro and AU$ at the daily rate. Sorted into **short values** (what you use up), **long values** (what you keep), transport, stays and experiences, per stage and down to the single item. A new camera doesn't ruin your daily average, because long values stay out of it. And **every list adds up exactly to the total shown**.
+
+### 🗒️ Didn't write every day? No problem.
+One entry for several days, on a stage or in the logbook. It appears on each of its days, and its costs count once.
+
+### 🧪 Play first, plan later
+One tap fills the app with a made-up 21-day trip that is **always in progress**, because every date counts from today. It never goes stale. Your own data is set aside and comes back exactly as it was. [More below](#ready-in-one-minute).
+
+---
+
 ## Why TravelBuddy
 
 Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, kangaroos at dusk, bushfires, closed tracks and hours without reception. TravelBuddy is built for exactly that.
@@ -35,7 +75,9 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 |---|---|
 | 📡 **Offline first** | Maps, places, routes, tickets and emergency help work without signal. Plan once, and everything comes along. |
 | ⛽ **Knows where it gets tight** | The longest stretch without fuel, long sections without water, the latest departure to arrive before sunset. |
-| 🔥 **Warns you in time** | Official fire, flood and storm warnings, plus road closures on your route. |
+| 🔥 **Warns you in time** | Official fire, flood and storm warnings along your whole route, before you get there, plus road closures. |
+| ✈️ **Watches your flights and trains** | Delays, gate, platform and connections, live and by itself. |
+| 💰 **Knows what it costs** | Every expense, sorted into short and long values, per stage and per item. |
 | 📍 **144 hand-picked places** | With photos, seasonal tips, sun times and labels like "must-see", "hidden gem" or "4WD only". |
 | 📷 **Thinks like a photographer** | Golden and blue hour, sunrise, sunset and a star photography rating for every place and every day of your trip. |
 | 🎵 **Plays where you are** | Collects music from every place you pass into your own Spotify playlist: local bands, their most-played song first. |
@@ -505,8 +547,10 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1 · entwickelt für Western Australia**<br>
+**Version 1.1 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
+
+**[✨ Neu in Version 1.1](#-neu-in-version-11)**
 
 <br>
 
@@ -516,6 +560,42 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 
 > Alle Bilder zeigen eine ausgedachte **Beispielreise**. Echte Reisedaten, Buchungen oder Dokumente sind darin nicht zu sehen.
 
+## ✨ Neu in Version 1.1
+
+**TravelBuddy warnt dich jetzt, bevor du in eine Gefahr hineinfährst, behält deine Flüge und Züge im Blick und zeigt, was die Reise wirklich kostet.**
+
+<table>
+<tr>
+<td align="center"><img src="bilder/de/neu-warnung.jpg" width="240" alt="Eine Warnung etwa 110 km voraus auf der Route"><br><b>Rechtzeitig gewarnt</b><br>etwa 110 km voraus auf deiner Route</td>
+<td align="center"><img src="bilder/de/neu-karte.jpg" width="240" alt="Warngebiet, Umkreis und Standort auf der Offline-Karte"><br><b>Auf der eigenen Karte</b><br>Gebiet, Umkreis und du, offline</td>
+<td align="center"><img src="bilder/de/neu-fluege.jpg" width="240" alt="Flugkarte mit Verspätung, Gate und Gepäckband"><br><b>Flüge und Züge live</b><br>Verspätung, Gate, Gleis, Umstieg</td>
+</tr>
+<tr>
+<td align="center"><img src="bilder/de/neu-kosten.jpg" width="240" alt="Kostenübersicht mit Short- und Long-Values"><br><b>Was es wirklich kostet</b><br>Short- und Long-Values, je Etappe</td>
+<td align="center"><img src="bilder/de/neu-logbuch.jpg" width="240" alt="Logbuch-Eintrag über zwei Tage"><br><b>Mehrere Tage auf einmal</b><br>ein Eintrag, Kosten zählen einmal</td>
+<td align="center"><img src="bilder/de/neu-testreise.jpg" width="240" alt="Erster Bildschirm mit dem Knopf für die Testreise"><br><b>Testreise</b><br>ein Tipp und die App ist voll</td>
+</tr>
+</table>
+
+### 🚨 Sie warnt dich, bevor du hineinfährst
+TravelBuddy schaut nicht nur, wo du gerade bist. Die App prüft deine **ganze Route Stück für Stück**, dazu jede Etappe und jede Wanderung, und sagt dir: *in etwa 110 km voraus*. Auch ein schmales Feuergebiet 700 km weiter wird erkannt. Zu jeder Warnung siehst du, wie groß das Gebiet ist und wie weit weg, öffnest sie in **Google Maps** oder siehst sie **auf deiner eigenen Offline-Karte** mit Gebiet, Umkreis und Standort. Ein Knopf blendet alles ein und aus. Ohne Netz bleibt der letzte Stand sichtbar.
+
+Fällt der Wetterdienst einmal aus, kommen die amtlichen Warnungen trotzdem durch. Und im **Testmodus** probierst du alles an einem beliebigen Ort mit erfundenen Warnungen aus, ohne etwas umzuprogrammieren, auch mitten in Australien.
+
+### ✈️ Deine Flüge und Züge, live
+Status, neue Zeiten, Terminal, Gate, Schalter, Gleis, Gepäckband und Umstiegszeit, auf einer eigenen Seite, auf **Heute** und als Hinweis 24 Stunden vor dem Abflug. Du trägst Flug oder Zug einmal ein, unter Route, Etappe oder Vorabausgaben, mit Nummer, Buchung, Sitzplatz und Ticket. **Jede neue Buchung wird von selbst abgefragt**: erst selten, dann öfter, je näher die Abfahrt rückt, damit der kostenlose Tarif reicht. Die App fragt ab, solange sie offen ist.
+
+Für Flüge brauchst du einen eigenen kostenlosen [AeroDataBox](https://aerodatabox.com)-Schlüssel von RapidAPI, er bleibt auf deinem Gerät. Deutsche Züge brauchen keinen.
+
+### 💰 Was die Reise wirklich kostet
+Jede Ausgabe in einer eigenen Zeile, in 23 Kategorien, in Euro und AU$ zum Tageskurs. Sortiert nach **Short-Values** (was verbraucht ist), **Long-Values** (was bleibt), Verkehr, Unterkunft und Erlebnissen, je Etappe und bis zum einzelnen Posten. Eine neue Kamera verdirbt dir nicht den Tagesschnitt, denn Long-Values zählen dort nicht mit. Und **jede Liste ergibt genau die angezeigte Summe**.
+
+### 🗒️ Nicht jeden Tag geschrieben? Kein Problem.
+Ein Eintrag für mehrere Tage, an der Etappe oder im Logbuch. Er steht an jedem seiner Tage, seine Kosten zählen einmal.
+
+### 🧪 Erst spielen, dann planen
+Ein Tipp füllt die App mit einer ausgedachten 21-Tage-Reise, die **immer gerade läuft**, weil jedes Datum vom heutigen Tag aus zählt. Sie veraltet nie. Deine eigenen Daten kommen zur Seite und sind danach genau wie vorher wieder da. [Mehr dazu weiter unten](#in-einer-minute-startklar).
+
 ## Warum TravelBuddy
 
 Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die teils 300 km auseinanderliegen, Kängurus in der Dämmerung, Buschfeuer, gesperrte Pisten und stundenlang kein Empfang. Genau dafür ist TravelBuddy gebaut.
@@ -524,7 +604,9 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 |---|---|
 | 📡 **Offline zuerst** | Karten, Orte, Routen, Belege und Notfallhilfe funktionieren ohne Netz. Einmal geplant, ist alles dabei. |
 | ⛽ **Rechnet mit, wo es knapp wird** | Die längste Strecke ohne Tankstelle, lange Abschnitte ohne Wasser, die späteste Abfahrt vor Sonnenuntergang. |
-| 🔥 **Warnt rechtzeitig** | Amtliche Warnungen zu Feuer, Flut und Unwetter, dazu Straßensperrungen auf deiner Route. |
+| 🔥 **Warnt rechtzeitig** | Amtliche Warnungen zu Feuer, Flut und Unwetter entlang deiner ganzen Route, bevor du dort bist, dazu Straßensperrungen. |
+| ✈️ **Behält Flüge und Züge im Blick** | Verspätung, Gate, Gleis und Umstieg, live und von selbst. |
+| 💰 **Weiß, was es kostet** | Jede Ausgabe, sortiert nach Short- und Long-Values, je Etappe und je Posten. |
 | 📍 **144 handverlesene Orte** | Mit Bildern, Saison-Tipps, Sonnenzeiten und Markierungen wie „Muss-Sehen“, „Geheimtipp“ oder „Nur 4WD“. |
 | 📷 **Denkt wie ein Fotograf** | Goldene und blaue Stunde, Auf- und Untergang und eine Bewertung für Sternenfotos an jedem Ort und für jeden Reisetag. |
 | 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |

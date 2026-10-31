@@ -115,18 +115,20 @@ function logbuch(heute, stempel) {
   })
 }
 
+const fluglinie = () => je('Beispiel Air', 'Sample Air')
+
 function termine(heute, abflug) {
-  const zeit = uhrVon(abflug)
+  const zeit = uhrVon(abflug), linie = fluglinie()
   const nr = je('Beispielbuchung', 'Sample booking')
   return [
-    { id: 'test-fl-hin', datum: plusTage(heute, -10), kat: 'flight', emoji: '✈️', titel: 'Frankfurt → Perth', sub: 'Beispiel Air ZZ901 · 21:15', flugNr: 'ZZ901', zeit: '21:15', ref: 'ZZTEST', sitz: '34C', docs: [] },
+    { id: 'test-fl-hin', datum: plusTage(heute, -10), kat: 'flight', emoji: '✈️', titel: 'Frankfurt → Perth', sub: `${linie} ZZ901 · 21:15`, flugNr: 'ZZ901', zeit: '21:15', ref: 'ZZTEST', sitz: '34C', docs: [] },
     { id: 'test-camper', datum: plusTage(heute, -9), kat: 'camper', emoji: '🚐', titel: je('Camper-Übernahme', 'Camper pick-up'), sub: `Perth · ${nr}`, ref: 'CAMP-01', docs: [] },
     { id: 'test-hotel-perth', datum: plusTage(heute, -9), kat: 'hotel', emoji: '🏨', titel: je('Erste Nacht in Perth', 'First night in Perth'), sub: nr, ref: 'HOTEL-01', docs: [] },
     { id: 'test-tour-walhai', datum: plusTage(heute, -1), kat: 'tour', emoji: '🦈', titel: je('Walhai-Tour Ningaloo', 'Ningaloo whale shark tour'), sub: `Coral Bay · ${nr}`, ref: 'TOUR-01', docs: [] },
-    { id: 'test-fl-karratha', datum: tagVon(abflug), kat: 'flight', emoji: '✈️', titel: 'Exmouth → Karratha', sub: `Beispiel Air ZZ471 · ${zeit} · 7C`, flugNr: 'ZZ471', zeit, ref: 'ZZTEST', sitz: '7C', docs: [] },
+    { id: 'test-fl-karratha', datum: tagVon(abflug), kat: 'flight', emoji: '✈️', titel: 'Exmouth → Karratha', sub: `${linie} ZZ471 · ${zeit} · 7C`, flugNr: 'ZZ471', zeit, ref: 'ZZTEST', sitz: '7C', docs: [] },
     { id: 'test-mietwagen', datum: plusTage(heute, 1), kat: 'camper', emoji: '🚙', titel: je('Geländewagen in Karratha', '4WD in Karratha'), sub: nr, ref: 'CAR-02', docs: [] },
     { id: 'test-hotel-karijini', datum: plusTage(heute, 5), kat: 'hotel', emoji: '⛺', titel: je('Safarizelt in Karijini', 'Safari tent in Karijini'), sub: nr, ref: 'TENT-03', docs: [] },
-    { id: 'test-fl-heim', datum: plusTage(heute, 10), kat: 'flight', emoji: '✈️', titel: 'Port Hedland → Perth → Frankfurt', sub: 'Beispiel Air ZZ318 / ZZ902 · 09:20', flugNr: 'ZZ318', zeit: '09:20', ref: 'ZZTEST', sitz: '23A', docs: [] },
+    { id: 'test-fl-heim', datum: plusTage(heute, 10), kat: 'flight', emoji: '✈️', titel: 'Port Hedland → Perth → Frankfurt', sub: `${linie} ZZ318 / ZZ902 · 09:20`, flugNr: 'ZZ318', zeit: '09:20', ref: 'ZZTEST', sitz: '23A', docs: [] },
     { id: 'test-zug-heim', datum: plusTage(heute, 11), kat: 'train', emoji: '🚆', titel: je('Frankfurt Flughafen → Mainz', 'Frankfurt Airport → Mainz'), sub: 'ICE 100 · 17:05', zugNr: 'ICE100', bahnhof: 'Frankfurt(M) Flughafen Fernbf', zeit: '17:05', ref: 'BAHN-01', sitz: je('Wagen 7, Platz 21', 'Coach 7, seat 21'), docs: [] },
   ]
 }
@@ -142,11 +144,11 @@ export function flugStaende(events, jetzt) {
   const uhr = (ms) => uhrVon(new Date(ms))
   const staende = {
     'test-fl-karratha#ZZ471': { geholt: jetzt, leer: false, verlauf: [{ zeit: jetzt - 40 * 60e3, text: je('Gate 2 statt Gate 1', 'Gate 2 instead of gate 1') }, { zeit: jetzt - 40 * 60e3, text: je('35 Minuten später', '35 minutes later') }],
-      daten: { status: 'Delayed', airline: 'Beispiel Air', flugzeug: 'Dash 8-400',
+      daten: { status: 'Delayed', airline: fluglinie(), flugzeug: 'Dash 8-400',
         ab: { iata: 'LEA', ort: 'Exmouth', planDatum: flug.datum, planZeit: flug.zeit, planMs: planAb, neuZeit: uhr(neuAb), neuMs: neuAb, terminal: '1', gate: '2', schalter: '3', band: '', live: true },
         an: { iata: 'KTA', ort: 'Karratha', planDatum: flug.datum, planZeit: uhr(planAn), planMs: planAn, neuZeit: uhr(neuAn), neuMs: neuAn, terminal: '', gate: '', schalter: '', band: '2', live: true } } },
   }
-  const leg = (nr, ab, an, tag, von, nach, airline = 'Beispiel Air') => ({ geholt: jetzt, leer: false, verlauf: [], daten: { status: 'Expected', airline, flugzeug: 'A321',
+  const leg = (nr, ab, an, tag, von, nach, airline = fluglinie()) => ({ geholt: jetzt, leer: false, verlauf: [], daten: { status: 'Expected', airline, flugzeug: 'A321',
     ab: { iata: ab, ort: von, planDatum: tag, planZeit: nr[0], planMs: zeitAm(tag, nr[0]), neuZeit: '', neuMs: null, terminal: '', gate: '', schalter: '', band: '', live: false },
     an: { iata: an, ort: nach, planDatum: tag, planZeit: nr[1], planMs: zeitAm(tag, nr[1]), neuZeit: '', neuMs: null, terminal: '', gate: '', schalter: '', band: '', live: false } } })
   staende['test-fl-heim#ZZ318'] = leg(['09:20', '11:50'], 'PHE', 'PER', heim.datum, 'Port Hedland', 'Perth')

@@ -94,7 +94,9 @@ export function probeWarnung(art, pos, reisen = []) {
   if (!pos) return null
   if (art === 'hier') return probe(art, 3, pos.lat, pos.lon, t('Dein Teststandort'))
   if (art === 'nah') return probe(art, 2, pos.lat, pos.lon + 30 / (GRAD_KM * Math.cos((pos.lat * Math.PI) / 180)), t('30 km östlich von dir'))
-  const r = reisen.find((x) => x.route?.geometry?.length > 2 && x.art !== 'flug')
+  // Die Route, auf der man gerade steht. Sonst die erste, die eine Strecke hat.
+  const wege = reisen.filter((x) => x.route?.geometry?.length > 2 && x.art !== 'flug')
+  const r = wege.find((x) => punktAufRoute(x.route.geometry, pos.lat, pos.lon).km <= AUF_ROUTE_KM) || wege[0]
   if (!r) return null
   const geo = r.route.geometry
   const ab = punktAufRoute(geo, pos.lat, pos.lon)
