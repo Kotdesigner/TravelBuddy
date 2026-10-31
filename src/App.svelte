@@ -26,6 +26,7 @@
   import NeuBlatt from './lib/NeuBlatt.svelte'
   import Einfuehrung from './lib/Einfuehrung.svelte'
   import { einfuehrungStarten } from './lib/einfuehrung.js'
+  import { testreiseAn, testreiseKnopf } from './lib/testreise-dienst.js'
   import OrtNeu from './lib/OrtNeu.svelte'
   import Seitenleiste from './lib/Seitenleiste.svelte'
   import RoutenDienst from './lib/RoutenDienst.svelte'
@@ -816,7 +817,7 @@
 <div class="app">
 <div class="sl-mac">
   <Seitenleiste {ansicht} unterpunkte={UNTER} {geh} onSuche={zurSuche} onBackup={onExport}
-    onImport={() => importInput.click()} onHandbuch={() => geh('mehr/handbuch')} onEinfuehrung={einfuehrungStarten} />
+    onImport={() => importInput.click()} onHandbuch={() => geh('mehr/handbuch')} onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} />
 </div>
 
 <div class="inhalt">
@@ -851,6 +852,9 @@
 {/if}
 
 <main class="wrap" bind:this={hauptEl}>
+  {#if $testreiseAn}
+    <p class="test-band" role="status"><span>🧪 {t('Testreise: Alles hier ist ausgedacht.')}</span><button class="btn" onclick={testreiseKnopf}>{t('Beenden')}</button></p>
+  {/if}
   {#if laden}
     <p class="info">{t('Lade Reisedaten …')}</p>
   {:else if fehler}
@@ -1181,7 +1185,7 @@
   <BottomBar {aktivTab} onTab={tabZu} {springeZu}
     onSuche={zurSuche} onBackup={onExport} onImport={() => importInput.click()}
     onHandbuch={() => geh('mehr/handbuch')}
-    onEinfuehrung={einfuehrungStarten} />
+    onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} />
 </div>
 
 <svelte:window bind:scrollY onkeydown={globaleTaste} />
@@ -1327,6 +1331,8 @@
   /* WESTERN über die volle Breite spreizen -> vorne & hinten bündig mit AUSTRALIA */
   .hero h1 .stretch { display: flex; justify-content: space-between; }
   .hero h1 .akz { color: #f0b453; }
+  .test-band { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 12px; padding: 6px 8px 6px 12px; border: 1px solid var(--line-stark); border-radius: var(--radius-m); background: var(--flaeche-2); color: var(--ink); font-size: calc(14px * var(--schrift, 1)); font-weight: 700; }
+  .test-band .btn { flex: none; min-height: 40px; }
   .app-footer {
     /* Steht immer am unteren Rand, auch auf kurzen Seiten. */
     margin-top: auto; text-align: center; padding: 18px 16px calc(22px + env(safe-area-inset-bottom, 0px));

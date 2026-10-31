@@ -61,6 +61,7 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 **One app for the whole trip, from the first idea to the last memory. It really does it all.**
 
 - 🧭 **Setup assistant** that sets up your trip with you in one minute
+- 🧪 **Test trip to play with:** one tap fills the app with a made-up 21-day trip, one more tap and it is gone
 - 📅 **Trip dates in the header image** straight from the start date and length
 - 🗺️ **Stages and routes** with dates, stops and drag-to-reorder
 - 📐 **Smart stop placement** where a new stop adds the least detour
@@ -154,6 +155,8 @@ Type a secret word into the search field, and a game opens:
 ---
 
 ## Ready in one minute
+
+**Just want to look around?** Choose **🧪 Play with a test trip first** on the first screen, or later under More → Test trip. The app fills up with a made-up 21-day trip through Western Australia that is always in progress: nine days are already in the logbook with photos, animals and itemised costs, today is day 10, the next flight leaves in 20 hours and is delayed, a sample warning sits on the route. Flight and warning data in it are invented, nothing is looked up, and you can change anything. **End test trip** removes it all, and your own data, set aside while you played, comes back exactly as it was.
 
 The first time you open TravelBuddy, a setup assistant walks you through eight short steps, and you set up your trip right away: start date and length (shown in the header image straight away), your first stage, a booking pasted from the confirmation email, tickets and documents onto the device. Every step can be skipped.
 
@@ -446,7 +449,7 @@ The Windows build embeds the icon with `rsrc`: install it once with `go install 
 
 ### Tests
 
-Each test runs on its own, for example `node tests/plan.test.mjs`. There are **over 1,400 automated checks** in 30 test files, including a rule against rounding errors: the parts always add up to exactly the total shown. `node tests/basic-privat.test.mjs` makes sure no personal data ends up in the code or the build.
+Each test runs on its own, for example `node tests/plan.test.mjs`. There are **over 1,400 automated checks** in 31 test files, including a rule against rounding errors: the parts always add up to exactly the total shown. `node tests/basic-privat.test.mjs` makes sure no personal data ends up in the code or the build.
 
 ---
 
@@ -480,7 +483,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - [x] **Version 1: Western Australia** with planning, logbook, offline map, supplies and hazards
 - [x] Setup assistant on first launch, trip dates in the header, adjustable text and overall size
 - [x] Source code here on GitHub, apps for Mac and Windows
-- [x] **Version 1.1:** flights and trains live, cost analysis, entries over several days, warnings along the route with offline map
+- [x] **Version 1.1:** flights and trains live, cost analysis, entries over several days, warnings along the route with offline map, test trip to play with
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -543,6 +546,7 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 **Eine App für die ganze Reise, von der ersten Idee bis zur letzten Erinnerung. Sie kann wirklich alles.**
 
 - 🧭 **Einrichtungsassistent**, der deine Reise in einer Minute mit dir anlegt
+- 🧪 **Testreise zum Spielen:** ein Tipp füllt die App mit einer ausgedachten 21-Tage-Reise, noch ein Tipp und sie ist wieder weg
 - 📅 **Reisezeitraum im Titelbild**, direkt aus Reisebeginn und Reisedauer
 - 🗺️ **Etappen und Routen** mit Datum, Stopps und Reihenfolge zum Ziehen
 - 📐 **Kluge Stopp-Platzierung** dort, wo ein neuer Stopp den kleinsten Umweg macht
@@ -634,6 +638,8 @@ Tipp ein geheimes Wort ins Suchfeld, und ein Spiel geht auf:
 </details>
 
 ## In einer Minute startklar
+
+**Erst mal nur umsehen?** Wähle auf dem ersten Bildschirm **🧪 Erst mit einer Testreise spielen** oder später unter Mehr → Testreise. Die App füllt sich mit einer ausgedachten 21-Tage-Reise durch Western Australia, die immer gerade läuft: Neun Tage stehen schon im Logbuch, mit Fotos, Tieren und aufgeschlüsselten Kosten, heute ist Tag 10, der nächste Flug geht in 20 Stunden und ist verspätet, auf der Route liegt eine Probe-Warnung. Flug- und Warndaten darin sind erfunden, abgefragt wird nichts, und du kannst alles ändern. **Testreise beenden** räumt alles wieder ab, und deine eigenen Daten, die solange zur Seite gelegt waren, sind genau wie vorher wieder da.
 
 Beim ersten Öffnen führt dich ein Einrichtungsassistent in acht kurzen Schritten durch alles, und du legst dabei gleich deine Reise an: Reisebeginn und Reisedauer (stehen sofort oben im Titelbild), die erste Etappe, eine Buchung aus der Bestätigungsmail, Tickets und Dokumente aufs Gerät. Jeder Schritt lässt sich überspringen.
 
@@ -922,7 +928,7 @@ Das Symbol der Windows-App bettet `rsrc` ein: einmal `go install github.com/akav
 
 ### Tests
 
-Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1.400 automatische Prüfungen** in 30 Testdateien, darunter eine Regel gegen Rundungsfehler: Teile ergeben immer genau die angezeigte Summe. `node tests/basic-privat.test.mjs` wacht darüber, dass keine persönlichen Daten im Code oder im Build landen.
+Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1.400 automatische Prüfungen** in 31 Testdateien, darunter eine Regel gegen Rundungsfehler: Teile ergeben immer genau die angezeigte Summe. `node tests/basic-privat.test.mjs` wacht darüber, dass keine persönlichen Daten im Code oder im Build landen.
 
 ## Datenschutz
 
@@ -936,7 +942,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 - [x] **Version 1: Western Australia** mit Planung, Logbuch, Offline-Karte, Versorgung und Gefahrenlage
 - [x] Einrichtungsassistent beim ersten Öffnen, Reisezeitraum im Titelbild, Schrift- und Gesamtgröße einstellbar
 - [x] Quellcode hier auf GitHub, Apps für Mac und Windows
-- [x] **Version 1.1:** Flüge und Züge live, Kostenauswertung, Einträge über mehrere Tage, Warnungen entlang der Route mit Offline-Karte
+- [x] **Version 1.1:** Flüge und Züge live, Kostenauswertung, Einträge über mehrere Tage, Warnungen entlang der Route mit Offline-Karte, Testreise zum Ausprobieren
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

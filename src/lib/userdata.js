@@ -51,7 +51,7 @@ function openDB() {
   })
 }
 
-async function idbGet(key) {
+export async function idbGet(key) {
   const db = await openDB()
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE, 'readonly')
@@ -61,7 +61,7 @@ async function idbGet(key) {
   })
 }
 
-async function idbSet(key, value) {
+export async function idbSet(key, value) {
   const db = await openDB()
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE, 'readwrite')
@@ -1003,7 +1003,7 @@ function setSync(patch) {
   })
 }
 
-function baueBackupPayload() {
+export function baueBackupPayload() {
   return {
     typ: 'wa-reiseplan-backup',
     version: 7,   // 5: Ostküste zusammengeführt · 6: Buchungen · 7: Zeitstempel + Grabsteine (Zusammenführen)

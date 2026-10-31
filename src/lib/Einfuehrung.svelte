@@ -13,6 +13,7 @@
   import { modal } from './modal.js'
   import { blattRaus, ausblenden } from './motion.js'
   import { SCHRITTE, einfuehrung, lies, merke, sollZeigen, istLeer } from './einfuehrung.js'
+  import { testreiseKnopf } from './testreise-dienst.js'
 
   let { geh = () => {}, anzahlOrte = 0 } = $props()
 
@@ -48,6 +49,7 @@
     setze(offen.schritt + 1)
   }
   function zurueck() { if (offen?.schritt > 0) setze(offen.schritt - 1) }
+  function testreise() { beenden(); testreiseKnopf() }
   function beenden() {
     einfuehrung.set(null)
     merke({ schritt: 0, fertig: true })
@@ -105,6 +107,7 @@
       </div>
       <div class="ef-knoepfe">
         <button class="btn-primary ef-los" onclick={weiter}>{t('Los geht’s')}</button>
+        <button class="btn ef-test" onclick={testreise}>🧪 {t('Erst mit einer Testreise spielen')}</button>
         <button class="ef-leise" onclick={beenden}>{t('Später')}</button>
       </div>
 
@@ -234,6 +237,7 @@
   .ef-knoepfe { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
   .ef-los { min-height: 52px; font-size: calc(17px * var(--schrift, 1)); }
   .ef-los:disabled { opacity: 0.5; }
+  .ef-test { min-height: 48px; font-size: calc(15px * var(--schrift, 1)); font-weight: 700; }
   .ef-leise { min-height: 44px; border: none; background: none; color: var(--brand-text); font-size: calc(15px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
 
   /* Beim Umsehen: ein Knopf über der unteren Leiste führt weiter */

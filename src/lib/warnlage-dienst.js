@@ -8,7 +8,7 @@ import { heuteTag } from './heute.js'
 import { warnlage, probeWarnung } from './warnlage.js'
 
 const KEY_TEST = 'tb-warn-test'
-const TEST_AUS = { aktiv: false, lat: null, lon: null, name: '', probe: '' }
+export const TEST_AUS = { aktiv: false, lat: null, lon: null, name: '', probe: '' }
 
 /** { liste, zeit: ms|null } */
 export const warnDaten = writable({ liste: [], zeit: null })

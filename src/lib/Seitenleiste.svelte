@@ -4,13 +4,14 @@
   // Unterpunkte des offenen Bereichs. Ersetzt die Leiste oben mit ihren Aufklappmenüs
   // und das ⋯-Dock unten rechts (Backup, Import, Design wohnen jetzt hier).
   import { online } from './netz.js'
+  import { testreiseAn } from './testreise-dienst.js'
   import { theme, setzeTheme } from './theme.js'
   import { darstellung, setzeSchrift, setzeGesamt, SCHRIFT, GESAMT } from './darstellung.js'
   const SCHRIFT_NAME = { klein: t('Klein'), standard: t('Standard'), gross: t('Groß'), sehrgross: t('Sehr groß') }
   const GESAMT_NAME = { kompakt: t('Kompakt'), standard: t('Standard'), gross: t('Groß'), sehrgross: t('Sehr groß') }
   import { syncZeiten } from './userdata.js'
 
-  let { ansicht, unterpunkte = {}, geh = () => {}, onSuche = () => {}, onBackup = () => {}, onImport = () => {}, onHandbuch = () => {}, onEinfuehrung = () => {} } = $props()
+  let { ansicht, unterpunkte = {}, geh = () => {}, onSuche = () => {}, onBackup = () => {}, onImport = () => {}, onHandbuch = () => {}, onEinfuehrung = () => {}, onTestreise = () => {} } = $props()
 
   const BEREICHE = [
     { id: 'heute', label: t('Heute') },
@@ -51,6 +52,7 @@
       <button onclick={onImport}>{t('📂 Import')}</button>
       <button onclick={onHandbuch}>{t('📖 Handbuch')}</button>
       <button onclick={onEinfuehrung}>{t('🧭 Einführung')}</button>
+      <button onclick={onTestreise}>🧪 {$testreiseAn ? t('Testreise beenden') : t('Testreise')}</button>
     </div>
     <div class="segment sl-theme" role="group" aria-label={t('Design')}>
       {#each [['auto', t('Auto')], ['hell', t('Hell')], ['dunkel', t('Dunkel')]] as [m, l]}

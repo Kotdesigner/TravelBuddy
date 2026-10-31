@@ -8,6 +8,7 @@
   // Monochrome SVG-Icons (einfärbbar für Aktiv-Zustand), Glass-Look,
   // Safe-Area unten, gleitender Indikator.
   import { online } from './netz.js'
+  import { testreiseAn } from './testreise-dienst.js'
   import { haptic } from './haptik.js'
   import { theme, setzeTheme } from './theme.js'
   import { darstellung, setzeSchrift, setzeGesamt, SCHRIFT, GESAMT } from './darstellung.js'
@@ -26,6 +27,7 @@
     onImport = () => {},
     onHandbuch = () => {},
     onEinfuehrung = () => {},
+    onTestreise = () => {},
   } = $props()
 
   let sheetOffen = $state(false)
@@ -195,6 +197,7 @@
     </div>
     <!-- Basic: statt „Startdaten laden“ die Einführung vom ersten Öffnen noch einmal -->
     <button class="s-einf" onclick={() => sheetAktion(onEinfuehrung)}>🧭 {t('Einführung noch einmal')}</button>
+    <button class="s-einf" onclick={() => sheetAktion(onTestreise)}>🧪 {$testreiseAn ? t('Testreise beenden') : t('Testreise ausprobieren')}</button>
   </div>
 {/if}
 

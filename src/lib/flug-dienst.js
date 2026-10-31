@@ -105,6 +105,9 @@ async function holeZug(zug) {
   return daten ? { daten } : { leer: true }
 }
 
+// Termine der Testreise sind ausgedacht: nichts abfragen, kein Kontingent verbrauchen
+const ausgedacht = (f) => f.id.startsWith('test-')
+
 function melde(flug, liste) {
   const wichtig = liste.filter((a) => a.wichtig)
   if (!wichtig.length) return
@@ -125,8 +128,11 @@ async function lauf({ liste = null, vonHand = false } = {}) {
   const zuHolen = (liste || [
     ...fl.filter((f) => faellig(f, stand.staende[f.id], jetzt, stand.staende)),
     ...zuege.filter((z) => zugFaellig(z, stand.staende[z.id], jetzt)),
-  ]).filter((f) => f.art === 'bahn' || fluegeFrei)
-  if (!zuHolen.length) return
+  ]).filter((f) => !ausgedacht(f) && (f.art === 'bahn' || fluegeFrei))
+  if (!zuHolen.length) {
+    if (vonHand && liste?.some(ausgedacht)) zeigeToast(t('In der Testreise sind die Daten ausgedacht. Abgefragt wird nichts.'), 'ok')
+    return
+  }
 
   fluglauf.set({ ...get(fluglauf), laden: true, fehler: null })
   let { staende, zaehler, gesperrtBis } = stand
@@ -201,6 +207,12 @@ async function zeigeVorAbflug() {
   })
   if (zum) geh('mehr/fluege')
   else zeigeVorAbflug()
+}
+
+/** Testreise: den ganzen Stand tauschen, ohne etwas abzufragen. */
+export function tauscheFlugstand(neu) {
+  flugspeicher.set(neu)
+  schreib(neu).catch(() => {})
 }
 
 let gestartet = false
