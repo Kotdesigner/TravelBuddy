@@ -176,6 +176,7 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - ⛺ **Supplies on the route:** fuel, water, toilets, camps, rest areas, shops, workshops, clinics
 - 🔥 **Official warnings** for fire, flood and storms in WA, VIC and QLD
 - 🚨 **Warnings along your route:** where you are, on the road ahead, on every stage and hike, even when a route runs through several danger zones
+- 🏷️ **Warning labels on the place pictures:** storm, heavy rain, flooding, thunderstorms, extreme heat or fire show up right on a place's thumbnail, with the distance if the warning is close by
 - 📡 **Exact location of every warning:** size of the area, distance, Google Maps, and offline on your own map with radius and your position
 - 🚧 **WA road conditions** with closures right on your route
 - 🆘 **Emergency mode** fully offline: position, nearest help, emergency numbers
@@ -745,6 +746,7 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - ⛺ **Versorgung an der Route:** Tankstellen, Wasser, Toiletten, Camps, Rastplätze, Läden, Werkstätten, Kliniken
 - 🔥 **Amtliche Warnungen** zu Feuer, Flut und Unwetter in WA, VIC und QLD
 - 🚨 **Warnungen entlang der Route:** am Standort, auf der Strecke voraus, auf jeder Etappe und Wanderung, auch wenn die Strecke mehrere Gefahrengebiete kreuzt
+- 🏷️ **Warn-Labels auf den Ortsbildern:** Sturm, Starkregen, Überflutung, Gewitter, extreme Hitze oder Feuer stehen direkt auf dem Thumbnail des Orts, bei Warnungen in der Nähe mit Entfernung
 - 📡 **Genaue Lage jeder Warnung:** Größe des Gebiets, Entfernung, Google Maps und offline auf der eigenen Karte mit Umkreis und deinem Standort
 - 🚧 **Straßenlage WA** mit Sperrungen direkt auf deiner Route
 - 🆘 **Notfall-Modus** komplett offline: Standort, nächste Hilfe, Notrufnummern
