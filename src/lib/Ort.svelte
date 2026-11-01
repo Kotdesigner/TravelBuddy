@@ -2,7 +2,7 @@
   import { t, LOCALE, tn, je } from './i18n.js'
   import { userData, updateOrt, reisen, stopHinzufuegen, neueReise, uid, journal, neuerJournalEintrag } from './userdata.js'
   import SonneWetter from './SonneWetter.svelte'
-  import { STUFE_FARBE } from './gefahren.js'
+  import { STUFE_FARBE, typName } from './gefahren.js'
   import { schriftAuf } from './kontrast.js'
   import { macheThumbnail, heute } from './thumbnail.js'
   import BildAendern from './BildAendern.svelte'
@@ -183,13 +183,13 @@
           {warnung.icon}<span class="lang"> {warnung.level}</span>{#if warnung.km > 1}<span class="km"> {Math.round(warnung.km)} km</span>{/if}
         </span>
       {:else if gefahr && gefahr.stufe >= 2}
-        {@const typen = gefahr.gefahren.filter((g) => g.stufe >= 2).map((g) => g.typ)}
-        <span class="warn" style="background:{STUFE_FARBE[gefahr.stufe]};color:{schriftAuf(STUFE_FARBE[gefahr.stufe])}" title={gefahr.gefahren.map((g) => g.typ + ': ' + g.text).join(' · ')}>
+        {@const typen = gefahr.gefahren.filter((g) => g.stufe >= 2).map((g) => typName(g.typ))}
+        <span class="warn" style="background:{STUFE_FARBE[gefahr.stufe]};color:{schriftAuf(STUFE_FARBE[gefahr.stufe])}" title={gefahr.gefahren.map((g) => typName(g.typ) + ': ' + g.text).join(' · ')}>
           {gefahr.gefahren[0]?.icon}<span class="lang"> {typen.join(', ')}</span>{#if typen.length > 1}<span class="km"> {typen.length}</span>{/if}
         </span>
       {/if}
       {#if ort.tags?.length}
-        <span class="badge" title={ort.tags.join(' · ')}>{ort.tags[0]}</span>
+        <span class="badge" title={ort.tags.map((x) => t(x)).join(' · ')}>{t(ort.tags[0])}</span>
       {/if}
       {#if istPerle(ort.name)}
         <span class="wander perle" title={t('Wander-Perle: eine der besten Wanderungen der Route')}>🌟<span class="lang"> {je('Wander-', 'Hiking ')}</span>{t('Perle')}</span>
@@ -372,7 +372,7 @@
   }
   .warn {
     position: absolute; top: 8px; left: 8px; color: #fff; font-size: calc(12px * var(--schrift, 1)); font-weight: 800;
-    padding: 3px 8px; border-radius: 9px; box-shadow: 0 1px 4px rgba(0,0,0,0.4); max-width: 70%;
+    padding: 3px 8px; border-radius: 9px; box-shadow: 0 1px 4px rgba(0,0,0,0.4); max-width: 60%;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .wander {
@@ -538,7 +538,7 @@
     .marken {
       display: flex; flex-wrap: wrap; align-items: flex-end; gap: 3px;
       position: absolute; left: 0; right: 0; bottom: 0;
-      padding: 18px 5px 5px;
+      padding: 18px 40px 5px 5px;   /* rechts sitzt der Bild-Knopf */
       background: linear-gradient(to top, rgba(0,0,0,0.62), rgba(0,0,0,0.28) 52%, transparent);
       pointer-events: none;
     }
@@ -562,7 +562,8 @@
   .bubble, .mehr-btn, .saison-btn { position: relative; }
   .bubble::after { content: ''; position: absolute; inset: -3px -2px; }
   .mehr-btn::after, .saison-btn::after { content: ''; position: absolute; inset: -7px -4px; }
-  .symbol-marke { position: absolute; left: 8px; top: 50px; z-index: 2; padding: 2px 8px; border-radius: 10px; background: rgba(20,12,8,.72); color: #fff; font-size: calc(11.5px * var(--schrift, 1)); font-weight: 700; }
+  .symbol-marke { position: absolute; right: 42px; bottom: 11px; z-index: 2; padding: 1px 6px; border-radius: 8px; background: rgba(20,12,8,.72); color: #fff; font-size: calc(10.5px * var(--schrift, 1)); font-weight: 700; }
+  @media (max-width: 520px) { .symbol-marke { right: auto; left: 5px; bottom: auto; top: 5px; } }
   .bild-quelle { margin: 0 0 8px; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); overflow-wrap: anywhere; }
   .bild-quelle a { color: inherit; }
 </style>

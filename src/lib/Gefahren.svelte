@@ -1,7 +1,7 @@
 <script>
   import { t, LOCALE, tn } from './i18n.js'
   import { ZWEI, dezimal, zahl } from './format.js'
-  import { STUFE_FARBE } from './gefahren.js'
+  import { STUFE_FARBE, typName } from './gefahren.js'
   import { schriftAuf } from './kontrast.js'
   import { online } from './netz.js'
   import Strassenlage from './Strassenlage.svelte'
@@ -157,7 +157,7 @@
         {#each (stdAlle ? standort.gefahren : standort.gefahren.slice(0, ZEIGE)) as g}
           <div class="g-zeile" style="border-left:4px solid {STUFE_FARBE[g.stufe]}">
             <span class="g-icon">{g.icon}</span>
-            <span class="g-text"><b>{g.typ}:</b> {g.text}</span>
+            <span class="g-text"><b>{typName(g.typ)}:</b> {g.text}</span>
             <span class="g-stufe" style="background:{STUFE_FARBE[g.stufe]};color:{schriftAuf(STUFE_FARBE[g.stufe])}">{stufeText[g.stufe]}</span>
           </div>
         {/each}
@@ -178,7 +178,7 @@
         <div class="o-zeile">
           <span class="o-badge" style="background:{STUFE_FARBE[b.stufe]}">{b.gefahren[0]?.icon}</span>
           <span class="o-name">{b.name}</span>
-          <span class="o-info">{b.gefahren.map((g) => g.typ).join(', ')}</span>
+          <span class="o-info">{b.gefahren.map((g) => typName(g.typ)).join(', ')}</span>
         </div>
       {/each}
       {#if betroffene.length > ZEIGE}

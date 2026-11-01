@@ -7,7 +7,7 @@
   import { zeigeToast } from './toast.js'
   import { modal } from './modal.js'
 
-  let { name, status = '', eigenes = false, onbild = () => {}, onzurueck = () => {}, klein = false } = $props()
+  let { name, status = '', eigenes = false, onbild = () => {}, onzurueck = () => {} } = $props()
   let auf = $state(false)
   const kannEinfuegen = typeof navigator !== 'undefined' && !!navigator.clipboard?.read
   const nav = typeof navigator !== 'undefined' ? navigator : { platform: '', userAgent: '' }
@@ -15,6 +15,7 @@
   const iphone = handy && !/Android/.test(nav.userAgent)
   const mac = /Mac/.test(nav.platform) && !handy
   const einladen = $derived((status === 'neu' || status === 'symbol') && !eigenes)
+  const knopfText = $derived(einladen ? je('Besseres Bild', 'Better picture') : je('Bild ändern', 'Change picture'))
 
   async function uebernimm(datei) {
     try {
@@ -46,9 +47,7 @@
 
 <svelte:window onpaste={auf ? tastatur : null} />
 
-<button class="ba-knopf" class:einladen class:klein onclick={(e) => { e.stopPropagation(); auf = true }} aria-label="{je('Bild ändern', 'Change picture')}: {name}">
-  {einladen ? '✨' : '📷'}<span>{einladen ? je('Besseres Bild', 'Better picture') : je('Bild ändern', 'Change picture')}</span>
-</button>
+<button class="ba-knopf" class:einladen onclick={(e) => { e.stopPropagation(); auf = true }} title={knopfText} aria-label="{knopfText}: {name}">{einladen ? '✨' : '📷'}</button>
 
 {#if auf}
   <div class="ba-hg" data-dialog-hg aria-hidden="true" onclick={() => (auf = false)}></div>
@@ -76,8 +75,9 @@
 {/if}
 
 <style>
-  .ba-knopf { position: absolute; left: 8px; top: 8px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; min-height: 36px; max-width: calc(100% - 16px); padding: 4px 10px; border: 1px solid rgba(255,255,255,.35); border-radius: 18px; background: rgba(20,12,8,.72); color: #fff; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
-  .ba-knopf span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* Klein in der Ecke, damit das Foto frei bleibt. ::after hält die Tippfläche bei 44 px. */
+  .ba-knopf { position: absolute; right: 6px; bottom: 6px; z-index: 2; display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 1px solid rgba(255,255,255,.35); border-radius: 50%; background: rgba(20,12,8,.72); color: #fff; font-size: calc(14px * var(--schrift, 1)); line-height: 1; cursor: pointer; }
+  .ba-knopf::after { content: ''; position: absolute; inset: -7px; }
   .ba-knopf.einladen { background: var(--brand); border-color: var(--brand); }
   .ba-hg { position: fixed; inset: 0; z-index: 900; background: rgba(0,0,0,.55); }
   .ba { position: fixed; left: 50%; top: 50%; z-index: 901; transform: translate(-50%, -50%); width: min(440px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; display: flex; flex-direction: column; gap: 8px; padding: 18px; border-radius: var(--radius-l); background: var(--card); color: var(--ink); box-shadow: var(--shadow); }

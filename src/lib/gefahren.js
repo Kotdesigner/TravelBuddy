@@ -1,9 +1,15 @@
 // Wetter-abgeleitete Gefahren-Einschätzung über Open-Meteo (online, ohne Server).
 // KEINE amtlichen Warnungen — nur Risiko-Indikatoren aus der Vorhersage.
-import { t, jeSprache } from './i18n.js'
+import { t, je, jeSprache } from './i18n.js'
 
 export const STUFEN = jeSprache(() => ({ 0: 'keine', 1: t('erhöht'), 2: 'hoch', 3: 'extrem' }))
 export const STUFE_FARBE = { 1: '#c9a227', 2: '#d97a2b', 3: '#c0392b' }
+
+// `typ` bleibt deutsch, auch im Zwischenspeicher, weil er die Gefahren zusammenfasst. Angezeigt wird typName.
+export function typName(typ) {
+  const namen = { Hitze: je('Hitze', 'Heat'), Überflutung: je('Überflutung', 'Flooding'), Starkregen: je('Starkregen', 'Heavy rain'), Regen: je('Regen', 'Rain'), Sturm: je('Sturm', 'Storm'), Wind: je('Wind', 'Wind'), Gewitter: je('Gewitter', 'Thunderstorm') }
+  return namen[typ] || typ
+}
 
 // Schwellen (australischer Sommer-Kontext), max über die nächsten Tage.
 function bewerteTag(temp, regen, boe, code) {
