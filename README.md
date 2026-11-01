@@ -63,6 +63,25 @@ No account, nothing to install from a store, and your data stays on your phone. 
 
 ---
 
+## Why TravelBuddy
+
+Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, kangaroos at dusk, bushfires, closed tracks and hours without reception. TravelBuddy is built for exactly that.
+
+| | |
+|---|---|
+| 📡 **Offline first** | Maps, places, routes, tickets and emergency help work without signal. Plan once, and everything comes along. |
+| ⛽ **Knows where it gets tight** | The longest stretch without fuel, long sections without water, the latest departure to arrive before sunset. |
+| 🔥 **Warns you in time** | Official fire, flood and storm warnings along your whole route, before you get there, plus road closures. |
+| ✈️ **Watches your flights and trains** | Delays, gate, platform and connections, live and by itself. |
+| 💰 **Knows what it costs** | Every expense, sorted into short and long values, per stage and per item. |
+| 📍 **144 hand-picked places** | With photos, seasonal tips, sun times and labels like "must-see", "hidden gem" or "4WD only". |
+| 📷 **Thinks like a photographer** | Golden and blue hour, sunrise, sunset and a star photography rating for every place and every day of your trip. |
+| 🎵 **Plays where you are** | Collects music from every place you pass into your own Spotify playlist: local bands, their most-played song first. |
+| 📔 **Writes your travel diary** | A logbook with 16 modules, from the fly factor to the roadkill counter, that turns into a travel journal, a trip film and a travel report. |
+| 🔒 **Yours alone** | No account, no server, no tracking. All data stays on your device. |
+
+---
+
 ## 📸 New in version 1.8
 
 **Photo conditions on the home screen.** One line tells you right away whether it is worth getting the camera out, with the best time, clouds and moon. Open it for golden and blue hour, moon, Milky Way with time and direction, star trails, sky and tips. Sun, moon and stars work offline.
@@ -72,6 +91,11 @@ No account, nothing to install from a store, and your data stays on your phone. 
 **Tidier everywhere.** Logbook, notes, hikes, the map and the home screen now share clear panels with equal buttons. Lists of routes stay short over months of travel: current ones first, the rest folded away, with a search.
 
 **Calendar as a real PDF, calmer trip film.** The calendar now creates a file instead of a print job. In the trip film, long flights zoom out early and cars skip the street-by-street detail.
+
+---
+
+<details>
+<summary><b>Earlier versions: 1.7 to 1.1</b></summary>
 
 ## 🎬 New in version 1.7
 
@@ -158,24 +182,7 @@ One entry for several days, on a stage or in the logbook. It appears on each of 
 ### 🧪 Play first, plan later
 One tap fills the app with a made-up 21-day trip that is **always in progress**, because every date counts from today. It never goes stale. Your own data is set aside and comes back exactly as it was. [More below](#ready-in-one-minute).
 
----
-
-## Why TravelBuddy
-
-Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, kangaroos at dusk, bushfires, closed tracks and hours without reception. TravelBuddy is built for exactly that.
-
-| | |
-|---|---|
-| 📡 **Offline first** | Maps, places, routes, tickets and emergency help work without signal. Plan once, and everything comes along. |
-| ⛽ **Knows where it gets tight** | The longest stretch without fuel, long sections without water, the latest departure to arrive before sunset. |
-| 🔥 **Warns you in time** | Official fire, flood and storm warnings along your whole route, before you get there, plus road closures. |
-| ✈️ **Watches your flights and trains** | Delays, gate, platform and connections, live and by itself. |
-| 💰 **Knows what it costs** | Every expense, sorted into short and long values, per stage and per item. |
-| 📍 **144 hand-picked places** | With photos, seasonal tips, sun times and labels like "must-see", "hidden gem" or "4WD only". |
-| 📷 **Thinks like a photographer** | Golden and blue hour, sunrise, sunset and a star photography rating for every place and every day of your trip. |
-| 🎵 **Plays where you are** | Collects music from every place you pass into your own Spotify playlist: local bands, their most-played song first. |
-| 📔 **Writes your travel diary** | A logbook with 16 modules, from the fly factor to the roadkill counter, that turns into a travel journal, a trip film and a travel report. |
-| 🔒 **Yours alone** | No account, no server, no tracking. All data stays on your device. |
+</details>
 
 ---
 
@@ -676,7 +683,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 
 # 🇩🇪 TravelBuddy auf Deutsch
 
-### Dein Roadtrip-Begleiter für die Strecken, auf denen das Netz aufhört.
+### Eine App. Der ganze Roadtrip. Auch dort, wo das Netz endet.
 
 Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, komplett offline, ohne Konto und ohne Cloud.<br>
 **Eine App für die ganze Reise. Sie kann alles.**<br>
@@ -729,6 +736,23 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 
 ---
 
+## Warum TravelBuddy
+
+Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die teils 300 km auseinanderliegen, Kängurus in der Dämmerung, Buschfeuer, gesperrte Pisten und stundenlang kein Empfang. Genau dafür ist TravelBuddy gebaut.
+
+| | |
+|---|---|
+| 📡 **Offline zuerst** | Karten, Orte, Routen, Belege und Notfallhilfe funktionieren ohne Netz. Einmal geplant, ist alles dabei. |
+| ⛽ **Rechnet mit, wo es knapp wird** | Die längste Strecke ohne Tankstelle, lange Abschnitte ohne Wasser, die späteste Abfahrt vor Sonnenuntergang. |
+| 🔥 **Warnt rechtzeitig** | Amtliche Warnungen zu Feuer, Flut und Unwetter entlang deiner ganzen Route, bevor du dort bist, dazu Straßensperrungen. |
+| ✈️ **Behält Flüge und Züge im Blick** | Verspätung, Gate, Gleis und Umstieg, live und von selbst. |
+| 💰 **Weiß, was es kostet** | Jede Ausgabe, sortiert nach Short- und Long-Values, je Etappe und je Posten. |
+| 📍 **144 handverlesene Orte** | Mit Bildern, Saison-Tipps, Sonnenzeiten und Markierungen wie „Muss-Sehen“, „Geheimtipp“ oder „Nur 4WD“. |
+| 📷 **Denkt wie ein Fotograf** | Goldene und blaue Stunde, Auf- und Untergang und eine Bewertung für Sternenfotos an jedem Ort und für jeden Reisetag. |
+| 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
+| 📔 **Schreibt dein Reisetagebuch** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
+| 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
+
 ## 📸 Neu in Version 1.8
 
 **Fotolage auf der Startseite.** Eine Zeile sagt sofort, ob sich die Kamera lohnt, mit bester Zeit, Wolken und Mond. Aufgeklappt stehen dort goldene und blaue Stunde, Mond, Milchstraße mit Zeit und Richtung, Strichspuren, Himmel und Tipps. Sonne, Mond und Sterne gehen auch offline.
@@ -738,6 +762,11 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 **Überall aufgeräumter.** Logbuch, Notizen, Wanderungen, Karte und Startseite haben klare Felder mit gleich großen Knöpfen. Routenlisten bleiben auch nach Monaten kurz: Aktuelles zuerst, der Rest eingeklappt, dazu eine Suche.
 
 **Kalender als echtes PDF, ruhigerer Reisefilm.** Der Kalender erzeugt jetzt eine Datei statt eines Druckauftrags. Im Reisefilm zoomen lange Flüge früher heraus, und das Auto zeigt nicht mehr jede Straße.
+
+---
+
+<details>
+<summary><b>Frühere Versionen: 1.7 bis 1.1</b></summary>
 
 ## 🎬 Neu in Version 1.7
 
@@ -820,22 +849,9 @@ Ein Eintrag für mehrere Tage, an der Etappe oder im Logbuch. Er steht an jedem 
 ### 🧪 Erst spielen, dann planen
 Ein Tipp füllt die App mit einer ausgedachten 21-Tage-Reise, die **immer gerade läuft**, weil jedes Datum vom heutigen Tag aus zählt. Sie veraltet nie. Deine eigenen Daten kommen zur Seite und sind danach genau wie vorher wieder da. [Mehr dazu weiter unten](#in-einer-minute-startklar).
 
-## Warum TravelBuddy
+</details>
 
-Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die teils 300 km auseinanderliegen, Kängurus in der Dämmerung, Buschfeuer, gesperrte Pisten und stundenlang kein Empfang. Genau dafür ist TravelBuddy gebaut.
-
-| | |
-|---|---|
-| 📡 **Offline zuerst** | Karten, Orte, Routen, Belege und Notfallhilfe funktionieren ohne Netz. Einmal geplant, ist alles dabei. |
-| ⛽ **Rechnet mit, wo es knapp wird** | Die längste Strecke ohne Tankstelle, lange Abschnitte ohne Wasser, die späteste Abfahrt vor Sonnenuntergang. |
-| 🔥 **Warnt rechtzeitig** | Amtliche Warnungen zu Feuer, Flut und Unwetter entlang deiner ganzen Route, bevor du dort bist, dazu Straßensperrungen. |
-| ✈️ **Behält Flüge und Züge im Blick** | Verspätung, Gate, Gleis und Umstieg, live und von selbst. |
-| 💰 **Weiß, was es kostet** | Jede Ausgabe, sortiert nach Short- und Long-Values, je Etappe und je Posten. |
-| 📍 **144 handverlesene Orte** | Mit Bildern, Saison-Tipps, Sonnenzeiten und Markierungen wie „Muss-Sehen“, „Geheimtipp“ oder „Nur 4WD“. |
-| 📷 **Denkt wie ein Fotograf** | Goldene und blaue Stunde, Auf- und Untergang und eine Bewertung für Sternenfotos an jedem Ort und für jeden Reisetag. |
-| 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
-| 📔 **Schreibt dein Reisetagebuch** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
-| 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
+---
 
 ## 📔 Nicht nur ein Planer. Ein Tagebuch-Macher.
 
