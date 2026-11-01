@@ -8,10 +8,10 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.1 · built for Western Australia**<br>
+**Version 1.2 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[✨ What's new in 1.1](#-new-in-version-11)**
+**[✨ What's new](#-new-in-version-12)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -26,6 +26,19 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 </div>
 
 > All pictures show a made-up **sample trip**. No real travel dates, bookings or documents are shown.
+
+---
+
+## 🛣️ New in version 1.2
+
+**Everyone chooses their own map.** The web app starts with the small map. If you want every road, street name and gravel track in Western Australia, tap **🛣️ Turn on large map** on the map page. The app tells you the size first, then downloads only the part you are travelling in, 33 to 76 MB. Turn it off and the storage is free again. On a website this needs the large package. In the Mac and Windows apps with the large map it is on from the start.
+
+<table>
+<tr>
+<td align="center"><img src="bilder/neu-karte-klein.jpg" width="340" alt="Exmouth on the small map: main road only"><br><b>Small map</b><br>main roads, enough for planning</td>
+<td align="center"><img src="bilder/neu-karte-gross.jpg" width="340" alt="Exmouth on the large map: every street with its name"><br><b>Large map</b><br>the same spot, every street and track</td>
+</tr>
+</table>
 
 ---
 
@@ -127,6 +140,7 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - 🌌 **Stargazing check** with moon phase and astronomical darkness
 - 📝 **Notes and reports** for every place
 - 🗺️ **Offline map** for all of Australia, in detail where you travel
+- 🛣️ **Small or large map, your choice:** every road and track in Western Australia at the tap of a button
 - ⛺ **Supplies on the route:** fuel, water, toilets, camps, rest areas, shops, workshops, clinics
 - 🔥 **Official warnings** for fire, flood and storms in WA, VIC and QLD
 - 🚨 **Warnings along your route:** where you are, on the road ahead, on every stage and hike, even when a route runs through several danger zones
@@ -389,6 +403,8 @@ iPhones only install web apps from an **HTTPS** address. A free Netlify site is 
 
 The large map is cut into four parts (Southwest & Perth, Central west coast, Pilbara & Coral Coast, Kimberley & Broome). The phone only loads a part once you zoom in there. Saving everything for offline takes about 270 MB on the phone instead of about 66 MB.
 
+With the large package every person chooses for themselves: in the web app the large map stays **off** until they tap **🛣️ Turn on large map** on the map page. Only then does the phone download the part it is in, 33 to 76 MB each. Turning it off frees the storage again. In the Mac and Windows apps the parts are already on the disk, so it starts switched on.
+
 ### Option A: ready-made `dist` from Releases (nothing to install)
 
 1. Download **`TravelBuddy-Netlify.zip`** or **`TravelBuddy-Netlify-Grosse-Karte.zip`** from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest). Each is the complete `dist` folder, zipped.
@@ -526,6 +542,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - [x] Setup assistant on first launch, trip dates in the header, adjustable text and overall size
 - [x] Source code here on GitHub, apps for Mac and Windows
 - [x] **Version 1.1:** flights and trains live, cost analysis, entries over several days, warnings along the route with offline map, test trip to play with
+- [x] **Version 1.2:** choose the small or large map right in the app
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -547,10 +564,10 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.1 · entwickelt für Western Australia**<br>
+**Version 1.2 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[✨ Neu in Version 1.1](#-neu-in-version-11)**
+**[✨ Was ist neu](#-neu-in-version-12)**
 
 <br>
 
@@ -559,6 +576,17 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 </div>
 
 > Alle Bilder zeigen eine ausgedachte **Beispielreise**. Echte Reisedaten, Buchungen oder Dokumente sind darin nicht zu sehen.
+
+## 🛣️ Neu in Version 1.2
+
+**Jede Person wählt ihre Karte selbst.** Die Web-App startet mit der kleinen Karte. Wer jede Straße, jeden Straßennamen und jede Schotterpiste in Western Australia möchte, tippt auf der Kartenseite auf **🛣️ Große Karte einschalten**. Die App nennt vorher die Größe und lädt dann nur den Teil, in dem du unterwegs bist, 33 bis 76 MB. Ausschalten gibt den Speicher wieder frei. Auf einer Webseite braucht das das große Paket. In den Apps für Mac und Windows mit großer Karte ist sie von Anfang an an.
+
+<table>
+<tr>
+<td align="center"><img src="bilder/neu-karte-klein.jpg" width="340" alt="Exmouth auf der kleinen Karte: nur die Hauptstraße"><br><b>Kleine Karte</b><br>Hauptstraßen, reicht zum Planen</td>
+<td align="center"><img src="bilder/neu-karte-gross.jpg" width="340" alt="Exmouth auf der großen Karte: jede Straße mit Namen"><br><b>Große Karte</b><br>dieselbe Stelle, jede Straße und Piste</td>
+</tr>
+</table>
 
 ## ✨ Neu in Version 1.1
 
@@ -652,6 +680,7 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - 🌌 **Sternen-Check** mit Mondphase und astronomischer Dunkelheit
 - 📝 **Notizen und Berichte** zu jedem Ort
 - 🗺️ **Offline-Karte** für ganz Australien, im Detail dort, wo du unterwegs bist
+- 🛣️ **Kleine oder große Karte, du entscheidest:** jede Straße und Piste in Western Australia auf Knopfdruck
 - ⛺ **Versorgung an der Route:** Tankstellen, Wasser, Toiletten, Camps, Rastplätze, Läden, Werkstätten, Kliniken
 - 🔥 **Amtliche Warnungen** zu Feuer, Flut und Unwetter in WA, VIC und QLD
 - 🚨 **Warnungen entlang der Route:** am Standort, auf der Strecke voraus, auf jeder Etappe und Wanderung, auch wenn die Strecke mehrere Gefahrengebiete kreuzt
@@ -908,6 +937,8 @@ Web-Apps installiert das iPhone nur von einer **HTTPS**-Adresse. Am einfachsten 
 
 Die große Karte ist in vier Teile geschnitten (Südwesten & Perth, Mittlere Westküste, Pilbara & Coral Coast, Kimberley & Broome). Das Handy lädt einen Teil erst, wenn du dort hineinzoomst. Alles offline sichern braucht auf dem Handy dann etwa 270 MB statt etwa 66 MB.
 
+Mit dem großen Paket entscheidet jede Person selbst: In der Web-App bleibt die große Karte **aus**, bis man auf der Kartenseite **🛣️ Große Karte einschalten** tippt. Erst dann lädt das Handy den Teil, in dem es gerade ist, je 33 bis 76 MB. Ausschalten gibt den Speicher wieder frei. In den Apps für Mac und Windows liegen die Teile schon auf der Platte, dort ist sie von Anfang an an.
+
 ### Weg A: fertiges `dist` aus den Releases (nichts installieren)
 
 1. **`TravelBuddy-Netlify.zip`** oder **`TravelBuddy-Netlify-Grosse-Karte.zip`** unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest) herunterladen. Beides ist der komplette Ordner `dist` als ZIP.
@@ -1025,6 +1056,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 - [x] Einrichtungsassistent beim ersten Öffnen, Reisezeitraum im Titelbild, Schrift- und Gesamtgröße einstellbar
 - [x] Quellcode hier auf GitHub, Apps für Mac und Windows
 - [x] **Version 1.1:** Flüge und Züge live, Kostenauswertung, Einträge über mehrere Tage, Warnungen entlang der Route mit Offline-Karte, Testreise zum Ausprobieren
+- [x] **Version 1.2:** kleine oder große Karte direkt in der App wählen
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

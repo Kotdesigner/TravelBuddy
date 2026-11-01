@@ -78,6 +78,9 @@ export const REGIONEN = jeSprache(() => {
   return liste
 })
 
+// Die Teile, die dieses Gerät benutzt: Ohne den Schalter für die große Karte bleiben ihre Teile außen vor
+export const teileFuer = (gross, alle = REGIONEN) => (gross ? alle : alle.filter((r) => !WA_GROSS.some((g) => g.id === r.id)))
+
 // Alles, wofür es überhaupt Kartendaten gibt. Außerhalb ist die Karte leer (nur Wasserfarbe).
 export const KARTENGEBIET = [
   Math.min(...REGIONEN.map((r) => r.bounds[0])),

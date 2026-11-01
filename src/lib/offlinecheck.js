@@ -6,16 +6,16 @@ const mitKoord = (s) => s && s.lat != null && s.lon != null
 const enthaelt = (r, s) => s.lon >= r.bounds[0] && s.lon <= r.bounds[2] && s.lat >= r.bounds[1] && s.lat <= r.bounds[3]
 
 /** Welche Kartenteile braucht die Reise? Je Stopp der feinste Teil, dazu immer der Überblick. */
-export function benoetigteKartenteile(reisen) {
+export function benoetigteKartenteile(reisen, alle = REGIONEN) {
   const ids = new Set(['australien'])
   for (const r of reisen || []) {
     for (const s of r?.stops || []) {
       if (!mitKoord(s)) continue
-      const best = REGIONEN.filter((g) => enthaelt(g, s)).sort((a, b) => b.maxzoom - a.maxzoom)[0]
+      const best = alle.filter((g) => enthaelt(g, s)).sort((a, b) => b.maxzoom - a.maxzoom)[0]
       if (best) ids.add(best.id)
     }
   }
-  return REGIONEN.filter((g) => ids.has(g.id))
+  return alle.filter((g) => ids.has(g.id))
 }
 
 /** POI-Dateien, die zur Reise gehören (Regionen mit mindestens einem Stopp); ohne Stopps alle. */

@@ -5,8 +5,10 @@
   import 'maplibre-gl/dist/maplibre-gl.css'
   import { onMount, untrack } from 'svelte'
   import { schriftAuf } from './kontrast.js'
-  import { REGIONEN, POI_REGIONEN, KARTENGEBIET, imGebiet, kartenteilFuer, schneideZu, detailStufe }
+  import { REGIONEN, WA_GROSS, GROSSE_KARTE, POI_REGIONEN, KARTENGEBIET, imGebiet, kartenteilFuer, schneideZu, detailStufe, teileFuer }
     from './karten-config.js'
+  import { grosseKarteAn, setzeGrosseKarte } from './karten-wahl.js'
+  import { frage } from './dialog.js'
   import { online } from './netz.js'
   import { fahrzeitText } from './routing.js'
   import { FORMATE, DATEITYPEN, exportiereKarte, speichere } from './kartenexport.js'
@@ -448,7 +450,8 @@
 
   const flaeche = (r) => (r.bounds[2] - r.bounds[0]) * (r.bounds[3] - r.bounds[1])
   // Online geht alles; offline nur, was gespeichert oder schon im Speicher ist.
-  const verfuegbar = () => REGIONEN.filter((r) => $online || gecacht.has(r.id) || quellen.has(r.id))
+  const kartenteile = $derived(teileFuer($grosseKarteAn))
+  const verfuegbar = () => kartenteile.filter((r) => $online || gecacht.has(r.id) || quellen.has(r.id))
 
   let teilTimer = 0
   async function pruefeTeil() {
@@ -463,7 +466,7 @@
     const zoom = map.getZoom()
     pruefungen++
     const ziel = kartenteilFuer(ausschnitt, zoom, aktiv, verfuegbar())
-    const ideal = kartenteilFuer(ausschnitt, zoom, aktiv, REGIONEN)
+    const ideal = kartenteilFuer(ausschnitt, zoom, aktiv, kartenteile)
     fehltHier = ideal && ziel && ideal.maxzoom > ziel.maxzoom ? ideal : null
     laedtTeil = null
     if (!ziel || ziel.id === aktiv.id) return
@@ -661,7 +664,7 @@
   async function alleSichern() {
     if (sichert) return
     sichert = true
-    const offen = REGIONEN.filter((r) => !gecacht.has(r.id))
+    const offen = kartenteile.filter((r) => !gecacht.has(r.id))
     fortschritt = { fertig: 0, gesamt: offen.length, name: '' }
     try {
       const c = await caches.open('karten-pmtiles-v2')
@@ -682,6 +685,40 @@
     sichert = false
     fortschritt = { fertig: 0, gesamt: 0, name: '' }
   }
+
+  // Große Karte ein: Sie kommt beim Hineinzoomen. Aus: Sie gibt ihren Speicher wieder frei.
+  async function grosseKarteUmschalten() {
+    if ($grosseKarteAn) {
+      setzeGrosseKarte(false)
+      await pruefeTeil()
+      await entferneGrosse()
+      return
+    }
+    const mb = WA_GROSS.map((r) => Math.round(r.mb))
+    const ja = await frage({
+      titel: t('Große Karte einschalten?'),
+      text: t('Beim Hineinzoomen lädt die App den Teil von Western Australia, in dem du gerade bist, je {von} bis {bis} MB. Das geht am besten im WLAN. Ausschalten gibt den Speicher wieder frei.', { von: Math.min(...mb), bis: Math.max(...mb) }),
+      ja: t('Einschalten'),
+    })
+    if (!ja) return
+    setzeGrosseKarte(true)
+    pruefeTeil()
+  }
+
+  // Den angezeigten Teil behält sie, falls ohne Netz gerade nichts anderes da ist
+  async function entferneGrosse() {
+    try {
+      const c = await caches.open(CACHE)
+      for (const r of WA_GROSS) {
+        if (r.id === aktiv?.id) continue
+        await c.delete(dateiUrl(r))
+        try { protocol?.tiles?.delete(r.datei) } catch {}
+        quellen.delete(r.id)
+      }
+      await pruefeCache()
+    } catch {}
+  }
+
   // ---- Export zum Drucken (siehe kartenexport.js) ----
   let expOffen = $state(false)
   let expLaeuft = $state(false)
@@ -734,9 +771,10 @@
     expLaeuft = false
   }
 
-  const alleDa = $derived(gecacht.size === REGIONEN.length)
-  const gesamtMB = REGIONEN.reduce((a, r) => a + r.mb, 0)
-  const offenMB = $derived(REGIONEN.filter((r) => !gecacht.has(r.id)).reduce((a, r) => a + r.mb, 0))
+  const gespeichert = $derived(kartenteile.filter((r) => gecacht.has(r.id)).length)
+  const alleDa = $derived(gespeichert === kartenteile.length)
+  const gesamtMB = $derived(kartenteile.reduce((a, r) => a + r.mb, 0))
+  const offenMB = $derived(kartenteile.filter((r) => !gecacht.has(r.id)).reduce((a, r) => a + r.mb, 0))
 </script>
 
 <div class="karten" data-zoom={zoomJetzt.toFixed(1)} data-teil={aktiv?.id || ''} data-pruefungen={pruefungen}>
@@ -746,7 +784,7 @@
     {:else if sichert}
       <span class="off-lauf">📥 {fortschritt.name} … {fortschritt.fertig}/{fortschritt.gesamt}</span>
     {:else}
-      <span class="off-hinweis">{t('📴 Offline: {size} von {length} Kartenteilen', { size: gecacht.size, length: REGIONEN.length })}</span>
+      <span class="off-hinweis">{t('📴 Offline: {size} von {length} Kartenteilen', { size: gespeichert, length: kartenteile.length })}</span>
       <button class="off-btn" onclick={alleSichern} disabled={!$online}>
         {$online ? t('📥 Ganz Australien sichern (~{round} MB)', { round: Math.round(offenMB) }) : t('zum Laden Netz nötig')}
       </button>
@@ -764,6 +802,12 @@
       {#if expMeldung}<span class="exp-msg">{expMeldung}</span>{/if}
     {/if}
   </div>
+  {#if GROSSE_KARTE}
+    <div class="gross-zeile">
+      <button class="off-btn" class:go={$grosseKarteAn} aria-pressed={$grosseKarteAn} onclick={grosseKarteUmschalten}>🛣️ {$grosseKarteAn ? t('Große Karte: an') : t('Große Karte einschalten')}</button>
+      <span>{t('Jede Straße und Piste in Western Australia. Es lädt nur der Teil, in dem du unterwegs bist.')}</span>
+    </div>
+  {/if}
   <div class="map-wrap">
     <div class="map" bind:this={container}></div>
     {#if $warnListe.length}
@@ -904,6 +948,8 @@
     padding: 7px 12px; font-size: calc(12.5px * var(--schrift, 1)); background: var(--flaeche);
     border-bottom: 1px solid var(--line);
   }
+  .gross-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 7px 12px; border-bottom: 1px solid var(--line); background: var(--flaeche); font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
+  .gross-zeile .off-btn { min-height: 40px; }
   .off-ok { color: var(--ok-text); font-weight: 700; }
   .off-lauf { color: var(--brand-text); font-weight: 700; }
   .off-hinweis { color: var(--muted); font-weight: 600; }

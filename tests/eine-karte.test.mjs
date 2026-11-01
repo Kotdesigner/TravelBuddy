@@ -2,7 +2,8 @@
 // und wie werden Routen auf das Kartengebiet zugeschnitten.
 // Ausführen: node tests/eine-karte.test.mjs
 import fs from 'node:fs'
-import { REGIONEN, WA_GROSS, GROSSE_KARTE, KARTENGEBIET, kartenteilFuer, schneideZu, imGebiet }
+import { grossStart } from '../src/lib/karten-wahl.js'
+import { REGIONEN, WA_GROSS, GROSSE_KARTE, KARTENGEBIET, kartenteilFuer, schneideZu, imGebiet, teileFuer }
   from '../src/lib/karten-config.js'
 
 let ok = 0, bad = 0
@@ -72,6 +73,14 @@ console.log('\n4b Große Karte (npm run build:gross)')
   const alle = [...REGIONEN, ...WA_GROSS]
   const gt = (lon, lat, zoom, aktuell = R.australien) => kartenteilFuer(ausschnitt(lon, lat, zoom), zoom, aktuell, alle)?.id
   p('normaler Build ohne große Teile', !GROSSE_KARTE && !REGIONEN.some((r) => G[r.id]))
+  p('Schalter aus: keine großen Teile', !teileFuer(false, alle).some((r) => G[r.id]) && teileFuer(false, alle).length === REGIONEN.length)
+  p('Schalter an: alle Teile', teileFuer(true, alle).length === alle.length)
+  p('aus: Exmouth bei Zoom 12 bleibt auf der kleinen Karte', kartenteilFuer(ausschnitt(114.12, -21.93, 12), 12, null, teileFuer(false, alle))?.id === 'wa')
+  p('an: Exmouth bei Zoom 12 nimmt den großen Teil', kartenteilFuer(ausschnitt(114.12, -21.93, 12), 12, null, teileFuer(true, alle))?.id === 'wa-nordwest')
+  p('im Netz ist die große Karte aus', grossStart(true, null, 'travelbuddy-wa.netlify.app') === false)
+  p('in den Apps für Mac und Windows ist sie an', grossStart(true, null, '127.0.0.1') === true)
+  p('die eigene Wahl gewinnt', grossStart(true, 'aus', '127.0.0.1') === false && grossStart(true, 'an', 'beispiel.netlify.app') === true)
+  p('ohne große Teile im Build bleibt sie aus', grossStart(false, 'an', '127.0.0.1') === false)
   p('vier Teile, jeder unter 100 MB (GitHub-Grenze)', WA_GROSS.length === 4 && WA_GROSS.every((r) => r.mb < 100 && r.maxzoom === 14))
   p('Perth, Zoom 10 → noch die kleine Westküste (lädt nicht 75 MB)', gt(115.86, -31.95, 10) === 'wa', gt(115.86, -31.95, 10))
   p('Perth, Zoom 11 → Südwesten & Perth', gt(115.86, -31.95, 11) === 'wa-sued', gt(115.86, -31.95, 11))

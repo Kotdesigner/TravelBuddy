@@ -2674,5 +2674,10 @@ export default {
  "Die Testreise ließ sich nicht laden. Deine Daten sind unverändert.": "The test trip could not be loaded. Your data is unchanged.",
  "Dein eigener Stand wurde nicht gefunden. Die Testreise bleibt, bis du ein Backup importierst.": "Your own data could not be found. The test trip stays until you import a backup.",
  "In der Testreise sind die Daten ausgedacht. Abgefragt wird nichts.": "Everything in the test trip is made up. Nothing is looked up.",
+ "Große Karte einschalten": "Turn on large map",
+ "Große Karte einschalten?": "Turn on the large map?",
+ "Große Karte: an": "Large map: on",
+ "Jede Straße und Piste in Western Australia. Es lädt nur der Teil, in dem du unterwegs bist.": "Every road and track in Western Australia. Only the part you are travelling in is downloaded.",
+ "Beim Hineinzoomen lädt die App den Teil von Western Australia, in dem du gerade bist, je {von} bis {bis} MB. Das geht am besten im WLAN. Ausschalten gibt den Speicher wieder frei.": "When you zoom in, the app downloads the part of Western Australia you are in, {von} to {bis} MB each. Best done on Wi-Fi. Turning it off frees the storage again.",
  "Zyklon": "cyclone"
 }

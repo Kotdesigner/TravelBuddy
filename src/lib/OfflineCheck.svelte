@@ -9,6 +9,8 @@
   import { veraltet } from './routen-dienst.js'
   import { istVerbunden } from './musik/spotify.js'
   import { benoetigteKartenteile, benoetigtePoiDateien, routenStand, sicherungTage } from './offlinecheck.js'
+  import { teileFuer } from './karten-config.js'
+  import { grosseKarteAn } from './karten-wahl.js'
 
   /** geh(pfad) aus App.svelte für die „Hin“-Knöpfe; onbackup() startet das Backup (optional). */
   let { geh = null, onbackup = null } = $props()
@@ -18,7 +20,7 @@
   let appStand = $state(null)    // { sw, pois: { da, fehlen } , kannCache }
   let prueft = $state(false)
 
-  const teile = $derived(benoetigteKartenteile($reisen))
+  const teile = $derived(benoetigteKartenteile($reisen, teileFuer($grosseKarteAn)))
   const poiDateien = $derived(benoetigtePoiDateien($reisen))
   const routen = $derived(routenStand($reisen, $gesamtStart, $heuteTag, (r) => !veraltet(r)))
   const backupTage = $derived(sicherungTage($syncZeiten?.gesichert))
