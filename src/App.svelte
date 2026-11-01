@@ -73,6 +73,8 @@
   import Rechtliches from './lib/Rechtliches.svelte'
   import { ladeBildNachweis } from './lib/bild-nachweis.js'
   import { zeigeOrteHinweis } from './lib/orte-hinweis.js'
+  import SpracheWahl from './lib/SpracheWahl.svelte'
+  import { spracheOffen } from './lib/i18n.js'
   import { holeOrtsdaten } from './lib/ortdaten.js'
   import { FELD } from './lib/journal-schema.js'
   import { haversine, luftlinieKm } from './lib/routing.js'
@@ -815,7 +817,8 @@
     rettung.set(null)   // nur einmal zeigen
   })
   ladeBildNachweis()
-  $effect(() => { if (ansicht.tab === 'orte' && !$einfuehrung) zeigeOrteHinweis() })
+  let sprachFrage = $state(spracheOffen())
+  $effect(() => { if (ansicht.tab === 'orte' && !$einfuehrung && !sprachFrage) zeigeOrteHinweis() })
 </script>
 
 <RoutenDienst orte={[...orte, ...$eigeneOrte]} />
@@ -1284,7 +1287,7 @@
     onzeigen={(o) => { ortNeuOffen = false; zuOrt(o) }} />
 {/if}
 
-<Einfuehrung {geh} anzahlOrte={orte.length} />
+{#if !sprachFrage}<Einfuehrung {geh} anzahlOrte={orte.length} />{/if}
 
 {#if neuOffen}
   <NeuBlatt typ={neuOffen.typ} vorlage={neuOffen.vorlage} orte={[...orte, ...$eigeneOrte]}
@@ -1292,6 +1295,7 @@
 {/if}
 
 <DialogHost />
+{#if sprachFrage}<SpracheWahl onfertig={() => (sprachFrage = false)} />{/if}
 <TresorDialog />
 
 {#if xoxoOffen}

@@ -52,6 +52,8 @@ No account, nothing to install from a store, and your data stays on your phone. 
 
 **Every place picture is now yours to change.** Tap the small **📷** in the corner of any place picture. Choose a photo from your device, open a ready-made image search for that place, or paste a snippet straight from the clipboard. On iPhone, take a screenshot of a picture that is only online and pick it from your photos. Your picture stays on your device. The first time you open Places, TravelBuddy explains this in a short note.
 
+**Your language from the first second.** On first launch TravelBuddy asks whether you want English or German. English is the default.
+
 **Every photo now has its source.** All 144 place photos come with author, licence and link, right in the app. Where no fitting free photo exists yet, a sample picture of the region stands in, clearly marked, with a button to add a better one.
 
 ---
@@ -631,6 +633,8 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 ## 🖼️ Neu in Version 1.3
 
 **Jedes Ortsbild kannst du jetzt selbst ändern.** Tippe auf das kleine **📷** in der Ecke jedes Ortsbilds. Wähle ein Foto vom Gerät, öffne eine fertige Bildersuche für diesen Ort oder füge einen Ausschnitt direkt aus der Zwischenablage ein. Dein Bild bleibt auf deinem Gerät. Am iPhone machst du von einem Bild, das es nur online gibt, einen Screenshot und wählst ihn aus deinen Fotos. Beim ersten Öffnen von Orte erklärt TravelBuddy das in einem kurzen Hinweis.
+
+**Deine Sprache von Anfang an.** Beim ersten Start fragt TravelBuddy, ob du Englisch oder Deutsch möchtest. Grundeinstellung ist Englisch.
 
 **Jedes Foto hat jetzt seine Quelle.** Alle 144 Ortsfotos stehen mit Urheber, Lizenz und Link in der App. Wo es noch kein passendes freies Foto gibt, steht ein Symbolbild der Region, klar gekennzeichnet und mit einem Knopf für ein besseres Bild.
 

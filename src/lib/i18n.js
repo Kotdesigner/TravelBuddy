@@ -21,8 +21,12 @@ function ermitteln() {
   // Tests und Werkzeuge in Node: Deutsch, außer ausdrücklich anders verlangt
   if (typeof window === 'undefined') return globalThis.__SPRACHE === 'en' ? 'en' : 'de'
   try { const s = localStorage.getItem(KEY); if (s === 'de' || s === 'en') return s } catch {}
-  const n = (typeof navigator !== 'undefined' && (navigator.languages?.[0] || navigator.language)) || 'de'
-  return /^de\b/i.test(n) ? 'de' : 'en'
+  return 'en'
+}
+
+/** Noch keine Sprache gewählt? Dann fragt die App beim Start nach. */
+export function spracheOffen() {
+  try { return !localStorage.getItem(KEY) } catch { return false }
 }
 
 export let sprache = ermitteln()
@@ -90,8 +94,8 @@ export const beimSprachwechsel = (f) => { oberflaecheNeu = f }
 /** Sprache wechseln: speichern und die Oberfläche im Kreis neu aufbauen. Geht dabei etwas
     schief, lädt die App ganz normal neu. */
 export function setzeSprache(s) {
-  if (s === sprache) return
   try { localStorage.setItem(KEY, s) } catch {}
+  if (s === sprache) return
   return kreisWechsel(async () => {
     try {
       sprache = s
