@@ -1,4 +1,4 @@
-// TravelBuddy für Windows: eine einzige TravelBuddy.exe.
+// TravelBuddy für Windows und Linux: eine einzige ausführbare Datei.
 //
 // Die fertige Web-App (dist/) steckt in der exe. Beim Start liefert sie ein kleiner Server auf
 // 127.0.0.1:8990 aus, und Microsoft Edge zeigt sie als eigenes Fenster ohne Adressleiste
@@ -120,6 +120,21 @@ func oeffneFenster() *exec.Cmd {
 	case "darwin":
 		_ = exec.Command("open", url).Start()
 	default:
+		// Linux: Browser der Chrome-Familie als eigenes Fenster, sonst der Standardbrowser (z. B. Firefox)
+		daten := os.Getenv("XDG_DATA_HOME")
+		if daten == "" {
+			daten = filepath.Join(os.Getenv("HOME"), ".local", "share")
+		}
+		profil := filepath.Join(daten, "TravelBuddy", "Fenster")
+		_ = os.MkdirAll(profil, 0o755)
+		for _, name := range []string{"google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "microsoft-edge", "brave-browser"} {
+			if p, err := exec.LookPath(name); err == nil {
+				cmd := exec.Command(p, "--app="+url, "--user-data-dir="+profil, "--window-size=1280,860", "--no-first-run", "--no-default-browser-check")
+				if cmd.Start() == nil {
+					return cmd
+				}
+			}
+		}
 		_ = exec.Command("xdg-open", url).Start()
 	}
 	return nil

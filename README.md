@@ -4,14 +4,14 @@
 
 ### The road trip companion for the stretches where the signal ends.
 
-Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no account, no cloud.<br>
+Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline, no account, no cloud.<br>
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.3 · built for Western Australia**<br>
+**Version 1.4 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-13)**
+**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-14)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -48,9 +48,11 @@ No account, nothing to install from a store, and your data stays on your phone. 
 
 ---
 
-## 🖼️ New in version 1.3
+## 🖼️ New in version 1.4
 
 **Every place picture is now yours to change.** Tap the small **📷** in the corner of any place picture. Choose a photo from your device, open a ready-made image search for that place, or paste a snippet straight from the clipboard. On iPhone, take a screenshot of a picture that is only online and pick it from your photos. Your picture stays on your device. The first time you open Places, TravelBuddy explains this in a short note.
+
+**Now on Linux too.** One executable file for x86-64 and ARM64: unpack it, run `./TravelBuddy`, done.
 
 **Your language from the first second.** On first launch TravelBuddy asks whether you want English or German. English is the default.
 
@@ -223,7 +225,7 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - 🧠 **Australia quiz** with five levels
 - 📘 **Manual** as a PDF in the app
 - 🎮 **Three hidden games** in the search field (see below)
-- 🖥️ **Mac app**, 🪟 **Windows app** and 📱 **iPhone web app**
+- 🖥️ **Mac app**, 🪟 **Windows app**, 🐧 **Linux app** and 📱 **iPhone web app**
 - 🚫 **No account, no cloud, no ads, no tracking**
 
 ### 🎮 Easter eggs: three hidden games
@@ -414,6 +416,7 @@ TravelBuddy collects the music of the places you pass through, **automatically, 
 |---|---|
 | 🖥️ **Mac** | `TravelBuddy-Mac.zip` (small map) or `TravelBuddy-Mac-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, move to Applications, open. Apple Silicon and Intel, macOS 13 or newer. |
 | 🪟 **Windows** | `TravelBuddy-Windows.zip` (small map) or `TravelBuddy-Windows-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, double-click `TravelBuddy.exe`. Windows 10 and 11 (64-bit). Opens in its own Microsoft Edge window. |
+| 🐧 **Linux** | `TravelBuddy-Linux-x64.tar.gz` or `TravelBuddy-Linux-arm64.tar.gz`, each also as `…-Grosse-Karte.tar.gz` (every road), from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unpack, run `./TravelBuddy`. Opens in its own window with Chrome, Chromium, Edge or Brave, otherwise in your default browser. |
 | 📱 **iPhone and any browser** | `TravelBuddy-Netlify.zip` (small map) or `TravelBuddy-Netlify-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): drag into Netlify's "Deploy manually" ([step by step](#-put-it-online-with-netlify-for-iphone)). Then open the address in Safari and choose "Add to Home Screen". |
 | 🔁 **Straight from GitHub** | In Netlify, choose "Import an existing project" and pick this repo. The settings are in `netlify.toml`, and every push publishes the new version. |
 
@@ -579,6 +582,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - [x] **Version 1.1:** flights and trains live, cost analysis, entries over several days, warnings along the route with offline map, test trip to play with
 - [x] **Version 1.2:** choose the small or large map right in the app
 - [x] **Version 1.3:** change any place picture, sources for every photo
+- [x] **Version 1.4:** Linux app, language choice on first launch, small picture buttons
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -596,14 +600,14 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 
 ### Dein Roadtrip-Begleiter für die Strecken, auf denen das Netz aufhört.
 
-Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne Konto und ohne Cloud.<br>
+Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, komplett offline, ohne Konto und ohne Cloud.<br>
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.3 · entwickelt für Western Australia**<br>
+**Version 1.4 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-13)**
+**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-14)**
 
 <br>
 
@@ -630,9 +634,11 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 </tr>
 </table>
 
-## 🖼️ Neu in Version 1.3
+## 🖼️ Neu in Version 1.4
 
 **Jedes Ortsbild kannst du jetzt selbst ändern.** Tippe auf das kleine **📷** in der Ecke jedes Ortsbilds. Wähle ein Foto vom Gerät, öffne eine fertige Bildersuche für diesen Ort oder füge einen Ausschnitt direkt aus der Zwischenablage ein. Dein Bild bleibt auf deinem Gerät. Am iPhone machst du von einem Bild, das es nur online gibt, einen Screenshot und wählst ihn aus deinen Fotos. Beim ersten Öffnen von Orte erklärt TravelBuddy das in einem kurzen Hinweis.
+
+**Jetzt auch für Linux.** Eine einzige ausführbare Datei für x86-64 und ARM64: entpacken, `./TravelBuddy` starten, fertig.
 
 **Deine Sprache von Anfang an.** Beim ersten Start fragt TravelBuddy, ob du Englisch oder Deutsch möchtest. Grundeinstellung ist Englisch.
 
@@ -795,7 +801,7 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - 🧠 **Australien-Quiz** mit fünf Stufen
 - 📘 **Handbuch** als PDF in der App
 - 🎮 **Drei versteckte Spiele** im Suchfeld (siehe unten)
-- 🖥️ **Mac-App**, 🪟 **Windows-App** und 📱 **Web-App fürs iPhone**
+- 🖥️ **Mac-App**, 🪟 **Windows-App**, 🐧 **Linux-App** und 📱 **Web-App fürs iPhone**
 - 🚫 **Kein Konto, keine Cloud, keine Werbung, kein Tracking**
 
 ### 🎮 Easter Eggs: drei versteckte Spiele
@@ -980,6 +986,7 @@ TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, wäh
 |---|---|
 | 🖥️ **Mac** | `TravelBuddy-Mac.zip` (kleine Karte) oder `TravelBuddy-Mac-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, in „Programme“ ziehen, öffnen. Apple Silicon und Intel, ab macOS 13. |
 | 🪟 **Windows** | `TravelBuddy-Windows.zip` (kleine Karte) oder `TravelBuddy-Windows-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, Doppelklick auf `TravelBuddy.exe`. Windows 10 und 11 (64 Bit). Öffnet sich in einem eigenen Fenster von Microsoft Edge. |
+| 🐧 **Linux** | `TravelBuddy-Linux-x64.tar.gz` oder `TravelBuddy-Linux-arm64.tar.gz`, jeweils auch als `…-Grosse-Karte.tar.gz` (jede Straße), unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, `./TravelBuddy` starten. Öffnet sich mit Chrome, Chromium, Edge oder Brave im eigenen Fenster, sonst im Standardbrowser. |
 | 📱 **iPhone und jeder Browser** | `TravelBuddy-Netlify.zip` (kleine Karte) oder `TravelBuddy-Netlify-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): bei Netlify unter „Deploy manually“ hineinziehen ([Schritt für Schritt](#-mit-netlify-ins-netz-stellen-für-das-iphone)). Danach die Adresse in Safari öffnen und „Zum Home-Bildschirm“. |
 | 🔁 **Direkt aus GitHub** | Bei Netlify „Import an existing project“ und dieses Repo wählen. Die Einstellungen stehen in `netlify.toml`, jeder Push veröffentlicht die neue Fassung. |
 
@@ -1125,6 +1132,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 - [x] **Version 1.1:** Flüge und Züge live, Kostenauswertung, Einträge über mehrere Tage, Warnungen entlang der Route mit Offline-Karte, Testreise zum Ausprobieren
 - [x] **Version 1.2:** kleine oder große Karte direkt in der App wählen
 - [x] **Version 1.3:** jedes Ortsbild selbst ändern, Quellen zu jedem Foto
+- [x] **Version 1.4:** Linux-App, Sprachwahl beim ersten Start, kleine Bild-Knöpfe
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

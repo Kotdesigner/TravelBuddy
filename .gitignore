@@ -67,3 +67,5 @@ win/*.syso
 
 # Große Karte (Stufe 14): zu groß fürs Repo, holen mit karten-gross/holen.sh
 karten-gross/*.pmtiles
+win/build-linux/
+win/build-linux-gross/
