@@ -2,6 +2,7 @@
 // Rechnung und gehen offline, Wolken und Sicht kommen dazu, wenn Netz da ist.
 import * as SunCalc from 'suncalc'
 import { je } from './i18n.js'
+import { metWetter } from './wetter-ausweich.js'
 
 const RAD = Math.PI / 180
 const MIN = 60000
@@ -216,9 +217,11 @@ export async function holeHimmel(lat, lon, jetzt = Date.now()) {
   try {
     const felder = 'cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,visibility,wind_speed_10m,wind_gusts_10m,temperature_2m,dew_point_2m,precipitation_probability'
     const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=${felder}&forecast_days=3&timeformat=unixtime`)
-    if (!r.ok) return null
+    if (!r.ok) throw new Error('Open-Meteo')
     const { hourly } = await r.json()
     speicher = { zeit: jetzt, lat, lon, werte: hourly }
     return hourly
-  } catch { return null }
+  } catch {
+    try { return (await metWetter(lat, lon)).hourly } catch { return null }
+  }
 }

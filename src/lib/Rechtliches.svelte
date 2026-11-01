@@ -9,6 +9,7 @@
 
   const DIENSTE = [
     [je('Wetter', 'Weather'), 'Open-Meteo', je('Koordinaten deiner Orte und, wenn du es erlaubst, dein Standort', 'Coordinates of your places and, if you allow it, your location')],
+    [je('Wetter, wenn Open-Meteo ausfällt', 'Weather when Open-Meteo is down'), 'MET Norway', je('Koordinaten deiner Orte und, wenn du es erlaubst, dein Standort', 'Coordinates of your places and, if you allow it, your location')],
     [je('Amtliche Warnungen und Straßenlage', 'Official warnings and road conditions'), 'DFES WA, VicEmergency, Queensland Fire Department, Main Roads WA', je('Nur der Abruf, keine Eingaben', 'Only the request, none of your entries')],
     [je('Straßenrouten', 'Road routes'), 'OSRM', je('Koordinaten deiner Stopps', 'Coordinates of your stops')],
     [je('Orte suchen und beschreiben', 'Searching and describing places'), 'Nominatim, Overpass, Wikipedia, Wikidata, Wikimedia Commons', je('Suchbegriffe, Ortsnamen, Koordinaten', 'Search terms, place names, coordinates')],
@@ -65,7 +66,7 @@
 
   <section id="quellen">
     <h2>{je('Quellen und Lizenzen', 'Sources and licences')}</h2>
-    <p>{je('Kartendaten © OpenStreetMap-Mitwirkende (ODbL), Kacheln Protomaps, Gelände Mapzen/AWS, Grenzen und Küsten Natural Earth. Wetter Open-Meteo. Das Titelbild ist ein eigenes Foto des Anbieters.', 'Map data © OpenStreetMap contributors (ODbL), tiles Protomaps, terrain Mapzen/AWS, borders and coasts Natural Earth. Weather Open-Meteo. The header picture is the provider’s own photo.')}</p>
+    <p>{je('Wetterdaten als Ausweich von MET Norway (CC BY 4.0). Kartendaten © OpenStreetMap-Mitwirkende (ODbL), Kacheln Protomaps, Gelände Mapzen/AWS, Grenzen und Küsten Natural Earth. Wetter Open-Meteo. Das Titelbild ist ein eigenes Foto des Anbieters.', 'Backup weather data from MET Norway (CC BY 4.0). Map data © OpenStreetMap contributors (ODbL), tiles Protomaps, terrain Mapzen/AWS, borders and coasts Natural Earth. Weather Open-Meteo. The header picture is the provider’s own photo.')}</p>
     <p><a href="/lizenzen.txt" target="_blank" rel="noopener">{je('Lizenzen der Bibliotheken und Schriften', 'Licences of libraries and fonts')}</a></p>
     <details>
       <summary>{je('Alle {n} Ortsfotos mit Urheber und Lizenz', 'All {n} place photos with author and licence').replace('{n}', String(fotos.length))}</summary>

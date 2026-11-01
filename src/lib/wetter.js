@@ -1,5 +1,6 @@
 // Wetter von Open-Meteo (kostenlos, kein Key) — nur ONLINE nutzbar.
 import { t, jeSprache } from './i18n.js'
+import { metWetter } from './wetter-ausweich.js'
 const WMO = jeSprache(() => ({
   0: ['☀️', t('Klar')], 1: ['🌤️', t('Überwiegend klar')], 2: ['⛅', t('Teils bewölkt')], 3: ['☁️', t('Bewölkt')],
   45: ['🌫️', t('Nebel')], 48: ['🌫️', t('Reifnebel')],
@@ -11,13 +12,19 @@ const WMO = jeSprache(() => ({
   95: ['⛈️', t('Gewitter')], 96: ['⛈️', t('Gewitter mit Hagel')], 99: ['⛈️', t('Starkes Gewitter')],
 }))
 
-export async function holeWetter(lat, lon) {
+async function openMeteo(lat, lon) {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
     + `&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,cloud_cover`
     + `&daily=temperature_2m_max,temperature_2m_min&forecast_days=1&timezone=auto`
   const r = await fetch(url)
   if (!r.ok) throw new Error(t('Wetter nicht erreichbar'))
-  const d = await r.json()
+  return r.json()
+}
+
+export async function holeWetter(lat, lon) {
+  let d
+  try { d = await openMeteo(lat, lon) }
+  catch { try { d = await metWetter(lat, lon) } catch { throw new Error(t('Wetter nicht erreichbar')) } }
   const c = d.current
   const [icon, text] = WMO[c.weather_code] || ['🌡️', '—']
   return {
@@ -28,6 +35,6 @@ export async function holeWetter(lat, lon) {
     wolken: c.cloud_cover,
     max: Math.round(d.daily.temperature_2m_max[0]),
     min: Math.round(d.daily.temperature_2m_min[0]),
-    einheit: d.current_units.temperature_2m || '°C',
+    einheit: d.current_units?.temperature_2m || '°C',
   }
 }

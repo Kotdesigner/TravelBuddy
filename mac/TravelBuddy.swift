@@ -9,6 +9,7 @@
 //
 // Bauen: sh mac/baue-mac-app.sh
 import Cocoa
+import CoreLocation
 import Network
 import WebKit
 
@@ -146,11 +147,74 @@ final class Server {
 
 // MARK: - Fenster mit der Web-App
 
+// MARK: - Standort
+// WKWebView gibt am Mac keinen Standort an die Seite weiter. Deshalb fragt die App CoreLocation
+// selbst und ersetzt navigator.geolocation durch diese Brücke. Die Seite merkt keinen Unterschied.
+let ORT_SKRIPT = """
+(() => {
+  let n = 0
+  const warten = new Map()
+  window.__ortAntwort = (id, lat, lon, genau, code) => {
+    const f = warten.get(id)
+    if (!f) return
+    warten.delete(id)
+    if (code) f[1]?.({ code, message: 'Standort nicht verfügbar' })
+    else f[0]?.({ coords: { latitude: lat, longitude: lon, accuracy: genau, altitude: null, altitudeAccuracy: null, heading: null, speed: null }, timestamp: Date.now() })
+  }
+  const geo = {
+    getCurrentPosition(ok, fehler) { const id = ++n; warten.set(id, [ok, fehler]); webkit.messageHandlers.ort.postMessage(id) },
+    watchPosition(ok, fehler) { this.getCurrentPosition(ok, fehler); return ++n },
+    clearWatch() {},
+  }
+  Object.defineProperty(navigator, 'geolocation', { value: geo, configurable: true })
+  Object.defineProperty(window, 'isSecureContext', { value: true, configurable: true })
+  try {
+    const p = navigator.permissions, q = p.query.bind(p)
+    Object.defineProperty(p, 'query', { configurable: true, value: (a) => (a?.name === 'geolocation' ? Promise.resolve({ state: 'granted' }) : q(a)) })
+  } catch {}
+  try { localStorage.removeItem('standort-abgelehnt') } catch {}
+})()
+"""
+
+final class OrtsBruecke: NSObject, CLLocationManagerDelegate, WKScriptMessageHandler {
+  private let ort = CLLocationManager()
+  private var offen: [Int] = []
+  weak var webView: WKWebView?
+
+  override init() { super.init(); ort.delegate = self }
+
+  func userContentController(_ c: WKUserContentController, didReceive m: WKScriptMessage) {
+    guard let id = m.body as? Int else { return }
+    offen.append(id)
+    pruefe()
+  }
+  private func pruefe() {
+    guard !offen.isEmpty else { return }
+    switch ort.authorizationStatus {
+    case .notDetermined: ort.requestWhenInUseAuthorization()
+    case .denied, .restricted: antworte(code: 1)
+    default: ort.requestLocation()
+    }
+  }
+  private func antworte(_ o: CLLocation? = nil, code: Int = 0) {
+    for id in offen {
+      webView?.evaluateJavaScript("__ortAntwort(\(id), \(o?.coordinate.latitude ?? 0), \(o?.coordinate.longitude ?? 0), \(o?.horizontalAccuracy ?? 0), \(code))")
+    }
+    offen = []
+  }
+  func locationManagerDidChangeAuthorization(_ m: CLLocationManager) { pruefe() }
+  func locationManager(_ m: CLLocationManager, didUpdateLocations l: [CLLocation]) { antworte(l.last) }
+  func locationManager(_ m: CLLocationManager, didFailWithError e: Error) {
+    antworte(code: (e as? CLError)?.code == .denied ? 1 : 2)
+  }
+}
+
 final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNavigationDelegate, WKDownloadDelegate {
   var fenster: NSWindow!
   var webView: WKWebView!
   var server: Server!
   var weitere: [NSWindow] = []   // Fenster für Belege (window.open)
+  let ortsBruecke = OrtsBruecke()
 
   func applicationDidFinishLaunching(_ n: Notification) {
     baueMenue()
@@ -169,8 +233,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
     let conf = WKWebViewConfiguration()
     conf.websiteDataStore = .default()
     conf.preferences.javaScriptCanOpenWindowsAutomatically = true
+    conf.userContentController.addUserScript(WKUserScript(source: ORT_SKRIPT, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+    conf.userContentController.add(ortsBruecke, name: "ort")
     // Sprache: WKWebView meldet die Sprache des Macs, weil das Bundle de.lproj und en.lproj hat (baue-mac-app.sh)
     webView = WKWebView(frame: .zero, configuration: conf)
+    ortsBruecke.webView = webView
     webView.uiDelegate = self
     webView.navigationDelegate = self
     webView.allowsBackForwardNavigationGestures = true

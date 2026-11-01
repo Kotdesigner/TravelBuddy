@@ -58,6 +58,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>NSHighResolutionCapable</key><true/>
   <key>NSHumanReadableCopyright</key><string>TravelBuddy by Kotdesigner</string>
   <key>NSLocationWhenInUseUsageDescription</key><string>Für Warnungen, Wetter und Notfallhilfe in deiner Nähe.</string>
+  <key>NSLocationUsageDescription</key><string>Für Temperatur, Wetter, Warnungen und Notfallhilfe in deiner Nähe.</string>
   <key>NSAppTransportSecurity</key><dict><key>NSAllowsLocalNetworking</key><true/></dict>
 </dict></plist>
 PLIST

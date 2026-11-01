@@ -4,6 +4,7 @@ import { get, writable } from 'svelte/store'
 import { effekte } from './effekte.js'
 import { je } from './i18n.js'
 import { zeigeToast } from './toast.js'
+import { metWetter } from './wetter-ausweich.js'
 
 const KEY = 'tb-stimmung'
 const FRISCH = 30 * 60 * 1000
@@ -79,8 +80,9 @@ export async function temperaturJetzt(pos, jetzt = Date.now()) {
   if (alt?.temp != null && jetzt - alt.zeit < FRISCH && Math.abs(alt.lat - pos.lat) + Math.abs(alt.lon - pos.lon) < 0.5) return alt.temp
   try {
     const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.lat}&longitude=${pos.lon}&current=temperature_2m`)
-    return r.ok ? (await r.json()).current.temperature_2m : null
-  } catch { return null }
+    if (r.ok) return (await r.json()).current.temperature_2m
+  } catch {}
+  try { return (await metWetter(pos.lat, pos.lon)).current.temperature_2m } catch { return null }
 }
 
 /** Holt das Wetter am Ort, höchstens alle 30 Minuten. pos: { lat, lon } oder null. */
@@ -90,9 +92,12 @@ export async function aktualisiereStimmung(pos, jetzt = Date.now()) {
   if (alt && jetzt - alt.zeit < FRISCH && Math.abs(alt.lat - pos.lat) + Math.abs(alt.lon - pos.lon) < 0.5) return
   try {
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${pos.lat}&longitude=${pos.lon}&current=temperature_2m,weather_code`
-    const r = await fetch(url)
-    if (!r.ok) return
-    const { current: c } = await r.json()
+    let c
+    try {
+      const r = await fetch(url)
+      if (!r.ok) throw new Error('Open-Meteo')
+      c = (await r.json()).current
+    } catch { c = (await metWetter(pos.lat, pos.lon)).current }
     const s = stimmungVon({ temp: c.temperature_2m, code: c.weather_code, nacht: istNacht(pos.lat, pos.lon) })
     localStorage.setItem(KEY, JSON.stringify({ s, temp: c.temperature_2m, zeit: jetzt, lat: pos.lat, lon: pos.lon }))
     zeige(s)

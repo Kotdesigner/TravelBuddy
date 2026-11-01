@@ -213,7 +213,7 @@
   async function init() {
     if (map || !container) return
     try {
-      const ml = await import('maplibre-gl')
+      const ml = await import('./maplibre.js')
       if (zerstoert) return
       maplibregl = ml.default ?? ml
       map = new maplibregl.Map({

@@ -57,7 +57,7 @@
   async function ladeLib() {
     if (maplibregl) return
     // Standard-Build: Vite bündelt MapLibres Worker selbst (keine CSP im Projekt -> Blob-Worker ok).
-    const [ml, pm] = await Promise.all([import('maplibre-gl'), import('pmtiles')])
+    const [ml, pm] = await Promise.all([import('./maplibre.js'), import('pmtiles')])
     maplibregl = ml.default ?? ml
     pmtilesLib = pm
     protocol = new pm.Protocol()

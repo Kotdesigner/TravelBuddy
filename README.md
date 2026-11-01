@@ -8,10 +8,10 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.8 · built for Western Australia**<br>
+**Version 1.9 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-18)**
+**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -81,6 +81,14 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 | 🔒 **Yours alone** | No account, no server, no tracking. All data stays on your device. |
 
 ---
+
+## 🛡️ New in version 1.9
+
+**Weather that doesn't give up.** If the main weather service is down or over its limit, TravelBuddy switches to a second one by itself. Temperature, weather and photo conditions keep working.
+
+**Your location in the Mac app.** The Mac app now gets your position directly from the Mac, so the temperature on the edge, weather mood and nearby warnings work there too.
+
+**Safer maps.** The map library is up to date, which closes a security issue.
 
 ## 📸 New in version 1.8
 
@@ -647,7 +655,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 | Desktop | Mac: Swift with WKWebView and a built-in server · Windows: Go with an embedded server, window in Microsoft Edge |
 | Maps | [MapLibre GL](https://maplibre.org), offline tiles as [PMTiles](https://protomaps.com/docs/pmtiles) from [Protomaps](https://protomaps.com) and [OpenStreetMap](https://www.openstreetmap.org), globe from [Natural Earth](https://www.naturalearthdata.com) |
 | Routes | [OSRM](https://project-osrm.org) for road routes, own offline analysis for fuel and water gaps, supplies and driving days |
-| Live data | [Open-Meteo](https://open-meteo.com), DFES Emergency WA, VicEmergency, Queensland Fire Department, Main Roads WA, [frankfurter.app](https://frankfurter.app), [AeroDataBox](https://aerodatabox.com) via RapidAPI for flights, [DBF](https://dbf.finalrewind.org) for German trains |
+| Live data | [Open-Meteo](https://open-meteo.com), [MET Norway](https://api.met.no), DFES Emergency WA, VicEmergency, Queensland Fire Department, Main Roads WA, [frankfurter.app](https://frankfurter.app), [AeroDataBox](https://aerodatabox.com) via RapidAPI for flights, [DBF](https://dbf.finalrewind.org) for German trains |
 | Places | Nominatim, Wikipedia and Wikimedia Commons |
 | Sun and moon | [SunCalc](https://github.com/mourner/suncalc), offline |
 | Security | WebAuthn with the PRF extension (Face ID, Touch ID, Windows Hello), AES-GCM, all in the browser |
@@ -674,6 +682,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.6:** journal and collage as files, notes in the logbook, wildlife periods
 - [x] **Version 1.7:** animated film with transport modes, design page, location on the map, urgent alerts
 - [x] **Version 1.8:** photo conditions on the home screen, temperature on the edge, calendar as a PDF file, tidy panels
+- [x] **Version 1.9:** second weather service, location in the Mac app, safer maps
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -695,10 +704,10 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.8 · entwickelt für Western Australia**<br>
+**Version 1.9 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-18)**
+**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
 
 **[⬇️ Mac-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)**
 
@@ -758,6 +767,14 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 | 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
 | 📔 **Schreibt dein Reisetagebuch** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
 | 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
+
+## 🛡️ Neu in Version 1.9
+
+**Wetter, das nicht aufgibt.** Fällt der Wetterdienst aus oder ist sein Limit erreicht, wechselt TravelBuddy von selbst zu einem zweiten Dienst. Temperatur, Wetter und Fotolage laufen weiter.
+
+**Dein Standort in der Mac-App.** Die Mac-App bekommt deinen Standort jetzt direkt vom Mac. Temperatur am Rand, Wetter-Stimmung und nahe Warnungen funktionieren dort jetzt auch.
+
+**Sicherere Karten.** Die Kartenbibliothek ist aktuell, damit ist eine Sicherheitslücke geschlossen.
 
 ## 📸 Neu in Version 1.8
 
@@ -1319,6 +1336,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.6:** Tagebuch und Kollage als Datei, Notizen im Logbuch, Zeiträume in der Tierwelt
 - [x] **Version 1.7:** Animationsfilm mit Verkehrsmitteln, Design-Seite, Standort auf der Karte, dringende Meldungen
 - [x] **Version 1.8:** Fotolage auf der Startseite, Temperatur am Rand, Kalender als PDF-Datei, aufgeräumte Felder
+- [x] **Version 1.9:** zweiter Wetterdienst, Standort in der Mac-App, sicherere Karten
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder
