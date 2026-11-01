@@ -11,7 +11,7 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 **Version 1.2 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[✨ What's new](#-new-in-version-12)**
+**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-12)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -26,6 +26,25 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 </div>
 
 > All pictures show a made-up **sample trip**. No real travel dates, bookings or documents are shown.
+
+---
+
+## 📱 Try it now on your iPhone
+
+<table>
+<tr>
+<td align="center"><a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/qr-iphone.png" width="170" alt="QR code to the TravelBuddy web app"></a></td>
+<td>
+
+1. Scan the code or open **[travelbuddy-v1-wa.netlify.app](https://travelbuddy-v1-wa.netlify.app)** in **Safari**.
+2. Tap **Share**, then **Add to Home Screen**.
+3. Open TravelBuddy from your home screen and tap **🧪 Play with a test trip first**.
+
+No account, nothing to install from a store, and your data stays on your phone. On a computer, the link works straight away.
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -571,7 +590,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 **Version 1.2 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[✨ Was ist neu](#-neu-in-version-12)**
+**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-12)**
 
 <br>
 
@@ -580,6 +599,23 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 </div>
 
 > Alle Bilder zeigen eine ausgedachte **Beispielreise**. Echte Reisedaten, Buchungen oder Dokumente sind darin nicht zu sehen.
+
+## 📱 Gleich auf dem iPhone ausprobieren
+
+<table>
+<tr>
+<td align="center"><a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/qr-iphone.png" width="170" alt="QR-Code zur TravelBuddy-Web-App"></a></td>
+<td>
+
+1. Code scannen oder **[travelbuddy-v1-wa.netlify.app](https://travelbuddy-v1-wa.netlify.app)** in **Safari** öffnen.
+2. Auf **Teilen** tippen, dann **Zum Home-Bildschirm**.
+3. TravelBuddy vom Home-Bildschirm öffnen und **🧪 Erst mit einer Testreise spielen** tippen.
+
+Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Computer funktioniert der Link sofort.
+
+</td>
+</tr>
+</table>
 
 ## 🛣️ Neu in Version 1.2
 
