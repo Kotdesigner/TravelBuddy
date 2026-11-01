@@ -1,5 +1,8 @@
 <script>
-  import { t, LOCALE, tn } from './i18n.js'
+  import { erlebt } from './erlebt.js'
+  import { eintragTage, zieleVon, streckeText } from './plan.js'
+  import { tagesPunkte } from './reisefahrt.js'
+  import { t, je, LOCALE, tn } from './i18n.js'
   import { ZWEI } from './format.js'
   // Feld-Beschriftungen mit ihren Eingaben verbinden (VoiceOver las nur „Textfeld“)
   const feldUid = Math.random().toString(36).slice(2, 8)
@@ -59,6 +62,15 @@
   function warnungenUebernehmen() {
     const cur = eintrag.felder?.hazards_faced || []
     setFeld('hazards_faced', [...cur, ...warnTags.filter((t) => !cur.includes(t))])
+  }
+
+  // --- Nahe Ereignisse: nur was du selbst auswählst, kommt ins Tagebuch ---
+  const tageDesEintrags = $derived(new Set(eintragTage(eintrag)))
+  const ereignisseHier = $derived($erlebt.filter((x) => tageDesEintrags.has(x.datum)))
+  const istDrin = (x) => (eintrag.ereignisse || []).some((y) => y.id === x.id)
+  function ereignisUmschalten(x) {
+    const alt = eintrag.ereignisse || []
+    updateJournalEintrag(eintrag.id, { ereignisse: istDrin(x) ? alt.filter((y) => y.id !== x.id) : [...alt, x] })
   }
 
   // --- Amtliche Lage als Wortlaut ins Logbuch ---
@@ -260,6 +272,15 @@
     ortAendern = false
   }
   let ortAendern = $state(false)
+  // Strecke des Tages: zum Ort kommt ein Ziel dazu
+  let zielWahl = $state(false)
+  function zielGewaehlt(o) {
+    setKopf({ ziele: [...ziele, { name: o.name, lat: o.lat ?? null, lon: o.lon ?? null, ortId: o.ortId || null }], ziel: null })
+    zielWahl = false
+  }
+  const ziele = $derived(zieleVon(eintrag))
+  const filmPunkte = $derived(tagesPunkte(eintrag))
+  const zielWeg = (i) => setKopf({ ziele: ziele.filter((_, k) => k !== i), ziel: null })
   async function loeschen() {
     if (await loeschFrage(t('Diesen Logbuch-Eintrag'), t('Text, Fotos, Sprachnotizen und alle Themen dieses Eintrags. Das lässt sich nicht rückgängig machen.'))) loescheJournalEintrag(eintrag.id)
   }
@@ -393,7 +414,7 @@
     <!-- Zugeklappt: eine Zeile, alles Wichtige auf einen Blick -->
     <button class="je-kurz" onclick={() => (aufgeklappt = true)}>
       <span class="k-datum">{kurzDatum}</span>
-      <span class="k-ort">{eintrag.ort || t('— ohne Ort —')}</span>
+      <span class="k-ort">{streckeText(eintrag) || t('— ohne Ort —')}</span>
       {#if auszug}<span class="k-text">{auszug}{(eintrag.text || '').length > 90 ? '…' : ''}</span>{/if}
       <span class="k-marken">
         {#if (eintrag.fotos || []).length}<span class="k-m">📷 {eintrag.fotos.length}</span>{/if}
@@ -427,9 +448,27 @@
     <span class="k4-lbl" id="ortlbl-{eintrag.id}">{t('Ort oder Strecke des Tages')}</span>
     {#if eintrag.ort && !ortAendern}
       <div class="k4-ort-wert">
-        <span class="k4-ort-name">📍 {eintrag.ort}{#if eintrag.lat == null}<small>{t('ohne Kartenpunkt')}</small>{/if}</span>
+        <span class="k4-ort-name">📍 {streckeText(eintrag)}{#if eintrag.lat == null}<small>{t('ohne Kartenpunkt')}</small>{/if}</span>
         <button class="btn" onclick={() => (ortAendern = true)}>{t('Ändern')}</button>
       </div>
+      {#if zielWahl}
+        <OrtWahl {orte} {reisen} freiText koordinaten={false} autofokus label={je('Ziel der Strecke suchen', 'Search destination')} platzhalter={je('z. B. Cervantes', 'e.g. Cervantes')} onwahl={zielGewaehlt} />
+        <button class="hw-link" onclick={() => (zielWahl = false)}>{t('Abbrechen')}</button>
+      {:else}
+        {#if ziele.length}
+          <ul class="k4-ziele">
+            {#each ziele as z, i}<li><span>→ {z.name}</span><button aria-label={je(`Ziel ${z.name} entfernen`, `Remove destination ${z.name}`)} onclick={() => zielWeg(i)}>✕</button></li>{/each}
+          </ul>
+        {/if}
+        {#if ziele.length}
+          {#if filmPunkte.vollstaendig}
+            <label class="k4-film"><input type="checkbox" checked={!!eintrag.imFilm} onchange={(e) => setKopf({ imFilm: e.currentTarget.checked })} /><span>{je('Im Animationsfilm', 'In the animated film')}</span></label>
+          {:else}
+            <p class="k4-film-tipp">{je('Für den Animationsfilm braucht jeder Ort einen Kartenpunkt. Wähle ihn aus der Vorschlagsliste.', 'For the animated film every place needs a map point. Pick it from the suggestions.')}</p>
+          {/if}
+        {/if}
+        <button class="hw-link" onclick={() => (zielWahl = true)}>{ziele.length ? je('+ Weiteres Ziel', '+ Another destination') : je('+ Strecke: Ziel hinzufügen', '+ Route: add destination')}</button>
+      {/if}
     {:else}
       <OrtWahl {orte} {reisen} freiText koordinaten={false} autofokus={ortAendern} label={t('Ort des Tages suchen')} platzhalter="z. B. Kalbarri oder Perth → Cervantes" onwahl={ortGewaehlt} />
       {#if ortAendern}<button class="hw-link" onclick={() => (ortAendern = false)}>{t('Abbrechen')}</button>{/if}
@@ -524,6 +563,16 @@
     </div>
   {/if}
 
+  {#if ereignisseHier.length}
+    <div class="je-ereignis">
+      <b>{je('Nah bei dir an diesem Tag', 'Near you on this day')}</b>
+      <small>{je('Wähle aus, was ins Tagebuch soll.', 'Choose what goes into your journal.')}</small>
+      {#each ereignisseHier as x (x.id)}
+        <label class="je-e-zeile"><input type="checkbox" checked={istDrin(x)} onchange={() => ereignisUmschalten(x)} /><span>{x.icon} {x.level}: {x.titel}<small>{x.km > 1 ? je(`${x.km} km entfernt`, `${x.km} km away`) : je('direkt bei dir', 'right where you were')}</small></span></label>
+      {/each}
+    </div>
+  {/if}
+
   <!-- Immer sichtbar: Wortlaut der Behördenmeldungen in den Tag schreiben.
        Auch „keine Warnungen“ ist ein Ergebnis und wird festgehalten. -->
   {#if eintrag.lat != null && eintrag.lon != null}
@@ -562,6 +611,10 @@
 </article>
 
 <style>
+  .je-ereignis { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; }
+  .je-ereignis small { display: block; color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); }
+  .je-e-zeile { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: calc(14px * var(--schrift, 1)); cursor: pointer; }
+  .je-e-zeile input { flex: none; width: 20px; height: 20px; accent-color: var(--brand); }
   .k4 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .k4-datum { display: flex; flex-direction: column; gap: 3px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
   .k4-datum .datum { min-height: 44px; font-size: calc(16px * var(--schrift, 1)); padding: 6px 10px; border: 1px solid var(--line-stark); border-radius: var(--radius-s); background: var(--eingabe); color: var(--ink); }
@@ -573,6 +626,12 @@
   .je-loeschen { display: flex; justify-content: flex-end; margin-top: 18px; padding-top: 12px; border-top: 1px dashed var(--line); }
   .k4-ort { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
   .k4-lbl { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
+  .k4-film { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: calc(14px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
+  .k4-film input { width: 20px; height: 20px; accent-color: var(--brand); }
+  .k4-film-tipp { margin: 4px 0; color: var(--muted); font-size: calc(13px * var(--schrift, 1)); }
+  .k4-ziele { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; }
+  .k4-ziele li { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: calc(14px * var(--schrift, 1)); }
+  .k4-ziele button { width: 44px; height: 44px; border: none; background: none; color: var(--muted); font-size: calc(14px * var(--schrift, 1)); cursor: pointer; }
   .k4-ort-wert { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--flaeche); border: 1px solid var(--line); border-radius: var(--radius-m); padding: 6px 6px 6px 12px; min-height: 52px; }
   .k4-ort-name { font-size: calc(16px * var(--schrift, 1)); font-weight: 700; display: flex; flex-direction: column; line-height: 1.3; }
   .k4-ort-name small { font-size: calc(12px * var(--schrift, 1)); font-weight: 400; color: var(--muted); }

@@ -334,7 +334,7 @@
     .sn-feld { height: min(75dvh, calc(100dvh - var(--sicher-oben) - var(--sicher-unten) - 76px)); }
   }
   /* Mac / großer Bildschirm: ¾ der Breite und ¾ der Höhe */
-  @media (min-width: 900px) {
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
     .sn-karte { width: auto; padding: 10px 12px 12px; }
     .sn-feld { width: 75vw; height: 75vh; }
   }

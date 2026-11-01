@@ -16,7 +16,8 @@
   import FlugKarte from './FlugKarte.svelte'
   import WarnLage from './WarnLage.svelte'
   import { fluege, flugspeicher, uhr } from './flug-dienst.js'
-  import { flugImFokus, umstiege } from './flug.js'
+  import { flugImFokus, umstiege, dringendeMeldungen } from './flug.js'
+  import { je } from './i18n.js'
   let { warnAnzahl = 0, sperrAnzahl = 0, sperrRoute = 0, onneu = () => {}, ontag = () => {}, geh = () => {} } = $props()
 
   const heute = $derived($heuteTag)
@@ -33,10 +34,16 @@
   const geschriebenGesamt = $derived(new Set($journal.flatMap(eintragTage).filter((d) => s.start && d >= s.start && d <= s.ende)).size)
   const routenJetzt = $derived(s.etappe ? routenDerEtappe($reisen, s.etappe.reise.id) : [])
   const flugJetzt = $derived(flugImFokus($fluege.alle, $flugspeicher.staende, $uhr))
+  const dringend = $derived(dringendeMeldungen($fluege.alle, $flugspeicher.staende, $uhr))
   const umstiegJetzt = $derived(flugJetzt ? umstiege($fluege.fluege, $flugspeicher.staende).find((u) => u.nachFlug === flugJetzt.id) : null)
 </script>
 
 <section class="ht" aria-label={t('Heute')}>
+  {#each dringend as m (m.flug.id)}
+    <a class="ht-warn ht-dringend" class:stark={m.stark} href="#/mehr/fluege">
+      <span aria-hidden="true">{m.flug.art === 'bahn' ? '🚆' : '✈️'}</span><span><b>{m.flug.art === 'bahn' ? je('Zug', 'Train') : je('Flug', 'Flight')} {m.flug.nr}</b> {m.text}</span>
+    </a>
+  {/each}
   <WarnLage {geh} />
   {#if flugJetzt}
     <a class="ht-flug" href="#/mehr/fluege">
@@ -141,6 +148,8 @@
   .ht-etappe > span:nth-child(2) { display: flex; flex-direction: column; min-width: 0; }
   .ht-band { width: 6px; align-self: stretch; border-radius: 3px; background: var(--farbe); flex: none; }
   .ht-schreiben { width: 100%; }
+  .ht-dringend { color: inherit; text-decoration: none; }
+  .ht-dringend:not(.stark) { background: var(--warn-flaeche); border-color: var(--warn-linie, var(--line)); }
   .ht-warn { background: var(--danger-flaeche); border-color: var(--danger-linie); }
   .ht-flug { display: block; color: inherit; text-decoration: none; animation: rein-unten var(--t-slow) var(--ease-out) backwards; }
 </style>

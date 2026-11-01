@@ -1,5 +1,5 @@
 <script>
-  import { t, LOCALE, sprache, setzeSprache } from './i18n.js'
+  import { t, je, LOCALE } from './i18n.js'
   import { ZWEI } from './format.js'
   import { blattRaus, ausblenden } from './motion.js'
   // Mobile Bottom-Tab-Bar: Navigation im Daumenbereich.
@@ -10,10 +10,6 @@
   import { online } from './netz.js'
   import { testreiseAn } from './testreise-dienst.js'
   import { haptic } from './haptik.js'
-  import { theme, setzeTheme } from './theme.js'
-  import { darstellung, setzeSchrift, setzeGesamt, SCHRIFT, GESAMT } from './darstellung.js'
-  const SCHRIFT_NAME = { klein: t('Klein'), standard: t('Standard'), gross: t('Groß'), sehrgross: t('Sehr groß') }
-  const GESAMT_NAME = { kompakt: t('Kompakt'), standard: t('Standard'), gross: t('Groß'), sehrgross: t('Sehr groß') }
   import { modal } from './modal.js'
   import { syncZeiten } from './userdata.js'
   const gesichertText = (iso) => { try { return new Date(iso).toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' }) + ', ' + new Date(iso).toLocaleTimeString(LOCALE, { hour: ZWEI, minute: '2-digit' }) } catch { return '' } }
@@ -28,6 +24,7 @@
     onHandbuch = () => {},
     onEinfuehrung = () => {},
     onTestreise = () => {},
+    onDesign = () => {},
   } = $props()
 
   let sheetOffen = $state(false)
@@ -157,37 +154,7 @@
       <button class="s-aktion" onclick={() => sheetAktion(onHandbuch)}>📖<span>{t('Handbuch')}</span></button>
     </div>
 
-    <div class="s-theme">
-      <span class="st-lbl">{t('🌓 Design')}</span>
-      <div class="segment">
-        {#each [['auto', t('Auto')], ['hell', t('Hell')], ['dunkel', t('Dunkel')]] as [m, l]}
-          <button class:an={$theme === m} onclick={() => { setzeTheme(m); haptic() }}>{l}</button>
-        {/each}
-      </div>
-    </div>
-
-    <div class="s-theme">
-      <span class="st-lbl">{t('🌐 Sprache')}</span>
-      <div class="segment">
-        {#each [['de', 'Deutsch'], ['en', 'English']] as [s, l]}
-          <button class:an={sprache === s} lang={s} onclick={() => { haptic(); setzeSprache(s) }}>{l}</button>
-        {/each}
-      </div>
-    </div>
-
-    <!-- Schrift (nur Texte) und Gesamtgröße (alles), je Gerät gemerkt (darstellung.js) -->
-    <div class="s-stufen">
-      <span class="st-lbl">{t('🔠 Schrift')}</span>
-      <div class="segment s-vier" role="group" aria-label={t('Schriftgröße')}>
-        {#each SCHRIFT as s (s.id)}<button class:an={$darstellung.schrift === s.id} aria-pressed={$darstellung.schrift === s.id} onclick={() => { setzeSchrift(s.id); haptic() }}>{SCHRIFT_NAME[s.id]}</button>{/each}
-      </div>
-    </div>
-    <div class="s-stufen">
-      <span class="st-lbl">{t('🔍 Gesamtgröße')}</span>
-      <div class="segment s-vier" role="group" aria-label={t('Gesamtgröße')}>
-        {#each GESAMT as s (s.id)}<button class:an={$darstellung.gesamt === s.id} aria-pressed={$darstellung.gesamt === s.id} onclick={() => { setzeGesamt(s.id); haptic() }}>{GESAMT_NAME[s.id]}</button>{/each}
-      </div>
-    </div>
+    <button class="s-design" onclick={() => sheetAktion(onDesign)}><span>🎨 {t('Design')}</span><small>{je('Hell und Dunkel, Sprache, Schrift, Effekte', 'Light and dark, language, text, effects')}</small></button>
 
     <div class="s-status">
       <span class="dot gross" class:on={$online}></span>{$online ? t('Online') : t('Offline. Alles Wichtige ist auf dem Gerät gespeichert.')}
@@ -202,6 +169,8 @@
 {/if}
 
 <style>
+  .s-design { display: flex; flex-direction: column; gap: 2px; width: 100%; min-height: 56px; margin-top: 12px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); font-size: calc(15px * var(--schrift, 1)); font-weight: 700; text-align: left; cursor: pointer; }
+  .s-design small { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 500; }
   /* ---------- Bar ----------
      Schwebende Leiste aus „Glas“ (Stil iOS 26): zwei Kapseln über dem Inhalt, der darunter
      durchscheint. Ohne backdrop-filter fast deckend. Tippflächen bleiben 56 px hoch. */
@@ -315,11 +284,6 @@
   .s-aktion span { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
   .s-aktion:active { background: var(--flaeche-2); }
 
-  .s-stufen { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
-  .s-vier { display: grid; grid-template-columns: repeat(4, 1fr); }
-  .s-vier button { padding: 8px 4px; }
-  .s-theme { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
-  .st-lbl { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; color: var(--ink); }
 
   .s-status {
     display: flex; align-items: center; gap: 8px; margin-top: 12px;

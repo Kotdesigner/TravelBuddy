@@ -10,6 +10,7 @@
 import { etappenMitDatum, routenDerEtappe, tageZwischen } from './plan.js'
 import { verdichte, vektor, lonlat, blick } from './globus.js'
 import { t } from './i18n.js'
+import { artDerTour, verlauf, logbuchTouren } from './reisefahrt.js'
 
 export const MIN_S = 30
 export const MAX_S = 60
@@ -75,15 +76,21 @@ const istFlug = (x) => (x?.art || 'auto') === 'flug' || !!x?.route?.flug
 const mitKoord = (x) => (x?.stops || []).filter((s) => s && s.lat != null && s.lon != null)
 function linieVon(x, farbe) {
   const st = mitKoord(x)
-  const geo = x.route?.geometry?.length >= 2 ? x.route.geometry : st.map((p) => [p.lon, p.lat])
-  return geo.length >= 2 ? { coords: verdichte(geo, istFlug(x)), farbe: x.farbe || farbe, flug: istFlug(x) } : null
+  const geo = artDerTour(x) !== 'boot' && x.route?.geometry?.length >= 2 ? x.route.geometry : st.map((p) => [p.lon, p.lat])
+  if (geo.length < 2) return null
+  const coords = verdichte(geo, istFlug(x))
+  return { coords, farbe: x.farbe || farbe, flug: istFlug(x), art: artDerTour(x), km: verlauf(coords).gesamt }
 }
 /** Linien, Stopps und Namen einer Etappe (Anreise und ihre Routen). */
-export function etappenGeo(reisen, etappe) {
+export function etappenGeo(reisen, etappe, journal = []) {
   const r = etappe.reise
-  const quellen = [r, ...routenDerEtappe(reisen, r.id)]
+  const quellen = [r, ...routenDerEtappe(reisen, r.id)].filter((x) => x.imFilm !== false)
   const farbe = r.farbe || '#c1662f'
   const linien = quellen.map((x) => linieVon(x, farbe)).filter(Boolean)
+  for (const x of logbuchTouren(journal, farbe)) {
+    if (x.datum < etappe.von || x.datum > etappe.bis) continue
+    linien.push({ coords: x.geo, farbe, flug: x.art === 'flug', art: x.art, km: verlauf(x.geo).gesamt })
+  }
   const punkte = []
   const namen = []
   for (const x of quellen) {
@@ -99,7 +106,7 @@ export function etappenGeo(reisen, etappe) {
 /** Ein Blick, der eine Etappe zeigt; ohne Koordinaten die Mitte Australiens. */
 export function blickAuf(alle) {
   if (!alle?.length) return { mitte: [122, -25], P: 4.2 }
-  return blick(alle, { fuellen: 0.56, minP: 1.22 })
+  return blick(alle, { fuellen: 0.72, minP: 1.22 })
 }
 
 // ---------- Gesamtbilanz ----------
@@ -213,7 +220,9 @@ export function kameraFlug(von, nach, p) {
     const s = Math.sin(d), k1 = Math.sin((1 - e) * d) / s, k2 = Math.sin(e * d) / s
     mitte = lonlat([va[0] * k1 + vb[0] * k2, va[1] * k1 + vb[1] * k2, va[2] * k1 + vb[2] * k2])
   }
-  const lp = Math.log(Math.max(1.02, von.P)) * (1 - e) + Math.log(Math.max(1.02, nach.P)) * e
+  // Erst langsam, dann immer schneller heran
+  const nahe = klemme(p) ** 3
+  const lp = Math.log(Math.max(1.02, von.P)) * (1 - nahe) + Math.log(Math.max(1.02, nach.P)) * nahe
   // Je weiter der Weg, desto höher der Bogen (bis etwa Faktor 2,6)
   const hub = Math.min(1.6, (d * 180 / Math.PI) / 40)
   const P = Math.exp(lp) * (1 + hub * Math.sin(Math.PI * e))
@@ -292,7 +301,7 @@ export function filmDaten({ reisen = [], journal = [], gesamtStart, maxFotos = 3
   const plan = etappenMitDatum(reisen, gesamtStart)
   let vorher = { mitte: [128, -26] }
   const etappen = plan.map((e) => {
-    const geo = etappenGeo(reisen, e)
+    const geo = etappenGeo(reisen, e, journal)
     const b = blickAuf(geo.alle)
     // Kurzer Weg zur nächsten Etappe = kürzerer Flug
     const flugGewicht = 0.5 + 0.5 * Math.min(1, winkel(vorher.mitte, b.mitte) / 25)

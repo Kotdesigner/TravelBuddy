@@ -1,5 +1,5 @@
 <script>
-  import { t, tn } from './i18n.js'
+  import { t, je, tn } from './i18n.js'
   import { kurzZeit } from './format.js'
   // Eine Strecke bearbeiten: Stopps per Suche hinzufügen, per Griff umsortieren,
   // Route, Tank-Lücken, Sehenswertes und Wetter an der Strecke.
@@ -103,8 +103,10 @@
       <button class:an={artVon(r) === 'auto'} aria-pressed={artVon(r) === 'auto'} onclick={() => setArt(r, 'auto')}>{t('🚗 Auto')}</button>
       <button class:an={artVon(r) === 'flug'} aria-pressed={artVon(r) === 'flug'} onclick={() => setArt(r, 'flug')}>{t('✈️ Flug')}</button>
       <button class:an={artVon(r) === 'bahn'} aria-pressed={artVon(r) === 'bahn'} onclick={() => setArt(r, 'bahn')}>{t('🚆 Bahn')}</button>
+      <button class:an={artVon(r) === 'boot'} aria-pressed={artVon(r) === 'boot'} onclick={() => setArt(r, 'boot')}>{t('⛵ Schippern')}</button>
     </div>
-    {#if gerade(r)}<VerkehrBlock art={artVon(r)} terminId={r.terminId} titel={r.name} onverknuepft={(id) => updateReise(r.id, { terminId: id })} />{/if}
+    <label class="re-film"><input type="checkbox" checked={r.imFilm !== false} onchange={(e) => updateReise(r.id, { imFilm: e.currentTarget.checked })} /><span>{je('Im Animationsfilm', 'In the animated film')}</span></label>
+    {#if gerade(r) && artVon(r) !== 'boot'}<VerkehrBlock art={artVon(r)} terminId={r.terminId} titel={r.name} onverknuepft={(id) => updateReise(r.id, { terminId: id })} />{/if}
 
     {#if st.length}
       <ol class="stops" use:sortierbar={{ onbewege: (a, b) => setStops(verschiebe(st, a, b)) }} aria-label={t('Stopps')}>
@@ -143,7 +145,7 @@
     <div class="route">
       {#if r.route && !alt}
         <div class="r-stats">
-          <span class="r-km">{r.route.flug ? '✈️' : '🛣️'} {r.route.km} km</span>
+          <span class="r-km">{artVon(r) === 'boot' ? '⛵' : r.route.flug ? '✈️' : '🛣️'} {r.route.km} km</span>
           <span>⏱️ {fahrzeitText(r.route.dauerMin)}</span>
           {#if r.route.tank}
             {@const maxL = h?.tank?.maxLuecke ?? r.route.tank.maxLuecke}
@@ -273,6 +275,8 @@
 </div>
 
 <style>
+  .re-film { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: calc(14px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
+  .re-film input { width: 20px; height: 20px; accent-color: var(--brand); }
   .re { display: flex; flex-wrap: wrap; gap: 18px; }
   .re-haupt { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
   .preview { flex: 0 0 220px; }

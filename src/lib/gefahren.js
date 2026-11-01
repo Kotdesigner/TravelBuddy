@@ -77,9 +77,9 @@ export async function holeGefahren(punkte) {
 }
 
 /** Einzelnen Standort auswerten (aktuelle Position + grob Umkreis). */
-export async function holeStandortGefahr(lat, lon) {
-  // Umkreis ~100 km: 5 Punkte (Zentrum + N/O/S/W ≈ 0.9° ≈ 100 km).
-  const d = 0.9
+export async function holeStandortGefahr(lat, lon, umkreisKm = 100) {
+  // Im eingestellten Umkreis: 5 Punkte, Zentrum und je einer nach N, O, S, W.
+  const d = Math.max(25, umkreisKm) / 111
   const punkte = [
     { id: 'c', lat, lon }, { id: 'n', lat: lat + d, lon }, { id: 's', lat: lat - d, lon },
     { id: 'o', lat, lon: lon + d }, { id: 'w', lat, lon: lon - d },

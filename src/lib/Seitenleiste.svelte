@@ -1,17 +1,13 @@
 <script>
-  import { t, LOCALE, sprache, setzeSprache } from './i18n.js'
+  import { t, LOCALE } from './i18n.js'
   // Seitenleiste am Mac: dieselben fünf Bereiche wie unten am iPhone, darunter die
   // Unterpunkte des offenen Bereichs. Ersetzt die Leiste oben mit ihren Aufklappmenüs
   // und das ⋯-Dock unten rechts (Backup, Import, Design wohnen jetzt hier).
   import { online } from './netz.js'
   import { testreiseAn } from './testreise-dienst.js'
-  import { theme, setzeTheme } from './theme.js'
-  import { darstellung, setzeSchrift, setzeGesamt, SCHRIFT, GESAMT } from './darstellung.js'
-  const SCHRIFT_NAME = { klein: t('Klein'), standard: t('Standard'), gross: t('Groß'), sehrgross: t('Sehr groß') }
-  const GESAMT_NAME = { kompakt: t('Kompakt'), standard: t('Standard'), gross: t('Groß'), sehrgross: t('Sehr groß') }
   import { syncZeiten } from './userdata.js'
 
-  let { ansicht, unterpunkte = {}, geh = () => {}, onSuche = () => {}, onBackup = () => {}, onImport = () => {}, onHandbuch = () => {}, onEinfuehrung = () => {}, onTestreise = () => {} } = $props()
+  let { ansicht, unterpunkte = {}, geh = () => {}, onSuche = () => {}, onBackup = () => {}, onImport = () => {}, onHandbuch = () => {}, onDesign = () => {}, onEinfuehrung = () => {}, onTestreise = () => {} } = $props()
 
   const BEREICHE = [
     { id: 'heute', label: t('Heute') },
@@ -24,7 +20,7 @@
 </script>
 
 <nav class="sl" aria-label={t('Hauptnavigation')}>
-  <div class="sl-marke">{t('Western')}<span>{t('Australia')}</span></div>
+  <div class="sl-marke">Travel<span>Buddy</span></div>
   <button class="sl-suche" onclick={onSuche} aria-keyshortcuts="Meta+K /">
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg>
     {t('Suchen')} <kbd>⌘K</kbd>
@@ -51,24 +47,9 @@
       <button onclick={onBackup}>{t('💾 Backup')}</button>
       <button onclick={onImport}>{t('📂 Import')}</button>
       <button onclick={onHandbuch}>{t('📖 Handbuch')}</button>
+      <button onclick={onDesign}>🎨 {t('Design')}</button>
       <button onclick={onEinfuehrung}>{t('🧭 Einführung')}</button>
       <button onclick={onTestreise}>🧪 {$testreiseAn ? t('Testreise beenden') : t('Testreise')}</button>
-    </div>
-    <div class="segment sl-theme" role="group" aria-label={t('Design')}>
-      {#each [['auto', t('Auto')], ['hell', t('Hell')], ['dunkel', t('Dunkel')]] as [m, l]}
-        <button class:an={$theme === m} aria-pressed={$theme === m} onclick={() => setzeTheme(m)}>{l}</button>
-      {/each}
-    </div>
-    <!-- Sprache: Namen immer in der eigenen Sprache; ein Wechsel lädt die App neu (i18n.js) -->
-    <div class="segment sl-sprache" role="group" aria-label={t('Sprache')}>
-      {#each [['de', 'Deutsch'], ['en', 'English']] as [s, l]}
-        <button class:an={sprache === s} aria-pressed={sprache === s} lang={s} onclick={() => setzeSprache(s)}>{l}</button>
-      {/each}
-    </div>
-    <!-- Schrift (nur Texte) und Gesamtgröße (alles), je Gerät gemerkt (darstellung.js) -->
-    <div class="sl-groesse">
-      <label>{t('Schrift')}<select value={$darstellung.schrift} onchange={(e) => setzeSchrift(e.currentTarget.value)}>{#each SCHRIFT as s (s.id)}<option value={s.id}>{SCHRIFT_NAME[s.id]}</option>{/each}</select></label>
-      <label>{t('Größe')}<select value={$darstellung.gesamt} onchange={(e) => setzeGesamt(e.currentTarget.value)}>{#each GESAMT as s (s.id)}<option value={s.id}>{GESAMT_NAME[s.id]}</option>{/each}</select></label>
     </div>
     <p class="sl-status"><span class="sl-punkt" class:an={$online} aria-hidden="true"></span>{$online ? t('Online') : t('Offline')}{#if gesichert}&nbsp;{t('· Backup {gesichert}', { gesichert })}{/if}</p>
   </div>
@@ -77,11 +58,11 @@
 <style>
   .sl {
     position: sticky; top: 0; height: 100dvh; overflow: auto; width: 232px; flex: none;
-    background: var(--flaeche); border-right: 1px solid var(--line); padding: 18px 12px 14px;
+    background: var(--flaeche); border-right: 1px solid var(--line); padding: 18px 12px 14px max(12px, env(safe-area-inset-left, 0px));
     display: flex; flex-direction: column; gap: 14px;
   }
-  .sl-marke { font-family: 'Anton', Impact, sans-serif; font-size: calc(24px * var(--schrift, 1)); line-height: 1; letter-spacing: 0.5px; color: var(--ink); text-transform: uppercase; padding: 4px 8px; }
-  .sl-marke span { display: block; color: var(--brand-text); }
+  .sl-marke { font-family: 'Anton', Impact, sans-serif; font-size: calc(30px * var(--schrift, 1)); line-height: 1.1; letter-spacing: 0.6px; color: var(--ink); text-align: center; white-space: nowrap; padding: 4px 0 10px; }
+  .sl-marke span { color: var(--brand-text); }
   .sl-suche {
     display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 10px; border-radius: 10px;
     border: 1px solid var(--line-stark); background: var(--card); color: var(--muted); font-size: calc(14px * var(--schrift, 1)); cursor: pointer; text-align: left;
@@ -102,13 +83,6 @@
   .sl-aktionen { display: flex; flex-direction: column; gap: 4px; }
   .sl-aktionen button { min-height: 36px; text-align: left; padding: 0 10px; border: none; background: none; border-radius: 8px; font-size: calc(14px * var(--schrift, 1)); color: var(--ink); cursor: pointer; }
   .sl-aktionen button:hover { background: var(--flaeche-2); }
-  .sl-theme { display: grid; grid-template-columns: repeat(3, 1fr); }
-  .sl-theme button { padding: 6px 4px; min-height: 34px; font-size: calc(12.5px * var(--schrift, 1)); }
-  .sl-sprache { display: grid; grid-template-columns: repeat(2, 1fr); margin-top: 6px; }
-  .sl-sprache button { padding: 6px 4px; min-height: 34px; font-size: calc(12.5px * var(--schrift, 1)); }
-  .sl-groesse { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .sl-groesse label { display: flex; flex-direction: column; gap: 2px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
-  .sl-groesse select { min-height: 34px; padding: 4px 6px; font-size: calc(13px * var(--schrift, 1)); border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); }
   .sl-status { margin: 0; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); display: flex; align-items: center; gap: 6px; padding: 0 6px; }
   .sl-punkt { width: 8px; height: 8px; border-radius: 50%; background: var(--line-stark); }
   .sl-punkt.an { background: var(--ok); }

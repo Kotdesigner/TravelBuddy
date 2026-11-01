@@ -327,3 +327,8 @@ export function reiseStatus(eintraege, heute) {
   const e = etappeAm(eintraege, heute)
   return { phase: 'unterwegs', tagNr: tageZwischen(u.start, heute) + 1, etappe: e, tagInEtappe: e ? tageZwischen(e.von, heute) + 1 : null, ...u }
 }
+
+/** Ziele eines Tages in der Reihenfolge der Fahrt. */
+export const zieleVon = (e) => (Array.isArray(e?.ziele) ? e.ziele : e?.ziel ? [e.ziel] : [])
+/** Ort und Ziele als Strecke: „Exmouth → Coral Bay → Ningaloo“. */
+export const streckeText = (e) => [e?.ort, ...zieleVon(e).map((z) => z.name)].filter(Boolean).join(' → ')

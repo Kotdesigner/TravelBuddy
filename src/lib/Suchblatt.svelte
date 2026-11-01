@@ -282,7 +282,7 @@
 
   /* iPhone: Reihenfolge wie iOS 26 — Treffer oben, darunter Etiketten, ganz unten das Suchfeld.
      Im Markup steht das Feld zuerst (VoiceOver liest es zuerst), angezeigt wird es unten. */
-  @media (max-width: 899px) {
+  @media (max-width: 639px), (max-width: 899px) and (orientation: portrait) {
     .s-griff { order: 0; }
     .s-status { order: 1; padding-top: 6px; }
     .s-liste { order: 2; }
@@ -306,7 +306,7 @@
   }
 
   /* Mac / großer Bildschirm: Fenster in der Mitte (wie Spotlight) */
-  @media (min-width: 900px) {
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
     .s-blatt {
       left: 50%; right: auto; bottom: auto; top: 10vh; height: auto;
       width: min(680px, 92vw); max-height: 76vh;

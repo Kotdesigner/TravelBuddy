@@ -311,4 +311,17 @@ export function flugImFokus(fluege, staende, jetzt, schonGezeigt = {}) {
   return null
 }
 
+/** Was vor der nächsten Fahrt wichtig ist: Ausfall, starke Verspätung oder eine Änderung der letzten 6 Stunden. */
+export function dringendeMeldungen(alle = [], staende = {}, jetzt = Date.now()) {
+  const raus = []
+  for (const f of alle) {
+    const s = staende[f.id], ab = abflugMs(f, s, staende)
+    if (jetzt < ab - 24 * STUNDE || jetzt > ab + 3 * STUNDE) continue
+    const neu = s?.verlauf?.[0], frisch = neu && jetzt - neu.zeit <= 6 * STUNDE
+    if (s?.daten && istSchlecht(s.daten)) raus.push({ flug: f, text: frisch ? neu.text : statusText(s.daten, jetzt), stark: true })
+    else if (frisch) raus.push({ flug: f, text: neu.text, stark: false })
+  }
+  return raus
+}
+
 export const stundenBis = (zeit, jetzt) => Math.round((zeit - jetzt) / STUNDE)

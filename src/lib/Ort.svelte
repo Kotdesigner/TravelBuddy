@@ -483,7 +483,7 @@
   .rm-hg { position: fixed; inset: 0; z-index: 19; }
   .rm-kopf { display: none; }
   /* iPhone: als Blatt über der Leiste, nicht als Klappmenü, das am Kachelrand abgeschnitten wird */
-  @media (max-width: 899px) {
+  @media (max-width: 639px), (max-width: 899px) and (orientation: portrait) {
     .rm-hg { background: rgba(20, 14, 8, 0.35); z-index: 129; animation: rm-hg var(--t-med) var(--ease-out); }
     .reise-menu {
       position: fixed; left: 10px; right: 10px; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); top: auto;

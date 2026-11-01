@@ -15,6 +15,10 @@
   import { FORMATE, DATEITYPEN, exportiereKarte, speichere } from './kartenexport.js'
   import { userData, journal } from './userdata.js'
   import { warnListe, meinePosition, warnUmkreis } from './warnlage-dienst.js'
+  import { frageStandortAn, folgeStandort, standortHinweis, standortStatus, standortFehler } from './standort.js'
+  import { zeigeToast } from './toast.js'
+  import { get } from 'svelte/store'
+  import { je } from './i18n.js'
   import { warnGeoJson, warnAusschnitt } from './warnlage.js'
 
   let { orte = [], reisen = [], warnFokus = null } = $props()
@@ -602,6 +606,18 @@
   }
   $effect(() => { $warnListe; $meinePosition; $warnUmkreis; warnFokus; warnAn; if (mapGeladen) untrack(zeigeWarnungen) })
 
+  // Eigener Standort: läuft ohne Netz über GPS. Mit erteilter Freigabe folgt der Punkt von selbst.
+  let suchtOrt = $state(false)
+  $effect(() => { if ($standortStatus === 'erlaubt') return folgeStandort() })
+  async function zuMir() {
+    suchtOrt = true
+    const ok = await frageStandortAn({ hoheGenauigkeit: true, alterMs: 30000 })
+    suchtOrt = false
+    const p = get(meinePosition)
+    if (!ok || !p) { zeigeToast(standortHinweis(get(standortStatus), get(standortFehler)) || t('Kein Standort verfügbar.'), 'fehler'); return }
+    map?.flyTo({ center: [p.lon, p.lat], zoom: Math.max(map.getZoom(), 11), duration: 900 })
+  }
+
   let laedt = $state(false)
 
   // Zuerst der Überblick über ganz Australien. Offline ohne ihn: der größte gespeicherte Teil.
@@ -789,6 +805,7 @@
   {/if}
   <div class="map-wrap">
     <div class="map" bind:this={container}></div>
+    <button class="ort-knopf" class:sucht={suchtOrt} onclick={zuMir} aria-label={je('Mein Standort', 'My location')} title={je('Mein Standort', 'My location')}><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg></button>
     {#if $warnListe.length}
       <button class="warn-knopf" class:aus={!warnAn} aria-pressed={warnAn} onclick={warnUmschalten}>{warnAn ? t('⚠️ Warngebiete ausblenden') : t('⚠️ Warngebiete einblenden')}</button>
     {/if}
@@ -885,6 +902,8 @@
     color: #4a4038; background: rgba(246, 240, 226, 0.94); box-shadow: 0 1px 3px rgba(0,0,0,.18);
     pointer-events: none;
   }
+  .ort-knopf { position: absolute; right: 10px; bottom: 46px; z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--brand-text); box-shadow: var(--shadow); cursor: pointer; }
+  .ort-knopf.sucht { opacity: 0.6; }
   .warn-knopf { position: absolute; top: 10px; left: 10px; z-index: 2; min-height: 40px; padding: 0 12px; border: 1px solid var(--line-stark); border-radius: 20px; background: var(--card); color: var(--ink); font-weight: 700; font-size: calc(13px * var(--schrift, 1)); box-shadow: var(--shadow); cursor: pointer; }
   .warn-knopf.aus { color: var(--muted); }
   .warn-legende { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0 0; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }

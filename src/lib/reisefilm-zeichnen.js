@@ -7,6 +7,7 @@ import { zeichneGlobus, zeichneGlobusSchnell, globusProjektion, zeichneUeberlage
 import { szeneBei, kameraFlug, teilLinien, kenBurns, deckend, blende, sanft, ausklang } from './reisefilm.js'
 import { bereich, tagMonatJahr, zahl, tageText } from './format.js'
 import { t, tn } from './i18n.js'
+import { FAHRZEUG, verlauf, punktBei, kmText } from './reisefahrt.js'
 
 const TITEL_SCHRIFT = "'Anton', Impact, 'Arial Narrow', sans-serif"
 const TEXT_SCHRIFT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Liberation Sans', Arial, sans-serif"
@@ -205,7 +206,22 @@ export function baueFilm(daten, canvas, { breite = 720, hoehe = 1280, kugelPx = 
     const linien = teilLinien(e.geo.linien, sanft(p))
     const punkte = p >= 1 ? e.geo.punkte : e.geo.punkte.slice(0, Math.max(1, Math.round(e.geo.punkte.length * p)))
     zeichneUeberlagerung(ctx, proj, { linien, punkte: e.geo.linien.length || p > 0.2 ? punkte : [], dpr: dpr * s, skala: s, versatz: [x, y] })
+    // Verkehrsmittel an der Spitze der Linie, dazu kurz die Entfernung
+    const zuletzt = linien[linien.length - 1]
+    if (zuletzt?.coords?.length >= 2 && p < 1) {
+      const v = verlauf(zuletzt.coords), o = punktBei(v, 1)
+      const q = proj.proj([o.lon, o.lat])
+      if (q) {
+        ctx.save()
+        ctx.translate(x + q[0] * s, y + q[1] * s); ctx.rotate(o.richtung * Math.PI / 180); ctx.scale(2, 2); ctx.translate(-12, -12)
+        ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 8
+        ctx.fillStyle = '#fff'; ctx.fill(new Path2D(FAHRZEUG[zuletzt.art] || FAHRZEUG.auto), 'evenodd')
+        ctx.restore()
+      }
+    }
+    const kmE = e.geo.linien.reduce((n, l) => n + (l.km || 0), 0)
     verlaufUnten(0.36, 0.8)
+    if (kmE) text(kmText(kmE, zahl), W / 2, 130, { groesse: 34, gewicht: 800, farbe: AKZENT, alpha: blende(sek, dauer, 0.4, 0.4) })
     etappenKarte(e, blende(sek - 0.15, dauer, 0.45, 0))
     text(`${sz.nr + 1} / ${etappen.length}`, W / 2, 84, { groesse: 22, gewicht: 700, farbe: 'rgba(244,236,224,0.8)' })
   }

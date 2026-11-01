@@ -147,16 +147,18 @@
         <button type="button" class:an={eArt === 'auto'} aria-pressed={eArt === 'auto'} onclick={() => (eArt = 'auto')}>{t('🚗 Auto')}</button>
         <button type="button" class:an={eArt === 'flug'} aria-pressed={eArt === 'flug'} onclick={() => (eArt = 'flug')}>{t('✈️ Flug')}</button>
         <button type="button" class:an={eArt === 'bahn'} aria-pressed={eArt === 'bahn'} onclick={() => (eArt = 'bahn')}>{t('🚆 Bahn')}</button>
+        <button type="button" class:an={eArt === 'boot'} aria-pressed={eArt === 'boot'} onclick={() => (eArt = 'boot')}>{t('⛵ Schippern')}</button>
       </div>
-      {#if eArt !== 'auto'}{@render verkehr()}{/if}
+      {#if eArt === 'flug' || eArt === 'bahn'}{@render verkehr()}{/if}
     {:else if typ === 'route'}
       <p class="nb-k">{t('Eine Strecke mit Stopps innerhalb einer Etappe. Start und Ziel reichen fürs Erste, den Rest ergänzt du in der Route.')}</p>
       <div class="segment" role="group" aria-label={t('Verkehrsmittel')}>
         <button type="button" class:an={rArt === 'auto'} aria-pressed={rArt === 'auto'} onclick={() => (rArt = 'auto')}>{t('🚗 Auto')}</button>
         <button type="button" class:an={rArt === 'flug'} aria-pressed={rArt === 'flug'} onclick={() => (rArt = 'flug')}>{t('✈️ Flug')}</button>
         <button type="button" class:an={rArt === 'bahn'} aria-pressed={rArt === 'bahn'} onclick={() => (rArt = 'bahn')}>{t('🚆 Bahn')}</button>
+        <button type="button" class:an={rArt === 'boot'} aria-pressed={rArt === 'boot'} onclick={() => (rArt = 'boot')}>{t('⛵ Schippern')}</button>
       </div>
-      {#if rArt !== 'auto'}{@render verkehr()}{/if}
+      {#if rArt === 'flug' || rArt === 'bahn'}{@render verkehr()}{/if}
       <label class="nb-f">{t('Etappe')}
         <select bind:value={rEtappe}>
           <option value="">{t('keine Etappe')}</option>
@@ -209,7 +211,7 @@
     padding: 8px 18px calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 12px;
     animation: hoch var(--t-slow) var(--ease-spring);
   }
-  @media (min-width: 900px) {
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
     .nb { left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 520px; border-radius: var(--radius-l); padding: 18px 22px 20px; animation: rein var(--t-med) var(--ease-spring); }
     .nb-griff { display: none; }
   }

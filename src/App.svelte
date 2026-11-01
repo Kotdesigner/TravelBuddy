@@ -20,7 +20,7 @@
   import Fluege from './lib/Fluege.svelte'
   import Kosten from './lib/Kosten.svelte'
   import { CLUSTER_KATS, kostenAuswertung } from './lib/kosten.js'
-  import { warnDaten, warnUmkreis, warnListe, meinePosition } from './lib/warnlage-dienst.js'
+  import { warnDaten, warnUmkreis, warnListe, meinePosition, testmodus } from './lib/warnlage-dienst.js'
   import { zaehleStrassen } from './lib/strassenlage.js'
   import Heute from './lib/Heute.svelte'
   import NeuBlatt from './lib/NeuBlatt.svelte'
@@ -66,13 +66,18 @@
   import { initUserData, userData, exportBackup, leseBackup, saeubereBackup, wendeBackupAn, backupInfo, datenStand, syncZeiten,
     eigeneOrte, updateEigenenOrt, loescheEigenenOrt, gefahrenCache, journal, reisen, reiseBudget, vorabKosten, buchungen, importiereReisekalender,
     vorschauZusammenfuehren, fuehreBackupZusammen, importRueckgaengig, schnappschuss, rettung,
-    gesamtStart, reiseTage, ready } from './lib/userdata.js'
+    gesamtStart, reiseTage, berechneKalender, ready } from './lib/userdata.js'
   import { get } from 'svelte/store'
   import { modal } from './lib/modal.js'
   import Handbuch from './lib/Handbuch.svelte'
   import Rechtliches from './lib/Rechtliches.svelte'
   import { ladeBildNachweis } from './lib/bild-nachweis.js'
   import { zeigeOrteHinweis } from './lib/orte-hinweis.js'
+  import NetzRahmen from './lib/NetzRahmen.svelte'
+  import { starteErlebt } from './lib/erlebt.js'
+  import Design from './lib/Design.svelte'
+  import { aktualisiereStimmung, pruefeSonnenuntergang } from './lib/stimmung.js'
+  import { effekte } from './lib/effekte.js'
   import SpracheWahl from './lib/SpracheWahl.svelte'
   import { spracheOffen } from './lib/i18n.js'
   import { holeOrtsdaten } from './lib/ortdaten.js'
@@ -333,6 +338,7 @@
     starteStandort()
     starteStrassenlage()
     starteFluege()
+    starteErlebt(warnListe, meinePosition, testmodus)
     // Musik unterwegs: Zustand laden, Rücksprung von Spotify erkennen
     starteMusik({ meldung: (t, art) => zeigeToast(t, art || 'info', 4000) })
   })
@@ -341,7 +347,9 @@
   $effect(() => {
     const s = $standort
     if (!s || !$online) return
-    holeStandortGefahr(s.lat, s.lon).then((g) => { standortGefahr = g }).catch(() => {})
+    const km = umkreisKm   // erst abrufen, wenn der Regler ruht
+    const warten = setTimeout(() => holeStandortGefahr(s.lat, s.lon, km).then((g) => { standortGefahr = g }).catch(() => {}), 800)
+    return () => clearTimeout(warten)
   })
 
   const GEFAHREN_ABSTAND_MS = 15 * 60 * 1000
@@ -352,6 +360,15 @@
     if (Date.now() - gefahrenZuletzt < GEFAHREN_ABSTAND_MS) return
     gefahrenZuletzt = Date.now()
     pruefeGefahren(false)
+  })
+  // Beim Zurückkommen auch den Standort auffrischen, sonst gilt die Warnlage für den Ort von vorhin
+  $effect(() => {
+    const auffrischen = () => {
+      if (document.visibilityState !== 'visible' || $standortStatus !== 'erlaubt') return
+      if (Date.now() - ($standort?.zeit || 0) > 600000) frageStandortAn({ alterMs: 300000 })
+    }
+    document.addEventListener('visibilitychange', auffrischen)
+    return () => document.removeEventListener('visibilitychange', auffrischen)
   })
   // Das iPhone hält die App oft stundenlang im Hintergrund, ohne dass sich etwas am Netz ändert.
   // Darum auch beim Zurückkommen und alle paar Minuten im offenen Zustand nachsehen.
@@ -419,6 +436,7 @@
     for (const { r, art } of alle) {
       // Ohne berechnete Route auf die Luftlinie der Stopps zurückfallen.
       const strecke = r.route?.km ?? luftlinieKm(r.stops || [])
+      if (art === 'boot') continue   // kein Sprit und keine Zeit am Steuer
       if (art === 'flug') { flugKm += strecke; flugMin += r.route?.dauerMin || 0 }
       else { km += strecke; min += r.route?.dauerMin || 0 }
     }
@@ -817,16 +835,38 @@
     rettung.set(null)   // nur einmal zeigen
   })
   ladeBildNachweis()
+  // Wetter-Stimmung: am besten vom GPS, sonst vom ersten Stopp der heutigen Etappe
+  const stimmungOrt = $derived.by(() => {
+    if ($standort) return { lat: $standort.lat, lon: $standort.lon }
+    const heute = ymdPlan(new Date())
+    const e = berechneKalender($reisen, $gesamtStart).eintraege.find((x) => heute >= ymdPlan(x.von) && heute <= ymdPlan(x.bis))
+    const p = (e?.reise.stops || []).find((x) => x.lat != null)
+    return p ? { lat: p.lat, lon: p.lon } : null
+  })
+  $effect(() => {
+    const ort = stimmungOrt
+    if (!$online || !$effekte.stimmung) return
+    aktualisiereStimmung(ort)
+    const uhr = setInterval(() => aktualisiereStimmung(ort), 600000)
+    return () => clearInterval(uhr)
+  })
+  $effect(() => {
+    const ort = stimmungOrt
+    pruefeSonnenuntergang(ort)
+    const uhr = setInterval(() => pruefeSonnenuntergang(ort), 60000)
+    return () => clearInterval(uhr)
+  })
   let sprachFrage = $state(spracheOffen())
   $effect(() => { if (ansicht.tab === 'orte' && !$einfuehrung && !sprachFrage) zeigeOrteHinweis() })
 </script>
 
 <RoutenDienst orte={[...orte, ...$eigeneOrte]} />
 
+<NetzRahmen />
 <div class="app">
 <div class="sl-mac">
   <Seitenleiste {ansicht} unterpunkte={UNTER} {geh} onSuche={zurSuche} onBackup={onExport}
-    onImport={() => importInput.click()} onHandbuch={() => geh('mehr/handbuch')} onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} />
+    onImport={() => importInput.click()} onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')} onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} />
 </div>
 
 <div class="inhalt">
@@ -840,17 +880,19 @@
   </h1>
 </header>
 {:else}
+  <!-- Titel, Zurück und Untermenü bleiben beim Scrollen gemeinsam stehen -->
+  <div class="kopf-fest">
   <!-- Unter Mehr gibt es am iPhone sonst nichts zum Zurückgehen; bleibt beim Scrollen stehen -->
   {#if ansicht.tab === 'mehr' && ansicht.unter}
     <div class="zurueck-leiste"><button class="zurueck-knopf" onclick={() => zurueck('mehr')}><span aria-hidden="true">‹</span> {t('Zurück')}</button></div>
   {/if}
   <header class="sk">
-    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : ansicht.unter === 'rechtliches' ? t('Datenschutz & Impressum') : TITEL[ansicht.tab]}</h1>
+    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : ansicht.unter === 'rechtliches' ? t('Datenschutz & Impressum') : ansicht.unter === 'design' ? t('Design') : TITEL[ansicht.tab]}</h1>
     <span class="sk-musik"><MusikSymbol {geh} /></span>
     {#if ansicht.tab === 'plan'}<button class="sk-neu" onclick={() => oeffneNeu(ansicht.unter === 'wanderungen' ? 'wanderung' : 'route')}>{t('+ Neu')}</button>{/if}
     {#if ansicht.tab === 'logbuch' && ansicht.unter !== 'notizen'}<button class="sk-neu" onclick={() => oeffneNeu('tag')}>{t('+ Tag')}</button>{/if}
   </header>
-  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch', 'rechtliches'].includes(ansicht.unter)}
+  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch', 'rechtliches', 'design'].includes(ansicht.unter)}
     <nav class="seg-leiste" aria-label={t('{wert}: Bereiche', { wert: TITEL[ansicht.tab] })} use:leisteRand={ansicht.pfad}>
       {#each UNTER[ansicht.tab] as [pfad, label] (pfad)}
         {@const an = ansicht.pfad === pfad || (pfad === ansicht.tab && (!ansicht.unter || ['etappe', 'route', 'tag'].includes(ansicht.unter))) || (ansicht.pfad.startsWith(pfad + '/') && pfad !== ansicht.tab) || (ansicht.tab === 'orte' && pfad === 'orte/' + orteUnter)}
@@ -858,6 +900,7 @@
       {/each}
     </nav>
   {/if}
+  </div>
 {/if}
 
 <main class="wrap" bind:this={hauptEl}>
@@ -1126,7 +1169,7 @@
           onwanderung={(id) => geh('plan/wanderungen/' + id)} />
       {/key}
     {:else if ansicht.unter === 'lesen'}
-      <TagebuchLese orte={[...orte, ...$eigeneOrte]} reisen={$reisen} />
+      <TagebuchLese orte={[...orte, ...$eigeneOrte]} reisen={$reisen} zahlen={{ fakten, anzeige, ausgaben, budget: $reiseBudget, schnitt: schnittProTag }} />
     {:else if ansicht.unter === 'notizen'}
       <Notizen />
     {:else if ansicht.unter === 'tiere'}
@@ -1175,6 +1218,8 @@
       <Handbuch />
     {:else if ansicht.unter === 'rechtliches'}
       <Rechtliches />
+    {:else if ansicht.unter === 'design'}
+      <Design />
     {:else if ansicht.unter === 'quiz'}
       <h2 class="abschnitt">{t('🇦🇺 Australien-Quiz')} {#if quizErgebnis.beantwortet}<span class="count">{t('{richtig}/{gesamt} · {emoji} Stufe {stufe}', { richtig: quizErgebnis.richtig, gesamt: quizErgebnis.gesamt, emoji: quizErgebnis.level?.emoji, stufe: quizErgebnis.level?.stufe })}</span>{/if}</h2>
       <Quiz fragen={quizData.fragen} levels={quizData.levels} />
@@ -1198,7 +1243,7 @@
 <div class="bb-mobil">
   <BottomBar {aktivTab} onTab={tabZu} {springeZu}
     onSuche={zurSuche} onBackup={onExport} onImport={() => importInput.click()}
-    onHandbuch={() => geh('mehr/handbuch')}
+    onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')}
     onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} />
 </div>
 
@@ -1379,14 +1424,18 @@
     max-width: 1100px; width: 100%; margin: 0 auto; display: flex; align-items: center; gap: 12px;
     padding: 26px 28px 4px; padding-top: max(26px, calc(env(safe-area-inset-top, 0px) + 10px));
   }
+  .kopf-fest { position: sticky; top: 0; z-index: 30; background: var(--bg); }
+  /* Inhalt verblasst kurz vor dem Kopf. Nur ein schmaler Streifen, das Lesen bleibt ungestört. */
+  .kopf-fest::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 22px; pointer-events: none; background: linear-gradient(var(--bg), transparent); }
+  :global(html[data-ohne-verblassen]) .kopf-fest::after { display: none; }
   .zurueck-leiste {
-    position: sticky; top: 0; z-index: 30; background: var(--bg);
+    background: var(--bg);
     padding: calc(env(safe-area-inset-top, 0px) + 4px) 8px 0;
   }
   .zurueck-leiste + .sk { padding-top: 0; }
   .zurueck-knopf { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 12px 0 4px; border: none; background: none; color: var(--brand-text); font-size: calc(16px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
   .zurueck-knopf span { font-size: calc(28px * var(--schrift, 1)); line-height: 1; margin-top: -3px; }
-  @media (min-width: 900px) { .zurueck-leiste { display: none; } .zurueck-leiste + .sk { padding-top: 26px; } }
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) { .zurueck-leiste { display: none; } .zurueck-leiste + .sk { padding-top: 26px; } }
   .sk-titel { min-height: 44px; display: flex; align-items: center; margin: 0; font-family: 'Anton', Impact, 'Arial Narrow', sans-serif; font-weight: 400; font-size: calc(40px * var(--schrift, 1)); line-height: 1.05; letter-spacing: 0.3px; color: var(--ink); }
   .sk-neu {
     margin-left: auto; min-height: 44px; padding: 0 18px; border-radius: 22px; border: none; cursor: pointer;
@@ -1397,7 +1446,7 @@
     scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-padding: 0 28px;
   }
   /* Am Mac stehen dieselben Unterpunkte schon in der Seitenleiste */
-  @media (min-width: 900px) { .seg-leiste { display: none; } }
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) { .seg-leiste { display: none; } }
   .seg-leiste::-webkit-scrollbar { display: none; }
   .seg-chip {
     flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 22px;
@@ -1426,10 +1475,10 @@
   .mehr-liste li:nth-child(6) { animation-delay: 150ms; }
   .heute-zahlen { margin-top: 18px; }
   .wrap > .abschnitt:first-child { margin-top: 8px; }
-  @media (min-width: 900px) {
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
     .hero { padding: 48px 28px 40px; }
   }
-  @media (max-width: 899px) {
+  @media (max-width: 639px), (max-width: 899px) and (orientation: portrait) {
     .sl-mac { display: none; }
     .bb-mobil { display: contents; }
     .wrap { padding: 14px 14px calc(96px + env(safe-area-inset-bottom, 0px)); }

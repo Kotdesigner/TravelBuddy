@@ -30,7 +30,8 @@ const setze = (store, id, wert) => store.update((s) => ({ ...s, [id]: wert }))
 
 export const artVon = (r) => r.art || 'auto'
 /** Flug und Bahn werden als gerade Linie gezeichnet, nur das Auto braucht eine Straßenroute. */
-export const gerade = (r) => ['flug', 'bahn'].includes(artVon(r))
+// Flug, Bahn und Boot laufen als gerade Linie, nur das Auto bekommt eine Straßenroute
+export const gerade = (r) => ['flug', 'bahn', 'boot'].includes(artVon(r))
 export const artPasst = (r) => !r.route || gerade(r) === !!r.route.flug
 export const veraltet = (r) => !!(r.route && r.route.sig !== stopsSignatur(r.stops))
 export const stops = (r) => r.stops || []
@@ -70,7 +71,7 @@ export async function routeRechnen(r) {
   setze(routeMsg, r.id, '')
   // Flug = Luftlinie, funktioniert auch ohne Netz und ohne Tank-Analyse.
   if (gerade(r)) {
-    try { updateReise(r.id, { route: flugRoute(r.stops, artVon(r) === 'bahn' ? { kmh: 130, puffer: 10 } : undefined) }) }
+    try { updateReise(r.id, { route: flugRoute(r.stops, artVon(r) === 'boot' ? { kmh: 30, puffer: 10 } : artVon(r) === 'bahn' ? { kmh: 130, puffer: 10 } : undefined) }) }
     catch (e) { setze(routeMsg, r.id, fehlerText(e)) }
     return
   }

@@ -113,6 +113,8 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 58px;
 }
+/* Sprungziele nicht unter dem festen Kopf verstecken */
+html:has(.kopf-fest) { scroll-padding-top: 140px; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Liberation Sans', Arial, sans-serif;
@@ -276,7 +278,7 @@ input[type='checkbox'], input[type='radio'] { accent-color: var(--brand); width:
 
 /* V4: Am iPhone zoomt Safari in jedes Feld mit Schrift unter 16 px hinein und bleibt dort
    stehen. Bis V3 betraf das fast alle Felder (13 px), nur die Suche war schon angepasst. */
-@media (max-width: 899px) {
+@media (max-width: 639px), (max-width: 899px) and (orientation: portrait) {
   input:not([type='checkbox']):not([type='radio']):not([type='range']), select, textarea { font-size: max(16px, calc(16px * var(--schrift, 1))) !important; }
 }   /* 18 → 22 px (Tippfläche) */
 
@@ -317,11 +319,54 @@ article.aufgerufen { box-shadow: 0 0 0 3px var(--brand-2), var(--shadow-float); 
 article.card:focus { outline: none; }
 article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 2px; }
 
-/* Heute: Schriftzug im Titelbild tritt beim Scrollen leicht zurück (nur wo der Browser
-   scroll-getriebene Animationen kann, Safari 26; sonst bleibt er einfach stehen) */
+
+/* V12: Lichtrand bei Verbindungen nach außen (NetzRahmen.svelte) */
+@property --nw { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.netz-rahmen {
+  position: fixed; inset: 0; z-index: 2000; pointer-events: none; box-sizing: border-box; padding: 2.5px;
+  border-radius: var(--nr-ecke, 0px); opacity: 0; transition: opacity 500ms var(--ease-out);
+  background: conic-gradient(from var(--nw), transparent 0 52%, color-mix(in srgb, var(--nf) 55%, transparent) 72%, #fff 84%, var(--nf) 90%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: nr-dreh 3400ms linear infinite; animation-play-state: paused;
+}
+.netz-rahmen.an { opacity: 0.8; animation-play-state: running; }
+@keyframes nr-dreh { to { --nw: 360deg; } }
+@media (display-mode: standalone) and (pointer: coarse) { .netz-rahmen { --nr-ecke: 54px; } }
+@media (prefers-reduced-motion: reduce) {
+  .netz-rahmen { animation: none; background: var(--nf); }
+  .netz-rahmen.an { opacity: 0.5; }
+}
+
+/* V12: Wetter-Stimmung (stimmung.js). Nur Grundtöne, Warn- und Markenfarben bleiben. */
+:root[data-stimmung='heiss'] { --bg: #fdf4e6; --flaeche: #fbeeda; --flaeche-2: #f6e0c2; --card: #fffaf1; }
+:root[data-stimmung='bewoelkt'] { --bg: #f6f4f1; --flaeche: #f2efea; --flaeche-2: #e8e3da; --card: #fcfbf9; }
+:root[data-stimmung='regen'] { --bg: #f1f4f6; --flaeche: #ebeff2; --flaeche-2: #dfe5ea; --card: #fafcfd; }
+:root[data-stimmung='nacht'] { --bg: #f4efe7; --flaeche: #efe8dd; --flaeche-2: #e6dccb; --card: #f9f5ee; }
+:root[data-theme='dark'][data-stimmung='heiss'] { --bg: #26160b; --flaeche: #32200f; --flaeche-2: #412b15; --card: #2f1f10; }
+:root[data-theme='dark'][data-stimmung='bewoelkt'] { --bg: #1d1916; --flaeche: #29231e; --flaeche-2: #352e27; --card: #27211c; }
+:root[data-theme='dark'][data-stimmung='regen'] { --bg: #161a1e; --flaeche: #1f252a; --flaeche-2: #2a3238; --card: #1d2328; }
+:root[data-theme='dark'][data-stimmung='nacht'] { --bg: #150e09; --flaeche: #20170f; --flaeche-2: #2c2015; --card: #1e150d; }
+
+/* V12: Kopf schrumpft beim Scrollen. Nur Transform, die Seite springt dadurch nicht. */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .hero h1, .hero .kicker { animation: hero-zurueck linear both; animation-timeline: scroll(root); animation-range: 0 280px; }
-    @keyframes hero-zurueck { to { transform: translateY(-28px); opacity: 0.4; } }
+    html:not([data-ohne-kopf]) .kopf-fest { top: -20px; }
+    html:not([data-ohne-kopf]) .kopf-fest .sk-titel { transform-origin: left center; animation: kopf-titel linear both; animation-timeline: scroll(root); animation-range: 0 90px; }
+    html:not([data-ohne-kopf]) .kopf-fest .sk-musik, html:not([data-ohne-kopf]) .kopf-fest .sk-neu { animation: kopf-knopf linear both; animation-timeline: scroll(root); animation-range: 0 90px; }
+    @keyframes kopf-titel { to { transform: translateY(10px) scale(0.68); } }
+    @keyframes kopf-knopf { to { transform: translateY(10px) scale(0.86); } }
+  }
+}
+
+/* V12: Hitze-Logo. Bewusst ohne SVG-Filter, die sind am iPhone zu teuer. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-hitze] .sl-marke, html[data-hitze] .hero h1 { animation: hitze-flimmern 2.8s ease-in-out both; }
+  @keyframes hitze-flimmern {
+    0%, 100% { transform: none; filter: none; }
+    20% { transform: skewX(1.2deg) translateY(-0.5px); filter: blur(0.3px) brightness(1.08); }
+    40% { transform: skewX(-1deg) translateY(0.5px); filter: blur(0.5px) brightness(1.14); }
+    60% { transform: skewX(1deg) translateY(-0.5px); filter: blur(0.4px) brightness(1.1); }
+    80% { transform: skewX(-0.6deg); filter: blur(0.2px) brightness(1.05); }
   }
 }

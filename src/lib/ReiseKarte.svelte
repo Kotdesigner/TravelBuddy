@@ -1,5 +1,5 @@
 <script>
-  import { t, LOCALE, tn } from './i18n.js'
+  import { t, je, LOCALE, tn } from './i18n.js'
   import { fehlerText } from './fehlertext.js'
   import { FORMATE, DATEITYPEN, exportiereKarte, speichere } from './kartenexport.js'
   import { schriftAuf } from './kontrast.js'
@@ -22,7 +22,8 @@
   import { weltGeojson, gradnetz, verdichte } from './globus.js'
   import { gesamtStart } from './userdata.js'
   import { etappenMitDatum, routenDerEtappe } from './plan.js'
-  import { bereich, dezimal } from './format.js'
+  import { bereich, dezimal, zahl } from './format.js'
+  import { artDerTour, logbuchTouren, verlauf, punktBei, spitzenZoom, anzoom, zoomBei, dauerFuer, kmText, NAH_ZOOM, FAHRZEUG } from './reisefahrt.js'
   import ReiseFilm from './ReiseFilm.svelte'
 
   let {
@@ -117,12 +118,12 @@
 
   // ---------- Reisen aufbereiten ----------
   const touren = $derived(reisen
-    .map((r) => ({ r, typ: (r.art || 'auto') === 'flug' ? t('Flug') : r.art === 'bahn' ? t('Bahn') : t('Fahrt'), farbe: r.farbe || '#c1662f' }))
+    .map((r) => ({ r, typ: (r.art || 'auto') === 'flug' ? t('Flug') : r.art === 'bahn' ? t('Bahn') : r.art === 'boot' ? je('Schippern', 'Boating') : t('Fahrt'), farbe: r.farbe || '#c1662f' }))
     .map(({ r, typ, farbe }) => {
     const stops = (r.stops || []).filter((s) => s.lat != null && s.lon != null)
     // Echte Straßengeometrie bevorzugen, sonst Linie zwischen den Stopps.
     const roh = r.route?.geometry?.length >= 2 ? r.route.geometry : stops.map((s) => [s.lon, s.lat])
-    const flug = ['flug', 'bahn'].includes(r.art || 'auto')
+    const flug = ['flug', 'bahn', 'boot'].includes(r.art || 'auto')
     const geo = verdichte(roh, flug)
       return { id: r.id, name: r.name, typ, farbe, reise: r, stops, geo, flug }
     }).filter((t) => t.stops.length > 0))
@@ -515,7 +516,59 @@
     animNr++
     try { map.stop() } catch {}
     if (introLaeuft) introFertig()
+    fahrzeugWeg()
     if (spielt) { spielt = false; beschriftung = null; setzeSichtbarkeit(true) }
+  }
+
+  // Eine Strecke abfahren: zum Start, langsam und dann schneller heranzoomen, das Verkehrsmittel fährt
+  // los und die Kamera zoomt nur so weit heraus, wie es die Länge der Strecke verlangt.
+  let fahrzeug = null
+  function fahrzeugWeg() { fahrzeug?.remove(); fahrzeug = null }
+  function zeitlauf(dauer, nr, schritt) {
+    return new Promise((fertig) => {
+      const start = performance.now()
+      const takt = (jetzt) => {
+        if (nr !== animNr || !map) return fertig(false)
+        const p = Math.min(1, (jetzt - start) / dauer)
+        schritt(p)
+        if (p < 1) requestAnimationFrame(takt); else fertig(true)
+      }
+      requestAnimationFrame(takt)
+    })
+  }
+  async function fahre(tour, e, nr) {
+    const art = tour.art || artDerTour(tour.reise)
+    // Boote fahren über Wasser, nicht die berechnete Straßenroute
+    const v = verlauf(art === 'boot' ? tour.stops.map((x) => [x.lon, x.lat]) : tour.geo)
+    const start = punktBei(v, 0), breitePx = Math.min(breite(), hoehe())
+    beschriftung = { titel: tour.name || e.reise?.name, zeit: bereich(e.von, e.bis), farbe: tour.farbe }
+    const mitte = map.getCenter()
+    const weg = verlauf([[mitte.lng, mitte.lat], [start.lon, start.lat]]).gesamt
+    if (weg > 150) {
+      map.flyTo({ center: [start.lon, start.lat], zoom: Math.min(map.getZoom(), spitzenZoom(weg, breitePx, start.lat)), duration: Math.min(2600, 900 + weg / 3), curve: 1.5, essential: true })
+      await new Promise((r) => setTimeout(r, Math.min(2600, 900 + weg / 3)))
+      if (nr !== animNr) return false
+    }
+    const z0 = map.getZoom()
+    if (!(await zeitlauf(1900, nr, (p) => map.jumpTo({ center: [start.lon, start.lat], zoom: z0 + (NAH_ZOOM - z0) * anzoom(p), bearing: 0, pitch: 0 })))) return false
+    if (v.coords.length < 2 || v.gesamt < 0.2) return nr === animNr
+    const el = document.createElement('div')
+    el.className = 'rk-fahrzeug'
+    el.innerHTML = `<svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path d="${FAHRZEUG[art]}" fill="#fff" fill-rule="evenodd" stroke="#14100c" stroke-width="1"/></svg>`
+    fahrzeugWeg()
+    fahrzeug = new maplibregl.Marker({ element: el, rotationAlignment: 'map', pitchAlignment: 'map', rotation: start.richtung }).setLngLat([start.lon, start.lat]).addTo(map)
+    beschriftung = { ...beschriftung, km: kmText(v.gesamt, zahl) }
+    await new Promise((r) => setTimeout(r, 700))
+    const spitze = spitzenZoom(v.gesamt, breitePx, start.lat)
+    const ok = await zeitlauf(dauerFuer(v.gesamt) * 1000, nr, (p) => {
+      const q = p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2
+      const o = punktBei(v, q)
+      fahrzeug?.setLngLat([o.lon, o.lat]).setRotation(o.richtung)
+      map.jumpTo({ center: [o.lon, o.lat], zoom: zoomBei(q, NAH_ZOOM, spitze) })
+    })
+    if (ok) await new Promise((r) => setTimeout(r, 450))
+    fahrzeugWeg()
+    return ok && nr === animNr
   }
 
   // Reise abspielen: Etappe für Etappe, in der Reihenfolge des Plans
@@ -529,6 +582,24 @@
     const nr = ++animNr
     const warte = (ms) => new Promise((r) => setTimeout(r, ms))
     const etappen = etappenMitDatum(reisen, $gesamtStart)
+    if (!reduziert()) {
+      const logTouren = logbuchTouren(journal)
+      const gefahren = new Set()
+      for (const e of etappen) {
+        const ids = [e.reise.id, ...routenDerEtappe(reisen, e.reise.id).map((r) => r.id)]
+        const teile = ids.map((id) => touren.find((x) => x.id === id)).filter((x) => x?.geo?.length && x.reise.imFilm !== false)
+        const vomTag = logTouren.filter((x) => x.datum >= e.von && x.datum <= e.bis)
+        vomTag.forEach((x) => gefahren.add(x.id))
+        if (teile.length) setzeSichtbarkeit(ids, 500)
+        for (const tour of [...teile, ...vomTag]) { if (!(await fahre(tour, e, nr))) return }
+      }
+      for (const tour of logTouren.filter((x) => !gefahren.has(x.id))) { if (!(await fahre(tour, { von: tour.datum, bis: tour.datum }, nr))) return }
+      if (nr !== animNr) return
+      spielt = false; beschriftung = null
+      setzeSichtbarkeit(true)
+      startBlick(2200)
+      return
+    }
     for (const e of etappen) {
       if (nr !== animNr) return
       const ids = [e.reise.id, ...routenDerEtappe(reisen, e.reise.id).map((r) => r.id)]
@@ -653,7 +724,7 @@
     <div class="rk-map" bind:this={container}></div>
     <div class="rk-licht" bind:this={lichtEl} aria-hidden="true"></div>
     {#if beschriftung}
-      <div class="rk-etappe" style="--f:{beschriftung.farbe}" aria-live="polite"><b>{beschriftung.titel}</b><span>{beschriftung.zeit}</span></div>
+      <div class="rk-etappe" style="--f:{beschriftung.farbe}" aria-live="polite"><b>{beschriftung.titel}</b><span>{beschriftung.zeit}{#if beschriftung.km}&nbsp;· {beschriftung.km}{/if}</span></div>
     {/if}
 
     {#if !bereit && !fehler}
@@ -941,4 +1012,5 @@
   @media (pointer: coarse) {
     .rk :global(.maplibregl-ctrl-group button) { width: 44px; height: 44px; }
   }
+  :global(.rk-fahrzeug) { filter: drop-shadow(0 2px 4px rgba(0,0,0,.55)); pointer-events: none; }
 </style>

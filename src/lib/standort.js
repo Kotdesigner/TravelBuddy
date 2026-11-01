@@ -59,6 +59,16 @@ function hole({ hoheGenauigkeit = false, alterMs = 300000 } = {}) {
   })
 }
 
+/** Position laufend mitführen, solange die Karte offen ist. Gibt die Funktion zum Beenden zurück. */
+export function folgeStandort() {
+  if (lageBestimmen() !== 'bereit') return () => {}
+  const id = navigator.geolocation.watchPosition((p) => {
+    standort.set({ lat: p.coords.latitude, lon: p.coords.longitude, genauigkeit: Math.round(p.coords.accuracy || 0), zeit: Date.now() })
+    standortStatus.set('erlaubt')
+  }, () => {}, { enableHighAccuracy: true, maximumAge: 15000, timeout: 30000 })
+  return () => navigator.geolocation.clearWatch(id)
+}
+
 /** Ausdrückliche Abfrage (Knopf). Fragt auch dann, wenn schon einmal abgelehnt wurde. */
 export async function frageStandortAn(opt) {
   const lage = lageBestimmen()

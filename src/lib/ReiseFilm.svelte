@@ -219,7 +219,7 @@
     padding: 8px 18px calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 12px;
     animation: hoch var(--t-slow) var(--ease-spring);
   }
-  @media (min-width: 900px) {
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
     .rf { left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 520px; border-radius: var(--radius-l); padding: 18px 22px 20px; animation: rein var(--t-med) var(--ease-spring); }
     .rf-griff { display: none; }
   }

@@ -92,7 +92,8 @@ console.log('\n4  Einbindung')
   const main = fs.readFileSync(wurzel + 'main.js', 'utf8')
   p('wird vor dem ersten Bild gesetzt (main.js)', main.indexOf("import './lib/darstellung.js'") >= 0 && main.indexOf("import './lib/darstellung.js'") < main.indexOf('mount('))
   const bb = fs.readFileSync(wurzel + 'lib/BottomBar.svelte', 'utf8'), sl = fs.readFileSync(wurzel + 'lib/Seitenleiste.svelte', 'utf8')
-  p('einstellbar im Mehr-Blatt (iPhone) und in der Seitenleiste (Mac)', /setzeSchrift/.test(bb) && /setzeGesamt/.test(bb) && /setzeSchrift/.test(sl) && /setzeGesamt/.test(sl))
+  const design = fs.readFileSync(new URL('../src/lib/Design.svelte', import.meta.url), 'utf8')
+  p('einstellbar auf der Seite Design', design.includes('setzeSchrift(s.id)') && design.includes('setzeGesamt(s.id)'))
   p('nicht im Backup (je Gerät)', !/tb-darstellung|darstellung/.test(fs.readFileSync(wurzel + 'lib/userdata.js', 'utf8')))
 }
 

@@ -8,10 +8,10 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.6 · built for Western Australia**<br>
+**Version 1.7 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-16)**
+**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-17)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -47,6 +47,16 @@ No account, nothing to install from a store, and your data stays on your phone. 
 </table>
 
 ---
+
+## 🎬 New in version 1.7
+
+**Your trip as a film.** "Play trip" now flies down to street level, slowly at first and then faster. A plane, car, train or boat sets off, the distance fades in, and the camera zooms out only as far as that stretch needs. Tick "In the animated film" for what you want to see and leave out the small hops.
+
+**Design in one place.** More → Design brings together light and dark, language, text, size and all effects, each with its own switch: soft fade, shrinking header, connection glow, weather mood, heat logo and a golden moment before sunset.
+
+**A plan that notices what matters.** Your own location on the offline map, urgent flight and train changes on the home screen, and one radius for you, your places and your routes.
+
+**A logbook closer to the real day.** Several destinations per day, nearby official warnings you pick one by one, and the journal now ends with facts, spending and the cost of each leg.
 
 ## 📄 New in version 1.6
 
@@ -176,7 +186,18 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - 🌦️ **Weather along the route**, not just at the destination
 - 🕒 **Driving days** with breaks and the latest departure before sunset
 - 🌍 **Trip map and 3D globe** with every stage, route and flight
-- ▶️ **"Play trip"** animates your whole journey on the map
+- 🎬 **Animated film of your trip:** plane, car, train or boat with distance, zoom in proportion to every stretch, and a switch per route for what appears
+- ⛵ **Boating as a transport mode:** a straight line over water, no fuel, its own boat in the film
+- 📍 **Your location on the offline map** with a button that jumps to you, also without signal
+- 🔔 **Urgent changes on the home screen:** cancellations, delays and gate or platform changes before your flight or train
+- 🌐 **Lit edge when the app goes online** for GPS, weather, warnings or Spotify
+- 🌦️ **Weather mood:** colours adapt slightly to the weather and time of day where you are
+- 🎨 **Design page** with light and dark, language, text, size and a switch for every effect
+- 📌 **Fixed headers** with sub-menus that stay in place and text that fades softly beneath them
+- ⛳ **Several destinations per day** in the logbook, shown as a route in your journal
+- 🗒️ **Notes by leg with time stamp**, included in the logbook and easy to take out again
+- ⚠️ **Nearby events on the road:** official warnings close to your real position, picked one by one for the journal
+- 💶 **Facts and spending at the end of the journal**, plus the cost of each leg
 - 🧩 **Route ideas** for the south and north loops from Perth
 - 🥾 **Hikes** with status, date and photos
 - 📅 **Calendar views like on iPhone:** switch between list, month and year for a quick overview of the whole trip
@@ -601,6 +622,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - [x] **Version 1.4:** Linux app, language choice on first launch, small picture buttons
 - [x] **Version 1.5:** calendar with list, month and year views
 - [x] **Version 1.6:** journal and collage as files, notes in the logbook, wildlife periods
+- [x] **Version 1.7:** animated film with transport modes, design page, location on the map, urgent alerts
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -622,10 +644,10 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, komplett offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.6 · entwickelt für Western Australia**<br>
+**Version 1.7 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-16)**
+**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-17)**
 
 **[⬇️ Mac-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)**
 
@@ -653,6 +675,16 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 </td>
 </tr>
 </table>
+
+## 🎬 Neu in Version 1.7
+
+**Deine Reise als Film.** „Reise abspielen“ zoomt jetzt bis auf Straßenebene heran, erst langsam, dann schneller. Flieger, Auto, Zug oder Boot fahren los, die Entfernung wird eingeblendet, und die Kamera zoomt nur so weit heraus, wie die Strecke es braucht. Mit „Im Animationsfilm“ wählst du, was zu sehen ist, und lässt kleine Wege weg.
+
+**Design an einer Stelle.** Mehr → Design bündelt Hell und Dunkel, Sprache, Schrift, Größe und alle Effekte, jeder mit eigenem Schalter: weiches Ausblenden, schrumpfender Kopf, Lichtrand bei Verbindungen, Wetter-Stimmung, Hitze-Logo und ein goldener Moment vor Sonnenuntergang.
+
+**Ein Plan, der mitdenkt.** Dein Standort auf der Offline-Karte, dringende Änderungen bei Flug und Zug auf der Startseite und ein Umkreis für dich, deine Orte und Routen.
+
+**Ein Logbuch näher am echten Tag.** Mehrere Ziele am Tag, nahe amtliche Warnungen zum einzelnen Auswählen, und das Tagebuch endet jetzt mit Daten, Ausgaben und den Kosten je Etappe.
 
 ## 📄 Neu in Version 1.6
 
@@ -772,7 +804,18 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - 🌦️ **Wetter an der Strecke**, nicht nur am Ziel
 - 🕒 **Fahrtage** mit Pausen und der spätesten Abfahrt vor Sonnenuntergang
 - 🌍 **Reise-Karte und 3D-Weltkugel** mit allen Etappen, Routen und Flügen
-- ▶️ **„Reise abspielen“** lässt die ganze Reise auf der Karte ablaufen
+- 🎬 **Animationsfilm deiner Reise:** Flieger, Auto, Zug oder Boot mit Entfernung, Zoom im Verhältnis zur Strecke und ein Schalter je Route für das, was zu sehen ist
+- ⛵ **Schippern als Verkehrsmittel:** gerade Linie über das Wasser, kein Sprit, im Film ein eigenes Boot
+- 📍 **Dein Standort auf der Offline-Karte** mit Knopf, der zu dir springt, auch ohne Netz
+- 🔔 **Dringende Änderungen auf der Startseite:** Ausfälle, Verspätungen und Gate- oder Gleiswechsel vor Flug und Zug
+- 🌐 **Lichtrand bei Verbindungen** für GPS, Wetter, Warnungen oder Spotify
+- 🌦️ **Wetter-Stimmung:** Die Farben passen sich leicht an Wetter und Tageszeit an deinem Ort an
+- 🎨 **Design-Seite** mit Hell und Dunkel, Sprache, Schrift, Größe und einem Schalter für jeden Effekt
+- 📌 **Feste Kopfbereiche** mit Untermenü, darunter blendet der Text weich aus
+- ⛳ **Mehrere Ziele am Tag** im Logbuch, im Tagebuch als Strecke
+- 🗒️ **Notizen je Etappe mit Zeitstempel**, von selbst im Logbuch und wieder herausnehmbar
+- ⚠️ **Nahe Ereignisse unterwegs:** amtliche Warnungen nah an deinem echten Standort, einzeln fürs Tagebuch auswählbar
+- 💶 **Daten und Ausgaben am Ende des Tagebuchs**, dazu die Kosten je Etappe
 - 🧩 **Routen-Ideen** für die Süd- und Nord-Schleife ab Perth
 - 🥾 **Wanderungen** mit Stand, Datum und Fotos
 - 📅 **Kalender-Ansichten wie am iPhone:** Liste, Monat und Jahr umschalten, für den schnellen Überblick über die ganze Reise
@@ -1171,6 +1214,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 - [x] **Version 1.4:** Linux-App, Sprachwahl beim ersten Start, kleine Bild-Knöpfe
 - [x] **Version 1.5:** Kalender mit den Ansichten Liste, Monat und Jahr
 - [x] **Version 1.6:** Tagebuch und Kollage als Datei, Notizen im Logbuch, Zeiträume in der Tierwelt
+- [x] **Version 1.7:** Animationsfilm mit Verkehrsmitteln, Design-Seite, Standort auf der Karte, dringende Meldungen
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

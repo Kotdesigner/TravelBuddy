@@ -1,5 +1,5 @@
 <script>
-  import { t, LOCALE, tn } from './i18n.js'
+  import { t, je, LOCALE, tn } from './i18n.js'
   import { ZWEI, dezimal, zahl } from './format.js'
   import { STUFE_FARBE, typName } from './gefahren.js'
   import { schriftAuf } from './kontrast.js'
@@ -89,7 +89,7 @@
     <div class="s-titel">{t('🚨 Amtliche Warnungen für WA, Victoria und Queensland')}</div>
 
     <div class="umkreis">
-      <label for="umk">{t('Umkreis um meine Orte und Routen')}</label>
+      <label for="umk">{je('Umkreis um mich, meine Orte und Routen', 'Radius around me, my places and routes')}</label>
       <input id="umk" type="range" min="0" max="300" step="25" bind:value={umkreisKm} />
       <span class="umk-wert">{umkreisKm === 0 ? t('nur direkt betroffen') : umkreisKm + ' km'}</span>
     </div>
@@ -147,7 +147,7 @@
 
   <!-- Aktueller Standort + Umkreis ~100 km -->
   <div class="standort">
-    <div class="s-titel">{t('📍 Dein Standort & ~100 km Umkreis')}</div>
+    <div class="s-titel">{je(`📍 Dein Standort & ${Math.max(25, umkreisKm)} km Umkreis`, `📍 Your location & ${Math.max(25, umkreisKm)} km radius`)}</div>
     {#if standort == null}
       <p class="hint">{t('Standort noch nicht geprüft. „Aktualisieren" tippen (fragt nach GPS-Freigabe).')}</p>
     {:else if standort.stufe === 0}

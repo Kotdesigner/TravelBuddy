@@ -6,10 +6,12 @@
   // Lese-/Ansichtsmodus fürs Roadtrip-Tagebuch: dieselben Daten wie der Editor,
   // aber als „fertiges“ Reisemagazin — Deckblatt, Foto-Grid, Zitat-Blöcke,
   // Tages-Bilanz, Sortier-Umschalter und Druck/PDF-Export („Fotobuch“).
-  import { journal, notizen, updateNotiz, wanderungen, buchungen, userData, gesamtStart } from './userdata.js'
+  import { journal, notizen, updateNotiz, wanderungen, buchungen, userData, gesamtStart, vorabKosten } from './userdata.js'
+  import { kostenAuswertung } from './kosten.js'
+  import { eur, aud } from './format.js'
   import { verteileNotizen } from './notizen-verteilung.js'
   import { zeigeToast } from './toast.js'
-  import { etappenMitDatum, chronik, routenDerEtappe } from './plan.js'
+  import { etappenMitDatum, chronik, routenDerEtappe, istEtappe, streckeText } from './plan.js'
   import { bereich, tagMonatJahr, tageText, zahl, dezimal } from './format.js'
   import { haversine, stimmigeLegs } from './routing.js'
   import { verdichte, blick, zeichneGlobus } from './globus.js'
@@ -25,7 +27,7 @@
   import TagebuchFotos from './TagebuchFotos.svelte'
   import { tagebuchFotos, holeTagebuchBild, geraetBild } from './tagebuch-fotos.js'
 
-  let { orte = [], reisen = [] } = $props()
+  let { orte = [], reisen = [], zahlen = null } = $props()
 
   // Zwei Fassungen: „kurz“ zeigt nur Bild, Text und Kennzahlen je Tag —
   // die ausführliche zusätzlich alle ausgefüllten Themenmodule, Notizen und Bilanz.
@@ -43,9 +45,9 @@
   const SCHALTER = [
     ['etappen', '🧭', t('Etappen')], ['wanderungen', '🥾', t('Wanderungen')],
     ['orte', '📍', t('Orte')], ['kugeln', '🌍', t('Weltkugeln')], ['bilanz', '📊', t('Bilanz')],
-    ['geraet', '📷', t('Fotos vom Gerät')], ['notizen', '🗒️', t('Notizen')],
+    ['geraet', '📷', t('Fotos vom Gerät')], ['notizen', '🗒️', t('Notizen')], ['zahlen', '💶', je('Zahlen & Ausgaben', 'Figures & spending')],
   ]
-  const VORGABE = { etappen: true, wanderungen: true, orte: true, kugeln: true, bilanz: true, geraet: true, notizen: true }
+  const VORGABE = { etappen: true, wanderungen: true, orte: true, kugeln: true, bilanz: true, geraet: true, notizen: true, zahlen: true }
   let zeige = $state((() => { try { return { ...VORGABE, ...JSON.parse(localStorage.getItem('tb-tagebuch-zeigen') || '{}') } } catch { return { ...VORGABE } } })())
   $effect(() => { try { localStorage.setItem('tb-tagebuch-zeigen', JSON.stringify(zeige)) } catch {} })
   const schalte = (id) => { zeige = { ...zeige, [id]: !zeige[id] } }
@@ -313,6 +315,46 @@
     return `<section class="kapitel bilanz" style="--kf:#8a3f16"><div class="kap-kopf"><div class="kap-txt"><h2>${esc(t('Bilanz'))}</h2><span>${esc(t('{titel} in Zahlen', { titel }))}</span></div></div><div class="bz-raster">${kacheln}</div>${fuss}</section>`
   }
 
+  // Ohne Kapitel zeigt die Seite trotzdem, was schon geplant ist, und die Schalter bleiben erreichbar
+  const nichtsDa = $derived(kapitel.length === 0 && !reisen.length && !$wanderungen.length && !($buchungen?.events || []).length && !$notizen.length)
+  const planung = $derived.by(() => {
+    const aus = !zeige.etappen && planE.length > 0
+    const routen = zeige.etappen ? reisen.filter((r) => !istEtappe(r)) : []
+    const wand = zeige.wanderungen ? $wanderungen : []
+    const gebucht = zeige.etappen ? ($buchungen?.events || []).filter((b) => !b.platzhalter) : []
+    return { aus, routen, wand, gebucht, da: routen.length + wand.length + gebucht.length > 0 }
+  })
+  // Daten & Fakten und Ausgaben wie auf der Startseite, dazu die Summe je Etappe mit den Vorabausgaben
+  const kostenEtappe = $derived(new Map(kostenAuswertung({ journal: $journal, vorab: $vorabKosten, kurse: $fxKurse, eintraege: planE }).etappen.map((z) => [z.id, z])))
+  const kostenZeile = (id) => {
+    const z = zeige.zahlen ? kostenEtappe.get(id) : null
+    return z ? `${je('Kosten dieser Etappe', 'Cost of this leg')}: ${eur(z.eur)} · ${aud(z.aud)}` : ''
+  }
+  function zahlenHTML() {
+    if (!zeige.zahlen || !zahlen) return ''
+    const { fakten: f, anzeige: a, ausgaben: g, budget, schnitt } = zahlen
+    const kachel = (wert, label, unter = '') => `<div class="zb-k"><b>${esc(wert)}</b>${unter ? `<em>${esc(unter)}</em>` : ''}<span>${esc(label)}</span></div>`
+    const zahlT = (n) => zahl(n)
+    let h = ''
+    if (f?.km > 0) {
+      const k = [f.gesamtReise > f.km ? kachel(zahlT(f.gesamtReise), t('🌍 km kumulierte Distanz')) : '', kachel(zahlT(f.km), t('🛣️ km gefahren')),
+        f.flugKm > 0 ? kachel(zahlT(f.flugKm), t('✈️ km geflogen')) : '', kachel(`${zahlT(f.liter)} L`, t('⛽ Sprit · ~{tank}× volltanken', { tank: f.tank })),
+        kachel(`≈ ${zahlT(f.kosten)} AU$`, t('💰 Spritkosten')), f.stunden > 0 ? kachel(`${zahlT(f.stunden)} h`, t('🕒 am Steuer')) : ''].join('')
+      const facts = (f.facts || []).map((x) => `<li>${esc(x)}</li>`).join('')
+      h += `<section class="kapitel zb" style="--kf:#8a3f16"><div class="kap-kopf"><div class="kap-txt"><h2>${esc(t('📊 Daten & Fakten'))}</h2></div></div><div class="zb-raster">${k}</div>${facts ? `<ul class="zb-liste">${facts}</ul>` : ''}</section>`
+    }
+    if (g?.hatDaten) {
+      const paar = (z, label) => kachel(eur(z.eur), label, aud(z.aud))
+      const k = [paar(a.gesamt, t('💶 Gesamt ausgegeben')), paar(a.verkehr, t('🚦 Verkehr')), paar(a.unterkunft, t('🏨 Unterkünfte')), paar(a.attraktion, t('🎟️ Attraktionen/Touren')),
+        a.vorab.eur > 0 ? paar(a.vorab, t('🧾 vor der Reise')) : '', a.unterwegs.eur > 0 ? paar(a.unterwegs, t('🚙 unterwegs')) : ''].join('')
+      const arten = [['kosten_flug', '✈️ Flüge {eur} · {aud}'], ['kosten_sprit', '⛽ Sprit {eur} · {aud}'], ['kosten_boot', '🚤 Boot/Fähre {eur} · {aud}'], ['kosten_bahn', '🚆 Bahn {eur} · {aud}'], ['kosten_bus', '🚌 Bus {eur} · {aud}'], ['kosten_mietfahrzeug', '🚐 Mietfahrzeug {eur} · {aud}'], ['kosten_technik', '🎥 Technik {eur} · {aud}'], ['kosten_behoerde', '🏛️ Behörde {eur} · {aud}'], ['kosten_sonstiges', '🛒 Sonstiges {eur} · {aud}']]
+      const liste = arten.filter(([c]) => a.cat[c]?.eur > 0).map(([c, l]) => `<li>${esc(t(l, { eur: eur(a.cat[c].eur), aud: aud(a.cat[c].aud) }))}</li>`).join('')
+      const werte = [a.short.eur > 0 ? `<p class="zb-z"><b>${esc(t('🪙 Short-Values'))}</b> ${esc(eur(a.short.eur))} · ${esc(aud(a.short.aud))}</p>` : '', a.long.eur > 0 ? `<p class="zb-z"><b>${esc(t('📦 Long-Values'))}</b> ${esc(eur(a.long.eur))} · ${esc(aud(a.long.aud))}</p>` : '',
+        budget > 0 ? `<p class="zb-z"><b>${esc(t('🎯 Budget'))}</b> ${esc(eur(budget))}</p>` : '', schnitt ? `<p class="zb-z"><b>${esc(t('Ø/Reisetag'))}</b> ${esc(eur(schnitt.eur))}</p>` : ''].join('')
+      h += `<section class="kapitel zb" style="--kf:#8a3f16"><div class="kap-kopf"><div class="kap-txt"><h2>${esc(t('💶 Ausgaben & Verkehr'))}</h2></div></div><div class="zb-raster">${k}</div>${werte}${liste ? `<ul class="zb-liste">${liste}</ul>` : ''}</section>`
+    }
+    return h
+  }
   const verteilung = $derived(zeige.notizen ? verteileNotizen($notizen, kapitel) : { tag: new Map(), etappe: new Map(), rest: [] })
   function notizAbwaehlen(n) {
     updateNotiz(n.id, { imLogbuch: false })
@@ -387,10 +429,10 @@
       <header class="t-kopf"><div class="t-meta">${nr}<span class="t-datum">${esc(datumVon(e))}</span></div>
       ${reiseLine}${routeLine}
       ${vorspann}
-      ${e.ort ? `<h3 class="t-ort">${esc(e.ort)}<span class="t-region">${reg}</span></h3>` : ''}
+      ${e.ort ? `<h3 class="t-ort">${esc(streckeText(e))}<span class="t-region">${reg}</span></h3>` : ''}
       ${stats ? `<div class="t-stats">${stats}</div>` : ''}</header>
       ${hatWert(e.text) ? `<p class="t-lead">${esc(e.text)}</p>` : ''}
-      ${gal}${fotosDazu}${mod}${notizHTML(verteilung.tag.get(e.datum), t('Notizen dieses Tages'))}
+      ${gal}${fotosDazu}${mod}${(e.ereignisse || []).length ? `<section class="modul"><h3 class="m-titel"><span>⚠️</span> ${esc(je('Erlebt unterwegs', 'On the road'))}</h3>${e.ereignisse.map((x) => `<p class="tn-print">${esc(x.icon)} ${esc(x.level)}: ${esc(x.titel)}</p>`).join('')}</section>` : ''}${notizHTML(verteilung.tag.get(e.datum), t('Notizen dieses Tages'))}
       ${nachspann}
       ${bil ? `<footer class="t-bilanz">${bil}</footer>` : ''}</article>`
   }
@@ -443,6 +485,13 @@
     }
     return h ? `<div class="kap-plan">${h}</div>` : ''
   }
+  function planungHTML() {
+    if (!planung.da) return ''
+    const routen = planung.routen.map((x) => `<p class="tn-print">🛣️ <b>${esc(x.name)}</b> ${esc(mitKoord(x).map((p) => p.name).join(' → '))}</p>`).join('')
+    const wand = planung.wand.map((w) => `<p class="tn-print">🥾 ${esc(w.name)}</p>`).join('')
+    const gebucht = planung.gebucht.map((b) => `<p class="tn-print">${katInfo(b.kat).icon} ${esc(b.titel)}</p>`).join('')
+    return `<section class="kapitel" style="--kf:#8a3f16"><div class="kap-kopf"><div class="kap-txt"><h2>${esc(je('Deine Planung', 'Your plan'))}</h2></div></div>${routen}${wand}${gebucht}</section>`
+  }
   function notizHTML(liste, kopf) {
     if (!liste?.length) return ''
     return `<section class="modul"><h3 class="m-titel"><span>🗒️</span> ${esc(kopf)}</h3>${liste.map((n) => `<p class="tn-print">${NOTIZ_TYP[n.typ]?.icon || ''} ${esc(n.text)}</p>`).join('')}</section>`
@@ -452,6 +501,7 @@
     const bild = zeige.kugeln && pl?.kugel ? kugelBild(pl.kugel, 230) : ''
     let h = `<section class="kapitel" style="--kf:${esc(k.farbe)}"><div class="kap-kopf"><div class="kap-txt"><h2>${esc(k.titel)}</h2>${k.untertitel ? `<span>${esc(k.untertitel)}${k.etappe ? ' · ' + esc(tageText(k.etappe.tage)) : ''}</span>` : ''}</div>${bild ? `<img class="kap-kugel" src="${bild}" alt="">` : ''}</div>`
     if (pl) h += planHTML(k, pl)
+    if (kostenZeile(k.id)) h += `<p class="tn-print"><b>💶 ${esc(kostenZeile(k.id))}</b></p>`
     h += notizHTML(verteilung.etappe.get(k.id), je('Notizen zu dieser Etappe', 'Notes on this leg'))
     for (const tg of k.tage) {
       if (!tg.journal.length) { h += tagOhneEintragHTML(tg); continue }
@@ -490,7 +540,7 @@
         ${g.avgFly ? `<span>🪰 ${t('Ø {wert}/5 Fliegen', { wert: dezimal(g.avgFly, 1) })}</span>` : ''}
       </div>
     </section>`
-    const koerper = kapitel.map(kapitelHTML).join('') + notizHTML(verteilung.rest, je('Weitere Notizen', 'More notes')) + bilanzHTML()
+    const koerper = (kapitel.length ? '' : planungHTML()) + kapitel.map(kapitelHTML).join('') + notizHTML(verteilung.rest, je('Weitere Notizen', 'More notes')) + bilanzHTML() + zahlenHTML()
     return { css: DRUCK_CSS, body: cover + koerper, schriften: { [SCHRIFT]: 'font/woff2' } }
   }
 
@@ -517,6 +567,11 @@
       background:var(--akz,#8a3f16); padding:2px 9px; border-radius:20px; }
     .t-datum { font-size:12px; color:#5a5248; font-weight:600; }
     .tn-print { margin:3px 0; font-size:13px; }
+    .zb { page-break-before:auto; margin-top:18px; }
+    .zb-raster { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:8px 0; }
+    .zb-k { display:flex; flex-direction:column; padding:8px 10px; border:1px solid #e4d9c8; border-radius:8px; break-inside:avoid; page-break-inside:avoid; }
+    .zb-k b { font-size:17px; } .zb-k em { font-style:normal; font-size:11px; color:#6b6157; } .zb-k span { font-size:11px; color:#6b6157; margin-top:2px; }
+    .zb-z { margin:3px 0; font-size:13px; } .zb-liste { margin:6px 0 0; padding-left:18px; font-size:13px; }
     .t-reise-print { font-size:11px; font-weight:700; color:#8a3f16; margin-top:4px; }
     .t-route-print { display:flex; flex-wrap:wrap; gap:3px 6px; align-items:center; margin-top:5px; font-size:11px; font-weight:600; color:#5a5248; }
     .t-route-print span { background:#f4ece0; border:1px solid var(--line); border-radius:5px; padding:1px 7px; }
@@ -586,33 +641,34 @@
   `
 </script>
 
-{#if kapitel.length === 0}
+{#if nichtsDa}
   <p class="leer">{t('Noch nichts zu lesen. Sobald du im Logbuch einen Tag schreibst, erscheint er hier als Seite deines Tagebuchs.')}</p>
   <TagebuchFotos {orte} />
 {:else}
   <label class="titel-feld">{t('Titel des Tagebuchs')}<input bind:value={titel} placeholder={t('Australien')} /></label>
-  <div class="zeige" role="group" aria-label={t('Was ins Tagebuch kommt')}>
-    <span class="zeige-lbl">{t('Im Tagebuch zeigen')}</span>
-    {#each SCHALTER as [id, icon, label]}
-      {#if id !== 'geraet' || $tagebuchFotos.length}
-        <button class="zeige-chip" class:an={zeige[id]} aria-pressed={zeige[id]} onclick={() => schalte(id)}><span aria-hidden="true">{icon}</span> {label}</button>
-      {/if}
-    {/each}
-  </div>
-  <div class="werkzeug">
-    <div class="fassung" role="group" aria-label={t('Fassung')}>
-      <button class="f-btn" class:an={fassung === 'kurz'} onclick={() => (fassung = 'kurz')}
-        title={t('Nur Bild, Text und Kennzahlen je Tag')}>{t('📄 Kurzfassung')}</button>
-      <button class="f-btn" class:an={fassung === 'lang'} onclick={() => (fassung = 'lang')}
-        title={t('Zusätzlich alle ausgefüllten Module, Notizen und Bilanz')}>{t('📖 Ausführlich')}</button>
+  <div class="lp">
+    <div class="lp-block">
+      <span class="lp-titel" id="lp-zeige">{t('Im Tagebuch zeigen')}</span>
+      <div class="lp-raster" role="group" aria-labelledby="lp-zeige">
+        {#each SCHALTER as [id, , label]}
+          {#if id !== 'geraet' || $tagebuchFotos.length}
+            <button class="zeige-chip" class:an={zeige[id]} aria-pressed={zeige[id]} onclick={() => schalte(id)}><span class="lp-haken" aria-hidden="true"></span>{label}</button>
+          {/if}
+        {/each}
+      </div>
     </div>
-    {#if alleFotos.length}
-      <button class="wz" onclick={() => (kollageAuf = true)}>{t('✨ Kollage ({length})', { length: alleFotos.length })}</button>
-    {/if}
-    <button class="wz druck" onclick={() => (ausgabeAuf = true)}>📄 {je('Tagebuch erstellen', 'Create journal')} ({fassung === 'kurz' ? je('kurz', 'short') : je('ausführlich', 'detailed')})</button>
-    <button class="wz" onclick={() => (reihenfolge = reihenfolge === 'alt' ? 'neu' : 'alt')}>
-      ⇅ {reihenfolge === 'alt' ? t('Älteste zuerst') : t('Neueste zuerst')}
-    </button>
+    <div class="lp-block">
+      <span class="lp-titel" id="lp-fassung">{t('Fassung')}</span>
+      <div class="segment lp-segment" role="group" aria-labelledby="lp-fassung">
+        <button class:an={fassung === 'kurz'} aria-pressed={fassung === 'kurz'} onclick={() => (fassung = 'kurz')}>{je('Kurz', 'Short')}</button>
+        <button class:an={fassung === 'lang'} aria-pressed={fassung === 'lang'} onclick={() => (fassung = 'lang')}>{je('Ausführlich', 'Detailed')}</button>
+      </div>
+    </div>
+    <div class="lp-aktionen">
+      <button class="wz druck" onclick={() => (ausgabeAuf = true)}>{je('Tagebuch erstellen', 'Create journal')}</button>
+      {#if alleFotos.length}<button class="wz" onclick={() => (kollageAuf = true)}>{je(`Kollage (${alleFotos.length})`, `Collage (${alleFotos.length})`)}</button>{/if}
+      <button class="wz" onclick={() => (reihenfolge = reihenfolge === 'alt' ? 'neu' : 'alt')}>{reihenfolge === 'alt' ? je('Älteste zuerst', 'Oldest first') : je('Neueste zuerst', 'Newest first')}</button>
+    </div>
   </div>
   <TagebuchFotos {orte} />
 
@@ -637,6 +693,27 @@
       </div>
     </header>
 
+    {#if kapitel.length === 0}
+      {#if planung.da}
+        <section class="kapitel" style="--kf: var(--brand)">
+          <header class="kap-kopf"><div class="kap-txt"><h2>{je('Deine Planung', 'Your plan')}</h2><span>{je('Noch ohne Etappe', 'No leg yet')}</span></div></header>
+          <div class="kp-plan">
+            {#each planung.routen as x (x.id)}
+              {@const st = mitKoord(x)}
+              <div class="kp-route" style="--rf:{x.farbe || 'var(--brand)'}">
+                <div class="kp-r-kopf"><b>🛣️ {x.name}</b>{#if x.route?.km}<span>{zahl(x.route.km)} km</span>{/if}</div>
+                {#if st.length}<div class="kp-stopps">{#each st.slice(0, 10) as p, i}<span class="kp-stopp">{p.name}</span>{#if i < Math.min(st.length, 10) - 1}<span aria-hidden="true">→</span>{/if}{/each}</div>{/if}
+              </div>
+            {/each}
+            {#if planung.wand.length}
+              <ul class="kp-wand">{#each planung.wand as w (w.id)}<li><span aria-hidden="true">{w.status === 'gemacht' ? '✅' : '🥾'}</span> <b>{w.name}</b></li>{/each}</ul>
+            {/if}
+            {#each planung.gebucht as b (b.id)}<p class="kp-gebucht">{katInfo(b.kat).icon} {b.titel}</p>{/each}
+          </div>
+        </section>
+      {/if}
+      <p class="leer">{planung.aus ? je('Die Etappen sind ausgeschaltet. Tippe oben auf „Etappen“, dann erscheinen sie hier.', 'The legs are switched off. Tap “Legs” above to show them here.') : planung.da ? je('Lege im Plan eine Etappe an, dann entstehen hier die Kapitel deines Tagebuchs.', 'Add a leg in the plan and the chapters of your journal appear here.') : t('Noch nichts zu lesen. Sobald du im Logbuch einen Tag schreibst, erscheint er hier als Seite deines Tagebuchs.')}</p>
+    {/if}
     {#each kapitel as k (k.id)}
     {@const pl = plaene.get(k.id)}
     <section class="kapitel" style="--kf:{k.farbe}">
@@ -679,6 +756,7 @@
           {/each}
         </ul>
       {/if}
+    {#if kostenZeile(k.id)}<p class="kp-kosten">💶 {kostenZeile(k.id)}</p>{/if}
     {@render notizListe(verteilung.etappe.get(k.id), je('Notizen zu dieser Etappe', 'Notes on this leg'))}
     {#each k.tage as tg (tg.datum)}
     {#if !tg.journal.length}
@@ -710,7 +788,7 @@
           {/if}
           {#if ji === 0 && zeige.etappen && reiseZeile(tg).length}<div class="t-unterwegs">{reiseZeile(tg).map((b) => (b.emoji || katInfo(b.kat).icon) + ' ' + b.titel).join(' · ')}</div>{/if}
           {#if e.ort}
-            <h3 class="t-ort">{e.ort}{#if region(e)}<span class="t-region"> · {region(e)}</span>{/if}</h3>
+            <h3 class="t-ort">{streckeText(e)}{#if region(e)}<span class="t-region"> · {region(e)}</span>{/if}</h3>
           {/if}
           {#if stats.length}
             <div class="t-stats">
@@ -792,6 +870,12 @@
           <footer class="t-bilanz">{#each bil as b}<span>{b}</span>{/each}</footer>
         {/if}
         {/if}
+        {#if e.ereignisse?.length}
+          <section class="modul">
+            <h3 class="m-titel"><span>⚠️</span> {je('Erlebt unterwegs', 'On the road')}</h3>
+            <ul class="tn-liste">{#each e.ereignisse as x (x.id)}<li><span>{x.icon} {x.level}: {x.titel}</span></li>{/each}</ul>
+          </section>
+        {/if}
         {#if ji === 0}{@render notizListe(verteilung.tag.get(e.datum), t('Notizen dieses Tages'))}{/if}
         {#if ji === tg.journal.length - 1}{@render extras(tg)}{/if}
       </article>
@@ -823,6 +907,7 @@
         {#if reiseBilanz.kosten}<p class="bz-fuss">{t('Beträge zum Tageskurs umgerechnet, ohne Kurs mit Näherungswert. Ausgaben vor der Reise sind nicht dabei.')}</p>{/if}
       </section>
     {/if}
+    {#if zeige.zahlen && zahlen}<div class="zahlen-block">{@html zahlenHTML()}</div>{/if}
   </div>
 {/if}
 
@@ -876,14 +961,6 @@
   .kap-kopf { border-left: 8px solid var(--kf); padding: 4px 0 4px 14px; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
   .kap-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   .kap-kopf.mit-kugel { margin-bottom: 6px; }
-  .zeige { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; }
-  .zeige-lbl { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); margin-right: 2px; }
-  .zeige-chip {
-    min-height: 40px; padding: 0 13px; border-radius: 20px; border: 1px dashed var(--line-stark); background: var(--card);
-    color: var(--muted); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; cursor: pointer;
-    transition: background-color var(--t-med) var(--ease-out), color var(--t-med) var(--ease-out), border-color var(--t-med) var(--ease-out);
-  }
-  .zeige-chip.an { border-style: solid; border-color: var(--ink); background: var(--ink); color: var(--bg); }
   .d-kugel { display: flex; justify-content: center; margin: 14px 0 4px; }
   .kap-plan { display: flex; flex-direction: column; gap: 8px; margin: 0 0 12px; }
   .kp-route { border-left: 4px solid var(--rf); padding: 2px 0 2px 10px; }
@@ -913,18 +990,6 @@
   .leer { color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); background: var(--flaeche); padding: 16px; border-radius: 10px; }
 
   /* Werkzeugleiste */
-  .fassung { display: inline-flex; gap: 0; border: 1px solid var(--line-stark); border-radius: 18px; overflow: hidden; }
-  .f-btn {
-    font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; padding: 8px 14px; min-height: 38px; cursor: pointer;
-    border: none; background: var(--card); color: var(--muted);
-  }
-  .f-btn.an { background: var(--brand); color: #fff; }
-  .werkzeug { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-  .wz {
-    font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; padding: 8px 14px; border: 1px solid var(--line);
-    background: var(--card); color: var(--muted); border-radius: 20px; cursor: pointer;
-  }
-  .wz.druck { background: var(--brand); color: #fff; border-color: var(--brand); }
 
   .magazin { display: flex; flex-direction: column; gap: 24px; }
 
@@ -1004,6 +1069,30 @@
   .fakten { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 4px; }
   .fakt { font-size: calc(13px * var(--schrift, 1)); color: var(--ink); }
   .fakt b { color: var(--brand-text); }
+  .kp-kosten { margin: 6px 0; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; }
+  .zahlen-block { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
+  .zahlen-block :global(.zb-raster) { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin: 8px 0; }
+  .zahlen-block :global(.zb-k) { display: flex; flex-direction: column; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  .zahlen-block :global(.zb-k b) { font-size: calc(18px * var(--schrift, 1)); }
+  .zahlen-block :global(.zb-k em), .zahlen-block :global(.zb-k span) { font-style: normal; color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); }
+  .zahlen-block :global(.zb-z), .zahlen-block :global(.zb-liste) { font-size: calc(14px * var(--schrift, 1)); margin: 4px 0; }
+  .zahlen-block :global(.kap-txt h2) { margin: 0; font-size: calc(20px * var(--schrift, 1)); }
+  /* Bedienfeld: gleiche Höhen, gleiche Abstände, zwei Spalten am Handy */
+  .lp { display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--card); }
+  .lp-block { display: flex; flex-direction: column; gap: 8px; }
+  .lp-titel { color: var(--muted); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; }
+  .lp-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .zeige-chip { display: flex; align-items: center; gap: 10px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: none; color: var(--ink); font-size: calc(14px * var(--schrift, 1)); font-weight: 600; text-align: left; cursor: pointer; }
+  .lp-haken { flex: none; display: grid; place-items: center; width: 18px; height: 18px; border: 1.5px solid var(--line-stark); border-radius: 5px; color: #fff; font-size: calc(12px * var(--schrift, 1)); line-height: 1; }
+  .zeige-chip:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .zeige-chip.an .lp-haken { border-color: var(--brand); background: var(--brand); }
+  .zeige-chip.an .lp-haken::before { content: '✓'; }
+  .lp-segment { display: grid; grid-template-columns: 1fr 1fr; }
+  .lp-segment button { min-height: 44px; }
+  .lp-aktionen { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .wz { min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--line-stark); border-radius: 10px; background: none; color: var(--ink); font-size: calc(14px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+  .wz:only-of-type { grid-column: 1 / -1; }
+  .wz.druck { grid-column: 1 / -1; min-height: 48px; border-color: var(--brand); background: var(--brand); color: #fff; font-size: calc(15px * var(--schrift, 1)); }
   .tn-liste { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
   .tn-liste li { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: calc(14px * var(--schrift, 1)); color: var(--ink); }
   .tn-weg { flex: none; width: 44px; height: 44px; border: none; background: none; color: var(--muted); font-size: calc(14px * var(--schrift, 1)); cursor: pointer; }

@@ -60,7 +60,7 @@ console.log('\n3  Suchfeld unten am iPhone (iOS 26), oben am Mac')
   const block = (kopf) => { const i = blatt.indexOf(kopf); let tiefe = 0, j = blatt.indexOf('{', i); const start = j
     for (; j < blatt.length; j++) { if (blatt[j] === '{') tiefe++; else if (blatt[j] === '}' && --tiefe === 0) break }
     return blatt.slice(start, j) }
-  const handy = block('@media (max-width: 899px)'), mac = block('@media (min-width: 900px)')
+  const handy = block('@media (max-width: 639px), (max-width: 899px) and (orientation: portrait)'), mac = block('@media (min-width: 900px), (orientation: landscape) and (min-width: 640px)')
   const reihe = Object.fromEntries([...handy.matchAll(/\.(s-[a-z]+) \{ order: (\d+)/g)].map((m) => [m[1], +m[2]]))
   p('iPhone: Suchfeld steht ganz unten (höchste Reihenfolge)', reihe['s-kopf'] === Math.max(...Object.values(reihe)), JSON.stringify(reihe))
   p('iPhone: Treffer über den Etiketten, Etiketten über dem Feld', reihe['s-liste'] < reihe['s-tags'] && reihe['s-tags'] < reihe['s-kopf'])
