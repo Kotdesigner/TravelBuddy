@@ -2679,5 +2679,12 @@ export default {
  "Große Karte: an": "Large map: on",
  "Jede Straße und Piste in Western Australia. Es lädt nur der Teil, in dem du unterwegs bist.": "Every road and track in Western Australia. Only the part you are travelling in is downloaded.",
  "Beim Hineinzoomen lädt die App den Teil von Western Australia, in dem du gerade bist, je {von} bis {bis} MB. Das geht am besten im WLAN. Ausschalten gibt den Speicher wieder frei.": "When you zoom in, the app downloads the part of Western Australia you are in, {von} to {bis} MB each. Best done on Wi-Fi. Turning it off frees the storage again.",
+ "{name} wird geladen, {fertig} von {gesamt}": "Downloading {name}, {fertig} of {gesamt}",
+ "Kartenmaterial liegt auf dem Gerät": "Maps are on this device",
+ "Kartenmaterial für unterwegs laden, am besten im WLAN:": "Download maps for the road, best on Wi-Fi:",
+ "Klein · {mb} MB": "Small · {mb} MB",
+ "Groß · {mb} MB": "Large · {mb} MB",
+ "Das Kartenmaterial ließ sich nicht laden. Auf der Kartenseite kannst du es noch einmal versuchen.": "The maps could not be downloaded. You can try again on the map page.",
+ "Kartenmaterial wird geladen: {name}, {fertig} von {gesamt}": "Downloading maps: {name}, {fertig} of {gesamt}",
  "Zyklon": "cyclone"
 }

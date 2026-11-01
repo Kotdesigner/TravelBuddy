@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 
 <br>
 
-<img src="bilder/en/mac-heute.jpg" alt="TravelBuddy on the Mac: Today with countdown, upcoming bookings and trip stats" width="900">
+<img src="bilder/en/titel-kein-netz.jpg" alt="TravelBuddy on MacBook and iPhone. No signal. No account. No problem." width="900">
 
 </div>
 
@@ -31,7 +31,7 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 
 ## 🛣️ New in version 1.2
 
-**Everyone chooses their own map.** The web app starts with the small map. If you want every road, street name and gravel track in Western Australia, tap **🛣️ Turn on large map** on the map page. The app tells you the size first, then downloads only the part you are travelling in, 33 to 76 MB. Turn it off and the storage is free again. On a website this needs the large package. In the Mac and Windows apps with the large map it is on from the start.
+**Everyone chooses their own map.** Right on the first screen the app asks: download the small maps (76 MB) or the large maps with every road, street name and gravel track in Western Australia (281 MB)? It carries on in the background while you look around. Decide later and you can tap **🛣️ Turn on large map** on the map page: the app tells you the size first, then downloads only the part you are travelling in, 33 to 76 MB. Turn it off and the storage is free again. On a website this needs the large package. In the Mac and Windows apps with the large map it is on from the start.
 
 <table>
 <tr>
@@ -101,6 +101,8 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 
 ## 📔 Not just a planner. A diary maker.
 
+<div align="center"><img src="bilder/en/titel-tagebuch.jpg" alt="You travel. TravelBuddy writes it down." width="900"></div>
+
 Most travel apps stop when the trip begins. TravelBuddy really gets going then.
 
 Every evening you note a few lines, add your photos, tap in the kilometres and the animals you saw. That's all. From it, TravelBuddy builds your **finished travel diary**: cover, photo grids, quotes, a summary for every day, painted globes for every stage and the big trip summary at the end. Ready to print as a photo book, as a PDF, as a single file for the family, or as a trip film for the group chat.
@@ -112,6 +114,8 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 ---
 
 ## 🚀 Everything TravelBuddy can do
+
+<div align="center"><img src="bilder/en/titel-eine-app.jpg" alt="Your whole trip. One app." width="900"></div>
 
 **One app for the whole trip, from the first idea to the last memory. It really does it all.**
 
@@ -433,7 +437,7 @@ Then drag the **`dist` folder itself** into "Deploy manually", not the project f
 2. On Netlify: **Add new site → Import an existing project → GitHub** and pick your fork.
 3. Leave all fields as they are. `netlify.toml` already sets the build command `npm ci && npm run build`, the publish folder `dist` and Node 22. Click **Deploy**.
 
-From then on, every push to `main` builds and publishes the new version. This way builds the small map, because the large map parts are too big for the repo.
+From then on, every change to the app on `main` builds and publishes the new version. This way includes the large map: the parts are too big for the repo, so `scripts/netlify-bau.sh` fetches them from the release. On the first screen everyone chooses: small maps (76 MB) or large maps (281 MB).
 
 ### On the iPhone
 
@@ -571,7 +575,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 
 <br>
 
-<img src="bilder/de/mac-heute.jpg" alt="TravelBuddy auf dem Mac: Heute mit Countdown, nächsten Buchungen und Zahlen zur Reise" width="900">
+<img src="bilder/de/titel-kein-netz.jpg" alt="TravelBuddy auf MacBook und iPhone. Kein Netz. Kein Konto. Kein Problem." width="900">
 
 </div>
 
@@ -579,7 +583,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 
 ## 🛣️ Neu in Version 1.2
 
-**Jede Person wählt ihre Karte selbst.** Die Web-App startet mit der kleinen Karte. Wer jede Straße, jeden Straßennamen und jede Schotterpiste in Western Australia möchte, tippt auf der Kartenseite auf **🛣️ Große Karte einschalten**. Die App nennt vorher die Größe und lädt dann nur den Teil, in dem du unterwegs bist, 33 bis 76 MB. Ausschalten gibt den Speicher wieder frei. Auf einer Webseite braucht das das große Paket. In den Apps für Mac und Windows mit großer Karte ist sie von Anfang an an.
+**Jede Person wählt ihre Karte selbst.** Gleich auf dem ersten Bildschirm fragt die App: kleines Kartenmaterial laden (76 MB) oder großes mit jeder Straße, jedem Straßennamen und jeder Schotterpiste in Western Australia (281 MB)? Das läuft im Hintergrund weiter, während du dich umsiehst. Wer später entscheidet, tippt auf der Kartenseite auf **🛣️ Große Karte einschalten**: Die App nennt vorher die Größe und lädt nur den Teil, in dem du unterwegs bist, 33 bis 76 MB. Ausschalten gibt den Speicher wieder frei. Auf einer Webseite braucht das das große Paket. In den Apps für Mac und Windows mit großer Karte ist sie von Anfang an an.
 
 <table>
 <tr>
@@ -643,6 +647,8 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 
 ## 📔 Nicht nur ein Planer. Ein Tagebuch-Macher.
 
+<div align="center"><img src="bilder/de/titel-tagebuch.jpg" alt="Du reist. TravelBuddy schreibt mit." width="900"></div>
+
 Die meisten Reise-Apps hören auf, wenn die Reise beginnt. TravelBuddy legt dann erst richtig los.
 
 Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du gesehen hast. Mehr nicht. Daraus baut TravelBuddy dein **fertiges Reisetagebuch**: Deckblatt, Foto-Raster, Zitate, die Bilanz jedes Tages, gemalte Weltkugeln für jede Etappe und am Ende die große Reise-Bilanz. Fertig zum Drucken als Fotobuch, als PDF, als eine Datei für die Familie oder als Reise-Film für den Gruppenchat.
@@ -652,6 +658,8 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 <div align="center"><img src="bilder/de/assistent-7.jpg" width="260" alt="Unterwegs entsteht dein Tagebuch"></div>
 
 ## 🚀 Alles, was TravelBuddy kann
+
+<div align="center"><img src="bilder/de/titel-eine-app.jpg" alt="Deine ganze Reise. Eine App." width="900"></div>
 
 **Eine App für die ganze Reise, von der ersten Idee bis zur letzten Erinnerung. Sie kann wirklich alles.**
 
@@ -967,7 +975,7 @@ Dann den **Ordner `dist` selbst** in „Deploy manually“ ziehen, nicht den Pro
 2. Bei Netlify: **Add new site → Import an existing project → GitHub** und deinen Fork wählen.
 3. Alle Felder so lassen. `netlify.toml` setzt schon den Build-Befehl `npm ci && npm run build`, den Ordner `dist` und Node 22. Auf **Deploy** klicken.
 
-Ab dann baut und veröffentlicht jeder Push auf `main` die neue Fassung. Dieser Weg baut die kleine Karte, weil die Teile der großen Karte zu groß fürs Repo sind.
+Ab dann baut und veröffentlicht jede Änderung an der App auf `main` die neue Fassung. Dieser Weg bringt die große Karte mit: Die Teile sind zu groß fürs Repo, deshalb holt `scripts/netlify-bau.sh` sie aus dem Release. Auf dem ersten Bildschirm wählt dann jede Person: kleines Kartenmaterial (76 MB) oder großes (281 MB).
 
 ### Am iPhone
 

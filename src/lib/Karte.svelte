@@ -9,6 +9,7 @@
     from './karten-config.js'
   import { grosseKarteAn, setzeGrosseKarte } from './karten-wahl.js'
   import { frage } from './dialog.js'
+  import { CACHE, dateiUrl, kartenLauf, kartenStand, ladeKartenteile } from './karten-laden.js'
   import { online } from './netz.js'
   import { fahrzeitText } from './routing.js'
   import { FORMATE, DATEITYPEN, exportiereKarte, speichere } from './kartenexport.js'
@@ -61,8 +62,6 @@
   // Ein Kartenteil wird einmalig als ganze Datei geholt und pmtiles liest LOKAL daraus.
   // So gibt es keine HTTP-Range-Anfragen — die vom Service-Worker/Worker-Zusammenspiel im
   // Prod-Build zerbrachen. Offline funktioniert es, weil die ganze Datei im Cache liegt.
-  const CACHE = 'karten-pmtiles-v2'
-  const dateiUrl = (r) => location.origin + '/karten/' + r.datei
 
   async function ladeRegion(region) {
     if (quellen.has(region.id)) {
@@ -646,8 +645,6 @@
   // Die .pmtiles liegen bewusst NICHT im Precache (sonst waeren es 96 MB bei der
   // Installation). Eine Region landet sonst erst dann offline, wenn man sie einmal
   // mit Netz geoeffnet hat — im Outback zu spaet. Deshalb dieser Knopf.
-  let sichert = $state(false)
-  let fortschritt = $state({ fertig: 0, gesamt: 0, name: '' })
   let gecacht = $state(new Set())
 
   async function pruefeCache() {
@@ -662,29 +659,11 @@
   }
 
   async function alleSichern() {
-    if (sichert) return
-    sichert = true
-    const offen = kartenteile.filter((r) => !gecacht.has(r.id))
-    fortschritt = { fertig: 0, gesamt: offen.length, name: '' }
-    try {
-      const c = await caches.open('karten-pmtiles-v2')
-      for (const r of offen) {
-        fortschritt = { ...fortschritt, name: r.name }
-        const url = location.origin + '/karten/' + r.datei
-        const resp = await fetch(url, { mode: 'same-origin' })
-        if (resp.ok) {
-          await c.delete(url)                     // siehe oben: genau EIN Eintrag je Datei
-          await c.put(url, resp.clone())
-          gecacht = new Set([...gecacht, r.id])
-        }
-        fortschritt = { ...fortschritt, fertig: fortschritt.fertig + 1 }
-      }
-    } catch (e) {
-      ladeFehler = t('Sichern fehlgeschlagen. ') + fehlerText(e)
-    }
-    sichert = false
-    fortschritt = { fertig: 0, gesamt: 0, name: '' }
+    try { await ladeKartenteile(kartenteile.filter((r) => !gecacht.has(r.id))) }
+    catch (e) { ladeFehler = t('Sichern fehlgeschlagen. ') + fehlerText(e) }
   }
+  // Auch was die Einführung im Hintergrund lädt, zählt hier gleich mit
+  $effect(() => { if ($kartenStand) pruefeCache() })
 
   // Große Karte ein: Sie kommt beim Hineinzoomen. Aus: Sie gibt ihren Speicher wieder frei.
   async function grosseKarteUmschalten() {
@@ -781,8 +760,8 @@
   <div class="offline-zeile">
     {#if alleDa}
       <span class="off-ok">{t('📴 Ganz Australien offline gespeichert ({round} MB)', { round: Math.round(gesamtMB) })}</span>
-    {:else if sichert}
-      <span class="off-lauf">📥 {fortschritt.name} … {fortschritt.fertig}/{fortschritt.gesamt}</span>
+    {:else if $kartenLauf}
+      <span class="off-lauf">📥 {$kartenLauf.name} … {$kartenLauf.fertig}/{$kartenLauf.gesamt}</span>
     {:else}
       <span class="off-hinweis">{t('📴 Offline: {size} von {length} Kartenteilen', { size: gespeichert, length: kartenteile.length })}</span>
       <button class="off-btn" onclick={alleSichern} disabled={!$online}>

@@ -3,6 +3,7 @@
 // Ausführen: node tests/eine-karte.test.mjs
 import fs from 'node:fs'
 import { grossStart } from '../src/lib/karten-wahl.js'
+import { paketMB } from '../src/lib/karten-laden.js'
 import { REGIONEN, WA_GROSS, GROSSE_KARTE, KARTENGEBIET, kartenteilFuer, schneideZu, imGebiet, teileFuer }
   from '../src/lib/karten-config.js'
 
@@ -77,6 +78,7 @@ console.log('\n4b Große Karte (npm run build:gross)')
   p('Schalter an: alle Teile', teileFuer(true, alle).length === alle.length)
   p('aus: Exmouth bei Zoom 12 bleibt auf der kleinen Karte', kartenteilFuer(ausschnitt(114.12, -21.93, 12), 12, null, teileFuer(false, alle))?.id === 'wa')
   p('an: Exmouth bei Zoom 12 nimmt den großen Teil', kartenteilFuer(ausschnitt(114.12, -21.93, 12), 12, null, teileFuer(true, alle))?.id === 'wa-nordwest')
+  p('kleines Paket rund 76 MB, großes rund 281 MB', paketMB(false, alle) === 76 && paketMB(true, alle) === 281, `${paketMB(false, alle)} / ${paketMB(true, alle)}`)
   p('im Netz ist die große Karte aus', grossStart(true, null, 'travelbuddy-wa.netlify.app') === false)
   p('in den Apps für Mac und Windows ist sie an', grossStart(true, null, '127.0.0.1') === true)
   p('die eigene Wahl gewinnt', grossStart(true, 'aus', '127.0.0.1') === false && grossStart(true, 'an', 'beispiel.netlify.app') === true)

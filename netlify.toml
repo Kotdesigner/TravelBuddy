@@ -1,7 +1,9 @@
-# Netlify baut TravelBuddy direkt aus GitHub: Add new site → Import an existing project → GitHub →
+# Netlify baut TravelBuddy direkt aus GitHub, mit großer Karte (scripts/netlify-bau.sh): Add new site → Import an existing project → GitHub →
 # Kotdesigner/TravelBuddy. Jeder Push auf main veröffentlicht die neue Fassung.
 [build]
-  command = "npm ci && npm run build"
+  command = "sh scripts/netlify-bau.sh"
+  # Nur bauen, wenn sich die App ändert. README und Bilder kosten keinen neuen Lauf.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- src public scripts package.json package-lock.json vite.config.js netlify.toml index.html"
   publish = "dist"
 
 [build.environment]

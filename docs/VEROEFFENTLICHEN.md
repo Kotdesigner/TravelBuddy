@@ -18,7 +18,7 @@ Reisedaten oder privaten Adressen im Build stecken.
 
 **Am einfachsten direkt aus GitHub:** Auf app.netlify.com **Add new site → Import an existing project →
 GitHub** und das Repo wählen. Build-Befehl und Ordner stehen schon in `netlify.toml`, nichts eintragen.
-Jeder Push auf `main` baut und veröffentlicht die Seite neu.
+Jede Änderung an der App auf `main` baut und veröffentlicht die Seite neu, mit großer Karte aus dem Release (`scripts/netlify-bau.sh`). Reine Text- und Bildänderungen lösen keinen Bau aus.
 
 **Ohne GitHub-Anbindung:** Unter Releases liegt `TravelBuddy-Netlify.zip`, der fertige Ordner `dist`.
 

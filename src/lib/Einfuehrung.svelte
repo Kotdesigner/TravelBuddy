@@ -14,6 +14,10 @@
   import { blattRaus, ausblenden } from './motion.js'
   import { SCHRITTE, einfuehrung, lies, merke, sollZeigen, istLeer } from './einfuehrung.js'
   import { testreiseKnopf } from './testreise-dienst.js'
+  import { GROSSE_KARTE } from './karten-config.js'
+  import { kartenLauf, ladePaket, paketMB } from './karten-laden.js'
+  import { online } from './netz.js'
+  import { zeigeToast } from './toast.js'
 
   let { geh = () => {}, anzahlOrte = 0 } = $props()
 
@@ -50,6 +54,13 @@
   }
   function zurueck() { if (offen?.schritt > 0) setze(offen.schritt - 1) }
   function testreise() { beenden(); testreiseKnopf() }
+
+  // Läuft im Hintergrund weiter, die Einführung kann derweil weitergehen
+  let kartenFertig = $state(false)
+  async function karten(gross) {
+    try { await ladePaket(gross); kartenFertig = true }
+    catch { zeigeToast(t('Das Kartenmaterial ließ sich nicht laden. Auf der Kartenseite kannst du es noch einmal versuchen.'), 'fehler', 6000) }
+  }
   function beenden() {
     einfuehrung.set(null)
     merke({ schritt: 0, fertig: true })
@@ -104,6 +115,17 @@
         {#each [['de', 'Deutsch'], ['en', 'English']] as [s, l]}
           <button class:an={sprache === s} aria-pressed={sprache === s} lang={s} onclick={() => setzeSprache(s)}>{l}</button>
         {/each}
+      </div>
+      <div class="ef-karten">
+        {#if $kartenLauf}<p class="ef-k" role="status">📥 {t('{name} wird geladen, {fertig} von {gesamt}', $kartenLauf)}</p>
+        {:else if kartenFertig}<p class="ef-ok" role="status">✓ {t('Kartenmaterial liegt auf dem Gerät')}</p>
+        {:else}
+          <p class="ef-k">🗺️ {t('Kartenmaterial für unterwegs laden, am besten im WLAN:')}</p>
+          <div class="ef-karten-knoepfe">
+            <button class="btn" disabled={!$online} onclick={() => karten(false)}>{t('Klein · {mb} MB', { mb: paketMB(false) })}</button>
+            {#if GROSSE_KARTE}<button class="btn" disabled={!$online} onclick={() => karten(true)}>{t('Groß · {mb} MB', { mb: paketMB(true) })}</button>{/if}
+          </div>
+        {/if}
       </div>
       <div class="ef-knoepfe">
         <button class="btn-primary ef-los" onclick={weiter}>{t('Los geht’s')}</button>
@@ -234,6 +256,9 @@
   .ef-f input { min-height: 46px; font-size: max(16px, calc(17px * var(--schrift, 1))); padding: 8px 12px; border: 1px solid var(--line-stark); border-radius: var(--radius-m); background: var(--eingabe); color: var(--ink); font-weight: 400; }
   .ef-sprache { display: grid; grid-template-columns: 1fr 1fr; }
   .ef-sprache button { min-height: 44px; }
+  .ef-karten { display: flex; flex-direction: column; gap: 6px; }
+  .ef-karten-knoepfe { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; }
+  .ef-karten-knoepfe .btn { min-height: 44px; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; }
   .ef-knoepfe { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
   .ef-los { min-height: 52px; font-size: calc(17px * var(--schrift, 1)); }
   .ef-los:disabled { opacity: 0.5; }
