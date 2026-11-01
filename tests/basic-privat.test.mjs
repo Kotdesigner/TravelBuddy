@@ -4,6 +4,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { CLIENT_ID, PLAYLIST_ID, LASTFM_KEY } from '../src/lib/musik/spotify-ids.js'
+import { IMPRESSUM } from '../src/lib/impressum.js'
 
 let ok = 0, bad = 0
 const p = (name, bed, zusatz = '') => {
@@ -66,7 +67,8 @@ console.log('\n2  Code: keine festen Zugänge und Reisedaten')
   p(`keine Reisedaten als Vorgabe in ${code.length} Dateien`, !mitDatum.length, mitDatum.map((f) => path.relative(wurzel, f)).join(', '))
   const mitId = code.filter((f) => ALTE_IDS.test(fs.readFileSync(f, 'utf8')))
   p('keine alten Konto-Kennungen', !mitId.length, mitId.join(', '))
-  const mitName = code.filter((f) => NAMEN.test(ohneKommentare(fs.readFileSync(f, 'utf8'))))
+  // Einzige Ausnahme: das Impressum, dort steht der Anbieter mit Absicht
+  const mitName = code.filter((f) => !f.endsWith('impressum.js') && NAMEN.test(ohneKommentare(fs.readFileSync(f, 'utf8'))))
   p('kein Name in Texten der Oberfläche', !mitName.length, mitName.map((f) => path.relative(wurzel, f)).join(', '))
   const mitAdresse = code.filter((f) => ADRESSEN.test(fs.readFileSync(f, 'utf8')))
   p('keine Adressen der privaten Fassung', !mitAdresse.length, mitAdresse.join(', '))
@@ -85,7 +87,7 @@ console.log('\n4  Gebaute App (dist/)')
 if (!fs.existsSync(path.join(wurzel, 'dist/index.html'))) console.log('  · übersprungen: erst npm run build')
 else {
   const texte = dateien('dist', /\.(js|html|json|webmanifest|css)$/).filter((f) => !/pois-|geo-/.test(f))
-  const treffer = texte.filter((f) => { const s = fs.readFileSync(f, 'utf8'); return NAMEN.test(s) || ALTE_IDS.test(s) || REISEDATEN.test(s) || ADRESSEN.test(s) })
+  const treffer = texte.filter((f) => { const s = fs.readFileSync(f, 'utf8').replaceAll(IMPRESSUM.name, '').replaceAll(IMPRESSUM.email, ''); return NAMEN.test(s) || ALTE_IDS.test(s) || REISEDATEN.test(s) || ADRESSEN.test(s) })
   p(`${texte.length} Dateien ohne Namen, Kennungen, Reisedaten, Adressen`, !treffer.length, treffer.map((f) => path.relative(wurzel, f)).join(', '))
   p('keine Größentabelle fremder Belege', !fs.existsSync(path.join(wurzel, 'dist/belege-groessen.json')))
   p('keine Belege', !fs.existsSync(path.join(wurzel, 'dist/dokumente')) || !fs.readdirSync(path.join(wurzel, 'dist/dokumente')).length)

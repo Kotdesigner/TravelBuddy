@@ -70,6 +70,7 @@
   import { get } from 'svelte/store'
   import { modal } from './lib/modal.js'
   import Handbuch from './lib/Handbuch.svelte'
+  import Rechtliches from './lib/Rechtliches.svelte'
   import { holeOrtsdaten } from './lib/ortdaten.js'
   import { FELD } from './lib/journal-schema.js'
   import { haversine, luftlinieKm } from './lib/routing.js'
@@ -837,12 +838,12 @@
     <div class="zurueck-leiste"><button class="zurueck-knopf" onclick={() => zurueck('mehr')}><span aria-hidden="true">‹</span> {t('Zurück')}</button></div>
   {/if}
   <header class="sk">
-    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : TITEL[ansicht.tab]}</h1>
+    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : ansicht.unter === 'rechtliches' ? t('Datenschutz & Impressum') : TITEL[ansicht.tab]}</h1>
     <span class="sk-musik"><MusikSymbol {geh} /></span>
     {#if ansicht.tab === 'plan'}<button class="sk-neu" onclick={() => oeffneNeu(ansicht.unter === 'wanderungen' ? 'wanderung' : 'route')}>{t('+ Neu')}</button>{/if}
     {#if ansicht.tab === 'logbuch' && ansicht.unter !== 'notizen'}<button class="sk-neu" onclick={() => oeffneNeu('tag')}>{t('+ Tag')}</button>{/if}
   </header>
-  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch'].includes(ansicht.unter)}
+  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch', 'rechtliches'].includes(ansicht.unter)}
     <nav class="seg-leiste" aria-label={t('{wert}: Bereiche', { wert: TITEL[ansicht.tab] })} use:leisteRand={ansicht.pfad}>
       {#each UNTER[ansicht.tab] as [pfad, label] (pfad)}
         {@const an = ansicht.pfad === pfad || (pfad === ansicht.tab && (!ansicht.unter || ['etappe', 'route', 'tag'].includes(ansicht.unter))) || (ansicht.pfad.startsWith(pfad + '/') && pfad !== ansicht.tab) || (ansicht.tab === 'orte' && pfad === 'orte/' + orteUnter)}
@@ -1165,6 +1166,8 @@
       <Teilen orte={[...orte, ...$eigeneOrte]} />
     {:else if ansicht.unter === 'handbuch'}
       <Handbuch />
+    {:else if ansicht.unter === 'rechtliches'}
+      <Rechtliches />
     {:else if ansicht.unter === 'quiz'}
       <h2 class="abschnitt">{t('🇦🇺 Australien-Quiz')} {#if quizErgebnis.beantwortet}<span class="count">{t('{richtig}/{gesamt} · {emoji} Stufe {stufe}', { richtig: quizErgebnis.richtig, gesamt: quizErgebnis.gesamt, emoji: quizErgebnis.level?.emoji, stufe: quizErgebnis.level?.stufe })}</span>{/if}</h2>
       <Quiz fragen={quizData.fragen} levels={quizData.levels} />
@@ -1178,7 +1181,7 @@
   {/if}
 </main>
 
-<footer class="app-footer">TravelBuddy <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
+<footer class="app-footer">TravelBuddy <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
 </div>
 </div>
 
@@ -1348,6 +1351,7 @@
   .app-footer .af-by a { color: inherit; text-decoration: underline; text-underline-offset: 2px; padding: 8px 2px; }
   /* Stand der geladenen Fassung — macht sofort sichtbar, wenn der Service-Worker
      noch eine ältere Version ausliefert. */
+  .app-footer .af-recht { display: block; width: fit-content; margin: 2px auto 0; padding: 10px 8px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
   .app-footer .af-build { display: block; margin-top: 4px; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }   /* vorher opacity .5: 2,2 : 1 */
 
   .filter-hinweis {
