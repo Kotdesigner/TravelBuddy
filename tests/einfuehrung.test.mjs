@@ -28,7 +28,7 @@ console.log('\n2  Gespeicherter Stand')
   p('unbrauchbar wird „noch nie gestartet“', bereinige(null) === null && bereinige('x') === null)
   p('Schritt wird begrenzt', bereinige({ schritt: 99 }).schritt === SCHRITTE.length - 1 && bereinige({ schritt: -2 }).schritt === 0 && bereinige({ schritt: 'a' }).schritt === 0)
   p('fertig bleibt', bereinige({ schritt: 2, fertig: true }).fertig === true)
-  p('acht Schritte, vom Willkommen bis zum Sichern', SCHRITTE.length === 8 && SCHRITTE[0] === 'willkommen' && SCHRITTE.at(-1) === 'sichern')
+  p('neun Schritte, vom Willkommen bis zum Sichern', SCHRITTE.length === 9 && SCHRITTE[0] === 'willkommen' && SCHRITTE.at(-1) === 'sichern')
   p('Anlegen, Buchung und Dokumente sind dabei', ['start', 'etappe', 'buchung', 'dokumente'].every((s) => SCHRITTE.includes(s)))
   p('je Gerät, nicht im Backup', !fs.readFileSync(wurzel + 'lib/userdata.js', 'utf8').includes(KEY))
 }

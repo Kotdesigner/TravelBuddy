@@ -52,6 +52,8 @@ No account, nothing to install from a store, and your data stays on your phone. 
 
 **The calendar now switches like on iPhone.** Choose list, month or year. The year shows every leg in colour at a glance, tap a month to open it and tap a day to see its events.
 
+**No confusion from the start.** The setup now explains in one illustrated step how a leg, the calendar and the logbook differ.
+
 ## 🖼️ New in version 1.4
 
 **Every place picture is now yours to change.** Tap the small **📷** in the corner of any place picture. Choose a photo from your device, open a ready-made image search for that place, or paste a snippet straight from the clipboard. On iPhone, take a screenshot of a picture that is only online and pick it from your photos. Your picture stays on your device. The first time you open Places, TravelBuddy explains this in a short note.
@@ -645,6 +647,8 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 ## 📅 Neu in Version 1.5
 
 **Der Kalender schaltet jetzt um wie am iPhone.** Wähle Liste, Monat oder Jahr. Das Jahr zeigt alle Etappen farbig auf einen Blick, ein Monat lässt sich antippen, und ein Tag öffnet seine Termine.
+
+**Keine Verwirrung von Anfang an.** Die Einrichtung erklärt jetzt in einem bebilderten Schritt, worin sich Etappe, Kalender und Logbuch unterscheiden.
 
 ## 🖼️ Neu in Version 1.4
 

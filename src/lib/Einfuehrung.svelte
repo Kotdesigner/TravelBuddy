@@ -151,6 +151,20 @@
         <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
       </div>
 
+    {:else if id === 'begriffe'}
+      <p class="ef-icon" aria-hidden="true">🧭</p>
+      <h2 id="ef-titel">{je('Drei Begriffe vorab', 'Three terms first')}</h2>
+      <p id="ef-text">{je('Die Etappe gliedert die Reise, der Kalender zeigt sie nach Datum, das Logbuch hält fest, was wirklich passiert ist.', 'A leg structures the trip, the calendar shows it by date, the logbook records what really happened.')}</p>
+      <dl class="ef-begriffe">
+        <div><svg class="ef-bild" viewBox="0 0 64 48" aria-hidden="true"><path d="M5 34h18" stroke="#c1662f" stroke-width="5" stroke-linecap="round"/><path d="M26 34h16" stroke="#2f7a63" stroke-width="5" stroke-linecap="round"/><path d="M45 34h14" stroke="#2a6fb5" stroke-width="5" stroke-linecap="round"/><circle cx="5" cy="34" r="4" fill="#c1662f"/><circle cx="59" cy="34" r="4" fill="#2a6fb5"/><path d="M34 26c-5-6-7-9-7-12a7 7 0 0 1 14 0c0 3-2 6-7 12Z" fill="#2f7a63"/><circle cx="34" cy="14" r="2.5" fill="#fff"/></svg><span><dt>{je('Etappe', 'Leg')}</dt><dd>{je('Ein Reiseabschnitt mit festem Datum. Daran hängen Routen, Wanderungen, Buchungen und Logbuchtage.', 'A part of the trip with fixed dates. Routes, hikes, bookings and logbook days belong to it.')}</dd><dd class="ef-wo">{je('Plan → Etappen', 'Plan → Legs')}</dd></span></div>
+        <div><svg class="ef-bild" viewBox="0 0 64 48" aria-hidden="true"><rect x="3" y="4" width="58" height="42" rx="6" fill="none" stroke="currentColor" stroke-opacity=".5" stroke-width="2"/><path d="M3 13h58" stroke="currentColor" stroke-opacity=".5" stroke-width="2"/><rect x="6" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="14" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="22" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="30" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="38" y="17" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="46" y="17" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="54" y="17" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="6" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="14" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="22" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="30" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="38" y="25" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="46" y="25" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="54" y="25" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="6" y="33" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="14" y="33" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="22" y="33" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="30" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="38" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="46" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="54" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/></svg><span><dt>{je('Kalender', 'Calendar')}</dt><dd>{je('Dein Blick auf die Reise nach Datum, als Liste, Monat oder Jahr. Hier trägst du nichts ein.', 'Your view of the trip by date, as list, month or year. You do not enter anything here.')}</dd><dd class="ef-wo">{je('Plan → Kalender', 'Plan → Calendar')}</dd></span></div>
+        <div><svg class="ef-bild" viewBox="0 0 64 48" aria-hidden="true"><path d="M32 9C25 5 15 5 6 7v35c9-2 19-2 26 2 7-4 17-4 26-2V7c-9-2-19-2-26 2Z" fill="none" stroke="currentColor" stroke-opacity=".6" stroke-width="2"/><path d="M32 9v35" stroke="currentColor" stroke-opacity=".6" stroke-width="2"/><rect x="11" y="12" width="16" height="11" rx="2" fill="#c1662f"/><circle cx="16" cy="16" r="2" fill="#fff"/><path d="M11 29h16M11 34h12M37 14h16M37 19h16M37 24h11M37 29h16M37 34h9" stroke="currentColor" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/></svg><span><dt>{je('Logbuch', 'Logbook')}</dt><dd>{je('Dein Reisetagebuch Tag für Tag: Text, Fotos, Kilometer, Tiere und Notizen.', 'Your travel journal day by day: text, photos, kilometres, animals and notes.')}</dd><dd class="ef-wo">{je('Logbuch', 'Logbook')}</dd></span></div>
+      </dl>
+      <div class="ef-knoepfe">
+        <button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>
+        <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
+      </div>
+
     {:else if id === 'etappe'}
       <p class="ef-icon" aria-hidden="true">🗺️</p>
       <h2 id="ef-titel">{t('Deine erste Etappe')}</h2>
@@ -232,6 +246,13 @@
 {/if}
 
 <style>
+  .ef-begriffe { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+  .ef-begriffe div { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; background: var(--flaeche-2); }
+  .ef-begriffe span { display: block; min-width: 0; }
+  .ef-bild { flex: none; width: 64px; height: 48px; color: var(--ink); }
+  .ef-begriffe dt { font-size: calc(15px * var(--schrift, 1)); font-weight: 700; }
+  .ef-begriffe dd { margin: 2px 0 0; font-size: calc(13.5px * var(--schrift, 1)); }
+  .ef-begriffe .ef-wo { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; }
   .ef-hg { position: fixed; inset: 0; background: rgba(20, 14, 8, 0.45); z-index: 130; animation: hg var(--t-med) var(--ease-out); }
   .ef {
     position: fixed; z-index: 131; left: 0; right: 0; bottom: 0; max-height: 92dvh; overflow: auto;
