@@ -17,7 +17,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline
 
 <br>
 
-**[⬇️ Mac app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[🌐 Web app for Netlify](#-put-it-online-with-netlify-for-iphone)** · **[🚀 Everything it can do](#-everything-travelbuddy-can-do)** · **[🛠️ Run it yourself](#run-it-without-the-ready-made-apps)**
+**[⬇️ Mac app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[🌐 Web app for Netlify](#-put-it-online-with-netlify-for-iphone)** · **[🚀 Everything it can do](#-everything-travelbuddy-can-do)** · **[🛠️ Run it yourself](#run-it-without-the-ready-made-apps)**
 
 <br>
 
@@ -608,6 +608,8 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, komplett offline
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-14)**
+
+**[⬇️ Mac-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)**
 
 <br>
 
