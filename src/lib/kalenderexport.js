@@ -12,6 +12,7 @@
 // Ohne Komprimierung (Methode 0 „stored") braucht es dafür keine Bibliothek, nur
 // eine CRC32-Prüfsumme. Bei ein paar hundert Zeilen ist die Dateigröße egal.
 
+import { druckeHtml } from './ausgabe.js'
 import { katInfo } from './reisekalender.js'
 import { dauerText } from './wanderungen-daten.js'
 import { LOCALE, t, tn, istEn, jeSprache } from './i18n.js'
@@ -134,15 +135,9 @@ const DRUCK_CSS = `
   h3.kap { font-family:'Anton',sans-serif; text-transform:uppercase; font-size:15pt; margin:0 0 6px; page-break-after:avoid; }
 `
 
-/** Öffnet das Druckfenster. Muss SYNCHRON aus dem Klick heraus laufen (iOS). */
+/** Druckt in der App, ohne zweites Fenster, aus dem es am iPhone kein Zurück gäbe. */
 export function alsPdf(daten) {
-  const w = window.open('', '_blank')   // ZUERST, sonst blockt iOS (siehe belege.js)
-  if (!w) return false
-  const html = baueDruckHtml(daten)
-  w.document.open(); w.document.write(html); w.document.close()
-  const los = () => { try { w.focus(); w.print() } catch {} }
-  w.onload = los
-  setTimeout(los, 900)   // Fallback, falls onload nicht feuert
+  druckeHtml(baueDruckHtml(daten))
   return true
 }
 
@@ -248,7 +243,8 @@ function crc32(buf) {
   return (c ^ 0xffffffff) >>> 0
 }
 
-function zip(dateien) {
+/** ZIP ohne Komprimierung. inhalt: Text oder Bytes. */
+export function zipBlob(dateien, typ = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
   const enc = new TextEncoder()
   const teile = [], zentral = []
   let versatz = 0
@@ -256,7 +252,7 @@ function zip(dateien) {
   const u32 = (n) => [n & 255, (n >> 8) & 255, (n >> 16) & 255, (n >>> 24) & 255]
 
   for (const { name, inhalt } of dateien) {
-    const daten = enc.encode(inhalt)
+    const daten = typeof inhalt === 'string' ? enc.encode(inhalt) : inhalt
     const nb = enc.encode(name)
     const c = crc32(daten)
     // Lokaler Kopf (Signatur, Version, Flags, Methode 0, Zeit/Datum 0, CRC, Größen)
@@ -277,7 +273,7 @@ function zip(dateien) {
   const ende = new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0),
     ...u16(zentral.length), ...u16(zentral.length), ...u32(verzGroesse), ...u32(versatz), ...u16(0)])
 
-  return new Blob([...teile, ...verz, ende], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+  return new Blob([...teile, ...verz, ende], { type: typ })
 }
 
 // --- Tabelle ----------------------------------------------------------------
@@ -364,7 +360,7 @@ export function alsXlsx({ eintraege }, dateiname = t('Reisekalender') + '.xlsx')
 </cellXfs>
 </styleSheet>`
 
-  const blob = zip([
+  const blob = zipBlob([
     { name: '[Content_Types].xml', inhalt: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
 <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>

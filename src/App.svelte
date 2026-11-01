@@ -1,5 +1,5 @@
 <script>
-  import { t, tn, LOCALE, istEn } from './lib/i18n.js'
+  import { je, t, tn, LOCALE, istEn } from './lib/i18n.js'
   import { dezimal, ZWEI, eur, aud, zahl } from './lib/format.js'
   import Ort from './lib/Ort.svelte'
   import Uebersicht from './lib/Uebersicht.svelte'
@@ -149,7 +149,7 @@
   const UNTER = {
     plan: [['plan', t('Etappen')], ['plan/wanderungen', t('Wanderungen')], ['plan/karte', t('Karte')], ['plan/kalender', t('Kalender')]],
     orte: [['orte/sueden', t('Süden')], ['orte/norden', t('Norden')], ['orte/osten', t('Ostküste')], ['orte/meine', t('Meine Orte')], ['orte/routen', t('Routen-Ideen')]],
-    logbuch: [['logbuch', t('Tage')], ['logbuch/lesen', t('Lesen')], ['logbuch/tiere', t('Tierwelt')], ['logbuch/notizen', t('Notizen')]],
+    logbuch: [['logbuch', je('Einträge', 'Entries')], ['logbuch/lesen', t('Lesen')], ['logbuch/tiere', t('Tierwelt')], ['logbuch/notizen', t('Notizen')]],
     // Dieselben Namen und Zeichen wie im Mehr-Blatt am iPhone und in den Seitentiteln
     mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
   }

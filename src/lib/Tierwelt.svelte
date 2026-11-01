@@ -28,17 +28,18 @@
   }
   function eintragen(art = '') { formArt = art; gewaehlt = art || null }
 
-  function speichern(s, datum) {
+  function speichern(roh, datum, bis) {
     const d = datum || ''
+    const s = bis ? { ...roh, bis } : roh
     const ziel = zielEintrag(get(journal), d)
     if (ziel) updateJournalEintrag(ziel.id, { sichtungen: mitSichtung(ziel.sichtungen, s) })
     else {
-      const id = neuerJournalEintrag({ datum: d, ort: s.ort || '' })
+      const id = neuerJournalEintrag({ datum: d, bis: bis || undefined, ort: s.ort || '' })
       updateJournalEintrag(id, { sichtungen: [s] })
     }
     formArt = null
     gewaehlt = ART[s.art] ? s.art : null
-    zeigeToast(t('{wert} am {tagMonat} eingetragen', { wert: ART[s.art]?.name || s.name, tagMonat: tagMonat(d) }), 'ok')
+    zeigeToast(bis ? je(`${ART[s.art]?.name || s.name}: ${tagMonat(d)} bis ${tagMonat(bis)} eingetragen`, `${ART[s.art]?.name || s.name}: ${tagMonat(d)} to ${tagMonat(bis)} added`) : t('{wert} am {tagMonat} eingetragen', { wert: ART[s.art]?.name || s.name, tagMonat: tagMonat(d) }), 'ok')
   }
   const kurzOrt = (s) => s?.ort || ''
 </script>
@@ -110,7 +111,7 @@
             <li>
               {#if s.foto}<img src={s.foto} alt={t('Foto: {name}', { name: info.name })} loading="lazy" />{/if}
               <div class="tw-d-txt">
-                {#if s.datum}<button class="tw-d-tag" onclick={() => ontag(s.datum)}>{tagMonatJahr(s.datum)}</button>{/if}
+                {#if s.datum}<button class="tw-d-tag" onclick={() => ontag(s.datum)}>{s.bis ? `${tagMonat(s.datum)} – ${tagMonatJahr(s.bis)}` : tagMonatJahr(s.datum)}</button>{/if}
                 <span>{[s.ort, (s.anzahl || 1) > 1 ? t('{n} Tiere', { n: s.anzahl }) : '', s.strassenrand ? t('am Straßenrand') : ''].filter(Boolean).join(', ')}</span>
                 {#if s.notiz}<small>{s.notiz}</small>{/if}
               </div>

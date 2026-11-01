@@ -153,7 +153,7 @@ console.log('\n9  Kein Bildschirm ohne Weg zurück')
   p('Sprachwechsel läuft ohne Neuladen, Neuladen nur als Notanker', /catch \(e\) \{ console\.error\(e\); location\.reload\(\) \}/.test(i18n) && !/^\s*location\.reload\(\)$/m.test(i18n))
   p('Tabs ohne Bild der ganzen Seite', app.includes('r !== 0 && bildwechsel('))
   p('Backup wird vor dem Übernehmen gesäubert', app.includes('saeubereBackup(p)'))
-  p('Druckfenster maskieren eigene Texte und Fotos', fs.readFileSync(new URL('../src/lib/Packliste.svelte', import.meta.url), 'utf8').includes('${esc(i.text)}') && fs.readFileSync(new URL('../src/lib/Kollage.svelte', import.meta.url), 'utf8').includes('${esc(f.src)}'))
+  p('Druckfenster maskieren eigene Texte und Fotos', fs.readFileSync(new URL('../src/lib/Packliste.svelte', import.meta.url), 'utf8').includes('${esc(i.text)}') && fs.readFileSync(new URL('../src/lib/TagebuchLese.svelte', import.meta.url), 'utf8').includes('${esc(n.text)}') && !fs.readFileSync(new URL('../src/lib/Kollage.svelte', import.meta.url), 'utf8').includes('document.write'))
 }
 
 console.log(`\n${'═'.repeat(46)}\n  ${ok} bestanden · ${bad} gescheitert\n`)

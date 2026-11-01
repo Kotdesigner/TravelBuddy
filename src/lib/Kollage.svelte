@@ -1,5 +1,7 @@
 <script>
-  import { t, LOCALE, tn, istEn } from './i18n.js'
+  import { t, je, LOCALE, tn } from './i18n.js'
+  import Ausgabe from './Ausgabe.svelte'
+  import { A4_QUER, kollageBlaetter, sammleDatei } from './ausgabe.js'
   import { ZWEI } from './format.js'
   // Animierte Foto-Kollage über alle Logbuch-Fotos.
   //
@@ -48,70 +50,24 @@
   function zurueck() { clearTimeout(timer); runde = Math.max(0, runde - 1); haptic() }
   function pause() { laeuft = !laeuft; haptic() }
 
-  // ---------- Druck-/Exportfassung ----------
-  // Die Animation lässt sich nicht drucken. Für Fotobuch und PDF wird deshalb
-  // dasselbe Kachel-Layout statisch aufgebaut: je Vorlage eine Seite, alle Fotos
-  // der Reihe nach, mit Bildunterschrift. Öffnet ein eigenes Druckfenster.
-  function esc(t) {
-    return String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+  // ---------- Datei erstellen ----------
+  // Die Animation lässt sich nicht ausgeben. Für PDF und Bilder wird dasselbe Kachel-Layout statisch
+  // gerechnet: je Vorlage eine A4-Seite, alle Fotos der Reihe nach, mit Bildunterschrift.
+  let ausgabeAuf = $state(false)
+  const FORMATE = [
+    { id: 'pdf', name: 'PDF', text: je('Höchste Qualität, 300 dpi, zum Drucken und Teilen', 'Highest quality, 300 dpi, for printing and sharing') },
+    { id: 'jpeg', name: 'JPEG', text: je('Ein Bild je Seite, 300 dpi', 'One picture per page, 300 dpi') },
+    { id: 'tiff', name: 'TIFF', text: je('Ohne Verlust, für Fotobuch und Druckerei, große Datei', 'Lossless, for photo books and print shops, large file') },
+  ]
+  const dateiName = () => `TravelBuddy-${je('Kollage', 'Collage')}`
+  function erstelle(format, melde, gestoppt) {
+    return sammleDatei(format, A4_QUER, dateiName(), (blatt) => kollageBlaetter({
+      fotos, vorlagen: VORLAGEN, titel, untertitel: `${t('Foto-Kollage')} · ${tn(fotos.length, '{n} Aufnahme', '{n} Aufnahmen')}`,
+      holeBild: async (f) => ({ url: f.src }),
+      beschriftung: (f) => [f.ort, f.datum ? kurzDat(f.datum) : ''].filter(Boolean).join(' · '),
+    }, blatt, melde, gestoppt))
   }
-  function druckKollage() {
-    if (!fotos.length) return
-    haptic()
-    const seiten = []
-    let i = 0, runde = 0
-    while (i < fotos.length) {
-      const v = VORLAGEN[runde % VORLAGEN.length]
-      const kacheln = []
-      for (const feld of v) {
-        if (i >= fotos.length) break
-        const f = fotos[i++]
-        const bu = [f.ort, f.datum ? kurzDat(f.datum) : ''].filter(Boolean).join(' · ')
-        kacheln.push(`<figure class="ka" style="grid-column:${feld[0]}/span ${feld[2]};grid-row:${feld[1]}/span ${feld[3]}">
-          <img src="${esc(f.src)}">${bu ? `<figcaption>${esc(bu)}</figcaption>` : ''}</figure>`)
-      }
-      seiten.push(`<section class="seite"><div class="raster">${kacheln.join('')}</div>
-        <div class="seitenzahl">${seiten.length + 1}</div></section>`)
-      runde++
-    }
-    const w = window.open('', '_blank')
-    if (!w) return
-    w.document.write(`<!doctype html><html lang="${istEn ? 'en' : 'de'}"><head><meta charset="utf-8">
-      <title>${esc(titel)} — ${t('Kollage')}</title>
-      <style>
-        @page { size: A4 landscape; margin: 10mm; }
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: -apple-system, Segoe UI, Roboto, sans-serif; background: #fff; color: #2b2621; }
-        .deckblatt { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-          text-align: center; page-break-after: always; }
-        .deckblatt h1 { font-size: calc(42px * var(--schrift, 1)); margin: 0 0 6px; letter-spacing: 0.02em; }
-        .deckblatt p { font-size: calc(15px * var(--schrift, 1)); color: #6b6157; margin: 0; }
-        .seite { height: 100vh; page-break-after: always; position: relative; padding-bottom: 8mm; }
-        .seite:last-of-type { page-break-after: auto; }
-        .raster { height: 100%; display: grid; grid-template-columns: repeat(6, 1fr);
-          grid-template-rows: repeat(4, 1fr); gap: 4mm; }
-        .ka { margin: 0; position: relative; overflow: hidden; border-radius: 3mm; background: #efe6d6;
-          break-inside: avoid; page-break-inside: avoid; }
-        .ka img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .ka figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 8mm 3mm 2mm;
-          font-size: 9pt; font-weight: 700; color: #fff;
-          background: linear-gradient(to top, rgba(0,0,0,.6), transparent);
-          overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .seitenzahl { position: absolute; bottom: 0; right: 0; font-size: 8pt; color: #9a9086; }
-        @media print { .hinweis { display: none; } }
-        .hinweis { padding: 10px; text-align: center; font-size: calc(13px * var(--schrift, 1)); color: #6b6157; }
-      </style></head><body>
-      <div class="hinweis">Druckdialog öffnet sich. Für ein PDF im Dialog „Als PDF sichern" wählen. Querformat A4.</div>
-      <section class="deckblatt"><h1>${esc(titel)}</h1>
-        <p>${t('Foto-Kollage')} · ${tn(fotos.length, '{n} Aufnahme', '{n} Aufnahmen')}</p></section>
-      ${seiten.join('')}
-      </body></html>`)
-    w.document.close()
-    // Bilder erst laden lassen, sonst druckt der Dialog leere Kacheln.
-    const los = () => setTimeout(() => { w.focus(); w.print() }, 400)
-    if (w.document.readyState === 'complete') los()
-    else w.addEventListener('load', los)
-  }
+  function oeffneAusgabe() { haptic(); laeuft = false; ausgabeAuf = true }
 
   const kurzDat = (d) => {
     try { return new Date(d + 'T12:00').toLocaleDateString(LOCALE, { day: ZWEI, month: 'short' }) }
@@ -120,6 +76,7 @@
 </script>
 
 <svelte:window onkeydown={(e) => {
+  if (ausgabeAuf) return
   if (e.key === 'Escape') schliessen()
   else if (e.key === 'ArrowRight') weiter()
   else if (e.key === 'ArrowLeft') zurueck()
@@ -132,7 +89,7 @@
     <span class="ko-zahl">{tn(fotos.length, '{n} Foto', '{n} Fotos')}</span>
     <div class="ko-steuer">
       {#if fotos.length}
-        <button class="ko-druck" onclick={druckKollage} title={t('Statische Fassung für Fotobuch/PDF')}>{t('🖨️ Drucken / PDF')}</button>
+        <button class="ko-druck" onclick={oeffneAusgabe}>📄 {je('Erstellen', 'Create')}</button>
       {/if}
       <button onclick={zurueck} aria-label={t('zurück')} title={t('zurück (←)')}>‹</button>
       <button onclick={pause} aria-label={laeuft ? t('anhalten') : t('abspielen')} title={t('Leertaste')}>{laeuft ? '⏸' : '▶'}</button>
@@ -159,10 +116,12 @@
   {/if}
 
   <div class="ko-fuss">
-    {#if !REDUZIERT}{t('Wechselt alle {wert} s · ← → blättern · Leertaste anhalten · Esc schließt · „Drucken / PDF" liefert dieselbe Kollage statisch fürs Fotobuch', { wert: DAUER / 1000 })}
+    {#if !REDUZIERT}{je(`Wechselt alle ${DAUER / 1000} s · ← → blättern · Leertaste anhalten · Esc schließt · „Erstellen“ macht daraus eine Datei`, `Changes every ${DAUER / 1000} s · ← → browse · Space pauses · Esc closes · “Create” turns it into a file`)}
     {:else}{t('Bewegung ist in deinen Systemeinstellungen reduziert, deshalb steht die Kollage still. ← → blättern.')}{/if}
   </div>
 </div>
+
+{#if ausgabeAuf}<Ausgabe titel={je('Kollage erstellen', 'Create collage')} formate={FORMATE} {erstelle} quer schliessen={() => (ausgabeAuf = false)} />{/if}
 
 <style>
   .ko {

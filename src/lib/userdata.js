@@ -471,7 +471,7 @@ export function loescheCheckin(id) {
 }
 
 // ---------- Notizen ----------
-export function neueNotiz(typ, text) {
+export function neueNotiz(typ, text, etappeId = null) {
   const t = (text || '').trim()
   if (!t) return
   const d = new Date()
@@ -479,7 +479,7 @@ export function neueNotiz(typ, text) {
   // tsLokal = lokale Wanduhr AM ORT/ZEITPUNKT der Erfassung (ohne Zeitzone -> ändert sich
   // NICHT, wenn das Gerät später in eine andere Zeitzone wechselt). ts = absoluter Moment (UTC).
   const tsLokal = `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`
-  notizen.update((n) => [stempeln({ id: uid(), typ, text: t, erledigt: false, ts: d.toISOString(), tsLokal }), ...n])
+  notizen.update((n) => [stempeln({ id: uid(), typ, text: t, erledigt: false, ts: d.toISOString(), tsLokal, etappeId }), ...n])
 }
 export function toggleNotiz(id) {
   notizen.update((n) => n.map((e) => (e.id === id ? stempeln({ ...e, erledigt: !e.erledigt }) : e)))

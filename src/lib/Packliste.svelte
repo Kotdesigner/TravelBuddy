@@ -1,4 +1,5 @@
 <script>
+  import { druckeHtml } from './ausgabe.js'
   import { t, LOCALE, istEn } from './i18n.js'
   import { frage } from './dialog.js'
   import { packliste, togglePack, addPackItem, delPackItem, packZuruecksetzen, istAn } from './userdata.js'
@@ -50,10 +51,7 @@
     </style></head><body>${body}
     <p style="margin-top:24px;color:#999;font-size:11px">★ = überlebenswichtig im Outback · erstellt mit TravelBuddy</p>
     </body></html>`
-    const w = window.open('', '_blank')
-    if (!w) return
-    w.document.write(html); w.document.close(); w.focus()
-    setTimeout(() => w.print(), 300)
+    druckeHtml(html)
   }
 </script>
 

@@ -8,10 +8,10 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.5 · built for Western Australia**<br>
+**Version 1.6 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-15)**
+**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-16)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -47,6 +47,14 @@ No account, nothing to install from a store, and your data stays on your phone. 
 </table>
 
 ---
+
+## 📄 New in version 1.6
+
+**Create your journal as a real file.** TravelBuddy now builds a top quality PDF at 300 dpi right on your device. The collage also comes as JPEG or TIFF. After that you print, save, share or mail it, and a Back button always leads into the app.
+
+**Notes belong to your trip.** Assign a note to a leg, see its time stamp, and find it in the logbook by itself. One tap takes it out again.
+
+**Wildlife for days you missed.** Pick any day or a whole period for a sighting. The logbook tab is now called Entries.
 
 ## 📅 New in version 1.5
 
@@ -172,6 +180,7 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - 🧩 **Route ideas** for the south and north loops from Perth
 - 🥾 **Hikes** with status, date and photos
 - 📅 **Calendar views like on iPhone:** switch between list, month and year for a quick overview of the whole trip
+- 📄 **Journal as a 300 dpi PDF, collage as PDF, JPEG or TIFF**, then print, save, share or mail
 - 🗓️ **Calendar** as a print PDF and as a real Excel file
 - 🖨️ **Map as a print image** in any size
 - 📥 **Travel calendar import** that sorts bookings in by itself
@@ -591,6 +600,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - [x] **Version 1.3:** change any place picture, sources for every photo
 - [x] **Version 1.4:** Linux app, language choice on first launch, small picture buttons
 - [x] **Version 1.5:** calendar with list, month and year views
+- [x] **Version 1.6:** journal and collage as files, notes in the logbook, wildlife periods
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -612,10 +622,10 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, komplett offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.5 · entwickelt für Western Australia**<br>
+**Version 1.6 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-15)**
+**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-16)**
 
 **[⬇️ Mac-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)**
 
@@ -643,6 +653,14 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 </td>
 </tr>
 </table>
+
+## 📄 Neu in Version 1.6
+
+**Dein Tagebuch als echte Datei.** TravelBuddy erstellt jetzt direkt auf dem Gerät ein PDF in höchster Qualität mit 300 dpi. Die Kollage gibt es auch als JPEG oder TIFF. Danach druckst, sicherst, teilst oder mailst du die Datei, und ein Zurück-Knopf führt immer in die App.
+
+**Notizen gehören zur Reise.** Ordne eine Notiz einer Etappe zu, sieh ihren Zeitstempel und finde sie von selbst im Logbuch. Ein Tipp nimmt sie wieder heraus.
+
+**Tierwelt für verpasste Tage.** Wähle für eine Sichtung einen beliebigen Tag oder einen ganzen Zeitraum. Der Logbuch-Reiter heißt jetzt Einträge.
 
 ## 📅 Neu in Version 1.5
 
@@ -758,6 +776,7 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - 🧩 **Routen-Ideen** für die Süd- und Nord-Schleife ab Perth
 - 🥾 **Wanderungen** mit Stand, Datum und Fotos
 - 📅 **Kalender-Ansichten wie am iPhone:** Liste, Monat und Jahr umschalten, für den schnellen Überblick über die ganze Reise
+- 📄 **Tagebuch als PDF mit 300 dpi, Kollage als PDF, JPEG oder TIFF**, danach drucken, sichern, teilen oder mailen
 - 🗓️ **Kalender** als Druck-PDF und als echte Excel-Datei
 - 🖨️ **Karte als Druckbild** in jeder Größe
 - 📥 **Reisekalender-Import**, der Buchungen selbst einsortiert
@@ -1151,6 +1170,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 - [x] **Version 1.3:** jedes Ortsbild selbst ändern, Quellen zu jedem Foto
 - [x] **Version 1.4:** Linux-App, Sprachwahl beim ersten Start, kleine Bild-Knöpfe
 - [x] **Version 1.5:** Kalender mit den Ansichten Liste, Monat und Jahr
+- [x] **Version 1.6:** Tagebuch und Kollage als Datei, Notizen im Logbuch, Zeiträume in der Tierwelt
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

@@ -1,17 +1,29 @@
 <script>
-  import { t } from './i18n.js'
-  import { notizen, neueNotiz, toggleNotiz, loescheNotiz } from './userdata.js'
+  import { t, je } from './i18n.js'
+  import { notizen, neueNotiz, toggleNotiz, updateNotiz, loescheNotiz, reisen, gesamtStart, berechneKalender, ymd } from './userdata.js'
   import { NOTIZ_TYPEN as TYPEN, NOTIZ_TYP as TYP } from './notizen-typen.js'
 
   let filter = $state('alle')
   let neuTyp = $state('notiz')
   let neuText = $state('')
+  let neuEtappe = $state('')
+
+  // Etappen zur Auswahl. Vorgeschlagen wird die Etappe, in der die Reise gerade steht.
+  const etappen = $derived(berechneKalender($reisen, $gesamtStart).eintraege.map((e) => ({ id: e.reise.id, name: e.reise.name, von: ymd(e.von), bis: ymd(e.bis) })))
+  const etappeName = (id) => etappen.find((e) => e.id === id)?.name || ''
+  const heute = ymd(new Date())
+  let vorgeschlagen = false
+  $effect(() => {
+    if (vorgeschlagen || !etappen.length) return
+    vorgeschlagen = true
+    neuEtappe = etappen.find((e) => heute >= e.von && heute <= e.bis)?.id || ''
+  })
 
   const liste = $derived(filter === 'alle' ? $notizen : $notizen.filter((n) => n.typ === filter))
   const zaehler = $derived.by(() => { const z = {}; for (const n of $notizen) z[n.typ] = (z[n.typ] || 0) + 1; return z })
 
-  function add() { neueNotiz(neuTyp, neuText); neuText = '' }
-  function waehle(id) { filter = id; if (id !== 'alle') neuTyp = id }
+  function add() { neueNotiz(neuTyp, neuText, neuEtappe || null); neuText = '' }
+  function waehle(id) { filter = id; neuTyp = id === 'alle' ? 'notiz' : id }
 
   // Stabile lokale Wanduhr vom Erfassungs-Zeitpunkt (unabhängig von der aktuellen Gerätezeitzone).
   function lokalString(n) {
@@ -61,7 +73,10 @@
   </div>
 
   <div class="add">
-    <select bind:value={neuTyp} aria-label={t('Kategorie')}>{#each TYPEN as t}<option value={t.id}>{t.icon} {t.label}</option>{/each}</select>
+    <select bind:value={neuEtappe} aria-label={je('Etappe', 'Leg')}>
+      <option value="">{je('Keine Etappe', 'No leg')}</option>
+      {#each etappen as e (e.id)}<option value={e.id}>{e.name}</option>{/each}
+    </select>
     <input placeholder={t('Neuer Eintrag …')} bind:value={neuText} onkeydown={(e) => e.key === 'Enter' && add()} />
     <button class="add-btn" onclick={add} disabled={!neuText.trim()}>{t('+ Hinzufügen')}</button>
   </div>
@@ -75,7 +90,16 @@
           <button class="check" onclick={() => toggleNotiz(n.id)} aria-label={t('als erledigt markieren')} title={t('erledigt')}>{n.erledigt ? '☑' : '☐'}</button>
           <span class="ic" title={TYP[n.typ]?.label}>{TYP[n.typ]?.icon}</span>
           <span class="txt">{n.text}</span>
-          <span class="ts">{kurzTs(n)}</span>
+          <span class="meta">
+            <span class="ts">{kurzTs(n)}</span>
+            {#if etappen.length}
+              <select class="n-etappe" value={n.etappeId || ''} aria-label={je('Etappe', 'Leg')} onchange={(e) => updateNotiz(n.id, { etappeId: e.target.value || null })}>
+                <option value="">{je('Keine Etappe', 'No leg')}</option>
+                {#each etappen as e (e.id)}<option value={e.id}>{e.name}</option>{/each}
+              </select>
+            {:else if n.etappeId}<span class="ts">{etappeName(n.etappeId)}</span>{/if}
+          </span>
+          <button class="lb" class:aus={n.imLogbuch === false} aria-pressed={n.imLogbuch !== false} title={n.imLogbuch === false ? je('Nicht im Logbuch', 'Not in the logbook') : je('Steht im Logbuch', 'In the logbook')} aria-label={je('Im Logbuch zeigen', 'Show in the logbook')} onclick={() => updateNotiz(n.id, { imLogbuch: n.imLogbuch === false })}>📖</button>
           <button class="del" onclick={() => loescheNotiz(n.id)} aria-label={t('löschen')} title={t('löschen')}>✕</button>
         </li>
       {/each}
@@ -84,6 +108,10 @@
 </div>
 
 <style>
+  .meta { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex: none; max-width: 42%; }
+  .n-etappe { max-width: 100%; border: none; background: none; color: var(--muted); font-size: calc(12px * var(--schrift, 1)); text-align: right; }
+  .lb { flex: none; width: 44px; height: 44px; border: none; background: none; font-size: calc(17px * var(--schrift, 1)); cursor: pointer; }
+  .lb.aus { filter: grayscale(1); opacity: .35; }
   .kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
   .intro { color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); margin: 0; flex: 1 1 260px; }
   .btn.exp { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; padding: 8px 13px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 8px; cursor: pointer; }

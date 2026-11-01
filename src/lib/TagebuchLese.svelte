@@ -1,10 +1,14 @@
 <script>
-  import { t, LOCALE, tn, istEn } from './i18n.js'
+  import { t, je, LOCALE, tn } from './i18n.js'
+  import Ausgabe from './Ausgabe.svelte'
+  import { A4_HOCH, htmlBlaetter, sammleDatei } from './ausgabe.js'
   import { hinweis } from './dialog.js'
   // Lese-/Ansichtsmodus fürs Roadtrip-Tagebuch: dieselben Daten wie der Editor,
   // aber als „fertiges“ Reisemagazin — Deckblatt, Foto-Grid, Zitat-Blöcke,
   // Tages-Bilanz, Sortier-Umschalter und Druck/PDF-Export („Fotobuch“).
-  import { journal, notizen, wanderungen, buchungen, userData, gesamtStart } from './userdata.js'
+  import { journal, notizen, updateNotiz, wanderungen, buchungen, userData, gesamtStart } from './userdata.js'
+  import { verteileNotizen } from './notizen-verteilung.js'
+  import { zeigeToast } from './toast.js'
   import { etappenMitDatum, chronik, routenDerEtappe } from './plan.js'
   import { bereich, tagMonatJahr, tageText, zahl, dezimal } from './format.js'
   import { haversine, stimmigeLegs } from './routing.js'
@@ -39,9 +43,9 @@
   const SCHALTER = [
     ['etappen', '🧭', t('Etappen')], ['wanderungen', '🥾', t('Wanderungen')],
     ['orte', '📍', t('Orte')], ['kugeln', '🌍', t('Weltkugeln')], ['bilanz', '📊', t('Bilanz')],
-    ['geraet', '📷', t('Fotos vom Gerät')],
+    ['geraet', '📷', t('Fotos vom Gerät')], ['notizen', '🗒️', t('Notizen')],
   ]
-  const VORGABE = { etappen: true, wanderungen: true, orte: true, kugeln: true, bilanz: true, geraet: true }
+  const VORGABE = { etappen: true, wanderungen: true, orte: true, kugeln: true, bilanz: true, geraet: true, notizen: true }
   let zeige = $state((() => { try { return { ...VORGABE, ...JSON.parse(localStorage.getItem('tb-tagebuch-zeigen') || '{}') } } catch { return { ...VORGABE } } })())
   $effect(() => { try { localStorage.setItem('tb-tagebuch-zeigen', JSON.stringify(zeige)) } catch {} })
   const schalte = (id) => { zeige = { ...zeige, [id]: !zeige[id] } }
@@ -230,13 +234,6 @@
 
   const summe = (obj) => Object.values(obj || {}).reduce((a, b) => a + (Number(b) || 0), 0)
 
-  // Erfasstes lokales Datum einer Notiz (stabil, unabhängig von der aktuellen Gerätezeitzone).
-  function notizDatum(n) {
-    if (n.tsLokal) return n.tsLokal.slice(0, 10)
-    try { const d = new Date(n.ts); const p = (x) => String(x).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}` }
-    catch { return '' }
-  }
-
   function counterEintraege(fid, obj) {
     const opts = FELD[fid]?.optionen || []
     const emojiVon = (label) => opts.find((o) => o.label === label)?.emoji || '📝'
@@ -316,6 +313,12 @@
     return `<section class="kapitel bilanz" style="--kf:#8a3f16"><div class="kap-kopf"><div class="kap-txt"><h2>${esc(t('Bilanz'))}</h2><span>${esc(t('{titel} in Zahlen', { titel }))}</span></div></div><div class="bz-raster">${kacheln}</div>${fuss}</section>`
   }
 
+  const verteilung = $derived(zeige.notizen ? verteileNotizen($notizen, kapitel) : { tag: new Map(), etappe: new Map(), rest: [] })
+  function notizAbwaehlen(n) {
+    updateNotiz(n.id, { imLogbuch: false })
+    zeigeToast(je('Aus dem Logbuch genommen. Unter Notizen lässt sie sich wieder einschalten.', 'Removed from the logbook. You can switch it back on under Notes.'), 'ok')
+  }
+
   // ---------- Druck / PDF („Fotobuch“) ----------
   function faktenHTML(e, m) {
     const kompakt = m.felder.filter((f) => !istProsa(f) && hat(e, f.id))
@@ -387,7 +390,7 @@
       ${e.ort ? `<h3 class="t-ort">${esc(e.ort)}<span class="t-region">${reg}</span></h3>` : ''}
       ${stats ? `<div class="t-stats">${stats}</div>` : ''}</header>
       ${hatWert(e.text) ? `<p class="t-lead">${esc(e.text)}</p>` : ''}
-      ${gal}${fotosDazu}${mod}
+      ${gal}${fotosDazu}${mod}${notizHTML(verteilung.tag.get(e.datum), t('Notizen dieses Tages'))}
       ${nachspann}
       ${bil ? `<footer class="t-bilanz">${bil}</footer>` : ''}</article>`
   }
@@ -440,11 +443,16 @@
     }
     return h ? `<div class="kap-plan">${h}</div>` : ''
   }
+  function notizHTML(liste, kopf) {
+    if (!liste?.length) return ''
+    return `<section class="modul"><h3 class="m-titel"><span>🗒️</span> ${esc(kopf)}</h3>${liste.map((n) => `<p class="tn-print">${NOTIZ_TYP[n.typ]?.icon || ''} ${esc(n.text)}</p>`).join('')}</section>`
+  }
   function kapitelHTML(k) {
     const pl = plaene.get(k.id)
     const bild = zeige.kugeln && pl?.kugel ? kugelBild(pl.kugel, 230) : ''
     let h = `<section class="kapitel" style="--kf:${esc(k.farbe)}"><div class="kap-kopf"><div class="kap-txt"><h2>${esc(k.titel)}</h2>${k.untertitel ? `<span>${esc(k.untertitel)}${k.etappe ? ' · ' + esc(tageText(k.etappe.tage)) : ''}</span>` : ''}</div>${bild ? `<img class="kap-kugel" src="${bild}" alt="">` : ''}</div>`
     if (pl) h += planHTML(k, pl)
+    h += notizHTML(verteilung.etappe.get(k.id), je('Notizen zu dieser Etappe', 'Notes on this leg'))
     for (const tg of k.tage) {
       if (!tg.journal.length) { h += tagOhneEintragHTML(tg); continue }
       tg.journal.forEach((e, i) => { h += tagHTML(e, i === 0 ? reiseZeileHTML(tg) : '', i === tg.journal.length - 1 ? extrasHTML(tg) : '', i === 0 ? geraetHTML(tg.fotos) : '') })
@@ -452,15 +460,17 @@
     return h + '</section>'
   }
 
-  function druckFotobuch() {
-    // Fenster sofort öffnen (sonst blockt der Browser es), die Kugeln danach malen
-    const w = window.open('', '_blank')
-    if (!w) { hinweis(t('Bitte Pop-ups für diese Seite erlauben, dann klappt der Druck- und PDF-Export.'), { titel: t('Fenster blockiert') }); return }
-    w.document.open(); w.document.write(`<!doctype html><meta charset="utf-8"><title>${t('Tagebuch')}</title><p style="font:600 16px system-ui;padding:40px;color:#5a5248">${t('Dein Tagebuch wird vorbereitet …')}</p>`); w.document.close()
-    setTimeout(() => druckSchreiben(w), 30)
+  // Datei erstellen statt Druckfenster: am iPhone führt aus einem zweiten Fenster kein Weg zurück.
+  let ausgabeAuf = $state(false)
+  const AUSGABE_FORMATE = [{ id: 'pdf', name: 'PDF', text: je('Höchste Qualität, 300 dpi, zum Drucken und Teilen', 'Highest quality, 300 dpi, for printing and sharing') }]
+  function erstelleTagebuch(format, melde, gestoppt) {
+    return sammleDatei(format, A4_HOCH, `TravelBuddy-${je('Reisetagebuch', 'Travel-journal')}`, async (blatt) => {
+      const dokument = await baueDokument()
+      try { await htmlBlaetter(dokument, blatt, melde, gestoppt) }
+      finally { for (const u of druckBilder.values()) URL.revokeObjectURL(u); druckBilder = new Map() }
+    })
   }
-  async function druckSchreiben(w) {
-    for (const u of druckBilder.values()) URL.revokeObjectURL(u)
+  async function baueDokument() {
     druckBilder = await holeDruckBilder()
     const bilder = druckBilder
     const g = gesamt
@@ -480,20 +490,13 @@
         ${g.avgFly ? `<span>🪰 ${t('Ø {wert}/5 Fliegen', { wert: dezimal(g.avgFly, 1) })}</span>` : ''}
       </div>
     </section>`
-    const koerper = kapitel.map(kapitelHTML).join('') + bilanzHTML()
-    const html = `<!doctype html><html lang="${istEn ? 'en' : 'de'}"><head><meta charset="utf-8">
-      <title>${t('Reisetagebuch')} ${esc(titel)}</title><style>${DRUCK_CSS}</style></head>
-      <body>${cover}${koerper}</body></html>`
-    w.document.open(); w.document.write(html); w.document.close()
-    try { w.addEventListener('pagehide', () => { for (const u of bilder.values()) URL.revokeObjectURL(u) }) } catch {}
-    let gedruckt = false
-    const los = () => { if (gedruckt) return; gedruckt = true; try { w.focus(); w.print() } catch {} }
-    w.onload = los
-    setTimeout(los, 800) // Fallback, falls onload nicht feuert
+    const koerper = kapitel.map(kapitelHTML).join('') + notizHTML(verteilung.rest, je('Weitere Notizen', 'More notes')) + bilanzHTML()
+    return { css: DRUCK_CSS, body: cover + koerper, schriften: { [SCHRIFT]: 'font/woff2' } }
   }
 
+  const SCHRIFT = `${typeof location !== 'undefined' ? location.origin : ''}/fonts/anton.woff2`
   const DRUCK_CSS = `
-    @font-face { font-family:'Anton'; src:url('${typeof location !== 'undefined' ? location.origin : ''}/fonts/anton.woff2') format('woff2'); font-display:swap; }
+    @font-face { font-family:'Anton'; src:url('${SCHRIFT}') format('woff2'); font-display:swap; }
     * { box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     body { font-family:'Segoe UI',system-ui,sans-serif; color:#2b2621; margin:0; background:#fff; }
     @page { size:A4; margin:16mm 14mm; }
@@ -513,6 +516,7 @@
     .t-nr { font-size:11px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:#fff;
       background:var(--akz,#8a3f16); padding:2px 9px; border-radius:20px; }
     .t-datum { font-size:12px; color:#5a5248; font-weight:600; }
+    .tn-print { margin:3px 0; font-size:13px; }
     .t-reise-print { font-size:11px; font-weight:700; color:#8a3f16; margin-top:4px; }
     .t-route-print { display:flex; flex-wrap:wrap; gap:3px 6px; align-items:center; margin-top:5px; font-size:11px; font-weight:600; color:#5a5248; }
     .t-route-print span { background:#f4ece0; border:1px solid var(--line); border-radius:5px; padding:1px 7px; }
@@ -605,7 +609,7 @@
     {#if alleFotos.length}
       <button class="wz" onclick={() => (kollageAuf = true)}>{t('✨ Kollage ({length})', { length: alleFotos.length })}</button>
     {/if}
-    <button class="wz druck" onclick={druckFotobuch}>{t('🖨️ Als Tagebuch drucken oder PDF ({wert})', { wert: fassung === 'kurz' ? 'kurz' : t('ausführlich') })}</button>
+    <button class="wz druck" onclick={() => (ausgabeAuf = true)}>📄 {je('Tagebuch erstellen', 'Create journal')} ({fassung === 'kurz' ? je('kurz', 'short') : je('ausführlich', 'detailed')})</button>
     <button class="wz" onclick={() => (reihenfolge = reihenfolge === 'alt' ? 'neu' : 'alt')}>
       ⇅ {reihenfolge === 'alt' ? t('Älteste zuerst') : t('Neueste zuerst')}
     </button>
@@ -675,6 +679,7 @@
           {/each}
         </ul>
       {/if}
+    {@render notizListe(verteilung.etappe.get(k.id), je('Notizen zu dieser Etappe', 'Notes on this leg'))}
     {#each k.tage as tg (tg.datum)}
     {#if !tg.journal.length}
       <article class="tag" style="--akz:{k.farbe}">
@@ -689,7 +694,6 @@
       {@const stats = quickStats(e)}
       {@const bil = bilanz(e)}
       {@const fotos = e.fotos || []}
-      {@const tagNotizen = e.datum ? $notizen.filter((n) => notizDatum(n) === e.datum) : []}
       {@const rt = reiseTag(e)}
       <article class="tag" style="--akz:{akzent(e)}">
         <header class="t-kopf">
@@ -784,27 +788,19 @@
           {/if}
         {/each}
 
-        {#if tagNotizen.length}
-          <section class="modul tagnotizen">
-            <h3 class="m-titel"><span>🗒️</span> {t('Notizen dieses Tages')}</h3>
-            <ul class="tn-liste">
-              {#each tagNotizen as n}
-                <li class:erl={n.erledigt}>{NOTIZ_TYP[n.typ]?.icon} {n.text}</li>
-              {/each}
-            </ul>
-          </section>
-        {/if}
-
         {#if bil.length}
           <footer class="t-bilanz">{#each bil as b}<span>{b}</span>{/each}</footer>
         {/if}
         {/if}
+        {#if ji === 0}{@render notizListe(verteilung.tag.get(e.datum), t('Notizen dieses Tages'))}{/if}
         {#if ji === tg.journal.length - 1}{@render extras(tg)}{/if}
       </article>
     {/each}
     {/each}
     </section>
     {/each}
+
+    {@render notizListe(verteilung.rest, je('Weitere Notizen', 'More notes'))}
 
     {#if zeige.bilanz && bilanzK.length}
       <section class="kapitel bilanz" style="--kf: var(--brand)" aria-labelledby="bilanz-titel">
@@ -829,6 +825,19 @@
     {/if}
   </div>
 {/if}
+
+{#snippet notizListe(liste, kopf)}
+  {#if liste?.length}
+    <section class="modul tagnotizen">
+      <h3 class="m-titel"><span>🗒️</span> {kopf}</h3>
+      <ul class="tn-liste">
+        {#each liste as n (n.id)}
+          <li class:erl={n.erledigt}><span>{NOTIZ_TYP[n.typ]?.icon} {n.text}</span><button class="tn-weg" aria-label={je('Aus dem Logbuch nehmen', 'Remove from the logbook')} title={je('Aus dem Logbuch nehmen', 'Remove from the logbook')} onclick={() => notizAbwaehlen(n)}>✕</button></li>
+        {/each}
+      </ul>
+    </section>
+  {/if}
+{/snippet}
 
 {#snippet geraetGalerie(liste)}
   {#if liste.length}
@@ -857,6 +866,7 @@
   {/each}
 {/snippet}
 
+{#if ausgabeAuf}<Ausgabe titel={je('Tagebuch erstellen', 'Create journal')} formate={AUSGABE_FORMATE} erstelle={erstelleTagebuch} schliessen={() => (ausgabeAuf = false)} />{/if}
 {#if kollageAuf}<Kollage fotos={alleFotos} titel={t('Mein Reisetagebuch: ') + titel} schliessen={() => (kollageAuf = false)} />{/if}
 
 <style>
@@ -995,7 +1005,8 @@
   .fakt { font-size: calc(13px * var(--schrift, 1)); color: var(--ink); }
   .fakt b { color: var(--brand-text); }
   .tn-liste { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
-  .tn-liste li { font-size: calc(14px * var(--schrift, 1)); color: var(--ink); }
+  .tn-liste li { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: calc(14px * var(--schrift, 1)); color: var(--ink); }
+  .tn-weg { flex: none; width: 44px; height: 44px; border: none; background: none; color: var(--muted); font-size: calc(14px * var(--schrift, 1)); cursor: pointer; }
   .tn-liste li.erl { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); text-decoration: line-through; }
   .chip {
     font-size: calc(12.5px * var(--schrift, 1)); font-weight: 600; color: var(--ink); background: var(--flaeche-2);

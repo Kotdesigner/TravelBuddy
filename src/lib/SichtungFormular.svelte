@@ -1,5 +1,5 @@
 <script>
-  import { t } from './i18n.js'
+  import { t, je } from './i18n.js'
   // Eine Tier-Sichtung erfassen: Art (Liste oder frei), Anzahl, Ort, optional Standort,
   // Notiz und Foto. Speichert nichts selbst, sondern gibt die fertige Sichtung zurück.
   import { get } from 'svelte/store'
@@ -24,13 +24,15 @@
   let notiz = $state('')
   let foto = $state('')
   let datum = $state(start.datum || heuteYmd())
+  let zeitraum = $state(false)
+  let bis = $state('')
   let fotoFehler = $state('')
   let standortMeldung = $state('')
   let holt = $state(false)
   let fotoEingabe = $state(null)
 
   const entwurf = $derived(neueSichtung({ art, name: eigenName, anzahl, ort: ort.trim(), lat, lon, notiz: notiz.trim(), foto }))
-  const gueltig = $derived(sichtungGueltig(entwurf) && (!mitDatum || /^\d{4}-\d{2}-\d{2}$/.test(datum)))
+  const gueltig = $derived(sichtungGueltig(entwurf) && (!mitDatum || /^\d{4}-\d{2}-\d{2}$/.test(datum)) && (!zeitraum || bis >= datum))
 
   async function standortHolen() {
     holt = true; standortMeldung = ''
@@ -53,7 +55,7 @@
   }
   function speichern() {
     if (!gueltig) return
-    onspeichern(entwurf, mitDatum ? datum : null)
+    onspeichern(entwurf, mitDatum ? datum : null, zeitraum && bis > datum ? bis : null)
   }
 </script>
 
@@ -79,7 +81,11 @@
   </div>
 
   {#if mitDatum}
-    <label class="sf-feld">{t('Datum')}<input type="date" bind:value={datum} /></label>
+    <div class="sf-datum">
+      <label class="sf-feld">{zeitraum ? je('Von', 'From') : t('Datum')}<input type="date" bind:value={datum} /></label>
+      {#if zeitraum}<label class="sf-feld">{je('Bis', 'To')}<input type="date" min={datum} bind:value={bis} /></label>{/if}
+    </div>
+    <button type="button" class="sf-zeitraum" aria-pressed={zeitraum} onclick={() => { zeitraum = !zeitraum; if (zeitraum && !bis) bis = datum }}>{zeitraum ? je('Nur ein Tag', 'Single day') : je('📅 Zeitraum wählen', '📅 Choose a period')}</button>
   {/if}
 
   <label class="sf-feld">Wo?<input type="text" bind:value={ort} placeholder={t('Ort, Strand, Straße')} /></label>
@@ -111,6 +117,9 @@
 </form>
 
 <style>
+  .sf-datum { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sf-datum .sf-feld { flex: 1 1 140px; min-width: 0; }
+  .sf-zeitraum { align-self: flex-start; min-height: 44px; padding: 0 12px; border: 1px solid var(--line-stark); border-radius: 10px; background: var(--btn-flaeche); color: var(--btn-ink); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
   .sf { display: flex; flex-direction: column; gap: 12px; padding: 12px; background: var(--flaeche); border-radius: var(--radius-m); border: 1px solid var(--line); }
   .sf-titel { margin: 0; font-size: calc(14px * var(--schrift, 1)); }
   .sf-arten { display: flex; flex-wrap: wrap; gap: 6px; }
