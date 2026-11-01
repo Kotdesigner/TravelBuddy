@@ -8,10 +8,10 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.4 · built for Western Australia**<br>
+**Version 1.5 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-14)**
+**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-15)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -47,6 +47,10 @@ No account, nothing to install from a store, and your data stays on your phone. 
 </table>
 
 ---
+
+## 📅 New in version 1.5
+
+**The calendar now switches like on iPhone.** Choose list, month or year. The year shows every leg in colour at a glance, tap a month to open it and tap a day to see its events.
 
 ## 🖼️ New in version 1.4
 
@@ -165,6 +169,7 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - ▶️ **"Play trip"** animates your whole journey on the map
 - 🧩 **Route ideas** for the south and north loops from Perth
 - 🥾 **Hikes** with status, date and photos
+- 📅 **Calendar views like on iPhone:** switch between list, month and year for a quick overview of the whole trip
 - 🗓️ **Calendar** as a print PDF and as a real Excel file
 - 🖨️ **Map as a print image** in any size
 - 📥 **Travel calendar import** that sorts bookings in by itself
@@ -583,6 +588,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - [x] **Version 1.2:** choose the small or large map right in the app
 - [x] **Version 1.3:** change any place picture, sources for every photo
 - [x] **Version 1.4:** Linux app, language choice on first launch, small picture buttons
+- [x] **Version 1.5:** calendar with list, month and year views
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -604,10 +610,10 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, komplett offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.4 · entwickelt für Western Australia**<br>
+**Version 1.5 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-14)**
+**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-15)**
 
 **[⬇️ Mac-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)**
 
@@ -635,6 +641,10 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 </td>
 </tr>
 </table>
+
+## 📅 Neu in Version 1.5
+
+**Der Kalender schaltet jetzt um wie am iPhone.** Wähle Liste, Monat oder Jahr. Das Jahr zeigt alle Etappen farbig auf einen Blick, ein Monat lässt sich antippen, und ein Tag öffnet seine Termine.
 
 ## 🖼️ Neu in Version 1.4
 
@@ -743,6 +753,7 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - ▶️ **„Reise abspielen“** lässt die ganze Reise auf der Karte ablaufen
 - 🧩 **Routen-Ideen** für die Süd- und Nord-Schleife ab Perth
 - 🥾 **Wanderungen** mit Stand, Datum und Fotos
+- 📅 **Kalender-Ansichten wie am iPhone:** Liste, Monat und Jahr umschalten, für den schnellen Überblick über die ganze Reise
 - 🗓️ **Kalender** als Druck-PDF und als echte Excel-Datei
 - 🖨️ **Karte als Druckbild** in jeder Größe
 - 📥 **Reisekalender-Import**, der Buchungen selbst einsortiert
@@ -1135,6 +1146,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 - [x] **Version 1.2:** kleine oder große Karte direkt in der App wählen
 - [x] **Version 1.3:** jedes Ortsbild selbst ändern, Quellen zu jedem Foto
 - [x] **Version 1.4:** Linux-App, Sprachwahl beim ersten Start, kleine Bild-Knöpfe
+- [x] **Version 1.5:** Kalender mit den Ansichten Liste, Monat und Jahr
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

@@ -1,5 +1,5 @@
 <script>
-  import { t, LOCALE, tn } from './i18n.js'
+  import { t, je, LOCALE, tn } from './i18n.js'
   import { ZWEI } from './format.js'
   import { eintragTage } from './plan.js'
   import { reisen, gesamtStart, berechneKalender, verschiebeReise, wanderungen, journal, buchungen, ymd } from './userdata.js'
@@ -7,10 +7,20 @@
   import { katInfo } from './reisekalender.js'
   import BelegKnoepfe from './BelegKnoepfe.svelte'
   import { baueEintraege, alsPdf, alsXlsx } from './kalenderexport.js'
+  import KalenderRaster from './KalenderRaster.svelte'
 
   let { kalender = [], box = '' } = $props()
 
   const plan = $derived(berechneKalender($reisen, $gesamtStart))
+
+  // Ansicht je Gerät merken: Liste, Monat oder Jahr
+  const ANSICHT_KEY = 'tb-kalender-ansicht'
+  const ANSICHTEN = [['liste', je('Liste', 'List')], ['monat', je('Monat', 'Month')], ['jahr', je('Jahr', 'Year')]]
+  let ansicht = $state((() => { try { const a = localStorage.getItem(ANSICHT_KEY); return a === 'monat' || a === 'jahr' ? a : 'liste' } catch { return 'liste' } })())
+  function setzeAnsicht(a) {
+    ansicht = a
+    try { localStorage.setItem(ANSICHT_KEY, a) } catch {}
+  }
 
   const fmt = (d) => d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' })
   const fmtTag = (s) => {
@@ -57,6 +67,10 @@
     const von = ymd(e.von), bis = ymd(e.bis)
     return new Set(logbuchTage.filter((d) => d >= von && d <= bis)).size
   }
+
+  // Dieselben Daten für die Monats- und Jahresansicht
+  const rasterEtappen = $derived(plan.eintraege.map((e) => ({ id: e.reise.id, name: e.reise.name, farbe: e.reise.farbe, von: ymd(e.von), bis: ymd(e.bis) })))
+  const rasterTermine = $derived([...gebucht.map((b) => ({ id: b.id, datum: b.datum, icon: katInfo(b.kat).icon, titel: b.titel, rand: b.sub })), ...termine])
 
   // Was in keine Etappe fällt — sonst verschwände es lautlos.
   const ausserhalb = $derived.by(() => {
@@ -119,6 +133,16 @@
   {#if plan.eintraege.length === 0}
     <p class="hint">{t('Noch keine Etappen. Im Plan eine Etappe mit Datum anlegen oder den Reisekalender laden, dann steht sie hier.')}</p>
   {:else}
+    <div class="ansicht-wahl" role="group" aria-label={je('Ansicht', 'View')}>
+      {#each ANSICHTEN as [a, name]}
+        <button class:an={ansicht === a} aria-pressed={ansicht === a} onclick={() => setzeAnsicht(a)}>{name}</button>
+      {/each}
+    </div>
+    {#if ansicht !== 'liste'}
+      {#key ansicht}
+        <KalenderRaster {ansicht} etappen={rasterEtappen} termine={rasterTermine} {logbuchTage} onmonat={() => setzeAnsicht('monat')} />
+      {/key}
+    {:else}
     <div class="zeit">
       {#each plan.eintraege as e, i (e.reise.id)}
         {@const eTermine = inEtappe(e)}
@@ -164,6 +188,7 @@
         </div>
       {/each}
     </div>
+    {/if}
     <div class="summe">{t('Gesamt: {gesamtTage} Tage · {fmt} – {fmt2}', { gesamtTage: plan.gesamtTage, fmt: fmt(plan.start), fmt2: fmt(plan.ende) })}</div>
 
     {#if ausserhalb.length || logbuchAusserhalb}
@@ -206,6 +231,9 @@
 </details>
 
 <style>
+  .ansicht-wahl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-bottom: 10px; padding: 3px; border-radius: 12px; background: var(--flaeche-2); }
+  .ansicht-wahl button { min-height: 44px; border: none; border-radius: 10px; background: none; color: var(--muted); font-size: calc(14px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+  .ansicht-wahl button.an { background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.25); }
   .plan { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; }
   .plan-kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
   .titel { font-size: calc(17px * var(--schrift, 1)); font-weight: 800; color: var(--brand-text); }
