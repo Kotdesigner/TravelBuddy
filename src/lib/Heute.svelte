@@ -15,6 +15,7 @@
   import FahrtHeute from './FahrtHeute.svelte'
   import FlugKarte from './FlugKarte.svelte'
   import WarnLage from './WarnLage.svelte'
+  import FotoLage from './FotoLage.svelte'
   import { fluege, flugspeicher, uhr } from './flug-dienst.js'
   import { flugImFokus, umstiege, dringendeMeldungen } from './flug.js'
   import { je } from './i18n.js'
@@ -27,6 +28,11 @@
   const termine = $derived(($buchungen?.events || []).filter((b) => !b.platzhalter))
   const am = (d) => termine.filter((b) => b.datum === d)
   const naechste = $derived(termine.filter((b) => b.datum >= heute).sort((a, b) => a.datum.localeCompare(b.datum)).slice(0, 3))
+  // Ohne Standort gilt der erste Stopp der laufenden oder nächsten Etappe
+  const fotoOrt = $derived.by(() => {
+    const st = (s.etappe?.reise || eintraege.find((e) => e.bis >= heute)?.reise)?.stops?.find((x) => x.lat != null)
+    return st ? { lat: st.lat, lon: st.lon, name: st.name } : null
+  })
   const wandAm = (d) => $wanderungen.filter((w) => w.datum === d)
   const heuteGeschrieben = $derived($journal.some((j) => deckt(j, heute)))
   const vorbItems = $derived([...VORBEREITUNG.flatMap((g) => g.items), ...($vorbereitung.custom || [])])
@@ -116,6 +122,7 @@
       <span aria-hidden="true">⛔</span><span><b>{tn(sperrAnzahl, '{n} Straßensperrung', '{n} Straßensperrungen')}</b> {sperrRoute ? t('auf deinen Routen oder in der Nähe') : t('in der Nähe deiner Orte')}</span><span class="ht-pfeil" aria-hidden="true">›</span>
     </button>
   {/if}
+  <FotoLage ersatz={fotoOrt} />
 </section>
 
 <style>

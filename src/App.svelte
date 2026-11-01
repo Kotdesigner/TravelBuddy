@@ -74,6 +74,7 @@
   import { ladeBildNachweis } from './lib/bild-nachweis.js'
   import { zeigeOrteHinweis } from './lib/orte-hinweis.js'
   import NetzRahmen from './lib/NetzRahmen.svelte'
+  import TempGlimmen from './lib/TempGlimmen.svelte'
   import { starteErlebt } from './lib/erlebt.js'
   import Design from './lib/Design.svelte'
   import { aktualisiereStimmung, pruefeSonnenuntergang } from './lib/stimmung.js'
@@ -858,11 +859,26 @@
   })
   let sprachFrage = $state(spracheOffen())
   $effect(() => { if (ansicht.tab === 'orte' && !$einfuehrung && !sprachFrage) zeigeOrteHinweis() })
+  // Leisten darunter halten genau an der Unterkante des Kopfes, auch wenn er schrumpft
+  function merkeKopf(el) {
+    let alt = 0, wartet = false
+    const miss = () => {
+      wartet = false
+      const h = Math.round(el.getBoundingClientRect().bottom)
+      if (h > 0 && h !== alt) { alt = h; document.documentElement.style.setProperty('--kopf-h', h + 'px') }
+    }
+    const bald = () => { if (!wartet) { wartet = true; requestAnimationFrame(miss) } }
+    const ro = new ResizeObserver(bald); ro.observe(el)
+    addEventListener('scroll', bald, { passive: true })
+    miss()
+    return { destroy() { ro.disconnect(); removeEventListener('scroll', bald) } }
+  }
 </script>
 
 <RoutenDienst orte={[...orte, ...$eigeneOrte]} />
 
 <NetzRahmen />
+<TempGlimmen />
 <div class="app">
 <div class="sl-mac">
   <Seitenleiste {ansicht} unterpunkte={UNTER} {geh} onSuche={zurSuche} onBackup={onExport}
@@ -881,7 +897,7 @@
 </header>
 {:else}
   <!-- Titel, Zurück und Untermenü bleiben beim Scrollen gemeinsam stehen -->
-  <div class="kopf-fest">
+  <div class="kopf-fest" use:merkeKopf>
   <!-- Unter Mehr gibt es am iPhone sonst nichts zum Zurückgehen; bleibt beim Scrollen stehen -->
   {#if ansicht.tab === 'mehr' && ansicht.unter}
     <div class="zurueck-leiste"><button class="zurueck-knopf" onclick={() => zurueck('mehr')}><span aria-hidden="true">‹</span> {t('Zurück')}</button></div>
@@ -1088,7 +1104,7 @@
 
   {:else if ansicht.tab === 'orte'}
     {#if orteUnter !== 'meine' && orteUnter !== 'routen'}
-      <div class="orte-neu"><button class="btn" onclick={() => (ortNeuOffen = true)}>{t('+ Ort hinzufügen')}</button></div>
+      <div class="orte-neu"><button class="bedien-knopf" onclick={() => (ortNeuOffen = true)}>{je('Ort hinzufügen', 'Add place')}</button></div>
     {/if}
     {#if filternAktiv}
     <div class="filter-hinweis" role="status">
@@ -1424,7 +1440,9 @@
     max-width: 1100px; width: 100%; margin: 0 auto; display: flex; align-items: center; gap: 12px;
     padding: 26px 28px 4px; padding-top: max(26px, calc(env(safe-area-inset-top, 0px) + 10px));
   }
-  .kopf-fest { position: sticky; top: 0; z-index: 30; background: var(--bg); }
+  .kopf-fest { position: sticky; top: 0; z-index: 30; padding-bottom: 8px; background: var(--bg); }
+  /* Ohne Untermenü (Mac) bräuchte der Titel sonst Luft zur stehenden Leiste darunter */
+  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) { .kopf-fest { padding-bottom: 22px; } }
   /* Inhalt verblasst kurz vor dem Kopf. Nur ein schmaler Streifen, das Lesen bleibt ungestört. */
   .kopf-fest::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 22px; pointer-events: none; background: linear-gradient(var(--bg), transparent); }
   :global(html[data-ohne-verblassen]) .kopf-fest::after { display: none; }
@@ -1493,10 +1511,7 @@
     .nach-oben { display: none !important; }
   }
   .anchor { scroll-margin-top: 96px; }
-  .abschnitt {
-    font-size: calc(24px * var(--schrift, 1)); color: var(--brand-text); font-weight: 800; margin: 30px 0 12px;
-    border-bottom: 3px solid var(--brand-2); padding-bottom: 8px;
-  }
+  .abschnitt { font-size: calc(21px * var(--schrift, 1)); color: var(--brand-text); font-weight: 800; margin: 22px 0 12px; }
   .abschnitt .count { font-size: calc(14px * var(--schrift, 1)); color: var(--muted); font-weight: 600; }
   .abschnitt .warnzahl { font-size: calc(13px * var(--schrift, 1)); color: #fff; background: #c0392b; font-weight: 700; padding: 2px 10px; border-radius: 12px; vertical-align: middle; }
   /* Roadtrip-Cockpit (Kennzahl-Kacheln) */
@@ -1572,16 +1587,16 @@
   .b-item { display: inline-block; background: #faf1e4; border-radius: 8px; padding: 2px 9px; margin: 0 5px 5px 0; color: var(--muted); }
   .b-item b { color: var(--warn-text); }
 
-  .region { margin: 16px 0 24px; }
+  .region { margin: 14px 0 26px; }
+  /* Die Leiste bleibt stehen, bis die Region zu Ende ist. Dann schiebt die nächste sie weg. */
   .region-titel {
-    color: #fff; font-weight: 700; font-size: calc(15px * var(--schrift, 1)); padding: 9px 16px; border-radius: 8px 8px 0 0;
-    background: #7a5c8e; display: flex; align-items: center; gap: 8px;
+    position: sticky; top: var(--kopf-h, 98px); z-index: 31; display: flex; align-items: center; gap: 8px; min-height: 44px; box-sizing: border-box; margin-bottom: 12px; padding: 6px 14px 6px 18px;
+    border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink);
+    font-size: calc(15px * var(--schrift, 1)); font-weight: 800; box-shadow: 0 3px 10px rgba(0, 0, 0, .16);
   }
-  .region-titel .anz { font-size: calc(12px * var(--schrift, 1)); background: rgba(0,0,0,0.28); padding: 1px 8px; border-radius: 10px; }
-  .grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px;
-    background: var(--card); border: 1px solid var(--line); border-top: none; padding: 16px; border-radius: 0 0 8px 8px;
-  }
+  .region-titel::before { content: ''; position: absolute; left: 8px; top: 11px; bottom: 11px; width: 3px; border-radius: 2px; background: var(--brand); }
+  .region-titel .anz { margin-left: auto; color: var(--muted); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
   .info { color: var(--muted); padding: 40px 0; text-align: center; }
   .fehler { color: var(--danger-text); }
 
@@ -1591,7 +1606,7 @@
   .btn { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 8px 13px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 8px; cursor: pointer; }
   .btn:disabled { opacity: 0.4; }
   .mo-card { display: flex; flex-direction: column; }
-  .orte-neu { display: flex; justify-content: flex-end; margin: 4px 0 -6px; }
+  .orte-neu { display: grid; margin: 4px 0 0; }
   .mo-del { margin-top: 2px; min-height: 32px; padding: 0 6px 0 0; display: inline-flex; align-items: center; font-size: calc(12px * var(--schrift, 1)); color: var(--danger-text); background: none; border: none; cursor: pointer; align-self: flex-start; }
 
   .nach-oben {
@@ -1608,15 +1623,15 @@
     .hero { padding: 30px 16px 30px; padding-top: calc(env(safe-area-inset-top, 0px) + 34px); }
     .hero h1 { font-size: calc(28px * var(--schrift, 1)); }
     .wrap { padding: 18px 13px 90px; }
-    .abschnitt { font-size: calc(20px * var(--schrift, 1)); }
+    .abschnitt { font-size: calc(18px * var(--schrift, 1)); }
     /* Orte am Handy ZWEISPALTIG. Eine Spalte hieß: knapp zwei Orte je Bildschirm,
        und bei 142 Orten scrollt man sich tot. Zwei Kacheln nebeneinander zeigen
        fünf bis sechs auf einmal — man überfliegt sie, statt sie abzuarbeiten.
        minmax(0,1fr) statt 1fr: sonst sprengen lange Ortsnamen die Spalte. */
-    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 12px; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     /* Mit großer Schrift passen zwei Karten nicht mehr nebeneinander (darstellung.js entscheidet) */
     :global(html[data-eine-spalte]) .grid { grid-template-columns: minmax(0, 1fr); }
-    .region-titel { font-size: calc(13px * var(--schrift, 1)); }
+    .region-titel { font-size: calc(14px * var(--schrift, 1)); }
     /* Kennzahl-Kacheln: 2 kleine nebeneinander, große (Quiz) volle Breite */
     .cockpit { grid-template-columns: 1fr 1fr; }
     .fb-grid { grid-template-columns: 1fr 1fr; }

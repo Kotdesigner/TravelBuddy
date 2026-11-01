@@ -1,7 +1,7 @@
 // Reisekalender als PDF und als Excel-Datei.
 //
 // Zwei Ausgaben aus derselben Quelle:
-//   alsPdf()  — A4-Druckfassung zum Mitnehmen, nach Etappen und Tagen gegliedert.
+//   alsDokument()  — A4-Fassung für die PDF-Datei, nach Etappen und Tagen gegliedert.
 //   alsXlsx() — echte .xlsx zum Weiterarbeiten, eine Zeile je Termin.
 //
 // Warum eine echte xlsx und kein CSV: CSV kann keine Spaltenbreiten, keine fette
@@ -12,7 +12,6 @@
 // Ohne Komprimierung (Methode 0 „stored") braucht es dafür keine Bibliothek, nur
 // eine CRC32-Prüfsumme. Bei ein paar hundert Zeilen ist die Dateigröße egal.
 
-import { druckeHtml } from './ausgabe.js'
 import { katInfo } from './reisekalender.js'
 import { dauerText } from './wanderungen-daten.js'
 import { LOCALE, t, tn, istEn, jeSprache } from './i18n.js'
@@ -45,7 +44,7 @@ export function baueEintraege({ plan, buchungen, wanderungen = [], journal = [] 
     out.push({
       datum: e.datum, zeit: '', kat: e.kat, quelle: 'Buchung',
       titel: e.titel, details: e.sub, ref: e.ref,
-      belege: e.docs.map((d) => d.label).join(', '),
+      belege: (e.docs || []).map((d) => d.label).join(', '),
       icon: katInfo(e.kat).icon, art: katInfo(e.kat).label,
       special: e.special || '', emoji: e.emoji || '',
     })
@@ -135,10 +134,10 @@ const DRUCK_CSS = `
   h3.kap { font-family:'Anton',sans-serif; text-transform:uppercase; font-size:15pt; margin:0 0 6px; page-break-after:avoid; }
 `
 
-/** Druckt in der App, ohne zweites Fenster, aus dem es am iPhone kein Zurück gäbe. */
-export function alsPdf(daten) {
-  druckeHtml(baueDruckHtml(daten))
-  return true
+/** Die A4-Fassung für die PDF-Datei: Schrift, Stil und Inhalt. */
+export function alsDokument(daten) {
+  const anton = `${location.origin}/fonts/anton.woff2`
+  return { css: DRUCK_CSS, body: baueDruckHtml(daten).match(/<body>([\s\S]*)<\/body>/)[1], schriften: { [anton]: 'font/woff2' } }
 }
 
 /** Die Druckfassung als HTML — herausgelöst, damit sie ohne Drucker prüfbar ist. */

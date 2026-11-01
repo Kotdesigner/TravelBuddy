@@ -6,7 +6,9 @@
   import { dauerText } from './wanderungen-daten.js'
   import { katInfo } from './reisekalender.js'
   import BelegKnoepfe from './BelegKnoepfe.svelte'
-  import { baueEintraege, alsPdf, alsXlsx } from './kalenderexport.js'
+  import { baueEintraege, alsDokument, alsXlsx } from './kalenderexport.js'
+  import { A4_HOCH, htmlBlaetter, sammleDatei } from './ausgabe.js'
+  import Ausgabe from './Ausgabe.svelte'
   import KalenderRaster from './KalenderRaster.svelte'
 
   let { kalender = [], box = '' } = $props()
@@ -85,18 +87,22 @@
   })
 
   // ---- Export ----
-  // Beide Ausgaben aus derselben Quelle. alsPdf() ruft window.open als ERSTES auf,
-  // deshalb muss der Klick direkt hier landen — ein await davor, und iOS blockt.
+  // Beide Ausgaben aus derselben Quelle.
   const exportDaten = () => baueEintraege({
     plan, buchungen: $buchungen, wanderungen: $wanderungen, journal: $journal,
   })
   let exportMeldung = $state('')
+  // PDF als Datei wie beim Tagebuch: kein Druckfenster, immer ein Weg zurück in die App
+  let ausgabeAuf = $state(false)
+  const AUSGABE_FORMATE = [{ id: 'pdf', name: 'PDF', text: je('Höchste Qualität, 300 dpi, zum Speichern und Teilen', 'Highest quality, 300 dpi, for saving and sharing') }]
   function pdfExport() {
-    const d = exportDaten()
-    if (!d.eintraege.length) { exportMeldung = t('Noch nichts zu drucken.'); return }
+    if (!exportDaten().eintraege.length) { exportMeldung = t('Noch nichts zu exportieren.'); return }
+    exportMeldung = ''
+    ausgabeAuf = true
+  }
+  function erstellePdf(format, melde, gestoppt) {
     const zeitraum = plan.eintraege.length ? t('{fmt} – {fmt2} · {gesamtTage} Tage', { fmt: fmt(plan.start), fmt2: fmt(plan.ende), gesamtTage: plan.gesamtTage }) : ''
-    if (!alsPdf({ ...d, zeitraum })) exportMeldung = t('Bitte Pop-ups für diese Seite erlauben.')
-    else exportMeldung = ''
+    return sammleDatei(format, A4_HOCH, `TravelBuddy-${je('Reisekalender', 'Travel-calendar')}`, (blatt) => htmlBlaetter(alsDokument({ ...exportDaten(), zeitraum }), blatt, melde, gestoppt))
   }
   function xlsxExport() {
     const d = exportDaten()
@@ -122,10 +128,10 @@
 <div class="plan">
   <div class="plan-kopf">
     <div class="titel">{t('🧭 Mein Gesamtplan')}</div>
-    <div class="kopf-akt">
-      <button class="exp" onclick={pdfExport} title={t('Druckfassung A4 \\u2014 nach Abschnitten und Tagen')}>{t('📄 PDF')}</button>
-      <button class="exp" onclick={xlsxExport} title={t('Eine Zeile je Termin, mit Filter und Spaltenbreiten')}>{t('📊 Excel')}</button>
-    </div>
+  </div>
+  <div class="bedien-zwei kopf-akt">
+    <button class="bedien-knopf" onclick={pdfExport} title={je('A4-Datei nach Abschnitten und Tagen', 'A4 file by sections and days')}>{je('Als PDF exportieren', 'Export as PDF')}</button>
+    <button class="bedien-knopf" onclick={xlsxExport} title={t('Eine Zeile je Termin, mit Filter und Spaltenbreiten')}>{je('Als Excel exportieren', 'Export as Excel')}</button>
   </div>
 
   {#if exportMeldung}<div class="exp-meldung">{exportMeldung}</div>{/if}
@@ -230,6 +236,8 @@
   {#if box}<div class="cbox">{@html box}</div>{/if}
 </details>
 
+{#if ausgabeAuf}<Ausgabe titel={je('Kalender als PDF', 'Calendar as PDF')} formate={AUSGABE_FORMATE} erstelle={erstellePdf} schliessen={() => (ausgabeAuf = false)} />{/if}
+
 <style>
   .ansicht-wahl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-bottom: 10px; padding: 3px; border-radius: 12px; background: var(--flaeche-2); }
   .ansicht-wahl button { min-height: 44px; border: none; border-radius: 10px; background: none; color: var(--muted); font-size: calc(14px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
@@ -238,10 +246,7 @@
   .plan-kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
   .titel { font-size: calc(17px * var(--schrift, 1)); font-weight: 800; color: var(--brand-text); }
   .start { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
-  .kopf-akt { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .exp { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 6px 11px; border: 1px solid var(--line-stark);
-    background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 8px; cursor: pointer; }
-  .exp:active { background: var(--flaeche-2); }
+  .kopf-akt { margin-bottom: 12px; }
   .exp-meldung { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--ok-text); margin-bottom: 8px; }
   .hint { color: var(--muted); font-size: calc(13px * var(--schrift, 1)); background: var(--flaeche); padding: 12px; border-radius: 8px; margin: 0; }
   .zeit { display: flex; flex-direction: column; gap: 8px; }

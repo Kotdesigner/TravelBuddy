@@ -62,6 +62,27 @@ export function pruefeSonnenuntergang(pos, jetzt = new Date()) {
   zeigeToast(je('🌅 Noch rund 30 Minuten Licht', '🌅 About 30 minutes of light left'), 'ok')
 }
 
+/** Position der Zahl am Rand in Prozent der Höhe: 45 Grad oben, minus 5 Grad unten. */
+export const tempHoehe = (t) => 14 + (45 - Math.max(-5, Math.min(45, t))) * 1.4
+const SILBER = [201, 206, 214], ROT = [235, 52, 44], BLAU = [52, 128, 240]
+/** Bei 20 Grad silbern, nach oben immer röter, nach unten immer blauer. */
+export function tempFarbe(t) {
+  const warm = t >= 20, ziel = warm ? ROT : BLAU
+  const k = Math.min(1, Math.abs(t - 20) / (warm ? 20 : 25))
+  return `rgb(${SILBER.map((w, i) => Math.round(w + (ziel[i] - w) * k)).join(', ')})`
+}
+
+/** Aktuelle Temperatur am Ort, nur mit Netz. Ein höchstens 30 Minuten alter Wert reicht. */
+export async function temperaturJetzt(pos, jetzt = Date.now()) {
+  if (!pos || (typeof navigator !== 'undefined' && navigator.onLine === false)) return null
+  const alt = gemerkt()
+  if (alt?.temp != null && jetzt - alt.zeit < FRISCH && Math.abs(alt.lat - pos.lat) + Math.abs(alt.lon - pos.lon) < 0.5) return alt.temp
+  try {
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.lat}&longitude=${pos.lon}&current=temperature_2m`)
+    return r.ok ? (await r.json()).current.temperature_2m : null
+  } catch { return null }
+}
+
 /** Holt das Wetter am Ort, höchstens alle 30 Minuten. pos: { lat, lon } oder null. */
 export async function aktualisiereStimmung(pos, jetzt = Date.now()) {
   if (!pos || !get(effekte).stimmung) return

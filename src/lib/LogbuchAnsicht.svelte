@@ -73,11 +73,11 @@
 </script>
 
 <div class="lb">
-  <div class="lb-werkzeug">
+  <div class="bedien lb-werkzeug">
     <FotoImport {orte}>
       {#snippet neben()}
-        <button class="btn lb-tiere" onclick={() => geh('logbuch/tiere')}>
-          <span aria-hidden="true">🦘</span> {t('Tierwelt')} <span class="lb-tiere-zahl">{t('{gesehen} von {gesamt}', { gesehen: tiere.gesehen, gesamt: tiere.gesamt })}</span>
+        <button class="bedien-knopf lb-tiere" onclick={() => geh('logbuch/tiere')}>
+          {t('Tierwelt')} <span class="lb-tiere-zahl">{t('{gesehen} von {gesamt}', { gesehen: tiere.gesehen, gesamt: tiere.gesamt })}</span>
         </button>
       {/snippet}
     </FotoImport>
@@ -180,7 +180,11 @@
   .lb { display: flex; flex-direction: column; gap: 12px; }
   .lb-werkzeug > :global(.fi) { width: 100%; }
   .lb-nachtragen { display: block; margin: 2px 0 8px auto; min-height: 36px; padding: 0 4px; border: none; background: none; color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
-  .lb-tiere { display: inline-flex; align-items: center; gap: 6px; }
+  .lb-werkzeug { margin-bottom: 0; }
+  .lb-werkzeug :global(.fi) { gap: 10px; align-items: stretch; }
+  .lb-werkzeug :global(.fi-zeile) { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: stretch; }
+  .lb-werkzeug :global(.fi-zeile .fi-knopf) { justify-content: center; min-width: 0; padding: 6px 12px; border: 1px solid var(--line-stark); border-radius: 10px; background: none; color: var(--ink); font-size: calc(14px * var(--schrift, 1)); font-weight: 700; line-height: 1.25; }
+  .lb-werkzeug :global(.fi-zeile .fi-knopf span) { display: none; }
   .lb-tiere-zahl { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
   .lb-k { margin: 0; font-size: calc(14.5px * var(--schrift, 1)); color: var(--muted); background: var(--flaeche); border-radius: var(--radius-m); padding: 12px 14px; }
   .lb-leer { background: var(--flaeche); border-radius: var(--radius-m); padding: 18px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }

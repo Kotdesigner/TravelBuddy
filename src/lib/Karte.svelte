@@ -1,4 +1,5 @@
 <script>
+  import TourenWahl from './TourenWahl.svelte'
   import { t, LOCALE } from './i18n.js'
   import { dezimal } from './format.js'
   import { fehlerText } from './fehlertext.js'
@@ -268,6 +269,7 @@
   //   Plakette ab Zoom 10 — weißer Kreis mit Farbring und Emoji; ab Zoom 13 mit Namen.
   //            Wo es eng wird, gewinnt die wichtigere Kategorie (`rang`); der Punkt darunter
   //            bleibt trotzdem sichtbar — es geht also nichts verloren.
+  const tourenWahl = $derived(reisen.map((r) => ({ id: r.id, name: r.name, farbe: r.farbe || '#c0392b', reise: r, flug: ['flug', 'bahn'].includes(r.art || 'auto'), zusatz: r.route ? `${r.route.km} km` : '' })))
   const POI_KAT = [
     // Farben so gewählt, dass die vier Standard-Kategorien klar auseinanderzuhalten sind
     // (erste Fassung: Rastplatz hellblau neben Wasser blau — auf der Karte kaum unterscheidbar).
@@ -826,18 +828,12 @@
       <div class="teil-pille warn">{t('📴 Mehr Details gibt es hier nur mit „{name}“, das liegt nicht auf diesem Gerät', { name: fehltHier.name })}</div>
     {/if}
   </div>
-  {#if reisen.length}
-    <div class="route-sel">
-      <span class="rs-lbl">{t('🛣️ Routen:')}</span>
-      <button class="rs-chip alle" class:an={gewaehlteReisen.size === reisen.length && reisen.length > 0}
-        onclick={alleReisen}>{t('Alle')}</button>
-      <button class="rs-chip" class:an={gewaehlteReisen.size === 0} onclick={keineReisen}>{t('Keine')}</button>
-      {#each reisen as r}
-        <button class="rs-chip" class:an={istGewaehlt(r.id)} onclick={() => toggleReise(r.id)}
-          style="--f:{r.farbe || '#c0392b'}">
-          <span class="rs-strich" class:flug={['flug', 'bahn'].includes(r.art || 'auto')}></span>{r.name}{#if r.route}&nbsp;· {r.route.km} km{/if}
-        </button>
-      {/each}
+  <div class="karten-fuss">
+    {#if reisen.length}
+      <TourenWahl touren={tourenWahl} istAn={istGewaehlt} umschalten={toggleReise} alle={alleReisen} keine={keineReisen}
+        alleAn={gewaehlteReisen.size === reisen.length} keineAn={gewaehlteReisen.size === 0}>
+        {#snippet unten()}
+          <div class="rs-meldungen">
       {#if gewaehlteReisen.size === 1}
         {@const rr = reisen.find((x) => gewaehlteReisen.has(x.id))}
         {#if rr?.route}
@@ -855,21 +851,28 @@
       {#if routeHinweis.ohneLinie.length}
         <span class="rs-warn">{t('⚠️ Ohne Linie: {kurzListe}. Dafür braucht es mindestens zwei Stopps mit Koordinaten.', { kurzListe: kurzListe(routeHinweis.ohneLinie) })}</span>
       {/if}
-    </div>
-  {/if}
-  <div class="poi-bar">
-    <span class="poi-titel">{t('Zeigen:')}</span>
-    <button class="poi-chip orte-chip" class:an={orteZeigen} onclick={() => (orteZeigen = !orteZeigen)}
-      title={orteZeigen ? t('Vorschlagsorte ausblenden, besuchte bleiben') : t('Alle Orte deiner Sammlung zeigen')}>
-      {t('📍 Orte')}{#if !orteZeigen && anzahlDokumentiert}&nbsp;{t('· nur {anzahlDokumentiert} besuchte', { anzahlDokumentiert })}{/if}
-    </button>
-    <span class="poi-trenner"></span>
-    {#each POI_KAT as kat}
-      <button class="poi-chip" class:an={poiAktiv[kat.k]} onclick={() => togglePoi(kat.k)} title={kat.label}
-        style="--pf:{kat.farbe}" aria-pressed={poiAktiv[kat.k]}>
-        <span class="poi-punkt"></span>{kat.emoji} {kat.label}{#if poiAktiv[kat.k] && poiGeladen}<span class="poi-zahl" style="color:{schriftAuf(kat.farbe)}">{(poiImBild[kat.k] || 0).toLocaleString(LOCALE)}</span>{/if}
-      </button>
-    {/each}
+          </div>
+        {/snippet}
+      </TourenWahl>
+    {/if}
+    <div class="bedien poi-feld">
+      <div class="bedien-block">
+        <span class="bedien-titel">{je('Orte auf der Karte', 'Places on the map')}</span>
+        <button class="bedien-wahl" class:an={orteZeigen} aria-pressed={orteZeigen} onclick={() => (orteZeigen = !orteZeigen)}
+          title={orteZeigen ? t('Vorschlagsorte ausblenden, besuchte bleiben') : t('Alle Orte deiner Sammlung zeigen')}>
+          {je('Alle Orte', 'All places')}{#if !orteZeigen && anzahlDokumentiert}<span class="bedien-zahl">{je(`nur ${anzahlDokumentiert} besuchte`, `only ${anzahlDokumentiert} visited`)}</span>{/if}
+        </button>
+      </div>
+      <div class="bedien-block">
+        <span class="bedien-titel">{je('Unterwegs', 'On the road')}</span>
+        <div class="bedien-raster">
+        {#each POI_KAT as kat}
+          <button class="poi-chip" class:an={poiAktiv[kat.k]} onclick={() => togglePoi(kat.k)} title={kat.label}
+            style="--pf:{kat.farbe}" aria-pressed={poiAktiv[kat.k]}>
+            <span class="poi-punkt"></span><span class="poi-name">{kat.label}</span>{#if poiAktiv[kat.k] && poiGeladen}<span class="poi-zahl" style="color:{schriftAuf(kat.farbe)}">{(poiImBild[kat.k] || 0).toLocaleString(LOCALE)}</span>{/if}
+          </button>
+        {/each}
+        </div>
     {#if poiGeladen && poiEinAn && poiSumme === 0}
       {#if poiAndere.length}
         <span class="poi-leer">{t('Im Ausschnitt nichts davon, aber {join}. Oben einblenden oder herauszoomen.', { join: poiAndere.map((kat) => `${kat.emoji} ${poiImBild[kat.k]}`).join(' · ') })}</span>
@@ -877,12 +880,14 @@
         <span class="poi-leer">{t('Hier sind keine Punkte gespeichert. Tankstellen & Co. gibt es offline für ganz WA, den Raum Melbourne, Cairns und die Whitsundays.')}</span>
       {/if}
     {/if}
-  </div>
-  <p class="hinweis">
+      </div>
+      <p class="bedien-text hinweis">
     {#if aktiv}{t('🔍 Details hier:')} <b>{detailStufe(aktiv)}</b> <span class="teil-name">({aktiv.name})</span> · {/if}
     {#if $online}{t('Gelände-Schattierung online')}{:else}{t('Gelände nur online')}{/if}
     {t('· Pins = deine {length} Orte · Tankstellen & Co.: Punkte immer, Symbole ab Zoom 10, Namen ab 13. Antippen zeigt Details.', { length: orte.filter((o) => o.lat != null).length })}
   </p>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -914,23 +919,20 @@
   .wl-kreis { border: 2px dashed #1f6fd1; border-radius: 50%; }
   .teil-pille.warn { color: var(--warn-text, #a05a1e); background: var(--warn-flaeche, #fdf1e0); }
   .teil-name { color: var(--muted); }
-  .route-sel { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 10px; background: var(--flaeche-2); border-top: 1px solid var(--line); }
   .rs-warn { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--warn-text, #a05a1e); background: var(--warn-flaeche, #fdf1e0);
     border: 1px solid var(--warn-linie, #e8c9a0); border-radius: 14px; padding: 4px 10px; }
   .rs-info { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
-  .poi-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; padding: 8px 10px; background: var(--flaeche-2); border-top: 1px solid var(--line); }
-  .poi-titel { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); margin-right: 2px; }
-  .poi-chip {
-    font-size: calc(12px * var(--schrift, 1)); font-weight: 600; padding: 4px 9px; border-radius: 14px; cursor: pointer;
-    border: 1px solid var(--line-stark); background: var(--card); color: var(--muted); white-space: nowrap;
-  }
-  .poi-chip { display: inline-flex; align-items: center; gap: 4px; }
-  .poi-chip.an { background: var(--card); color: var(--ink); border-color: var(--pf); box-shadow: inset 0 0 0 1px var(--pf); }
+  .karten-fuss { display: flex; flex-direction: column; gap: 8px; padding: 8px; border-top: 1px solid var(--line); background: var(--flaeche); }
+  .poi-feld { margin: 0; }
+  .rs-meldungen { display: flex; flex-direction: column; gap: 6px; }
+  .rs-meldungen:empty { display: none; }
+  .poi-chip { display: flex; align-items: center; gap: 8px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: none; color: var(--muted); font-size: calc(14px * var(--schrift, 1)); font-weight: 600; text-align: left; cursor: pointer; }
+  .poi-chip.an { border-color: var(--pf); color: var(--ink); }
+  .poi-name { flex: 1; min-width: 0; }
   .poi-punkt { width: 9px; height: 9px; border-radius: 50%; background: var(--pf); border: 1.5px solid #fff; box-shadow: 0 0 0 1px var(--pf); opacity: .35; }
   .poi-chip.an .poi-punkt { opacity: 1; }
   .poi-zahl { font-size: calc(12px * var(--schrift, 1)); font-weight: 800; color: #fff; background: var(--pf); border-radius: 8px; padding: 0 5px; min-width: 14px; text-align: center; }
   .poi-leer { font-size: calc(12px * var(--schrift, 1)); color: var(--warn-text, #a05a1e); width: 100%; }
-  .hinweis { margin: 0; padding: 8px 12px; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); background: var(--flaeche); }
   :global(.pin) {
     width: 14px; height: 14px; background: #c0392b; border: 2px solid #fff;
     border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 1px 3px rgba(0,0,0,0.4); cursor: pointer;
@@ -961,22 +963,6 @@
   .offline-zeile select { font-size: calc(12px * var(--schrift, 1)); padding: 4px 6px; border-radius: 7px; border: 1px solid var(--line); background: var(--eingabe); }
   .exp-msg { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: #1a7f37; width: 100%; }
   /* Routenauswahl: antippbare Chips statt Einfachauswahl — mehrere gleichzeitig. */
-  .rs-lbl { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
-  .rs-chip {
-    display: inline-flex; align-items: center; gap: 5px;
-    min-height: 32px; padding: 5px 11px; border-radius: 16px;
-    border: 1px solid var(--line); background: var(--card); color: var(--ink);
-    font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; cursor: pointer; white-space: nowrap;
-  }
-  .rs-chip.an { border-color: var(--f, var(--brand)); box-shadow: inset 0 0 0 1px var(--f, var(--brand)); }
-  .rs-chip.alle.an { background: var(--brand); border-color: var(--brand); color: #fff; }
-  .rs-strich { width: 14px; height: 3px; border-radius: 2px; background: var(--f); flex-shrink: 0; }
-  .rs-strich.flug {
-    border-radius: 0;
-    background: repeating-linear-gradient(to right, var(--f) 0 4px, transparent 4px 7px);
-  }
-  .orte-chip { font-weight: 800; }
-  .poi-trenner { width: 1px; height: 20px; background: var(--line); margin: 0 2px; }
   /* Besuchte Orte heben sich ab — sie bleiben auch bei ausgeblendeten Vorschlägen. */
   :global(.pin.besucht) { background: #2f7a63; box-shadow: 0 0 0 2px #fff, 0 1px 4px rgba(0,0,0,.35); }
 </style>

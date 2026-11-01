@@ -10,7 +10,7 @@
   // • Klick auf Route/Nummer öffnet ein Infofenster: Kennzahlen, Fotos zum
   //   Durchblättern, Logbuch-Einträge, Link zur Reise.
   // • Klick auf die Karte (bzw. ⤢) vergrößert sie auf Vollbild.
-  // Die Karte ist eine Weltkugel. Beim Öffnen fliegt sie von
+  // V4 (Wunsch 10.10.): die Karte ist eine Weltkugel. Beim Öffnen fliegt sie von
   // Deutschland nach Australien und zeichnet dabei die Flüge nach. „Reise abspielen“
   // fährt die Etappen der Reihe nach ab. Herangezoomt wird sie wie bisher zur flachen
   // Karte mit Straßen (OpenStreetMap, nur online). Offline bleibt die gemalte Kugel.
@@ -22,8 +22,9 @@
   import { weltGeojson, gradnetz, verdichte } from './globus.js'
   import { gesamtStart } from './userdata.js'
   import { etappenMitDatum, routenDerEtappe } from './plan.js'
+  import TourenWahl from './TourenWahl.svelte'
   import { bereich, dezimal, zahl } from './format.js'
-  import { artDerTour, logbuchTouren, verlauf, punktBei, spitzenZoom, anzoom, zoomBei, dauerFuer, kmText, NAH_ZOOM, FAHRZEUG } from './reisefahrt.js'
+  import { artDerTour, logbuchTouren, verlauf, punktBei, spitzenZoom, anzoom, zoomBei, dauerFuer, kmText, glaette, nahZoom, auszoomAnteil, FAHRZEUG } from './reisefahrt.js'
   import ReiseFilm from './ReiseFilm.svelte'
 
   let {
@@ -539,7 +540,8 @@
   async function fahre(tour, e, nr) {
     const art = tour.art || artDerTour(tour.reise)
     // Boote fahren über Wasser, nicht die berechnete Straßenroute
-    const v = verlauf(art === 'boot' ? tour.stops.map((x) => [x.lon, x.lat]) : tour.geo)
+    const roh = verlauf(art === 'boot' ? tour.stops.map((x) => [x.lon, x.lat]) : tour.geo)
+    const v = glaette(roh), nah = nahZoom(art)
     const start = punktBei(v, 0), breitePx = Math.min(breite(), hoehe())
     beschriftung = { titel: tour.name || e.reise?.name, zeit: bereich(e.von, e.bis), farbe: tour.farbe }
     const mitte = map.getCenter()
@@ -550,21 +552,21 @@
       if (nr !== animNr) return false
     }
     const z0 = map.getZoom()
-    if (!(await zeitlauf(1900, nr, (p) => map.jumpTo({ center: [start.lon, start.lat], zoom: z0 + (NAH_ZOOM - z0) * anzoom(p), bearing: 0, pitch: 0 })))) return false
-    if (v.coords.length < 2 || v.gesamt < 0.2) return nr === animNr
+    if (!(await zeitlauf(1900, nr, (p) => map.jumpTo({ center: [start.lon, start.lat], zoom: z0 + (nah - z0) * anzoom(p), bearing: 0, pitch: 0 })))) return false
+    if (v.coords.length < 2 || roh.gesamt < 0.2) return nr === animNr
     const el = document.createElement('div')
     el.className = 'rk-fahrzeug'
     el.innerHTML = `<svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path d="${FAHRZEUG[art]}" fill="#fff" fill-rule="evenodd" stroke="#14100c" stroke-width="1"/></svg>`
     fahrzeugWeg()
     fahrzeug = new maplibregl.Marker({ element: el, rotationAlignment: 'map', pitchAlignment: 'map', rotation: start.richtung }).setLngLat([start.lon, start.lat]).addTo(map)
-    beschriftung = { ...beschriftung, km: kmText(v.gesamt, zahl) }
+    beschriftung = { ...beschriftung, km: kmText(roh.gesamt, zahl) }
     await new Promise((r) => setTimeout(r, 700))
-    const spitze = spitzenZoom(v.gesamt, breitePx, start.lat)
-    const ok = await zeitlauf(dauerFuer(v.gesamt) * 1000, nr, (p) => {
+    const spitze = Math.min(nah, spitzenZoom(roh.gesamt, breitePx, start.lat)), aus = auszoomAnteil(art, roh.gesamt)
+    const ok = await zeitlauf(dauerFuer(roh.gesamt) * 1000, nr, (p) => {
       const q = p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2
       const o = punktBei(v, q)
       fahrzeug?.setLngLat([o.lon, o.lat]).setRotation(o.richtung)
-      map.jumpTo({ center: [o.lon, o.lat], zoom: zoomBei(q, NAH_ZOOM, spitze) })
+      map.jumpTo({ center: [o.lon, o.lat], zoom: zoomBei(p, nah, spitze, aus) })
     })
     if (ok) await new Promise((r) => setTimeout(r, 450))
     fahrzeugWeg()
@@ -693,7 +695,7 @@
 
   const beruehrung = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches
   function toggleGross() { gross = !gross; haptic() }
-  // Direkt zur Etappe bzw. Route im Plan, nicht nur an den Anfang der Liste
+  // V4: direkt zur Etappe bzw. Route im Plan, nicht nur an den Anfang der Liste
   function zurReise() {
     const r = gewaehlt?.reise
     const ziel = !r ? 'plan' : r.typ === 'route' ? (r.etappeId ? `plan/etappe/${r.etappeId}/${r.id}` : 'plan/route/' + r.id) : 'plan/etappe/' + r.id
@@ -708,16 +710,18 @@
   <div class="rk-kopf">
     <h2 class="rk-titel">{t('🌍 Meine Reise-Karte')}</h2>
     <div class="rk-werkzeug">
-      {#if bereit && touren.length}
-        <button class="rk-spiel" class:an={spielt} onclick={abspielen} aria-pressed={spielt}>{spielt ? t('⏹ Anhalten') : t('▶ Reise abspielen')}</button>
-        <button class="rk-spiel rk-film" onclick={oeffneFilm} aria-haspopup="dialog" title={t('Reise als Video aufnehmen')}>{t('🎬 Film')}</button>
-      {/if}
-      <button class="rk-btn" onclick={umschalten} title={flach ? t('Als Weltkugel zeigen') : t('Als flache Karte zeigen')} aria-label={flach ? t('Als Weltkugel zeigen') : t('Als flache Karte zeigen')}>{flach ? '🌍' : '🗺️'}</button>
       <span class="rk-zahl">{tn(touren.length, '{n} Tour', '{n} Touren')}</span>
+      <button class="rk-btn" onclick={umschalten} title={flach ? t('Als Weltkugel zeigen') : t('Als flache Karte zeigen')} aria-label={flach ? t('Als Weltkugel zeigen') : t('Als flache Karte zeigen')}>{flach ? '🌍' : '🗺️'}</button>
       <button class="rk-btn" onclick={toggleGross} title={gross ? 'verkleinern' : t('vergrößern')}
         aria-label={gross ? t('Karte verkleinern') : t('Karte vergrößern')}>{gross ? '✕' : '⤢'}</button>
     </div>
   </div>
+  {#if bereit && touren.length}
+    <div class="bedien-zwei rk-aktionen">
+      <button class="bedien-knopf" class:haupt={spielt} onclick={abspielen} aria-pressed={spielt}>{spielt ? t('⏹ Anhalten') : t('▶ Reise abspielen')}</button>
+      <button class="bedien-knopf" onclick={oeffneFilm} aria-haspopup="dialog" title={t('Reise als Video aufnehmen')}>{t('🎬 Film')}</button>
+    </div>
+  {/if}
 
   <div class="rk-buehne">
     <div class="rk-sterne" aria-hidden="true"></div>
@@ -734,7 +738,7 @@
       <div class="rk-lade fehler">{fehler}</div>
     {/if}
     {#if touren.length === 0 && bereit}
-      <div class="rk-hinweis">{t('Sobald du im')} <b>{t('Plan')}</b> {t('eine Etappe oder Route mit Stopps anlegst, erscheint sie hier, mit nummerierten Stationen zum Antippen.')}</div>
+      <div class="rk-hinweis"><span>{t('Sobald du im')} <b>{t('Plan')}</b> {t('eine Etappe oder Route mit Stopps anlegst, erscheint sie hier, mit nummerierten Stationen zum Antippen.')}</span></div>
     {/if}
     {#if !gross && bereit && touren.length}
       <button class="rk-lupe" onclick={toggleGross}>{t('⤢ Karte vergrößern')}</button>
@@ -817,15 +821,10 @@
 
   {#if touren.length}
     <div class="rk-legende">
-      <button class="rk-leg rk-alle" class:an={zeigtAlle} onclick={alleSicht}>{t('Alle')}</button>
-      <button class="rk-leg" class:an={nichtsSichtbar} onclick={keineSicht}>{t('Keine')}</button>
-      {#each touren as t}
-        <button class="rk-leg" class:an={istSichtbar(t.id)} class:offen={gewaehlt?.id === t.id}
-          onclick={() => toggleSicht(t.id)} ondblclick={() => waehle(t.id)}>
-          <span class="rk-linie" class:flug={t.flug} style="--f:{t.farbe}"></span>{t.name}
-        </button>
-      {/each}
-      <span class="rk-tipp">{t('Antippen blendet ein/aus · Route auf der Karte antippen für Details')}</span>
+      <TourenWahl {touren} istAn={istSichtbar} offen={(id) => gewaehlt?.id === id} umschalten={toggleSicht} antippen={waehle}
+        alle={alleSicht} keine={keineSicht} alleAn={zeigtAlle} keineAn={nichtsSichtbar}>
+        {#snippet unten()}<p class="rk-tipp">{t('Antippen blendet ein/aus · Route auf der Karte antippen für Details')}</p>{/snippet}
+      </TourenWahl>
     </div>
   {/if}
 </div>
@@ -874,12 +873,6 @@
     background: radial-gradient(circle at 34% 28%, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 26%, rgba(0,0,0,0) 48%, rgba(2,12,30,0.30) 80%, rgba(2,10,26,0.52) 100%);
     transition: opacity 400ms ease-out;
   }
-  .rk-spiel {
-    min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--line-stark); background: var(--card);
-    color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); font-weight: 800; cursor: pointer;
-  }
-  .rk-spiel.an { background: var(--brand); color: #fff; border-color: var(--brand); }
-  .rk-film { padding: 0 12px; }
   .rk-werkzeug { flex-wrap: wrap; justify-content: flex-end; }
   .rk-etappe {
     position: absolute; z-index: 4; left: 12px; top: 12px; display: flex; flex-direction: column; gap: 1px;
@@ -964,20 +957,10 @@
     background: var(--brand); color: #fff; font-size: calc(13.5px * var(--schrift, 1)); font-weight: 800; cursor: pointer;
   }
 
-  .rk-legende { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 12px; margin-top: 10px; }
-  .rk-leg {
-    display: inline-flex; align-items: center; gap: 7px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700;
-    color: var(--ink); background: var(--card); border: 1px solid var(--line);
-    border-radius: 18px; padding: 6px 12px; min-height: 36px; cursor: pointer;
-  }
-  .rk-leg.an { border-color: var(--brand); background: var(--btn-flaeche); }
+  .rk-aktionen { margin-bottom: 10px; }
+  .rk-legende { margin-top: 12px; }
   /* Legendenstrich wie auf der Karte: Fahrt durchgezogen, Flug gestrichelt. */
-  .rk-linie { width: 18px; height: 3px; border-radius: 2px; background: var(--f); }
-  .rk-linie.flug {
-    border-radius: 0;
-    background: repeating-linear-gradient(to right, var(--f) 0 5px, transparent 5px 8px);
-  }
-  .rk-tipp { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
+  .rk-tipp { margin: 0; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
 
   @media (max-width: 520px) {
     .rk-map { height: 380px; }
@@ -1001,14 +984,10 @@
   /* Sichtbar kraeftig, ausgeblendet blass. Die geoeffnete Route bekommt zusaetzlich einen
      Rahmen, damit „ausgewaehlt" und „sichtbar" nicht verwechselt werden. */
   /* aus: lesbar (Kontrast ≥ 3 : 1), aber gestrichelt */
-  .rk-leg:not(.an) { color: var(--muted); border-style: dashed; }
-  .rk-leg.offen { box-shadow: inset 0 0 0 2px var(--brand); }
-  .rk-alle.an { background: var(--brand); color: #fff; }
 
-  .rk-leg { min-height: 44px; }
   /* Größere Tippfläche ohne größere Optik (Apple: 44 pt) */
-  .rk-btn, .rk-spiel { position: relative; }
-  .rk-btn::after, .rk-spiel::after, .rk-lupe::after { content: ''; position: absolute; inset: -4px; border-radius: inherit; }
+  .rk-btn { position: relative; }
+  .rk-btn::after, .rk-lupe::after { content: ''; position: absolute; inset: -4px; border-radius: inherit; }
   @media (pointer: coarse) {
     .rk :global(.maplibregl-ctrl-group button) { width: 44px; height: 44px; }
   }

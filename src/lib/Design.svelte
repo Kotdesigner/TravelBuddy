@@ -13,6 +13,7 @@
     { id: 'rahmen', titel: je('Rahmen bei Verbindungen', 'Connection glow'), text: je('Ein schmaler Lichtrand zeigt, wenn die App GPS, Wetter, Warnungen oder Spotify abruft.', 'A thin edge of light shows when the app uses GPS, weather, warnings or Spotify.') },
     { id: 'stimmung', titel: je('Wetter-Stimmung', 'Weather mood'), text: je('Die Farben passen sich leicht dem Wetter und der Tageszeit an deinem Ort an.', 'Colours adapt slightly to the weather and time of day where you are.') },
     { id: 'hitze', titel: je('Hitze-Logo', 'Heat logo'), text: je('Ab 38 Grad flimmert der Schriftzug beim Start kurz wie Luft über heißem Asphalt.', 'From 38 degrees the logo shimmers briefly on start, like air over hot asphalt.') },
+    { id: 'temperatur', titel: je('Temperatur am Rand', 'Temperature on the edge'), text: je('Beim Öffnen leuchtet die Temperatur am rechten Rand kurz auf. Je höher sie steht, desto wärmer ist es.', 'On opening, the temperature glows briefly on the right edge. The higher it sits, the warmer it is.') },
     { id: 'sonne', titel: je('Sonnenuntergang', 'Sunset'), text: je('30 Minuten vor Sonnenuntergang leuchtet der Rahmen einmal golden, mit kurzem Hinweis.', 'The edge glows gold once 30 minutes before sunset, with a short note.') },
   ]
   const alleAn = $derived(EFFEKTE.every((e) => $effekte[e.id]))

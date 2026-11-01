@@ -2,7 +2,7 @@
 import { writable } from 'svelte/store'
 
 const KEY = 'tb-effekte'
-export const VORGABE = Object.freeze({ verblassen: true, kopf: true, rahmen: true, stimmung: true, hitze: true, sonne: true })
+export const VORGABE = Object.freeze({ verblassen: true, kopf: true, rahmen: true, stimmung: true, hitze: true, sonne: true, temperatur: true })
 
 function lies() {
   try { return { ...VORGABE, ...JSON.parse(localStorage.getItem(KEY) || '{}') } } catch { return { ...VORGABE } }

@@ -1,7 +1,7 @@
 <script>
   import { lage } from './warnlage-dienst.js'
   import WarnKnoepfe from './WarnKnoepfe.svelte'
-  import { t, LOCALE, tn } from './i18n.js'
+  import { t, je, LOCALE, tn } from './i18n.js'
   import { ZWEI } from './format.js'
   // Wanderungen-Verwaltung: Wunschliste → geplant → gemacht.
   // Pro Wanderung: Kennzahlen (km, Dauer, Höhenmeter), Schwierigkeit, Wegart,
@@ -19,7 +19,7 @@
 
   let { orte = [], reisen = [], fokusId = null, onneu = null } = $props()
 
-  // Aus dem Plan, dem Tag oder „+ Neu“ direkt auf eine Wanderung springen
+  // V4: aus dem Plan, dem Tag oder „+ Neu“ direkt auf eine Wanderung springen
   $effect(() => {
     if (!fokusId) return
     filter = 'alle'
@@ -35,7 +35,7 @@
 
   const orteSort = $derived([...orte].filter((o) => o.lat != null).sort((a, b) => a.name.localeCompare(b.name, LOCALE)))
 
-  // Nach Datum, wie im Logbuch; ohne Datum (Wunschliste) danach in der bisherigen Reihenfolge
+  // V4: nach Datum, wie im Logbuch; ohne Datum (Wunschliste) danach in der bisherigen Reihenfolge
   const sortiert = $derived([...$wanderungen].map((w, i) => [w, i]).sort((x, y) => {
     const a = x[0].datum || '9999', b = y[0].datum || '9999'
     return a.localeCompare(b) || (x[0].zeit || '').localeCompare(y[0].zeit || '') || x[1] - y[1]
@@ -119,9 +119,20 @@
   }
 </script>
 
-<div class="kopf">
-  <p class="intro">{t('Von der Wunschliste bis „gemacht“. Mit Datum steht eine Wanderung auch im Logbuch an ihrem Tag.')}</p>
-  <button class="btn neu" onclick={neu}>{t('+ Neue Wanderung')}</button>
+<div class="bedien">
+  <p class="bedien-text">{t('Von der Wunschliste bis „gemacht“. Mit Datum steht eine Wanderung auch im Logbuch an ihrem Tag.')}</p>
+  {#if $wanderungen.length}
+    <div class="bedien-block">
+      <span class="bedien-titel" id="wa-stand">{je('Stand', 'Status')}</span>
+      <div class="bedien-raster" role="group" aria-labelledby="wa-stand">
+        <button class="bedien-wahl" class:an={filter === 'alle'} aria-pressed={filter === 'alle'} onclick={() => (filter = 'alle')}>{t('Alle')}<span class="bedien-zahl">{zaehler.alle}</span></button>
+        {#each WANDER_STATUS as s}
+          <button class="bedien-wahl" class:an={filter === s.id} aria-pressed={filter === s.id} onclick={() => (filter = s.id)}>{s.label}<span class="bedien-zahl">{zaehler[s.id]}</span></button>
+        {/each}
+      </div>
+    </div>
+  {/if}
+  <button class="bedien-knopf haupt" onclick={neu}>{je('Neue Wanderung', 'New hike')}</button>
 </div>
 
 {#if $wanderungen.length}
@@ -130,13 +141,6 @@
     {#if stat.km}<span>{t('📏 {km} km gesamt', { km: stat.km })}</span>{/if}
     {#if stat.hm}<span>⛰️ {stat.hm} hm</span>{/if}
     {#if stat.gemacht}<span>{t('✅ {gemacht} gemacht', { gemacht: stat.gemacht })}</span>{/if}
-  </div>
-
-  <div class="filter">
-    <button class="f" class:an={filter === 'alle'} onclick={() => (filter = 'alle')}>{t('Alle')} <b>{zaehler.alle}</b></button>
-    {#each WANDER_STATUS as s}
-      <button class="f" class:an={filter === s.id} onclick={() => (filter = s.id)}>{s.emoji} {s.label} <b>{zaehler[s.id]}</b></button>
-    {/each}
   </div>
 {/if}
 
@@ -172,7 +176,7 @@
             {#each ($lage.proWanderung[w.id] || []) as x (x.id)}
               <div class="w-warn"><b>{x.icon} {x.level}</b>: {x.titel}<WarnKnoepfe w={x} /></div>
             {/each}
-            <!-- Zuerst wann und wo, dann die Zahlen -->
+            <!-- V4: zuerst wann und wo, dann die Zahlen -->
             <div class="block">
               <span class="b-cap">{t('📅 Wann (optional)')}</span>
               <div class="grid">
@@ -279,18 +283,11 @@
 <style>
   .badge.warnung { background: var(--danger-flaeche); color: var(--danger-text); }
   .w-warn { background: var(--warn-flaeche); border: 1px solid var(--danger-linie); border-radius: var(--radius-s); padding: 8px 10px; font-size: calc(13.5px * var(--schrift, 1)); }
-  .kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-  .intro { color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); margin: 0; flex: 1 1 260px; }
   .btn { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 8px 14px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 8px; cursor: pointer; }
-  .neu { background: #2f7a63; color: #fff; border-color: #2f7a63; }
 
   .bilanz { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   .bilanz span { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--ink); background: var(--flaeche); border: 1px solid var(--line); border-radius: 20px; padding: 5px 12px; }
 
-  .filter { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-  .f { font-size: calc(12px * var(--schrift, 1)); font-weight: 600; padding: 6px 11px; border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 18px; cursor: pointer; }
-  .f.an { background: var(--brand); color: #fff; border-color: var(--brand); }
-  .f b { font-weight: 800; }
 
   .leer { color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); background: var(--flaeche); padding: 16px; border-radius: 10px; }
 
@@ -350,7 +347,6 @@
     .trail { grid-template-columns: 1fr; }
   }
 
-  .f { min-height: 44px; padding: 6px 14px; font-size: calc(13px * var(--schrift, 1)); }
   .c-del { width: 44px !important; height: 44px !important; }
   .c-name { min-height: 44px; font-size: calc(16px * var(--schrift, 1)); }
 </style>

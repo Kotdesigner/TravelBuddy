@@ -332,3 +332,16 @@ export function reiseStatus(eintraege, heute) {
 export const zieleVon = (e) => (Array.isArray(e?.ziele) ? e.ziele : e?.ziel ? [e.ziel] : [])
 /** Ort und Ziele als Strecke: „Exmouth → Coral Bay → Ningaloo“. */
 export const streckeText = (e) => [e?.ort, ...zieleVon(e).map((z) => z.name)].filter(Boolean).join(' → ')
+
+/** Touren für lange Listen: Laufendes und Kommendes in Planfolge, danach Vergangenes, das Neueste zuerst. */
+export function zuerstAktuell(touren, eintraege, heute) {
+  const stand = new Map(eintraege.map((e) => [e.reise.id, e]))
+  const vonTour = (x) => stand.get(x.reise?.etappeId) || stand.get(x.id)
+  const gruppe = (e) => (!e ? 2 : e.bis >= heute ? 0 : 1)
+  return [...touren].sort((a, b) => {
+    const ea = vonTour(a), eb = vonTour(b), ga = gruppe(ea), gb = gruppe(eb)
+    if (ga !== gb) return ga - gb
+    if (ga === 2) return 0
+    return ga === 0 ? ea.von.localeCompare(eb.von) : eb.von.localeCompare(ea.von)
+  })
+}

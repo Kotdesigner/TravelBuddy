@@ -46,7 +46,7 @@
     return (r.steps || []).length || 3
   }
 
-  // Eine Routen-Idee wird eine Route in der passenden Etappe (meist der Roadtrip)
+  // V4: Eine Routen-Idee wird eine Route in der passenden Etappe (meist der Roadtrip)
   function uebernehmen(r) {
     const stops = stoppsAusRoute(r)
     const etappe = vermuteEtappe({ stops }, etappenMitDatum(get(reisen), get(gesamtStart)))
@@ -93,8 +93,8 @@
 {/each}
 
 <style>
-  .route { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 22px; background: var(--card); box-shadow: var(--shadow); }
-  .head { color: #fff; padding: 14px 20px; }
+  .route { border-radius: var(--radius-m); overflow: clip; border: 1px solid var(--line); margin-bottom: 22px; background: var(--card); box-shadow: var(--shadow); }
+  .head { position: sticky; top: var(--kopf-h, 98px); z-index: 31; color: #fff; padding: 12px 16px; box-shadow: 0 2px 6px rgba(0, 0, 0, .18); }
   .titel { font-size: calc(18px * var(--schrift, 1)); font-weight: 800; }
   .meta { margin-top: 4px; font-size: calc(12.5px * var(--schrift, 1)); }
   .meta span { margin-right: 14px; }
@@ -104,7 +104,7 @@
   .legende { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); margin-top: 6px; line-height: 1.7; }
   .caption { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); margin-top: 4px; line-height: 1.5; }
   .summary { color: var(--muted); font-size: calc(13.8px * var(--schrift, 1)); margin: 0 0 14px; }
-  .step { display: flex; gap: 12px; padding: 7px 0; border-top: 1px solid #f0e9db; }
+  .step { display: flex; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
   .step:first-of-type { border-top: none; }
   .tag { flex: 0 0 74px; font-weight: 700; color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); }
   .stext { font-size: calc(13px * var(--schrift, 1)); }
@@ -118,9 +118,10 @@
   .uebernehmen-btn { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 8px 14px; border-radius: 8px; background: #2f7a63; color: #fff; border: 1px solid #2f7a63; cursor: pointer; }
   .zur-route { margin-left: 10px; min-height: 40px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--ok-linie); background: var(--card); color: var(--ok-text); font-weight: 700; cursor: pointer; }
   .uebernehmen-btn:hover { background: #276b56; }
-  .uebernommen { position: sticky; top: 60px; z-index: 5; background: var(--ok-flaeche); border: 1px solid var(--ok-linie); color: var(--ok-text); padding: 10px 14px; border-radius: 8px; font-size: calc(13px * var(--schrift, 1)); font-weight: 600; margin-bottom: 12px; }
+  .uebernommen { position: sticky; top: var(--kopf-h, 98px); z-index: 5; background: var(--ok-flaeche); border: 1px solid var(--ok-linie); color: var(--ok-text); padding: 10px 14px; border-radius: 8px; font-size: calc(13px * var(--schrift, 1)); font-weight: 600; margin-bottom: 12px; }
   @media (max-width: 520px) {
     .map { float: none; width: 100%; margin: 0 0 12px; }
     .step { flex-direction: column; gap: 2px; }
+    .tag { flex: none; }
   }
 </style>

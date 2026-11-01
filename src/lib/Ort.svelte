@@ -49,7 +49,7 @@
   let saisonAuf = $state(false)
   // Kurze Beschreibungen brauchen keinen Aufklapper — sonst steht unter jedem
   // Zweizeiler ein sinnloses „mehr“.
-  const langerText = $derived((ort.beschreibung || '').length > 190)
+  const langerText = $derived((ort.beschreibung || '').length > 110)
   const alleReisen = $derived($reisen)
   const allesJournal = $derived($journal)
   const tagebuchAnker = 'tagebuch'
@@ -67,10 +67,10 @@
   let hTimer
   function flash(m) { hinzugefuegt = m; clearTimeout(hTimer); hTimer = setTimeout(() => (hinzugefuegt = ''), 2200) }
 
-  // Einplanen = in eine Route (die passendste zuerst), neue Route, oder als Wanderung.
+  // V4: Einplanen = in eine Route (die passendste zuerst), neue Route, oder als Wanderung.
   const routen = $derived(alleReisen.filter(istRoute))
   const routenNachNaehe = $derived(routen.map((r) => ({ r, km: abstandZurRoute(r, ort) })).sort((a, b) => a.km - b.km))
-  // In welchen Routen steckt dieser Ort schon?
+  // In welchen Routen steckt dieser Ort schon? (Vorschlag 5 aus UX-Recherche/27)
   const inRouten = $derived(routen.filter((r) => (r.stops || []).some((s) => norm(s.name) === norm(ort.name)
     || (s.lat != null && ort.lat != null && Math.abs(s.lat - ort.lat) < 0.02 && Math.abs(s.lon - ort.lon) < 0.02))))
   function zuReise(rid, rname) {
@@ -132,7 +132,7 @@
     updateOrt(ort.id, { bilder })
   }
 
-  // --- Tagebuch: EIN Tagebuch — hier nur Verweis + Alt-Einträge ---
+  // --- Tagebuch (New Style V3): EIN Tagebuch — hier nur Verweis + Alt-Einträge ---
   // Neue Reisetage entstehen im großen Reisetagebuch (mit Orts-Verknüpfung);
   // alte Orts-Einträge bleiben lesbar/löschbar.
   const grossesTagebuch = $derived(allesJournal.filter((e) => e.ortId === ort.id))
@@ -177,6 +177,7 @@
          werden sie dort zu einer Reihe am unteren Bildrand. Reihenfolge im Markup =
          Wichtigkeit: Gefahr zuerst. `.lang` sind die Wortteile, die auf dem Handy
          wegfallen — die volle Auskunft steht weiterhin im title. -->
+    <h3 class="name">{ort.name}</h3>
     <div class="marken">
       {#if warnung}
         <span class="warn" style="background:{warnung.farbe};color:{schriftAuf(warnung.farbe)}" title="{warnung.titel}{warnung.km > 1 ? ', ' + t('{km} km entfernt', { km: Math.round(warnung.km) }) : ''}">
@@ -200,16 +201,6 @@
   </div>
 
   <div class="body">
-    <div class="head">
-      <span class="name">{ort.name}</span>
-      <button
-        class="bubble"
-        class:has={hatInhalt}
-        title={t('Notiz / Bericht / Tagebuch')}
-        onclick={() => (offen = !offen)}
-      >{tagebuch.length > 0 ? '📖' : '💬'}</button>
-    </div>
-
     {#if inRouten.length}
       <p class="in-route">🧭 in {inRouten.map((r) => r.name).join(', ')}</p>
     {/if}
@@ -273,7 +264,7 @@
           <input type="file" accept="image/*" onchange={addFoto} />
         </label>
 
-        <!-- Tagebuch: EIN Tagebuch — Verweis ins große Reisetagebuch -->
+        <!-- Tagebuch (V3): EIN Tagebuch — Verweis ins große Reisetagebuch -->
         <div class="tb">
           <div class="tb-titel">{t('📓 Logbuch')}</div>
           <div class="tb-verweis">
@@ -326,10 +317,10 @@
     {/if}
 
     <div class="aktionen">
-      <a class="maps" href={mapsUrl} target="_blank" rel="noopener">{t('📍 Google Maps')}</a>
+      <a class="maps" href={mapsUrl} target="_blank" rel="noopener">Google Maps</a>
       <div class="reise-wrap">
         <button class="reise-btn" onclick={() => (zeigeReiseWahl = !zeigeReiseWahl)} aria-expanded={zeigeReiseWahl}>
-          {#if hinzugefuegt}{hinzugefuegt}{:else}{t('➕ Einplanen')}{/if}
+          {#if hinzugefuegt}{hinzugefuegt}{:else}{je('Einplanen', 'Add to trip')}{/if}
         </button>
         {#if zeigeReiseWahl}
           <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -345,6 +336,12 @@
           </div>
         {/if}
       </div>
+      <button
+        class="bubble"
+        class:has={hatInhalt}
+        title={t('Notiz / Bericht / Tagebuch')}
+        onclick={() => (offen = !offen)}
+      >{tagebuch.length > 0 ? '📖' : '💬'}</button>
     </div>
   </div>
 </article>
@@ -355,41 +352,28 @@
   .rm-name { display: flex; flex-direction: column; text-align: left; line-height: 1.25; }
   .rm-name small { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 600; }
   .card {
-    border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--line); border-radius: var(--radius-m); overflow: hidden; scroll-margin-top: calc(var(--kopf-h, 98px) + 56px);
     background: var(--card); display: flex; flex-direction: column; box-shadow: var(--shadow);
   }
-  .img { height: 150px; background: #efe6d6; position: relative; }
-  .img img { width: 100%; height: 150px; object-fit: cover; display: block; }
+  .img { height: 170px; background: #2a221b; position: relative; overflow: hidden; }
+  .img::after { content: ''; position: absolute; inset: 40% 0 0; background: linear-gradient(to top, rgba(10, 7, 4, .78), transparent); pointer-events: none; }
+  .img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .fallback {
-    width: 100%; height: 150px; display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, #efe6d6, #e0d3ba);
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #5a4633, #2a221b);
   }
   .fallback span { font-size: calc(46px * var(--schrift, 1)); opacity: 0.75; }
-  .marken { display: contents; }   /* am Schreibtisch: Kinder bleiben in den Ecken */
-  .badge {
-    position: absolute; top: 8px; right: 8px; background: rgba(43,38,33,0.72); color: #fff;
-    font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 2px 7px; border-radius: 9px; letter-spacing: 0.3px;
-  }
-  .warn {
-    position: absolute; top: 8px; left: 8px; color: #fff; font-size: calc(12px * var(--schrift, 1)); font-weight: 800;
-    padding: 3px 8px; border-radius: 9px; box-shadow: 0 1px 4px rgba(0,0,0,0.4); max-width: 60%;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .wander {
-    position: absolute; bottom: 8px; left: 8px; color: #fff; font-size: calc(12px * var(--schrift, 1)); font-weight: 800;
-    padding: 3px 8px; border-radius: 9px; box-shadow: 0 1px 4px rgba(0,0,0,0.4); letter-spacing: 0.2px;
-    background: #2f7a63;
-  }
+  .marken { position: absolute; top: 7px; left: 7px; right: 7px; z-index: 1; display: flex; flex-wrap: wrap; gap: 4px; pointer-events: none; }
+  .marken > * { max-width: 100%; color: #fff; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 2px 7px; border-radius: 8px; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; box-shadow: 0 1px 3px rgba(0, 0, 0, .4); }
+  .badge { display: none; }
+  .wander { background: rgba(47, 122, 99, .92); }
   .wander.perle { background: linear-gradient(135deg, #e0a72b, #c1662f); }
-  .body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
-  .head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-  .name { font-weight: 700; font-size: calc(15px * var(--schrift, 1)); color: var(--ink); }
-  .bubble {
-    border: none; cursor: pointer; font-size: calc(14px * var(--schrift, 1)); line-height: 1; padding: 5px 9px;
-    border-radius: 12px 12px 12px 3px; background: #d9d3c7; filter: grayscale(1); flex: 0 0 auto;
-  }
-  .bubble.has { background: var(--accent); filter: none; box-shadow: 0 1px 3px rgba(224,123,40,0.5); }
+  .body { padding: 11px 12px 12px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .name { position: absolute; left: 11px; right: 44px; bottom: 9px; z-index: 1; margin: 0; color: #fff; font-size: calc(16px * var(--schrift, 1)); font-weight: 800; line-height: 1.2; text-shadow: 0 1px 6px rgba(0, 0, 0, .55); }
+  .bubble { cursor: pointer; font-size: calc(15px * var(--schrift, 1)); line-height: 1; padding: 0; border: 1px solid var(--line-stark); border-radius: 10px; background: none; filter: grayscale(1); }
+  .bubble.has { border-color: var(--brand); filter: none; }
   .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tags :global(.tagpill) { padding: 1px 7px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; letter-spacing: 0; text-transform: none; }
   .desc { font-size: calc(13px * var(--schrift, 1)); color: var(--muted); margin: 0; }
   .info-text {
     font-size: calc(12px * var(--schrift, 1)); color: var(--muted); margin: 0; line-height: 1.5; flex: 1;
@@ -444,7 +428,7 @@
     border-radius: 9px; padding: 4px 9px; min-height: 26px; cursor: pointer;
     transition: background var(--t-fast) var(--ease-out);
   }
-  /* Aus: lesbar (Kontrast ≥ 3 : 1), aber deutlich als „nicht gewählt“. */
+  /* Aus: lesbar, aber deutlich als „nicht gewählt“ — früher 32 % Deckkraft (1,5 : 1). */
   .e-tag:not(.an) { background: var(--card); color: var(--muted); box-shadow: inset 0 0 0 1.5px var(--line-stark); }
   .eigen-daten { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .e-btn { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 8px 12px; min-height: 44px; border: 1px solid var(--ok-linie);
@@ -452,18 +436,11 @@
   .e-btn:disabled { opacity: 0.6; cursor: default; }
   .e-msg { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
   .e-hinweis { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-style: italic; }
-  .aktionen { margin-top: auto; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-  .maps {
-    font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--info-text); text-decoration: none;
-    background: var(--info-flaeche); border: 1px solid var(--info-linie); padding: 6px 10px; border-radius: 6px;
-  }
-  .maps:hover { background: #d7e8f5; }
-  .reise-wrap { position: relative; }
-  .reise-btn {
-    font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--ok-text); background: var(--ok-flaeche); border: 1px solid var(--ok-linie);
-    padding: 6px 10px; border-radius: 6px; cursor: pointer;
-  }
-  .reise-btn:hover { background: #d7ece3; }
+  .aktionen { margin-top: auto; padding-top: 4px; display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 6px; }
+  .maps, .reise-btn { box-sizing: border-box; display: flex; align-items: center; justify-content: center; width: 100%; min-width: 0; min-height: 44px; padding: 0 8px; border: 1px solid var(--line-stark); border-radius: 10px; background: none; color: var(--ink); font-size: calc(13.5px * var(--schrift, 1)); font-weight: 700; text-decoration: none; cursor: pointer; }
+  .maps { grid-column: 1 / -1; }
+  .reise-btn { border-color: var(--brand); color: var(--brand-text); }
+  .reise-wrap { position: relative; min-width: 0; }
   .reise-menu {
     position: absolute; bottom: calc(100% + 4px); left: 0; z-index: 20; background: var(--card);
     border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.18);
@@ -498,7 +475,7 @@
     overflow: hidden;
   }
   .mehr-btn {
-    /* 32 px hoch statt 19 — auf dem iPhone traf man „mehr“ kaum */
+    /* 32 px hoch statt 19 — auf dem iPhone traf man „mehr“ kaum (Prüfung 19.09.) */
     display: inline-flex; align-items: center; min-height: 32px; position: relative;
     background: none; border: none; padding: 0 6px 0 0; margin: -4px 0 2px;
     color: var(--brand-text); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; cursor: pointer;
@@ -519,51 +496,21 @@
      Bild flacher, Schrift eine Spur kleiner, Etiketten dürfen umbrechen —
      sonst quillt der Inhalt aus der Spalte. */
   @media (max-width: 520px) {
-    /* Bild UND Inhalt auf dieselbe Höhe. Nur .img zu verkleinern reichte nicht:
-       das <img> blieb auf 150 px und quoll unten aus dem Rahmen — es sah aus wie
-       ein zweites Bild und schob sich über den Text. */
-    .img { height: 104px; overflow: hidden; }
-    .img img, .fallback { height: 104px; }
+    .img { height: 132px; }
     .fallback span { font-size: calc(34px * var(--schrift, 1)); }
-    /* Das Etikett (MUSS-SEHEN, GEHEIMTIPP …) steht bereits im Rumpf als farbiger
-       Chip. Auf dem Bild wäre es dasselbe ein zweites Mal. */
-    .marken .badge { display: none; }
-    .name { font-size: calc(13.5px * var(--schrift, 1)); line-height: 1.25; }
-    .body { padding: 8px 9px 10px; gap: 5px; }
-
-    /* Zwei Kacheln nebeneinander = 152 px breit. In den Ecken stießen Gefahr,
-       Etikett und Wanderung zusammen. Hier stehen sie in EINER Reihe am unteren
-       Bildrand, über einem Verlauf, damit sie auf jedem Foto lesbar bleiben.
-       Sie wachsen nach oben, wenn es mehr als eine Zeile wird. */
-    .marken {
-      display: flex; flex-wrap: wrap; align-items: flex-end; gap: 3px;
-      position: absolute; left: 0; right: 0; bottom: 0;
-      padding: 18px 40px 5px 5px;   /* rechts sitzt der Bild-Knopf */
-      background: linear-gradient(to top, rgba(0,0,0,0.62), rgba(0,0,0,0.28) 52%, transparent);
-      pointer-events: none;
-    }
-    .marken > * {
-      position: static; max-width: 100%;
-      font-size: calc(12px * var(--schrift, 1)); font-weight: 800; padding: 2px 5px; border-radius: 7px;
-      letter-spacing: 0.1px; line-height: 1.35; box-shadow: 0 1px 3px rgba(0,0,0,0.45);
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    /* Die langen Wortteile fallen weg — die volle Auskunft steht im title. */
+    .name { font-size: calc(14.5px * var(--schrift, 1)); left: 9px; right: 40px; bottom: 8px; }
+    .body { padding: 9px 9px 10px; gap: 6px; }
     .lang { display: none; }
-    .badge { background: rgba(255,255,255,0.92); color: #2b2621; letter-spacing: 0.2px; }
-    .warn { flex: 0 1 auto; }
     .km { font-weight: 700; }
   }
 
-  /* Tippflächen nach Apple-Maß (44 pt) für die Hauptaktionen der Kachel */
-  .maps, .reise-btn { min-height: 44px; display: inline-flex; align-items: center; }
+  /* V4: Tippflächen nach Apple-Maß (44 pt) für die Hauptaktionen der Kachel */
   .bubble { min-height: 44px; min-width: 44px; }
   /* Größere Tippfläche ohne größere Optik (Apple: 44 pt) */
   .bubble, .mehr-btn, .saison-btn { position: relative; }
   .bubble::after { content: ''; position: absolute; inset: -3px -2px; }
   .mehr-btn::after, .saison-btn::after { content: ''; position: absolute; inset: -7px -4px; }
-  .symbol-marke { position: absolute; right: 42px; bottom: 11px; z-index: 2; padding: 1px 6px; border-radius: 8px; background: rgba(20,12,8,.72); color: #fff; font-size: calc(10.5px * var(--schrift, 1)); font-weight: 700; }
-  @media (max-width: 520px) { .symbol-marke { right: auto; left: 5px; bottom: auto; top: 5px; } }
+  .symbol-marke { position: absolute; right: 7px; top: 7px; z-index: 2; padding: 1px 6px; border-radius: 8px; background: rgba(20,12,8,.72); color: #fff; font-size: calc(10.5px * var(--schrift, 1)); font-weight: 700; }
   .bild-quelle { margin: 0 0 8px; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); overflow-wrap: anywhere; }
   .bild-quelle a { color: inherit; }
 </style>

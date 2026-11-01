@@ -63,6 +63,19 @@ export function punktBei(v, p) {
 }
 
 export const NAH_ZOOM = 11.5
+// Mit Auto und Bahn bleibt die Kamera weiter weg, die Strecke zählt, nicht jede Straße der Stadt
+export const nahZoom = (art) => (art === 'auto' || art === 'bahn' ? 10 : NAH_ZOOM)
+
+/** Gleichmäßige, leicht geglättete Linie für Fahrzeug und Kamera: kein Abbiegen an jeder Ecke. */
+export function glaette(v, stuecke = 300) {
+  if (v.coords.length < 3 || !v.gesamt) return v
+  const dicht = Array.from({ length: stuecke + 1 }, (_, i) => { const o = punktBei(v, i / stuecke); return [o.lon, o.lat] })
+  const r = Math.round(Math.min(1.5, v.gesamt * 0.02) / (v.gesamt / stuecke))
+  return verlauf(dicht.map((c, i) => {
+    const w = Math.min(r, i, stuecke - i), teil = dicht.slice(i - w, i + w + 1)
+    return [teil.reduce((s, x) => s + x[0], 0) / teil.length, teil.reduce((s, x) => s + x[1], 0) / teil.length]
+  }))
+}
 /** Zoom, bei dem `km` rund 60 % der Bildbreite füllen. Kleine Strecken bleiben also nah. */
 export function spitzenZoom(km, breitePx = 400, lat = -25) {
   const z = Math.log2((78271 * Math.cos(lat * RAD) * breitePx * 0.6) / Math.max(1, km * 1000))
@@ -71,9 +84,15 @@ export function spitzenZoom(km, breitePx = 400, lat = -25) {
 
 /** Anzoomen: erst langsam, dann immer schneller. */
 export const anzoom = (p) => Math.max(0, Math.min(1, p)) ** 3
-/** Während der Fahrt: heraus bis zur Mitte, zum Ziel wieder herein. */
-export function zoomBei(p, nah, spitze) {
-  return nah + (spitze - nah) * Math.sin(Math.PI * Math.max(0, Math.min(1, p))) ** 1.4
+/** Anteil der Fahrt, nach dem die Kamera ganz draußen ist. Lange Flüge zoomen früh heraus. */
+export function auszoomAnteil(art, km) {
+  if (art === 'flug' && km >= 300) return 0.12
+  return km >= 300 ? 0.3 : 0.5
+}
+/** Während der Fahrt: bis Anteil `aus` heraus, draußen bleiben, zum Ziel wieder herein. */
+export function zoomBei(p, nah, spitze, aus = 0.5) {
+  const q = Math.max(0, Math.min(1, p)), k = Math.min(1, Math.min(q, 1 - q) / aus)
+  return nah + (spitze - nah) * k * k * (3 - 2 * k)
 }
 /** Sekunden je Fahrt: längere Strecken dauern länger, aber nie endlos. */
 export const dauerFuer = (km) => Math.min(8, 3 + 1.2 * Math.log10(km + 1))

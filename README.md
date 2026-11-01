@@ -8,10 +8,10 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.7 · built for Western Australia**<br>
+**Version 1.8 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-17)**
+**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-18)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -47,6 +47,16 @@ No account, nothing to install from a store, and your data stays on your phone. 
 </table>
 
 ---
+
+## 📸 New in version 1.8
+
+**Photo conditions on the home screen.** One line tells you right away whether it is worth getting the camera out, with the best time, clouds and moon. Open it for golden and blue hour, moon, Milky Way with time and direction, star trails, sky and tips. Sun, moon and stars work offline.
+
+**A touch of warmth.** When you open the app, the temperature where you are glows briefly on the right edge. The higher it sits, the warmer it is. Only with signal, and you can turn it off.
+
+**Tidier everywhere.** Logbook, notes, hikes, the map and the home screen now share clear panels with equal buttons. Lists of routes stay short over months of travel: current ones first, the rest folded away, with a search.
+
+**Calendar as a real PDF, calmer trip film.** The calendar now creates a file instead of a print job. In the trip film, long flights zoom out early and cars skip the street-by-street detail.
 
 ## 🎬 New in version 1.7
 
@@ -174,74 +184,48 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 
 **One app for the whole trip, from the first idea to the last memory. It really does it all.**
 
-- 🧭 **Setup assistant** that sets up your trip with you in one minute
-- 🧪 **Test trip to play with:** one tap fills the app with a made-up 21-day trip, one more tap and it is gone
-- 📅 **Trip dates in the header image** straight from the start date and length
-- 🗺️ **Stages and routes** with dates, stops and drag-to-reorder
-- 📐 **Smart stop placement** where a new stop adds the least detour
-- 🛣️ **Real road routes** with kilometres and driving time
-- ⛽ **Longest stretch without fuel** for every route
-- 💧 **Long sections without water** flagged in advance
-- 👀 **Sights up to 25 km off the road** suggested along the way
-- 🌦️ **Weather along the route**, not just at the destination
-- 🕒 **Driving days** with breaks and the latest departure before sunset
-- 🌍 **Trip map and 3D globe** with every stage, route and flight
-- 🎬 **Animated film of your trip:** plane, car, train or boat with distance, zoom in proportion to every stretch, and a switch per route for what appears
-- ⛵ **Boating as a transport mode:** a straight line over water, no fuel, its own boat in the film
-- 📍 **Your location on the offline map** with a button that jumps to you, also without signal
-- 🔔 **Urgent changes on the home screen:** cancellations, delays and gate or platform changes before your flight or train
-- 🌐 **Lit edge when the app goes online** for GPS, weather, warnings or Spotify
-- 🌦️ **Weather mood:** colours adapt slightly to the weather and time of day where you are
-- 🎨 **Design page** with light and dark, language, text, size and a switch for every effect
-- 📌 **Fixed headers** with sub-menus that stay in place and text that fades softly beneath them
-- ⛳ **Several destinations per day** in the logbook, shown as a route in your journal
-- 🗒️ **Notes by leg with time stamp**, included in the logbook and easy to take out again
-- ⚠️ **Nearby events on the road:** official warnings close to your real position, picked one by one for the journal
-- 💶 **Facts and spending at the end of the journal**, plus the cost of each leg
-- 🧩 **Route ideas** for the south and north loops from Perth
-- 🥾 **Hikes** with status, date and photos
-- 📅 **Calendar views like on iPhone:** switch between list, month and year for a quick overview of the whole trip
-- 📄 **Journal as a 300 dpi PDF, collage as PDF, JPEG or TIFF**, then print, save, share or mail
-- 🗓️ **Calendar** as a print PDF and as a real Excel file
-- 🖨️ **Map as a print image** in any size
-- 📥 **Travel calendar import** that sorts bookings in by itself
-- 📍 **144 hand-picked places** with photos, seasons and insider labels
-- 🖼️ **Change any picture:** your own photo, an image search or a pasted snippet
-- ➕ **Add your own places** with photo and description from Wikipedia
-- 📷 **Made for photographers:** golden hour, blue hour and the night sky at every place, planned for any day
-- 🌅 **Sun times** with sunrise, sunset and the sun's highest point
-- 🌌 **Stargazing check** with moon phase and astronomical darkness
-- 📝 **Notes and reports** for every place
+Sorted by how much it helps on the road: safety and planning first, photo tools and looks further down.
+
 - 🗺️ **Offline map** for all of Australia, in detail where you travel
-- 🛣️ **Small or large map, your choice:** every road and track in Western Australia at the tap of a button
 - ⛺ **Supplies on the route:** fuel, water, toilets, camps, rest areas, shops, workshops, clinics
 - 🔥 **Official warnings** for fire, flood and storms in WA, VIC and QLD
 - 🚨 **Warnings along your route:** where you are, on the road ahead, on every stage and hike, even when a route runs through several danger zones
-- 🏷️ **Warning labels on the place pictures:** storm, heavy rain, flooding, thunderstorms, extreme heat or fire show up right on a place's thumbnail, with the distance if the warning is close by
-- 📡 **Exact location of every warning:** size of the area, distance, Google Maps, and offline on your own map with radius and your position
-- 🚧 **WA road conditions** with closures right on your route
 - 🆘 **Emergency mode** fully offline: position, nearest help, emergency numbers
-- ✅ **"I'm OK" log** to export and share
+- 🚧 **WA road conditions** with closures right on your route
+- ⛽ **Longest stretch without fuel** for every route
+- 💧 **Long sections without water** flagged in advance
 - 📶 **"Ready to go?" check** before you drive into a dead zone
+- 🛫 **Flights and trains live:** status, new times, terminal, gate, check-in desk, platform, baggage belt and connections
+- 🔔 **Urgent changes on the home screen:** cancellations, delays and gate or platform changes before your flight or train
+- 🛣️ **Real road routes** with kilometres and driving time
+- 🕒 **Driving days** with breaks and the latest departure before sunset
+- 🌦️ **Weather along the route**, not just at the destination
+- 🗺️ **Stages and routes** with dates, stops and drag-to-reorder
+- 📐 **Smart stop placement** where a new stop adds the least detour
+- 👀 **Sights up to 25 km off the road** suggested along the way
+- 📍 **144 hand-picked places** with photos, seasons and insider labels
+- ➕ **Add your own places** with photo and description from Wikipedia
+- 🧩 **Route ideas** for the south and north loops from Perth
+- 🥾 **Hikes** with status, date and photos
+- 🧭 **Setup assistant** that sets up your trip with you in one minute
+- 🔎 **One search for everything:** places, days, animals, bookings, notes
+- 🚫 **No account, no cloud, no ads, no tracking**
 - 📖 **Logbook** with 16 modules and 72 fields per day
-- 🎙️ **Voice memos and dictation** straight into the day
-- 📸 **Photos sort themselves** by date, place and route kilometre
-- 🪰 **Fly factor, roadkill counter and road trains** for the real outback feeling
-- 🛸 **Roadside curiosities counter:** Big Things, shoe fences, odd mailboxes
-- 🦘 **Wildlife album** with 20 animals to collect
-- 👃 **Senses, people, food, campfire and night sky** captured every day
-- 🏛️ **Official situation of the day** saved automatically in the logbook
 - 📚 **Automatic travel journal:** your logbook becomes a finished travel magazine by itself
+- 📸 **Photos sort themselves** by date, place and route kilometre
+- 🎙️ **Voice memos and dictation** straight into the day
+- ⛳ **Several destinations per day** in the logbook, shown as a route in your journal
+- 🗒️ **Notes by leg with time stamp**, included in the logbook and easy to take out again
+- 🗒️ **Entries over several days** on stages and in the logbook, for when you did not write every day
+- ⚠️ **Nearby events on the road:** official warnings close to your real position, picked one by one for the journal
+- 🏛️ **Official situation of the day** saved automatically in the logbook
 - 🖨️ **Photo book ready** to print or as a PDF, short or detailed
+- 📄 **Journal as a 300 dpi PDF, collage as PDF, JPEG or TIFF**, then print, save, share or mail
 - 🖼️ **Photo library built in:** pick hundreds of photos, each lands on its day by itself
 - ☁️ **All your iCloud photos** on the Mac, in photo-book quality
-- 🎞️ **Animated photo collage**, offline and without AI
-- 🎬 **Trip film** in portrait format, recorded in the app
 - 👨‍👩‍👧 **Share with family:** the travel report as one file via Messages, WhatsApp, Mail or AirDrop
 - 💌 **Opens anywhere:** no app, no account, even offline, without bookings or exact coordinates
-- 🎵 **Spotify soundtrack:** music from every place lands in your playlist automatically
-- 🎸 **Local bands first**, each with their most-played song
-- 📴 **Music offline too:** places are noted and caught up later
+- 📥 **Travel calendar import** that sorts bookings in by itself
 - 📨 **Booking from email:** paste it, everything is recognised
 - 🎫 **Tickets and documents offline** on the device
 - 🔐 **Face ID, Touch ID or Windows Hello** to protect your documents
@@ -250,20 +234,58 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - 💶 **Budget in euro and AU$** at the daily exchange rate
 - 🧾 **Costs per day** in 23 categories, as many single items as you like
 - 💰 **Cost analysis** by short values, long values, transport, stays and experiences, per stage and down to the single item
-- 🗒️ **Entries over several days** on stages and in the logbook, for when you did not write every day
-- 🛫 **Flights and trains live:** status, new times, terminal, gate, check-in desk, platform, baggage belt and connections
+- 💶 **Facts and spending at the end of the journal**, plus the cost of each leg
 - 🎒 **Outback packing list**
+- 📅 **Calendar views like on iPhone:** switch between list, month and year for a quick overview of the whole trip
+- 🗓️ **Calendar as a PDF file and a real Excel file**, to save, share or mail
+- 📍 **Your location on the offline map** with a button that jumps to you, also without signal
+- 🌍 **Trip map and 3D globe** with every stage, route and flight
+- 🖨️ **Map as a print image** in any size
 - 🔄 **Backup and sync** between Mac and iPhone, merged safely
-- 🔎 **One search for everything:** places, days, animals, bookings, notes
-- 🔠 **Text size and overall size** adjustable in four steps
-- 🌓 **Light and dark mode**
-- 🇬🇧🇩🇪 **English and German**
-- ♿ **Accessible**, checked against WCAG 2.2 AA
+- 🖥️ **Mac app**, 🪟 **Windows app**, 🐧 **Linux app** and 📱 **iPhone web app**
+- 🎵 **Spotify soundtrack:** music from every place lands in your playlist automatically
+- 🎸 **Local bands first**, each with their most-played song
+- 📴 **Music offline too:** places are noted and caught up later
+- 🛣️ **Small or large map, your choice:** every road and track in Western Australia at the tap of a button
+- 📡 **Exact location of every warning:** size of the area, distance, Google Maps, and offline on your own map with radius and your position
+- 🏷️ **Warning labels on the place pictures:** storm, heavy rain, flooding, thunderstorms, extreme heat or fire show up right on a place's thumbnail, with the distance if the warning is close by
+- ✅ **"I'm OK" log** to export and share
+- 📸 **Photo conditions on the home screen:** one line shows whether it is worth it here and now, with rating, best time, clouds and moon
+- 🌅 **Golden and blue hour** morning and evening, with sun direction
+- 🌌 **Milky Way planner:** time window, height, direction and the next good night
+- 🌙 **Moon at a glance:** phase, brightness, moonrise and moonset with direction, and the time without moonlight
+- ✨ **Star trails:** where to point the camera and how long you can shoot
+- ☁️ **Sky for photographers:** clouds by layer, visibility, wind, rain risk and dew warning
+- 🏙️ **City light estimate** and meteor showers around their peak
+- 📷 **Made for photographers:** golden hour, blue hour and the night sky at every place, planned for any day
+- 🌅 **Sun times** with sunrise, sunset and the sun's highest point
+- 🌌 **Stargazing check** with moon phase and astronomical darkness
+- 🖼️ **Change any picture:** your own photo, an image search or a pasted snippet
+- 📝 **Notes and reports** for every place
+- 🎬 **Animated film of your trip:** plane, car, train or boat with distance, zoom in proportion to every stretch, and a switch per route for what appears
+- 🎬 **Trip film** in portrait format, recorded in the app
+- 🎞️ **Animated photo collage**, offline and without AI
+- ⛵ **Boating as a transport mode:** a straight line over water, no fuel, its own boat in the film
+- 🗂️ **Route picker that grows with you:** current first, folded lists and a search, on the map and the home screen
+- 🧭 **Tidy panels** with equal buttons in logbook, notes, hikes and map
+- 🦘 **Wildlife album** with 20 animals to collect
+- 🪰 **Fly factor, roadkill counter and road trains** for the real outback feeling
+- 🛸 **Roadside curiosities counter:** Big Things, shoe fences, odd mailboxes
+- 👃 **Senses, people, food, campfire and night sky** captured every day
 - 🧠 **Australia quiz** with five levels
 - 📘 **Manual** as a PDF in the app
+- 🧪 **Test trip to play with:** one tap fills the app with a made-up 21-day trip, one more tap and it is gone
+- 📅 **Trip dates in the header image** straight from the start date and length
+- 🔠 **Text size and overall size** adjustable in four steps
+- 🇬🇧🇩🇪 **English and German**
+- ♿ **Accessible**, checked against WCAG 2.2 AA
+- 🌓 **Light and dark mode**
+- 🎨 **Design page** with light and dark, language, text, size and a switch for every effect
+- 🌡️ **Temperature on the edge:** a brief, quiet glow when you open the app, higher means warmer, only with signal
+- 🌐 **Lit edge when the app goes online** for GPS, weather, warnings or Spotify
+- 🌦️ **Weather mood:** colours adapt slightly to the weather and time of day where you are
+- 📌 **Fixed headers** with sub-menus that stay in place and text that fades softly beneath them
 - 🎮 **Three hidden games** in the search field (see below)
-- 🖥️ **Mac app**, 🪟 **Windows app**, 🐧 **Linux app** and 📱 **iPhone web app**
-- 🚫 **No account, no cloud, no ads, no tracking**
 
 ### 🎮 Easter eggs: three hidden games
 
@@ -623,6 +645,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - [x] **Version 1.5:** calendar with list, month and year views
 - [x] **Version 1.6:** journal and collage as files, notes in the logbook, wildlife periods
 - [x] **Version 1.7:** animated film with transport modes, design page, location on the map, urgent alerts
+- [x] **Version 1.8:** photo conditions on the home screen, temperature on the edge, calendar as a PDF file, tidy panels
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -644,10 +667,10 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, komplett offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.7 · entwickelt für Western Australia**<br>
+**Version 1.8 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-17)**
+**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-18)**
 
 **[⬇️ Mac-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)**
 
@@ -675,6 +698,16 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 </td>
 </tr>
 </table>
+
+## 📸 Neu in Version 1.8
+
+**Fotolage auf der Startseite.** Eine Zeile sagt sofort, ob sich die Kamera lohnt, mit bester Zeit, Wolken und Mond. Aufgeklappt stehen dort goldene und blaue Stunde, Mond, Milchstraße mit Zeit und Richtung, Strichspuren, Himmel und Tipps. Sonne, Mond und Sterne gehen auch offline.
+
+**Ein Hauch Wärme.** Beim Öffnen leuchtet die Temperatur an deinem Standort kurz am rechten Rand auf. Je höher sie steht, desto wärmer ist es. Nur mit Netz und abschaltbar.
+
+**Überall aufgeräumter.** Logbuch, Notizen, Wanderungen, Karte und Startseite haben klare Felder mit gleich großen Knöpfen. Routenlisten bleiben auch nach Monaten kurz: Aktuelles zuerst, der Rest eingeklappt, dazu eine Suche.
+
+**Kalender als echtes PDF, ruhigerer Reisefilm.** Der Kalender erzeugt jetzt eine Datei statt eines Druckauftrags. Im Reisefilm zoomen lange Flüge früher heraus, und das Auto zeigt nicht mehr jede Straße.
 
 ## 🎬 Neu in Version 1.7
 
@@ -792,74 +825,48 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 
 **Eine App für die ganze Reise, von der ersten Idee bis zur letzten Erinnerung. Sie kann wirklich alles.**
 
-- 🧭 **Einrichtungsassistent**, der deine Reise in einer Minute mit dir anlegt
-- 🧪 **Testreise zum Spielen:** ein Tipp füllt die App mit einer ausgedachten 21-Tage-Reise, noch ein Tipp und sie ist wieder weg
-- 📅 **Reisezeitraum im Titelbild**, direkt aus Reisebeginn und Reisedauer
-- 🗺️ **Etappen und Routen** mit Datum, Stopps und Reihenfolge zum Ziehen
-- 📐 **Kluge Stopp-Platzierung** dort, wo ein neuer Stopp den kleinsten Umweg macht
-- 🛣️ **Echte Straßenrouten** mit Kilometern und Fahrzeit
-- ⛽ **Längste Strecke ohne Tankstelle** für jede Route
-- 💧 **Lange Abschnitte ohne Wasser**, vorher markiert
-- 👀 **Sehenswertes bis 25 km neben der Strecke** als Vorschlag
-- 🌦️ **Wetter an der Strecke**, nicht nur am Ziel
-- 🕒 **Fahrtage** mit Pausen und der spätesten Abfahrt vor Sonnenuntergang
-- 🌍 **Reise-Karte und 3D-Weltkugel** mit allen Etappen, Routen und Flügen
-- 🎬 **Animationsfilm deiner Reise:** Flieger, Auto, Zug oder Boot mit Entfernung, Zoom im Verhältnis zur Strecke und ein Schalter je Route für das, was zu sehen ist
-- ⛵ **Schippern als Verkehrsmittel:** gerade Linie über das Wasser, kein Sprit, im Film ein eigenes Boot
-- 📍 **Dein Standort auf der Offline-Karte** mit Knopf, der zu dir springt, auch ohne Netz
-- 🔔 **Dringende Änderungen auf der Startseite:** Ausfälle, Verspätungen und Gate- oder Gleiswechsel vor Flug und Zug
-- 🌐 **Lichtrand bei Verbindungen** für GPS, Wetter, Warnungen oder Spotify
-- 🌦️ **Wetter-Stimmung:** Die Farben passen sich leicht an Wetter und Tageszeit an deinem Ort an
-- 🎨 **Design-Seite** mit Hell und Dunkel, Sprache, Schrift, Größe und einem Schalter für jeden Effekt
-- 📌 **Feste Kopfbereiche** mit Untermenü, darunter blendet der Text weich aus
-- ⛳ **Mehrere Ziele am Tag** im Logbuch, im Tagebuch als Strecke
-- 🗒️ **Notizen je Etappe mit Zeitstempel**, von selbst im Logbuch und wieder herausnehmbar
-- ⚠️ **Nahe Ereignisse unterwegs:** amtliche Warnungen nah an deinem echten Standort, einzeln fürs Tagebuch auswählbar
-- 💶 **Daten und Ausgaben am Ende des Tagebuchs**, dazu die Kosten je Etappe
-- 🧩 **Routen-Ideen** für die Süd- und Nord-Schleife ab Perth
-- 🥾 **Wanderungen** mit Stand, Datum und Fotos
-- 📅 **Kalender-Ansichten wie am iPhone:** Liste, Monat und Jahr umschalten, für den schnellen Überblick über die ganze Reise
-- 📄 **Tagebuch als PDF mit 300 dpi, Kollage als PDF, JPEG oder TIFF**, danach drucken, sichern, teilen oder mailen
-- 🗓️ **Kalender** als Druck-PDF und als echte Excel-Datei
-- 🖨️ **Karte als Druckbild** in jeder Größe
-- 📥 **Reisekalender-Import**, der Buchungen selbst einsortiert
-- 📍 **144 handverlesene Orte** mit Bildern, Saison und Insider-Markierungen
-- 🖼️ **Jedes Bild änderbar:** eigenes Foto, Bildersuche oder eingefügter Ausschnitt
-- ➕ **Eigene Orte anlegen** mit Bild und Beschreibung aus Wikipedia
-- 📷 **Gemacht für Fotografen:** goldene Stunde, blaue Stunde und Nachthimmel an jedem Ort, für jeden Tag planbar
-- 🌅 **Sonnenzeiten** mit Auf- und Untergang und dem Höchststand der Sonne
-- 🌌 **Sternen-Check** mit Mondphase und astronomischer Dunkelheit
-- 📝 **Notizen und Berichte** zu jedem Ort
+Sortiert nach Nutzen unterwegs: Sicherheit und Planung zuerst, Fotohelfer und Optik weiter unten.
+
 - 🗺️ **Offline-Karte** für ganz Australien, im Detail dort, wo du unterwegs bist
-- 🛣️ **Kleine oder große Karte, du entscheidest:** jede Straße und Piste in Western Australia auf Knopfdruck
 - ⛺ **Versorgung an der Route:** Tankstellen, Wasser, Toiletten, Camps, Rastplätze, Läden, Werkstätten, Kliniken
 - 🔥 **Amtliche Warnungen** zu Feuer, Flut und Unwetter in WA, VIC und QLD
 - 🚨 **Warnungen entlang der Route:** am Standort, auf der Strecke voraus, auf jeder Etappe und Wanderung, auch wenn die Strecke mehrere Gefahrengebiete kreuzt
-- 🏷️ **Warn-Labels auf den Ortsbildern:** Sturm, Starkregen, Überflutung, Gewitter, extreme Hitze oder Feuer stehen direkt auf dem Thumbnail des Orts, bei Warnungen in der Nähe mit Entfernung
-- 📡 **Genaue Lage jeder Warnung:** Größe des Gebiets, Entfernung, Google Maps und offline auf der eigenen Karte mit Umkreis und deinem Standort
-- 🚧 **Straßenlage WA** mit Sperrungen direkt auf deiner Route
 - 🆘 **Notfall-Modus** komplett offline: Standort, nächste Hilfe, Notrufnummern
-- ✅ **„Ich bin OK“-Protokoll** zum Exportieren und Teilen
+- 🚧 **Straßenlage WA** mit Sperrungen direkt auf deiner Route
+- ⛽ **Längste Strecke ohne Tankstelle** für jede Route
+- 💧 **Lange Abschnitte ohne Wasser**, vorher markiert
 - 📶 **Check „Bereit für unterwegs?“** vor der Fahrt ins Funkloch
+- 🛫 **Flüge und Züge live:** Status, neue Zeiten, Terminal, Gate, Schalter, Gleis, Gepäckband und Umstieg
+- 🔔 **Dringende Änderungen auf der Startseite:** Ausfälle, Verspätungen und Gate- oder Gleiswechsel vor Flug und Zug
+- 🛣️ **Echte Straßenrouten** mit Kilometern und Fahrzeit
+- 🕒 **Fahrtage** mit Pausen und der spätesten Abfahrt vor Sonnenuntergang
+- 🌦️ **Wetter an der Strecke**, nicht nur am Ziel
+- 🗺️ **Etappen und Routen** mit Datum, Stopps und Reihenfolge zum Ziehen
+- 📐 **Kluge Stopp-Platzierung** dort, wo ein neuer Stopp den kleinsten Umweg macht
+- 👀 **Sehenswertes bis 25 km neben der Strecke** als Vorschlag
+- 📍 **144 handverlesene Orte** mit Bildern, Saison und Insider-Markierungen
+- ➕ **Eigene Orte anlegen** mit Bild und Beschreibung aus Wikipedia
+- 🧩 **Routen-Ideen** für die Süd- und Nord-Schleife ab Perth
+- 🥾 **Wanderungen** mit Stand, Datum und Fotos
+- 🧭 **Einrichtungsassistent**, der deine Reise in einer Minute mit dir anlegt
+- 🔎 **Eine Suche für alles:** Orte, Tage, Tiere, Buchungen, Notizen
+- 🚫 **Kein Konto, keine Cloud, keine Werbung, kein Tracking**
 - 📖 **Logbuch** mit 16 Modulen und 72 Feldern je Tag
-- 🎙️ **Sprachnotizen und Diktat** direkt in den Tag
-- 📸 **Fotos sortieren sich selbst** nach Datum, Ort und Streckenkilometer
-- 🪰 **Fliegen-Faktor, Roadkill-Zähler und Road-Trains** fürs echte Outback-Gefühl
-- 🛸 **Zähler für Kuriositäten am Straßenrand:** Big Things, Schuh-Zäune, skurrile Briefkästen
-- 🦘 **Tier-Album** mit 20 Tieren zum Sammeln
-- 👃 **Sinne, Menschen, Essen, Lagerfeuer und Nachthimmel**, jeden Tag festgehalten
-- 🏛️ **Amtliche Lage des Tages**, automatisch im Logbuch gespeichert
 - 📚 **Automatisches Reisetagebuch:** Aus dem Logbuch wird von selbst ein fertiges Reisemagazin
+- 📸 **Fotos sortieren sich selbst** nach Datum, Ort und Streckenkilometer
+- 🎙️ **Sprachnotizen und Diktat** direkt in den Tag
+- ⛳ **Mehrere Ziele am Tag** im Logbuch, im Tagebuch als Strecke
+- 🗒️ **Notizen je Etappe mit Zeitstempel**, von selbst im Logbuch und wieder herausnehmbar
+- 🗒️ **Einträge über mehrere Tage** an Etappe und Logbuch, wenn du nicht jeden Tag schreibst
+- ⚠️ **Nahe Ereignisse unterwegs:** amtliche Warnungen nah an deinem echten Standort, einzeln fürs Tagebuch auswählbar
+- 🏛️ **Amtliche Lage des Tages**, automatisch im Logbuch gespeichert
 - 🖨️ **Fertig fürs Fotobuch** zum Drucken oder als PDF, kurz oder ausführlich
+- 📄 **Tagebuch als PDF mit 300 dpi, Kollage als PDF, JPEG oder TIFF**, danach drucken, sichern, teilen oder mailen
 - 🖼️ **Fotomediathek eingebunden:** Hunderte Fotos wählen, jedes landet von selbst an seinem Tag
 - ☁️ **Alle iCloud-Fotos** am Mac, in Fotobuch-Qualität
-- 🎞️ **Animierte Foto-Kollage**, offline und ohne KI
-- 🎬 **Reise-Film** im Hochformat, in der App aufgenommen
 - 👨‍👩‍👧 **Mit der Familie teilen:** der Reisebericht als eine Datei über Nachrichten, WhatsApp, Mail oder AirDrop
 - 💌 **Öffnet sich überall:** ohne App, ohne Konto, auch offline, ohne Buchungen und genaue Koordinaten
-- 🎵 **Spotify-Soundtrack:** Musik von jedem Ort landet automatisch in deiner Playlist
-- 🎸 **Lokale Bands zuerst**, jeweils mit ihrem meistgehörten Song
-- 📴 **Musik auch offline:** Orte werden vorgemerkt und später nachgeholt
+- 📥 **Reisekalender-Import**, der Buchungen selbst einsortiert
 - 📨 **Buchung aus Mail:** einfügen, alles wird erkannt
 - 🎫 **Tickets und Dokumente offline** auf dem Gerät
 - 🔐 **Face ID, Touch ID oder Windows Hello** schützen deine Dokumente
@@ -868,20 +875,58 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - 💶 **Budget in Euro und AU$** zum Tageskurs
 - 🧾 **Kosten je Tag** in 23 Kategorien, beliebig viele einzelne Posten
 - 💰 **Kostenauswertung** nach Short-Values, Long-Values, Verkehr, Unterkunft und Erlebnissen, je Etappe und bis zum einzelnen Posten
-- 🗒️ **Einträge über mehrere Tage** an Etappe und Logbuch, wenn du nicht jeden Tag schreibst
-- 🛫 **Flüge und Züge live:** Status, neue Zeiten, Terminal, Gate, Schalter, Gleis, Gepäckband und Umstieg
+- 💶 **Daten und Ausgaben am Ende des Tagebuchs**, dazu die Kosten je Etappe
 - 🎒 **Packliste fürs Outback**
+- 📅 **Kalender-Ansichten wie am iPhone:** Liste, Monat und Jahr umschalten, für den schnellen Überblick über die ganze Reise
+- 🗓️ **Kalender als PDF-Datei und als echte Excel-Datei**, zum Sichern, Teilen oder Mailen
+- 📍 **Dein Standort auf der Offline-Karte** mit Knopf, der zu dir springt, auch ohne Netz
+- 🌍 **Reise-Karte und 3D-Weltkugel** mit allen Etappen, Routen und Flügen
+- 🖨️ **Karte als Druckbild** in jeder Größe
 - 🔄 **Backup und Abgleich** zwischen Mac und iPhone, sicher zusammengeführt
-- 🔎 **Eine Suche für alles:** Orte, Tage, Tiere, Buchungen, Notizen
-- 🔠 **Schriftgröße und Gesamtgröße** in vier Stufen einstellbar
-- 🌓 **Hell und dunkel**
-- 🇩🇪🇬🇧 **Deutsch und Englisch**
-- ♿ **Barrierearm**, geprüft nach WCAG 2.2 AA
+- 🖥️ **Mac-App**, 🪟 **Windows-App**, 🐧 **Linux-App** und 📱 **Web-App fürs iPhone**
+- 🎵 **Spotify-Soundtrack:** Musik von jedem Ort landet automatisch in deiner Playlist
+- 🎸 **Lokale Bands zuerst**, jeweils mit ihrem meistgehörten Song
+- 📴 **Musik auch offline:** Orte werden vorgemerkt und später nachgeholt
+- 🛣️ **Kleine oder große Karte, du entscheidest:** jede Straße und Piste in Western Australia auf Knopfdruck
+- 📡 **Genaue Lage jeder Warnung:** Größe des Gebiets, Entfernung, Google Maps und offline auf der eigenen Karte mit Umkreis und deinem Standort
+- 🏷️ **Warn-Labels auf den Ortsbildern:** Sturm, Starkregen, Überflutung, Gewitter, extreme Hitze oder Feuer stehen direkt auf dem Thumbnail des Orts, bei Warnungen in der Nähe mit Entfernung
+- ✅ **„Ich bin OK“-Protokoll** zum Exportieren und Teilen
+- 📸 **Fotolage auf der Startseite:** eine Zeile zeigt, ob es sich hier und jetzt lohnt, mit Bewertung, bester Zeit, Wolken und Mond
+- 🌅 **Goldene und blaue Stunde** morgens und abends, mit Sonnenrichtung
+- 🌌 **Milchstraßen-Planer:** Zeitfenster, Höhe, Richtung und die nächste gute Nacht
+- 🌙 **Mond auf einen Blick:** Phase, Helligkeit, Auf- und Untergang mit Richtung und die Zeit ohne Mondlicht
+- ✨ **Strichspuren:** wohin die Kamera zeigen soll und wie lange du belichten kannst
+- ☁️ **Himmel für Fotografen:** Wolken nach Schichten, Sicht, Wind, Regenrisiko und Taugefahr
+- 🏙️ **Stadtlicht als Schätzung** und Sternschnuppen rund um ihren Höhepunkt
+- 📷 **Gemacht für Fotografen:** goldene Stunde, blaue Stunde und Nachthimmel an jedem Ort, für jeden Tag planbar
+- 🌅 **Sonnenzeiten** mit Auf- und Untergang und dem Höchststand der Sonne
+- 🌌 **Sternen-Check** mit Mondphase und astronomischer Dunkelheit
+- 🖼️ **Jedes Bild änderbar:** eigenes Foto, Bildersuche oder eingefügter Ausschnitt
+- 📝 **Notizen und Berichte** zu jedem Ort
+- 🎬 **Animationsfilm deiner Reise:** Flieger, Auto, Zug oder Boot mit Entfernung, Zoom im Verhältnis zur Strecke und ein Schalter je Route für das, was zu sehen ist
+- 🎬 **Reise-Film** im Hochformat, in der App aufgenommen
+- 🎞️ **Animierte Foto-Kollage**, offline und ohne KI
+- ⛵ **Schippern als Verkehrsmittel:** gerade Linie über das Wasser, kein Sprit, im Film ein eigenes Boot
+- 🗂️ **Routenauswahl, die mitwächst:** Aktuelles zuerst, eingeklappte Listen und Suche, auf Karte und Startseite
+- 🧭 **Aufgeräumte Felder** mit gleich großen Knöpfen in Logbuch, Notizen, Wanderungen und Karte
+- 🦘 **Tier-Album** mit 20 Tieren zum Sammeln
+- 🪰 **Fliegen-Faktor, Roadkill-Zähler und Road-Trains** fürs echte Outback-Gefühl
+- 🛸 **Zähler für Kuriositäten am Straßenrand:** Big Things, Schuh-Zäune, skurrile Briefkästen
+- 👃 **Sinne, Menschen, Essen, Lagerfeuer und Nachthimmel**, jeden Tag festgehalten
 - 🧠 **Australien-Quiz** mit fünf Stufen
 - 📘 **Handbuch** als PDF in der App
+- 🧪 **Testreise zum Spielen:** ein Tipp füllt die App mit einer ausgedachten 21-Tage-Reise, noch ein Tipp und sie ist wieder weg
+- 📅 **Reisezeitraum im Titelbild**, direkt aus Reisebeginn und Reisedauer
+- 🔠 **Schriftgröße und Gesamtgröße** in vier Stufen einstellbar
+- 🇩🇪🇬🇧 **Deutsch und Englisch**
+- ♿ **Barrierearm**, geprüft nach WCAG 2.2 AA
+- 🌓 **Hell und dunkel**
+- 🎨 **Design-Seite** mit Hell und Dunkel, Sprache, Schrift, Größe und einem Schalter für jeden Effekt
+- 🌡️ **Temperatur am Rand:** kurzes, leises Aufleuchten beim Öffnen, je höher, desto wärmer, nur mit Netz
+- 🌐 **Lichtrand bei Verbindungen** für GPS, Wetter, Warnungen oder Spotify
+- 🌦️ **Wetter-Stimmung:** Die Farben passen sich leicht an Wetter und Tageszeit an deinem Ort an
+- 📌 **Feste Kopfbereiche** mit Untermenü, darunter blendet der Text weich aus
 - 🎮 **Drei versteckte Spiele** im Suchfeld (siehe unten)
-- 🖥️ **Mac-App**, 🪟 **Windows-App**, 🐧 **Linux-App** und 📱 **Web-App fürs iPhone**
-- 🚫 **Kein Konto, keine Cloud, keine Werbung, kein Tracking**
 
 ### 🎮 Easter Eggs: drei versteckte Spiele
 
@@ -1215,6 +1260,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 - [x] **Version 1.5:** Kalender mit den Ansichten Liste, Monat und Jahr
 - [x] **Version 1.6:** Tagebuch und Kollage als Datei, Notizen im Logbuch, Zeiträume in der Tierwelt
 - [x] **Version 1.7:** Animationsfilm mit Verkehrsmitteln, Design-Seite, Standort auf der Karte, dringende Meldungen
+- [x] **Version 1.8:** Fotolage auf der Startseite, Temperatur am Rand, Kalender als PDF-Datei, aufgeräumte Felder
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

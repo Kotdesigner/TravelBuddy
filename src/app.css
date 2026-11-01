@@ -370,3 +370,19 @@ article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 
     80% { transform: skewX(-0.6deg); filter: blur(0.2px) brightness(1.05); }
   }
 }
+
+/* Bedienfeld nach dem Vorbild von Logbuch/Lesen: gleiche Höhen, gleiche Abstände, zwei Spalten am Handy */
+.bedien { display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--card); }
+.bedien-block { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.bedien-titel { color: var(--muted); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; }
+.bedien-text { margin: 0; color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); line-height: 1.45; }
+.bedien-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.bedien-zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.bedien-knopf { display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--line-stark); border-radius: 10px; background: none; color: var(--ink); font-size: calc(14px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+.bedien-knopf:disabled { opacity: 0.45; cursor: default; }
+.bedien-knopf.haupt { min-height: 48px; border-color: var(--brand); background: var(--brand); color: #fff; font-size: calc(15px * var(--schrift, 1)); }
+.bedien-wahl { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: none; color: var(--ink); font-size: calc(14px * var(--schrift, 1)); font-weight: 600; text-align: left; cursor: pointer; }
+.bedien-wahl.an { border-color: var(--brand); background: var(--brand); color: #fff; }
+.bedien-zahl { flex: none; color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; font-variant-numeric: tabular-nums; }
+.bedien-wahl.an .bedien-zahl { color: #fff; }
+.bedien-feld { width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid var(--line-stark); border-radius: 10px; background: var(--eingabe); color: var(--ink); font-size: calc(14px * var(--schrift, 1)); }
