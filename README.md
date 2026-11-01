@@ -2,7 +2,7 @@
 
 # TravelBuddy
 
-### The road trip companion for the stretches where the signal ends.
+### One app. The whole road trip. Even where the signal ends.
 
 Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline, no account, no cloud.<br>
 **One app for the whole trip. It does it all.**<br>
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline
 
 <br>
 
-<img src="bilder/en/titel-kein-netz.jpg" alt="TravelBuddy on MacBook and iPhone. No signal. No account. No problem." width="900">
+<img src="bilder/en/titel-eine-app.jpg" alt="One app. The whole trip." width="900">
 
 </div>
 
@@ -43,6 +43,21 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline
 No account, nothing to install from a store, and your data stays on your phone. On a computer, the link works straight away.
 
 </td>
+</tr>
+</table>
+
+---
+
+<table>
+<tr>
+<td align="center"><img src="bilder/en/iphone-heute.jpg" width="240" alt="Today"><br><b>Today</b></td>
+<td align="center"><img src="bilder/en/iphone-karte.jpg" width="240" alt="Offline map"><br><b>Offline map</b></td>
+<td align="center"><img src="bilder/en/iphone-orte.jpg" width="240" alt="Places"><br><b>Places</b></td>
+</tr>
+<tr>
+<td align="center"><img src="bilder/en/iphone-tagebuch.jpg" width="240" alt="Your journal"><br><b>Your journal</b></td>
+<td align="center"><img src="bilder/en/iphone-tag.jpg" width="240" alt="Every day told"><br><b>Every day told</b></td>
+<td align="center"><img src="bilder/en/iphone-fotolage.jpg" width="240" alt="Photo conditions"><br><b>Photo conditions</b></td>
 </tr>
 </table>
 
@@ -180,7 +195,7 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 
 ## 🚀 Everything TravelBuddy can do
 
-<div align="center"><img src="bilder/en/titel-eine-app.jpg" alt="Your whole trip. One app." width="900"></div>
+<div align="center"><img src="bilder/en/titel-kein-netz.jpg" alt="No signal. No account. No problem." width="900"></div>
 
 **One app for the whole trip, from the first idea to the last memory. It really does it all.**
 
@@ -343,7 +358,7 @@ The first time you open TravelBuddy, a setup assistant walks you through eight s
 </table>
 
 <div align="center">
-<img src="bilder/en/mac-route.jpg" width="760" alt="Route on the Mac">
+<img src="bilder/en/mac-karte.jpg" width="760" alt="Offline map on the Mac">
 <br><sub>Route with stops on the Mac</sub>
 </div>
 
@@ -676,7 +691,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, komplett offline
 
 <br>
 
-<img src="bilder/de/titel-kein-netz.jpg" alt="TravelBuddy auf MacBook und iPhone. Kein Netz. Kein Konto. Kein Problem." width="900">
+<img src="bilder/de/titel-eine-app.jpg" alt="Eine App. Die ganze Reise." width="900">
 
 </div>
 
@@ -698,6 +713,21 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 </td>
 </tr>
 </table>
+
+<table>
+<tr>
+<td align="center"><img src="bilder/de/iphone-heute.jpg" width="240" alt="Heute"><br><b>Heute</b></td>
+<td align="center"><img src="bilder/de/iphone-karte.jpg" width="240" alt="Offline-Karte"><br><b>Offline-Karte</b></td>
+<td align="center"><img src="bilder/de/iphone-orte.jpg" width="240" alt="Orte"><br><b>Orte</b></td>
+</tr>
+<tr>
+<td align="center"><img src="bilder/de/iphone-tagebuch.jpg" width="240" alt="Dein Tagebuch"><br><b>Dein Tagebuch</b></td>
+<td align="center"><img src="bilder/de/iphone-tag.jpg" width="240" alt="Jeder Tag erzählt"><br><b>Jeder Tag erzählt</b></td>
+<td align="center"><img src="bilder/de/iphone-fotolage.jpg" width="240" alt="Fotolage"><br><b>Fotolage</b></td>
+</tr>
+</table>
+
+---
 
 ## 📸 Neu in Version 1.8
 
@@ -821,7 +851,7 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 
 ## 🚀 Alles, was TravelBuddy kann
 
-<div align="center"><img src="bilder/de/titel-eine-app.jpg" alt="Deine ganze Reise. Eine App." width="900"></div>
+<div align="center"><img src="bilder/de/titel-kein-netz.jpg" alt="Kein Netz. Kein Konto. Kein Problem." width="900"></div>
 
 **Eine App für die ganze Reise, von der ersten Idee bis zur letzten Erinnerung. Sie kann wirklich alles.**
 
@@ -982,7 +1012,7 @@ Beim ersten Öffnen führt dich ein Einrichtungsassistent in acht kurzen Schritt
 </table>
 
 <div align="center">
-<img src="bilder/de/mac-route.jpg" width="760" alt="Route auf dem Mac">
+<img src="bilder/de/mac-karte.jpg" width="760" alt="Offline-Karte auf dem Mac">
 <br><sub>Route mit Stopps auf dem Mac</sub>
 </div>
 
