@@ -25,7 +25,7 @@
   import Heute from './lib/Heute.svelte'
   import NeuBlatt from './lib/NeuBlatt.svelte'
   import Einfuehrung from './lib/Einfuehrung.svelte'
-  import { einfuehrungStarten } from './lib/einfuehrung.js'
+  import { einfuehrung, einfuehrungStarten } from './lib/einfuehrung.js'
   import { testreiseAn, testreiseKnopf } from './lib/testreise-dienst.js'
   import { kartenLauf } from './lib/karten-laden.js'
   import OrtNeu from './lib/OrtNeu.svelte'
@@ -71,6 +71,8 @@
   import { modal } from './lib/modal.js'
   import Handbuch from './lib/Handbuch.svelte'
   import Rechtliches from './lib/Rechtliches.svelte'
+  import { ladeBildNachweis } from './lib/bild-nachweis.js'
+  import { zeigeOrteHinweis } from './lib/orte-hinweis.js'
   import { holeOrtsdaten } from './lib/ortdaten.js'
   import { FELD } from './lib/journal-schema.js'
   import { haversine, luftlinieKm } from './lib/routing.js'
@@ -812,6 +814,8 @@
     zeigeToast(t('Gerettet ✓ {n} {wert} aus dem Notspeicher zurückgeholt{wert2}', { n, wert: n === 1 ? t('Eintrag') : t('Einträge'), wert2: e ? t(', {e} ergänzt', { e }) : '' }), 'ok', 9000)
     rettung.set(null)   // nur einmal zeigen
   })
+  ladeBildNachweis()
+  $effect(() => { if (ansicht.tab === 'orte' && !$einfuehrung) zeigeOrteHinweis() })
 </script>
 
 <RoutenDienst orte={[...orte, ...$eigeneOrte]} />

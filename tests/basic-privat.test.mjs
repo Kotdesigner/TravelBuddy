@@ -28,7 +28,8 @@ const ADRESSEN = /v2-wa-tb|trvlbdd|travelbuddyv2/
 
 console.log('\n1  Inhalte (Orte, Routen, Bilder, Praxis, Quiz)')
 {
-  const json = dateien('public', /\.json$/).filter((f) => !/pois-/.test(f))
+  // Im Bildnachweis stehen die Namen fremder Fotografen, auch ein Steve kann darunter sein
+  const json = dateien('public', /\.json$/).filter((f) => !/pois-|bilder-nachweis/.test(f))
   const mitName = json.filter((f) => NAMEN.test(fs.readFileSync(f, 'utf8')))
   p(`kein Name in ${json.length} Inhaltsdateien`, !mitName.length, mitName.map((f) => path.basename(f)).join(', '))
   p('keine Startdaten mitgeliefert', !fs.existsSync(path.join(wurzel, 'public/startdaten.json')))
@@ -86,7 +87,7 @@ console.log('\n3  Build-Einstellungen')
 console.log('\n4  Gebaute App (dist/)')
 if (!fs.existsSync(path.join(wurzel, 'dist/index.html'))) console.log('  · übersprungen: erst npm run build')
 else {
-  const texte = dateien('dist', /\.(js|html|json|webmanifest|css)$/).filter((f) => !/pois-|geo-/.test(f))
+  const texte = dateien('dist', /\.(js|html|json|webmanifest|css)$/).filter((f) => !/pois-|geo-|bilder-nachweis/.test(f))
   const treffer = texte.filter((f) => { const s = fs.readFileSync(f, 'utf8').replaceAll(IMPRESSUM.name, '').replaceAll(IMPRESSUM.email, ''); return NAMEN.test(s) || ALTE_IDS.test(s) || REISEDATEN.test(s) || ADRESSEN.test(s) })
   p(`${texte.length} Dateien ohne Namen, Kennungen, Reisedaten, Adressen`, !treffer.length, treffer.map((f) => path.relative(wurzel, f)).join(', '))
   p('keine Größentabelle fremder Belege', !fs.existsSync(path.join(wurzel, 'dist/belege-groessen.json')))

@@ -5,6 +5,8 @@
   import { STUFE_FARBE } from './gefahren.js'
   import { schriftAuf } from './kontrast.js'
   import { macheThumbnail, heute } from './thumbnail.js'
+  import BildAendern from './BildAendern.svelte'
+  import { bildNachweis } from './bild-nachweis.js'
   import { istWanderung, istPerle } from './wander-orte.js'
   import { istRoute, abstandZurRoute, ymd as ymdPlan } from './plan.js'
   import { norm } from './suche.js'
@@ -121,6 +123,10 @@
     } catch {}
   }
 
+  // Ein gewähltes Bild steht vorne und wird damit zum Bild des Orts
+  function neuesBild(thumb) { updateOrt(ort.id, { bilder: [thumb, ...(eintrag.bilder || [])] }) }
+  const nachweis = $derived($bildNachweis[ort.id] || null)
+
   function removeFoto(i) {
     const bilder = (eintrag.bilder || []).filter((_, idx) => idx !== i)
     updateOrt(ort.id, { bilder })
@@ -164,6 +170,8 @@
     {:else}
       <div class="fallback"><span>{ort.emoji || '📍'}</span></div>
     {/if}
+    <BildAendern name={ort.name} status={ort.eigen ? '' : nachweis?.status === 'belegt' ? '' : nachweis?.status} eigenes={!!eintrag.bilder?.length} onbild={neuesBild} onzurueck={() => removeFoto(0)} />
+    {#if nachweis?.status === 'symbol' && !eintrag.bilder?.length}<span class="symbol-marke">{je('Symbolbild', 'Sample picture')}</span>{/if}
     <!-- Alle Marken in EINEM Behälter. Am Schreibtisch sitzen sie wie bisher in den
          Ecken; auf dem Handy (152 px Kachelbreite) stießen sie dort zusammen, deshalb
          werden sie dort zu einer Reihe am unteren Bildrand. Reihenfolge im Markup =
@@ -247,6 +255,9 @@
             placeholder={t('Wie war es hier? Was solltest du dir merken?')}></textarea>
         </label>
 
+        {#if nachweis && !eintrag.bilder?.length}
+          <p class="bild-quelle">{nachweis.status === 'symbol' ? je('Symbolbild, Foto: ', 'Sample picture, photo: ') : je('Foto: ', 'Photo: ')}<a href={nachweis.seite} target="_blank" rel="noopener">{nachweis.autor}</a>, {nachweis.lizenz}</p>
+        {/if}
         {#if eintrag.bilder?.length}
           <div class="fotos">
             {#each eintrag.bilder as b, i}
@@ -551,4 +562,7 @@
   .bubble, .mehr-btn, .saison-btn { position: relative; }
   .bubble::after { content: ''; position: absolute; inset: -3px -2px; }
   .mehr-btn::after, .saison-btn::after { content: ''; position: absolute; inset: -7px -4px; }
+  .symbol-marke { position: absolute; left: 8px; top: 50px; z-index: 2; padding: 2px 8px; border-radius: 10px; background: rgba(20,12,8,.72); color: #fff; font-size: calc(11.5px * var(--schrift, 1)); font-weight: 700; }
+  .bild-quelle { margin: 0 0 8px; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); overflow-wrap: anywhere; }
+  .bild-quelle a { color: inherit; }
 </style>

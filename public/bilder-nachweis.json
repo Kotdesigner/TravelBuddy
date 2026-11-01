@@ -1,404 +1,1586 @@
 [
- {
-  "id": "wirrawilla_regenwald",
-  "name": "Wirrawilla Rainforest Walk",
-  "datei": "wirrawilla_regenwald.jpg",
-  "motiv": "Toolangi State Forest",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/0/0d/20124-01-04_Toolangi_tree_house_600_2810_1_2_%28Soft_4%29.jpg",
-  "seite": "https://en.wikipedia.org/wiki/Toolangi_State_Forest"
- },
- {
-  "id": "flinders_street_station",
-  "name": "Flinders Street Station",
-  "datei": "flinders_street_station.jpg",
-  "motiv": "Flinders Street Station IMG 9646.JPG (5095764364).jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flinders_Street_Station_IMG_9646.JPG_%285095764364%29.jpg/1280px-Flinders_Street_Station_IMG_9646.JPG_%285095764364%29.jpg",
-  "seite": "File:Flinders Street Station IMG 9646.JPG (5095764364).jpg"
- },
- {
-  "id": "queen_victoria_market",
-  "name": "Queen Victoria Market",
-  "datei": "queen_victoria_market.jpg",
-  "motiv": "Queen Victoria Market walk (Unsplash).jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Queen_Victoria_Market_walk_%28Unsplash%29.jpg/1280px-Queen_Victoria_Market_walk_%28Unsplash%29.jpg",
-  "seite": "File:Queen Victoria Market walk (Unsplash).jpg"
- },
- {
-  "id": "melbourne_skydeck",
-  "name": "Melbourne Skydeck (Eureka Tower)",
-  "datei": "melbourne_skydeck.png",
-  "motiv": "Eureka Tower",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Eureka_Tower%2C_August_2010.png",
-  "seite": "https://en.wikipedia.org/wiki/Eureka_Tower"
- },
- {
-  "id": "hosier_lane",
-  "name": "Hosier Lane",
-  "datei": "hosier_lane.jpg",
-  "motiv": "Wall of Hosier Lane Melbourne Australia.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Wall_of_Hosier_Lane_Melbourne_Australia.jpg/1280px-Wall_of_Hosier_Lane_Melbourne_Australia.jpg",
-  "seite": "File:Wall of Hosier Lane Melbourne Australia.jpg"
- },
- {
-  "id": "ngv_international",
-  "name": "National Gallery of Victoria (NGV International)",
-  "datei": "ngv_international.jpg",
-  "motiv": "National Gallery of Victoria",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/National_Gallery_of_Victoria_2024.jpg/3840px-National_Gallery_of_Victoria_2024.jpg",
-  "seite": "https://de.wikipedia.org/wiki/National_Gallery_of_Victoria"
- },
- {
-  "id": "royal_botanic_gardens_melbourne",
-  "name": "Royal Botanic Gardens Victoria - Melbourne Gardens",
-  "datei": "royal_botanic_gardens_melbourne.jpg",
-  "motiv": "PXL 20241006 043548729 Royal Botanic Gardens Victoria - Melbourne Gardens 5X9J+W3 Melbourne, Victoria, Australia 07.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/PXL_20241006_043548729_Royal_Botanic_Gardens_Victoria_-_Melbourne_Gardens_5X9J%2BW3_Melbourne%2C_Victoria%2C_Australia_07.jpg/1280px-PXL_20241006_043548729_Royal_Botanic_Gardens_Victoria_-_Melbourne_Gardens_5X9J%2BW3_Melbourne%2C_Victoria%2C_Australia_07.jpg",
-  "seite": "File:PXL 20241006 043548729 Royal Botanic Gardens Victoria - Melbourne Gardens 5X9J+W3 Melbourne, Victoria, Australia 07.jpg"
- },
- {
-  "id": "rose_street_artists_market",
-  "name": "Rose Street Artists' Market (Fitzroy)",
-  "datei": "rose_street_artists_market.jpg",
-  "motiv": "Fitzroy, Victoria",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/4/41/The_Fitzroy_skyline.jpg",
-  "seite": "https://en.wikipedia.org/wiki/Fitzroy%2C_Victoria"
- },
- {
-  "id": "brighton_bathing_boxes",
-  "name": "Brighton Bathing Boxes (Dendy Street Beach)",
-  "datei": "brighton_bathing_boxes.jpg",
-  "motiv": "Brighton, Victoria",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/5/53/Brightontownhall2021_b.jpg",
-  "seite": "https://en.wikipedia.org/wiki/Brighton%2C_Victoria"
- },
- {
-  "id": "puffing_billy_belgrave",
-  "name": "Puffing Billy Railway (Bahnhof Belgrave)",
-  "datei": "puffing_billy_belgrave.jpg",
-  "motiv": "Puffing Billy Railway",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/0/05/Puffing_billy_in_action_2003.jpg",
-  "seite": "https://de.wikipedia.org/wiki/Puffing_Billy_Railway"
- },
- {
-  "id": "phillip_island_penguin_parade",
-  "name": "Penguin Parade, Phillip Island",
-  "datei": "phillip_island_penguin_parade.jpg",
-  "motiv": "Phillip Island Nature Park",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Penguin_Parade_3.jpg",
-  "seite": "https://en.wikipedia.org/wiki/Phillip_Island_Nature_Park"
- },
- {
-  "id": "cairns_esplanade_lagoon",
-  "name": "Cairns Esplanade Lagoon",
-  "datei": "cairns_esplanade_lagoon.jpg",
-  "motiv": "Cairns Esplanade Lagoon Fish - panoramio.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Cairns_Esplanade_Lagoon_Fish_-_panoramio.jpg",
-  "seite": "File:Cairns Esplanade Lagoon Fish - panoramio.jpg"
- },
- {
-  "id": "crystal_cascades",
-  "name": "Crystal Cascades",
-  "datei": "crystal_cascades.jpg",
-  "motiv": "Crystal Cascades",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/3/32/Crystal_Cascades_SF24334-01.jpg",
-  "seite": "https://en.wikipedia.org/wiki/Crystal_Cascades"
- },
- {
-  "id": "palm_cove",
-  "name": "Palm Cove",
-  "datei": "palm_cove.jpg",
-  "motiv": "Esplanade, Palm Cove, 2018.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Esplanade%2C_Palm_Cove%2C_2018.jpg/1280px-Esplanade%2C_Palm_Cove%2C_2018.jpg",
-  "seite": "File:Esplanade, Palm Cove, 2018.jpg"
- },
- {
-  "id": "rex_lookout",
-  "name": "Rex Lookout",
-  "datei": "rex_lookout.jpg",
-  "motiv": "Rex Lookout, 2015 (01).JPG",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Rex_Lookout%2C_2015_%2801%29.JPG/1280px-Rex_Lookout%2C_2015_%2801%29.JPG",
-  "seite": "File:Rex Lookout, 2015 (01).JPG"
- },
- {
-  "id": "green_island",
-  "name": "Green Island",
-  "datei": "green_island.jpg",
-  "motiv": "The Green Island - panoramio.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/The_Green_Island_-_panoramio.jpg/1280px-The_Green_Island_-_panoramio.jpg",
-  "seite": "File:The Green Island - panoramio.jpg"
- },
- {
-  "id": "fitzroy_island",
-  "name": "Fitzroy Island",
-  "datei": "fitzroy_island.jpg",
-  "motiv": "Fitzroy Island 2004 - panoramio (2).jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Fitzroy_Island_2004_-_panoramio_%282%29.jpg/1280px-Fitzroy_Island_2004_-_panoramio_%282%29.jpg",
-  "seite": "File:Fitzroy Island 2004 - panoramio (2).jpg"
- },
- {
-  "id": "michaelmas_cay",
-  "name": "Michaelmas Cay",
-  "datei": "michaelmas_cay.jpg",
-  "motiv": "Michaelmas Cay 01.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Michaelmas_Cay_01.jpg/1280px-Michaelmas_Cay_01.jpg",
-  "seite": "File:Michaelmas Cay 01.jpg"
- },
- {
-  "id": "josephine_falls",
-  "name": "Josephine Falls",
-  "datei": "josephine_falls.jpg",
-  "motiv": "Josephine Falls - Wooroonooran National Park - panoramio.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/9/92/Josephine_Falls_-_Wooroonooran_National_Park_-_panoramio.jpg",
-  "seite": "File:Josephine Falls - Wooroonooran National Park - panoramio.jpg"
- },
- {
-  "id": "innisfail",
-  "name": "Innisfail",
-  "datei": "innisfail.jpg",
-  "motiv": "Innisfail Court House, 1940.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Innisfail_Court_House%2C_1940.jpg/1280px-Innisfail_Court_House%2C_1940.jpg",
-  "seite": "File:Innisfail Court House, 1940.jpg"
- },
- {
-  "id": "etty_bay",
-  "name": "Etty Bay",
-  "datei": "etty_bay.jpg",
-  "motiv": "Southern Cassowary near Etty Bay.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Southern_Cassowary_near_Etty_Bay.jpg/1280px-Southern_Cassowary_near_Etty_Bay.jpg",
-  "seite": "File:Southern Cassowary near Etty Bay.jpg"
- },
- {
-  "id": "mission_beach",
-  "name": "Mission Beach",
-  "datei": "mission_beach.jpg",
-  "motiv": "Mission Beach - panoramio (1).jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Mission_Beach_-_panoramio_%281%29.jpg/1280px-Mission_Beach_-_panoramio_%281%29.jpg",
-  "seite": "File:Mission Beach - panoramio (1).jpg"
- },
- {
-  "id": "kuranda_skyrail",
-  "name": "Kuranda (Skyrail & Scenic Railway)",
-  "datei": "kuranda_skyrail.jpg",
-  "motiv": "Kuranda Scenic Railway",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/0/08/Kuranda.jpg",
-  "seite": "https://de.wikipedia.org/wiki/Kuranda_Scenic_Railway"
- },
- {
-  "id": "barron_falls",
-  "name": "Barron Falls (Din Din) Lookout",
-  "datei": "barron_falls.jpg",
-  "motiv": "Barron Falls",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/4/41/Barron_falls_january2005.JPG",
-  "seite": "https://en.wikipedia.org/wiki/Barron_Falls"
- },
- {
-  "id": "mossman_gorge",
-  "name": "Mossman Gorge",
-  "datei": "mossman_gorge.jpg",
-  "motiv": "Mossman Gorge - panoramio (1).jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Mossman_Gorge_-_panoramio_%281%29.jpg/1280px-Mossman_Gorge_-_panoramio_%281%29.jpg",
-  "seite": "File:Mossman Gorge - panoramio (1).jpg"
- },
- {
-  "id": "four_mile_beach",
-  "name": "Four Mile Beach, Port Douglas",
-  "datei": "four_mile_beach.jpg",
-  "motiv": "Port Douglas (Queensland)",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/2/20/Port_douglas_qld_australia.jpg",
-  "seite": "https://de.wikipedia.org/wiki/Port_Douglas_(Queensland)"
- },
- {
-  "id": "cape_tribulation",
-  "name": "Cape Tribulation",
-  "datei": "cape_tribulation.jpg",
-  "motiv": "Cape Tribulation \"Donde el Rainforest se mezcla con la Gran barrera\" - panoramio.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Cape_Tribulation_%22Donde_el_Rainforest_se_mezcla_con_la_Gran_barrera%22_-_panoramio.jpg/1280px-Cape_Tribulation_%22Donde_el_Rainforest_se_mezcla_con_la_Gran_barrera%22_-_panoramio.jpg",
-  "seite": "File:Cape Tribulation \"Donde el Rainforest se mezcla con la Gran barrera\" - panoramio.jpg"
- },
- {
-  "id": "granite_gorge",
-  "name": "Granite Gorge Nature Park",
-  "datei": "granite_gorge.jpg",
-  "motiv": "Granite Gorge Nature Park - panoramio (1).jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Granite_Gorge_Nature_Park_-_panoramio_%281%29.jpg/1280px-Granite_Gorge_Nature_Park_-_panoramio_%281%29.jpg",
-  "seite": "File:Granite Gorge Nature Park - panoramio (1).jpg"
- },
- {
-  "id": "curtain_fig_tree",
-  "name": "Curtain Fig Tree",
-  "datei": "curtain_fig_tree.jpg",
-  "motiv": "Curtain-Fig-Nationalpark",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/f/f9/CurtainFig.jpg",
-  "seite": "https://de.wikipedia.org/wiki/Curtain-Fig-Nationalpark"
- },
- {
-  "id": "lake_eacham",
-  "name": "Lake Eacham (Crater Lakes National Park)",
-  "datei": "lake_eacham.jpg",
-  "motiv": "Crater-Lakes-Nationalpark",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/7/73/Yidyam.jpg",
-  "seite": "https://de.wikipedia.org/wiki/Crater-Lakes-Nationalpark"
- },
- {
-  "id": "millaa_millaa_falls",
-  "name": "Millaa Millaa Falls & Waterfall Circuit",
-  "datei": "millaa_millaa_falls.jpg",
-  "motiv": "Millaa Millaa Falls",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/MillaaMillaaFallsOct272024_01.jpg/3840px-MillaaMillaaFallsOct272024_01.jpg",
-  "seite": "https://en.wikipedia.org/wiki/Millaa_Millaa_Falls"
- },
- {
-  "id": "hypipamee_crater",
-  "name": "Mount Hypipamee Crater & Dinner Falls",
-  "datei": "hypipamee_crater.png",
-  "motiv": "Dinner Falls",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/3/35/Queensland_State_Archives_1315_Rays_Falls_head_of_Barron_River_at_Mount_Hypipamee_near_Herberton_c_1935.png",
-  "seite": "https://en.wikipedia.org/wiki/Dinner_Falls"
- },
- {
-  "id": "black_spur_fernshaw",
-  "name": "Black Spur / Fernshaw Picnic Ground",
-  "datei": "black_spur_fernshaw.jpg",
-  "motiv": "Black Spur, Yarra Ranges NP, Vic, Australia - Diliff.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Black_Spur%2C_Yarra_Ranges_NP%2C_Vic%2C_Australia_-_Diliff.jpg/1280px-Black_Spur%2C_Yarra_Ranges_NP%2C_Vic%2C_Australia_-_Diliff.jpg"
- },
- {
-  "id": "rainforest_gallery",
-  "name": "Rainforest Gallery (Mount Donna Buang)",
-  "datei": "rainforest_gallery.jpg",
-  "motiv": "Rainforest Gallery of Victoria.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Rainforest_Gallery_of_Victoria.jpg/1280px-Rainforest_Gallery_of_Victoria.jpg"
- },
- {
-  "id": "melbourne_cricket_ground",
-  "name": "Melbourne Cricket Ground (MCG)",
-  "datei": "melbourne_cricket_ground.jpg",
-  "motiv": "AFL Grand Final 2010 on the Melbourne Cricket Ground.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/AFL_Grand_Final_2010_on_the_Melbourne_Cricket_Ground.jpg/1280px-AFL_Grand_Final_2010_on_the_Melbourne_Cricket_Ground.jpg"
- },
- {
-  "id": "st_kilda_pier_penguins",
-  "name": "St Kilda Breakwater (Zwergpinguin-Kolonie)",
-  "datei": "st_kilda_pier_penguins.jpg",
-  "motiv": "20091121 Rakali at the St Kilda Breakwater (rear view).jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/20091121_Rakali_at_the_St_Kilda_Breakwater_%28rear_view%29.jpg/1280px-20091121_Rakali_at_the_St_Kilda_Breakwater_%28rear_view%29.jpg"
- },
- {
-  "id": "werribee_open_range_zoo",
-  "name": "Werribee Open Range Zoo",
-  "datei": "werribee_open_range_zoo.jpg",
-  "motiv": "Dromedary at the Werribee Open Range Zoo.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Dromedary_at_the_Werribee_Open_Range_Zoo.jpg/1280px-Dromedary_at_the_Werribee_Open_Range_Zoo.jpg"
- },
- {
-  "id": "peninsula_hot_springs",
-  "name": "Peninsula Hot Springs",
-  "datei": "peninsula_hot_springs.jpg",
-  "motiv": "Peninsula Hot Springs.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Peninsula_Hot_Springs.jpg"
- },
- {
-  "id": "jack_barnes_mangrove_boardwalk",
-  "name": "Jack Barnes Bicentennial Mangrove Boardwalk",
-  "datei": "jack_barnes_mangrove_boardwalk.jpg",
-  "motiv": "Jack Barnes Bicentennial Mangrove Boardwalk.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Jack_Barnes_Bicentennial_Mangrove_Boardwalk.jpg/1280px-Jack_Barnes_Bicentennial_Mangrove_Boardwalk.jpg"
- },
- {
-  "id": "babinda_boulders",
-  "name": "Babinda Boulders (The Boulders)",
-  "datei": "babinda_boulders.jpg",
-  "motiv": "Babinda Boulders NQld-02 (11358043283).jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Babinda_Boulders_NQld-02_%2811358043283%29.jpg/1280px-Babinda_Boulders_NQld-02_%2811358043283%29.jpg"
- },
- {
-  "id": "daintree_river_cruise",
-  "name": "Daintree River (Krokodilfahrt ab Daintree Village)",
-  "datei": "daintree_river_cruise.jpg",
-  "motiv": "Butorides striatus - Daintree River.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Butorides_striatus_-_Daintree_River.jpg/1280px-Butorides_striatus_-_Daintree_River.jpg"
- },
- {
-  "id": "cathedral_fig_tree",
-  "name": "Cathedral Fig Tree",
-  "datei": "cathedral_fig_tree.jpg",
-  "motiv": "Cathedral fig tree - panoramio.jpg",
-  "quelle": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Cathedral_fig_tree_-_panoramio.jpg/1280px-Cathedral_fig_tree_-_panoramio.jpg"
- },
- {
-  "id": "mt_sugarloaf_kinglake",
-  "name": "Mount Sugarloaf Lookout",
-  "datei": "mt_sugarloaf_kinglake.jpg",
-  "motiv": "privat beigesteuert",
-  "quelle": "privat: Mount Sugarloaf Lookout.jpg"
- },
- {
-  "id": "jehosaphat_gully",
-  "name": "Jehosaphat Gully",
-  "datei": "jehosaphat_gully.jpg",
-  "motiv": "privat beigesteuert",
-  "quelle": "privat: Jehosaphat Gully.webp"
- },
- {
-  "id": "mount_st_leonard",
-  "name": "Mount St Leonard",
-  "datei": "mount_st_leonard.jpg",
-  "motiv": "privat beigesteuert",
-  "quelle": "privat: Mount St Leonard.jpeg"
- },
- {
-  "id": "marysville_gedenkstaette",
-  "name": "Marysville Bushfire Memorial / Gallipoli Park",
-  "datei": "marysville_gedenkstaette.jpg",
-  "motiv": "privat beigesteuert",
-  "quelle": "privat: Marysville Bushfire Memorial : Gallipoli Park.jpg"
- },
- {
-  "id": "redwood_forest_warburton",
-  "name": "Redwood Forest (Cement Creek)",
-  "datei": "redwood_forest_warburton.jpg",
-  "motiv": "privat beigesteuert",
-  "quelle": "privat: Redwood Forest (Cement Creek).jpg"
- },
- {
-  "id": "tarrawarra",
-  "name": "TarraWarra Museum of Art & Estate",
-  "datei": "tarrawarra.jpg",
-  "motiv": "privat beigesteuert",
-  "quelle": "privat: TarraWarra Museum of Art & Estate.jpg"
- },
- {
-  "id": "mount_bartle_frere",
-  "name": "Mount Bartle Frere (Südgipfel, 1.622 m)",
-  "datei": "mount_bartle_frere.jpg",
-  "motiv": "privat beigesteuert",
-  "quelle": "privat: Mount Bartle Frere (Südgipfel, 1.622 m).jpg"
- },
- {
-  "id": "dampier_archipel_murujuga",
-  "name": "Dampier-Archipel & Murujuga",
-  "datei": "dampier_archipel_murujuga.jpg",
-  "motiv": "privat beigesteuert",
-  "quelle": "privat"
- },
- {
-  "id": "natures_window_the_loop",
-  "name": "Nature's Window & The Loop",
-  "datei": "natures_window_the_loop.jpg",
-  "motiv": "Murchison River Gorge - Nature's window (6136071267).jpg",
-  "quelle": "https://commons.wikimedia.org/wiki/File:Murchison_River_Gorge_-_Nature%27s_window_(6136071267).jpg",
-  "seite": "File:Murchison River Gorge - Nature's window (6136071267).jpg",
-  "urheber": "Julien Carnot",
-  "lizenz": "CC BY-SA 2.0"
- },
- {
-  "id": "broad_arrow_tavern",
-  "name": "Broad Arrow Tavern",
-  "datei": "broad_arrow_tavern.jpg",
-  "motiv": "Broad Arrow Tavern, Western Australia - exterior.jpg",
-  "quelle": "https://commons.wikimedia.org/wiki/File:Broad_Arrow_Tavern,_Western_Australia_-_exterior.jpg",
-  "seite": "File:Broad Arrow Tavern, Western Australia - exterior.jpg",
-  "urheber": "Chuq",
-  "lizenz": "CC BY-SA 4.0"
- }
+{
+"id": "babinda_boulders",
+"name": "Babinda Boulders (The Boulders)",
+"datei": "babinda_boulders.jpg",
+"titel": "Babinda Boulders-03and (4194182415).jpg",
+"autor": "Sheba_Also 43,000 photos",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Babinda_Boulders-03and_(4194182415).jpg",
+"status": "neu"
+},
+{
+"id": "barron_falls",
+"name": "Barron Falls (Din Din) Lookout",
+"datei": "barron_falls.jpg",
+"titel": "Barron falls january2005.JPG",
+"autor": "Ashlsimm",
+"lizenz": "Attribution",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Barron_falls_january2005.JPG",
+"status": "belegt"
+},
+{
+"id": "black_spur_fernshaw",
+"name": "Black Spur / Fernshaw Picnic Ground",
+"datei": "black_spur_fernshaw.jpg",
+"titel": "Black Spur, Yarra Ranges NP, Vic, Australia - Diliff.jpg",
+"autor": "Diliff",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Black_Spur,_Yarra_Ranges_NP,_Vic,_Australia_-_Diliff.jpg",
+"status": "belegt"
+},
+{
+"id": "bluff_knoll",
+"name": "Bluff Knoll",
+"datei": "bluff_knoll.jpg",
+"titel": "Bluff Knoll, Stirling Range, Western Australia.jpg",
+"autor": "SamJeffs1",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Bluff_Knoll,_Stirling_Range,_Western_Australia.jpg",
+"status": "belegt"
+},
+{
+"id": "boranup_forest_drive",
+"name": "Boranup Forest Drive",
+"datei": "boranup_forest_drive.jpg",
+"titel": "Gloucester Tree, Western Australia.jpg",
+"autor": "David La Rosa",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Gloucester_Tree,_Western_Australia.jpg",
+"status": "symbol"
+},
+{
+"id": "brighton_bathing_boxes",
+"name": "Brighton Bathing Boxes (Dendy Street Beach)",
+"datei": "brighton_bathing_boxes.jpg",
+"titel": "Brightontownhall2021 b.jpg",
+"autor": "File:Brightontownhall2021.jpg: Celco85 derivative work: Georgfotoart",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Brightontownhall2021_b.jpg",
+"status": "belegt"
+},
+{
+"id": "broad_arrow_tavern",
+"name": "Broad Arrow Tavern",
+"datei": "broad_arrow_tavern.jpg",
+"titel": "Broad Arrow Tavern, Western Australia - exterior.jpg",
+"autor": "Chuq",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Broad_Arrow_Tavern,_Western_Australia_-_exterior.jpg",
+"status": "belegt"
+},
+{
+"id": "busselton_jetty",
+"name": "Busselton Jetty",
+"datei": "busselton_jetty.jpg",
+"titel": "Busselton Jetty, 2015 (07).JPG",
+"autor": "Bahnfrend",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Busselton_Jetty,_2015_(07).JPG",
+"status": "belegt"
+},
+{
+"id": "cairns_esplanade_lagoon",
+"name": "Cairns Esplanade Lagoon",
+"datei": "cairns_esplanade_lagoon.jpg",
+"titel": "Cairns Esplanade Lagoon Fish - panoramio.jpg",
+"autor": "Alex Monckton",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Cairns_Esplanade_Lagoon_Fish_-_panoramio.jpg",
+"status": "belegt"
+},
+{
+"id": "canal_rocks",
+"name": "Canal Rocks",
+"datei": "canal_rocks.jpg",
+"titel": "Sunset at Canal Rocks, Western Australia, February 2021 09.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Sunset_at_Canal_Rocks,_Western_Australia,_February_2021_09.jpg",
+"status": "belegt"
+},
+{
+"id": "cape_arid_national_park",
+"name": "Cape Arid National Park",
+"datei": "cape_arid_national_park.jpg",
+"titel": "Cape Arid National Park 393.jpg",
+"autor": "Gypsy Denise",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Cape_Arid_National_Park_393.jpg",
+"status": "belegt"
+},
+{
+"id": "cape_leeuwin_lighthouse",
+"name": "Cape Leeuwin Lighthouse",
+"datei": "cape_leeuwin_lighthouse.jpg",
+"titel": "Cape Leeuwin Lighthouse, 2015 (06).JPG",
+"autor": "Bahnfrend",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Cape_Leeuwin_Lighthouse,_2015_(06).JPG",
+"status": "belegt"
+},
+{
+"id": "cape_tribulation",
+"name": "Cape Tribulation",
+"datei": "cape_tribulation.jpg",
+"titel": "Cape_Tribulation_from_the_South_Beach_1.jpg",
+"autor": "Luxure",
+"lizenz": "CC BY 3.0 au",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Cape_Tribulation_from_the_South_Beach_1.jpg",
+"status": "neu"
+},
+{
+"id": "carnac_island",
+"name": "Carnac Island",
+"datei": "carnac_island.jpg",
+"titel": "Carnac Island, Western Australia, seen from the east, November 2023 09.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Carnac_Island,_Western_Australia,_seen_from_the_east,_November_2023_09.jpg",
+"status": "belegt"
+},
+{
+"id": "castle_rock_granite_skywalk",
+"name": "Castle Rock Granite Skywalk",
+"datei": "castle_rock_granite_skywalk.jpg",
+"titel": "Nancy's peak.jpg",
+"autor": "Aaimyep",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Nancy%27s_peak.jpg",
+"status": "belegt"
+},
+{
+"id": "cathedral_fig_tree",
+"name": "Cathedral Fig Tree",
+"datei": "cathedral_fig_tree.jpg",
+"titel": "Cathedral fig tree - panoramio.jpg",
+"autor": "Korkut Tas",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Cathedral_fig_tree_-_panoramio.jpg",
+"status": "belegt"
+},
+{
+"id": "cattle_pool_goolinee_lyons_river",
+"name": "Cattle Pool / Goolinee (Lyons River)",
+"datei": "cattle_pool_goolinee_lyons_river.jpg",
+"titel": "Cattle Pool, Mount Augustus National Park, July 2020 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Cattle_Pool,_Mount_Augustus_National_Park,_July_2020_01.jpg",
+"status": "neu"
+},
+{
+"id": "charles_knife_canyon_shothole_canyon",
+"name": "Charles Knife Canyon & Shothole Canyon",
+"datei": "charles_knife_canyon_shothole_canyon.jpg",
+"titel": "Charles Knife Canyon, Cape Range National Park, Exmouth 2.jpg",
+"autor": "Joshua Tagicakibau",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Charles_Knife_Canyon,_Cape_Range_National_Park,_Exmouth_2.jpg",
+"status": "belegt"
+},
+{
+"id": "circular_pool",
+"name": "Circular Pool",
+"datei": "circular_pool.jpg",
+"titel": "Circular Pool.jpg",
+"autor": "Hughesdarren (talk) (Uploads)",
+"lizenz": "Public domain",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Circular_Pool.jpg",
+"status": "neu"
+},
+{
+"id": "conspicuous_cliffs",
+"name": "Conspicuous Cliffs",
+"datei": "conspicuous_cliffs.jpg",
+"titel": "2026-03-21-Bibbulmun-Track-at-Conspicuous-Cliff-01.jpg",
+"autor": "Elrondil",
+"lizenz": "CC BY 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:2026-03-21-Bibbulmun-Track-at-Conspicuous-Cliff-01.jpg",
+"status": "neu"
+},
+{
+"id": "coral_bay",
+"name": "Coral Bay",
+"datei": "coral_bay.jpg",
+"titel": "WV banner Coral Bay.jpg",
+"autor": "(WT-shared) Inas at wts wikivoyage",
+"lizenz": "CC0",
+"lizenzUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+"seite": "https://commons.wikimedia.org/wiki/File:WV_banner_Coral_Bay.jpg",
+"status": "belegt"
+},
+{
+"id": "crystal_cascades",
+"name": "Crystal Cascades",
+"datei": "crystal_cascades.jpg",
+"titel": "Crystal Cascades SF24334-01.jpg",
+"autor": "Steve Fitzgerald",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Crystal_Cascades_SF24334-01.jpg",
+"status": "belegt"
+},
+{
+"id": "curtain_fig_tree",
+"name": "Curtain Fig Tree",
+"datei": "curtain_fig_tree.jpg",
+"titel": "CurtainFig.jpg",
+"autor": "Mike Lehmann",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:CurtainFig.jpg",
+"status": "belegt"
+},
+{
+"id": "daintree_river_cruise",
+"name": "Daintree River (Krokodilfahrt ab Daintree Village)",
+"datei": "daintree_river_cruise.jpg",
+"titel": "DaintreeRiverFerryOct242024_05.jpg",
+"autor": "Hagai Agmon-Snir حچاي اچمون-سنير חגי אגמון-שניר",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:DaintreeRiverFerryOct242024_05.jpg",
+"status": "neu"
+},
+{
+"id": "dampier_archipel_murujuga",
+"name": "Dampier-Archipel & Murujuga",
+"datei": "dampier_archipel_murujuga.jpg",
+"titel": "Nganjarli Murujuga Rock Art 01.jpg",
+"autor": "The editor next door",
+"lizenz": "CC0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Nganjarli_Murujuga_Rock_Art_01.jpg",
+"status": "neu"
+},
+{
+"id": "dave_evans_bicentennial_tree",
+"name": "Dave Evans Bicentennial Tree",
+"datei": "dave_evans_bicentennial_tree.jpg",
+"titel": "Dave evans bicentennial tree 1.JPG",
+"autor": "Graham Evans",
+"lizenz": "CC BY 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Dave_evans_bicentennial_tree_1.JPG",
+"status": "belegt"
+},
+{
+"id": "dirk_hartog_island",
+"name": "Dirk Hartog Island",
+"datei": "dirk_hartog_island.jpg",
+"titel": "Cape Inscription Lighthouse.jpg",
+"autor": "unbekannt",
+"lizenz": "Public domain",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Cape_Inscription_Lighthouse.jpg",
+"status": "belegt"
+},
+{
+"id": "duke_of_orleans_bay_wharton_beach",
+"name": "Duke of Orleans Bay & Wharton Beach",
+"datei": "duke_of_orleans_bay_wharton_beach.jpg",
+"titel": "Duke of Orleans Bay, Western Australia, January 2024 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Duke_of_Orleans_Bay,_Western_Australia,_January_2024_01.jpg",
+"status": "belegt"
+},
+{
+"id": "east_mount_barren",
+"name": "East Mount Barren",
+"datei": "east_mount_barren.jpg",
+"titel": "East Mount Barren (Hopetoun WA).jpg",
+"autor": "Summerpuss",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:East_Mount_Barren_(Hopetoun_WA).jpg",
+"status": "belegt"
+},
+{
+"id": "elephant_rocks",
+"name": "Elephant Rocks",
+"datei": "elephant_rocks.jpg",
+"titel": "The Elephant Rocks.JPG",
+"autor": "Fredlyfish4",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:The_Elephant_Rocks.JPG",
+"status": "belegt"
+},
+{
+"id": "etty_bay",
+"name": "Etty Bay",
+"datei": "etty_bay.jpg",
+"titel": "Coral Rock Oyster, Etty Bay QLD 4858, Australie imported from iNaturalist photo 324876331.jpg",
+"autor": "(c) Donald Davesne, some rights reserved (CC BY)",
+"lizenz": "CC BY 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Coral_Rock_Oyster,_Etty_Bay_QLD_4858,_Australie_imported_from_iNaturalist_photo_324876331.jpg",
+"status": "neu"
+},
+{
+"id": "eyre_bird_observatory",
+"name": "Eyre Bird Observatory",
+"datei": "eyre_bird_observatory.jpg",
+"titel": "Shattuck 68014, Eyre Bird Observatory, Cocklebiddy, Western Australia (51254919609).jpg",
+"autor": "Steve Shattuck from Canberra, Australia",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Shattuck_68014,_Eyre_Bird_Observatory,_Cocklebiddy,_Western_Australia_(51254919609).jpg",
+"status": "neu"
+},
+{
+"id": "fitzroy_island",
+"name": "Fitzroy Island",
+"datei": "fitzroy_island.jpg",
+"titel": "Fitzroy Island.jpg",
+"autor": "Joshua Tagicakibau",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Fitzroy_Island.jpg",
+"status": "neu"
+},
+{
+"id": "flinders_street_station",
+"name": "Flinders Street Station",
+"datei": "flinders_street_station.jpg",
+"titel": "Flinders Street Station Melbourne March 2021.jpg",
+"autor": "Gracchus250",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Flinders_Street_Station_Melbourne_March_2021.jpg",
+"status": "neu"
+},
+{
+"id": "four_mile_beach",
+"name": "Four Mile Beach, Port Douglas",
+"datei": "four_mile_beach.jpg",
+"titel": "Port douglas qld australia.jpg",
+"autor": "Malcolmj",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Port_douglas_qld_australia.jpg",
+"status": "belegt"
+},
+{
+"id": "francois_peron_np_voll_loop",
+"name": "Francois Peron NP (Voll-Loop)",
+"datei": "francois_peron_np_voll_loop.jpg",
+"titel": "Skipjack Point, Francois Peron National Park, Western Australia.jpg",
+"autor": "Frederik Vanrenterghem",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Skipjack_Point,_Francois_Peron_National_Park,_Western_Australia.jpg",
+"status": "belegt"
+},
+{
+"id": "frenchman_peak",
+"name": "Frenchman Peak",
+"datei": "frenchman_peak.jpg",
+"titel": "Frenchman Peak, Cape Le Grand National Park, January 2024 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Frenchman_Peak,_Cape_Le_Grand_National_Park,_January_2024_01.jpg",
+"status": "neu"
+},
+{
+"id": "gloucester_tree",
+"name": "Gloucester Tree",
+"datei": "gloucester_tree.jpg",
+"titel": "Gloucester Tree, Western Australia.jpg",
+"autor": "David La Rosa",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Gloucester_Tree,_Western_Australia.jpg",
+"status": "belegt"
+},
+{
+"id": "gnaraloo_bay_3_mile_camp",
+"name": "Gnaraloo Bay & 3 Mile Camp",
+"datei": "gnaraloo_bay_3_mile_camp.jpg",
+"titel": "110127 Running ghost crab O ceratophtalma prey Loggerhead hatchling Gnaraloo Bay Rookery.JPG",
+"autor": "Gnaraloo Turtle Conservation Program",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:110127_Running_ghost_crab_O_ceratophtalma_prey_Loggerhead_hatchling_Gnaraloo_Bay_Rookery.JPG",
+"status": "belegt"
+},
+{
+"id": "golden_gate_dunsky_beach",
+"name": "Golden Gate & Dunsky Beach",
+"datei": "golden_gate_dunsky_beach.jpg",
+"titel": "2002 - View across Shelley Beach to West Cape Howe, WA - panoramio.jpg",
+"autor": "aussiejeff",
+"lizenz": "CC BY 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:2002_-_View_across_Shelley_Beach_to_West_Cape_Howe,_WA_-_panoramio.jpg",
+"status": "neu"
+},
+{
+"id": "granite_gorge",
+"name": "Granite Gorge Nature Park",
+"datei": "granite_gorge.jpg",
+"titel": "Granite Gorge Nature Park - panoramio (1).jpg",
+"autor": "Korkut Tas",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Granite_Gorge_Nature_Park_-_panoramio_(1).jpg",
+"status": "belegt"
+},
+{
+"id": "great_ocean_drive_esperance",
+"name": "Great Ocean Drive (Esperance)",
+"datei": "great_ocean_drive_esperance.jpg",
+"titel": "Great Ocean Drive, Esperance",
+"autor": "trippinlarry",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "",
+"seite": "https://www.flickr.com/photos/32096548@N06/5469027222",
+"status": "neu"
+},
+{
+"id": "green_island",
+"name": "Green Island",
+"datei": "green_island.jpg",
+"titel": "Fitzroy Island.jpg",
+"autor": "Joshua Tagicakibau",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Fitzroy_Island.jpg",
+"status": "symbol"
+},
+{
+"id": "greens_pool",
+"name": "Greens Pool",
+"datei": "greens_pool.jpg",
+"titel": "Greens Pool, William Bay, Denmark WA.jpg",
+"autor": "BaroBert",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:Greens_Pool,_William_Bay,_Denmark_WA.jpg",
+"status": "belegt"
+},
+{
+"id": "gwalia_ghost_town_hoover_house",
+"name": "Gwalia Ghost Town & Hoover House",
+"datei": "gwalia_ghost_town_hoover_house.jpg",
+"titel": "Sons of Gwalia mine, c1921.jpg",
+"autor": "Millar, Roy",
+"lizenz": "Public domain",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Sons_of_Gwalia_mine,_c1921.jpg",
+"status": "belegt"
+},
+{
+"id": "hamelin_bay",
+"name": "Hamelin Bay",
+"datei": "hamelin_bay.jpg",
+"titel": "Hamelin Bay, Western Australia.jpg",
+"autor": "Hezbolarki Fun Ship at en.wikipedia",
+"lizenz": "Public domain",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Hamelin_Bay,_Western_Australia.jpg",
+"status": "belegt"
+},
+{
+"id": "healesville_sanctuary",
+"name": "Healesville Sanctuary",
+"datei": "healesville_sanctuary.jpg",
+"titel": "Healesville Trichoglossus chlorolepidotus in Healesville Sanctuary.jpg",
+"autor": "Ymblanter",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Healesville_Trichoglossus_chlorolepidotus_in_Healesville_Sanctuary.jpg",
+"status": "belegt"
+},
+{
+"id": "heartbreak_trail_heartbreak_crossing",
+"name": "Heartbreak Trail / Heartbreak Crossing",
+"datei": "heartbreak_trail_heartbreak_crossing.jpg",
+"titel": "Gloucester Tree, Western Australia.jpg",
+"autor": "David La Rosa",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Gloucester_Tree,_Western_Australia.jpg",
+"status": "symbol"
+},
+{
+"id": "hellfire_bay",
+"name": "Hellfire Bay",
+"datei": "hellfire_bay.jpg",
+"titel": "Hellfire Bay WA.JPG",
+"autor": "Cookaa",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Hellfire_Bay_WA.JPG",
+"status": "belegt"
+},
+{
+"id": "hosier_lane",
+"name": "Hosier Lane",
+"datei": "hosier_lane.jpg",
+"titel": "Hosier Lane, Melbourne, Victoria, Australia.JPG",
+"autor": "Coekon",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Hosier_Lane,_Melbourne,_Victoria,_Australia.JPG",
+"status": "neu"
+},
+{
+"id": "houtman_abrolhos_islands",
+"name": "Houtman Abrolhos Islands",
+"datei": "houtman_abrolhos_islands.jpg",
+"titel": "Beacon Island Abrolhos.jpg",
+"autor": "Guy de la Bedoyere",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Beacon_Island_Abrolhos.jpg",
+"status": "belegt"
+},
+{
+"id": "injidup_natural_spa",
+"name": "Injidup Natural Spa",
+"datei": "injidup_natural_spa.jpg",
+"titel": "2025-06-05 Injidup Natural Spa Western Australia",
+"autor": "Allan Henderson",
+"lizenz": "CC BY 2.0",
+"lizenzUrl": "",
+"seite": "https://www.flickr.com/photos/88019192@N00/54572952102",
+"status": "neu"
+},
+{
+"id": "innisfail",
+"name": "Innisfail",
+"datei": "innisfail.jpg",
+"titel": "Gate at ANZAC Memorial Park Innisfail, 2025.jpg",
+"autor": "Chris Olszewski",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Gate_at_ANZAC_Memorial_Park_Innisfail,_2025.jpg",
+"status": "neu"
+},
+{
+"id": "israelite_bay",
+"name": "Israelite Bay",
+"datei": "israelite_bay.jpg",
+"titel": "Quagi Beach, Western Australia, January 2024 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Quagi_Beach,_Western_Australia,_January_2024_01.jpg",
+"status": "symbol"
+},
+{
+"id": "jack_barnes_mangrove_boardwalk",
+"name": "Jack Barnes Bicentennial Mangrove Boardwalk",
+"datei": "jack_barnes_mangrove_boardwalk.jpg",
+"titel": "Jack Barnes Bicentennial Mangrove Boardwalk.jpg",
+"autor": "SimoneV87",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Jack_Barnes_Bicentennial_Mangrove_Boardwalk.jpg",
+"status": "belegt"
+},
+{
+"id": "jehosaphat_gully",
+"name": "Jehosaphat Gully",
+"datei": "jehosaphat_gully.jpg",
+"titel": "Black Spur, Yarra Ranges NP, Vic, Australia - Diliff.jpg",
+"autor": "Diliff",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Black_Spur,_Yarra_Ranges_NP,_Vic,_Australia_-_Diliff.jpg",
+"status": "symbol"
+},
+{
+"id": "jewel_cave",
+"name": "Jewel Cave",
+"datei": "jewel_cave.jpg",
+"titel": "Jewel Cave, Deepdene, Western Australia, October 2023 02.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Jewel_Cave,_Deepdene,_Western_Australia,_October_2023_02.jpg",
+"status": "neu"
+},
+{
+"id": "josephine_falls",
+"name": "Josephine Falls",
+"datei": "josephine_falls.jpg",
+"titel": "Josephine Falls - Wooroonooran National Park - panoramio.jpg",
+"autor": "David Dreher",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Josephine_Falls_-_Wooroonooran_National_Park_-_panoramio.jpg",
+"status": "belegt"
+},
+{
+"id": "kalbarri_np_murchison_station",
+"name": "Kalbarri NP & Murchison Station",
+"datei": "kalbarri_np_murchison_station.jpg",
+"titel": "Kalbarri Natures Window.jpg",
+"autor": "User Tirin on en.wikipedia",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:Kalbarri_Natures_Window.jpg",
+"status": "belegt"
+},
+{
+"id": "karijini_np",
+"name": "Karijini NP",
+"datei": "karijini_np.jpg",
+"titel": "Karijini National Park banner.jpg",
+"autor": "Martin Kraft",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Karijini_National_Park_banner.jpg",
+"status": "belegt"
+},
+{
+"id": "karlamilyi_rudall_river_np",
+"name": "Karlamilyi (Rudall River) NP",
+"datei": "karlamilyi_rudall_river_np.jpg",
+"titel": "Karijini National Park banner.jpg",
+"autor": "Martin Kraft",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Karijini_National_Park_banner.jpg",
+"status": "symbol"
+},
+{
+"id": "kennedy_range_np_temple_gorge",
+"name": "Kennedy Range NP (Temple Gorge)",
+"datei": "kennedy_range_np_temple_gorge.jpg",
+"titel": "Temple Gorge, Kennedy Range National Park, July 2020 03.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Temple_Gorge,_Kennedy_Range_National_Park,_July_2020_03.jpg",
+"status": "neu"
+},
+{
+"id": "king_george_sound_safari_albany",
+"name": "King George Sound Safari (Albany)",
+"datei": "king_george_sound_safari_albany.jpg",
+"titel": "Seal Island, Albany, Western Australia, April 2022 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Seal_Island,_Albany,_Western_Australia,_April_2022_01.jpg",
+"status": "neu"
+},
+{
+"id": "kookynie_niagara_dam",
+"name": "Kookynie & Niagara Dam",
+"datei": "kookynie_niagara_dam.jpg",
+"titel": "Niagara Dam.JPG",
+"autor": "Steven Marshall / Cardboardbird",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Niagara_Dam.JPG",
+"status": "neu"
+},
+{
+"id": "kuranda_skyrail",
+"name": "Kuranda (Skyrail & Scenic Railway)",
+"datei": "kuranda_skyrail.jpg",
+"titel": "Kuranda.jpg",
+"autor": "Dagmar Hollmann",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Kuranda.jpg",
+"status": "belegt"
+},
+{
+"id": "lake_ballard_inside_australia",
+"name": "Lake Ballard — „Inside Australia“",
+"datei": "lake_ballard_inside_australia.jpg",
+"titel": "Inside Australia. Lake Ballard. WA (3423925665).jpg",
+"autor": "Amanda Slater from Coventry, West Midlands, UK",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Inside_Australia._Lake_Ballard._WA_(3423925665).jpg",
+"status": "belegt"
+},
+{
+"id": "lake_eacham",
+"name": "Lake Eacham (Crater Lakes National Park)",
+"datei": "lake_eacham.jpg",
+"titel": "Yidyam.jpg",
+"autor": "Originally uploaded by Bruceanthro (Transferred by rr2000)",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:Yidyam.jpg",
+"status": "belegt"
+},
+{
+"id": "lake_hillier_middle_island",
+"name": "Lake Hillier (Middle Island)",
+"datei": "lake_hillier_middle_island.jpg",
+"titel": "Pink Lake (Lake Hillier) on Middle Island off the coast of Esperance Western Australia.jpg",
+"autor": "Yodaobione",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Pink_Lake_(Lake_Hillier)_on_Middle_Island_off_the_coast_of_Esperance_Western_Australia.jpg",
+"status": "belegt"
+},
+{
+"id": "lancelin_sand_dunes",
+"name": "Lancelin Sand Dunes",
+"datei": "lancelin_sand_dunes.jpg",
+"titel": "Lancelin Sanddunes.jpg",
+"autor": "Zachary Coubrough",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Lancelin_Sanddunes.jpg",
+"status": "belegt"
+},
+{
+"id": "le_grand_beach_rossiter_bay",
+"name": "Le Grand Beach & Rossiter Bay",
+"datei": "le_grand_beach_rossiter_bay.jpg",
+"titel": "Le Grand Beach 7 WA.JPG",
+"autor": "Cookaa",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Le_Grand_Beach_7_WA.JPG",
+"status": "neu"
+},
+{
+"id": "lights_beach",
+"name": "Lights Beach",
+"datei": "lights_beach.jpg",
+"titel": "Quagi Beach, Western Australia, January 2024 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Quagi_Beach,_Western_Australia,_January_2024_01.jpg",
+"status": "symbol"
+},
+{
+"id": "little_beach_two_peoples_bay",
+"name": "Little Beach, Two Peoples Bay",
+"datei": "little_beach_two_peoples_bay.jpg",
+"titel": "Little Beach, Two Peoples Bay Nature Reserve, Western Australia.jpg",
+"autor": "Kwokka3",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Little_Beach,_Two_Peoples_Bay_Nature_Reserve,_Western_Australia.jpg",
+"status": "belegt"
+},
+{
+"id": "lucky_bay",
+"name": "Lucky Bay",
+"datei": "lucky_bay.jpg",
+"titel": "Lucky Bay 3 WA.JPG",
+"autor": "Cookaa",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Lucky_Bay_3_WA.JPG",
+"status": "belegt"
+},
+{
+"id": "mackerel_islands_thevenard",
+"name": "Mackerel Islands (Thevenard)",
+"datei": "mackerel_islands_thevenard.jpg",
+"titel": "Onslow, Western Australia 1.JPG",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Onslow,_Western_Australia_1.JPG",
+"status": "belegt"
+},
+{
+"id": "mammoth_cave",
+"name": "Mammoth Cave",
+"datei": "mammoth_cave.jpg",
+"titel": "Mammoth Cave Western Australia.jpg",
+"autor": "The original uploader was Tirin at English Wikipedia.",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:Mammoth_Cave_Western_Australia.jpg",
+"status": "belegt"
+},
+{
+"id": "mandalay_beach",
+"name": "Mandalay Beach",
+"datei": "mandalay_beach.jpg",
+"titel": "Quagi Beach, Western Australia, January 2024 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Quagi_Beach,_Western_Australia,_January_2024_01.jpg",
+"status": "symbol"
+},
+{
+"id": "marble_bar_carawine_gorge",
+"name": "Marble Bar & Carawine Gorge",
+"datei": "marble_bar_carawine_gorge.jpg",
+"titel": "Marble Bar (6940761181).jpg",
+"autor": "Eva Rinaldi",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Marble_Bar_(6940761181).jpg",
+"status": "belegt"
+},
+{
+"id": "maroondah_reservoir",
+"name": "Maroondah Reservoir Park",
+"datei": "maroondah_reservoir.jpg",
+"titel": "Maroondah Reservoir, Yarra Ranges National Park.jpg",
+"autor": "BennyG3255",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Maroondah_Reservoir,_Yarra_Ranges_National_Park.jpg",
+"status": "neu"
+},
+{
+"id": "marysville_gedenkstaette",
+"name": "Marysville Bushfire Memorial / Gallipoli Park",
+"datei": "marysville_gedenkstaette.jpg",
+"titel": "Black Spur, Yarra Ranges NP, Vic, Australia - Diliff.jpg",
+"autor": "Diliff",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Black_Spur,_Yarra_Ranges_NP,_Vic,_Australia_-_Diliff.jpg",
+"status": "symbol"
+},
+{
+"id": "masons_falls",
+"name": "Masons Falls",
+"datei": "masons_falls.jpg",
+"titel": "Masons Falls.JPG",
+"autor": "Original uploader was FedLawyer at en.wikipedia",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:Masons_Falls.JPG",
+"status": "belegt"
+},
+{
+"id": "melbourne_cricket_ground",
+"name": "Melbourne Cricket Ground (MCG)",
+"datei": "melbourne_cricket_ground.jpg",
+"titel": "AFL Grand Final 2010 on the Melbourne Cricket Ground.jpg",
+"autor": "Alexander Sheko",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:AFL_Grand_Final_2010_on_the_Melbourne_Cricket_Ground.jpg",
+"status": "belegt"
+},
+{
+"id": "melbourne_skydeck",
+"name": "Melbourne Skydeck (Eureka Tower)",
+"datei": "melbourne_skydeck.jpg",
+"titel": "Melbourne Skydeck (View from Eureka Tower) 05.jpg",
+"autor": "Indrajit Das",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Melbourne_Skydeck_(View_from_Eureka_Tower)_05.jpg",
+"status": "neu"
+},
+{
+"id": "michaelmas_cay",
+"name": "Michaelmas Cay",
+"datei": "michaelmas_cay.jpg",
+"titel": "Brown booby, Michaelmas Cay.jpg",
+"autor": "Bernard Gagnon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Brown_booby,_Michaelmas_Cay.jpg",
+"status": "neu"
+},
+{
+"id": "middle_island_lake_hillier_aus_der_luft",
+"name": "Middle Island & Lake Hillier aus der Luft",
+"datei": "middle_island_lake_hillier_aus_der_luft.jpg",
+"titel": "Lake Hillier 2 Middle Island Recherche Archipelago NR IV-2011.JPG",
+"autor": "Aussie Oc",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Lake_Hillier_2_Middle_Island_Recherche_Archipelago_NR_IV-2011.JPG",
+"status": "belegt"
+},
+{
+"id": "millaa_millaa_falls",
+"name": "Millaa Millaa Falls & Waterfall Circuit",
+"datei": "millaa_millaa_falls.jpg",
+"titel": "MillaaMillaaFallsOct272024_01.jpg",
+"autor": "Hagai Agmon-Snir حچاي اچمون-سنير חגי אגמון-שניר",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:MillaaMillaaFallsOct272024_01.jpg",
+"status": "belegt"
+},
+{
+"id": "millstream_chichester_np",
+"name": "Millstream Chichester NP",
+"datei": "millstream_chichester_np.jpg",
+"titel": "Millstream National Park, Pilbara, Western Australia, Python Pool.jpg",
+"autor": "Gypsy Denise",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Millstream_National_Park,_Pilbara,_Western_Australia,_Python_Pool.jpg",
+"status": "belegt"
+},
+{
+"id": "mission_beach",
+"name": "Mission Beach",
+"datei": "mission_beach.jpg",
+"titel": "Beach in front of Castaways Resort ^ Spa, Mission Beach, Queensland, Australia - panoramio.jpg",
+"autor": "Paul Toogood",
+"lizenz": "CC BY 3.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Beach_in_front_of_Castaways_Resort_%5E_Spa,_Mission_Beach,_Queensland,_Australia_-_panoramio.jpg",
+"status": "neu"
+},
+{
+"id": "monkey_mia_herald_bight",
+"name": "Monkey Mia & Herald Bight",
+"datei": "monkey_mia_herald_bight.jpg",
+"titel": "Monkey Mia, Western Australia.jpg",
+"autor": "Nachoman-au",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:Monkey_Mia,_Western_Australia.jpg",
+"status": "belegt"
+},
+{
+"id": "montebello_islands",
+"name": "Montebello Islands",
+"datei": "montebello_islands.jpg",
+"titel": "Montebello Islands-NASA.jpg",
+"autor": "User:Moondyne",
+"lizenz": "Public domain",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Montebello_Islands-NASA.jpg",
+"status": "belegt"
+},
+{
+"id": "mossman_gorge",
+"name": "Mossman Gorge",
+"datei": "mossman_gorge.jpg",
+"titel": "Mossman Gorge, Queensland, July 2020, 01.jpg",
+"autor": "Chris Olszewski",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Mossman_Gorge,_Queensland,_July_2020,_01.jpg",
+"status": "neu"
+},
+{
+"id": "mount_augustus_burringurrah",
+"name": "Mount Augustus (Burringurrah)",
+"datei": "mount_augustus_burringurrah.jpg",
+"titel": "Mount Augustus WA.jpg",
+"autor": "Graeme Churchard from Bristol, UK",
+"lizenz": "CC BY 2.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/2.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Mount_Augustus_WA.jpg",
+"status": "belegt"
+},
+{
+"id": "mount_bartle_frere",
+"name": "Mount Bartle Frere (Südgipfel, 1.622 m)",
+"datei": "mount_bartle_frere.jpg",
+"titel": "Bartle Frere.jpg",
+"autor": "Peter Bell",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Bartle_Frere.jpg",
+"status": "neu"
+},
+{
+"id": "mount_donna_buang",
+"name": "Mount Donna Buang",
+"datei": "mount_donna_buang.jpg",
+"titel": "Mount Donna Buang from above.jpg",
+"autor": "Bob Tan",
+"lizenz": "CC BY 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Mount_Donna_Buang_from_above.jpg",
+"status": "belegt"
+},
+{
+"id": "hypipamee_crater",
+"name": "Mount Hypipamee Crater & Dinner Falls",
+"datei": "hypipamee_crater.jpg",
+"titel": "Mount Hypipamee.jpg",
+"autor": "GirlWanderlust",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Mount_Hypipamee.jpg",
+"status": "neu"
+},
+{
+"id": "mount_shadforth_lookout",
+"name": "Mount Shadforth Lookout",
+"datei": "mount_shadforth_lookout.jpg",
+"titel": "Gloucester Tree, Western Australia.jpg",
+"autor": "David La Rosa",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Gloucester_Tree,_Western_Australia.jpg",
+"status": "symbol"
+},
+{
+"id": "mount_st_leonard",
+"name": "Mount St Leonard",
+"datei": "mount_st_leonard.jpg",
+"titel": "Mountain Ash (Eucalyptus regnans) trunk from previous logging.JPG",
+"autor": "Tirin (www.takver.com)",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Mountain_Ash_(Eucalyptus_regnans)_trunk_from_previous_logging.JPG",
+"status": "neu"
+},
+{
+"id": "mt_sugarloaf_kinglake",
+"name": "Mount Sugarloaf Lookout",
+"datei": "mt_sugarloaf_kinglake.jpg",
+"titel": "Black Spur, Yarra Ranges NP, Vic, Australia - Diliff.jpg",
+"autor": "Diliff",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Black_Spur,_Yarra_Ranges_NP,_Vic,_Australia_-_Diliff.jpg",
+"status": "symbol"
+},
+{
+"id": "muiron_islands_exmouth",
+"name": "Muiron Islands (Exmouth)",
+"datei": "muiron_islands_exmouth.jpg",
+"titel": "Australia exmouth sandy bay.jpg",
+"autor": "User: (WT-shared) Inas at wts wikivoyage",
+"lizenz": "Public domain",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Australia_exmouth_sandy_bay.jpg",
+"status": "neu"
+},
+{
+"id": "muttonbird_beach",
+"name": "Muttonbird Beach",
+"datei": "muttonbird_beach.jpg",
+"titel": "Quagi Beach, Western Australia, January 2024 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Quagi_Beach,_Western_Australia,_January_2024_01.jpg",
+"status": "symbol"
+},
+{
+"id": "ngv_international",
+"name": "National Gallery of Victoria (NGV International)",
+"datei": "ngv_international.jpg",
+"titel": "National_Gallery_of_Victoria_2024.jpg",
+"autor": "Shkuru Afshar",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:National_Gallery_of_Victoria_2024.jpg",
+"status": "belegt"
+},
+{
+"id": "natures_window_the_loop",
+"name": "Nature's Window & The Loop",
+"datei": "natures_window_the_loop.jpg",
+"titel": "Murchison River Gorge - Nature's window (6136071267).jpg",
+"autor": "Julien Carnot",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Murchison_River_Gorge_-_Nature%27s_window_(6136071267).jpg",
+"status": "belegt"
+},
+{
+"id": "nuytsland_nature_reserve_point_culver_baxter_cliffs",
+"name": "Nuytsland Nature Reserve, Point Culver & Baxter Cliffs",
+"datei": "nuytsland_nature_reserve_point_culver_baxter_cliffs.jpg",
+"titel": "Limestone cliffs, near twilight cove, eyre - cyclopedia of western australia.jpg",
+"autor": "James Sykes Battye",
+"lizenz": "Public domain",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Limestone_cliffs,_near_twilight_cove,_eyre_-_cyclopedia_of_western_australia.jpg",
+"status": "belegt"
+},
+{
+"id": "palm_cove",
+"name": "Palm Cove",
+"datei": "palm_cove.jpg",
+"titel": "Moonlit sea - Palm Cove - Flickr - Jorge Lascar.jpg",
+"autor": "Jorge Láscar from Melbourne, Australia",
+"lizenz": "CC BY 2.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Moonlit_sea_-_Palm_Cove_-_Flickr_-_Jorge_Lascar.jpg",
+"status": "neu"
+},
+{
+"id": "peaceful_bay",
+"name": "Peaceful Bay",
+"datei": "peaceful_bay.jpg",
+"titel": "Baccalieu View Walking Trail peaceful pond.jpg",
+"autor": "EDfromRED",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Baccalieu_View_Walking_Trail_peaceful_pond.jpg",
+"status": "neu"
+},
+{
+"id": "peak_charles_national_park",
+"name": "Peak Charles National Park",
+"datei": "peak_charles_national_park.jpg",
+"titel": "Peak Charles 10 Peak Charles NP V-2013.jpeg",
+"autor": "Aussie Oc at English Wikipedia",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Peak_Charles_10_Peak_Charles_NP_V-2013.jpeg",
+"status": "neu"
+},
+{
+"id": "penguin_island_shoalwater_kajaktour",
+"name": "Penguin Island & Shoalwater-Kajaktour",
+"datei": "penguin_island_shoalwater_kajaktour.jpg",
+"titel": "Penguin Island ferry.jpg",
+"autor": "Brian Jenkins",
+"lizenz": "Attribution",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Penguin_Island_ferry.jpg",
+"status": "belegt"
+},
+{
+"id": "phillip_island_penguin_parade",
+"name": "Penguin Parade, Phillip Island",
+"datei": "phillip_island_penguin_parade.jpg",
+"titel": "Penguin Parade 3.jpg",
+"autor": "Phillipislandtourism",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Penguin_Parade_3.jpg",
+"status": "belegt"
+},
+{
+"id": "peninsula_hot_springs",
+"name": "Peninsula Hot Springs",
+"datei": "peninsula_hot_springs.jpg",
+"titel": "Peninsula Hot Springs.jpg",
+"autor": "Ziham Omar",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Peninsula_Hot_Springs.jpg",
+"status": "belegt"
+},
+{
+"id": "pink_lake_esperance",
+"name": "Pink Lake (Esperance)",
+"datei": "pink_lake_esperance.jpg",
+"titel": "Sunset over Pink Lake, Esperance, January 2024 08.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Sunset_over_Pink_Lake,_Esperance,_January_2024_08.jpg",
+"status": "belegt"
+},
+{
+"id": "point_ann",
+"name": "Point Ann",
+"datei": "point_ann.jpg",
+"titel": "View from Point Ann.jpg",
+"autor": "BriMiDra",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:View_from_Point_Ann.jpg",
+"status": "neu"
+},
+{
+"id": "puffing_billy_belgrave",
+"name": "Puffing Billy Railway (Bahnhof Belgrave)",
+"datei": "puffing_billy_belgrave.jpg",
+"titel": "Puffing billy in action 2003.jpg",
+"autor": "Diliff",
+"lizenz": "CC BY 2.5",
+"lizenzUrl": "https://creativecommons.org/licenses/by/2.5",
+"seite": "https://commons.wikimedia.org/wiki/File:Puffing_billy_in_action_2003.jpg",
+"status": "belegt"
+},
+{
+"id": "quagi_beach",
+"name": "Quagi Beach",
+"datei": "quagi_beach.jpg",
+"titel": "Quagi Beach, Western Australia, January 2024 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Quagi_Beach,_Western_Australia,_January_2024_01.jpg",
+"status": "neu"
+},
+{
+"id": "queen_victoria_market",
+"name": "Queen Victoria Market",
+"datei": "queen_victoria_market.jpg",
+"titel": "Queen Victoria Market Victoria Street Shopfronts, Melbourne Australia (4601550491).jpg",
+"autor": "Rexness",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Queen_Victoria_Market_Victoria_Street_Shopfronts,_Melbourne_Australia_(4601550491).jpg",
+"status": "neu"
+},
+{
+"id": "quobba_blowholes",
+"name": "Quobba Blowholes",
+"datei": "quobba_blowholes.jpg",
+"titel": "King Waves Kill - panoramio.jpg",
+"autor": "Rob McGregor",
+"lizenz": "CC BY 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:King_Waves_Kill_-_panoramio.jpg",
+"status": "belegt"
+},
+{
+"id": "rainforest_gallery",
+"name": "Rainforest Gallery (Mount Donna Buang)",
+"datei": "rainforest_gallery.jpg",
+"titel": "Rainforest Gallery of Victoria.jpg",
+"autor": "Sandeepparekh9",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Rainforest_Gallery_of_Victoria.jpg",
+"status": "belegt"
+},
+{
+"id": "red_bluff_quobba_station",
+"name": "Red Bluff (Quobba Station)",
+"datei": "red_bluff_quobba_station.jpg",
+"titel": "Blowholes, Quobba Point, Western Australia (6924534900).jpg",
+"autor": "Travel &amp; Shit from Brighton, UK",
+"lizenz": "CC BY-SA 2.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Blowholes,_Quobba_Point,_Western_Australia_(6924534900).jpg",
+"status": "neu"
+},
+{
+"id": "redwood_forest_warburton",
+"name": "Redwood Forest (Cement Creek)",
+"datei": "redwood_forest_warburton.jpg",
+"titel": "2017 01 28 Cement Creek at Mount Donna Buang-002 (31717942514).jpg",
+"autor": "Rexness",
+"lizenz": "CC BY 2.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:2017_01_28_Cement_Creek_at_Mount_Donna_Buang-002_(31717942514).jpg",
+"status": "neu"
+},
+{
+"id": "rex_lookout",
+"name": "Rex Lookout",
+"datei": "rex_lookout.jpg",
+"titel": "Fitzroy Island.jpg",
+"autor": "Joshua Tagicakibau",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Fitzroy_Island.jpg",
+"status": "symbol"
+},
+{
+"id": "rose_street_artists_market",
+"name": "Rose Street Artists' Market (Fitzroy)",
+"datei": "rose_street_artists_market.jpg",
+"titel": "The Fitzroy skyline.jpg",
+"autor": "Klim Levene",
+"lizenz": "CC BY 2.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/2.0",
+"seite": "https://commons.wikimedia.org/wiki/File:The_Fitzroy_skyline.jpg",
+"status": "belegt"
+},
+{
+"id": "rottnest_island_wadjemup",
+"name": "Rottnest Island (Wadjemup)",
+"datei": "rottnest_island_wadjemup.jpg",
+"titel": "Rottnest Quokka 2004 SeanMcClean.jpg",
+"autor": "en:User:SeanMack",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:Rottnest_Quokka_2004_SeanMcClean.jpg",
+"status": "belegt"
+},
+{
+"id": "royal_botanic_gardens_melbourne",
+"name": "Royal Botanic Gardens Victoria - Melbourne Gardens",
+"datei": "royal_botanic_gardens_melbourne.jpg",
+"titel": "PXL 20241006 043548729 Royal Botanic Gardens Victoria - Melbourne Gardens 5X9J+W3 Melbourne, Victoria, Australia 07.jpg",
+"autor": "Sourabh.biswas003",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:PXL_20241006_043548729_Royal_Botanic_Gardens_Victoria_-_Melbourne_Gardens_5X9J%2BW3_Melbourne,_Victoria,_Australia_07.jpg",
+"status": "belegt"
+},
+{
+"id": "running_waters_eel_pool_oakover_river",
+"name": "Running Waters / „Eel Pool“ (Oakover River)",
+"datei": "running_waters_eel_pool_oakover_river.jpg",
+"titel": "Karijini National Park banner.jpg",
+"autor": "Martin Kraft",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Karijini_National_Park_banner.jpg",
+"status": "symbol"
+},
+{
+"id": "shelley_beach_west_cape_howe_np",
+"name": "Shelley Beach, West Cape Howe NP",
+"datei": "shelley_beach_west_cape_howe_np.jpg",
+"titel": "2002 - View across Shelley Beach to West Cape Howe, WA - panoramio.jpg",
+"autor": "aussiejeff",
+"lizenz": "CC BY 3.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:2002_-_View_across_Shelley_Beach_to_West_Cape_Howe,_WA_-_panoramio.jpg",
+"status": "neu"
+},
+{
+"id": "st_kilda_pier_penguins",
+"name": "St Kilda Breakwater (Zwergpinguin-Kolonie)",
+"datei": "st_kilda_pier_penguins.jpg",
+"titel": "20091121 Little Penguin on rock at St Kilda Breakwater (left side view).jpg",
+"autor": "Mikeybear",
+"lizenz": "CC BY 3.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:20091121_Little_Penguin_on_rock_at_St_Kilda_Breakwater_(left_side_view).jpg",
+"status": "neu"
+},
+{
+"id": "steavenson_falls",
+"name": "Steavenson Falls",
+"datei": "steavenson_falls.jpg",
+"titel": "Steavenson Falls.jpg",
+"autor": "Stephen Bain",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Steavenson_Falls.jpg",
+"status": "belegt"
+},
+{
+"id": "steep_point_edel_land",
+"name": "Steep Point (Edel Land)",
+"datei": "steep_point_edel_land.jpg",
+"titel": "Steep Point.JPG",
+"autor": "User:JarrahTree",
+"lizenz": "CC BY 2.5 au",
+"lizenzUrl": "https://creativecommons.org/licenses/by/2.5/au/deed.en",
+"seite": "https://commons.wikimedia.org/wiki/File:Steep_Point.JPG",
+"status": "belegt"
+},
+{
+"id": "stokes_national_park",
+"name": "Stokes National Park",
+"datei": "stokes_national_park.jpg",
+"titel": "Stokes Banner.jpg",
+"autor": "Aussie Oc at English Wikipedia",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Stokes_Banner.jpg",
+"status": "belegt"
+},
+{
+"id": "sugarloaf_rock",
+"name": "Sugarloaf Rock",
+"datei": "sugarloaf_rock.jpg",
+"titel": "Sunset at Sugarloaf Rock.jpg",
+"autor": "NickPratley",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Sunset_at_Sugarloaf_Rock.jpg",
+"status": "belegt"
+},
+{
+"id": "table_island_alexander_bay",
+"name": "Table Island & Alexander Bay",
+"datei": "table_island_alexander_bay.jpg",
+"titel": "Table Island and Duke of Orleans Bay, Western Australia, January 2024 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Table_Island_and_Duke_of_Orleans_Bay,_Western_Australia,_January_2024_01.jpg",
+"status": "neu"
+},
+{
+"id": "tarrawarra",
+"name": "TarraWarra Museum of Art & Estate",
+"datei": "tarrawarra.jpg",
+"titel": "TarraWarra Estate in Yarra Valley (2874220267).jpg",
+"autor": "edwin.11",
+"lizenz": "CC BY 2.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/2.0",
+"seite": "https://commons.wikimedia.org/wiki/File:TarraWarra_Estate_in_Yarra_Valley_(2874220267).jpg",
+"status": "neu"
+},
+{
+"id": "the_gap_and_natural_bridge",
+"name": "The Gap and Natural Bridge",
+"datei": "the_gap_and_natural_bridge.jpg",
+"titel": "Little Beach, Two Peoples Bay Nature Reserve, Western Australia.jpg",
+"autor": "Kwokka3",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Little_Beach,_Two_Peoples_Bay_Nature_Reserve,_Western_Australia.jpg",
+"status": "belegt"
+},
+{
+"id": "the_pinnacles_nambung_np",
+"name": "The Pinnacles (Nambung NP)",
+"datei": "the_pinnacles_nambung_np.jpg",
+"titel": "Nambung National Park The Pinnacles.JPG",
+"autor": "BoundaryRider",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Nambung_National_Park_The_Pinnacles.JPG",
+"status": "belegt"
+},
+{
+"id": "thistle_cove",
+"name": "Thistle Cove",
+"datei": "thistle_cove.jpg",
+"titel": "Cape Le Grande National Park, Thistle Cove.jpg",
+"autor": "Emilyjade",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Cape_Le_Grande_National_Park,_Thistle_Cove.jpg",
+"status": "belegt"
+},
+{
+"id": "turquoise_bay_jurabi_turtle_centre",
+"name": "Turquoise Bay & Jurabi Turtle Centre",
+"datei": "turquoise_bay_jurabi_turtle_centre.jpg",
+"titel": "Cape Range National Park DSC04170.JPG",
+"autor": "unbekannt",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:Cape_Range_National_Park_DSC04170.JPG",
+"status": "belegt"
+},
+{
+"id": "valley_of_the_giants_tree_top_walk",
+"name": "Valley of the Giants Tree Top Walk",
+"datei": "valley_of_the_giants_tree_top_walk.jpg",
+"titel": "Tree top walk - Valley Of The Giants - Walpole-Nornalup National Park.jpg",
+"autor": "The original uploader was SeanMack at English Wikipedia.",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+"seite": "https://commons.wikimedia.org/wiki/File:Tree_top_walk_-_Valley_Of_The_Giants_-_Walpole-Nornalup_National_Park.jpg",
+"status": "belegt"
+},
+{
+"id": "warroora_maggies_camp",
+"name": "Warroora / Maggies Camp",
+"datei": "warroora_maggies_camp.jpg",
+"titel": "Quagi Beach, Western Australia, January 2024 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Quagi_Beach,_Western_Australia,_January_2024_01.jpg",
+"status": "symbol"
+},
+{
+"id": "werribee_open_range_zoo",
+"name": "Werribee Open Range Zoo",
+"datei": "werribee_open_range_zoo.jpg",
+"titel": "Werribee Open Range Zoo (12026600895).jpg",
+"autor": "Chris Phutully from Australia",
+"lizenz": "CC BY 2.0",
+"lizenzUrl": "",
+"seite": "https://commons.wikimedia.org/wiki/File:Werribee_Open_Range_Zoo_(12026600895).jpg",
+"status": "neu"
+},
+{
+"id": "west_mount_barren",
+"name": "West Mount Barren",
+"datei": "west_mount_barren.jpg",
+"titel": "View to the NE from West Mount Barren.jpg",
+"autor": "Ramjaram",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:View_to_the_NE_from_West_Mount_Barren.jpg",
+"status": "neu"
+},
+{
+"id": "windy_harbour_salmon_beach",
+"name": "Windy Harbour & Salmon Beach",
+"datei": "windy_harbour_salmon_beach.jpg",
+"titel": "Enormous Basalt Columns, Windy Harbour, D'Entrecateaux NP 035.jpg",
+"autor": "Gypsy Denise",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Enormous_Basalt_Columns,_Windy_Harbour,_D%27Entrecateaux_NP_035.jpg",
+"status": "neu"
+},
+{
+"id": "wirrawilla_regenwald",
+"name": "Wirrawilla Rainforest Walk",
+"datei": "wirrawilla_regenwald.jpg",
+"titel": "20124-01-04 Toolangi tree house 600 2810 1 2 (Soft 4).jpg",
+"autor": "Peter Campbell",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:20124-01-04_Toolangi_tree_house_600_2810_1_2_(Soft_4).jpg",
+"status": "belegt"
+},
+{
+"id": "woody_island_recherche_archipel",
+"name": "Woody Island (Recherche-Archipel)",
+"datei": "woody_island_recherche_archipel.jpg",
+"titel": "Skinny Dip Bay 2 Woody Island NR VIII-2012.jpeg",
+"autor": "Aussie Oc at English Wikipedia",
+"lizenz": "CC BY-SA 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Skinny_Dip_Bay_2_Woody_Island_NR_VIII-2012.jpeg",
+"status": "belegt"
+},
+{
+"id": "yardie_creek_track_coral_bay_cape_range",
+"name": "Yardie Creek Track (Coral Bay ↔ Cape Range)",
+"datei": "yardie_creek_track_coral_bay_cape_range.jpg",
+"titel": "Rock Wallabies, Yardie Creek, Cape Range National Park.jpg",
+"autor": "Joshua Tagicakibau",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Rock_Wallabies,_Yardie_Creek,_Cape_Range_National_Park.jpg",
+"status": "belegt"
+},
+{
+"id": "yeagarup_dunes",
+"name": "Yeagarup Dunes",
+"datei": "yeagarup_dunes.jpg",
+"titel": "Yeagarup WA 6260, Australia - panoramio.jpg",
+"autor": "Jan Hazevoet",
+"lizenz": "CC BY 3.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/3.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Yeagarup_WA_6260,_Australia_-_panoramio.jpg",
+"status": "belegt"
+},
+{
+"id": "zuytdorp_cliffs_thunder_bay",
+"name": "Zuytdorp Cliffs & Thunder Bay",
+"datei": "zuytdorp_cliffs_thunder_bay.jpg",
+"titel": "Zuytdorp Cliffs.jpg",
+"autor": "Kevin",
+"lizenz": "CC BY 2.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by/2.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Zuytdorp_Cliffs.jpg",
+"status": "belegt"
+}
 ]

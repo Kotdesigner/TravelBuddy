@@ -3,6 +3,9 @@
   // Die Liste der Dienste muss zu dem passen, was die App wirklich anspricht.
   import { je } from './i18n.js'
   import { IMPRESSUM, impressumFertig } from './impressum.js'
+  import { bildNachweis } from './bild-nachweis.js'
+
+  const fotos = $derived(Object.values($bildNachweis).sort((a, b) => a.name.localeCompare(b.name)))
 
   const DIENSTE = [
     [je('Wetter', 'Weather'), 'Open-Meteo', je('Koordinaten deiner Orte und, wenn du es erlaubst, dein Standort', 'Coordinates of your places and, if you allow it, your location')],
@@ -56,7 +59,23 @@
 
     <h3>{je('Deine Rechte', 'Your rights')}</h3>
     <p>{je('Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung und Widerspruch sowie auf Beschwerde bei einer Datenschutzbehörde. Der Anbieter speichert keine personenbezogenen Daten auf eigenen Servern, deine Nutzungsdaten liegen allein bei dir. Deine Daten in der App löschst du, indem du die App entfernst oder die Website-Daten im Browser löschst.', 'You have the right to access, rectification, erasure, restriction and objection, and to complain to a data protection authority. The provider stores no personal data on servers of its own, so your usage data stays with you. To delete your data in the app, remove the app or clear the site data in your browser.')}</p>
+    <p>{je('Fremde Fotos, die du selbst zu einem Ort hinzufügst, bleiben auf deinem Gerät. Für ihre Nutzung bist du selbst verantwortlich.', 'Photos you add to a place yourself stay on your device. You are responsible for how you use them.')}</p>
     <p class="re-stand">{je('Stand: November 2026', 'As of November 2026')}</p>
+  </section>
+
+  <section id="quellen">
+    <h2>{je('Quellen und Lizenzen', 'Sources and licences')}</h2>
+    <p>{je('Kartendaten © OpenStreetMap-Mitwirkende (ODbL), Kacheln Protomaps, Gelände Mapzen/AWS, Grenzen und Küsten Natural Earth. Wetter Open-Meteo. Das Titelbild ist ein eigenes Foto des Anbieters.', 'Map data © OpenStreetMap contributors (ODbL), tiles Protomaps, terrain Mapzen/AWS, borders and coasts Natural Earth. Weather Open-Meteo. The header picture is the provider’s own photo.')}</p>
+    <p><a href="/lizenzen.txt" target="_blank" rel="noopener">{je('Lizenzen der Bibliotheken und Schriften', 'Licences of libraries and fonts')}</a></p>
+    <details>
+      <summary>{je('Alle {n} Ortsfotos mit Urheber und Lizenz', 'All {n} place photos with author and licence').replace('{n}', String(fotos.length))}</summary>
+      <p>{je('Die Fotos sind für die App verkleinert. Symbolbilder zeigen die Region, nicht den genannten Ort.', 'The photos are resized for the app. Sample pictures show the region, not the place named.')}</p>
+      <ul>
+        {#each fotos as f (f.id)}
+          <li><b>{f.name}</b><span><a href={f.seite} target="_blank" rel="noopener">{f.titel}</a></span><small>{f.autor}, {f.lizenz}{f.status === 'symbol' ? je(', Symbolbild', ', sample picture') : ''}</small></li>
+        {/each}
+      </ul>
+    </details>
   </section>
 </article>
 
@@ -71,4 +90,6 @@
   .re li { display: flex; flex-direction: column; gap: 1px; padding-bottom: 8px; border-bottom: 1px solid var(--line); font-size: calc(14px * var(--schrift, 1)); }
   .re li small { font-size: calc(13px * var(--schrift, 1)); color: var(--muted); }
   .re-stand { color: var(--muted); }
+  .re summary { min-height: 44px; display: flex; align-items: center; font-weight: 700; cursor: pointer; }
+  .re li span { overflow-wrap: anywhere; }
 </style>

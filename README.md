@@ -8,10 +8,10 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.2 · built for Western Australia**<br>
+**Version 1.3 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-12)**
+**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-13)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -25,7 +25,7 @@ Plan it, drive it, remember it. On iPhone, Mac and Windows, fully offline, no ac
 
 </div>
 
-> All pictures show a made-up **sample trip**. No real travel dates, bookings or documents are shown.
+> All pictures show a made-up **sample trip**. No real travel dates, bookings or documents are shown. Place photos inside the screens are credited in the app.
 
 ---
 
@@ -45,6 +45,14 @@ No account, nothing to install from a store, and your data stays on your phone. 
 </td>
 </tr>
 </table>
+
+---
+
+## 🖼️ New in version 1.3
+
+**Every place picture is now yours to change.** Tap **📷 Change picture** on any place. Choose a photo from your device, open a ready-made image search for that place, or paste a snippet straight from the clipboard. On iPhone, take a screenshot of a picture that is only online and pick it from your photos. Your picture stays on your device. The first time you open Places, TravelBuddy explains this in a short note.
+
+**Every photo now has its source.** All 144 place photos come with author, licence and link, right in the app. Where no fitting free photo exists yet, a sample picture of the region stands in, clearly marked, with a button to add a better one.
 
 ---
 
@@ -157,6 +165,7 @@ Every evening you note a few lines, add your photos, tap in the kilometres and t
 - 🖨️ **Map as a print image** in any size
 - 📥 **Travel calendar import** that sorts bookings in by itself
 - 📍 **144 hand-picked places** with photos, seasons and insider labels
+- 🖼️ **Change any picture:** your own photo, an image search or a pasted snippet
 - ➕ **Add your own places** with photo and description from Wikipedia
 - 📷 **Made for photographers:** golden hour, blue hour and the night sky at every place, planned for any day
 - 🌅 **Sun times** with sunrise, sunset and the sun's highest point
@@ -530,7 +539,7 @@ The Windows build embeds the icon with `rsrc`: install it once with `go install 
 
 ### Tests
 
-Each test runs on its own, for example `node tests/plan.test.mjs`. There are **over 1,400 automated checks** in 31 test files, including a rule against rounding errors: the parts always add up to exactly the total shown. `node tests/basic-privat.test.mjs` makes sure no personal data ends up in the code or the build.
+Each test runs on its own, for example `node tests/plan.test.mjs`. There are **over 1,400 automated checks** in 32 test files, including a rule against rounding errors: the parts always add up to exactly the total shown. `node tests/basic-privat.test.mjs` makes sure no personal data ends up in the code or the build.
 
 ---
 
@@ -566,6 +575,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 - [x] Source code here on GitHub, apps for Mac and Windows
 - [x] **Version 1.1:** flights and trains live, cost analysis, entries over several days, warnings along the route with offline map, test trip to play with
 - [x] **Version 1.2:** choose the small or large map right in the app
+- [x] **Version 1.3:** change any place picture, sources for every photo
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -587,10 +597,10 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.2 · entwickelt für Western Australia**<br>
+**Version 1.3 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-12)**
+**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-13)**
 
 <br>
 
@@ -598,7 +608,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac und Windows, komplett offline, ohne 
 
 </div>
 
-> Alle Bilder zeigen eine ausgedachte **Beispielreise**. Echte Reisedaten, Buchungen oder Dokumente sind darin nicht zu sehen.
+> Alle Bilder zeigen eine ausgedachte **Beispielreise**. Echte Reisedaten, Buchungen oder Dokumente sind darin nicht zu sehen. Die Ortsfotos auf den Bildschirmen sind in der App nachgewiesen.
 
 ## 📱 Gleich auf dem iPhone ausprobieren
 
@@ -616,6 +626,12 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 </td>
 </tr>
 </table>
+
+## 🖼️ Neu in Version 1.3
+
+**Jedes Ortsbild kannst du jetzt selbst ändern.** Tippe bei jedem Ort auf **📷 Bild ändern**. Wähle ein Foto vom Gerät, öffne eine fertige Bildersuche für diesen Ort oder füge einen Ausschnitt direkt aus der Zwischenablage ein. Dein Bild bleibt auf deinem Gerät. Am iPhone machst du von einem Bild, das es nur online gibt, einen Screenshot und wählst ihn aus deinen Fotos. Beim ersten Öffnen von Orte erklärt TravelBuddy das in einem kurzen Hinweis.
+
+**Jedes Foto hat jetzt seine Quelle.** Alle 144 Ortsfotos stehen mit Urheber, Lizenz und Link in der App. Wo es noch kein passendes freies Foto gibt, steht ein Symbolbild der Region, klar gekennzeichnet und mit einem Knopf für ein besseres Bild.
 
 ## 🛣️ Neu in Version 1.2
 
@@ -718,6 +734,7 @@ Jeden Abend ein paar Zeilen, deine Fotos, die Kilometer und die Tiere, die du ge
 - 🖨️ **Karte als Druckbild** in jeder Größe
 - 📥 **Reisekalender-Import**, der Buchungen selbst einsortiert
 - 📍 **144 handverlesene Orte** mit Bildern, Saison und Insider-Markierungen
+- 🖼️ **Jedes Bild änderbar:** eigenes Foto, Bildersuche oder eingefügter Ausschnitt
 - ➕ **Eigene Orte anlegen** mit Bild und Beschreibung aus Wikipedia
 - 📷 **Gemacht für Fotografen:** goldene Stunde, blaue Stunde und Nachthimmel an jedem Ort, für jeden Tag planbar
 - 🌅 **Sonnenzeiten** mit Auf- und Untergang und dem Höchststand der Sonne
@@ -1085,7 +1102,7 @@ Das Symbol der Windows-App bettet `rsrc` ein: einmal `go install github.com/akav
 
 ### Tests
 
-Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1.400 automatische Prüfungen** in 31 Testdateien, darunter eine Regel gegen Rundungsfehler: Teile ergeben immer genau die angezeigte Summe. `node tests/basic-privat.test.mjs` wacht darüber, dass keine persönlichen Daten im Code oder im Build landen.
+Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1.400 automatische Prüfungen** in 32 Testdateien, darunter eine Regel gegen Rundungsfehler: Teile ergeben immer genau die angezeigte Summe. `node tests/basic-privat.test.mjs` wacht darüber, dass keine persönlichen Daten im Code oder im Build landen.
 
 ## Datenschutz
 
@@ -1101,6 +1118,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 - [x] Quellcode hier auf GitHub, Apps für Mac und Windows
 - [x] **Version 1.1:** Flüge und Züge live, Kostenauswertung, Einträge über mehrere Tage, Warnungen entlang der Route mit Offline-Karte, Testreise zum Ausprobieren
 - [x] **Version 1.2:** kleine oder große Karte direkt in der App wählen
+- [x] **Version 1.3:** jedes Ortsbild selbst ändern, Quellen zu jedem Foto
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder
@@ -1109,7 +1127,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 
 ## Daten und Bilder · Data and images
 
-Kartendaten © [OpenStreetMap](https://www.openstreetmap.org/copyright)-Mitwirkende · Kacheln [Protomaps](https://protomaps.com) · Ortsfotos von Wikimedia Commons (CC BY-SA, Nachweis in der App) · Grenzen und Küsten: Natural Earth.
+Kartendaten © [OpenStreetMap](https://www.openstreetmap.org/copyright)-Mitwirkende · Kacheln [Protomaps](https://protomaps.com) · Ortsfotos von Wikimedia Commons und Flickr unter freien Lizenzen, zum Teil verkleinert (Urheber, Lizenz und Link je Foto in der App unter Datenschutz & Impressum) · Das Titelbild der App ist ein eigenes Foto · Lizenzen der Bibliotheken und Schriften: `public/lizenzen.txt` · Grenzen und Küsten: Natural Earth.
 
 <div align="center">
 
