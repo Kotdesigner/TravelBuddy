@@ -38,10 +38,16 @@
     <p>{je('Reisen, Logbuch, Fotos, Kosten, Dokumente und Einstellungen liegen nur im Speicher deines Browsers oder der App. Der Anbieter sieht davon nichts. Ein Backup entsteht nur, wenn du es selbst auslöst. Den Standort nutzt die App nur, wenn du es erlaubst.', 'Trips, logbook, photos, costs, documents and settings are kept only in the storage of your browser or the app. The provider sees none of it. A backup is only made when you start one. The app only uses your location if you allow it.')}</p>
 
     <h3>{je('Hosting', 'Hosting')}</h3>
-    <p>{je('Die Web-App liegt bei Netlify, Inc. in den USA. Beim Abruf verarbeitet Netlify technisch nötige Daten wie IP-Adresse, Zeitpunkt und abgerufene Datei. Das dient dem sicheren Betrieb der Seite, Art. 6 Abs. 1 lit. f DSGVO. Dabei können Daten in die USA gelangen.', 'The web app is hosted by Netlify, Inc. in the USA. When you open it, Netlify processes technically necessary data such as IP address, time and requested file. This serves the secure operation of the site, Art. 6(1)(f) GDPR. Data may be transferred to the USA.')}</p>
+    <p>{je('Die Web-App liegt bei Netlify, Inc., 512 2nd Street, Suite 200, San Francisco, CA 94107, USA. Beim Abruf verarbeitet Netlify technisch nötige Daten wie IP-Adresse, Zeitpunkt, Browsertyp und abgerufene Datei. Das dient dem sicheren Betrieb der Seite, Art. 6 Abs. 1 lit. f DSGVO. Dabei können Daten in die USA gelangen.', 'The web app is hosted by Netlify, Inc., 512 2nd Street, Suite 200, San Francisco, CA 94107, USA. When you open it, Netlify processes technically necessary data such as IP address, time, browser type and requested file. This serves the secure operation of the site, Art. 6(1)(f) GDPR. Data may be transferred to the USA.')}</p>
+
+    <h3>{je('Quellcode und Downloads', 'Source code and downloads')}</h3>
+    <p>{je('Der Quellcode und die Downloads liegen bei GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. Beim Besuch der Seiten oder beim Herunterladen verarbeitet GitHub technische Daten und IP-Adressen nach eigenen Datenschutzbestimmungen.', 'The source code and downloads are hosted by GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. When you visit those pages or download a file, GitHub processes technical data and IP addresses under its own privacy terms.')}</p>
+
+    <h3>{je('Apps für Mac und Windows', 'Mac and Windows apps')}</h3>
+    <p>{je('Die Apps laufen als lokale Anwendungen auf deinem Computer und senden keine Telemetrie-, Analyse- oder Nutzungsdaten an den Anbieter. Karten sind eingebaut. Für Live-Funktionen wie Wetter, Warnungen, Routen oder Flüge sprechen sie dieselben Dienste an wie die Web-App.', 'The apps run locally on your computer and send no telemetry, analytics or usage data to the provider. Maps are built in. For live features such as weather, warnings, routes or flights they contact the same services as the web app.')}</p>
 
     <h3>{je('Dienste, die dein Gerät direkt anspricht', 'Services your device contacts directly')}</h3>
-    <p>{je('Einige Funktionen holen Daten von fremden Diensten. Dabei sieht der jeweilige Dienst deine IP-Adresse und die genannten Angaben. Es gelten dessen Datenschutzregeln.', 'Some features fetch data from other services. Each one sees your IP address and the details listed. Its own privacy rules apply.')}</p>
+    <p>{je('Einige Funktionen holen Daten von fremden Diensten. Dabei sieht der jeweilige Dienst deine IP-Adresse und die genannten Angaben. Das ist nötig, damit die Funktion arbeitet (Art. 6 Abs. 1 lit. f DSGVO). Es gelten die Datenschutzregeln des Dienstes.', 'Some features fetch data from other services. Each one sees your IP address and the details listed. This is needed for the feature to work (Art. 6(1)(f) GDPR). The service’s own privacy rules apply.')}</p>
     <ul>
       {#each DIENSTE as [wofuer, wer, was]}
         <li><b>{wofuer}</b><span>{wer}</span><small>{was}</small></li>
@@ -49,7 +55,7 @@
     </ul>
 
     <h3>{je('Deine Rechte', 'Your rights')}</h3>
-    <p>{je('Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung und Widerspruch sowie auf Beschwerde bei einer Datenschutzbehörde. Deine Daten in der App löschst du, indem du die App entfernst oder die Website-Daten im Browser löschst.', 'You have the right to access, rectification, erasure, restriction and objection, and to complain to a data protection authority. To delete your data in the app, remove the app or clear the site data in your browser.')}</p>
+    <p>{je('Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung und Widerspruch sowie auf Beschwerde bei einer Datenschutzbehörde. Der Anbieter speichert keine personenbezogenen Daten auf eigenen Servern, deine Nutzungsdaten liegen allein bei dir. Deine Daten in der App löschst du, indem du die App entfernst oder die Website-Daten im Browser löschst.', 'You have the right to access, rectification, erasure, restriction and objection, and to complain to a data protection authority. The provider stores no personal data on servers of its own, so your usage data stays with you. To delete your data in the app, remove the app or clear the site data in your browser.')}</p>
     <p class="re-stand">{je('Stand: November 2026', 'As of November 2026')}</p>
   </section>
 </article>
