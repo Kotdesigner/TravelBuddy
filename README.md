@@ -4,7 +4,7 @@
 
 ### One app. The whole road trip. Even where the signal ends.
 
-Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, fully offline, no account, no cloud.<br>
+Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first, no account, no cloud.<br>
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
@@ -655,6 +655,12 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 
 ---
 
+## License
+
+Licence-free: TravelBuddy's own code is released into the public domain under [The Unlicense](LICENSE). Map data, place photos, libraries and fonts keep their own licences.
+
+---
+
 ## Roadmap
 
 - [x] **Version 1: Western Australia** with planning, logbook, offline map, supplies and hazards
@@ -685,7 +691,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 
 ### Eine App. Der ganze Roadtrip. Auch dort, wo das Netz endet.
 
-Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, komplett offline, ohne Konto und ohne Cloud.<br>
+Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, ohne Konto und ohne Cloud.<br>
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
@@ -1293,6 +1299,12 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 - Alle Daten bleiben im Speicher deines Geräts. Mac und iPhone gleichst du über eine Backup-Datei ab, zum Beispiel per AirDrop. Beim Import wird zusammengeführt, nichts wird gelöscht.
 - Tickets, Ausweise und Fotos fürs Tagebuch bleiben auf dem Gerät und kommen nicht ins Backup.
 - Live-Daten zu Flug und Bahn sind freiwillig. Nur dann geht die Flugnummer mit Datum über RapidAPI an AeroDataBox oder der Bahnhof an DBF. Dein Schlüssel bleibt auf diesem Gerät und kommt nicht ins Backup.
+
+## Lizenz
+
+Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) gemeinfrei. Kartendaten, Ortsfotos, Bibliotheken und Schriften behalten ihre eigenen Lizenzen.
+
+---
 
 ## Fahrplan
 
