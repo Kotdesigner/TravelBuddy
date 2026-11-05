@@ -291,7 +291,7 @@
   .tf-tipp { margin: 0; font-size: calc(13px * var(--schrift, 1)); color: var(--muted); line-height: 1.45; max-width: 68ch; }
   .tf-zeile { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
   .tf-knopf { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
-  .tf-knopf:disabled { opacity: 0.5; cursor: default; }
+  .tf-knopf:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .tf-datei { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; overflow: hidden; }
   .tf-stand { margin: 0; font-size: calc(13px * var(--schrift, 1)); color: var(--muted); font-variant-numeric: tabular-nums; }
   .tf-stand:empty { display: none; }

@@ -5,7 +5,7 @@ const RAD = Math.PI / 180
 /** flug, bahn, boot oder auto. Alte Autorouten mit Fähre im Namen gelten ebenfalls als Boot. */
 export function artDerTour(r) {
   const art = r?.art || 'auto'
-  if (art === 'bahn' || art === 'boot') return art
+  if (art === 'bahn' || art === 'boot' || art === 'bus') return art
   if (art === 'flug' || r?.route?.flug) return 'flug'
   return /boot|boat|fähre|faehre|ferry|schiff|kreuzfahrt|cruise/i.test(r?.name || '') ? 'boot' : 'auto'
 }
@@ -16,6 +16,7 @@ export function artDesTages(e) {
   if (/Boot|Fähre/.test(v)) return 'boot'
   if (/Flug/.test(v)) return 'flug'
   if (/Bahn/.test(v)) return 'bahn'
+  if (/Bus/.test(v)) return 'bus'
   return 'auto'
 }
 
@@ -64,7 +65,7 @@ export function punktBei(v, p) {
 
 export const NAH_ZOOM = 11.5
 // Mit Auto und Bahn bleibt die Kamera weiter weg, die Strecke zählt, nicht jede Straße der Stadt
-export const nahZoom = (art) => (art === 'auto' || art === 'bahn' ? 10 : NAH_ZOOM)
+export const nahZoom = (art) => (['auto', 'bahn', 'bus'].includes(art) ? 10 : NAH_ZOOM)
 
 /** Gleichmäßige, leicht geglättete Linie für Fahrzeug und Kamera: kein Abbiegen an jeder Ecke. */
 export function glaette(v, stuecke = 300) {
@@ -104,5 +105,15 @@ export const FAHRZEUG = {
   flug: 'M12 2c1 0 1.6 1.6 1.6 3.6v4.1l8 4.7v2.2l-8-2.5v4.4l2.4 1.8V21L12 20l-4 1v-1.7l2.4-1.8v-4.4l-8 2.5v-2.2l8-4.7V5.6C10.4 3.6 11 2 12 2z',
   auto: 'M10 3h4a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zm-.5 6v3h5V9a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1z',
   boot: 'M12 2c3 3 5 7 5 11v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-7c0-4 2-8 5-11z',
+  bus: 'M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 3v3h8V5H8z',
   bahn: 'M9 2h6a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 3v4h6V5H9z',
 }
+
+// Einstellungen für „Reise abspielen“: Faktor für die Dauer und Versatz für den Zoom
+export const FILM_TEMPO = { langsam: 1.7, normal: 1, schnell: 0.55 }
+export const FILM_ZOOM = { nah: 1, mittel: 0, weit: -2 }
+const FILM_KEY = 'tb-film'
+export function leseFilm() {
+  try { const f = JSON.parse(localStorage.getItem(FILM_KEY) || '{}'); return { tempo: FILM_TEMPO[f.tempo] ? f.tempo : 'normal', zoom: f.zoom in FILM_ZOOM ? f.zoom : 'mittel' } } catch { return { tempo: 'normal', zoom: 'mittel' } }
+}
+export function merkeFilm(f) { try { localStorage.setItem(FILM_KEY, JSON.stringify(f)) } catch {} }

@@ -15,7 +15,7 @@
   import { audioVerfuegbar, starteAufnahme } from './audio.js'
   import SonneWetter from './SonneWetter.svelte'
   import OrtWahl from './OrtWahl.svelte'
-  import { etappeAm, routenDerEtappe, tageZwischen, gueltigesDatum } from './plan.js'
+  import { etappeAm, etappeVonEintrag, etappenAm, routenDerEtappe, tageZwischen, gueltigesDatum } from './plan.js'
   import { stimmigeLegs } from './routing.js'
   import { loeschFrage } from './dialog.js'
   import { dauer, klapp } from './motion.js'
@@ -235,7 +235,9 @@
     return stimmigeLegs(rt)[eintrag.legIdx]?.km ?? null
   })
   // ---- Etappe ergibt sich aus dem Datum; Route/Abschnitt nur noch für die km ----
-  const etappeHeute = $derived(etappeAm(eintraege, eintrag.datum))
+  const etappeHeute = $derived(etappeVonEintrag(eintraege, eintrag))
+  // V14: Am Wechseltag (eine Etappe endet, die nächste beginnt) wählbar, zu welcher der Tag gehört
+  const wechselWahl = $derived(etappenAm(eintraege, eintrag.datum))
   const routenHeute = $derived(etappeHeute ? routenDerEtappe(reisen, etappeHeute.reise.id) : [])
   // Wahlmöglichkeiten „Strecke des Tages“: die Etappe selbst (falls sie Stopps hat), jede Route ganz, jeder Abschnitt
   const streckenWahl = $derived.by(() => {
@@ -442,6 +444,16 @@
       {/if}
     </span>
     {/if}
+    {#if wechselWahl.length > 1}
+      <span class="k4-wechsel">
+        <small>{je('Wechseltag, der Eintrag gehört zu', 'Change day, this entry belongs to')}</small>
+        <span class="segment" role="group" aria-label={je('Wechseltag: gehört zu', 'Change day: belongs to')}>
+          {#each wechselWahl as w (w.reise.id)}
+            <button type="button" class:an={etappeHeute?.reise.id === w.reise.id} aria-pressed={etappeHeute?.reise.id === w.reise.id} onclick={() => setKopf({ etappeId: w.reise.id })}>{w.reise.name}</button>
+          {/each}
+        </span>
+      </span>
+    {/if}
   </div>
 
   <div class="k4-ort">
@@ -622,6 +634,8 @@
   .k4-etappe > span:last-child { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
   .k4-etappe b { font-size: calc(14.5px * var(--schrift, 1)); }
   .k4-etappe small { font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
+  .k4-wechsel { flex-basis: 100%; display: flex; flex-direction: column; gap: 4px; }
+  .k4-wechsel small { font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); font-weight: 700; }
   .k4-band { width: 6px; align-self: stretch; min-height: 34px; border-radius: 3px; flex: none; }
   .je-loeschen { display: flex; justify-content: flex-end; margin-top: 18px; padding-top: 12px; border-top: 1px dashed var(--line); }
   .k4-ort { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
@@ -650,10 +664,10 @@
   .lage { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 8px; }
   .lage-btn {
     font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 7px 12px; border-radius: 8px; cursor: pointer;
-    border: 1px solid #d8a56b; background: var(--warn-flaeche); color: #8a4a12;
+    border: 1px solid var(--warn-linie); background: var(--warn-flaeche); color: var(--warn-text);
   }
-  .lage-btn:disabled { opacity: 0.45; cursor: default; }
-  .lage-ok { font-size: calc(12px * var(--schrift, 1)); font-weight: 800; color: #1a7f37; }
+  .lage-btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
+  .lage-ok { font-size: calc(12px * var(--schrift, 1)); font-weight: 800; color: var(--ok-text); }
   .lage-grund { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); flex: 1 1 200px; min-width: 0; }
   .je-wetter { margin-top: 8px; }
   .haupt { position: relative; margin-top: 8px; }
@@ -706,24 +720,23 @@
   .c-lbl { font-size: calc(12.5px * var(--schrift, 1)); color: var(--ink); }
   .c-ctrl { display: inline-flex; align-items: center; gap: 6px; }
   .c-ctrl button { width: 26px; height: 26px; border: 1px solid var(--line-stark); background: var(--card); border-radius: 6px; cursor: pointer; font-size: calc(15px * var(--schrift, 1)); font-weight: 700; color: var(--btn-ink); }
-  .c-ctrl button:disabled { opacity: 0.35; }
+  .c-ctrl button:disabled { opacity: 0.45; color: var(--aus-ink); cursor: not-allowed; }
   .c-n { min-width: 18px; text-align: center; font-weight: 800; font-size: calc(13px * var(--schrift, 1)); }
   .c-row.eigen { background: var(--ok-flaeche); }
   .c-del { border: none !important; color: var(--danger-text); background: none !important; font-size: calc(13px * var(--schrift, 1)); }
   .c-add { display: flex; gap: 5px; margin-top: 4px; }
   .c-add input { flex: 1; font-size: calc(12.5px * var(--schrift, 1)); padding: 6px 8px; border: 1px solid var(--line-stark); border-radius: 6px; background: var(--eingabe); color: var(--ink); }
   .c-add button { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 6px 10px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 6px; cursor: pointer; }
-  .c-add button:disabled { opacity: 0.4; }
+  .c-add button:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .farbe { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
   .sw { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #ccc; cursor: pointer; }
   .sw.an { box-shadow: 0 0 0 2px var(--ink); }
   .farb-txt { flex: 1 1 120px; }
   @media (max-width: 520px) { .quickstats { grid-template-columns: 1fr; } }
   .je-warn {
-    background: #fff6ec; border: 1px solid #eab98d; border-radius: 10px;
+    background: var(--warn-flaeche); border: 1px solid var(--warn-linie); border-radius: 10px; color: var(--ink);
     padding: 9px 11px; margin: 8px 0 4px; font-size: calc(12.5px * var(--schrift, 1));
   }
-  :global([data-theme='dark']) .je-warn { background: #3a2a1c; border-color: #6b4a2a; }
   .jw-kopf { font-weight: 800; margin-bottom: 4px; }
   .jw-quelle { font-weight: 600; opacity: .65; font-size: calc(12px * var(--schrift, 1)); margin-left: 4px; }
   .jw-z { margin: 3px 0; line-height: 1.4; }
@@ -732,7 +745,7 @@
     margin-top: 6px; padding: 5px 11px; border: 1px solid #c0392b; background: none;
     color: var(--danger-text); border-radius: 14px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; cursor: pointer;
   }
-  .jw-ok { display: inline-block; margin-top: 6px; font-weight: 700; color: #1a7f37; font-size: calc(12px * var(--schrift, 1)); }
+  .jw-ok { display: inline-block; margin-top: 6px; font-weight: 700; color: var(--ok-text); font-size: calc(12px * var(--schrift, 1)); }
   .je.zu { padding: 0; }
   .je-kurz {
     display: flex; align-items: center; gap: 9px; width: 100%; text-align: left;
@@ -744,7 +757,7 @@
   .k-text { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
   .k-marken { display: flex; gap: 5px; flex-shrink: 0; }
   .k-m { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; background: var(--flaeche-2); border-radius: 9px; padding: 2px 6px; white-space: nowrap; }
-  .k-m.warn { background: #fdf0e6; color: #8a5a2b; }
+  .k-m.warn { background: var(--warn-flaeche); color: var(--warn-text); }
   .k-pfeil { color: var(--muted); font-size: calc(12px * var(--schrift, 1)); flex-shrink: 0; }
   .je-zu {
     background: none; border: none; color: var(--muted); font-size: calc(13px * var(--schrift, 1));

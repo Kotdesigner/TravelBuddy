@@ -324,7 +324,7 @@ Total AUD 540.00`, KTX)
   const auto = alsBuchungen({ ...f, art: 'fahrzeug', fahrzeug: 'car', titel: 'Hertz' }, { jetzt: 'x' })
   p('Mietwagen: kat car, Übernahme und Rückgabe', auto.length === 2 && auto[0].kat === 'car' && /^Übernahme/.test(auto[0].sub) && /^Rückgabe/.test(auto[1].sub))
   p('zahlAus: 1.234,56 / 1,234.56 / 1.234 / 12,5', zahlAus('1.234,56') === 1234.56 && zahlAus('1,234.56') === 1234.56 && zahlAus('1.234') === 1234 && zahlAus('12,5') === 12.5)
-  p('sechs Arten', ARTEN.map((a) => a.id).join() === 'flug,unterkunft,fahrzeug,tour,faehre,sonstiges')
+  p('acht Arten', ARTEN.map((a) => a.id).join() === 'flug,unterkunft,fahrzeug,tour,faehre,bahn,shuttle,sonstiges')
 }
 
 console.log('\n13  Ohne Buchung')

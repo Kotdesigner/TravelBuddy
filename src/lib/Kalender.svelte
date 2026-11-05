@@ -5,7 +5,7 @@
   import { reisen, gesamtStart, berechneKalender, verschiebeReise, wanderungen, journal, buchungen, ymd } from './userdata.js'
   import { dauerText } from './wanderungen-daten.js'
   import { katInfo } from './reisekalender.js'
-  import BelegKnoepfe from './BelegKnoepfe.svelte'
+  import BuchungZusatz from './BuchungZusatz.svelte'
   import { baueEintraege, alsDokument, alsXlsx } from './kalenderexport.js'
   import { A4_HOCH, htmlBlaetter, sammleDatei } from './ausgabe.js'
   import Ausgabe from './Ausgabe.svelte'
@@ -172,8 +172,7 @@
                   <span class="t-datum">{fmtTag(b.datum)}</span>
                   <span class="t-titel">{katInfo(b.kat).icon} {b.titel}</span>
                   {#if b.sub}<span class="t-rand">{b.sub}</span>{/if}
-                  {#if b.ref}<span class="t-ref">{b.ref}</span>{/if}
-                  <BelegKnoepfe docs={b.docs} klein />
+                  <BuchungZusatz termin={b} klein />
                 </div>
               {/each}
               {#each eTermine as t (t.id)}
@@ -250,7 +249,7 @@
   .exp-meldung { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--ok-text); margin-bottom: 8px; }
   .hint { color: var(--muted); font-size: calc(13px * var(--schrift, 1)); background: var(--flaeche); padding: 12px; border-radius: 8px; margin: 0; }
   .zeit { display: flex; flex-direction: column; gap: 8px; }
-  .etappe { display: flex; gap: 12px; align-items: center; background: var(--eingabe); border: 1px solid #ece3d4; border-radius: 8px; padding: 9px 12px; }
+  .etappe { display: flex; gap: 12px; align-items: center; background: var(--eingabe); border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; }
   .datum { flex: 0 0 130px; font-weight: 700; color: var(--brand-text); font-size: calc(13.5px * var(--schrift, 1)); }
   .datum .tage { display: block; font-weight: 400; color: var(--muted); font-size: calc(12px * var(--schrift, 1)); }
   .inhalt { flex: 1; min-width: 0; }
@@ -258,8 +257,8 @@
   .inhalt .stops { display: block; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; }
   .etappe-akt { display: inline-flex; gap: 3px; flex: 0 0 auto; }
   .etappe-akt button { border: 1px solid var(--line-stark); background: var(--card); border-radius: 8px; cursor: pointer; font-size: calc(14px * var(--schrift, 1)); min-width: 34px; min-height: 34px; padding: 0 8px; }
-  .etappe-akt button:disabled { opacity: 0.3; }
-  .etappe-akt .mp { border-color: #cfe0ec; background: var(--info-flaeche); }
+  .etappe-akt button:disabled { opacity: 0.45; color: var(--aus-ink); cursor: not-allowed; }
+  .etappe-akt .mp { border-color: var(--info-linie); background: var(--info-flaeche); }
   .summe { margin-top: 10px; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; color: var(--ok-text); }
 
   /* Datierte Wanderungen & Logbuchtage, eingerückt unter ihrer Etappe */
@@ -267,8 +266,9 @@
   .termine { display: flex; flex-direction: column; gap: 3px; margin: 0 0 2px 18px; padding-left: 10px; border-left: 2px dashed color-mix(in srgb, var(--f, #999) 55%, transparent); }
   .termin {
     display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
-    font-size: calc(12.5px * var(--schrift, 1)); padding: 4px 9px; border-radius: 6px; background: var(--flaeche);
+    font-size: calc(12.5px * var(--schrift, 1)); padding: 6px 2px; border-bottom: 1px solid var(--line);
   }
+  .termin:last-child { border-bottom: none; }
   .doku {
     display: inline-flex; align-items: baseline; gap: 6px; align-self: flex-start;
     font-size: calc(12px * var(--schrift, 1)); font-weight: 700; text-decoration: none;
@@ -278,8 +278,8 @@
   .d-luecke { font-weight: 600; color: var(--muted); }
   .t-datum { flex: 0 0 auto; font-weight: 800; color: var(--muted); font-size: calc(12px * var(--schrift, 1)); min-width: 92px; }
   .t-titel { font-weight: 700; color: var(--ink); }
-  .termin.gebucht { background: var(--info-flaeche, #eaf2f8); }
-  .t-ref { font-size: calc(12px * var(--schrift, 1)); font-family: ui-monospace, monospace; color: var(--muted); }
+  /* V15: Gebuchtes erkennt man an Symbol, Nummer und Belegen, nicht an einem zweiten Kasten */
+  .termin.gebucht .t-titel { color: var(--ink); }
   .t-rand { color: var(--muted); font-size: calc(12px * var(--schrift, 1)); }
 
   .ausserhalb { margin-top: 12px; padding: 10px 12px; background: var(--flaeche); border: 1px dashed var(--line-stark); border-radius: 8px; display: flex; flex-direction: column; gap: 4px; }
@@ -289,7 +289,7 @@
   .ref { margin-top: 6px; }
   .ref summary { cursor: pointer; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; color: var(--muted); padding: 8px 0; }
   .cal { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card); margin-top: 8px; }
-  .row { display: flex; gap: 14px; padding: 12px 16px; border-top: 1px solid #f0e9db; }
+  .row { display: flex; gap: 14px; padding: 12px 16px; border-top: 1px solid var(--line); }
   .row:first-child { border-top: none; }
   .date { flex: 0 0 130px; font-weight: 700; color: var(--brand-text); font-size: calc(13.5px * var(--schrift, 1)); }
   .days { display: block; font-weight: 400; color: var(--muted); font-size: calc(12px * var(--schrift, 1)); margin-top: 2px; }

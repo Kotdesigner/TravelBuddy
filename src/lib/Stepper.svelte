@@ -41,7 +41,7 @@
     box-shadow: var(--shadow);
   }
   .st-btn:hover { background: var(--btn-flaeche); }
-  .st-btn:disabled { opacity: 0.3; cursor: default; box-shadow: none; }
+  .st-btn:disabled { opacity: 0.45; color: var(--aus-ink); cursor: not-allowed; box-shadow: none; }
   .st-wert {
     width: 52px; min-height: 42px; border: none; background: none; text-align: center;
     font-size: calc(14px * var(--schrift, 1)); font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums;

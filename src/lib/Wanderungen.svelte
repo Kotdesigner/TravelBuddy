@@ -302,13 +302,13 @@
   .badge { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; border-radius: 20px; padding: 2px 9px; border: 1px solid var(--line); }
   .badge.sw { background: var(--flaeche); color: var(--ink); }
   .stat-wunsch { background: var(--warn-flaeche); color: var(--btn-ink); border-color: #e8cf9a; }
-  .stat-geplant { background: #e7f0fa; color: #2a5a8a; border-color: #b8d0e8; }
+  .stat-geplant { background: var(--info-flaeche); color: var(--info-text); border-color: var(--info-linie); }
   .stat-gemacht { background: var(--ok-flaeche); color: var(--ok-text); border-color: #b0d8c6; }
   .badge.termin { background: var(--flaeche); color: var(--brand-text); border-color: var(--line-stark); font-weight: 800; }
   .c-kurz { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 600; }
   .c-ord { display: flex; gap: 3px; }
   .c-ord button { width: 38px; height: 38px; border: 1px solid var(--line-stark); background: var(--card); border-radius: 9px; cursor: pointer; font-size: calc(14px * var(--schrift, 1)); color: var(--btn-ink); }
-  .c-ord button:disabled { opacity: 0.3; cursor: default; }
+  .c-ord button:disabled { opacity: 0.45; color: var(--aus-ink); cursor: not-allowed; }
   .c-del { color: var(--danger-text) !important; }
 
   .status-wahl { align-self: flex-start; flex-wrap: wrap; }

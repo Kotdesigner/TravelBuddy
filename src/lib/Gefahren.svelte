@@ -197,7 +197,7 @@
   .kopf { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .titel { font-size: calc(17px * var(--schrift, 1)); font-weight: 800; color: var(--danger-text); }
   .btn { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 7px 12px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 8px; cursor: pointer; }
-  .btn:disabled { opacity: 0.4; }
+  .btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .offline, .fehler { font-size: calc(13px * var(--schrift, 1)); padding: 8px 0; }
   .fehler { color: var(--danger-text); }
   .cache-banner { background: var(--info-flaeche); border: 1px solid var(--info-linie); color: var(--info-text); font-size: calc(12.5px * var(--schrift, 1)); padding: 8px 12px; border-radius: 8px; margin: 8px 0; }
@@ -255,5 +255,5 @@
 .oz-hinweis { color: var(--muted); flex: 1; min-width: 160px; }
 .oz-hinweis.warn { color: var(--warn-text); font-weight: 600; width: 100%; flex: none; }
 .oz-btn { min-height: 36px; padding: 4px 12px; border: 1px solid var(--brand); background: none; color: var(--brand-text); border-radius: 18px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
-.oz-btn:disabled { opacity: .5; }
+.oz-btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
 </style>

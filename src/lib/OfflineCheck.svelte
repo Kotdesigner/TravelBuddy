@@ -147,7 +147,7 @@
   .oc-titel { margin: 0; font-size: calc(17px * var(--schrift, 1)); text-wrap: balance; }
   .oc-summe { margin: 2px 0 0; font-size: calc(13px * var(--schrift, 1)); color: var(--muted); }
   .oc-neu { flex: none; }
-  .oc-neu:disabled { opacity: 0.55; cursor: default; }
+  .oc-neu:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .oc-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .oc-punkt { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--warn); background: var(--warn-flaeche); }
   .oc-punkt.ok { border-color: var(--ok-linie); background: var(--ok-flaeche); }

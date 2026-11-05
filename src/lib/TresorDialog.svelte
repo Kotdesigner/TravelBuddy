@@ -66,7 +66,7 @@
   .td-hg { position: fixed; inset: 0; background: rgba(20, 14, 8, 0.42); z-index: 150; }
   .td {
     position: fixed; z-index: 151; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: min(360px, calc(100vw - 40px)); background: var(--card); color: var(--ink);
+    width: min(360px, calc(100% - 40px)); background: var(--card); color: var(--ink);
     border-radius: var(--radius-l); box-shadow: var(--shadow-float); padding: 22px 20px 16px;
   }
   h2 { margin: 0 0 6px; font-size: calc(18px * var(--schrift, 1)); line-height: 1.3; }
@@ -82,5 +82,5 @@
   .td-knoepfe button { min-height: 48px; border-radius: var(--radius-m); font-size: calc(16px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
   .td-nein { background: var(--flaeche-2); color: var(--ink); border: 1px solid var(--line); }
   .td-ja { background: var(--brand); color: #fff; border: none; }
-  .td-ja:disabled { opacity: 0.5; cursor: default; }
+  .td-ja:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
 </style>

@@ -81,6 +81,7 @@
   const MEHR_SEKTIONEN = [
     { id: 'notfall', icon: '🆘', label: t('Notfall'), info: t('Notrufe, nächste Hilfe, dein Standort'), rot: true },
     { id: 'vorbereitung', icon: '🧳', label: t('Reisevorbereitung'), info: t('Checkliste, Dokumente, Buchungen') },
+    { id: 'buchungen', icon: '🎫', label: je('Buchungen', 'Bookings'), info: je('Termin, Nummer, Kosten und Belege', 'Date, number, cost and documents') },
     { id: 'fluege', icon: '✈️', label: t('Flüge & Bahn'), info: t('Status, Gate, Gleis und Verspätung') },
     { id: 'kosten', icon: '💰', label: t('Kosten'), info: t('Wofür, je Etappe und pro Tag') },
     { id: 'gefahren', icon: '⚠️', label: t('Gefahrenlage'), info: t('Warnungen zu Feuer, Flut und Hitze') },

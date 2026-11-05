@@ -97,7 +97,7 @@
 <style>
   .kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
   .fortschritt { flex: 1 1 240px; }
-  .f-bar { height: 12px; background: #eee3d2; border-radius: 8px; overflow: hidden; }
+  .f-bar { height: 12px; background: var(--flaeche-2); border-radius: 8px; overflow: hidden; }
   .f-fill { height: 100%; background: linear-gradient(90deg, #d98a3d, #2f7a63); transform-origin: left; transition: transform var(--t-slow) var(--ease-spring); }
   .f-text { font-size: calc(13px * var(--schrift, 1)); color: var(--muted); margin-top: 4px; }
   .f-text b { color: var(--ink); }
@@ -125,6 +125,6 @@
   .add { display: flex; gap: 5px; margin-top: 8px; }
   .add input { flex: 1; font-size: calc(12.5px * var(--schrift, 1)); padding: 6px 8px; border: 1px solid var(--line-stark); border-radius: 6px; background: var(--eingabe); color: var(--ink); }
   .add button { font-size: calc(14px * var(--schrift, 1)); font-weight: 700; width: 30px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 6px; cursor: pointer; }
-  .add button:disabled { opacity: 0.4; }
+  .add button:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   @media (max-width: 640px) { .kats { columns: 1; } }
 </style>

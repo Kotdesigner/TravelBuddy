@@ -123,7 +123,7 @@ export function gesamtsuche(begriff, d = {}) {
   const kat = (k) => (d.katInfo ? d.katInfo(k) : { icon: '📌', label: '' })
   dazu('buchungen', T.buchungen, '🧾', [
     ...(d.buchungen?.events || []).filter((b) => b && !b.platzhalter).map((b) => {
-      const r = pruefe(b.titel || '', [b.sub, kat(b.kat).label, b.ref, ...(b.docs || []).map((x) => x.label)].join(' '), b.datum)
+      const r = pruefe(b.titel || '', [b.sub, kat(b.kat).label, b.ref, b.ort, b.anbieter, ...(b.docs || []).map((x) => x.label)].join(' '), b.datum)
       if (!r) return null
       return { id: 'bu:' + b.id, titel: `${b.emoji || kat(b.kat).icon} ${b.titel}`, unter: [b.datum ? mitWochentag(b.datum) : '', b.sub].filter(Boolean).join(' · '), icon: b.emoji || kat(b.kat).icon, ziel: b.datum ? 'logbuch/tag/' + b.datum : 'plan/kalender', datum: b.datum, ...r }
     }),

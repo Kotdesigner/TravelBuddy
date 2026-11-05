@@ -192,7 +192,7 @@
     font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--btn-ink); background: none; border: 1px dashed var(--line-stark);
     border-radius: 8px; padding: 6px 10px; cursor: pointer; margin-top: 8px;
   }
-  .fi-knopf:disabled { opacity: 0.5; cursor: default; }
+  .fi-knopf:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .fi-datei { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; overflow: hidden; }
   .fi-tipp { margin: 0; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); line-height: 1.45; max-width: 60ch; }
 

@@ -11,7 +11,7 @@
 import { t, jeSprache } from './i18n.js'
 import { kursFuer, inBeide } from './fx.js'
 import { rundeAufSumme } from './runden.js'
-import { etappeAm, eintragTage } from './plan.js'
+import { etappeAm, etappeVonEintrag, eintragTage } from './plan.js'
 
 // Reihenfolge wie in der Auswahl: was unterwegs am häufigsten vorkommt, zuerst
 export const KOSTEN_KATEGORIEN = jeSprache(() => ([
@@ -93,13 +93,13 @@ function runde(zeilen, feld, gesamt) {
  * Gezeigt werden ganze Beträge. Jede Liste ergibt genau die Gesamtsumme (siehe runden.js).
  * @param eintraege  Etappen mit Datum aus etappenMitDatum
  */
-export function kostenAuswertung({ journal = [], vorab = [], kurse = {}, eintraege = [] } = {}) {
+export function kostenAuswertung({ journal = [], vorab = [], kurse = {}, eintraege = [], reisen = [] } = {}) {
   const posten = [], tage = new Set()
   for (const e of journal) {
     if (!e) continue
     const cur = e.felder?.waehrung || 'AUD'
     const kurs = kursFuer(kurse, e.datum)
-    const etappe = etappeAm(eintraege, e.datum)?.reise.id || null
+    const etappe = etappeVonEintrag(eintraege, e)?.reise.id || null
     for (const a of ausgabenVon(e)) {
       const x = inBeide(a.betrag, cur, kurs)
       if (!x.eur && !x.aud) continue
@@ -109,11 +109,16 @@ export function kostenAuswertung({ journal = [], vorab = [], kurse = {}, eintrae
     }
   }
   const etappenIds = new Set(eintraege.map((x) => x.reise.id))
+  // V16: Eine Ausgabe, die an einer Route hängt, zählt zur Etappe dieser Route (vorher „Ohne Etappe“)
+  const etappeDerRoute = new Map(reisen.filter((r) => r?.typ === 'route' && r.etappeId).map((r) => [r.id, r.etappeId]))
+  const etappeVon = (id) => (etappenIds.has(id) ? id : etappenIds.has(etappeDerRoute.get(id)) ? etappeDerRoute.get(id) : null)
+  // V14: Vor der Reise ist, was vor dem ersten Reisetag bezahlt wurde; der Rest zählt zu unterwegs
+  const reiseStart = eintraege.reduce((m, x) => (!m || x.von < m ? x.von : m), '')
   for (const k of vorab) {
     const x = inBeide(k.betrag, k.waehrung, kursFuer(kurse, k.datum))
     if (!x.eur && !x.aud) continue
     const kat = KATEGORIE[k.kat] ? k.kat : 'kosten_sonstiges'
-    posten.push({ ...x, kat, cluster: clusterVon(kat), etappe: etappenIds.has(k.reiseId) ? k.reiseId : null, vorab: true, datum: k.datum, bis: '', text: k.text || '', betrag: betragVon(k.betrag), waehrung: k.waehrung, ort: '' })
+    posten.push({ ...x, kat, cluster: clusterVon(kat), etappe: etappeVon(k.reiseId), vorab: !reiseStart || !k.datum || k.datum < reiseStart, offen: k.zahlung === 'vorOrt', datum: k.datum, bis: '', text: k.text || '', betrag: betragVon(k.betrag), waehrung: k.waehrung, ort: '' })
   }
 
   const summe = (liste) => liste.reduce((s, p) => ({ eur: s.eur + p.eur, aud: s.aud + p.aud }), { eur: 0, aud: 0 })
@@ -158,4 +163,35 @@ export function postenAuswahl(a, wahl = 'alle') {
   const summe = cl || kat || a.gesamt
   const posten = a.posten.filter((p) => (cl ? p.cluster === cl.id : kat ? p.kat === kat.id : wahl === 'alle'))
   return { eur: summe.eur, aud: summe.aud, posten, anzahl: posten.length, proPosten: posten.length ? Math.round(summe.eur / posten.length) : 0 }
+}
+
+/** Summe je Etappe in Euro und AU$ (Vorab-Ausgaben mit Etappe und Logbuch an ihren Tagen). */
+export function etappenSummen(daten) {
+  return new Map(kostenAuswertung(daten).etappen.filter((z) => z.id).map((z) => [z.id, { eur: z.eur, aud: z.aud }]))
+}
+
+// Wörter, die in fast jeder Buchung stehen und deshalb nichts über die Etappe sagen
+const ALLGEMEIN = new Set(['hotel', 'flug', 'nach', 'airport', 'flughafen', 'shuttle', 'resort', 'the', 'and', 'von', 'mit', 'fuer', 'für', 'booking', 'buchung', 'abreise', 'anreise', 'check', 'out'])
+const woerter = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/[^a-z0-9]+/).filter((w) => w.length >= 4 && !ALLGEMEIN.has(w))
+
+/**
+ * Welche Etappe passt zu einer Vorab-Ausgabe ohne Etappe? Über die verknüpfte Buchung, sonst über
+ * gleiche Wörter in Buchung und Text. Bei zwei gleich guten Treffern in verschiedenen Etappen keiner.
+ */
+export function etappeVorschlag(k, termine = [], eintraege = []) {
+  if (!k || k.reiseId) return null
+  const nimm = (datum) => { const e = etappeAm(eintraege, datum); return e ? { id: e.reise.id, name: e.reise.name, datum } : null }
+  const verknuepft = k.terminId ? termine.find((e) => e.id === k.terminId) : null
+  if (verknuepft) return nimm(verknuepft.datum)
+  const w = new Set(woerter(k.text))
+  if (!w.size) return null
+  let best = 0, treffer = []
+  for (const e of termine) {
+    const n = new Set(woerter(`${e.titel} ${e.sub || ''}`).filter((x) => w.has(x))).size
+    if (!n) continue
+    if (n > best) { best = n; treffer = [e] } else if (n === best) treffer.push(e)
+  }
+  const etappen = [...new Map(treffer.map((e) => [nimm(e.datum)?.id, e])).entries()].filter(([id]) => id)
+  if (etappen.length !== 1) return null
+  return nimm(treffer.map((e) => e.datum).sort()[0])
 }

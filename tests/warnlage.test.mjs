@@ -2,7 +2,7 @@
 // Ausführen: node tests/warnlage.test.mjs
 import fs from 'node:fs'
 import { warnungenAnRoute, warnRahmen, warnMitte, gebietGroesse } from '../src/lib/warnungen.js'
-import { warnlage, punktAufRoute, probeWarnung, warnGeoJson, warnAusschnitt, kreis, mapsPosition, mapsWeg } from '../src/lib/warnlage.js'
+import { warnlage, buendleHinweise, punktAufRoute, probeWarnung, warnGeoJson, warnAusschnitt, kreis, mapsPosition, mapsWeg } from '../src/lib/warnlage.js'
 
 let ok = 0, bad = 0
 const p = (name, bed, zusatz = '') => {
@@ -140,6 +140,23 @@ console.log('\n8  Einbau')
   p('Gefahrenlage zeigt Lage, Knöpfe und Testmodus', ['WarnLage', 'WarnKnoepfe', 'WarnTest'].every((x) => src('lib/Gefahren.svelte').includes(x)))
   p('Karte zeichnet Warnungen', src('lib/Karte.svelte').includes('warnGeoJson'))
   p('Plan, Etappe und Wanderung kennen die Lage', ['lib/PlanAnsicht.svelte', 'lib/EtappeDetail.svelte', 'lib/Wanderungen.svelte'].every((f) => src(f).includes('$lage')))
+}
+
+console.log('\n9  Gleiche Warnung an mehreren Abschnitten (V15)')
+{
+  const w = { id: 'feuer', km: 100, kmBis: 0 }
+  const h = [
+    { art: 'route', id: 'r1', name: 'Transfer Flughafen', aufRoute: false, w: { ...w, km: 100, kmBis: 0 } },
+    { art: 'route', id: 'r2', name: 'Ab Shute Harbour', aufRoute: false, w: { ...w, km: 96, kmBis: 10 } },
+    { art: 'route', id: 'r3', name: 'Ab Coral Beach', aufRoute: false, w: { ...w, km: 93, kmBis: 0 } },
+    { art: 'route', id: 'r4', name: 'Ab Airlie', aufRoute: true, w: { ...w, km: 101, kmBis: 30 } },
+    { art: 'wanderung', id: 'w1', name: 'Wanderung', w: { id: 'flut', km: 5 } },
+  ]
+  const b = buendleHinweise(h)
+  p('fünf Hinweise mit zwei Warnungen werden zwei', b.length === 2, String(b.length))
+  p('vorne der Abschnitt, auf dem man fährt', b[0].id === 'r4' && b[0].weitere.length === 3, JSON.stringify(b[0]))
+  p('ohne Fahrt der nächste zuerst', buendleHinweise(h.slice(0, 3))[0].id === 'r3')
+  p('einzelne Warnung bleibt, wie sie ist', !b[1].weitere && b[1].id === 'w1')
 }
 
 console.log(`\n  ${ok} bestanden · ${bad} gescheitert\n`)

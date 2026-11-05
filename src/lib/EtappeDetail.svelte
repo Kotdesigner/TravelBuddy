@@ -1,32 +1,67 @@
 <script>
-  import { t, tn } from './i18n.js'
+  import { t, tn, je } from './i18n.js'
   // Eine Etappe: Name und Datum, Buchungen, Routen mit Stopps, Wanderungen, Logbuch.
   // Ist keine Etappe gewählt (Route ohne Etappe), zeigt sie nur diese Route.
-  import { reisen, gesamtStart, buchungen, wanderungen, journal, updateReise, loescheReise, neueRoute, wandleReiseUm } from './userdata.js'
-  import { etappenMitDatum, routenDerEtappe, tageZwischen, gueltigesDatum, ymd, offenerZeitraum, eintragTage } from './plan.js'
+  import { reisen, gesamtStart, buchungen, wanderungen, journal, updateReise, loescheReise, neueRoute, wandleReiseUm, vorabKosten } from './userdata.js'
+  import { etappenMitDatum, routenDerEtappe, reiseweg, VERKEHR, tageZwischen, gueltigesDatum, ymd, offenerZeitraum, eintragTage, plusTage } from './plan.js'
   import { lage } from './warnlage-dienst.js'
   import WarnKnoepfe from './WarnKnoepfe.svelte'
-  import { bereich, tageText, mitWochentag, zahl } from './format.js'
+  import { bereich, tageText, mitWochentag, zahl, eur, aud } from './format.js'
   import { katInfo } from './reisekalender.js'
   import { STATUS_MAP, S_MAP } from './wanderungen-daten.js'
-  import { loeschFrage } from './dialog.js'
+  import { frage, loeschFrage } from './dialog.js'
+  import { etappenSummen } from './kosten.js'
+  import { fxKurse } from './fx.js'
+  import AenderungsLeiste from './AenderungsLeiste.svelte'
+  import { setzeWaechter } from './navigation.js'
+  import GeoVorschlaege from './GeoVorschlaege.svelte'
   import { zeigeToast } from './toast.js'
   import { haptic } from './haptik.js'
   import Stepper from './Stepper.svelte'
   import RouteEditor from './RouteEditor.svelte'
   import Versorgung from './Versorgung.svelte'
-  import BelegKnoepfe from './BelegKnoepfe.svelte'
+  import BuchungZusatz from './BuchungZusatz.svelte'
+  import { wechselZeit } from './buchung.js'
+  import AbschnittPlan from './AbschnittPlan.svelte'
+  import { abschnitteDerEtappe, bereichVon } from './abschnitte.js'
+  import { naechteUebersicht } from './naechte.js'
+  import { hinweise } from './routen-dienst.js'
   import { dauer, klapp, istMorph, morphName } from './motion.js'
 
   let { etappeId = null, routeId = null, orte = [], warnungen = [], umkreisKm = 150,
     onzurueck = () => {}, onneu = () => {}, onlogbuch = () => {}, onwanderung = () => {} } = $props()
 
+  // V14: Beginnt die Etappe an dem Tag, an dem die vorige endet, ist das ein Wechseltag mit Uhrzeit
+  const wechsel = $derived.by(() => {
+    if (!eintrag) return null
+    const alle = etappenMitDatum($reisen, $gesamtStart)
+    const vorher = alle.find((x) => x.reise.id !== eintrag.reise.id && x.bis === eintrag.von && x.von < eintrag.von)
+    if (!vorher) return null
+    const w = wechselZeit({}, eintrag.von, $buchungen?.events || [])
+    return { vorher, auto: w?.zeit || '', quelle: w?.quelle || '' }
+  })
   const eintrag = $derived(etappenMitDatum($reisen, $gesamtStart).find((e) => e.reise.id === etappeId) || null)
   const etappe = $derived(eintrag?.reise || $reisen.find((r) => r.id === etappeId) || null)
   const einzelRoute = $derived(!etappeId && routeId ? $reisen.find((r) => r.id === routeId) : null)
-  const routen = $derived(etappe ? routenDerEtappe($reisen, etappe.id) : einzelRoute ? [einzelRoute] : [])
+  // V16: Routen in der Reihenfolge eingeplant (nach Datum), ohne Datum, Ideen
+  const gruppen = $derived(etappe ? abschnitteDerEtappe($reisen, etappe.id) : { eingeplant: [], offen: einzelRoute ? [einzelRoute] : [], ideen: [] })
+  const routen = $derived([...gruppen.eingeplant, ...gruppen.offen, ...gruppen.ideen])
+  const kopfVor = (i) => (etappe && i === gruppen.eingeplant.length && gruppen.offen.length ? je('Ohne Datum', 'Without a date')
+    : etappe && i === gruppen.eingeplant.length + gruppen.offen.length && gruppen.ideen.length ? je('Ideen, zählen nicht mit', 'Ideas, not counted') : '')
+  const zeitText = (r) => { const b = bereichVon(r); return b ? (b.von === b.bis ? mitWochentag(b.von) : `${mitWochentag(b.von)} ${je('bis', 'to')} ${mitWochentag(b.bis)}`) + (r.zeit ? ` · ${r.zeit}` : '') : '' }
   const alleEtappen = $derived(etappenMitDatum($reisen, $gesamtStart))
+  const kostenEtappe = $derived(etappe ? etappenSummen({ journal: $journal, vorab: $vorabKosten, kurse: $fxKurse, eintraege: alleEtappen, reisen: $reisen }).get(etappe.id) : null)
 
+  // V16: Nächte dieser Etappe auf einen Blick
+  const naechteHier = $derived.by(() => {
+    if (!eintrag) return null
+    const n = naechteUebersicht({ eintraege: alleEtappen, reisen: $reisen, events: $buchungen?.events || [] }).naechte.filter((x) => x.etappe?.id === eintrag.reise.id)
+    const z = { gebucht: 0, geplant: 0, flug: 0, camper: 0, offen: 0 }
+    for (const x of n) z[x.zustand]++
+    return n.length ? z : null
+  })
+  // V16: vorgemerkte Orte, die an Routen dieser Etappe liegen
+  const vorgemerktHier = $derived(routen.flatMap((r) => ($hinweise[r.id]?.vorschlaege || []).filter((v) => v.vorgemerkt).map((v) => ({ ...v, r }))))
   let offen = $state({})
   $effect(() => { if (routeId) offen[routeId] = true })
   // Kommt man über eine Route hierher (Link, Karte, Ort einplanen), steht sie gleich im Bild
@@ -54,8 +89,39 @@
     if (t >= 1) updateReise(etappe.id, { tage: t })
   }
 
-  function routeDazu() {
-    const id = neueRoute({ etappeId: etappe.id, name: t('Route {n}', { n: routen.length + 1 }), art: 'auto', farbe: etappe.farbe })
+  // Ungespeicherte Änderungen: Beim Verlassen fragen, auf jedem Weg. Tippen daneben bleibt hier.
+  let aenderung = $state(null)
+  $effect(() => {
+    setzeWaechter(async () => {
+      if (!aenderung?.geaendert) return true
+      const a = await frage({ titel: je('Änderungen verwerfen?', 'Discard changes?'), text: je('Deine Änderungen sind noch nicht gespeichert.', 'Your changes are not saved yet.'), ja: je('Speichern', 'Save'), nein: je('Nicht speichern', "Don't save"), abbruch: null })
+      if (a === null) return false
+      if (a) aenderung.speichern(); else aenderung.verwerfen()
+      return true
+    })
+    const schliessen = (e) => { if (aenderung?.geaendert) e.preventDefault() }
+    addEventListener('beforeunload', schliessen)
+    return () => { setzeWaechter(null); removeEventListener('beforeunload', schliessen) }
+  })
+  // Löschen und Umwandeln sind schon bestätigt, danach gibt es diese Seite nicht mehr
+  function ohneFrage() { setzeWaechter(null); onzurueck() }
+
+  // Nächster Abschnitt: beginnt dort, wo der letzte aufhört, mit eigenem Verkehrsmittel
+  const weg = $derived(reiseweg(routen))
+  const letzterOrt = $derived([...routen].reverse().find((r) => r.stops?.length)?.stops.at(-1))
+  const WEITER = [['flug', '✈️', 'Flug', 'Flight'], ['bus', '🚌', 'Bus', 'Bus'], ['auto', '🚗', 'Auto', 'Car'], ['bahn', '🚆', 'Bahn', 'Train'], ['boot', '⛵', 'Schiff', 'Boat']]
+  // Eine neue Route beginnt nach der letzten eingeplanten: Flug, Bus, Bahn und Schiff am selben Tag, sonst am Tag danach
+  function naechsterTag() {
+    const letzter = gruppen.eingeplant.at(-1)
+    if (!letzter) return eintrag?.von || null
+    const b = bereichVon(letzter)
+    const tag = ['flug', 'bus', 'bahn', 'boot'].includes(letzter.art) ? b.bis : plusTage(b.bis, 1)
+    return eintrag && tag > eintrag.bis ? eintrag.bis : tag
+  }
+  function abschnittDazu(art) {
+    const s = letzterOrt
+    const start = s ? { ...s, id: undefined } : null
+    const id = neueRoute({ etappeId: etappe.id, name: s ? je(`Ab ${s.name}`, `From ${s.name}`) : t('Route {n}', { n: routen.length + 1 }), art, farbe: etappe.farbe, stops: start ? [start] : [], tage: 1, von: naechsterTag() })
     offen[id] = true
     haptic()
     setTimeout(() => document.getElementById('route-' + id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
@@ -63,7 +129,7 @@
   async function routeLoeschen(r) {
     if (await loeschFrage(t('Route „{name}“', { name: r.name }), t('{length} Stopps. Das lässt sich nicht rückgängig machen.', { length: (r.stops || []).length }))) {
       loescheReise(r.id); zeigeToast(t('Route „{name}“ gelöscht', { name: r.name }), 'info')
-      if (einzelRoute) onzurueck()
+      if (einzelRoute) ohneFrage()
     }
   }
   async function etappeLoeschen() {
@@ -72,14 +138,14 @@
     // Nach dem Löschen ist `etappe` null, deshalb Name und ID vorher festhalten
     const { id, name } = etappe
     if (await loeschFrage(t('Etappe „{name}“', { name }), zusatz)) {
-      loescheReise(id); zeigeToast(t('Etappe „{name}“ gelöscht', { name }), 'info'); onzurueck()
+      loescheReise(id); zeigeToast(t('Etappe „{name}“ gelöscht', { name }), 'info'); ohneFrage()
     }
   }
   function zurRoute() {
     const { id, name } = etappe
     wandleReiseUm(id, 'route', null)
     zeigeToast(t('„{name}“ ist jetzt eine Route ohne Etappe', { name }), 'ok')
-    onzurueck()
+    ohneFrage()
   }
   const farben = ['#2f6b4f', '#1a7a8a', '#a8842b', '#7a3b1e', '#7a5c8e', '#c1662f', '#4a4038', '#a83c6e']
 </script>
@@ -114,6 +180,7 @@
       </section>
     {/each}
 
+    <GeoVorschlaege liste={[etappe, ...routen]} />
     <section class="ed-block ed-zeit">
       <div class="ed-felder">
         <label class="ed-f">{t('Von')}<input type="date" value={von} onchange={(e) => setVon(e.target.value)} /></label>
@@ -121,6 +188,25 @@
         <label class="ed-f">{t('Bis')}<input type="date" value={bis} min={von} onchange={(e) => setBis(e.target.value)} /></label>
       </div>
       <p class="ed-k">{t('{mitWochentag} bis {mitWochentag2}, {tageText}', { mitWochentag: mitWochentag(von), mitWochentag2: mitWochentag(bis), tageText: tageText(eintrag?.tage ?? etappe.tage) })}{#if vergangen > 0 && vergangen < (eintrag?.tage ?? 0)}&nbsp;{t('· heute Tag {vergangen}', { vergangen })}{/if}</p>
+      {#if wechsel}
+        <div class="ed-wechsel">
+          <label class="ed-f">{je(`Wechsel am ${mitWochentag(von)} um`, `Change on ${mitWochentag(von)} at`)}
+            <input type="time" value={etappe.wechselUm || ''} placeholder={wechsel.auto || ''} onchange={(e) => updateReise(etappe.id, { wechselUm: e.target.value || null })} />
+          </label>
+          <p class="ed-k">{etappe.wechselUm
+            ? je(`Bis ${etappe.wechselUm} gilt an diesem Tag noch „${wechsel.vorher.reise.name}“.`, `Until ${etappe.wechselUm} the day still counts as “${wechsel.vorher.reise.name}”.`)
+            : wechsel.auto
+              ? je(`Aus der Buchung: ${wechsel.auto} (${wechsel.quelle}). Bis dahin gilt noch „${wechsel.vorher.reise.name}“.`, `From the booking: ${wechsel.auto} (${wechsel.quelle}). Until then “${wechsel.vorher.reise.name}” applies.`)
+              : je(`An diesem Tag endet „${wechsel.vorher.reise.name}“. Mit einer Uhrzeit weiß die App, ab wann die neue Etappe gilt.`, `“${wechsel.vorher.reise.name}” ends on this day. With a time the app knows when the new leg starts.`)}</p>
+        </div>
+      {/if}
+      {#if vorgemerktHier.length}
+        <button class="ed-naechte" onclick={() => { const v = vorgemerktHier[0]; offen[v.r.id] = true; setTimeout(() => document.getElementById('route-' + v.r.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80) }}>⭐ {vorgemerktHier.length === 1 ? je(`${vorgemerktHier[0].ort.name} liegt an „${vorgemerktHier[0].r.name}“`, `${vorgemerktHier[0].ort.name} is on “${vorgemerktHier[0].r.name}”`) : je(`${vorgemerktHier.length} vorgemerkte Orte liegen an deinen Routen`, `${vorgemerktHier.length} saved places are on your routes`)} ›</button>
+      {/if}
+      {#if naechteHier}
+        <button class="ed-naechte" onclick={() => (location.hash = '#/plan/naechte')}>🌙 {je('Nächte', 'Nights')}: {[naechteHier.gebucht && je(`${naechteHier.gebucht} gebucht`, `${naechteHier.gebucht} booked`), naechteHier.geplant && je(`${naechteHier.geplant} geplant`, `${naechteHier.geplant} planned`), naechteHier.flug && je(`${naechteHier.flug} im Flug`, `${naechteHier.flug} on a flight`), naechteHier.camper && je(`${naechteHier.camper} im Camper ohne Platz`, `${naechteHier.camper} in the camper without a site`), naechteHier.offen && je(`${naechteHier.offen} offen`, `${naechteHier.offen} open`)].filter(Boolean).join(' · ')} ›</button>
+      {/if}
+      {#if kostenEtappe?.eur}<p class="ed-kosten">{je('Kosten bisher', 'Costs so far')} <b>{eur(kostenEtappe.eur)}</b> · {aud(kostenEtappe.aud)}</p>{/if}
       {#if etappe.quelle === 'reisekalender'}
         <p class="ed-k ed-quelle">{t('Kommt aus deinem Reisekalender. Ein neuer Import setzt Name und Datum wieder auf den Kalender. Deine Routen, Wanderungen und Logbuchtage bleiben dabei an der Etappe.')}</p>
       {/if}
@@ -131,7 +217,7 @@
         <h2 class="ed-h">{t('Gebucht')} <span class="ed-zahl">{gebucht.length}</span></h2>
         <ul class="ed-buch">
           {#each gebucht as b (b.id)}
-            <li><span class="ed-b-tag">{mitWochentag(b.datum)}</span><span class="ed-b-icon" aria-hidden="true">{b.emoji || katInfo(b.kat).icon}</span><span class="ed-b-txt"><b>{b.titel}</b>{#if b.sub}<small>{b.sub}</small>{/if}<BelegKnoepfe docs={b.docs} /></span></li>
+            <li><span class="ed-b-tag">{mitWochentag(b.datum)}</span><span class="ed-b-icon" aria-hidden="true">{b.emoji || katInfo(b.kat).icon}</span><span class="ed-b-txt"><b>{b.titel}</b>{#if b.sub}<small>{b.sub}</small>{/if}<BuchungZusatz termin={b} /></span></li>
           {/each}
         </ul>
       </section>
@@ -151,17 +237,23 @@
   <section class="ed-block">
     {#if etappe}<h2 class="ed-h">{t('Routen')} <span class="ed-zahl">{routen.length}</span></h2>{/if}
     {#if etappe && !routen.length}
-      <p class="ed-k">{t('Eine Route ist die Strecke, die du in dieser Etappe fährst, mit allen Stopps. Daraus rechnet die App km, Fahrzeit, Tankstopps und Sehenswertes am Weg.')}</p>
+      <p class="ed-k">{je('Eine Route ist ein Teil dieser Etappe mit eigenem Zeitraum: eine Fahrt mit Stopps oder ein Flug, Bus, Zug oder Schiff. Aus den Stopps und ihren Nächten rechnet die App km, Fahrtage, Tankstopps und die Fahrt des Tages.', 'A route is part of this leg with its own dates: a drive with stops, or a flight, bus, train or boat. From the stops and their nights the app works out km, driving days, fuel stops and the day’s drive.')}</p>
     {/if}
-    {#each routen as r (r.id)}
-      <article class="ed-route" id="route-{r.id}" style="--farbe:{r.farbe || 'var(--brand)'}">
+    {#if weg.length > 1}
+      <p class="ed-weg-kette">{#each weg as w, i}{#if i}<span class="ed-weg-art" aria-label={w.art}> {VERKEHR[w.art] || '→'} </span>{/if}<span>{w.name}</span>{/each}</p>
+    {/if}
+    {#each routen as r, i (r.id)}
+      {#if kopfVor(i)}<h3 class="ed-h3">{kopfVor(i)}</h3>{/if}
+      <article class="ed-route" class:idee={r.idee} id="route-{r.id}" style="--farbe:{r.farbe || 'var(--brand)'}">
         <div class="ed-r-kopf">
           <button class="aufklapp" class:offen={offen[r.id]} aria-expanded={!!offen[r.id]} aria-label={t(offen[r.id] ? '{name} zuklappen' : '{name} aufklappen', { name: r.name })} onclick={() => (offen[r.id] = !offen[r.id])}></button>
           <input class="ed-r-name" value={r.name} aria-label={t('Name der Route')} oninput={(e) => updateReise(r.id, { name: e.target.value })} />
         </div>
+        {#if zeitText(r)}<p class="ed-r-zeit">{VERKEHR[r.art] || '🚗'} {zeitText(r)}</p>{/if}
         <p class="ed-r-meta">{t('{length} Stopps', { length: (r.stops || []).length })}{#if r.route?.km}&nbsp;· {r.route.flug ? '✈️' : '🛣️'} {zahl(r.route.km)} km{/if}{#if (r.stops || []).length >= 2}&nbsp;· {r.stops[0].name} → {r.stops[r.stops.length - 1].name}{/if}</p>
         {#if offen[r.id]}
           <div class="ed-innen" transition:klapp={{ duration: dauer(240) }}>
+            <AbschnittPlan {r} etappe={eintrag} {orte} />
             <RouteEditor {r} {orte} reisen={$reisen} {warnungen} {umkreisKm} />
             <Versorgung {r} {orte} />
             <div class="ed-r-fuss">
@@ -178,7 +270,16 @@
         {/if}
       </article>
     {/each}
-    {#if etappe}<button class="btn ed-dazu" onclick={routeDazu}>{t('+ Route in dieser Etappe')}</button>{/if}
+    {#if etappe}
+      <div class="bedien-block ed-weiter">
+        <span class="bedien-titel">{letzterOrt ? je(`Nächste Route ab ${letzterOrt.name}`, `Next route from ${letzterOrt.name}`) : je('Erste Route', 'First route')}</span>
+        <div class="bedien-raster">
+          {#each WEITER as [art, zeichen, de, en] (art)}
+            <button class="bedien-knopf" onclick={() => abschnittDazu(art)}><span aria-hidden="true">{zeichen}</span> {je(de, en)}</button>
+          {/each}
+        </div>
+      </div>
+    {/if}
   </section>
 
   {#if etappe}
@@ -213,9 +314,19 @@
     <p class="ed-k">{t('Diese Etappe gibt es nicht mehr.')}</p>
   {/if}
 </div>
+{#key etappeId || routeId}<AenderungsLeiste etappeId={etappeId} routeId={etappeId ? null : routeId} bind:api={aenderung} />{/key}
+
 
 <style>
   .ed { display: flex; flex-direction: column; gap: 16px; }
+  .ed-weg-kette { margin: 0 0 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); font-size: calc(14px * var(--schrift, 1)); font-weight: 700; line-height: 1.5; }
+  .ed-weg-art { margin: 0 6px; font-weight: 400; }
+  .ed-weiter { margin-top: 12px; }
+  .ed-naechte { display: block; margin: 6px 0 0; padding: 0; border: none; background: none; color: var(--ink); font-size: calc(13.5px * var(--schrift, 1)); font-weight: 700; text-align: left; cursor: pointer; min-height: 36px; }
+  .ed-wechsel { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+  .ed-wechsel input { max-width: 160px; }
+  .ed-kosten { margin: 6px 0 0; color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); }
+  .ed-kosten b { color: var(--ink); }
   .ed-zurueck {
     align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 12px 0 4px;
     border: none; background: none; color: var(--brand-text); font-size: calc(16px * var(--schrift, 1)); font-weight: 600; cursor: pointer;
@@ -265,6 +376,9 @@
   .ed-r-kopf { display: flex; align-items: center; gap: 8px; }
   .ed-r-name { flex: 1; min-width: 0; font-size: calc(16.5px * var(--schrift, 1)); font-weight: 700; color: var(--ink); border: 1px solid transparent; border-radius: 8px; padding: 6px 6px; background: transparent; min-height: 44px; }
   .ed-r-name:hover, .ed-r-name:focus { border-color: var(--line-stark); background: var(--eingabe); }
+  .ed-r-zeit { margin: 0 0 0 48px; font-size: calc(13.5px * var(--schrift, 1)); font-weight: 700; color: var(--ink); }
+  .ed-h3 { margin: 14px 0 4px; font-size: calc(13.5px * var(--schrift, 1)); color: var(--muted); font-weight: 800; }
+  .ed-route.idee { opacity: 0.75; border-style: dashed; }
   .ed-r-meta { margin: 0 0 0 48px; font-size: calc(13px * var(--schrift, 1)); color: var(--muted); }
   .ed-r-fuss { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
   .ed-dazu { align-self: flex-start; min-height: 44px; }
@@ -281,6 +395,6 @@
     /* Auf dem iPhone keine Karte in der Karte in der Karte: die Route liegt flach im Block */
     .ed-block { padding: 12px; }
     .ed-route { border: none; border-left: 4px solid var(--farbe); border-radius: 0; padding: 4px 0 8px 10px; }
-    .ed-r-meta { margin-left: 0; }
+    .ed-r-meta, .ed-r-zeit { margin-left: 0; }
   }
 </style>

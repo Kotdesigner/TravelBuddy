@@ -1,11 +1,13 @@
 <script>
-  import { t, LOCALE } from './i18n.js'
+  import { t, je, LOCALE } from './i18n.js'
   // Ortswahl per Suche. Ersetzt die Auswahlliste mit 51 WA-Orten und die
   // Lat/Lon-Felder: eine Suche über alle Orte der App (144 + eigene), die Städte
   // für die Routenplanung und die Stopps deiner Routen. Koordinaten von Hand nur noch
   // als Ausweg unter „Eigene Koordinaten“.
   import { norm } from './suche.js'
   import { WA_ORTE } from './wa-orte.js'
+  import { online } from './netz.js'
+  import { sucheOnline } from './ort-suche.js'
 
   let {
     orte = [],              // alle Orte (Vorschläge + eigene)
@@ -41,7 +43,7 @@
     return out
   })
 
-  const treffer = $derived.by(() => {
+  const lokal = $derived.by(() => {
     const s = norm(q.trim())
     if (!s) return []
     const r = []
@@ -52,6 +54,22 @@
     }
     return r.sort((a, b) => a[0] - b[0] || a[1].name.localeCompare(b[1].name, LOCALE)).slice(0, 7).map((x) => x[1])
   })
+
+  // Im Netz suchen, sobald eine kurze Tipp-Pause ist. Nur wenn das Feld offen ist.
+  let netz = $state([]), sucht = $state(false)
+  $effect(() => {
+    const s = q.trim(), an = offen && $online
+    netz = []
+    if (!an || s.length < 3) { sucht = false; return }
+    const ab = new AbortController()
+    sucht = true
+    const warten = setTimeout(async () => {
+      try { netz = await sucheOnline(s, ab.signal); sucht = false } catch { if (!ab.signal.aborted) sucht = false }
+    }, 350)
+    return () => { clearTimeout(warten); ab.abort() }
+  })
+  const nah = (a, b) => Math.abs(a.lat - b.lat) + Math.abs(a.lon - b.lon) < 0.05
+  const treffer = $derived([...lokal, ...netz.filter((n) => !lokal.some((o) => norm(o.name) === norm(n.name) && nah(o, n)))])
 
   $effect(() => { q; aktiv = 0 })
   $effect(() => { if (autofokus && eingabe) setTimeout(() => eingabe?.focus({ preventScroll: true }), 60) })
@@ -82,7 +100,7 @@
     onwahl({ name: kName.trim() || t('Eigener Punkt'), lat: zahl(kLat), lon: zahl(kLon), quelle: 'koordinaten' })
     kName = ''; kLat = ''; kLon = ''; koordAuf = false
   }
-  const symbol = (o) => (o.quelle === 'ort' ? '📍' : o.quelle === 'stadt' ? '🏘️' : '🧭')
+  const symbol = (o) => (o.quelle === 'ort' ? '📍' : o.quelle === 'stadt' ? '🏘️' : o.quelle === 'netz' ? '🌐' : '🧭')
 </script>
 
 <div class="ow">
@@ -102,7 +120,7 @@
         <li id="ow-{uid}-{i}" role="option" aria-selected={i === aktiv} class:aktiv={i === aktiv}
           onpointerdown={(e) => e.preventDefault()} onclick={() => waehle(o)}>
           <span class="ow-sym" aria-hidden="true">{symbol(o)}</span>
-          <span class="ow-txt"><b>{o.name}</b><small>{t(o.region)}</small></span>
+          <span class="ow-txt"><b>{o.name}</b><small>{o.quelle === 'netz' ? o.region : t(o.region)}</small></span>
         </li>
       {/each}
       {#if freiText && q.trim()}
@@ -114,6 +132,8 @@
         </li>
       {/if}
     </ul>
+  {:else if offen && sucht}
+    <p class="ow-nix" role="status">{je('Suche im Netz …', 'Searching online …')}</p>
   {:else if offen && q.trim().length >= 2 && !treffer.length}
     <p class="ow-nix">{t('Kein Ort mit „{trim}“.', { trim: q.trim() })} {#if koordinaten}{t('Mit Koordinaten geht es trotzdem:')}{/if}</p>
   {/if}

@@ -8,9 +8,9 @@
 </script>
 
 {#if d}
-  <div class="dh-hg" out:ausblenden data-dialog-hg onclick={() => d.antwort(false)} aria-hidden="true"></div>
+  <div class="dh-hg" out:ausblenden data-dialog-hg onclick={() => d.antwort(d.abbruch)} aria-hidden="true"></div>
   <div class="dh" out:ausblenden={{ skala: 0.96 }} role="alertdialog" aria-labelledby={d.titel ? 'dh-titel' : undefined} aria-describedby={d.text ? 'dh-text' : undefined}
-    use:modal={{ onclose: () => d.antwort(false), fokus: d.gefahr ? '.dh-nein' : '.dh-ja' }}>
+    use:modal={{ onclose: () => d.antwort(d.abbruch), fokus: d.gefahr ? '.dh-nein' : '.dh-ja' }}>
     {#if d.titel}<h2 id="dh-titel">{d.titel}</h2>{/if}
     {#if d.text}<p id="dh-text">{d.text}</p>{/if}
     <div class="dh-knoepfe" class:einzeln={!d.nein}>
@@ -24,7 +24,7 @@
   .dh-hg { position: fixed; inset: 0; background: rgba(20, 14, 8, 0.42); z-index: 140; animation: hg var(--t-med) var(--ease-out); }
   .dh {
     position: fixed; z-index: 141; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: min(360px, calc(100vw - 40px)); max-height: 86vh; max-height: 86dvh; overflow: auto; overscroll-behavior: contain;
+    width: min(360px, calc(100% - 40px)); max-height: 86vh; max-height: 86dvh; overflow: auto; overscroll-behavior: contain;
     background: var(--card); color: var(--ink);
     border-radius: var(--radius-l); box-shadow: var(--shadow-float); padding: 22px 20px 16px;
     animation: rein var(--t-med) var(--ease-spring);

@@ -161,7 +161,7 @@
     border: 1px solid var(--line-stark); background: var(--card); color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 650; cursor: pointer;
   }
   .vs-chip.an { background: var(--brand); border-color: var(--brand); color: #fff; }
-  .vs-chip:disabled { opacity: 0.45; cursor: default; }
+  .vs-chip:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .vs-b { font-size: calc(12px * var(--schrift, 1)); font-weight: 800; background: rgba(0, 0, 0, 0.1); padding: 1px 6px; border-radius: 9px; font-variant-numeric: tabular-nums; }
   .vs-chip.an .vs-b { background: rgba(255, 255, 255, 0.28); }
   .vs-abschnitt { margin: 6px 0 0; font-size: calc(13.5px * var(--schrift, 1)); font-weight: 750; color: var(--ink); display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }

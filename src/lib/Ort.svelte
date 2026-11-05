@@ -1,6 +1,8 @@
 <script>
   import { t, LOCALE, tn, je } from './i18n.js'
-  import { userData, updateOrt, reisen, stopHinzufuegen, neueReise, uid, journal, neuerJournalEintrag } from './userdata.js'
+  import { userData, updateOrt, reisen, stopHinzufuegen, neueReise, neueRoute, uid, journal, neuerJournalEintrag } from './userdata.js'
+  import { istFahrt, istReiseEtappe } from './abschnitte.js'
+  import ZuordnenBlatt from './ZuordnenBlatt.svelte'
   import SonneWetter from './SonneWetter.svelte'
   import { STUFE_FARBE, typName } from './gefahren.js'
   import { schriftAuf } from './kontrast.js'
@@ -13,7 +15,8 @@
   import { geh } from './navigation.js'
   import { oeffneNeu } from './neu.js'
   import { zeigeToast } from './toast.js'
-  import { loeschFrage } from './dialog.js'
+  import { loeschFrage, frage } from './dialog.js'
+  import { zahl } from './format.js'
   import { updateEigenenOrt } from './userdata.js'
   import { holeOrtsdaten } from './ortdaten.js'
   import { rubrikPatch } from './rubrik.js'
@@ -69,7 +72,27 @@
 
   // V4: Einplanen = in eine Route (die passendste zuerst), neue Route, oder als Wanderung.
   const routen = $derived(alleReisen.filter(istRoute))
-  const routenNachNaehe = $derived(routen.map((r) => ({ r, km: abstandZurRoute(r, ort) })).sort((a, b) => a.km - b.km))
+  // V16: nur Fahrten (keine Flüge, Transfers, Bahn) und nur bis 300 km, mit dem Namen der Etappe
+  const etappeName = (id) => alleReisen.find((x) => x.id === id)?.name || ''
+  // Nur Fahrten, nie Strecken aus Hin- oder Heimreise (etwa „Ab Kiel“)
+  const alleFahrten = $derived(routen.filter((r) => istFahrt(r) && !istReiseEtappe(alleReisen.find((x) => x.id === r.etappeId), alleReisen)).map((r) => ({ r, km: abstandZurRoute(r, ort) })).sort((a, b) => a.km - b.km))
+  const routenNachNaehe = $derived(alleFahrten.filter((x) => x.km <= 300))
+  const weiteFahrten = $derived(alleFahrten.filter((x) => x.km > 300))
+  let weitAuf = $state(false)
+  // V16: Ein weit entfernter Ort lässt sich trotzdem einfügen, nach Rückfrage mit dem Umweg
+  async function zuWeiterReise(r, km) {
+    zeigeReiseWahl = false
+    const ok = await frage({ titel: je(`${ort.name} in „${r.name}“?`, `${ort.name} into “${r.name}”?`), text: je(`Der Ort liegt etwa ${zahl(Math.round(km))} km neben dieser Route. Die App fügt ihn an der Stelle mit dem kleinsten Umweg ein.`, `The place is about ${zahl(Math.round(km))} km from this route. The app adds it where it makes the smallest detour.`), ja: je('Trotzdem einfügen', 'Add anyway') })
+    if (ok) zuReise(r.id, r.name)
+  }
+  // V16: Vormerken. Liegt der Ort später an einer Route, schlägt die App ihn dort zuerst vor (bis 100 km)
+  const vorgemerkt = $derived(!!$userData[ort.id]?.vorgemerkt)
+  function vormerken() {
+    zeigeReiseWahl = false
+    const war = vorgemerkt
+    updateOrt(ort.id, { vorgemerkt: !war })
+    zeigeToast(war ? je(`${ort.name} nicht mehr vorgemerkt`, `${ort.name} no longer saved`) : je(`⭐ ${ort.name} vorgemerkt. Liegt er an einer Route, schlägt die App ihn dort vor.`, `⭐ ${ort.name} saved. When a route passes nearby, the app suggests it there.`), 'ok', 4000)
+  }
   // In welchen Routen steckt dieser Ort schon? (Vorschlag 5 aus UX-Recherche/27)
   const inRouten = $derived(routen.filter((r) => (r.stops || []).some((s) => norm(s.name) === norm(ort.name)
     || (s.lat != null && ort.lat != null && Math.abs(s.lat - ort.lat) < 0.02 && Math.abs(s.lon - ort.lon) < 0.02))))
@@ -79,7 +102,18 @@
     flash('✓ in ' + rname)
     zeigeToast(nach ? t('{name} in „{rname}“ nach {nach} eingefügt', { name: ort.name, rname, nach }) : t('{name} als Start von „{rname}“ eingefügt', { name: ort.name, rname }), 'ok')
   }
+  let neuFrage = $state(false)
+  function neuZugeordnet(w) {
+    neuFrage = false
+    const id = neueRoute({ name: w.name, etappeId: w.etappeId, von: w.von, tage: w.tage, idee: w.idee, stops: [{ name: ort.name, lat: ort.lat ?? null, lon: ort.lon ?? null, img: null }] })
+    zeigeToast(je(`${ort.name}: neue Route angelegt`, `${ort.name}: new route added`), 'ok')
+    geh(w.etappeId ? `plan/etappe/${w.etappeId}/${id}` : 'plan/route/' + id)
+  }
   function zuNeuerReise() {
+    zeigeReiseWahl = false
+    neuFrage = true
+  }
+  function zuNeuerReiseAlt() {
     zeigeReiseWahl = false
     oeffneNeu('route', { stops: [{ name: ort.name, lat: ort.lat ?? null, lon: ort.lon ?? null, img: null }] })
   }
@@ -163,6 +197,7 @@
   const fmtDatum = (d) => { try { return new Date(d + 'T12:00').toLocaleDateString(LOCALE, { day: 'numeric', month: 'short', year: 'numeric' }) } catch { return d } }
 </script>
 
+{#if neuFrage}<ZuordnenBlatt vorlage={{ titel: ort.name, name: ort.name, stops: [{ name: ort.name, lat: ort.lat, lon: ort.lon }], tage: 1 }} knopf={je('Route anlegen', 'Add route')} onfertig={neuZugeordnet} onabbruch={() => (neuFrage = false)} />{/if}
 <article class="card" id="ort-{ort.id}" tabindex="-1">
   <div class="img">
     {#if bildSrc}
@@ -177,7 +212,7 @@
          werden sie dort zu einer Reihe am unteren Bildrand. Reihenfolge im Markup =
          Wichtigkeit: Gefahr zuerst. `.lang` sind die Wortteile, die auf dem Handy
          wegfallen — die volle Auskunft steht weiterhin im title. -->
-    <h3 class="name">{ort.name}</h3>
+    <h3 class="name">{#if vorgemerkt}<span class="vm-stern" title={je('vorgemerkt', 'saved for later')}>⭐ </span>{/if}{ort.name}</h3>
     <div class="marken">
       {#if warnung}
         <span class="warn" style="background:{warnung.farbe};color:{schriftAuf(warnung.farbe)}" title="{warnung.titel}{warnung.km > 1 ? ', ' + t('{km} km entfernt', { km: Math.round(warnung.km) }) : ''}">
@@ -202,7 +237,9 @@
 
   <div class="body">
     {#if inRouten.length}
-      <p class="in-route">🧭 in {inRouten.map((r) => r.name).join(', ')}</p>
+      <p class="in-route">{vorgemerkt ? '⭐' : '🧭'} in {inRouten.map((r) => r.name).join(', ')}</p>
+    {:else if vorgemerkt}
+      <p class="in-route vm">⭐ {je('vorgemerkt, noch in keiner Route', 'saved, not in a route yet')}</p>
     {/if}
     {#if ort.tags?.length}
       <div class="tags">
@@ -327,11 +364,20 @@
           <div class="rm-hg" onclick={() => (zeigeReiseWahl = false)} aria-hidden="true"></div>
           <div class="reise-menu" role="menu" aria-label={t('{name} einplanen', { name: ort.name })}>
             <span class="rm-kopf">{ort.name}</span>
-            {#if routenNachNaehe.length}<span class="rm-titel">{t('In eine Route')}</span>{/if}
+            {#if routenNachNaehe.length}<span class="rm-titel">{je('In eine Fahrt in der Nähe', 'Into a nearby drive')}</span>{:else}<span class="rm-titel">{je('Keine Fahrt bis 300 km in der Nähe', 'No drive within 300 km')}</span>{/if}
             {#each routenNachNaehe as { r, km } (r.id)}
-              <button role="menuitem" onclick={() => zuReise(r.id, r.name)}><span class="dot" style="background:{r.farbe}"></span><span class="rm-name">{r.name}{#if km < 60}<small>{t('{round} km von der Strecke', { round: Math.round(km) })}</small>{/if}</span></button>
+              <button role="menuitem" onclick={() => zuReise(r.id, r.name)}><span class="dot" style="background:{r.farbe}"></span><span class="rm-name">{r.name}{#if etappeName(r.etappeId)}<small>{etappeName(r.etappeId)}</small>{/if}{#if km < 60}<small>{t('{round} km von der Strecke', { round: Math.round(km) })}</small>{/if}</span></button>
             {/each}
-            <button role="menuitem" class="neu" onclick={zuNeuerReise}>{t('＋ Neue Route mit diesem Ort')}</button>
+            {#if weiteFahrten.length}
+              <button role="menuitem" class="neu" aria-expanded={weitAuf} onclick={() => (weitAuf = !weitAuf)}>{weitAuf ? je('Weiter entfernte Fahrten ausblenden', 'Hide distant drives') : je(`Andere Fahrt wählen … (${weiteFahrten.length})`, `Choose another drive … (${weiteFahrten.length})`)}</button>
+              {#if weitAuf}
+                {#each weiteFahrten as { r, km } (r.id)}
+                  <button role="menuitem" onclick={() => zuWeiterReise(r, km)}><span class="dot" style="background:{r.farbe}"></span><span class="rm-name">{r.name}<small>{etappeName(r.etappeId)}{etappeName(r.etappeId) ? ' · ' : ''}{je(`${zahl(Math.round(km))} km entfernt`, `${zahl(Math.round(km))} km away`)}</small></span></button>
+                {/each}
+              {/if}
+            {/if}
+            <button role="menuitem" class="neu" onclick={vormerken}>{vorgemerkt ? je('⭐ Nicht mehr vormerken', '⭐ Remove from saved') : je('⭐ Vormerken, für eine spätere Route', '⭐ Save for a later route')}</button>
+            <button role="menuitem" class="neu" onclick={zuNeuerReise}>{je('＋ Neue Route mit diesem Ort …', '＋ New route with this place …')}</button>
             <button role="menuitem" class="neu" onclick={alsWanderung}>{t('🥾 Als Wanderung merken')}</button>
           </div>
         {/if}
@@ -347,6 +393,8 @@
 </article>
 
 <style>
+  .in-route.vm { color: var(--brand-text); }
+  .vm-stern { font-size: 0.9em; }
   .in-route { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--ok-text); }
   .rm-titel { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); padding: 4px 10px 0; }
   .rm-name { display: flex; flex-direction: column; text-align: left; line-height: 1.25; }
@@ -410,7 +458,7 @@
   .tb-link:hover { text-decoration: underline; }
   .tb-keine { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
   .tb-alt { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-style: italic; }
-  .tb-eintrag { background: var(--flaeche); border: 1px solid #ece0cc; border-radius: 8px; padding: 7px 8px; display: flex; flex-direction: column; gap: 5px; }
+  .tb-eintrag { background: var(--flaeche); border: 1px solid var(--line); border-radius: 8px; padding: 7px 8px; display: flex; flex-direction: column; gap: 5px; }
   .tb-kopf { display: flex; align-items: center; justify-content: space-between; }
   .tb-datum { font-size: calc(12px * var(--schrift, 1)); padding: 3px 6px; border: 1px solid var(--line-stark); border-radius: 5px; background: var(--card); }
   .tb-del { border: none; background: none; color: var(--danger-text); cursor: pointer; font-size: calc(13px * var(--schrift, 1)); }
@@ -420,7 +468,7 @@
   .tb-neu { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
   .tb-neutext { flex: 1 1 120px; font-size: calc(12.5px * var(--schrift, 1)); padding: 6px 8px; border: 1px solid var(--line-stark); border-radius: 6px; background: var(--eingabe); color: var(--ink); }
   .tb-add { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 6px 10px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 6px; cursor: pointer; }
-  .tb-add:disabled { opacity: 0.4; }
+  .tb-add:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .eigen-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
   .et-titel { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); margin-right: 2px; }
   .e-tag {
@@ -433,7 +481,7 @@
   .eigen-daten { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .e-btn { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 8px 12px; min-height: 44px; border: 1px solid var(--ok-linie);
     background: var(--ok-flaeche); color: var(--ok-text); border-radius: 18px; cursor: pointer; }
-  .e-btn:disabled { opacity: 0.6; cursor: default; }
+  .e-btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .e-msg { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
   .e-hinweis { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-style: italic; }
   .aktionen { margin-top: auto; padding-top: 4px; display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 6px; }
@@ -487,10 +535,9 @@
   }
   :global([data-theme='dark']) .saison-btn { background: #3a2a1c; border-color: #6b4a2a; color: #e8c9a0; }
   .saison {
-    background: #fdf0e6; border-left: 3px solid #eab98d; border-radius: 0 8px 8px 0;
+    background: var(--warn-flaeche); border-left: 3px solid var(--warn-linie); border-radius: 0 8px 8px 0; color: var(--ink);
     padding: 7px 10px; margin: 2px 0 6px; font-size: calc(12.5px * var(--schrift, 1)); line-height: 1.45;
   }
-  :global([data-theme='dark']) .saison { background: #3a2a1c; border-left-color: #6b4a2a; }
 
   /* Zweispaltig am Handy: die Kachel ist dann nur noch ~170 px breit.
      Bild flacher, Schrift eine Spur kleiner, Etiketten dürfen umbrechen —

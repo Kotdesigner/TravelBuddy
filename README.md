@@ -8,7 +8,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.9 · built for Western Australia**<br>
+**Version 1.10 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
@@ -81,6 +81,22 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 | 🔒 **Yours alone** | No account, no server, no tracking. All data stays on your device. |
 
 ---
+
+## 🏕️ New in version 1.10
+
+**Every night at a glance.** A new page shows each night of your trip: booked, planned, on a flight, in the camper without a site yet, or still open. Public holidays in Western Australia and the peak season are marked, the urgent nights come first.
+
+**Routes with their own dates.** A route now has its own days inside a stage, and every stop its nights. From that TravelBuddy works out a plan for each day: from where to where, how many kilometres, how long at the wheel, which days are rest days and which get too long. The home screen shows the day's drive by itself.
+
+**Save a place for later.** A place is still far from every route? Save it. As soon as a route passes within 100 km, TravelBuddy tells you and suggests it first, at the spot with the smallest detour. Sights along the way are now suggested up to 75 km off the road.
+
+**One booking, everywhere.** Date, booking number, cost and documents belong together, whether you booked before the trip or on the road. Copy the booking number, open the voucher or mark a payment due on site as paid, right where the booking shows up. Bookings can now also be entered without an email.
+
+**Quick expense and evening check.** Type an amount on the home screen, pick a category, done. It lands in the day's logbook entry. In the evening the app asks whether you spent anything today.
+
+**Asks instead of guessing.** When you add a route idea or plan a place, TravelBuddy suggests the right stage and asks for dates. A change of stage happens at the time of your departure, not at midnight.
+
+**Calmer and clearer.** Dark mode fixed in 30 places, clearer disabled buttons, page titles named after the page, the same warning on several routes shown once. Editing a stage now has save, don't save and undo.
 
 ## 🛡️ New in version 1.9
 
@@ -232,7 +248,12 @@ Sorted by how much it helps on the road: safety and planning first, photo tools 
 - 🌦️ **Weather along the route**, not just at the destination
 - 🗺️ **Stages and routes** with dates, stops and drag-to-reorder
 - 📐 **Smart stop placement** where a new stop adds the least detour
-- 👀 **Sights up to 25 km off the road** suggested along the way
+- 🌙 **Every night at a glance:** booked, planned, on a flight, in the camper or open, with public holidays and peak season
+- 📅 **Routes with their own dates** inside a stage, nights per stop, rest days and too-long days per route
+- 🚐 **The day's drive** on the home screen, worked out from your route and nights
+- 👀 **Sights up to 75 km off the road** suggested along the way
+- ⭐ **Save places for later:** suggested first as soon as a route passes within 100 km
+- 🤔 **Asks instead of guessing** when you add a route idea or plan a place
 - 📍 **144 hand-picked places** with photos, seasons and insider labels
 - ➕ **Add your own places** with photo and description from Wikipedia
 - 🧩 **Route ideas** for the south and north loops from Perth
@@ -257,12 +278,14 @@ Sorted by how much it helps on the road: safety and planning first, photo tools 
 - 💌 **Opens anywhere:** no app, no account, even offline, without bookings or exact coordinates
 - 📥 **Travel calendar import** that sorts bookings in by itself
 - 📨 **Booking from email:** paste it, everything is recognised
+- 🎫 **One booking, everywhere:** date, booking number to copy, cost and documents together, with or without an email
 - 🎫 **Tickets and documents offline** on the device
 - 🔐 **Face ID, Touch ID or Windows Hello** to protect your documents
 - ✈️ **Trip preparation** with countdown and checklist
 - 🪪 **Document expiry warnings** for passport, visa and more
 - 💶 **Budget in euro and AU$** at the daily exchange rate
 - 🧾 **Costs per day** in 23 categories, as many single items as you like
+- 💸 **Quick expense** on the home screen and an evening check whether you spent anything
 - 💰 **Cost analysis** by short values, long values, transport, stays and experiences, per stage and down to the single item
 - 💶 **Facts and spending at the end of the journal**, plus the cost of each leg
 - 🎒 **Outback packing list**
@@ -383,7 +406,7 @@ The first time you open TravelBuddy, a setup assistant walks you through eight s
 
 ### 🗺️ Plan
 - **Stages and routes:** stages are periods with dates, routes are the drives within them. New stops go where they add the least detour, and you can drag to reorder.
-- **What the app works out for every route:** distance and driving time, the longest stretch without fuel, long sections without water, sights up to 25 km off the road, weather along the way.
+- **What the app works out for every route:** distance and driving time, the longest stretch without fuel, long sections without water, sights up to 75 km off the road, weather along the way.
 - **Driving days:** distance, driving time with breaks and the latest departure to arrive before sunset. Wildlife is out at dusk.
 - **Trip map and 3D globe:** all stages and routes with numbered stops, flights as great circles. **"Play trip"** animates your whole journey.
 - **Route ideas** for the south and north loops from Perth, **hikes** with status, the **calendar** as a print PDF and as a real Excel file, the **map as a print image** in the size you need.
@@ -404,7 +427,7 @@ TravelBuddy shows the light before you get there, at every one of the 144 places
 - **Star photography rating** for every place and night, from excellent to "moon too bright": calculated offline from the moon phase and astronomical darkness, refined online with the cloud cover.
 - **Moon phase and brightness** in percent.
 - **Weather at the spot:** high and low, wind and humidity (online).
-- **Find the shots:** 144 places with photos and seasonal tips, labels like "hidden gem", and sights up to 25 km off your route.
+- **Find the shots:** 144 places with photos and seasonal tips, labels like "hidden gem", and sights up to 75 km off your route.
 - **In the logbook:** photos sort themselves by capture date and GPS, plus fields for sunset and night sky, the Southern Cross, and the dominant colour of the day. Camera and drone have their own cost categories.
 - **Show your pictures:** animated photo collage, travel journal to print and a trip film in portrait format.
 
@@ -683,6 +706,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.7:** animated film with transport modes, design page, location on the map, urgent alerts
 - [x] **Version 1.8:** photo conditions on the home screen, temperature on the edge, calendar as a PDF file, tidy panels
 - [x] **Version 1.9:** second weather service, location in the Mac app, safer maps
+- [x] **Version 1.10:** nights at a glance, routes with dates, places saved for later, bookings in one place, quick expenses
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -704,7 +728,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.9 · entwickelt für Western Australia**<br>
+**Version 1.10 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
@@ -767,6 +791,22 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 | 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
 | 📔 **Schreibt dein Reisetagebuch** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
 | 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
+
+## 🏕️ Neu in Version 1.10
+
+**Jede Nacht im Blick.** Eine neue Seite zeigt jede Nacht der Reise: gebucht, geplant, im Flug, im Camper noch ohne Platz oder offen. Feiertage in Western Australia und die Hochsaison sind markiert, die dringenden Nächte stehen oben.
+
+**Routen mit eigenem Zeitraum.** Eine Route hat jetzt ihre eigenen Tage in der Etappe, jeder Stopp seine Nächte. Daraus rechnet TravelBuddy einen Plan für jeden Tag: von wo nach wo, wie viele Kilometer, wie lange am Steuer, welche Tage Ruhetage sind und welche zu lang werden. Auf der Startseite steht die Fahrt des Tages von selbst.
+
+**Orte vormerken.** Ein Ort liegt noch weit weg von jeder Route? Vormerken. Sobald eine Route bis 100 km daneben verläuft, meldet sich TravelBuddy und schlägt ihn zuerst vor, an der Stelle mit dem kleinsten Umweg. Sehenswertes entlang der Strecke wird jetzt bis 75 km neben der Straße vorgeschlagen.
+
+**Eine Buchung, überall.** Termin, Buchungsnummer, Kosten und Belege gehören zusammen, ob vor der Reise oder unterwegs gebucht. Nummer kopieren, Voucher öffnen oder einen Betrag, der vor Ort fällig ist, als bezahlt markieren: genau dort, wo die Buchung steht. Buchungen lassen sich jetzt auch ohne Mail eintragen.
+
+**Schnell-Ausgabe und Abendfrage.** Auf der Startseite Betrag eintippen, Kategorie wählen, fertig. Die Ausgabe landet im Logbuch des Tages. Abends fragt die App, ob du heute etwas ausgegeben hast.
+
+**Fragt statt zu raten.** Beim Übernehmen einer Routen-Idee oder beim Einplanen eines Orts schlägt TravelBuddy die passende Etappe vor und fragt nach dem Zeitraum. Ein Etappenwechsel gilt ab deiner Abfahrt, nicht ab Mitternacht.
+
+**Ruhiger und klarer.** Dunkelmodus an 30 Stellen korrigiert, gesperrte Knöpfe eindeutig, Seitentitel nach der Seite benannt, dieselbe Warnung an mehreren Routen nur einmal. Etappen haben beim Bearbeiten Speichern, Nicht speichern und Rückgängig.
 
 ## 🛡️ Neu in Version 1.9
 
@@ -912,7 +952,12 @@ Sortiert nach Nutzen unterwegs: Sicherheit und Planung zuerst, Fotohelfer und Op
 - 🌦️ **Wetter an der Strecke**, nicht nur am Ziel
 - 🗺️ **Etappen und Routen** mit Datum, Stopps und Reihenfolge zum Ziehen
 - 📐 **Kluge Stopp-Platzierung** dort, wo ein neuer Stopp den kleinsten Umweg macht
-- 👀 **Sehenswertes bis 25 km neben der Strecke** als Vorschlag
+- 🌙 **Jede Nacht im Blick:** gebucht, geplant, im Flug, im Camper oder offen, mit Feiertagen und Hochsaison
+- 📅 **Routen mit eigenem Zeitraum** in der Etappe, Nächte je Stopp, Ruhetage und zu lange Tage je Route
+- 🚐 **Die Fahrt des Tages** auf der Startseite, aus Route und Nächten gerechnet
+- 👀 **Sehenswertes bis 75 km neben der Strecke** als Vorschlag
+- ⭐ **Orte vormerken:** zuerst vorgeschlagen, sobald eine Route bis 100 km daneben verläuft
+- 🤔 **Fragt statt zu raten** beim Übernehmen einer Routen-Idee oder beim Einplanen eines Orts
 - 📍 **144 handverlesene Orte** mit Bildern, Saison und Insider-Markierungen
 - ➕ **Eigene Orte anlegen** mit Bild und Beschreibung aus Wikipedia
 - 🧩 **Routen-Ideen** für die Süd- und Nord-Schleife ab Perth
@@ -937,12 +982,14 @@ Sortiert nach Nutzen unterwegs: Sicherheit und Planung zuerst, Fotohelfer und Op
 - 💌 **Öffnet sich überall:** ohne App, ohne Konto, auch offline, ohne Buchungen und genaue Koordinaten
 - 📥 **Reisekalender-Import**, der Buchungen selbst einsortiert
 - 📨 **Buchung aus Mail:** einfügen, alles wird erkannt
+- 🎫 **Eine Buchung, überall:** Termin, Buchungsnummer zum Kopieren, Kosten und Belege zusammen, mit oder ohne Mail
 - 🎫 **Tickets und Dokumente offline** auf dem Gerät
 - 🔐 **Face ID, Touch ID oder Windows Hello** schützen deine Dokumente
 - ✈️ **Reisevorbereitung** mit Countdown und Checkliste
 - 🪪 **Warnung vor Ablaufdaten** für Pass, Visum und mehr
 - 💶 **Budget in Euro und AU$** zum Tageskurs
 - 🧾 **Kosten je Tag** in 23 Kategorien, beliebig viele einzelne Posten
+- 💸 **Schnell-Ausgabe** auf der Startseite und eine Abendfrage, ob du etwas ausgegeben hast
 - 💰 **Kostenauswertung** nach Short-Values, Long-Values, Verkehr, Unterkunft und Erlebnissen, je Etappe und bis zum einzelnen Posten
 - 💶 **Daten und Ausgaben am Ende des Tagebuchs**, dazu die Kosten je Etappe
 - 🎒 **Packliste fürs Outback**
@@ -1061,7 +1108,7 @@ Beim ersten Öffnen führt dich ein Einrichtungsassistent in acht kurzen Schritt
 
 ### 🗺️ Planen
 - **Etappen und Routen:** Etappen sind Zeitabschnitte mit Datum, Routen die Strecken darin. Neue Stopps landen dort, wo sie den kleinsten Umweg machen, die Reihenfolge lässt sich ziehen.
-- **Was die App an jeder Route rechnet:** Kilometer und Fahrzeit, die längste Strecke ohne Tankstelle, lange Strecken ohne Wasser, Sehenswertes bis 25 km neben der Strecke, Wetter an der Strecke.
+- **Was die App an jeder Route rechnet:** Kilometer und Fahrzeit, die längste Strecke ohne Tankstelle, lange Strecken ohne Wasser, Sehenswertes bis 75 km neben der Strecke, Wetter an der Strecke.
 - **Fahrtage:** Strecke, Fahrzeit mit Pausen und die späteste Abfahrt, um vor Sonnenuntergang anzukommen. In der Dämmerung ist viel Wild unterwegs.
 - **Reise-Karte und 3D-Weltkugel:** alle Etappen und Routen mit nummerierten Stopps, Flüge als Großkreise. **„Reise abspielen“** lässt die ganze Reise ablaufen.
 - **Routen-Ideen** für die Süd- und Nord-Schleife ab Perth, **Wanderungen** mit Stand, der **Kalender** als Druck-PDF und als echte Excel-Datei, die **Karte als Druckbild** in der gewünschten Größe.
@@ -1082,7 +1129,7 @@ TravelBuddy zeigt das Licht, bevor du dort bist, an jedem der 144 Orte und an je
 - **Bewertung für Sternenfotos** an jedem Ort und in jeder Nacht, von exzellent bis „Mond zu hell“: offline berechnet aus Mondphase und astronomischer Dunkelheit, online verfeinert mit der Bewölkung.
 - **Mondphase und Helligkeit** in Prozent.
 - **Wetter am Ort:** Höchst- und Tiefstwert, Wind und Luftfeuchte (online).
-- **Motive finden:** 144 Orte mit Bildern und Saison-Tipps, Markierungen wie „Geheimtipp“ und Sehenswertes bis 25 km neben deiner Route.
+- **Motive finden:** 144 Orte mit Bildern und Saison-Tipps, Markierungen wie „Geheimtipp“ und Sehenswertes bis 75 km neben deiner Route.
 - **Im Logbuch:** Fotos sortieren sich nach Aufnahmedatum und GPS ein, dazu Felder für Sonnenuntergang und Nachthimmel, das Kreuz des Südens und die dominierende Farbe des Tages. Kamera und Drohne haben eigene Kostenkategorien.
 - **Bilder zeigen:** animierte Foto-Kollage, Reisetagebuch zum Drucken und Reise-Film im Hochformat.
 
@@ -1337,6 +1384,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.7:** Animationsfilm mit Verkehrsmitteln, Design-Seite, Standort auf der Karte, dringende Meldungen
 - [x] **Version 1.8:** Fotolage auf der Startseite, Temperatur am Rand, Kalender als PDF-Datei, aufgeräumte Felder
 - [x] **Version 1.9:** zweiter Wetterdienst, Standort in der Mac-App, sicherere Karten
+- [x] **Version 1.10:** Nächte im Blick, Routen mit Zeitraum, Orte vormerken, Buchungen an einem Ort, Schnell-Ausgabe
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

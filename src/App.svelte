@@ -18,6 +18,10 @@
   import { strassenlage, starteStrassenlage, aktualisiereStrassenlage } from './lib/strassenlage-dienst.js'
   import { starteFluege } from './lib/flug-dienst.js'
   import Fluege from './lib/Fluege.svelte'
+  import Buchungen from './lib/Buchungen.svelte'
+  import Naechte from './lib/Naechte.svelte'
+  import VorgemerkteOrte from './lib/VorgemerkteOrte.svelte'
+  import { verbindeSichere } from './lib/buchung-dienst.js'
   import Kosten from './lib/Kosten.svelte'
   import { CLUSTER_KATS, kostenAuswertung } from './lib/kosten.js'
   import { warnDaten, warnUmkreis, warnListe, meinePosition, testmodus } from './lib/warnlage-dienst.js'
@@ -35,7 +39,7 @@
   import TresorDialog from './lib/TresorDialog.svelte'
   import { frage, hinweis, loeschFrage } from './lib/dialog.js'
   import { neuAnfrage, oeffneNeu } from './lib/neu.js'
-  import { leseAdresse, geh, merke, zurueck } from './lib/navigation.js'
+  import { leseAdresse, geh, merke, fragWaechter, zurueck } from './lib/navigation.js'
   import { etappenMitDatum, planUeberblick, reiseZeitraum, ymd as ymdPlan } from './lib/plan.js'
   import Quiz from './lib/Quiz.svelte'
   import Packliste from './lib/Packliste.svelte'
@@ -116,9 +120,21 @@
   let letzterPfad = ansicht.pfad
   merke(ansicht.pfad)
   $effect(() => {
+    let fragt = false
     const neu = async () => {
-      scrollStand.set(letzterPfad, window.scrollY)
+      if (fragt) return
       const a = leseAdresse()
+      // Ungespeicherte Änderungen: Adresse zurückstellen und erst fragen
+      if (a.pfad !== ansicht.pfad) {
+        const ziel = location.hash
+        history.replaceState(null, '', '#/' + ansicht.pfad)
+        fragt = true
+        const weiter = await fragWaechter()
+        fragt = false
+        if (!weiter) return
+        history.replaceState(null, '', ziel)
+      }
+      scrollStand.set(letzterPfad, window.scrollY)
       // Alte Sprungmarken (#tagebuch …) still auf die neue Adresse umschreiben
       if (location.hash && !location.hash.startsWith('#/')) history.replaceState(null, '', '#/' + a.pfad)
       merke(a.pfad)
@@ -151,19 +167,29 @@
   // main.js wartet beim Sprachwechsel darauf
   let { onbereit = () => {} } = $props()
   $effect(() => { if (!laden && $ready) tick().then(onbereit) })
+  // V14: Ausgaben, die eindeutig zu einer Buchung gehören, einmal je Start verbinden. Unsichere stehen unter Buchungen zum Bestätigen.
+  let verbunden = false
+  $effect(() => {
+    if (laden || !$ready || verbunden) return
+    verbunden = true
+    tick().then(() => { const n = verbindeSichere(); if (n) zeigeToast(n === 1 ? je('1 Ausgabe ihrer Buchung zugeordnet', '1 cost linked to its booking') : je(`${n} Ausgaben ihren Buchungen zugeordnet`, `${n} costs linked to their bookings`), 'ok', 3200) })
+  })
   // Unterpunkte je Bereich: oben als Umschalter (iPhone) und in der Seitenleiste (Mac)
   const UNTER = {
-    plan: [['plan', t('Etappen')], ['plan/wanderungen', t('Wanderungen')], ['plan/karte', t('Karte')], ['plan/kalender', t('Kalender')]],
+    plan: [['plan', t('Etappen')], ['plan/wanderungen', t('Wanderungen')], ['plan/karte', t('Karte')], ['plan/kalender', t('Kalender')], ['plan/naechte', je('Nächte', 'Nights')]],
     orte: [['orte/sueden', t('Süden')], ['orte/norden', t('Norden')], ['orte/osten', t('Ostküste')], ['orte/meine', t('Meine Orte')], ['orte/routen', t('Routen-Ideen')]],
     logbuch: [['logbuch', je('Einträge', 'Entries')], ['logbuch/lesen', t('Lesen')], ['logbuch/tiere', t('Tierwelt')], ['logbuch/notizen', t('Notizen')]],
     // Dieselben Namen und Zeichen wie im Mehr-Blatt am iPhone und in den Seitentiteln
-    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
+    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/buchungen', je('🎫 Buchungen', '🎫 Bookings')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
   }
+  // V15 (Design B2): Unter Mehr heißt der große Titel wie die Seite, ohne Zeichen davor, statt immer „Mehr“
+  const mehrName = $derived(ansicht.tab === 'mehr' && ansicht.unter ? (UNTER.mehr.find(([p]) => p === 'mehr/' + ansicht.unter)?.[1] || '').replace(/^[^\p{L}]+/u, '') : '')
   const TITEL = { heute: t('Heute'), plan: t('Plan'), orte: t('Orte'), logbuch: t('Logbuch'), mehr: t('Mehr') }
   // Eine Zeile je Punkt unter „Mehr“: was steckt dahinter (nur Namen, kein Wort dazu)
   const MEHR_INFO = {
     'mehr/notfall': t('Notrufnummern, nächste Hilfe und dein Standort zum Durchsagen. Geht auch offline.'),
     'mehr/vorbereitung': t('Checkliste bis zur Abreise, Dokumente, Buchungen und Ausgaben vorab.'),
+    'mehr/buchungen': je('Jede Buchung mit Termin, Buchungsnummer, Kosten und Belegen. Auch Aktivitäten, die du unterwegs buchst.', 'Every booking with date, number, cost and documents. Also activities you book on the road.'),
     'mehr/gefahren': t('Amtliche Warnungen zu Feuer, Flut und Hitze rund um deine Orte und Routen.'),
     'mehr/packliste': t('Zum Abhaken, abgestimmt auf allein mit dem Auto durchs Outback.'),
     'mehr/praxis': t('Was du vorab buchen musst, Permits, Tanken im Norden, Reifen, Buschfeuer.'),
@@ -431,13 +457,15 @@
   // Nur GEFAHRENE Strecken zählen in Fahrstrecke, Sprit und Zeit am Steuer.
   // Geflogene zählen ausschließlich in die kumulierte Distanz.
   // Vorgabe: Westküste = Auto, Ostküste = Flug (dort wird überwiegend geflogen).
+  // V16: Ideen (Routen mit `idee`) zählen nicht: nicht auf Karte, Weltkugel, Film, im Tagebuch und in den Zahlen
+  const reisenOhneIdeen = $derived($reisen.filter((r) => !r.idee))
   const fakten = $derived.by(() => {
-    const alle = $reisen.map((r) => ({ r, art: r.art || 'auto' }))
+    const alle = $reisen.filter((r) => !r.idee).map((r) => ({ r, art: r.art || 'auto' }))
     let km = 0, min = 0, flugKm = 0, flugMin = 0
     for (const { r, art } of alle) {
       // Ohne berechnete Route auf die Luftlinie der Stopps zurückfallen.
       const strecke = r.route?.km ?? luftlinieKm(r.stops || [])
-      if (art === 'boot') continue   // kein Sprit und keine Zeit am Steuer
+      if (art === 'boot' || art === 'bus') continue   // kein Sprit und keine Zeit am Steuer
       if (art === 'flug') { flugKm += strecke; flugMin += r.route?.dauerMin || 0 }
       else { km += strecke; min += r.route?.dauerMin || 0 }
     }
@@ -903,7 +931,7 @@
     <div class="zurueck-leiste"><button class="zurueck-knopf" onclick={() => zurueck('mehr')}><span aria-hidden="true">‹</span> {t('Zurück')}</button></div>
   {/if}
   <header class="sk">
-    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : ansicht.unter === 'rechtliches' ? t('Datenschutz & Impressum') : ansicht.unter === 'design' ? t('Design') : TITEL[ansicht.tab]}</h1>
+    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : ansicht.unter === 'rechtliches' ? t('Datenschutz & Impressum') : ansicht.unter === 'design' ? t('Design') : mehrName || TITEL[ansicht.tab]}</h1>
     <span class="sk-musik"><MusikSymbol {geh} /></span>
     {#if ansicht.tab === 'plan'}<button class="sk-neu" onclick={() => oeffneNeu(ansicht.unter === 'wanderungen' ? 'wanderung' : 'route')}>{t('+ Neu')}</button>{/if}
     {#if ansicht.tab === 'logbuch' && ansicht.unter !== 'notizen'}<button class="sk-neu" onclick={() => oeffneNeu('tag')}>{t('+ Tag')}</button>{/if}
@@ -1038,6 +1066,8 @@
             </div>
           {/if}
           <ul class="fb-facts">
+            {#if anzeige.cat.kosten_unterkunft.eur > 0}<li>🏨 {je('Unterkünfte', 'Stays')} {eur(anzeige.cat.kosten_unterkunft.eur)} · {aud(anzeige.cat.kosten_unterkunft.aud)}</li>{/if}
+            {#if anzeige.cat.kosten_attraktion.eur > 0}<li>🎟️ {je('Touren und Eintritte', 'Tours and tickets')} {eur(anzeige.cat.kosten_attraktion.eur)} · {aud(anzeige.cat.kosten_attraktion.aud)}</li>{/if}
             {#if anzeige.cat.kosten_flug.eur > 0}<li>{t('✈️ Flüge {eur} · {aud}', { eur: eur(anzeige.cat.kosten_flug.eur), aud: aud(anzeige.cat.kosten_flug.aud) })}</li>{/if}
             {#if anzeige.cat.kosten_sprit.eur > 0}<li>{t('⛽ Sprit {eur} · {aud}', { eur: eur(anzeige.cat.kosten_sprit.eur), aud: aud(anzeige.cat.kosten_sprit.aud) })}</li>{/if}
             {#if anzeige.cat.kosten_boot.eur > 0}<li>{t('🚤 Boot/Fähre {eur} · {aud}', { eur: eur(anzeige.cat.kosten_boot.eur), aud: aud(anzeige.cat.kosten_boot.aud) })}</li>{/if}
@@ -1075,7 +1105,7 @@
       <!-- Reise-Karte: echte Karte mit allen Routen, nummerierten Stopps,
            Infofenster je Route und Vollbild-Ansicht -->
       <div use:erscheine>
-        <ReiseKarte reisen={$reisen} journal={$journal}
+        <ReiseKarte reisen={reisenOhneIdeen} journal={$journal}
           orte={orte} eigeneOrte={$eigeneOrte} {springeZu} />
       </div>
 
@@ -1095,7 +1125,9 @@
     {:else if ansicht.unter === 'wanderungen'}
       <Wanderungen orte={[...orte, ...$eigeneOrte]} reisen={$reisen} fokusId={ansicht.id || null} onneu={() => oeffneNeu('wanderung')} />
     {:else if ansicht.unter === 'karte'}
-      <Karte {orte} reisen={$reisen} warnFokus={ansicht.id?.startsWith('warnung/') ? ansicht.id.slice(8) : null} />
+      <Karte {orte} reisen={reisenOhneIdeen} warnFokus={ansicht.id?.startsWith('warnung/') ? ansicht.id.slice(8) : null} />
+    {:else if ansicht.unter === 'naechte'}
+      <Naechte {geh} />
     {:else if ansicht.unter === 'kalender'}
       <Kalender kalender={inhalt?.kalender ?? []} box={inhalt?.kalenderBox ?? ''} />
     {:else}
@@ -1141,6 +1173,7 @@
       {/each}
     {:else if orteUnter === 'meine'}
       <h2 class="abschnitt">{t('Meine Orte')} <span class="count">{$eigeneOrte.length}</span></h2>
+      <VorgemerkteOrte orte={[...orte, ...$eigeneOrte]} {geh} />
       <div class="mo-kopf">
         <p class="mo-intro">{t('Lege eigene Orte an, so wie die Vorschläge. Sie erscheinen hier und lassen sich in deine Routen einplanen.')}</p>
         <button class="btn" onclick={() => (ortNeuOffen = true)}>{t('+ Ort hinzufügen')}</button>
@@ -1185,7 +1218,7 @@
           onwanderung={(id) => geh('plan/wanderungen/' + id)} />
       {/key}
     {:else if ansicht.unter === 'lesen'}
-      <TagebuchLese orte={[...orte, ...$eigeneOrte]} reisen={$reisen} zahlen={{ fakten, anzeige, ausgaben, budget: $reiseBudget, schnitt: schnittProTag }} />
+      <TagebuchLese orte={[...orte, ...$eigeneOrte]} reisen={reisenOhneIdeen} zahlen={{ fakten, anzeige, ausgaben, budget: $reiseBudget, schnitt: schnittProTag }} />
     {:else if ansicht.unter === 'notizen'}
       <Notizen />
     {:else if ansicht.unter === 'tiere'}
@@ -1197,12 +1230,12 @@
 
   {:else if ansicht.tab === 'mehr'}
     {#if ansicht.unter === 'notfall'}
-      <h2 class="abschnitt">{t('🆘 Notfall-Karte')}</h2>
       <Notfall />
     {:else if ansicht.unter === 'vorbereitung'}
-      <h2 class="abschnitt">{t('🧳 Reisevorbereitung')}</h2>
       <OfflineCheck {geh} onbackup={onExport} />
       <Reisevorbereitung />
+    {:else if ansicht.unter === 'buchungen'}
+      <Buchungen {geh} />
     {:else if ansicht.unter === 'fluege'}
       <Fluege />
     {:else if ansicht.unter === 'kosten'}
@@ -1221,14 +1254,11 @@
       <h2 class="abschnitt">{t('🎒 Packliste: Solo Outback')}</h2>
       <Packliste />
     {:else if ansicht.unter === 'praxis'}
-      <h2 class="abschnitt">{t('Praxis & Sicherheit')}</h2>
       <Praxis warnung={inhalt?.praxisWarnung ?? ''} liste={inhalt?.praxisListe ?? []}
         quellen={inhalt?.quellen ?? ''} fussnote={inhalt?.fussnote ?? ''} />
     {:else if ansicht.unter === 'musik'}
-      <h2 class="abschnitt">{t('🎵 Musik unterwegs')}</h2>
       <MusikSeite orte={[...orte, ...$eigeneOrte]} />
     {:else if ansicht.unter === 'teilen'}
-      <h2 class="abschnitt">{t('📤 Reisebericht teilen')}</h2>
       <Teilen orte={[...orte, ...$eigeneOrte]} />
     {:else if ansicht.unter === 'handbuch'}
       <Handbuch />
@@ -1475,6 +1505,7 @@
   .seg-chip:active { transform: scale(0.96); }
   .seg-chip.an { background: var(--ink); border-color: var(--ink); color: var(--bg); }
   .mehr-liste { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; max-width: 520px; }
+  @media (min-width: 900px) { .mehr-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 1040px; } .mehr-liste a { height: 100%; } }
   .mehr-liste a {
     display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; padding: 10px 16px;
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-m); color: var(--ink);
@@ -1559,7 +1590,7 @@
   .budget { margin-bottom: 12px; }
   .bg-set { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--ink); display: inline-flex; align-items: center; gap: 6px; }
   .bg-set input { width: 110px; font-size: calc(13px * var(--schrift, 1)); padding: 6px 8px; border: 1px solid var(--line-stark); border-radius: 6px; background: var(--eingabe); color: var(--ink); font-weight: 700; }
-  .bg-bar { height: 9px; background: #ece2cf; border-radius: 6px; overflow: hidden; margin: 10px 0 7px; }
+  .bg-bar { height: 9px; background: var(--flaeche-2); border-radius: 6px; overflow: hidden; margin: 10px 0 7px; }
   .bg-fill { height: 100%; background: #2f7a63; transform-origin: left; transition: transform var(--t-slow) var(--ease-spring), background-color var(--t-med); }
   .bg-fill.warn { background: #e0a72b; }
   .bg-fill.over { background: #c0392b; }
@@ -1584,7 +1615,7 @@
   .b-block { margin-top: 8px; font-size: calc(13px * var(--schrift, 1)); line-height: 1.9; }
   .b-block:first-child { margin-top: 0; }
   .b-lbl { font-weight: 700; color: var(--ink); margin-right: 6px; }
-  .b-item { display: inline-block; background: #faf1e4; border-radius: 8px; padding: 2px 9px; margin: 0 5px 5px 0; color: var(--muted); }
+  .b-item { display: inline-block; background: var(--flaeche-2); border-radius: 8px; padding: 2px 9px; margin: 0 5px 5px 0; color: var(--ink); }
   .b-item b { color: var(--warn-text); }
 
   .region { margin: 14px 0 26px; }
@@ -1604,7 +1635,7 @@
   .mo-intro { color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); margin: 0; flex: 1 1 300px; }
   .btn.voll { background: var(--ok-flaeche); border-color: var(--ok-linie); color: var(--ok-text); }
   .btn { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 8px 13px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 8px; cursor: pointer; }
-  .btn:disabled { opacity: 0.4; }
+  .btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .mo-card { display: flex; flex-direction: column; }
   .orte-neu { display: grid; margin: 4px 0 0; }
   .mo-del { margin-top: 2px; min-height: 32px; padding: 0 6px 0 0; display: inline-flex; align-items: center; font-size: calc(12px * var(--schrift, 1)); color: var(--danger-text); background: none; border: none; cursor: pointer; align-self: flex-start; }
@@ -1641,7 +1672,7 @@
   .imp-hg { position: fixed; inset: 0; background: rgba(20,15,10,0.45); z-index: calc(var(--z-sheet) - 1); }
   .imp {
     position: fixed; z-index: var(--z-sheet); left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: min(520px, calc(100vw - 28px)); max-height: 86vh; max-height: 86dvh; overflow: auto; overscroll-behavior: contain;
+    width: min(520px, calc(100% - 28px)); max-height: 86vh; max-height: 86dvh; overflow: auto; overscroll-behavior: contain;
     background: var(--card); border: 1px solid var(--line); border-radius: 14px;
     padding: 20px 22px; box-shadow: var(--shadow-float);
   }
@@ -1656,13 +1687,13 @@
   .imp-tab td.t-name { text-align: left; font-weight: 600; }
   .imp-tab td.t-grau, .imp-tab td.null { color: var(--muted); font-weight: 400; }
   .imp-warn {
-    font-size: calc(12px * var(--schrift, 1)); line-height: 1.5; color: #8a4a12; background: var(--warn-flaeche);
+    font-size: calc(12px * var(--schrift, 1)); line-height: 1.5; color: var(--warn-text); background: var(--warn-flaeche);
     border-radius: 8px; padding: 8px 10px; margin-bottom: 6px;
   }
   .imp-akt { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
   .imp-ok { flex: 1 1 auto; min-height: 44px; font-size: calc(14px * var(--schrift, 1)); font-weight: 800; border: none;
     border-radius: 10px; background: #2f7a63; color: #fff; cursor: pointer; }
-  .imp-ok:disabled { opacity: 0.6; }
+  .imp-ok:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .imp-ab { min-height: 44px; padding: 0 16px; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; border: 1px solid var(--line-stark);
     border-radius: 10px; background: var(--card); color: var(--btn-ink); cursor: pointer; }
   .imp-ersetz { display: block; margin: 12px auto 0; background: none; border: none; cursor: pointer;

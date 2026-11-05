@@ -12,13 +12,15 @@
 
 // ---------- Arten ----------
 import { dezimal } from './format.js'
-import { t, tn, LOCALE, jeSprache } from './i18n.js'
+import { t, tn, je, LOCALE, jeSprache } from './i18n.js'
 export const ARTEN = jeSprache(() => ([
   { id: 'flug', label: t('Flug'), kat: 'flight', emoji: '✈️', vorab: 'kosten_flug' },
   { id: 'unterkunft', label: t('Unterkunft'), kat: 'hotel', emoji: '🏨', vorab: 'kosten_unterkunft' },
   { id: 'fahrzeug', label: t('Camper / Mietwagen'), kat: 'camper', emoji: '🚐', vorab: 'kosten_mietfahrzeug' },
-  { id: 'tour', label: t('Tour'), kat: 'tour', emoji: '🎟️', vorab: 'kosten_attraktion' },
-  { id: 'faehre', label: t('Fähre'), kat: 'boat', emoji: '⛴️', vorab: 'kosten_boot' },
+  { id: 'tour', label: je('Tour / Aktivität', 'Tour / activity'), kat: 'tour', emoji: '🎟️', vorab: 'kosten_attraktion' },
+  { id: 'faehre', label: je('Fähre / Bootsfahrt', 'Ferry / boat trip'), kat: 'boat', emoji: '⛴️', vorab: 'kosten_boot' },
+  { id: 'bahn', label: je('Bahn', 'Train'), kat: 'train', emoji: '🚆', vorab: 'kosten_bahn' },
+  { id: 'shuttle', label: je('Shuttle / Bus', 'Shuttle / bus'), kat: 'shuttle', emoji: '🚌', vorab: 'kosten_bus' },
   { id: 'sonstiges', label: t('Sonstiges'), kat: '', emoji: '📌', vorab: 'kosten_sonstiges' },
 ]))
 export const artInfo = (id) => ARTEN.find((a) => a.id === id) || ARTEN[ARTEN.length - 1]

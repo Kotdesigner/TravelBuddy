@@ -63,7 +63,7 @@
 {/if}
 
 <style>
-  .bk-liste { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+  .bk-liste { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
   .bk-paar { display: inline-flex; align-items: center; gap: 1px; max-width: 100%; }
   .bk {
     font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--info-text); background: var(--info-flaeche);
@@ -72,7 +72,7 @@
     overflow-wrap: anywhere;
   }
   .bk.lokal { cursor: pointer; background: var(--ok-flaeche); border-color: var(--ok-linie); color: var(--ok-text); }
-  .bk.fehlt { background: var(--flaeche-2); border-color: var(--line); color: var(--muted); font-weight: 600; }
+  .bk.fehlt { background: none; border: 1px dashed var(--line-stark); color: var(--muted); font-weight: 500; }
   .bk-x { width: 30px; height: 30px; border: none; background: none; color: var(--danger-text); font-size: calc(13px * var(--schrift, 1)); cursor: pointer; border-radius: 50%; flex: none; }
   .klein .bk { font-size: calc(12px * var(--schrift, 1)); padding: 3px 7px; min-height: 24px; }
 </style>

@@ -80,7 +80,7 @@
   .strip .stern { font-size: calc(13px * var(--schrift, 1)); }
   .sw-chev { margin-left: auto; }
   .astro { margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--line); font-size: calc(12px * var(--schrift, 1)); }
-  .astro b { color: #3a3560; }
+  .astro b { color: var(--ink); }
   .astro .a-sub { display: block; color: var(--muted); margin-top: 2px; }
   .details { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); padding: 6px 0 2px; }
   .sun-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

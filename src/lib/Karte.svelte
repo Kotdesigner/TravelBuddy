@@ -957,7 +957,7 @@
     padding: 5px 12px; border: 1px solid var(--brand); background: none; color: var(--brand-text);
     border-radius: 14px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; cursor: pointer;
   }
-  .off-btn:disabled { opacity: .45; cursor: default; }
+  .off-btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .off-btn.go { background: var(--brand); color: #fff; }
   .exp-trenner { flex: 1; }
   .offline-zeile select { font-size: calc(12px * var(--schrift, 1)); padding: 4px 6px; border-radius: 7px; border: 1px solid var(--line); background: var(--eingabe); }

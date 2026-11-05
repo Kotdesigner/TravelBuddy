@@ -33,3 +33,10 @@ assert.equal(logbuchTouren([tag])[0].art, 'boot')
 assert.equal(logbuchTouren([{ ...tag, imFilm: false }]).length, 0)
 assert.equal(tagesPunkte({ ...tag, ziele: [{ name: 'X' }] }).vollstaendig, false)
 console.log('✓ Reisefahrt')
+
+// Film-Einstellungen: unbekannte Werte fallen auf normal und mittel zurück
+{
+  const { leseFilm, FILM_TEMPO, FILM_ZOOM } = await import('../src/lib/reisefahrt.js')
+  const f = leseFilm()
+  if (f.tempo !== 'normal' || f.zoom !== 'mittel' || FILM_TEMPO.langsam <= FILM_TEMPO.schnell || FILM_ZOOM.nah <= FILM_ZOOM.weit) throw new Error('Film-Einstellungen falsch')
+}

@@ -1,5 +1,5 @@
 <script>
-  import { t } from './i18n.js'
+  import { t, je } from './i18n.js'
   // Ein Reisetag: oben, was an dem Tag ohnehin feststeht (Gebuchtes, Wanderungen,
   // Notizen), darunter dein Logbuch-Eintrag mit allen Themen. Gibt es noch keinen,
   // legt ein Tipp ihn an, mit Datum und Etappe schon richtig gesetzt.
@@ -11,12 +11,15 @@
   import { NOTIZ_TYP } from './notizen-typen.js'
   import { haptic } from './haptik.js'
   import JournalEintrag from './JournalEintrag.svelte'
-  import BelegKnoepfe from './BelegKnoepfe.svelte'
+  import BuchungZusatz from './BuchungZusatz.svelte'
+  import { stelleAm } from './abschnitte.js'
 
   let { datum, orte = [], warnungen = [], umkreisKm = 150, onzurueck = () => {}, ontag = () => {}, onwanderung = () => {} } = $props()
 
   const eintraege = $derived(etappenMitDatum($reisen, $gesamtStart))
   const etappe = $derived(etappeAm(eintraege, datum))
+  // V16: Abschnitt des Tages
+  const stelle = $derived(etappe ? stelleAm($reisen, etappe.reise.id, datum) : null)
   const ueber = $derived(planUeberblick(eintraege))
   const nr = $derived(ueber.start && datum >= ueber.start && datum <= ueber.ende ? tageZwischen(ueber.start, datum) + 1 : null)
   const eintraegeTag = $derived($journal.filter((j) => deckt(j, datum)))
@@ -46,7 +49,7 @@
   <header class="tb-kopf" style="--farbe:{etappe?.reise.farbe || 'var(--line-stark)'}">
     <h2>{wochentagLang(datum)}, {tagMonatJahr(datum)}</h2>
     <p>
-      {#if nr}{t('Reisetag {nr}', { nr })}{/if}{#if etappe}{t('{wert}Etappe', { wert: nr ? ' · ' : '' })} <b>{etappe.reise.name}</b>{t(', Tag {wert} von {tage} ({bereich})', { wert: tageZwischen(etappe.von, datum) + 1, tage: etappe.tage, bereich: bereich(etappe.von, etappe.bis) })}{:else if !nr}{t('außerhalb deiner Reise')}{/if}
+      {#if nr}{t('Reisetag {nr}', { nr })}{/if}{#if etappe}{t('{wert}Etappe', { wert: nr ? ' · ' : '' })} <b>{etappe.reise.name}</b>{t(', Tag {wert} von {tage} ({bereich})', { wert: tageZwischen(etappe.von, datum) + 1, tage: etappe.tage, bereich: bereich(etappe.von, etappe.bis) })}{#if stelle}{' · '}<b>{stelle.abschnitt.name}</b>{', '}{je(`Tag ${stelle.tag} von ${stelle.tage}`, `day ${stelle.tag} of ${stelle.tage}`)}{/if}{:else if !nr}{t('außerhalb deiner Reise')}{/if}
     </p>
   </header>
 
@@ -55,7 +58,7 @@
       <h3>{t('Gebucht')}</h3>
       <ul class="tb-liste">
         {#each gebucht as b (b.id)}
-          <li><span class="tb-i" aria-hidden="true">{b.emoji || katInfo(b.kat).icon}</span><span class="tb-txt"><b>{b.titel}</b>{#if b.sub}<small>{b.sub}{#if b.ref}&nbsp;· {b.ref}{/if}</small>{/if}<BelegKnoepfe docs={b.docs} /></span></li>
+          <li><span class="tb-i" aria-hidden="true">{b.emoji || katInfo(b.kat).icon}</span><span class="tb-txt"><b>{b.titel}</b>{#if b.sub}<small>{b.sub}</small>{/if}<BuchungZusatz termin={b} /></span></li>
         {/each}
       </ul>
     </section>

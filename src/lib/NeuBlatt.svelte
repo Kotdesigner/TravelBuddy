@@ -16,6 +16,7 @@
   import Stepper from './Stepper.svelte'
   import OrtWahl from './OrtWahl.svelte'
   import BuchungEinfuegen from './BuchungEinfuegen.svelte'
+  import { etappeVorschlag } from './abschnitte.js'
 
   let { typ: startTyp = 'route', vorlage = {}, orte = [], onclose = () => {}, onfertig = () => {} } = $props()
 
@@ -48,8 +49,8 @@
   $effect(() => {
     if (rGesetzt || rEtappe || !eintraege.length) return
     rGesetzt = true
-    const v = vorlage.etappeId || etappeAm(eintraege, heute)?.reise.id
-      || [...eintraege].sort((a, b) => (a.reise.art === 'flug') - (b.reise.art === 'flug') || b.tage - a.tage)[0]?.reise.id
+    // V16: Vorschlag wie beim Übernehmen: passend zur Gegend der Stopps, nie Hin- oder Heimreise
+    const v = vorlage.etappeId || etappeAm(eintraege, heute)?.reise.id || etappeVorschlag(vorlage.stops || [], eintraege, $reisen)?.etappe.reise.id
     rEtappe = v || ''
   })
 
@@ -146,6 +147,7 @@
       <div class="segment" role="group" aria-label={t('Verkehrsmittel')}>
         <button type="button" class:an={eArt === 'auto'} aria-pressed={eArt === 'auto'} onclick={() => (eArt = 'auto')}>{t('🚗 Auto')}</button>
         <button type="button" class:an={eArt === 'flug'} aria-pressed={eArt === 'flug'} onclick={() => (eArt = 'flug')}>{t('✈️ Flug')}</button>
+        <button type="button" class:an={eArt === 'bus'} aria-pressed={eArt === 'bus'} onclick={() => (eArt = 'bus')}>🚌 Bus</button>
         <button type="button" class:an={eArt === 'bahn'} aria-pressed={eArt === 'bahn'} onclick={() => (eArt = 'bahn')}>{t('🚆 Bahn')}</button>
         <button type="button" class:an={eArt === 'boot'} aria-pressed={eArt === 'boot'} onclick={() => (eArt = 'boot')}>{t('⛵ Schippern')}</button>
       </div>
@@ -155,6 +157,7 @@
       <div class="segment" role="group" aria-label={t('Verkehrsmittel')}>
         <button type="button" class:an={rArt === 'auto'} aria-pressed={rArt === 'auto'} onclick={() => (rArt = 'auto')}>{t('🚗 Auto')}</button>
         <button type="button" class:an={rArt === 'flug'} aria-pressed={rArt === 'flug'} onclick={() => (rArt = 'flug')}>{t('✈️ Flug')}</button>
+        <button type="button" class:an={rArt === 'bus'} aria-pressed={rArt === 'bus'} onclick={() => (rArt = 'bus')}>🚌 Bus</button>
         <button type="button" class:an={rArt === 'bahn'} aria-pressed={rArt === 'bahn'} onclick={() => (rArt = 'bahn')}>{t('🚆 Bahn')}</button>
         <button type="button" class:an={rArt === 'boot'} aria-pressed={rArt === 'boot'} onclick={() => (rArt = 'boot')}>{t('⛵ Schippern')}</button>
       </div>

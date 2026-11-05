@@ -4,7 +4,7 @@
   import { t, LOCALE } from './i18n.js'
   import { mitWochentag } from './format.js'
   import { statusText, verspaetung, istSchlecht, dauerText, abfrageDatum } from './flug.js'
-  import BelegKnoepfe from './BelegKnoepfe.svelte'
+  import BuchungZusatz from './BuchungZusatz.svelte'
 
   let { flug, stand = null, staende = {}, jetzt = Date.now(), umstieg = null, kurz = false, onabfragen = null, onaendern = null, laden = false } = $props()
   const bahn = $derived(flug.art === 'bahn')
@@ -66,7 +66,7 @@
       <p class="fk-klein">{zeitFmt.format(v.zeit)}: {v.text}</p>
     {/each}
     {#if flug.sitz || flug.ref}<p class="fk-klein">{#if flug.ref}{t('Buchung {ref}', { ref: flug.ref })}{/if}{#if flug.ref && flug.sitz}{' · '}{/if}{#if flug.sitz}{t('Sitzplatz {wert}', { wert: flug.sitz })}{/if}</p>{/if}
-    {#if flug.docs?.length}<BelegKnoepfe docs={flug.docs} klein />{/if}
+    <BuchungZusatz termin={{ id: flug.terminId, ref: flug.ref, docs: flug.docs || [] }} klein nummer={false} />
     <footer class="fk-fuss">
       <span class="fk-klein">{#if geholt}{t('Abgefragt {zeit}', { zeit: geholt })}{/if}</span>
       <span class="fk-knoepfe">
@@ -105,5 +105,5 @@
   .fk-fuss { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 2px; }
   .fk-knoepfe { display: flex; gap: 6px; flex: none; }
   .fk-knopf { min-height: 36px; padding: 0 12px; border-radius: var(--radius-s); border: 1px solid var(--line-stark); background: var(--flaeche); color: var(--btn-ink); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; cursor: pointer; flex: none; }
-  .fk-knopf:disabled { opacity: 0.5; cursor: default; }
+  .fk-knopf:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
 </style>

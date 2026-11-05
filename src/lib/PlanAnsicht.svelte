@@ -1,14 +1,17 @@
 <script>
   import { lage } from './warnlage-dienst.js'
-  import { t, tn } from './i18n.js'
+  import { t, tn, je } from './i18n.js'
   import { merkeMorph, istMorph, morphName } from './motion.js'
   import { heuteTag } from './heute.js'
   // Plan: alle Etappen mit Datum, darunter ihre Routen. Antippen öffnet die Etappe.
   // Ersetzt „Meine Reisen“ mit seinen 12 aufgeklappten Bearbeiten-Karten.
-  import { reisen, gesamtStart, reiseTage, buchungen, wanderungen, journal, wandleReiseUm, loescheReise } from './userdata.js'
-  import { etappenMitDatum, planUeberblick, routenDerEtappe, istRoute, ymd, vermuteEtappe, reiseZeitraum, gueltigesDatum } from './plan.js'
+  import { reisen, gesamtStart, reiseTage, buchungen, wanderungen, journal, vorabKosten, wandleReiseUm, loescheReise, updateReise } from './userdata.js'
+  import ZuordnenBlatt from './ZuordnenBlatt.svelte'
+  import { etappenSummen } from './kosten.js'
+  import { fxKurse } from './fx.js'
+  import { etappenMitDatum, planUeberblick, routenDerEtappe, istRoute, ymd, vermuteEtappe, reiseZeitraum, gueltigesDatum, ohnePunkt } from './plan.js'
   import Stepper from './Stepper.svelte'
-  import { bereich, tageText, tagMonatJahr, zahl } from './format.js'
+  import { bereich, tageText, tagMonatJahr, zahl, eur } from './format.js'
   import { loeschFrage } from './dialog.js'
   import { zeigeToast } from './toast.js'
   import { artVon } from './routen-dienst.js'
@@ -19,6 +22,12 @@
   const eintraege = $derived(etappenMitDatum($reisen, $gesamtStart))
   const ueber = $derived(planUeberblick(eintraege))
   const zeitraum = $derived(reiseZeitraum($gesamtStart, $reiseTage, ueber))
+  const kosten = $derived(etappenSummen({ journal: $journal, vorab: $vorabKosten, kurse: $fxKurse, eintraege, reisen: $reisen }))
+  const ohneGeo = $derived(ohnePunkt($reisen))
+  function geoOeffnen() {
+    const r = $reisen.find((x) => ohnePunkt([x]).length)
+    if (r) onoeffne(istRoute(r) ? r.etappeId : r.id, istRoute(r) ? r.id : undefined)
+  }
   const ohneEtappe = $derived($reisen.filter((r) => istRoute(r) && (!r.etappeId || !$reisen.some((e) => e.id === r.etappeId))))
   const lueckeNach = $derived(new Map(ueber.luecken.map((l) => [l.nachId, l])))
 
@@ -40,10 +49,15 @@
     if (!bis) return []
     return eintraege.filter((e) => e.reise.quelle !== 'reisekalender' && e.von > bis)
   })
-  async function zurRoute(e) {
-    const ziel = vermuteEtappe(e.reise, eintraege.filter((x) => x.reise.id !== e.reise.id && !nachRueckflug.includes(x)))
-    wandleReiseUm(e.reise.id, 'route', ziel?.id || null)
-    zeigeToast(t('„{name}“ ist jetzt eine Route', { name: e.reise.name }), 'ok')
+  // V16: fragen, in welche Etappe (vorher geraten)
+  let umwandeln = $state(null)
+  function zurRoute(e) { umwandeln = e }
+  function umgewandelt(w) {
+    const e = umwandeln
+    umwandeln = null
+    wandleReiseUm(e.reise.id, 'route', w.etappeId)
+    updateReise(e.reise.id, { von: w.von, tage: w.tage, name: w.name, ...(w.idee ? { idee: true } : {}) })
+    zeigeToast(je(`„${w.name}“ ist jetzt eine Route`, `“${w.name}” is now a route`), 'ok')
   }
   async function weg(e) {
     if (await loeschFrage(`„${e.reise.name}“`, t('{length} Stopps. Das lässt sich nicht rückgängig machen.', { length: (e.reise.stops || []).length }))) {
@@ -54,6 +68,8 @@
   const symbol = (r) => ({ flug: '✈️', bahn: '🚆' }[artVon(r)] || '🚐')
 </script>
 
+{#if umwandeln}<ZuordnenBlatt vorlage={{ titel: umwandeln.reise.name, name: umwandeln.reise.name, stops: umwandeln.reise.stops || [], tage: umwandeln.tage }} knopf={je('Zur Route machen', 'Make it a route')} onfertig={umgewandelt} onabbruch={() => (umwandeln = null)} />{/if}
+
 <div class="pl">
   <!-- Basic: Reisebeginn und Reisedauer aus der Einführung, hier änderbar. Der Zeitraum steht im Titelbild. -->
   <div class="pl-zeitraum">
@@ -62,6 +78,9 @@
   </div>
   {#if !eintraege.length && zeitraum}
     <p class="pl-summe"><b>{t('{tagMonatJahr} bis {tagMonatJahr2}', { tagMonatJahr: tagMonatJahr(zeitraum.von), tagMonatJahr2: tagMonatJahr(zeitraum.bis) })}</b>{t(', {tageText}, noch ohne Etappen', { tageText: tageText(zeitraum.tage) })}</p>
+  {/if}
+  {#if ohneGeo.length}
+    <button class="pl-geo" onclick={geoOeffnen}><b>{je(`${ohneGeo.length} Orte ohne Kartenpunkt`, `${ohneGeo.length} places without a map point`)}</b><small>{je('Antippen, die App schlägt Treffer vor', 'Tap for suggestions')}</small></button>
   {/if}
   {#if eintraege.length}
     <p class="pl-summe">
@@ -105,6 +124,7 @@
                 {#if z.wand}<span>🥾 {z.wand}</span>{/if}
                 {#if z.buch}<span>{t('🧾 {buch} gebucht', { buch: z.buch })}</span>{/if}
                 {#if z.tage}<span>{t('📓 {tage} von {tage2} Tagen', { tage: z.tage, tage2: e.tage })}</span>{/if}
+                {#if kosten.get(e.reise.id)?.eur}<span class="pl-kosten" title={je('Kosten bisher', 'Costs so far')}>💶 {eur(kosten.get(e.reise.id).eur)}</span>{/if}
               </span>
             </span>
             <span class="pl-pfeil" aria-hidden="true">›</span>
@@ -151,6 +171,8 @@
 </div>
 
 <style>
+  .pl-geo { display: flex; flex-direction: column; gap: 2px; width: 100%; min-height: 56px; margin-bottom: 12px; padding: 8px 14px; border: 1px solid var(--brand); border-radius: 10px; background: var(--card); color: var(--ink); font-size: calc(14px * var(--schrift, 1)); text-align: left; cursor: pointer; }
+  .pl-geo small { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); }
   .pl-warn { color: var(--danger-text); font-weight: 700; }
   .pl { display: flex; flex-direction: column; gap: 14px; }
   .pl-zeitraum { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }

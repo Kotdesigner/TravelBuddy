@@ -38,6 +38,9 @@ console.log('\n3  Etappen mit festem Datum')
   const l = planUeberblick(etappenMitDatum([{ id: 'x', typ: 'etappe', von: '2037-12-01', tage: 2 }, { id: 'y', typ: 'etappe', von: '2037-12-05', tage: 1 }, { id: 'z', typ: 'etappe', von: '2037-12-05', tage: 1 }]))
   p('Lücke erkannt (2 freie Tage)', l.luecken.some((x) => x.nachId === 'x' && x.tage === 2), JSON.stringify(l.luecken))
   p('Überschneidung erkannt (−1)', l.luecken.some((x) => x.vorId === 'z' && x.tage === -1))
+  const w = planUeberblick(etappenMitDatum([{ id: 'h', typ: 'etappe', von: '2037-11-29', tage: 3 }, { id: 'm', typ: 'etappe', von: '2037-12-01', tage: 4 }, { id: 'k', typ: 'etappe', von: '2037-12-02', tage: 2 }]))
+  p('Wechseltag ist keine Überschneidung', !w.luecken.some((x) => x.nachId === 'h'), JSON.stringify(w.luecken))
+  p('echte Überschneidung bleibt (2 Tage)', w.luecken.some((x) => x.nachId === 'm' && x.tage === -3), JSON.stringify(w.luecken))
 }
 
 console.log('\n5  Wo passt ein neuer Stopp hin?')
@@ -114,3 +117,24 @@ console.log('\n9  Wo steht man?')
 
 console.log(`\n  ${ok} bestanden · ${bad} gescheitert\n`)
 process.exit(bad ? 1 : 0)
+
+// Reiseweg über mehrere Abschnitte: gleiche Orte nur einmal, Verkehrsmittel zum jeweiligen Ort
+{
+  const { reiseweg } = await import('../src/lib/plan.js')
+  const weg = reiseweg([
+    { art: 'flug', stops: [{ name: 'Cairns' }, { name: 'Proserpine' }] },
+    { art: 'bus', stops: [{ name: 'Proserpine' }, { name: 'Airlie Beach' }] },
+    { art: 'boot', stops: [{ name: 'Airlie Beach' }, { name: 'Hamilton Island' }] },
+  ])
+  if (weg.map((w) => `${w.art}:${w.name}`).join() !== 'null:Cairns,flug:Proserpine,bus:Airlie Beach,boot:Hamilton Island') throw new Error('Reiseweg falsch')
+}
+
+// Änderungen erkennen: berechnete Route zählt nicht, Stopps schon. Orte ohne Punkt je einmal.
+{
+  const { aenderungsZeichen, imBereich, ohnePunkt } = await import('../src/lib/plan.js')
+  const a = { id: 'r', name: 'A', stops: [{ name: 'X', lat: 1, lon: 2 }], route: { km: 5 } }
+  if (aenderungsZeichen([a]) !== aenderungsZeichen([{ ...a, route: { km: 9 } }])) throw new Error('Route zählt fälschlich')
+  if (aenderungsZeichen([a]) === aenderungsZeichen([{ ...a, stops: [] }])) throw new Error('Stopp nicht erkannt')
+  if (imBereich([{ id: 'e' }, { id: 'r', etappeId: 'e' }, { id: 'z' }], 'e', null).length !== 2) throw new Error('Bereich falsch')
+  if (ohnePunkt([{ stops: [{ name: 'Cairns', lat: null }, { name: 'Cairns', lat: null }, { name: 'B', lat: 1 }] }]).join() !== 'Cairns') throw new Error('ohnePunkt falsch')
+}

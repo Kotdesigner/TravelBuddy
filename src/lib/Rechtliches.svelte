@@ -12,7 +12,7 @@
     [je('Wetter, wenn Open-Meteo ausfällt', 'Weather when Open-Meteo is down'), 'MET Norway', je('Koordinaten deiner Orte und, wenn du es erlaubst, dein Standort', 'Coordinates of your places and, if you allow it, your location')],
     [je('Amtliche Warnungen und Straßenlage', 'Official warnings and road conditions'), 'DFES WA, VicEmergency, Queensland Fire Department, Main Roads WA', je('Nur der Abruf, keine Eingaben', 'Only the request, none of your entries')],
     [je('Straßenrouten', 'Road routes'), 'OSRM', je('Koordinaten deiner Stopps', 'Coordinates of your stops')],
-    [je('Orte suchen und beschreiben', 'Searching and describing places'), 'Nominatim, Overpass, Wikipedia, Wikidata, Wikimedia Commons', je('Suchbegriffe, Ortsnamen, Koordinaten', 'Search terms, place names, coordinates')],
+    [je('Orte suchen und beschreiben', 'Searching and describing places'), 'Photon, Nominatim, Overpass, Wikipedia, Wikidata, Wikimedia Commons', je('Suchbegriffe, Ortsnamen, Koordinaten', 'Search terms, place names, coordinates')],
     [je('Wechselkurs', 'Exchange rate'), 'Frankfurter', je('Nur der Abruf', 'Only the request')],
     [je('Gelände auf der Karte', 'Terrain on the map'), 'Amazon S3 (Mapzen/AWS)', je('Der sichtbare Kartenausschnitt', 'The visible map area')],
     [je('Flüge, nur mit deinem Schlüssel', 'Flights, only with your key'), 'AeroDataBox über RapidAPI', je('Flugnummer, Datum, dein Schlüssel', 'Flight number, date, your key')],

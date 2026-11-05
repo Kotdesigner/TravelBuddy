@@ -6,6 +6,8 @@
   import { get } from 'svelte/store'
   import { schriftAuf } from './kontrast.js'
   import { findeKoordinaten } from './wa-orte.js'
+  import { je } from './i18n.js'
+  import ZuordnenBlatt from './ZuordnenBlatt.svelte'
 
   let { routen = [] } = $props()
 
@@ -46,20 +48,29 @@
     return (r.steps || []).length || 3
   }
 
-  // V4: Eine Routen-Idee wird eine Route in der passenden Etappe (meist der Roadtrip)
+  // V16: Eine Routen-Idee wird eine Route mit Zeitraum. Die App fragt, in welche Etappe, ab wann und wie lange
+  // (vorher riet sie die Etappe und landete bei einer Route ab Perth in der Heimreise).
+  let frage = $state(null)
   function uebernehmen(r) {
     const stops = stoppsAusRoute(r)
-    const etappe = vermuteEtappe({ stops }, etappenMitDatum(get(reisen), get(gesamtStart)))
-    const id = neueRoute({ name: r.titel.replace(/^Route\s+/, ''), farbe: r.farbe, tage: tageAusRoute(r), stops, etappeId: etappe?.id || null })
-    meldung = t('„{titel}“ ist jetzt eine Route{wert}.', { titel: r.titel, wert: etappe ? t(' in „{name}“', { name: etappe.name }) : '' })
+    frage = { r, stops, vorlage: { titel: r.titel, name: r.titel.replace(/^Route\s+/, ''), stops, tage: tageAusRoute(r) } }
+  }
+  function zuordnen(w) {
+    const { r, stops } = frage
+    frage = null
+    const etappe = w.etappeId ? get(reisen).find((x) => x.id === w.etappeId) : null
+    const id = neueRoute({ name: w.name, farbe: r.farbe, tage: w.tage, stops, etappeId: w.etappeId, von: w.von, idee: w.idee })
+    meldung = w.idee ? je(`„${w.name}“ ist als Idee gemerkt${etappe ? ` in „${etappe.name}“` : ''}.`, `“${w.name}” is saved as an idea${etappe ? ` in “${etappe.name}”` : ''}.`)
+      : je(`„${w.name}“ ist jetzt eine Route${etappe ? ` in „${etappe.name}“` : ''}.`, `“${w.name}” is now a route${etappe ? ` in “${etappe.name}”` : ''}.`)
     clearTimeout(mTimer); mTimer = setTimeout(() => (meldung = ''), 6000)
-    letzte = { id, etappeId: etappe?.id || null }
+    letzte = { id, etappeId: w.etappeId || null }
   }
   let letzte = $state(null)
 </script>
 
+{#if frage}<ZuordnenBlatt vorlage={frage.vorlage} onfertig={zuordnen} onabbruch={() => (frage = null)} />{/if}
 {#if meldung}<div class="uebernommen" role="status">✓ {meldung}
-  {#if letzte}<button class="zur-route" onclick={() => geh(letzte.etappeId ? `plan/etappe/${letzte.etappeId}/${letzte.id}` : 'plan/route/' + letzte.id)}>{t('Route öffnen')}</button>{/if}</div>{/if}
+  {#if letzte}<button class="zur-route" onclick={() => geh(letzte.etappeId ? `plan/etappe/${letzte.etappeId}/${letzte.id}` : 'plan/route/' + letzte.id)}>{je('Öffnen', 'Open')}</button>{/if}</div>{/if}
 
 {#each routen as r (r.id)}
   <article class="route">
@@ -83,7 +94,7 @@
         </div>
       {/each}
       <div class="links">
-        <button class="uebernehmen-btn" onclick={() => uebernehmen(r)}>{t('➕ Als Route übernehmen')}</button>
+        <button class="uebernehmen-btn" onclick={() => uebernehmen(r)}>{je('➕ Als Route übernehmen', '➕ Add as a route')}</button>
         {#each r.links as l}
           <a class="maps-big" href={l.url} target="_blank" rel="noopener">{l.label}</a>
         {/each}
@@ -114,7 +125,7 @@
     font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 8px 14px; border-radius: 8px; background: var(--card);
     color: var(--ink); border: 1px solid var(--line-stark); text-decoration: none;
   }
-  .maps-big:hover { background: #f4ecdc; }
+  .maps-big:hover { background: var(--flaeche-2); }
   .uebernehmen-btn { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 8px 14px; border-radius: 8px; background: #2f7a63; color: #fff; border: 1px solid #2f7a63; cursor: pointer; }
   .zur-route { margin-left: 10px; min-height: 40px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--ok-linie); background: var(--card); color: var(--ok-text); font-weight: 700; cursor: pointer; }
   .uebernehmen-btn:hover { background: #276b56; }

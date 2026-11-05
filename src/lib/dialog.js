@@ -10,9 +10,9 @@ import { t } from './i18n.js'
 export const dialogAnfrage = writable(null)
 
 /** @returns Promise<boolean> */
-export function frage({ titel = '', text = '', ja = 'OK', nein = t('Abbrechen'), gefahr = false } = {}) {
+export function frage({ titel = '', text = '', ja = 'OK', nein = t('Abbrechen'), gefahr = false, abbruch = false } = {}) {
   return new Promise((resolve) => {
-    dialogAnfrage.set({ titel, text, ja, nein, gefahr, antwort: (wert) => { dialogAnfrage.set(null); resolve(wert) } })
+    dialogAnfrage.set({ titel, text, ja, nein, gefahr, abbruch, antwort: (wert) => { dialogAnfrage.set(null); resolve(wert) } })
   })
 }
 

@@ -6,6 +6,7 @@ import { planMigrieren, etappenMitDatum, planUeberblick, istRoute, istEtappe, be
 import { t } from './i18n.js'
 import { haengeBelegeAn, nimmBelegAb, eigeneBelegeUebernehmen } from './belege.js'
 import { musikFuerBackup, musikAusBackup } from './musik/speicher.js'
+import { datiereAbschnitte } from './abschnitte.js'
 
 const DB_NAME = 'wa-plan'
 const STORE = 'kv'
@@ -87,6 +88,16 @@ function planNachziehen() {
   const cur = get(reisen)
   if (!Array.isArray(cur) || !cur.some((r) => r && typeof r === 'object' && !r.typ)) return
   reisen.set(sortiereReisen(planMigrieren(cur, get(gesamtStart)).reisen))
+}
+// V16: Abschnitte ohne Datum (Flug, Bus, Boot, Bahn) bekommen Datum und Uhrzeit aus ihrer Buchung.
+// Ohne Zeitstempel, wie jeder Umbau: sonst gälte er beim Abgleich als frische Bearbeitung.
+function abschnitteDatieren() {
+  const rs = get(reisen)
+  const p = datiereAbschnitte(rs, get(buchungen)?.events || [], etappenMitDatum(rs, get(gesamtStart)))
+  if (!p.length) return 0
+  const m = new Map(p.map((x) => [x.id, x]))
+  reisen.set(rs.map((r) => { const x = m.get(r.id); return x ? { ...r, von: x.von, tage: x.tage, ...(x.zeit ? { zeit: x.zeit } : {}), terminId: x.terminId } : r }))
+  return p.length
 }
 reisen.subscribe((rs) => {
   if (planUmbauAktiv && Array.isArray(rs) && rs.some((r) => r && typeof r === 'object' && !r.typ)) queueMicrotask(planNachziehen)
@@ -265,6 +276,7 @@ export async function initUserData() {
   }
   try { rettenAusNotspeicher() } catch (e) { console.warn('Notspeicher nicht lesbar', e) }
   try { planNachziehen() } catch (e) { console.warn('Plan-Umbau fehlgeschlagen', e) }
+  try { abschnitteDatieren() } catch (e) { console.warn('Abschnitte nicht datiert', e) }
   planUmbauAktiv = true
   loaded = true
   ready.set(true)
@@ -349,6 +361,9 @@ export function neueVorabKosten(vorlage = {}) {
   const datum = vorlage.datum || `${heute.getFullYear()}-${String(heute.getMonth() + 1).padStart(2, '0')}-${String(heute.getDate()).padStart(2, '0')}`
   const k = { id: uid(), text: vorlage.text || '', kat: vorlage.kat || 'kosten_sonstiges', betrag: vorlage.betrag ?? '', waehrung: vorlage.waehrung || 'EUR', datum, reiseId: vorlage.reiseId || null }
   if (vorlage.keinTermin) k.keinTermin = true
+  // V14: Kosten gehören zu einer Buchung (Termin-ID) und sind bezahlt oder erst vor Ort fällig
+  if (vorlage.terminId) k.terminId = vorlage.terminId
+  if (vorlage.zahlung) k.zahlung = vorlage.zahlung
   vorabKosten.update((ks) => [...ks, stempeln(k)])
   return k.id
 }
@@ -547,7 +562,7 @@ export function updateOrt(ortId, patch) {
   userData.update((d) => {
     const cur = d[ortId] || { notiz: '', bericht: '', bilder: [], tagebuch: [] }
     const next = stempeln({ ...cur, ...patch })
-    const isEmpty = !next.notiz && !next.bericht
+    const isEmpty = !next.notiz && !next.bericht && !next.vorgemerkt
       && (!next.bilder || next.bilder.length === 0)
       && (!next.tagebuch || next.tagebuch.length === 0)
     const copy = { ...d }
@@ -626,6 +641,9 @@ export function neueReise(vorlage = {}) {
   }
   if (typ === 'etappe' && vorlage.von) r.von = vorlage.von
   if (typ === 'route' && vorlage.etappeId) r.etappeId = vorlage.etappeId
+  // V16: ein Abschnitt kann gleich mit Zeitraum entstehen, oder als Idee, die nicht mitzählt
+  if (typ === 'route' && vorlage.von) r.von = vorlage.von
+  if (typ === 'route' && vorlage.idee) r.idee = true
   reisen.update((rs) => sortiereReisen([...rs, stempeln(r)]))
   return r.id
 }
@@ -874,6 +892,7 @@ export function importiereReisekalender(kalender, { orte = [], reisenAnlegen = t
   }
 
   setSync({ kalenderImport: new Date().toISOString() })
+  try { abschnitteDatieren() } catch {}
   return { angelegt, ersetzt, eigene, buchungen: kalender.events.filter((e) => !e.platzhalter).length }
 }
 
@@ -1197,6 +1216,7 @@ export function wendeBackupAn(p, { schnappschuss: _s = true } = {}) {
 function uebernehme(p) {
   uebernahmeLaeuft = true
   try { uebernehmeRoh(p) } finally { uebernahmeLaeuft = false }
+  try { abschnitteDatieren() } catch {}
 }
 function uebernehmeRoh(p) {
   userData.set(p.daten ?? p)
@@ -1228,4 +1248,10 @@ function uebernehmeRoh(p) {
 // Bequemer Direkt-Import (einlesen + anwenden) — Kompatibilität.
 export function importBackup(file) {
   return leseBackup(file).then((p) => wendeBackupAn(p))
+}
+
+/** Stellt einen früheren Stand einzelner Etappen und Routen wieder her. ids: alles, was ersetzt wird. */
+export function reisenZurueck(ids, stand) {
+  const weg = new Set(ids)
+  reisen.update((rs) => sortiereReisen([...rs.filter((r) => !weg.has(r.id)), ...stand]))
 }

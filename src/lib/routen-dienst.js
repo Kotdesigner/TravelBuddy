@@ -6,13 +6,14 @@
 // RoutenDienst.svelte (in App.svelte eingebunden), gelesen von jedem RouteEditor.
 import { fehlerText } from './fehlertext.js'
 import { writable, get } from 'svelte/store'
-import { updateReise } from './userdata.js'
+import { updateReise, userData } from './userdata.js'
+import { zeigeToast } from './toast.js'
 import { berechneRoute, flugRoute, tankAnalyse, stopsSignatur } from './routing.js'
 import { tankLuecken, orteAnRoute, wetterPunkte } from './routenhinweise.js'
 import { holeGefahren } from './gefahren.js'
 import { poiRegionFuer } from './karten-config.js'
 import { kurzTag } from './format.js'
-import { t } from './i18n.js'
+import { t, je } from './i18n.js'
 
 export const rechnet = writable({})     // reise.id -> true, solange gerechnet wird
 export const routeMsg = writable({})    // reise.id -> Fehlermeldung
@@ -124,12 +125,31 @@ export function autoRouten(rs, online) {
 }
 
 // ---------- Hinweise entlang der Route ----------
-export function hinweiseRechnen(rs, alleOrte) {
+// V16: Orte bis 75 km neben der Route schlägt die App vor (vorher 25 km), vorgemerkte bis 100 km und zuerst.
+import { UMKREIS_VORSCHLAG, UMKREIS_VORGEMERKT, vorgemerkteIds, vorschlaegeMitMerkern } from './routenhinweise.js'
+export { UMKREIS_VORSCHLAG, UMKREIS_VORGEMERKT, vorgemerkteIds, vorschlaegeMitMerkern }
+
+// Einmal je Route und Ort melden, wenn ein vorgemerkter Ort an einer Route liegt
+const GEMELDET = 'tb-vorgemerkt-gemeldet'
+function meldeVorgemerkte(r, liste) {
+  let schon = []
+  try { schon = JSON.parse(localStorage.getItem(GEMELDET) || '[]') } catch {}
+  const neu = liste.filter((v) => v.vorgemerkt && !schon.includes(`${r.id}:${v.ort.id}`))
+  if (!neu.length) return
+  try { localStorage.setItem(GEMELDET, JSON.stringify([...schon, ...neu.map((v) => `${r.id}:${v.ort.id}`)].slice(-500))) } catch {}
+  const v = neu[0], name = r.stops?.[v.nachStopp]?.name
+  const mehr = neu.length > 1 ? je(` (und ${neu.length - 1} weitere)`, ` (and ${neu.length - 1} more)`) : ''
+  const nach = name ? je(`, passt nach ${name}`, `, fits after ${name}`) : ''
+  zeigeToast('⭐ ' + je(`${v.ort.name} liegt an deiner Route „${r.name}“ (${v.abstand} km${nach})${mehr}. Einfügen in der Route unter den sehenswerten Orten.`,
+    `${v.ort.name} is on your route “${r.name}” (${v.abstand} km${nach})${mehr}. Add it in the route under places worth seeing.`), 'ok', 7000)
+}
+
+export function hinweiseRechnen(rs, alleOrte, vorgemerkt = vorgemerkteIds(get(userData))) {
   const rw = get(reichweite)
   const h = get(hinweise)
   for (const r of rs) {
     if (!r.route?.geometry || r.route.flug || veraltet(r)) continue
-    const key = [r.route.sig, r.route.km, rw, (r.nichtVorschlagen || []).join(','), alleOrte.length].join('|')
+    const key = [r.route.sig, r.route.km, rw, (r.nichtVorschlagen || []).join(','), alleOrte.length, vorgemerkt.join(','), UMKREIS_VORSCHLAG].join('|')
     if (h[r.id]?.key === key) continue
     ladeTankstellenFuer(r.stops).then((fuel) => {
       const tank = fuel.length ? tankLuecken(r.route.geometry, fuel, {
@@ -138,7 +158,8 @@ export function hinweiseRechnen(rs, alleOrte) {
         ziel: [...stops(r)].reverse().find((s) => s.lat != null)?.name || 'Ziel',
         ortsnamen: [...stops(r), ...alleOrte],
       }) : null
-      const vorschlaege = orteAnRoute(r.route.geometry, alleOrte, r.stops, { maxKm: 25, ignoriert: r.nichtVorschlagen || [], gesamtKm: r.route.km })
+      const vorschlaege = vorschlaegeMitMerkern(orteAnRoute(r.route.geometry, alleOrte, r.stops, { maxKm: Math.max(UMKREIS_VORSCHLAG, UMKREIS_VORGEMERKT), ignoriert: r.nichtVorschlagen || [], gesamtKm: r.route.km }), vorgemerkt)
+      if (!r.idee) meldeVorgemerkte(r, vorschlaege)
       setze(hinweise, r.id, { key, tank, vorschlaege, ohneTankdaten: !fuel.length })
       // Gespeicherte Kurzfassung korrigieren, wenn sie noch von der alten Rechnung stammt.
       if (tank && r.route.tank && r.route.tank.maxLuecke !== tank.maxLuecke) {

@@ -6,7 +6,7 @@
   import { goldRahmen } from './stimmung.js'
 
   const FARBE = { gps: '#e8bd82', daten: '#8fc2ef', spotify: '#5fdc8f' }
-  const ERST_NACH = 500, MINDESTENS = 1400
+  const ERST_NACH = 150, MINDESTENS = 1400
 
   let sichtbar = $state(false)
   let art = $state('daten')

@@ -142,6 +142,6 @@
   .fl-zeile span { display: flex; flex-direction: column; min-width: 0; flex: 1 1 160px; }
   .fl-zeile small { font-size: calc(12.5px * var(--schrift, 1)); }
   .fl-knopf { min-height: 44px; padding: 0 12px; border-radius: var(--radius-s); border: 1px solid var(--line-stark); background: var(--card); color: var(--btn-ink); font-weight: 700; cursor: pointer; }
-  .fl-knopf:disabled { opacity: 0.5; cursor: default; }
+  .fl-knopf:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .fl-quelle { text-align: center; }
 </style>

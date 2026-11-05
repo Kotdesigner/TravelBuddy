@@ -84,7 +84,9 @@ export function planUeberblick(eintraege) {
   for (let i = 1; i < eintraege.length; i++) {
     const vorher = eintraege[i - 1], e = eintraege[i]
     const abstand = tageZwischen(vorher.bis, e.von) - 1   // >0 = freie Tage, <0 = Überschneidung
-    if (abstand !== 0) luecken.push({ nachId: vorher.reise.id, vorId: e.reise.id, tage: abstand })
+    // Endet eine Etappe an dem Tag, an dem die nächste beginnt, ist das ein Wechseltag, keine Überschneidung
+    const wechseltag = abstand === -1 && vorher.von < e.von && e.bis > vorher.bis
+    if (abstand !== 0 && !wechseltag) luecken.push({ nachId: vorher.reise.id, vorId: e.reise.id, tage: abstand })
     if (e.bis > ende) ende = e.bis
   }
   return { start, ende, tage: tageZwischen(start, ende) + 1, luecken }
@@ -98,7 +100,16 @@ export function etappeAm(eintraege, datum) {
   return treffer
 }
 
-export const routenDerEtappe = (reisen, etappeId) => (reisen || []).filter((r) => istRoute(r) && r.etappeId === etappeId)
+/** V14: Die Etappe eines Logbuch-Eintrags. Am Wechseltag gilt die gewählte, sonst die am Datum. */
+export function etappeVonEintrag(eintraege, j) {
+  const d = j?.datum
+  return (j?.etappeId && eintraege.find((x) => x.reise.id === j.etappeId && d >= x.von && d <= x.bis)) || etappeAm(eintraege, d)
+}
+/** Alle Etappen an einem Tag (am Wechseltag zwei). */
+export const etappenAm = (eintraege, datum) => eintraege.filter((x) => datum >= x.von && datum <= x.bis)
+
+// V16: Ideen (`idee: true`) zählen nirgends mit. Sie stehen nur in der Etappe unter „Ideen“ (abschnitte.js)
+export const routenDerEtappe = (reisen, etappeId) => (reisen || []).filter((r) => istRoute(r) && r.etappeId === etappeId && !r.idee)
 
 // ---------- Geografie ----------
 function km(a, b) {
@@ -345,3 +356,24 @@ export function zuerstAktuell(touren, eintraege, heute) {
     return ga === 0 ? ea.von.localeCompare(eb.von) : eb.von.localeCompare(ea.von)
   })
 }
+
+export const VERKEHR = { auto: '🚗', flug: '✈️', bus: '🚌', bahn: '🚆', boot: '⛵' }
+/** Der Weg über alle Routen einer Etappe: Orte der Reihe nach, jeweils mit dem Verkehrsmittel dorthin. */
+export function reiseweg(routen = []) {
+  const weg = []
+  for (const r of routen) {
+    (r.stops || []).forEach((s, i) => {
+      const art = i ? r.art || 'auto' : null
+      if (!i && weg[weg.length - 1]?.name === s.name) return
+      weg.push({ name: s.name, art })
+    })
+  }
+  return weg
+}
+
+/** Alle Etappen und Routen, die zu einer Detailseite gehören. */
+export const imBereich = (reisen, etappeId, routeId) => (reisen || []).filter((r) => r.id === etappeId || r.id === routeId || (etappeId && r.etappeId === etappeId))
+/** Was der Nutzer geändert hat. Berechnete Routen zählen nicht, die rechnet die App selbst nach. */
+export const aenderungsZeichen = (liste) => JSON.stringify(liste.map(({ id, name, farbe, tage, von, art, etappeId, imFilm, idee, zeit, stops }) => ({ id, name, farbe, tage, von, art, etappeId, imFilm, idee: !!idee, zeit: zeit || '', stops: (stops || []).map(({ name: n, lat, lon, naechte }) => [n, lat, lon, naechte || 0]) })).sort((a, b) => a.id.localeCompare(b.id)))
+/** Namen der Stopps ohne Koordinaten, jeder einmal. */
+export const ohnePunkt = (liste) => [...new Set((liste || []).flatMap((r) => (r.stops || []).filter((s) => s.lat == null && s.name?.trim()).map((s) => s.name)))]

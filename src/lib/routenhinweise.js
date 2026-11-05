@@ -267,3 +267,17 @@ export function stoppKmAufRoute(gitter, stopps, maxKm = 60) {
   }
   return out
 }
+
+// ---------- V16: Vorschläge entlang der Route, vorgemerkte Orte zuerst ----------
+export const UMKREIS_VORSCHLAG = 75
+export const UMKREIS_VORGEMERKT = 100
+export const vorgemerkteIds = (ud) => Object.entries(ud || {}).filter(([, v]) => v?.vorgemerkt).map(([k]) => k).sort()
+
+/** Vorschläge sortieren und kennzeichnen: vorgemerkte zuerst, sonst nach Lage an der Route. Rein, testbar. */
+export function vorschlaegeMitMerkern(roh, vorgemerkt = []) {
+  const vm = new Set(vorgemerkt)
+  return roh.filter((v) => v.abstand <= UMKREIS_VORSCHLAG || vm.has(v.ort.id))
+    .map((v) => ({ ...v, vorgemerkt: vm.has(v.ort.id) }))
+    .sort((a, b) => (b.vorgemerkt - a.vorgemerkt) || a.km - b.km)
+}
+

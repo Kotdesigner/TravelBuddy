@@ -116,7 +116,7 @@
   {/if}
 
   <div class="ko-fuss">
-    {#if !REDUZIERT}{je(`Wechselt alle ${DAUER / 1000} s · ← → blättern · Leertaste anhalten · Esc schließt · „Erstellen“ macht daraus eine Datei`, `Changes every ${DAUER / 1000} s · ← → browse · Space pauses · Esc closes · “Create” turns it into a file`)}
+    {#if !REDUZIERT}{je(`Wechselt alle ${DAUER / 1000} s. Blättern mit ← →, anhalten mit der Leertaste, schließen mit Esc. „Erstellen“ macht daraus eine Datei.`, `Changes every ${DAUER / 1000} s. Browse with ← →, pause with Space, close with Esc. “Create” turns it into a file.`)}
     {:else}{t('Bewegung ist in deinen Systemeinstellungen reduziert, deshalb steht die Kollage still. ← → blättern.')}{/if}
   </div>
 </div>
@@ -144,7 +144,7 @@
 
   .ko-raster {
     flex: 1; min-height: 0;
-    display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(4, 1fr); gap: 8px;
+    display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 8px;
   }
   .ka {
     grid-column: var(--c) / span var(--w); grid-row: var(--r) / span var(--h);
@@ -174,7 +174,7 @@
   .ko-fuss { font-size: calc(12px * var(--schrift, 1)); opacity: 0.5; text-align: center; }
 
   @media (max-width: 560px) {
-    .ko-raster { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(5, 1fr); }
+    .ko-raster { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(0, 1fr)); }
     .ka { grid-column: 1 / -1; grid-row: span 1; }
   }
 </style>

@@ -19,6 +19,11 @@
   import { fluege, flugspeicher, uhr } from './flug-dienst.js'
   import { flugImFokus, umstiege, dringendeMeldungen } from './flug.js'
   import { je } from './i18n.js'
+  import BuchungZusatz from './BuchungZusatz.svelte'
+  import SchnellAusgabe from './SchnellAusgabe.svelte'
+  import { etappeJetzt, wechselZeit, uhrzeitIn } from './buchung.js'
+  import { ausgabenVon } from './kosten.js'
+  import { stelleAm } from './abschnitte.js'
   let { warnAnzahl = 0, sperrAnzahl = 0, sperrRoute = 0, onneu = () => {}, ontag = () => {}, geh = () => {} } = $props()
 
   const heute = $derived($heuteTag)
@@ -41,6 +46,27 @@
   const routenJetzt = $derived(s.etappe ? routenDerEtappe($reisen, s.etappe.reise.id) : [])
   const flugJetzt = $derived(flugImFokus($fluege.alle, $flugspeicher.staende, $uhr))
   const dringend = $derived(dringendeMeldungen($fluege.alle, $flugspeicher.staende, $uhr))
+  // V14: Am Wechseltag gilt bis zur Wechselzeit (Abflug, Abfahrt oder selbst gesetzt) noch die alte Etappe
+  const uhrJetzt = $derived.by(() => { const d = new Date($uhr); return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}` })
+  const etappeNun = $derived(s.phase === 'unterwegs' ? (etappeJetzt(eintraege, heute, uhrJetzt, termine) || s.etappe) : s.etappe)
+  // V16: der Abschnitt, in dem du heute bist (Etappe › Abschnitt · Tag x von y)
+  const stelleNun = $derived(etappeNun ? stelleAm($reisen, etappeNun.reise.id, heute) : null)
+  const tagInEtappeNun = $derived(etappeNun ? tageZwischen(etappeNun.von, heute) + 1 : 0)
+  const wechselHeute = $derived.by(() => {
+    const neu = eintraege.find((e) => e.von === heute && eintraege.some((x) => x !== e && x.bis === heute))
+    if (!neu) return null
+    const w = wechselZeit(neu.reise, heute, termine)
+    return { etappe: neu, zeit: w?.zeit || '', quelle: w?.quelle || '' }
+  })
+  const zeitVon = (x) => x.zeit || uhrzeitIn(x.sub)
+  const amSortiert = (d) => am(d).sort((a, b) => (zeitVon(a) || '99').localeCompare(zeitVon(b) || '99'))
+  // Abendfrage: ab 18 Uhr, wenn heute noch nichts ausgegeben wurde. „Nichts“ gilt für den Tag.
+  const ABEND_KEY = 'tb-abendfrage'
+  let abendWeg = $state((() => { try { return localStorage.getItem(ABEND_KEY) || '' } catch { return '' } })())
+  const heuteAusgaben = $derived($journal.filter((j) => deckt(j, heute)).flatMap((j) => ausgabenVon(j)).length)
+  const abendfrage = $derived(s.phase === 'unterwegs' && new Date($uhr).getHours() >= 18 && !heuteAusgaben && abendWeg !== heute)
+  function nichtsAusgegeben() { abendWeg = heute; try { localStorage.setItem(ABEND_KEY, heute) } catch {} }
+  let betragFeld = $state()
   const umstiegJetzt = $derived(flugJetzt ? umstiege($fluege.fluege, $flugspeicher.staende).find((u) => u.nachFlug === flugJetzt.id) : null)
 </script>
 
@@ -83,27 +109,42 @@
   {:else if s.phase === 'unterwegs'}
     <div class="ht-karte ht-unterwegs" style="--farbe:{s.etappe?.reise.farbe || 'var(--brand)'}">
       <p class="ht-zahl"><b>{t('Tag {tagNr}', { tagNr: s.tagNr })}</b> {t('von {tage}', { tage: s.tage })}</p>
-      {#if s.etappe}
-        <button class="ht-etappe" onclick={() => geh('plan/etappe/' + s.etappe.reise.id)}>
+      {#if etappeNun}
+        <button class="ht-etappe" style="--farbe:{etappeNun.reise.farbe || 'var(--brand)'}" onclick={() => geh('plan/etappe/' + etappeNun.reise.id)}>
           <span class="ht-band" aria-hidden="true"></span>
-          <span><b>{s.etappe.reise.name}</b><small>{t('Tag {tagInEtappe} von {tage} · {bereich}', { tagInEtappe: s.tagInEtappe, tage: s.etappe.tage, bereich: bereich(s.etappe.von, s.etappe.bis) })}{#if routenJetzt.length}&nbsp;· {routenJetzt.map((r) => r.name).join(', ')}{/if}</small></span>
+          <span><b>{etappeNun.reise.name}</b><small>{t('Tag {tagInEtappe} von {tage} · {bereich}', { tagInEtappe: tagInEtappeNun, tage: etappeNun.tage, bereich: bereich(etappeNun.von, etappeNun.bis) })}{#if stelleNun}{' · '}{stelleNun.abschnitt.name}, {je(`Tag ${stelleNun.tag} von ${stelleNun.tage}`, `day ${stelleNun.tag} of ${stelleNun.tage}`)}{:else if routenJetzt.length && etappeNun === s.etappe}&nbsp;· {routenJetzt.map((r) => r.name).join(', ')}{/if}</small></span>
           <span class="ht-pfeil" aria-hidden="true">›</span>
         </button>
+      {/if}
+      {#if wechselHeute}
+        <p class="ht-wechsel">🔀 {wechselHeute.zeit
+          ? je(`Heute Wechsel um ${wechselHeute.zeit} nach „${wechselHeute.etappe.reise.name}“`, `Change today at ${wechselHeute.zeit} to “${wechselHeute.etappe.reise.name}”`)
+          : je(`Heute Wechsel nach „${wechselHeute.etappe.reise.name}“`, `Change today to “${wechselHeute.etappe.reise.name}”`)}{#if wechselHeute.quelle}<small> · {wechselHeute.quelle}</small>{/if}</p>
       {/if}
       <FahrtHeute reisen={$reisen} {heute} {geh} />
       <button class="btn-primary ht-schreiben" onclick={() => { if (!heuteGeschrieben) neuerJournalEintrag({ datum: heute }); ontag(heute) }}>{heuteGeschrieben ? t('Heutigen Logbuch-Eintrag öffnen') : t('Heute ins Logbuch schreiben')}</button>
       {#each [[heute, t('Heute')], [morgen, t('Morgen')]] as [d, titel]}
-        {@const b = am(d)}
+        {@const b = amSortiert(d)}
         {@const w = wandAm(d)}
         {#if b.length || w.length}
           <h2 class="ht-h">{titel}</h2>
           <ul class="ht-liste">
-            {#each b as x (x.id)}<li><span class="ht-i" aria-hidden="true">{x.emoji || katInfo(x.kat).icon}</span><span class="ht-t">{x.titel}{#if x.sub}<small>{x.sub}</small>{/if}</span></li>{/each}
+            {#each b as x (x.id)}<li class="ht-buchung"><span class="ht-i" aria-hidden="true">{x.emoji || katInfo(x.kat).icon}</span><span class="ht-t">{#if zeitVon(x)}<span class="ht-zeit">{zeitVon(x)}</span>{/if}<b>{x.titel}</b>{#if x.sub}<small>{x.sub}</small>{/if}<BuchungZusatz termin={x} /></span></li>{/each}
             {#each w as x (x.id)}<li><span class="ht-i" aria-hidden="true">{STATUS_MAP[x.status]?.emoji || '🥾'}</span><span class="ht-t">{x.name}{#if x.zeit}<small>{t('{zeit} Uhr', { zeit: x.zeit })}</small>{/if}</span></li>{/each}
           </ul>
         {/if}
       {/each}
     </div>
+    {#if abendfrage}
+      <div class="ht-karte ht-abend" role="status">
+        <p><b>{je('Heute schon etwas ausgegeben?', 'Spent anything today?')}</b></p>
+        <div class="ht-abend-k">
+          <button class="btn-primary" onclick={() => betragFeld?.focus()}>{je('Ja, eintragen', 'Yes, add it')}</button>
+          <button class="btn btn-ghost" onclick={nichtsAusgegeben}>{je('Nein, nichts', 'No, nothing')}</button>
+        </div>
+      </div>
+    {/if}
+    <SchnellAusgabe datum={heute} etappeId={etappeNun?.reise.id || null} {ontag} bind:betragFeld />
   {:else}
     <div class="ht-karte">
       <p class="ht-zahl"><b>{t('Wieder da.')}</b></p>
@@ -155,6 +196,11 @@
   .ht-etappe > span:nth-child(2) { display: flex; flex-direction: column; min-width: 0; }
   .ht-band { width: 6px; align-self: stretch; border-radius: 3px; background: var(--farbe); flex: none; }
   .ht-schreiben { width: 100%; }
+  .ht-wechsel { font-size: calc(14px * var(--schrift, 1)); font-weight: 700; }
+  .ht-wechsel small { font-weight: 400; color: var(--muted); }
+  .ht-zeit { font-size: calc(13px * var(--schrift, 1)); font-weight: 800; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .ht-abend { flex-direction: column; gap: 8px; border-color: var(--brand); }
+  .ht-abend-k { display: flex; gap: 8px; flex-wrap: wrap; }
   .ht-dringend { color: inherit; text-decoration: none; }
   .ht-dringend:not(.stark) { background: var(--warn-flaeche); border-color: var(--warn-linie, var(--line)); }
   .ht-warn { background: var(--danger-flaeche); border-color: var(--danger-linie); }

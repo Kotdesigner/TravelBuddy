@@ -36,6 +36,7 @@ export function warnlage({ warnungen = [], standort = null, reisen = [], eintrae
 
   const routen = []
   for (const r of reisen) {
+    if (r.idee) continue   // V16: Ideen fährt man (noch) nicht
     const geo = r.route?.geometry
     if (!geo?.length || r.art === 'flug' || vorbei(r.etappeId || r.id)) continue
     const stelle = standort ? punktAufRoute(geo, standort.lat, standort.lon) : null
@@ -57,7 +58,9 @@ export function warnlage({ warnungen = [], standort = null, reisen = [], eintrae
     const id = e.reise.id
     const stopps = (e.reise.stops || []).filter((s) => s.lat != null).map((s) => warnungenFuer(warnungen, s.lat, s.lon, umkreisKm))
     const anRouten = routen.filter((r) => r.etappeId === id || r.id === id).map((r) => r.treffer)
-    const anWegen = wanderungen.filter((w) => w.reiseId === id && proWanderung[w.id]).map((w) => proWanderung[w.id])
+    // V16: auch Wanderungen, die an einer Route dieser Etappe hängen
+    const routenIds = new Set(reisen.filter((r) => r?.typ === 'route' && r.etappeId === id).map((r) => r.id))
+    const anWegen = wanderungen.filter((w) => (w.reiseId === id || routenIds.has(w.reiseId)) && proWanderung[w.id]).map((w) => proWanderung[w.id])
     const liste = zusammen([...stopps, ...anRouten, ...anWegen])
     if (liste.length) proEtappe[id] = liste
   }
@@ -69,7 +72,28 @@ export function warnlage({ warnungen = [], standort = null, reisen = [], eintrae
     ...wanderungen.filter((w) => proWanderung[w.id] && bald(w.datum)).map((w) => ({ art: 'wanderung', id: w.id, name: w.name, w: proWanderung[w.id][0], ziel: `plan/wanderungen/${w.id}` })),
     ...eintraege.filter((e) => proEtappe[e.reise.id] && !routen.some((r) => r.etappeId === e.reise.id || r.id === e.reise.id) && bald(e.von)).map((e) => ({ art: 'etappe', id: e.reise.id, name: e.reise.name, w: proEtappe[e.reise.id][0], ziel: `plan/etappe/${e.reise.id}` })),
   ]
-  return { hier, drin: hier.filter((w) => w.km === 0), routen, proEtappe, proWanderung, hinweise, zahl: hier.length + hinweise.length }
+  const gebuendelt = buendleHinweise(hinweise)
+  return { hier, drin: hier.filter((w) => w.km === 0), routen, proEtappe, proWanderung, hinweise: gebuendelt, zahl: hier.length + gebuendelt.length }
+}
+
+/**
+ * V15: Dieselbe Warnung an mehreren Abschnitten derselben Art (etwa ein Buschfeuer neben vier Transfers) nur einmal.
+ * Vorne steht der Abschnitt, auf dem man fährt, sonst der mit der Warnung am nächsten; `weitere` nennt die übrigen.
+ */
+export function buendleHinweise(hinweise = []) {
+  const gruppen = new Map()
+  for (const h of hinweise) {
+    // Nur gleiche Art: Wanderung und Etappe mit derselben Warnung bleiben zwei Hinweise mit eigenem Ziel
+    const k = h.w?.id != null ? `${h.art}|${h.w.id}` : `${h.art}:${h.id}`
+    if (!gruppen.has(k)) gruppen.set(k, [])
+    gruppen.get(k).push(h)
+  }
+  const rang = (h) => [h.aufRoute ? 0 : 1, h.art === 'route' ? (h.w.kmBis ?? 0) : 0, h.w?.km ?? 0]
+  const vor = (a, b) => { const x = rang(a), y = rang(b); for (let i = 0; i < x.length; i++) if (x[i] !== y[i]) return x[i] - y[i]; return 0 }
+  return [...gruppen.values()].map((g) => {
+    const s = [...g].sort(vor)
+    return s.length === 1 ? s[0] : { ...s[0], weitere: s.slice(1).map((h) => h.name) }
+  })
 }
 
 function tageSpaeter(tag, n) {

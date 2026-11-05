@@ -70,7 +70,8 @@
   const tagGilt = (t) => t.journal.length > 0 || t.fotos.length > 0 || (zeige.wanderungen && t.wanderungen.some(wandErzaehlt)) || (zeige.orte && t.ortTage.length > 0)
   // Leere Einträge (angelegt, nie beschrieben) sind keine Tagebuchseite
   const eintragHatInhalt = (e) => !!((e.text || '').trim() || (e.ort || '').trim() || (e.fotos || []).length || (e.audios || []).length
-    || Object.values(e.felder || {}).some((w) => w != null && w !== '' && !(Array.isArray(w) && !w.length) && !(typeof w === 'object' && !Array.isArray(w) && !Object.keys(w).length)))
+    // V16: Nur Ausgaben (etwa aus der Schnell-Ausgabe) machen noch keine Tagebuchseite
+    || Object.entries(e.felder || {}).filter(([k]) => !k.startsWith('kosten_') && k !== 'waehrung').map(([, w]) => w).some((w) => w != null && w !== '' && !(Array.isArray(w) && !w.length) && !(typeof w === 'object' && !Array.isArray(w) && !Object.keys(w).length)))
   const kapitel = $derived.by(() => {
     const k = []
     const dazu = (id, titel, untertitel, farbe, tage, etappe = null) => {
@@ -325,7 +326,7 @@
     return { aus, routen, wand, gebucht, da: routen.length + wand.length + gebucht.length > 0 }
   })
   // Daten & Fakten und Ausgaben wie auf der Startseite, dazu die Summe je Etappe mit den Vorabausgaben
-  const kostenEtappe = $derived(new Map(kostenAuswertung({ journal: $journal, vorab: $vorabKosten, kurse: $fxKurse, eintraege: planE }).etappen.map((z) => [z.id, z])))
+  const kostenEtappe = $derived(new Map(kostenAuswertung({ journal: $journal, vorab: $vorabKosten, kurse: $fxKurse, eintraege: planE, reisen }).etappen.map((z) => [z.id, z])))
   const kostenZeile = (id) => {
     const z = zeige.zahlen ? kostenEtappe.get(id) : null
     return z ? `${je('Kosten dieser Etappe', 'Cost of this leg')}: ${eur(z.eur)} · ${aud(z.aud)}` : ''
@@ -1043,15 +1044,15 @@
 
   .t-lead { margin: 14px 22px 4px; font-size: calc(17.5px * var(--schrift, 1)); line-height: 1.55; color: var(--ink); font-style: italic; }
 
-  .galerie { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin: 14px 0 6px; padding: 0 5px; }
-  .galerie.solo { grid-template-columns: 1fr; }
-  .galerie.dicht { grid-template-columns: 1fr 1fr 1fr; }
-  .g-foto { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 6px; background: #eee2cf; }
+  .galerie { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; margin: 14px 0 6px; padding: 0 5px; }
+  .galerie.solo { grid-template-columns: minmax(0, 1fr); }
+  .galerie.dicht { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .g-foto { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 6px; background: var(--flaeche-2); }
   .galerie.viele .g-foto:first-child { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
   .galerie.solo .g-foto { aspect-ratio: 16 / 9; max-height: 440px; }
   .g-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .g-foto img:not([src]) { visibility: hidden; }
-  @media (max-width: 520px) { .galerie.dicht { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .galerie.dicht { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
   .t-audio { display: flex; flex-direction: column; gap: 6px; padding: 6px 22px; }
   .t-audio audio { width: 100%; max-width: 420px; height: 34px; }

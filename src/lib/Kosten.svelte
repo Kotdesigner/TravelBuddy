@@ -8,7 +8,7 @@
   import { eur, aud, dezimal, tagMonat, bereich } from './format.js'
   import { kostenAuswertung, postenAuswahl, KATEGORIE } from './kosten.js'
 
-  const a = $derived(kostenAuswertung({ journal: $journal, vorab: $vorabKosten, kurse: $fxKurse, eintraege: etappenMitDatum($reisen, $gesamtStart) }))
+  const a = $derived(kostenAuswertung({ journal: $journal, vorab: $vorabKosten, kurse: $fxKurse, eintraege: etappenMitDatum($reisen, $gesamtStart), reisen: $reisen }))
   const paar = (x) => `${eur(x.eur)} · ${aud(x.aud)}`
   const breite = (teil, ganz) => `${Math.max(1.5, ganz ? (teil / ganz) * 100 : 0)}%`
   const groessteEtappe = $derived(Math.max(0, ...a.etappen.map((e) => e.eur)))

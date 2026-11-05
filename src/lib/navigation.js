@@ -23,6 +23,11 @@ export function leseAdresse(hash = location.hash) {
   return { tab, unter, id: rest.join('/'), pfad: h }
 }
 
+// Eine Seite mit ungespeicherten Änderungen kann das Verlassen aufhalten.
+let waechter = null
+export const setzeWaechter = (fn) => { waechter = fn }
+export const fragWaechter = async () => (waechter ? waechter() : true)
+
 export function geh(pfad) {
   const ziel = '#/' + String(pfad).replace(/^#?\/?/, '')
   if (location.hash === ziel) window.dispatchEvent(new HashChangeEvent('hashchange'))

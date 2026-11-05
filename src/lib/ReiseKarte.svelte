@@ -24,7 +24,7 @@
   import { etappenMitDatum, routenDerEtappe } from './plan.js'
   import TourenWahl from './TourenWahl.svelte'
   import { bereich, dezimal, zahl } from './format.js'
-  import { artDerTour, logbuchTouren, verlauf, punktBei, spitzenZoom, anzoom, zoomBei, dauerFuer, kmText, glaette, nahZoom, auszoomAnteil, FAHRZEUG } from './reisefahrt.js'
+  import { artDerTour, logbuchTouren, verlauf, punktBei, spitzenZoom, anzoom, zoomBei, dauerFuer, kmText, glaette, nahZoom, auszoomAnteil, leseFilm, merkeFilm, FILM_TEMPO, FILM_ZOOM, FAHRZEUG } from './reisefahrt.js'
   import ReiseFilm from './ReiseFilm.svelte'
 
   let {
@@ -119,7 +119,7 @@
 
   // ---------- Reisen aufbereiten ----------
   const touren = $derived(reisen
-    .map((r) => ({ r, typ: (r.art || 'auto') === 'flug' ? t('Flug') : r.art === 'bahn' ? t('Bahn') : r.art === 'boot' ? je('Schippern', 'Boating') : t('Fahrt'), farbe: r.farbe || '#c1662f' }))
+    .map((r) => ({ r, typ: (r.art || 'auto') === 'flug' ? t('Flug') : r.art === 'bahn' ? t('Bahn') : r.art === 'boot' ? je('Schippern', 'Boating') : r.art === 'bus' ? 'Bus' : t('Fahrt'), farbe: r.farbe || '#c1662f' }))
     .map(({ r, typ, farbe }) => {
     const stops = (r.stops || []).filter((s) => s.lat != null && s.lon != null)
     // Echte Straßengeometrie bevorzugen, sonst Linie zwischen den Stopps.
@@ -524,6 +524,8 @@
   // Eine Strecke abfahren: zum Start, langsam und dann schneller heranzoomen, das Verkehrsmittel fährt
   // los und die Kamera zoomt nur so weit heraus, wie es die Länge der Strecke verlangt.
   let fahrzeug = null
+  let film = $state(leseFilm())
+  function setzeFilm(feld, wert) { film[feld] = wert; merkeFilm($state.snapshot(film)) }
   function fahrzeugWeg() { fahrzeug?.remove(); fahrzeug = null }
   function zeitlauf(dauer, nr, schritt) {
     return new Promise((fertig) => {
@@ -541,7 +543,7 @@
     const art = tour.art || artDerTour(tour.reise)
     // Boote fahren über Wasser, nicht die berechnete Straßenroute
     const roh = verlauf(art === 'boot' ? tour.stops.map((x) => [x.lon, x.lat]) : tour.geo)
-    const v = glaette(roh), nah = nahZoom(art)
+    const v = glaette(roh), nah = nahZoom(art) + FILM_ZOOM[film.zoom], dehnen = FILM_TEMPO[film.tempo]
     const start = punktBei(v, 0), breitePx = Math.min(breite(), hoehe())
     beschriftung = { titel: tour.name || e.reise?.name, zeit: bereich(e.von, e.bis), farbe: tour.farbe }
     const mitte = map.getCenter()
@@ -552,7 +554,7 @@
       if (nr !== animNr) return false
     }
     const z0 = map.getZoom()
-    if (!(await zeitlauf(1900, nr, (p) => map.jumpTo({ center: [start.lon, start.lat], zoom: z0 + (nah - z0) * anzoom(p), bearing: 0, pitch: 0 })))) return false
+    if (!(await zeitlauf(1900 * dehnen, nr, (p) => map.jumpTo({ center: [start.lon, start.lat], zoom: z0 + (nah - z0) * anzoom(p), bearing: 0, pitch: 0 })))) return false
     if (v.coords.length < 2 || roh.gesamt < 0.2) return nr === animNr
     const el = document.createElement('div')
     el.className = 'rk-fahrzeug'
@@ -560,15 +562,15 @@
     fahrzeugWeg()
     fahrzeug = new maplibregl.Marker({ element: el, rotationAlignment: 'map', pitchAlignment: 'map', rotation: start.richtung }).setLngLat([start.lon, start.lat]).addTo(map)
     beschriftung = { ...beschriftung, km: kmText(roh.gesamt, zahl) }
-    await new Promise((r) => setTimeout(r, 700))
+    await new Promise((r) => setTimeout(r, 700 * dehnen))
     const spitze = Math.min(nah, spitzenZoom(roh.gesamt, breitePx, start.lat)), aus = auszoomAnteil(art, roh.gesamt)
-    const ok = await zeitlauf(dauerFuer(roh.gesamt) * 1000, nr, (p) => {
+    const ok = await zeitlauf(dauerFuer(roh.gesamt) * 1000 * dehnen, nr, (p) => {
       const q = p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2
       const o = punktBei(v, q)
       fahrzeug?.setLngLat([o.lon, o.lat]).setRotation(o.richtung)
       map.jumpTo({ center: [o.lon, o.lat], zoom: zoomBei(p, nah, spitze, aus) })
     })
-    if (ok) await new Promise((r) => setTimeout(r, 450))
+    if (ok) await new Promise((r) => setTimeout(r, 450 * dehnen))
     fahrzeugWeg()
     return ok && nr === animNr
   }
@@ -720,6 +722,18 @@
     <div class="bedien-zwei rk-aktionen">
       <button class="bedien-knopf" class:haupt={spielt} onclick={abspielen} aria-pressed={spielt}>{spielt ? t('⏹ Anhalten') : t('▶ Reise abspielen')}</button>
       <button class="bedien-knopf" onclick={oeffneFilm} aria-haspopup="dialog" title={t('Reise als Video aufnehmen')}>{t('🎬 Film')}</button>
+    </div>
+    <div class="rk-regler">
+      <div class="segment" role="group" aria-label={je('Tempo', 'Speed')}>
+        {#each [['langsam', 'Langsam', 'Slow'], ['normal', 'Normal', 'Normal'], ['schnell', 'Schnell', 'Fast']] as [id, de, en] (id)}
+          <button class:an={film.tempo === id} aria-pressed={film.tempo === id} onclick={() => setzeFilm('tempo', id)}>{je(de, en)}</button>
+        {/each}
+      </div>
+      <div class="segment" role="group" aria-label={je('Zoom', 'Zoom')}>
+        {#each [['nah', 'Nah', 'Close'], ['mittel', 'Mittel', 'Medium'], ['weit', 'Weit', 'Wide']] as [id, de, en] (id)}
+          <button class:an={film.zoom === id} aria-pressed={film.zoom === id} onclick={() => setzeFilm('zoom', id)}>{je(de, en)}</button>
+        {/each}
+      </div>
     </div>
   {/if}
 
@@ -957,7 +971,10 @@
     background: var(--brand); color: #fff; font-size: calc(13.5px * var(--schrift, 1)); font-weight: 800; cursor: pointer;
   }
 
-  .rk-aktionen { margin-bottom: 10px; }
+  .rk-aktionen { margin-bottom: 8px; }
+  .rk-regler { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin-bottom: 10px; }
+  .rk-regler .segment { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rk-regler .segment button { min-height: 40px; }
   .rk-legende { margin-top: 12px; }
   /* Legendenstrich wie auf der Karte: Fahrt durchgezogen, Flug gestrichelt. */
   .rk-tipp { margin: 0; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
@@ -979,7 +996,7 @@
   }
   .exp-box select { font-size: calc(12px * var(--schrift, 1)); padding: 5px 6px; border-radius: 7px; border: 1px solid var(--line); background: var(--eingabe); }
   .exp-go { background: var(--brand); color: #fff; border-color: var(--brand); }
-  .exp-go:disabled { opacity: .6; }
+  .exp-go:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .exp-msg { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: #1a7f37; width: 100%; }
   /* Sichtbar kraeftig, ausgeblendet blass. Die geoeffnete Route bekommt zusaetzlich einen
      Rahmen, damit „ausgewaehlt" und „sichtbar" nicht verwechselt werden. */

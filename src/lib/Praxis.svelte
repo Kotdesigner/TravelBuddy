@@ -14,10 +14,10 @@
 
 <style>
   .warn {
-    background: #fbeee7; border-left: 4px solid #c0392b; padding: 12px 16px; border-radius: 0 8px 8px 0;
-    font-size: calc(13.5px * var(--schrift, 1)); color: #6b3a2f; line-height: 1.6;
+    background: var(--danger-flaeche); border-left: 4px solid var(--danger); padding: 12px 16px; border-radius: 0 8px 8px 0;
+    font-size: calc(13.5px * var(--schrift, 1)); color: var(--ink); line-height: 1.6;
   }
-  .warn :global(b) { color: #7a2317; }
+  .warn :global(b) { color: var(--danger-text); }
   .liste { padding-left: 20px; margin: 16px 0; }
   .liste li { font-size: calc(13.5px * var(--schrift, 1)); color: var(--muted); margin-bottom: 9px; line-height: 1.55; }
   .liste :global(b) { color: var(--ink); }

@@ -23,7 +23,7 @@
 
 <style>
   .sw-hg { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,.6); }
-  .sw { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(340px, calc(100vw - 32px)); padding: 20px 18px 18px; border-radius: var(--radius-l); background: var(--card); color: var(--ink); box-shadow: var(--shadow); text-align: center; }
+  .sw { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(340px, calc(100% - 32px)); padding: 20px 18px 18px; border-radius: var(--radius-l); background: var(--card); color: var(--ink); box-shadow: var(--shadow); text-align: center; }
   .sw h2 { margin: 0; font-size: calc(20px * var(--schrift, 1)); }
   .sw p { margin: 4px 0 16px; color: var(--muted); font-size: calc(15px * var(--schrift, 1)); }
   .sw-knoepfe { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

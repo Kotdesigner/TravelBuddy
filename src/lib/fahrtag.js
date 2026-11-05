@@ -9,7 +9,8 @@
 // Reicht das Tageslicht nicht (Losfahren läge vor Sonnenaufgang), Vorschlag: Strecke teilen.
 import * as SunCalc from 'suncalc'
 import { zeitzoneFuer } from './sonne.js'
-import { etappenMitDatum, etappeAm, routenDerEtappe, gueltigesDatum } from './plan.js'
+import { etappenMitDatum, etappeAm, routenDerEtappe, gueltigesDatum, plusTage } from './plan.js'
+import { bereichVon } from './abschnitte.js'
 import { rundeAufSumme, gleicheTeile } from './runden.js'
 import { stimmigeLegs } from './routing.js'
 import { LOCALE, t, beiSprache } from './i18n.js'
@@ -195,7 +196,7 @@ export function fahrDatum(r, reisen, gesamtStart, heute) {
   return heute
 }
 
-const istAuto = (r) => (r?.art || 'auto') !== 'flug' && !r?.route?.flug
+const istAuto = (r) => !['flug', 'bus'].includes(r?.art || 'auto') && !r?.route?.flug
 
 /**
  * Die heutige Fahrt, falls eine ansteht. Reihenfolge der Hinweise:
@@ -232,6 +233,18 @@ export function heutigeFahrt({ reisen = [], gesamtStart, heute, journal = [], ak
     if (j.legIdx == null) return ergebnis(r, a, 'logbuch')
     const t = a.find((x) => x.vonIdx === j.legIdx) || a[j.legIdx]
     if (t) return ergebnis(r, [t], 'logbuch')
+  }
+  // 1b. V16: eingeplanter Abschnitt mit Nächten je Stopp. Gefahren wird am Morgen nach der letzten Nacht.
+  for (const r of kandidaten) {
+    const b = bereichVon(r)
+    if (!b || r.idee || heute < b.von || heute > b.bis) continue
+    const st = r.stops || []
+    if (!st.some((s) => Number(s.naechte) > 0)) continue
+    const ankunft = []
+    let d = b.von
+    st.forEach((s) => { ankunft.push(d); d = plusTage(d, Math.max(0, Math.round(Number(s.naechte) || 0))) })
+    const a = abs(r).filter((t) => ankunft[t.nachIdx] === heute)
+    if (a.length) return ergebnis(r, a, 'abschnitt')
   }
   // 2. Stopps mit Datum
   for (const r of kandidaten) {

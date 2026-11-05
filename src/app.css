@@ -37,9 +37,11 @@
   --line-stark: #d5c9b3;   /* kräftigere Kante (Inputs, Buttons) */
   --ok-flaeche: #e7f3ee; --ok-linie: #b9ddcd; --ok-text: #276b56;
   --danger-flaeche: #fdecec; --danger-linie: #e3b7b0;
-  --warn-flaeche: #fdeede;
+  --warn-flaeche: #fdeede; --warn-linie: #eab98d;
   --warn-text: #7a3b1e;    /* Hinweis-Schrift auf Warnfläche (dunkel: heller, siehe unten) */
   --info-flaeche: #eaf2f8; --info-linie: #cfe0ec; --info-text: #1a5276;
+  /* Gesperrte Knöpfe: eigene Fläche, Schrift und Kante statt nur Transparenz (V15, Hallmark 39a) */
+  --aus-flaeche: #ebe4d8; --aus-ink: #6e6356; --aus-linie: #ddd3c2;
 
   /* Radien */
   --radius-s: 10px;
@@ -93,8 +95,9 @@
   --line-stark: #5a4831;
   --ok-flaeche: #1c332a; --ok-linie: #2f5748; --ok-text: #86cbb0;
   --danger-flaeche: #3b201d; --danger-linie: #6a3730;
-  --warn-flaeche: #3b2d17;
+  --warn-flaeche: #3b2d17; --warn-linie: #6b4a2a;
   --info-flaeche: #1d2c38; --info-linie: #2f4a5e; --info-text: #8ec2e8;
+  --aus-flaeche: #2e2418; --aus-ink: #9a8d7b; --aus-linie: #43352a;
   /* Terrakotta-Schrift auf Dunkelbraun: #8a3f16 erreicht nur 2,1 : 1 (unter WCAG 1.4.3).
      #e89a63 erreicht auf allen dunklen Flächen 5,9–7,9 : 1. Flächen behalten --brand. */
   --brand-text: #e89a63;
@@ -132,6 +135,8 @@ a { color: inherit; }
 /* Zeilenumbruch nach aktuellem Stand: Überschriften ausgewogen, Fließtext ohne
    einzelne Wörter in der letzten Zeile (Safari 17.5 bzw. 26, ältere ignorieren es) */
 h1, h2, h3, h4, .sk-titel, .ed-h, legend { text-wrap: balance; }
+/* Lange Wörter („Reisevorbereitung“, Playlist-Namen) bei großer Schrift umbrechen statt überlaufen (V15) */
+h1, h2, h3, h4, .sk-titel { overflow-wrap: break-word; min-width: 0; }
 p, li, dd, figcaption, small { text-wrap: pretty; }
 html { font-optical-sizing: auto; }
 /* Farbschema-Umschaltung ohne harte Sprünge, wo keine View Transition läuft */
@@ -252,15 +257,17 @@ html[data-richtung='zurueck'] ::view-transition-old(haupt) { animation: vt-raus-
   background: var(--brand); color: #fff; box-shadow: var(--shadow);
 }
 .btn-primary:hover { background: #7a3712; }
-.btn-primary:disabled { opacity: 0.4; cursor: default; }
+
+/* Gesperrt: gleiche Fläche für alle Arten, auch beim Darüberfahren */
+.btn:disabled, .btn:disabled:hover, .btn-primary:disabled, .btn-primary:disabled:hover { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
 
 /* Zerstörend: rot NUR fürs Löschen */
 .btn-danger {
   font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 9px 14px; min-height: 44px;
   border: 1px solid var(--danger); border-radius: var(--radius-s); cursor: pointer;
-  background: #fff; color: var(--danger);
+  background: var(--card); color: var(--danger-text);
 }
-.btn-danger:hover { background: #fdecec; }
+.btn-danger:hover { background: var(--danger-flaeche); }
 
 /* ============ Eingaben: komfortable Ziele ============ */
 select,
@@ -379,7 +386,7 @@ article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 
 .bedien-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
 .bedien-zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .bedien-knopf { display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--line-stark); border-radius: 10px; background: none; color: var(--ink); font-size: calc(14px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
-.bedien-knopf:disabled { opacity: 0.45; cursor: default; }
+.bedien-knopf:disabled, .bedien-knopf.haupt:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
 .bedien-knopf.haupt { min-height: 48px; border-color: var(--brand); background: var(--brand); color: #fff; font-size: calc(15px * var(--schrift, 1)); }
 .bedien-wahl { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: none; color: var(--ink); font-size: calc(14px * var(--schrift, 1)); font-weight: 600; text-align: left; cursor: pointer; }
 .bedien-wahl.an { border-color: var(--brand); background: var(--brand); color: #fff; }

@@ -5,8 +5,11 @@
   import { effekte } from './effekte.js'
   import { online } from './netz.js'
   import { temperaturJetzt, tempHoehe, tempFarbe } from './stimmung.js'
+  import { reisen, gesamtStart } from './userdata.js'
+  import { etappenMitDatum } from './plan.js'
+  import { heuteTag } from './heute.js'
 
-  const FRIST = 60000, PAUSE = 600000
+  const FRIST = 60000, PAUSE = 600000, GPS_WARTEN = 5000
   let wert = $state(null), lauf = $state(0)
   let offenSeit = Date.now(), fertig = false, wegSeit = 0, fragt = false
 
@@ -19,11 +22,20 @@
     fertig = true
     wert = Math.round(t); lauf++
   }
-  $effect(() => { versuche($meinePosition) })
+  // Ohne GPS (Safari gibt es unter http://localhost nicht her) gilt der erste Stopp der
+  // laufenden oder nächsten Etappe. Dem echten Standort bleibt ein kurzer Vorsprung.
+  const ersatz = $derived(etappenMitDatum($reisen, $gesamtStart).find((e) => e.bis >= $heuteTag)?.reise.stops?.find((s) => s.lat != null) || null)
+  $effect(() => {
+    const p = $meinePosition, e = ersatz
+    if (p) { versuche(p); return }
+    if (!e) return
+    const warten = setTimeout(() => versuche({ lat: e.lat, lon: e.lon }), GPS_WARTEN)
+    return () => clearTimeout(warten)
+  })
   $effect(() => {
     const sicht = () => {
       if (document.hidden) { wegSeit = Date.now(); return }
-      if (wegSeit && Date.now() - wegSeit >= PAUSE) { offenSeit = Date.now(); fertig = false; versuche($meinePosition) }
+      if (wegSeit && Date.now() - wegSeit >= PAUSE) { offenSeit = Date.now(); fertig = false; const e = ersatz; versuche($meinePosition || (e && { lat: e.lat, lon: e.lon })) }
     }
     document.addEventListener('visibilitychange', sicht)
     return () => document.removeEventListener('visibilitychange', sicht)

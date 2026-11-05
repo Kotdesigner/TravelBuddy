@@ -1,6 +1,8 @@
 <script>
   import { t, je } from './i18n.js'
   import { notizen, neueNotiz, toggleNotiz, updateNotiz, loescheNotiz, reisen, gesamtStart, berechneKalender, ymd } from './userdata.js'
+  import { buchungen } from './userdata.js'
+  import { etappeJetzt } from './buchung.js'
   import { NOTIZ_TYPEN as TYPEN, NOTIZ_TYP as TYP } from './notizen-typen.js'
 
   let filter = $state('alle')
@@ -16,7 +18,10 @@
   $effect(() => {
     if (vorgeschlagen || !etappen.length) return
     vorgeschlagen = true
-    neuEtappe = etappen.find((e) => heute >= e.von && heute <= e.bis)?.id || ''
+    // V14: am Wechseltag nach Uhrzeit (bis zur Wechselzeit die alte Etappe, danach die neue)
+    const d = new Date(), uhr = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+    const plan = etappen.map((e) => ({ reise: $reisen.find((r) => r.id === e.id) || { id: e.id }, von: e.von, bis: e.bis }))
+    neuEtappe = etappeJetzt(plan, heute, uhr, $buchungen?.events || [])?.reise.id || ''
   })
 
   const liste = $derived(filter === 'alle' ? $notizen : $notizen.filter((n) => n.typ === filter))
@@ -131,7 +136,7 @@
     display: flex; align-items: center; gap: 9px; background: var(--card); border: 1px solid var(--line);
     border-radius: 9px; padding: 9px 11px; box-shadow: var(--shadow);
   }
-  .check { border: none; background: none; cursor: pointer; font-size: calc(18px * var(--schrift, 1)); color: #2f7a63; line-height: 1; flex: none; min-width: 36px; min-height: 36px; }
+  .check { border: none; background: none; cursor: pointer; font-size: calc(18px * var(--schrift, 1)); color: var(--ok-text); line-height: 1; flex: none; min-width: 36px; min-height: 36px; }
   .ic { font-size: calc(15px * var(--schrift, 1)); flex: none; }
   .txt { flex: 1; font-size: calc(14px * var(--schrift, 1)); color: var(--ink); word-break: break-word; }
   .ts { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); white-space: nowrap; flex: none; font-variant-numeric: tabular-nums; }
@@ -139,8 +144,8 @@
   .del:hover { opacity: 1; }
 
   /* erledigt: leicht ergraut & kleiner */
-  .eintrag.erledigt { background: #f6f2ea; }
+  .eintrag.erledigt { background: var(--flaeche); }
   .eintrag.erledigt .check { color: #9bb5aa; }
-  .eintrag.erledigt .txt { color: #a89a86; font-size: calc(12.5px * var(--schrift, 1)); }
+  .eintrag.erledigt .txt { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); }
   .eintrag.erledigt .ic { opacity: 0.5; }
 </style>

@@ -102,6 +102,7 @@
     <div class="segment re-art" role="group" aria-label={t('Verkehrsmittel')}>
       <button class:an={artVon(r) === 'auto'} aria-pressed={artVon(r) === 'auto'} onclick={() => setArt(r, 'auto')}>{t('🚗 Auto')}</button>
       <button class:an={artVon(r) === 'flug'} aria-pressed={artVon(r) === 'flug'} onclick={() => setArt(r, 'flug')}>{t('✈️ Flug')}</button>
+      <button class:an={artVon(r) === 'bus'} aria-pressed={artVon(r) === 'bus'} onclick={() => setArt(r, 'bus')}>🚌 Bus</button>
       <button class:an={artVon(r) === 'bahn'} aria-pressed={artVon(r) === 'bahn'} onclick={() => setArt(r, 'bahn')}>{t('🚆 Bahn')}</button>
       <button class:an={artVon(r) === 'boot'} aria-pressed={artVon(r) === 'boot'} onclick={() => setArt(r, 'boot')}>{t('⛵ Schippern')}</button>
     </div>
@@ -187,7 +188,7 @@
                   <li class="hw-vorschlag">
                     {#if b}<img class="hw-bild" src={b} alt="" loading="lazy" />{:else}<span class="hw-bild hw-bild-leer" aria-hidden="true">📍</span>{/if}
                     <span class="hw-ort">
-                      <b>{v.ort.name}</b>{#if v.ort.tags?.[0]} <span class="tagpill {tagKlasse(v.ort.tags[0])}">{t(v.ort.tags[0])}</span>{/if}
+                      <b>{#if v.vorgemerkt}<span title={je('vorgemerkt', 'saved for later')}>⭐ </span>{/if}{v.ort.name}</b>{#if v.ort.tags?.[0]} <span class="tagpill {tagKlasse(v.ort.tags[0])}">{t(v.ort.tags[0])}</span>{/if}
                       <small>{t('{abstand} km neben der Route · passt nach „{wert}“', { abstand: v.abstand, wert: r.stops[v.nachStopp]?.name || t('Start') })}</small>
                     </span>
                     <button class="btn hw-dazu" onclick={() => vorschlagDazu(v)} aria-label={t('{name} als Stopp einfügen', { name: v.ort.name })}>+<span class="hw-dazu-txt"> {t('Stopp')}</span></button>
@@ -282,7 +283,7 @@
   .preview { flex: 0 0 220px; }
   .preview svg { width: 100%; height: auto; display: block; }
   @media (max-width: 620px) { .preview { flex: 1 1 100%; max-width: 260px; margin: 0 auto; } }
-  .re-art { align-self: flex-start; }
+  .re-art { align-self: stretch; display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); }
   .rg-km { display: block; font-size: calc(12.5px * var(--schrift, 1)); opacity: 0.85; }
 
   .stops { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
@@ -328,7 +329,7 @@
   .r-hint { font-size: calc(13px * var(--schrift, 1)); color: var(--muted); }
   .r-ctrl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
   .r-ctrl .btn { min-height: 44px; }
-  .btn:disabled { opacity: 0.45; cursor: default; }
+  .btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .reich { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
   .r-fehler { font-size: calc(13px * var(--schrift, 1)); color: var(--danger-text); }
   .r-hw { border: 1px solid var(--line); border-radius: 12px; background: var(--flaeche); }

@@ -1,10 +1,10 @@
 <script>
   // Unsichtbar, einmal in App.svelte: hält Routen, Hinweise und Wetter aktuell,
   // egal welcher Bildschirm gerade offen ist.
-  import { reisen, gesamtStart } from './userdata.js'
+  import { reisen, gesamtStart, userData } from './userdata.js'
   import { online } from './netz.js'
   import { etappenMitDatum, ymd, plusTage } from './plan.js'
-  import { autoRouten, hinweiseRechnen, autoWetter, reichweite } from './routen-dienst.js'
+  import { autoRouten, hinweiseRechnen, autoWetter, reichweite, vorgemerkteIds } from './routen-dienst.js'
 
   let { orte = [] } = $props()
 
@@ -22,7 +22,7 @@
   $effect(() => {
     const rs = $reisen, alle = orte
     $reichweite
-    hinweiseRechnen(rs, alle)
+    hinweiseRechnen(rs, alle, vorgemerkteIds($userData))
   })
 
   // Wetter an der Strecke automatisch für die laufende Etappe (nur online)

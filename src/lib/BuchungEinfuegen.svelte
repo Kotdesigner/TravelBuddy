@@ -13,6 +13,9 @@
   import { zeigeToast } from './toast.js'
   import { haptic } from './haptik.js'
   import { klapp, dauer } from './motion.js'
+  import { je } from './i18n.js'
+  import { speichereBeleg, eigenerPfad, belegLabel } from './belege.js'
+  import { belegeAnhaengen } from './userdata.js'
 
   /** kompakt: ohne eigene Überschrift (im Neu-Blatt). onfertig({ typ:'buchung', datum, etappeId, anzahl }) */
   let { kompakt = false, onfertig = () => {} } = $props()
@@ -22,7 +25,11 @@
   let erkannt = $state(null)       // Ergebnis von erkenne()
   let f = $state(null)             // Formularwerte
   let geaendert = $state({})       // Felder, die der Nutzer angefasst hat (keine Prüfmarke mehr)
-  let alsVorab = $state(false)
+  // V14: Jede Buchung trägt ihre Kosten (bezahlt am …, am Reisetag oder vor Ort) und ihre Belege
+  let zahlung = $state('bezahlt')
+  let bezahltAm = $state('')
+  let belegDateien = $state([])
+  let belegFeld = $state()
   let feldText = $state()
 
   const eintraege = $derived(etappenMitDatum($reisen, $gesamtStart))
@@ -44,11 +51,17 @@
     erkannt = erkenne(text, { zeitraum, heute: $heuteTag })
     f = alsFormular(erkannt)
     geaendert = {}
-    alsVorab = false
+    zahlung = 'bezahlt'; bezahltAm = $heuteTag
     haptic()
   }
+  // Ohne Mail: dasselbe Formular leer, z. B. für einen Fallschirmsprung, der vor Ort gebucht wurde
+  function ohneMail() {
+    erkannt = null; geaendert = {}
+    f = { art: 'tour', fahrzeug: 'camper', titel: '', anbieter: '', von: $heuteTag, bis: '', zeitVon: '', zeitBis: '', ort: '', ortBis: '', ref: '', flugNr: '', betrag: '', waehrung: 'AUD', segmente: [] }
+    zahlung = 'bezahlt'; bezahltAm = $heuteTag
+  }
   function verwerfen() {
-    erkannt = null; f = null; geaendert = {}
+    erkannt = null; f = null; geaendert = {}; belegDateien = []
     feldText?.focus()
   }
   const anfassen = (k) => { if (!geaendert[k]) geaendert = { ...geaendert, [k]: true } }
@@ -88,13 +101,28 @@
       ja: t('Trotzdem anlegen'),
     }))) return
     const n = buchungenEinfuegen(ev)
-    if (alsVorab && vorabMoeglich) {
-      neueVorabKosten({ text: f.titel.trim(), kat: artInfo(f.art).vorab, betrag: betragZahl, waehrung: f.waehrung, reiseId: etappe?.reise.id || null, keinTermin: true })
+    if (vorabMoeglich && zahlung !== 'keine') {
+      const reisetag = ev[0].datum
+      neueVorabKosten({ text: f.titel.trim(), kat: artInfo(f.art).vorab, betrag: betragZahl, waehrung: f.waehrung, reiseId: etappe?.reise.id || null,
+        terminId: ev[0].id, zahlung: zahlung === 'vorOrt' ? 'vorOrt' : 'bezahlt', datum: zahlung === 'bezahlt' && bezahltAm ? bezahltAm : reisetag })
+    }
+    if (belegDateien.length) {
+      const anhaengen = [], belegt = new Set()
+      try {
+        for (const d of belegDateien) {
+          const pfad = eigenerPfad(ev[0].id, d.name, belegt)
+          belegt.add(pfad)
+          await speichereBeleg(pfad, d)
+          anhaengen.push({ ziel: ev[0].id, label: belegLabel(d.name), datei: pfad })
+        }
+        try { await navigator.storage?.persist?.() } catch {}
+      } catch (err) { zeigeToast(t('Speichern fehlgeschlagen: ') + (err?.message || err), 'fehler', 4000) }
+      if (anhaengen.length) belegeAnhaengen(anhaengen)
     }
     haptic.confirm()
     zeigeToast(n > 1 ? t('{n} Termine übernommen ✓', { n }) : t('Buchung übernommen ✓'), 'ok')
     const ergebnis = { typ: 'buchung', datum: ev[0].datum, etappeId: etappe?.reise.id || null, anzahl: n }
-    text = ''; erkannt = null; f = null; geaendert = {}
+    text = ''; erkannt = null; f = null; geaendert = {}; belegDateien = []
     onfertig(ergebnis)
   }
 </script>
@@ -115,6 +143,7 @@
     <div class="be-knoepfe">
       <button class="btn-primary be-los" onclick={erkennen} disabled={!text.trim()}>{t('Erkennen')}</button>
       {#if kannZwischenablage}<button class="btn" onclick={ausZwischenablage}>{t('📋 Aus Zwischenablage')}</button>{/if}
+      <button class="btn btn-ghost" onclick={ohneMail}>{je('✍️ Ohne Mail eintragen', '✍️ Enter without mail')}</button>
     </div>
   {:else}
     <form class="be-form" onsubmit={(e) => { e.preventDefault(); uebernehmen() }} transition:klapp={{ duration: dauer(240) }}>
@@ -218,8 +247,27 @@
         </label>
       </div>
       {#if vorabMoeglich}
-        <label class="be-check"><input type="checkbox" bind:checked={alsVorab} /> <span>{t('Betrag auch unter Vorab-Ausgaben eintragen')}</span></label>
+        <fieldset class="be-zahlung">
+          <legend>{je('Bezahlt?', 'Paid?')}</legend>
+          <label class="be-check"><input type="radio" bind:group={zahlung} value="bezahlt" /> <span>{je('Bezahlt am', 'Paid on')}</span>
+            {#if zahlung === 'bezahlt'}<input class="be-am" type="date" bind:value={bezahltAm} aria-label={je('Bezahlt am', 'Paid on')} />{/if}</label>
+          <label class="be-check"><input type="radio" bind:group={zahlung} value="reisetag" /> <span>{je('Am Reisetag bezahlt', 'Paid on the day')}</span></label>
+          <label class="be-check"><input type="radio" bind:group={zahlung} value="vorOrt" /> <span>{je('Vor Ort zu zahlen', 'Pay on site')}</span></label>
+          <label class="be-check"><input type="radio" bind:group={zahlung} value="keine" /> <span>{je('Nicht in die Kosten', 'Leave out of costs')}</span></label>
+        </fieldset>
+      {:else if betragZahl != null}
+        <p class="be-k">{je('In die Kosten fließen nur Beträge in AUD oder EUR.', 'Only AUD or EUR amounts go into the costs.')}</p>
       {/if}
+
+      <div class="be-belege">
+        <span class="be-f">{je('Belege (Voucher, Bestätigung, Rechnung)', 'Documents (voucher, confirmation, invoice)')}</span>
+        {#if belegDateien.length}
+          <ul>{#each belegDateien as d, i (d.name + i)}<li>📎 {d.name} <button type="button" class="be-x" aria-label={je('Beleg entfernen', 'Remove document')} onclick={() => (belegDateien = belegDateien.filter((_, j) => j !== i))}>✕</button></li>{/each}</ul>
+        {/if}
+        <input bind:this={belegFeld} class="be-unsichtbar" type="file" multiple accept="application/pdf,image/*" onchange={(e) => { belegDateien = [...belegDateien, ...e.currentTarget.files]; e.currentTarget.value = '' }} />
+        <button type="button" class="btn" onclick={() => belegFeld?.click()}>{je('📎 Beleg hinzufügen', '📎 Add document')}</button>
+        <small>{je('Liegt danach offline auf dem Gerät und ist am Termin, am Tag und unter Buchungen abrufbar.', 'Stored offline on this device and shown with the booking, the day and under Bookings.')}</small>
+      </div>
 
       <p class="be-etappe" aria-live="polite">
         {#if f.art === 'flug' && f.segmente.length > 1 && segmenteAn}
@@ -254,6 +302,13 @@
   .be-k { margin: 0; font-size: calc(13px * var(--schrift, 1)); line-height: 1.5; color: var(--muted); }
   .be-f { display: flex; flex-direction: column; gap: 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); flex: 1 1 140px; min-width: 0; }
   .be-schmal { flex: 0 1 120px; }
+  .be-zahlung { border: 1px solid var(--line); border-radius: var(--radius-s); padding: 8px 10px; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+  .be-zahlung legend { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); padding: 0 4px; }
+  .be-am { min-height: 36px; font-size: max(16px, calc(14px * var(--schrift, 1))); padding: 4px 8px; border: 1px solid var(--line-stark); border-radius: var(--radius-s); background: var(--eingabe); color: var(--ink); }
+  .be-belege { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .be-belege ul { list-style: none; margin: 0; padding: 0; font-size: calc(13.5px * var(--schrift, 1)); }
+  .be-belege small { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
+  .be-x { border: none; background: none; color: var(--muted); cursor: pointer; min-width: 32px; min-height: 32px; }
   .be textarea, .be-f input, .be-f select {
     width: 100%; box-sizing: border-box; min-height: 44px; font-size: calc(15px * var(--schrift, 1)); font-weight: 400; font-family: inherit;
     padding: 8px 10px; border: 1px solid var(--line-stark); border-radius: var(--radius-s); background: var(--eingabe); color: var(--ink);

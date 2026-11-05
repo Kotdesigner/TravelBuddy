@@ -1,7 +1,7 @@
 <script>
   // Deine Lage: bist du im Warngebiet, was liegt in der Nähe, was kommt auf Route, Etappe und Wanderung.
   // Auf „Heute“ kurz, in der Gefahrenlage mit Karte und Google Maps.
-  import { t, tn } from './i18n.js'
+  import { t, tn, je } from './i18n.js'
   import { zahl, dezimal } from './format.js'
   import { lage, meinePosition, testmodus, warnDaten } from './warnlage-dienst.js'
   import { uhr } from './flug-dienst.js'
@@ -37,6 +37,7 @@
     {#each $lage.hinweise.slice(0, gross ? 12 : 4) as h (h.art + h.id)}
       <button class="wl-z wl-knopf" onclick={() => geh(h.ziel)}>
         <b>{ART[h.art]} {h.name}</b>
+        {#if h.weitere?.length}<small class="wl-weitere" title={h.weitere.join(', ')}>{h.weitere.length === 1 ? je('und 1 weitere Route', 'and 1 more route') : je(`und ${h.weitere.length} weitere Routen`, `and ${h.weitere.length} more routes`)}</small>{/if}
         <span>
           {#if h.art === 'route' && h.aufRoute && h.w.kmBis < 10}{t('Direkt vor dir: {titel}', { titel: h.w.titel })}
           {:else if h.art === 'route' && h.aufRoute}{t('In etwa {km} km voraus: {titel}', { km: rund(h.w.kmBis), titel: h.w.titel })}
@@ -61,6 +62,7 @@
   .wl.rot { background: var(--danger-flaeche); color: var(--ink); }
   .wl-z { display: flex; flex-direction: column; gap: 1px; font-size: calc(14px * var(--schrift, 1)); text-align: left; overflow-wrap: anywhere; }
   .wl-z.stark b { font-size: calc(17px * var(--schrift, 1)); color: var(--danger-text); }
+  .wl-weitere { font-weight: 700; }
   .wl-z small { display: block; font-size: calc(12.5px * var(--schrift, 1)); opacity: 0.85; }
   .wl-knopf { background: none; border: none; border-top: 1px solid var(--danger-linie); padding: 8px 0 0; color: inherit; cursor: pointer; font: inherit; min-height: 44px; }
   .wl-mehr { align-self: flex-start; min-height: 36px; padding: 0; border: none; background: none; color: inherit; font-weight: 700; font-size: calc(13.5px * var(--schrift, 1)); cursor: pointer; }

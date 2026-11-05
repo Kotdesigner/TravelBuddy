@@ -1,5 +1,5 @@
 <script>
-  import { t, tn, LOCALE } from './i18n.js'
+  import { t, tn, je, LOCALE } from './i18n.js'
   import { dezimal, ZWEI, eur, aud } from './format.js'
   import { frage, hinweis, loeschFrage } from './dialog.js'
   import { etappenMitDatum, planUeberblick } from './plan.js'
@@ -26,7 +26,7 @@
            schlageZielVor, eigenerPfad, belegLabel, istBildDatei, kameraName } from './belege.js'
   import { fxKurse, kursFuer, inBeide } from './fx.js'
   import { vorabArt, nummernImText, zugnummernImText } from './flug.js'
-  import { KOSTEN_CLUSTER } from './kosten.js'
+  import { KOSTEN_CLUSTER, etappeVorschlag } from './kosten.js'
   import VerkehrBlock from './VerkehrBlock.svelte'
 
   // Kategorien für Vorab-Ausgaben (Keys = dieselben wie im Tagebuch-Kostenmodul).
@@ -47,6 +47,11 @@
     { key: 'kosten_sonstiges', label: t('🛒 Sonstiges') },
   ]
   // Reisen zum Zuordnen (Roadtrip West + Vacation Ost).
+  // Vorschlag für Vorab-Ausgaben ohne Etappe: über die Buchung mit passendem Datum
+  const vorschlagEtappen = $derived(etappenMitDatum($reisen, $gesamtStart))
+  const etappenVorschlag = (k) => etappeVorschlag(k, $buchungen?.events || [], vorschlagEtappen)
+  const vorschlaege = $derived($vorabKosten.map((k) => [k, etappenVorschlag(k)]).filter(([, v]) => v))
+  function alleVorschlaege() { for (const [k, v] of vorschlaege) updateVorabKosten(k.id, { reiseId: v.id }) }
   const reiseOptionen = $derived([
     ...$reisen.map((r) => ({ id: r.id, label: '🚗 ' + r.name })),
   ])
@@ -667,6 +672,9 @@
   {#if $vorabKosten.length === 0}
     <p class="leer">{t('Noch keine Vorab-Ausgaben. „+ Ausgabe“ legt die erste an.')}</p>
   {:else}
+    {#if vorschlaege.length > 1}
+      <button class="bedien-knopf vk-alle" onclick={alleVorschlaege}>{je(`${vorschlaege.length} Vorschläge für Etappen übernehmen`, `Accept ${vorschlaege.length} leg suggestions`)}</button>
+    {/if}
     <div class="vk-liste">
       {#each $vorabKosten as k (k.id)}
         <div class="vk">
@@ -693,6 +701,8 @@
                 {#each reiseOptionen as o}<option value={o.id}>{o.label}</option>{/each}
               </select>
             </label>
+            {@const v = etappenVorschlag(k)}
+            {#if v}<button class="vk-vorschlag" onclick={() => updateVorabKosten(k.id, { reiseId: v.id })}>{je(`Vorschlag: ${v.name} übernehmen`, `Suggestion: use ${v.name}`)}</button>{/if}
           {/if}
           {#if vorabArt(k.kat)}
             <VerkehrBlock art={vorabArt(k.kat)} terminId={k.terminId} titel={k.text} nr={nummernImText(k.text)[0] || zugnummernImText(k.text)[0] || ''} onverknuepft={(id) => updateVorabKosten(k.id, { terminId: id })} />
@@ -706,6 +716,9 @@
 </section>
 
 <style>
+  .vk-alle { width: 100%; margin-bottom: 10px; }
+  .vk-vorschlag { align-self: flex-start; min-height: 40px; padding: 0 12px; border: 1px dashed var(--brand); border-radius: 10px; background: none; color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+
   .countdown { display: flex; align-items: baseline; gap: 12px; background: linear-gradient(140deg, #2f7a63, #1a5a48); color: #fff; border-radius: 12px; padding: 16px 20px; margin-bottom: 18px; box-shadow: var(--shadow); }
   .countdown.bald { background: linear-gradient(140deg, #c1662f, #8a3f16); }
   .cd-zahl { font-size: calc(40px * var(--schrift, 1)); font-weight: 800; line-height: 1; }
@@ -735,7 +748,7 @@
   .bl-akt { display: flex; flex-wrap: wrap; gap: 6px; }
   .bl-btn { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 8px 13px; border-radius: 8px; cursor: pointer; border: 1px solid #2f7a63; background: #2f7a63; color: #fff; }
   .bl-btn.zart { background: var(--card); color: var(--btn-ink); border-color: var(--line-stark); }
-  .bl-btn:disabled { opacity: 0.55; cursor: default; }
+  .bl-btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .bl-hint, .bl-erg { font-size: calc(12px * var(--schrift, 1)); line-height: 1.5; color: var(--muted); }
   /* Maske: Dateien selbst zuordnen */
   .zo { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line-stark); padding-top: 10px; }
@@ -757,7 +770,7 @@
 
   .bu-offline { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 10px; }
   .bu-save { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 7px 12px; border-radius: 8px; cursor: pointer; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); }
-  .bu-save:disabled { opacity: 0.6; cursor: default; }
+  .bu-save:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .bu-hint { flex: 1 1 180px; min-width: 0; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
   .bu-neu { min-height: 44px; }
   .bu-eigen { display: inline-block; margin-left: 6px; font-size: calc(12px * var(--schrift, 1)); font-weight: 800; color: var(--info-text); background: var(--info-flaeche); border-radius: 8px; padding: 1px 7px; vertical-align: 1px; }
@@ -771,7 +784,7 @@
   .b-kopf h3 { margin: 0; font-size: calc(15px * var(--schrift, 1)); font-weight: 800; color: var(--brand-text); }
   .fortschritt { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
   .neu { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; min-height: 36px; padding: 6px 12px; border: 1px solid #2f7a63; background: #2f7a63; color: #fff; border-radius: 8px; cursor: pointer; }
-  .bar { height: 8px; background: #ece2cf; border-radius: 5px; overflow: hidden; margin-bottom: 12px; }
+  .bar { height: 8px; background: var(--flaeche-2); border-radius: 5px; overflow: hidden; margin-bottom: 12px; }
   .bar-fill { height: 100%; background: #2f7a63; transform-origin: left; transition: transform var(--t-slow) var(--ease-spring); }
 
   .gruppe { margin-bottom: 10px; }
@@ -787,7 +800,7 @@
   .add { display: flex; gap: 6px; margin-top: 8px; }
   .add input { flex: 1; font-size: calc(13px * var(--schrift, 1)); padding: 8px 9px; border: 1px solid var(--line-stark); border-radius: 6px; background: var(--eingabe); color: var(--ink); }
   .add button { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; padding: 8px 12px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 6px; cursor: pointer; }
-  .add button:disabled { opacity: 0.4; }
+  .add button:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
 
   .dok-vorschlaege { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
   .v-chip { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 6px 11px; border: 1px solid var(--ok-linie); background: var(--ok-flaeche); color: var(--ok-text); border-radius: 16px; cursor: pointer; }
@@ -795,7 +808,7 @@
   .leer { color: var(--muted); font-size: calc(13.5px * var(--schrift, 1)); background: var(--flaeche); padding: 14px; border-radius: 10px; }
   .dok-liste { display: flex; flex-direction: column; gap: 10px; }
   .dok { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; background: var(--eingabe); }
-  .dok.erledigt { background: #f4f8f5; border-color: #cfe4d8; }
+  .dok.erledigt { background: var(--ok-flaeche); border-color: var(--ok-linie); }
   .dok-z1 { display: flex; align-items: center; gap: 8px; }
   .d-typ { flex: 1; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; padding: 6px 8px; border: 1px solid var(--line-stark); border-radius: 6px; color: var(--ink); }
   .d-check { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }

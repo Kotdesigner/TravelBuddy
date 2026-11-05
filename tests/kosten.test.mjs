@@ -133,3 +133,19 @@ console.log('\n5  Offene Tage nachtragen')
 
 console.log(`\n  ${ok} bestanden · ${bad} gescheitert\n`)
 process.exit(bad ? 1 : 0)
+
+// Etappen-Summe und Vorschlag für Vorab-Ausgaben ohne Etappe
+{
+  const { etappenSummen, etappeVorschlag } = await import('../src/lib/kosten.js')
+  const eintraege = [{ reise: { id: 'a', name: 'Melbourne' }, von: '2037-12-01', bis: '2037-12-04' }, { reise: { id: 'b', name: 'Whitsundays' }, von: '2037-12-08', bis: '2037-12-11' }]
+  const vorab = [{ id: 'v1', betrag: '100', waehrung: 'EUR', kat: 'kosten_unterkunft', datum: '2037-04-01', reiseId: 'b' }]
+  const journal = [{ id: 'j', datum: '2037-12-02', felder: { waehrung: 'EUR' }, ausgaben: [{ kat: 'kosten_essen', betrag: '30' }] }]
+  const s = etappenSummen({ journal, vorab, kurse: {}, eintraege })
+  if (s.get('b')?.eur !== 100 || s.get('a')?.eur !== 30) throw new Error('Etappen-Summe falsch ' + JSON.stringify([...s]))
+  const termine = [{ id: 't1', datum: '2037-12-10', titel: 'Seaside Lodge' }, { id: 't2', datum: '2037-12-02', titel: 'ibis Budget', sub: 'Melbourne Airport' }, { id: 't3', datum: '2037-12-09', titel: 'Coral Lagoon Resort' }]
+  if (etappeVorschlag({ text: 'Seaside Lodge Hotel' }, termine, eintraege)?.id !== 'b') throw new Error('Vorschlag Seaside Lodge')
+  if (etappeVorschlag({ text: 'Ibis Budget Melbourne Airport' }, termine, eintraege)?.id !== 'a') throw new Error('Vorschlag ibis')
+  if (etappeVorschlag({ text: 'Drohne' }, termine, eintraege) !== null) throw new Error('Drohne darf keinen Vorschlag haben')
+  if (etappeVorschlag({ text: 'x', terminId: 't3' }, termine, eintraege)?.id !== 'b') throw new Error('Vorschlag über Termin')
+  if (etappeVorschlag({ text: 'Coral Lagoon', reiseId: 'a' }, termine, eintraege) !== null) throw new Error('Hat schon Etappe')
+}
