@@ -67,18 +67,29 @@ No account, nothing to install from a store, and your data stays on your phone. 
 
 Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, kangaroos at dusk, bushfires, closed tracks and hours without reception. TravelBuddy is built for exactly that.
 
-| | |
-|---|---|
-| 📡 **Offline first** | Maps, places, routes, tickets and emergency help work without signal. Plan once, and everything comes along. |
-| ⛽ **Knows where it gets tight** | The longest stretch without fuel, long sections without water, the latest departure to arrive before sunset. |
-| 🔥 **Warns you in time** | Official fire, flood and storm warnings along your whole route, before you get there, plus road closures. |
-| ✈️ **Watches your flights and trains** | Delays, gate, platform and connections, live and by itself. |
-| 💰 **Knows what it costs** | Every expense, sorted into short and long values, per stage and per item. |
-| 📍 **144 hand-picked places** | With photos, seasonal tips, sun times and labels like "must-see", "hidden gem" or "4WD only". |
-| 📷 **Thinks like a photographer** | Golden and blue hour, sunrise, sunset and a star photography rating for every place and every day of your trip. |
-| 🎵 **Plays where you are** | Collects music from every place you pass into your own Spotify playlist: local bands, their most-played song first. |
-| 📔 **Writes your travel diary** | A logbook with 16 modules, from the fly factor to the roadkill counter, that turns into a travel journal, a trip film and a travel report. |
-| 🔒 **Yours alone** | No account, no server, no tracking. All data stays on your device. |
+<table>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-offline.gif" width="230" alt="Offline first"><br>📡 <b>Offline first</b><br><sub>Maps, places, routes, tickets and emergency help work without signal. Plan once, and everything comes along.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-tank.gif" width="230" alt="Knows where it gets tight"><br>⛽ <b>Knows where it gets tight</b><br><sub>The longest stretch without fuel, long sections without water, the latest departure to arrive before sunset.</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-warnung.gif" width="230" alt="Warns you in time"><br>🔥 <b>Warns you in time</b><br><sub>Official fire, flood and storm warnings along your whole route, before you get there, plus road closures.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-flug.gif" width="230" alt="Watches your flights and trains"><br>✈️ <b>Watches your flights and trains</b><br><sub>Delays, gate, platform and connections, live and by itself.</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-kosten.gif" width="230" alt="Knows what it costs"><br>💰 <b>Knows what it costs</b><br><sub>Every expense, sorted into short and long values, per stage and per item.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-orte.gif" width="230" alt="144 hand-picked places"><br>📍 <b>144 hand-picked places</b><br><sub>With photos, seasonal tips, sun times and labels like "must-see", "hidden gem" or "4WD only".</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-foto.gif" width="230" alt="Thinks like a photographer"><br>📷 <b>Thinks like a photographer</b><br><sub>Golden and blue hour, sunrise, sunset and a star photography rating for every place and every day of your trip.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-musik.gif" width="230" alt="Plays where you are"><br>🎵 <b>Plays where you are</b><br><sub>Collects music from every place you pass into your own Spotify playlist: local bands, their most-played song first.</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-tagebuch.gif" width="230" alt="Writes your travel diary"><br>📔 <b>Writes your travel diary</b><br><sub>A logbook with 16 modules, from the fly factor to the roadkill counter, that turns into a travel journal, a trip film and a travel report.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/en/ablauf-dokumente.gif" width="230" alt="Yours alone"><br>🔒 <b>Yours alone</b><br><sub>No account, no server, no tracking. All data stays on your device.</sub></td>
+</tr>
+</table>
+
 
 ---
 
@@ -92,10 +103,28 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 <td align="center" width="50%"><img src="bilder/en/ablauf-ausgabe.gif" width="260" alt="Expense over a period: 140 AUD spread over 7 days"><br><b>One shop, seven days</b><br>spread to the cent, each day gets its share</td>
 </tr>
 <tr>
-<td align="center"><img src="bilder/en/ablauf-dokumente.gif" width="260" alt="Attach passport files and lock the documents with a PIN"><br><b>Passport with its file, locked</b><br>Face ID, Touch ID, PIN or password</td>
+<td align="center"><img src="bilder/en/ablauf-route.gif" width="260" alt="Create a route: start, destination and stops, the app works out km, driving time and fuel gaps"><br><b>A route in a minute</b><br>stops in, km, time and fuel gaps out</td>
 <td align="center"><img src="bilder/en/ablauf-naechte.gif" width="260" alt="Every night of the trip: booked, planned, on a flight or still open"><br><b>Every night at a glance</b><br>booked, planned or still open</td>
 </tr>
 </table>
+
+---
+
+## 🎵 Sounds of the Road
+
+<table><tr>
+<td width="44%" align="center"><img src="bilder/en/ablauf-musik.gif" width="260" alt="Sounds of the Road: music collected along the trip, sorted by place"></td>
+<td valign="top">
+
+**Your trip gets its own soundtrack.** While you drive, TravelBuddy listens for where you are and collects music from there into your Spotify playlist **“Sounds of the Road”**: bands from the area, their most-played song first.
+
+- 🎸 **Really local:** Fremantle, Albany, the Pilbara. Every place adds its sound.
+- 📡 **No signal?** Places are noted offline and caught up later.
+- 🎧 **Your taste first:** favourite genres lead, nothing twice.
+- 🔒 **Safe:** Spotify login without a password in the app, everything stays on your device.
+
+<sub>The recording uses sample titles. Needs Spotify Premium.</sub>
+</td></tr></table>
 
 ---
 
@@ -813,18 +842,29 @@ Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Compute
 
 Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die teils 300 km auseinanderliegen, Kängurus in der Dämmerung, Buschfeuer, gesperrte Pisten und stundenlang kein Empfang. Genau dafür ist TravelBuddy gebaut.
 
-| | |
-|---|---|
-| 📡 **Offline zuerst** | Karten, Orte, Routen, Belege und Notfallhilfe funktionieren ohne Netz. Einmal geplant, ist alles dabei. |
-| ⛽ **Rechnet mit, wo es knapp wird** | Die längste Strecke ohne Tankstelle, lange Abschnitte ohne Wasser, die späteste Abfahrt vor Sonnenuntergang. |
-| 🔥 **Warnt rechtzeitig** | Amtliche Warnungen zu Feuer, Flut und Unwetter entlang deiner ganzen Route, bevor du dort bist, dazu Straßensperrungen. |
-| ✈️ **Behält Flüge und Züge im Blick** | Verspätung, Gate, Gleis und Umstieg, live und von selbst. |
-| 💰 **Weiß, was es kostet** | Jede Ausgabe, sortiert nach Short- und Long-Values, je Etappe und je Posten. |
-| 📍 **144 handverlesene Orte** | Mit Bildern, Saison-Tipps, Sonnenzeiten und Markierungen wie „Muss-Sehen“, „Geheimtipp“ oder „Nur 4WD“. |
-| 📷 **Denkt wie ein Fotograf** | Goldene und blaue Stunde, Auf- und Untergang und eine Bewertung für Sternenfotos an jedem Ort und für jeden Reisetag. |
-| 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
-| 📔 **Schreibt dein Reisetagebuch** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
-| 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
+<table>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-offline.gif" width="230" alt="Offline zuerst"><br>📡 <b>Offline zuerst</b><br><sub>Karten, Orte, Routen, Belege und Notfallhilfe funktionieren ohne Netz. Einmal geplant, ist alles dabei.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-tank.gif" width="230" alt="Rechnet mit, wo es knapp wird"><br>⛽ <b>Rechnet mit, wo es knapp wird</b><br><sub>Die längste Strecke ohne Tankstelle, lange Abschnitte ohne Wasser, die späteste Abfahrt vor Sonnenuntergang.</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-warnung.gif" width="230" alt="Warnt rechtzeitig"><br>🔥 <b>Warnt rechtzeitig</b><br><sub>Amtliche Warnungen zu Feuer, Flut und Unwetter entlang deiner ganzen Route, bevor du dort bist, dazu Straßensperrungen.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-flug.gif" width="230" alt="Behält Flüge und Züge im Blick"><br>✈️ <b>Behält Flüge und Züge im Blick</b><br><sub>Verspätung, Gate, Gleis und Umstieg, live und von selbst.</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-kosten.gif" width="230" alt="Weiß, was es kostet"><br>💰 <b>Weiß, was es kostet</b><br><sub>Jede Ausgabe, sortiert nach Short- und Long-Values, je Etappe und je Posten.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-orte.gif" width="230" alt="144 handverlesene Orte"><br>📍 <b>144 handverlesene Orte</b><br><sub>Mit Bildern, Saison-Tipps, Sonnenzeiten und Markierungen wie „Muss-Sehen“, „Geheimtipp“ oder „Nur 4WD“.</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-foto.gif" width="230" alt="Denkt wie ein Fotograf"><br>📷 <b>Denkt wie ein Fotograf</b><br><sub>Goldene und blaue Stunde, Auf- und Untergang und eine Bewertung für Sternenfotos an jedem Ort und für jeden Reisetag.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-musik.gif" width="230" alt="Spielt, wo du bist"><br>🎵 <b>Spielt, wo du bist</b><br><sub>Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst.</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-tagebuch.gif" width="230" alt="Schreibt dein Reisetagebuch"><br>📔 <b>Schreibt dein Reisetagebuch</b><br><sub>Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht.</sub></td>
+<td align="center" valign="top" width="50%"><img src="bilder/de/ablauf-dokumente.gif" width="230" alt="Gehört dir"><br>🔒 <b>Gehört dir</b><br><sub>Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät.</sub></td>
+</tr>
+</table>
+
 
 ## 🎬 So sieht es aus
 
@@ -836,10 +876,28 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 <td align="center" width="50%"><img src="bilder/de/ablauf-ausgabe.gif" width="260" alt="Ausgabe über einen Zeitraum: 140 AUD auf 7 Tage verteilt"><br><b>Ein Einkauf, sieben Tage</b><br>centgenau verteilt, jeder Tag bekommt seinen Anteil</td>
 </tr>
 <tr>
-<td align="center"><img src="bilder/de/ablauf-dokumente.gif" width="260" alt="Dateien an den Reisepass hängen und die Dokumente mit PIN sperren"><br><b>Pass mit Datei, gesperrt</b><br>Face ID, Touch ID, PIN oder Passwort</td>
+<td align="center"><img src="bilder/de/ablauf-route.gif" width="260" alt="Route anlegen: Start, Ziel und Stopps, die App rechnet km, Fahrzeit und Tank-Lücken"><br><b>Eine Route in einer Minute</b><br>Stopps rein, km, Zeit und Tank-Lücken raus</td>
 <td align="center"><img src="bilder/de/ablauf-naechte.gif" width="260" alt="Jede Nacht der Reise: gebucht, geplant, im Flug oder noch offen"><br><b>Jede Nacht im Blick</b><br>gebucht, geplant oder noch offen</td>
 </tr>
 </table>
+
+---
+
+## 🎵 Sounds of the Road
+
+<table><tr>
+<td width="44%" align="center"><img src="bilder/de/ablauf-musik.gif" width="260" alt="Sounds of the Road: unterwegs gesammelte Musik, nach Orten sortiert"></td>
+<td valign="top">
+
+**Deine Reise bekommt ihren eigenen Soundtrack.** Während du fährst, merkt sich TravelBuddy, wo du bist, und sammelt Musik von dort in deine Spotify-Playlist **„Sounds of the Road“**: Bands aus der Gegend, ihr meistgehörter Song zuerst.
+
+- 🎸 **Wirklich lokal:** Fremantle, Albany, die Pilbara. Jeder Ort bringt seinen Klang mit.
+- 📡 **Kein Netz?** Orte werden offline gemerkt und später nachgeholt.
+- 🎧 **Dein Geschmack zuerst:** Lieblingsstile vorne, nichts doppelt.
+- 🔒 **Sicher:** Spotify-Anmeldung ohne Passwort in der App, alles bleibt auf deinem Gerät.
+
+<sub>Die Aufnahme zeigt Beispieltitel. Braucht Spotify Premium.</sub>
+</td></tr></table>
 
 ---
 
