@@ -1,4 +1,5 @@
 <script>
+  import InfoKnopf from './InfoKnopf.svelte'
   import { t, tn } from './i18n.js'
   import { heuteTag } from './heute.js'
   // Logbuch: die ganze Reise chronologisch, Etappe für Etappe, Tag für Tag.
@@ -81,6 +82,7 @@
         </button>
       {/snippet}
     </FotoImport>
+    <InfoKnopf id="logbuch" />
   </div>
   {#if vorDerReise}
     {@const n = tageZwischen(heute, ueber.start)}

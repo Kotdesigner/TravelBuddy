@@ -8,7 +8,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.12 · built for Western Australia**<br>
+**Version 1.13 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
@@ -127,6 +127,12 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 </td></tr></table>
 
 ---
+
+## 🧭 New in version 1.13
+
+**The app explains itself.** A small ⓘ next to the headings says in two or three sentences what a leg, a route, the nights, a booking or the cost groups are and how they connect, with a jump straight into the right part of the manual. A picture shows how it all fits together: trip, legs, routes, then nights, bookings and expenses matched by date, the logbook and finally your journal.
+
+**First steps on Today.** Five steps make a trip complete: first leg, a route, a booking, your documents, the first logbook day. Each one opens the right form with one tap and ticks itself off. Empty pages now say what to do next, with a button.
 
 ## 🔐 New in version 1.12
 
@@ -770,6 +776,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.10:** nights at a glance, routes with dates, places saved for later, bookings in one place, quick expenses
 - [x] **Version 1.11:** bookings fill themselves in from an email, tickets and admissions, expenses over a period, checked from top to bottom
 - [x] **Version 1.12:** documents with their file, locked with Face ID, Touch ID, PIN or password
+- [x] **Version 1.13:** the app explains itself: ⓘ help, how it all fits together, first steps
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -791,7 +798,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.12 · entwickelt für Western Australia**<br>
+**Version 1.13 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
@@ -900,6 +907,12 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 </td></tr></table>
 
 ---
+
+## 🧭 Neu in Version 1.13
+
+**Die App erklärt sich selbst.** Ein kleines ⓘ neben den Überschriften sagt in zwei, drei Sätzen, was eine Etappe, eine Route, die Nächte, eine Buchung oder die Kostengruppen sind und wie alles zusammenhängt, mit einem Sprung direkt in den passenden Teil des Handbuchs. Ein Bild zeigt das Ganze: Reise, Etappen, Routen, darunter Nächte, Buchungen und Ausgaben, die über das Datum zugeordnet werden, das Logbuch und am Ende dein Tagebuch.
+
+**Erste Schritte auf Heute.** Fünf Schritte machen eine Reise rund: erste Etappe, eine Route, eine Buchung, deine Dokumente, der erste Logbuch-Tag. Jeder öffnet mit einem Tipp das passende Formular und hakt sich von selbst ab. Leere Seiten sagen jetzt, was als Nächstes kommt, mit Knopf.
 
 ## 🔐 Neu in Version 1.12
 
@@ -1511,6 +1524,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.10:** Nächte im Blick, Routen mit Zeitraum, Orte vormerken, Buchungen an einem Ort, Schnell-Ausgabe
 - [x] **Version 1.11:** Buchungen füllen sich aus der Mail aus, Tickets und Eintritte, Ausgaben über einen Zeitraum, von oben bis unten geprüft
 - [x] **Version 1.12:** Dokumente mit Datei, gesperrt mit Face ID, Touch ID, PIN oder Passwort
+- [x] **Version 1.13:** die App erklärt sich selbst: ⓘ-Hilfe, so hängt alles zusammen, erste Schritte
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

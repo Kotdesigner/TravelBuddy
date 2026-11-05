@@ -1,4 +1,6 @@
 <script>
+  import { oeffneNeu } from './neu.js'
+  import InfoKnopf from './InfoKnopf.svelte'
   // V16: Plan → Nächte. Für jede Nacht der Reise: gebucht, geplant, im Flug, im Camper ohne Platz
   // oder offen. Feiertage in WA und die Hochsaison stehen dabei, die dringenden Nächte oben.
   import { je } from './i18n.js'
@@ -26,10 +28,11 @@
 </script>
 
 <section class="na" aria-label={je('Nächte', 'Nights')}>
-  <p class="na-k">{je('Wo du jede Nacht schläfst. Gebucht kommt aus deinen Buchungen, geplant aus den Stopps einer Route mit ihren Nächten.', 'Where you sleep each night. Booked comes from your bookings, planned from the stops of a route with their nights.')}</p>
+  <p class="na-k">{je('Wo du jede Nacht schläfst. Gebucht kommt aus deinen Buchungen, geplant aus den Stopps einer Route mit ihren Nächten.', 'Where you sleep each night. Booked comes from your bookings, planned from the stops of a route with their nights.')}<InfoKnopf id="naechte" /></p>
 
   {#if !u.naechte.length}
-    <p class="na-k">{je('Noch keine Etappen mit Datum.', 'No legs with dates yet.')}</p>
+    <p class="na-k">{je('Noch keine Etappen mit Datum. Leg zuerst eine Etappe an, dann siehst du hier jede Nacht der Reise.', 'No legs with dates yet. Add a leg first, then you see every night of the trip here.')}</p>
+    <button class="btn-primary" onclick={() => oeffneNeu('etappe')}>{je('+ Etappe anlegen', '+ Add leg')}</button>
   {:else}
     <div class="na-zahlen">
       {#each Object.keys(ZUSTAND) as k (k)}

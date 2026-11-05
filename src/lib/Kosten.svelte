@@ -1,4 +1,5 @@
 <script>
+  import InfoKnopf from './InfoKnopf.svelte'
   // Mehr → Kosten: alles, was die Reise gekostet hat, aus Vorabausgaben und Logbuch, nach Clustern.
   // Eine Reihe Balken je Liste in einer Farbe, die Beträge stehen immer als Zahl daneben.
   import { t, tn, je } from './i18n.js'
@@ -22,12 +23,12 @@
 <section class="ko" aria-label={t('Kosten')}>
   {#if !a.gesamt.eur && !a.gesamt.aud}
     <div class="ko-karte">
-      <p>{je('Noch keine Ausgaben. Trag sie über „+ Neu“ → Ausgabe ein, auf der Startseite oder im Logbuch am Tag unter „Kosten & Verkehr“.', 'No expenses yet. Add them via “+ New” → Expense, on the start page or in the logbook under “Costs & transport”.')}</p>
+      <p>{je('Noch keine Ausgaben. Trag sie über „+ Neu“ → Ausgabe ein, auf der Startseite oder im Logbuch am Tag unter „Kosten & Verkehr“.', 'No expenses yet. Add them via “+ New” → Expense, on the start page or in the logbook under “Costs & transport”.')}<InfoKnopf id="kosten" /></p>
       <a class="btn-primary ko-link" href="#/logbuch">{t('Zum Logbuch')}</a>
     </div>
   {:else}
     <div class="ko-kacheln">
-      <div class="ko-kachel gross"><span>{t('Gesamt')}</span><b>{eur(a.gesamt.eur)}</b><small>{aud(a.gesamt.aud)}</small></div>
+      <div class="ko-kachel gross"><span>{t('Gesamt')}<InfoKnopf id="kosten" /></span><b>{eur(a.gesamt.eur)}</b><small>{aud(a.gesamt.aud)}</small></div>
       <div class="ko-kachel"><span>{t('Vor der Reise')}</span><b>{eur(a.vorab.eur)}</b><small>{aud(a.vorab.aud)}</small></div>
       <div class="ko-kachel"><span>{t('Unterwegs')}</span><b>{eur(a.unterwegs.eur)}</b><small>{aud(a.unterwegs.aud)}</small></div>
       <div class="ko-kachel"><span>🪙 {t('Short-Values')}</span><b>{eur(cluster('short').eur)}</b><small>{aud(cluster('short').aud)}</small></div>

@@ -1,4 +1,5 @@
 <script>
+  import InfoKnopf from './InfoKnopf.svelte'
   import { t, tn, je, LOCALE } from './i18n.js'
   import { dezimal, ZWEI, eur, aud } from './format.js'
   import { frage, hinweis, loeschFrage } from './dialog.js'
@@ -460,6 +461,7 @@
         </span>
       {/if}
     </button>
+    <InfoKnopf id="dokumente" />
     {#if !dokGesperrt}<button class="neu" onclick={() => { dokAuf = true; neuesDokument() }}>{t('+ Dokument')}</button>{/if}
   </div>
   {#if dokAuf && dokGesperrt}

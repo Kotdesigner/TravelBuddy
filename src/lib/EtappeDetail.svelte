@@ -1,4 +1,6 @@
 <script>
+  import { oeffneNeu } from './neu.js'
+  import InfoKnopf from './InfoKnopf.svelte'
   import { t, tn, je } from './i18n.js'
   // Eine Etappe: Name und Datum, Buchungen, Routen mit Stopps, Wanderungen, Logbuch.
   // Ist keine Etappe gewählt (Route ohne Etappe), zeigt sie nur diese Route.
@@ -214,7 +216,7 @@
 
     {#if gebucht.length}
       <section class="ed-block">
-        <h2 class="ed-h">{t('Gebucht')} <span class="ed-zahl">{gebucht.length}</span></h2>
+        <h2 class="ed-h">{t('Gebucht')} <span class="ed-zahl">{gebucht.length}</span><InfoKnopf id="buchung" /></h2>
         <ul class="ed-buch">
           {#each gebucht as b (b.id)}
             <li><span class="ed-b-tag">{mitWochentag(b.datum)}</span><span class="ed-b-icon" aria-hidden="true">{b.emoji || katInfo(b.kat).icon}</span><span class="ed-b-txt"><b>{b.titel}</b>{#if b.sub}<small>{b.sub}</small>{/if}<BuchungZusatz termin={b} /></span></li>
@@ -235,9 +237,13 @@
   {/if}
 
   <section class="ed-block">
-    {#if etappe}<h2 class="ed-h">{t('Routen')} <span class="ed-zahl">{routen.length}</span></h2>{/if}
+    {#if etappe}<h2 class="ed-h">{t('Routen')} <span class="ed-zahl">{routen.length}</span><InfoKnopf id="route" /></h2>{/if}
     {#if etappe && !routen.length}
       <p class="ed-k">{je('Eine Route ist ein Teil dieser Etappe mit eigenem Zeitraum: eine Fahrt mit Stopps oder ein Flug, Bus, Zug oder Schiff. Aus den Stopps und ihren Nächten rechnet die App km, Fahrtage, Tankstopps und die Fahrt des Tages.', 'A route is part of this leg with its own dates: a drive with stops, or a flight, bus, train or boat. From the stops and their nights the app works out km, driving days, fuel stops and the day’s drive.')}</p>
+      <div class="ed-leer-knoepfe">
+        <button class="btn" onclick={() => oeffneNeu('route', { etappeId: etappe.id })}>{je('+ Route anlegen', '+ Add route')}</button>
+        <a class="btn btn-ghost" href="#/orte">{je('Orte einplanen', 'Plan in places')}</a>
+      </div>
     {/if}
     {#if weg.length > 1}
       <p class="ed-weg-kette">{#each weg as w, i}{#if i}<span class="ed-weg-art" aria-label={w.art}> {VERKEHR[w.art] || '→'} </span>{/if}<span>{w.name}</span>{/each}</p>
@@ -300,7 +306,7 @@
     </section>
 
     <section class="ed-block">
-      <h2 class="ed-h">{t('Logbuch')}</h2>
+      <h2 class="ed-h">{t('Logbuch')}<InfoKnopf id="logbuch" /></h2>
       <p class="ed-k">{geschrieben ? t('{geschrieben} von {wert} Tagen geschrieben.', { geschrieben, wert: eintrag?.tage ?? etappe.tage }) : t('Noch kein Tag geschrieben.')}</p>
       <button class="btn ed-dazu" onclick={() => onlogbuch(etappe.id)}>{t('Im Logbuch ansehen')}</button>
       {#if eintrag}<button class="btn ed-dazu" onclick={() => onneu('tag', offenerZeitraum(eintrag, $journal, ymd(new Date())))}>{t('Mehrere Tage nachtragen')}</button>{/if}
@@ -397,4 +403,5 @@
     .ed-route { border: none; border-left: 4px solid var(--farbe); border-radius: 0; padding: 4px 0 8px 10px; }
     .ed-r-meta, .ed-r-zeit { margin-left: 0; }
   }
+  .ed-leer-knoepfe { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 </style>

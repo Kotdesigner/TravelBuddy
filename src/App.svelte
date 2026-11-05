@@ -1,4 +1,5 @@
 <script>
+  import InfoKnopf from './lib/InfoKnopf.svelte'
   import { je, t, tn, LOCALE, istEn } from './lib/i18n.js'
   import { dezimal, ZWEI, eur, aud, zahl } from './lib/format.js'
   import Ort from './lib/Ort.svelte'
@@ -1137,7 +1138,7 @@
 
   {:else if ansicht.tab === 'orte'}
     {#if orteUnter !== 'meine' && orteUnter !== 'routen'}
-      <div class="orte-neu"><button class="bedien-knopf" onclick={() => (ortNeuOffen = true)}>{je('Ort hinzufügen', 'Add place')}</button></div>
+      <div class="orte-neu"><button class="bedien-knopf" onclick={() => (ortNeuOffen = true)}>{je('Ort hinzufügen', 'Add place')}</button><InfoKnopf id="orte" /></div>
     {/if}
     {#if filternAktiv}
     <div class="filter-hinweis" role="status">
@@ -1638,7 +1639,8 @@
   .btn { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 8px 13px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 8px; cursor: pointer; }
   .btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .mo-card { display: flex; flex-direction: column; }
-  .orte-neu { display: grid; margin: 4px 0 0; }
+  .orte-neu { display: flex; align-items: center; gap: 4px; margin: 4px 0 0; }
+  .orte-neu > .bedien-knopf { flex: 1; }
   .mo-del { margin-top: 2px; min-height: 32px; padding: 0 6px 0 0; display: inline-flex; align-items: center; font-size: calc(12px * var(--schrift, 1)); color: var(--danger-text); background: none; border: none; cursor: pointer; align-self: flex-start; }
 
   .nach-oben {

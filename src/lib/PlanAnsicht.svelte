@@ -1,4 +1,5 @@
 <script>
+  import InfoKnopf from './InfoKnopf.svelte'
   import { lage } from './warnlage-dienst.js'
   import { t, tn, je } from './i18n.js'
   import { merkeMorph, istMorph, morphName } from './motion.js'
@@ -84,6 +85,7 @@
   {/if}
   {#if eintraege.length}
     <p class="pl-summe">
+      <InfoKnopf id="zusammenhang" />
       <b>{t('{tagMonatJahr} bis {tagMonatJahr2}', { tagMonatJahr: tagMonatJahr(ueber.start), tagMonatJahr2: tagMonatJahr(ueber.ende) })}</b>{t(', {tageText} in {length} Etappen', { tageText: tageText(ueber.tage), length: eintraege.length })}
     </p>
   {/if}
@@ -103,7 +105,7 @@
 
   {#if !eintraege.length}
     <div class="pl-leer">
-      <p><b>{t('Noch keine Etappe.')}</b> {t('Eine Etappe ist ein Abschnitt deiner Reise mit Datum, zum Beispiel „Melbourne, 30.11. bis 3.12.“. Die Strecken, die du darin fährst, legst du danach als Routen an.')}</p>
+      <p><b>{t('Noch keine Etappe.')}</b> {t('Eine Etappe ist ein Abschnitt deiner Reise mit Datum, zum Beispiel „Melbourne, 30.11. bis 3.12.“. Die Strecken, die du darin fährst, legst du danach als Routen an.')}<InfoKnopf id="zusammenhang" /></p>
       <button class="btn-primary" onclick={() => onneu('etappe')}>{t('Erste Etappe anlegen')}</button>
       <p class="pl-leer-k">{t('Oder deinen Reisekalender laden: Mehr → Import.')}</p>
     </div>

@@ -1,4 +1,6 @@
 <script>
+  import Zusammenhang from './Zusammenhang.svelte'
+  let zhAuf = $state(false)
   import { t, tn, je, sprache, setzeSprache } from './i18n.js'
   // Einführung beim ersten Öffnen: führt einmal durch die App. Jeder Schritt
   // erklärt kurz und lässt das Wichtigste gleich wirklich tun: Startdatum, erste Etappe, eine
@@ -160,6 +162,9 @@
         <div><svg class="ef-bild" viewBox="0 0 64 48" aria-hidden="true"><rect x="3" y="4" width="58" height="42" rx="6" fill="none" stroke="currentColor" stroke-opacity=".5" stroke-width="2"/><path d="M3 13h58" stroke="currentColor" stroke-opacity=".5" stroke-width="2"/><rect x="6" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="14" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="22" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="30" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="38" y="17" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="46" y="17" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="54" y="17" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="6" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="14" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="22" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="30" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="38" y="25" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="46" y="25" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="54" y="25" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="6" y="33" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="14" y="33" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="22" y="33" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="30" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="38" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="46" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="54" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/></svg><span><dt>{je('Kalender', 'Calendar')}</dt><dd>{je('Dein Blick auf die Reise nach Datum, als Liste, Monat oder Jahr. Hier trägst du nichts ein.', 'Your view of the trip by date, as list, month or year. You do not enter anything here.')}</dd><dd class="ef-wo">{je('Plan → Kalender', 'Plan → Calendar')}</dd></span></div>
         <div><svg class="ef-bild" viewBox="0 0 64 48" aria-hidden="true"><path d="M32 9C25 5 15 5 6 7v35c9-2 19-2 26 2 7-4 17-4 26-2V7c-9-2-19-2-26 2Z" fill="none" stroke="currentColor" stroke-opacity=".6" stroke-width="2"/><path d="M32 9v35" stroke="currentColor" stroke-opacity=".6" stroke-width="2"/><rect x="11" y="12" width="16" height="11" rx="2" fill="#c1662f"/><circle cx="16" cy="16" r="2" fill="#fff"/><path d="M11 29h16M11 34h12M37 14h16M37 19h16M37 24h11M37 29h16M37 34h9" stroke="currentColor" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/></svg><span><dt>{je('Logbuch', 'Logbook')}</dt><dd>{je('Dein Reisetagebuch Tag für Tag: Text, Fotos, Kilometer, Tiere und Notizen.', 'Your travel journal day by day: text, photos, kilometres, animals and notes.')}</dd><dd class="ef-wo">{je('Logbuch', 'Logbook')}</dd></span></div>
       </dl>
+      <!-- 1.13: das ganze Bild, auf Wunsch aufgeklappt -->
+      <button type="button" class="ef-leise ef-zh-knopf" aria-expanded={zhAuf} onclick={() => (zhAuf = !zhAuf)}>{zhAuf ? je('So hängt alles zusammen ▴', 'How it all fits together ▴') : je('So hängt alles zusammen ▾', 'How it all fits together ▾')}</button>
+      {#if zhAuf}<Zusammenhang />{/if}
       <div class="ef-knoepfe">
         <button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>
         <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
@@ -307,4 +312,5 @@
   @keyframes hoch { from { transform: translateY(40px); opacity: 0.4; } }
   @keyframes rein { from { opacity: 0; } }
   @keyframes hochMitte { from { transform: translate(-50%, 40px); opacity: 0.4; } }
+  .ef-zh-knopf { align-self: flex-start; min-height: 44px; }
 </style>

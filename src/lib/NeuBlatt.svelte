@@ -1,4 +1,5 @@
 <script>
+  import InfoKnopf from './InfoKnopf.svelte'
   import { t, je } from './i18n.js'
   import { blattRaus, ausblenden } from './motion.js'
   import { heuteTag } from './heute.js'
@@ -141,7 +142,7 @@
   {:else}
   <form class="nb-form" onsubmit={(e) => { e.preventDefault(); anlegen() }}>
     {#if typ === 'etappe'}
-      <p class="nb-k">{t('Ein Abschnitt der Reise mit Datum, zum Beispiel ein Stadtaufenthalt oder der Roadtrip mit dem Camper.')}</p>
+      <p class="nb-k">{t('Ein Abschnitt der Reise mit Datum, zum Beispiel ein Stadtaufenthalt oder der Roadtrip mit dem Camper.')}<InfoKnopf id="etappe" /></p>
       <label class="nb-f">{t('Name')}<input bind:value={eName} placeholder={t('z. B. Melbourne')} /></label>
       <div class="nb-zeile">
         <label class="nb-f">{t('Von')}<input type="date" bind:value={eVon} /></label>
@@ -157,7 +158,7 @@
       </div>
       {#if eArt === 'flug' || eArt === 'bahn'}{@render verkehr()}{/if}
     {:else if typ === 'route'}
-      <p class="nb-k">{t('Eine Strecke mit Stopps innerhalb einer Etappe. Start und Ziel reichen fürs Erste, den Rest ergänzt du in der Route.')}</p>
+      <p class="nb-k">{t('Eine Strecke mit Stopps innerhalb einer Etappe. Start und Ziel reichen fürs Erste, den Rest ergänzt du in der Route.')}<InfoKnopf id="route" /></p>
       <div class="segment" role="group" aria-label={t('Verkehrsmittel')}>
         <button type="button" class:an={rArt === 'auto'} aria-pressed={rArt === 'auto'} onclick={() => (rArt = 'auto')}>{t('🚗 Auto')}</button>
         <button type="button" class:an={rArt === 'flug'} aria-pressed={rArt === 'flug'} onclick={() => (rArt = 'flug')}>{t('✈️ Flug')}</button>

@@ -21,6 +21,7 @@
   import { je } from './i18n.js'
   import BuchungZusatz from './BuchungZusatz.svelte'
   import SchnellAusgabe from './SchnellAusgabe.svelte'
+  import ErsteSchritte from './ErsteSchritte.svelte'
   import { etappeJetzt, wechselZeit, uhrzeitIn } from './buchung.js'
   import { ausgabenVon } from './kosten.js'
   import { stelleAm } from './abschnitte.js'
@@ -76,6 +77,7 @@
       <span aria-hidden="true">{m.flug.art === 'bahn' ? '🚆' : '✈️'}</span><span><b>{m.flug.art === 'bahn' ? je('Zug', 'Train') : je('Flug', 'Flight')} {m.flug.nr}</b> {m.text}</span>
     </a>
   {/each}
+  <ErsteSchritte {geh} />
   <WarnLage {geh} />
   {#if flugJetzt}
     <a class="ht-flug" href="#/mehr/fluege">

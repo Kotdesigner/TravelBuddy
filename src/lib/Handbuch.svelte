@@ -6,6 +6,8 @@
   // die Regeln des Handbuchs und die der App auseinander (beide haben z. B. `.inhalt`).
   import { onMount } from 'svelte'
   import { t, istEn } from './i18n.js'
+  import { get } from 'svelte/store'
+  import { handbuchTeil } from './hilfe.js'
 
   let blatt = $state(null)
   let fehler = $state(false)
@@ -32,6 +34,13 @@
       inhalt.append(...dok.body.childNodes)
       wurzel.append(stil, inhalt)
       geladen = true
+      // V18: von einem ⓘ-Blatt aus gleich zum passenden Teil springen
+      const teil = get(handbuchTeil)
+      if (teil) {
+        handbuchTeil.set(null)
+        const ziel = [...inhalt.querySelectorAll('.teil')].find((el) => el.textContent.trim() === `Teil ${teil}` || el.textContent.trim() === `Part ${teil}`)
+        if (ziel) requestAnimationFrame(() => ziel.scrollIntoView({ block: 'start' }))
+      }
     } catch { fehler = true }
   })
 </script>

@@ -1,4 +1,5 @@
 <script>
+  import InfoKnopf from './InfoKnopf.svelte'
   // V17: Ausgabe über +Neu, im Aufbau der anderen Formulare im Neu-Blatt (Etappe, Route, Logbuch).
   // Kategorien in den vier Gruppen der Kosten-Seite, jede Gruppe aufklappbar wie die Themen im Logbuch.
   // Ein Tag der Reise (oder danach): landet wie die Schnelleingabe auf „Heute“ im Logbuch-Eintrag des Tages.
@@ -98,7 +99,7 @@
   </div>
 
   <div class="ag-kats" role="radiogroup" aria-labelledby="ag-kat-{uid}">
-    <span class="ag-f" id="ag-kat-{uid}">{je('Kategorie', 'Category')}</span>
+    <span class="ag-f" id="ag-kat-{uid}">{je('Kategorie', 'Category')}<InfoKnopf id="ausgabe" /></span>
     {#each KOSTEN_CLUSTER as c (c.id)}
       {@const drin = c.kats.includes(kat)}
       <div class="modul" class:offen={offen[c.id]}>

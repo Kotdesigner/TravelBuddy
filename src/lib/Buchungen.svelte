@@ -1,4 +1,6 @@
 <script>
+  import { oeffneNeu } from './neu.js'
+  import InfoKnopf from './InfoKnopf.svelte'
   // V14: Mehr → Buchungen. Jede Buchung an einem Ort: Termin, Buchungsnummer, Kosten und Belege.
   // Termine kommen aus dem Reisekalender oder sind selbst eingetragen, Kosten aus den Ausgaben
   // vorab (über die Termin-ID verbunden). Was die App nicht sicher zuordnen kann, steht oben zum Bestätigen.
@@ -66,7 +68,7 @@
 </script>
 
 <section class="bu" aria-label={je('Buchungen', 'Bookings')}>
-  <p class="bu-k">{je('Alles Gebuchte an einer Stelle: wann, Buchungsnummer, was es kostet und die Belege. Dieselben Angaben stehen am Tag, in der Etappe, im Kalender und unter Kosten.', 'Everything booked in one place: when, booking number, cost and documents. The same details show on the day, in the leg, the calendar and under costs.')}</p>
+  <p class="bu-k">{je('Alles Gebuchte an einer Stelle: wann, Buchungsnummer, was es kostet und die Belege. Dieselben Angaben stehen am Tag, in der Etappe, im Kalender und unter Kosten.', 'Everything booked in one place: when, booking number, cost and documents. The same details show on the day, in the leg, the calendar and under costs.')}<InfoKnopf id="buchung" /></p>
 
   <div class="bu-kopf">
     <div class="segment" role="group" aria-label={je('Auswahl', 'Selection')}>
@@ -108,7 +110,9 @@
   {/if}
 
   {#if !gezeigt.length}
-    <p class="bu-leer">{wahl === 'kommend' ? je('Keine kommenden Buchungen.', 'No upcoming bookings.') : je('Keine Buchungen.', 'No bookings.')}</p>
+    <p class="bu-leer">{wahl === 'kommend' ? je('Keine kommenden Buchungen.', 'No upcoming bookings.') : je('Keine Buchungen.', 'No bookings.')}
+      {je('Füg eine Bestätigungsmail ein, die App füllt die Felder aus, oder trag sie von Hand ein.', 'Paste a confirmation email and the app fills in the fields, or enter it by hand.')}</p>
+    <button class="btn-primary bu-leer-knopf" onclick={() => oeffneNeu('buchung')}>{je('+ Buchung eintragen', '+ Add booking')}</button>
   {/if}
   <ul class="bu-liste">
     {#each gezeigt as b (b.id)}
@@ -218,4 +222,5 @@
   .bu-ein, .bu select { font-size: max(16px, calc(14px * var(--schrift, 1))); min-height: 36px; padding: 4px 8px; border: 1px solid var(--line-stark); border-radius: var(--radius-s); background: var(--eingabe); color: var(--ink); min-width: 0; max-width: 100%; }
   .bu-fuss { display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 6px; }
   .bu-rot { color: var(--danger, #b91c1c); }
+  .bu-leer-knopf { align-self: flex-start; margin: 4px 0 12px; }
 </style>
