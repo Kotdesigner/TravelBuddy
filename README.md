@@ -8,7 +8,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.13 · built for Western Australia**<br>
+**Version 1.14 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
@@ -127,6 +127,10 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 </td></tr></table>
 
 ---
+
+## 🔁 New in version 1.14
+
+**Your documents on the second device, without doing them twice.** A backup carries every document with number, date and the list of its files, the files themselves stay on the device. After importing on the iPhone, Documents shows “Match missing files”: pick the files once, all at once, and each one lands with its document, recognised by name and size. Passport and visa never travel inside the backup.
 
 ## 🧭 New in version 1.13
 
@@ -777,6 +781,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.11:** bookings fill themselves in from an email, tickets and admissions, expenses over a period, checked from top to bottom
 - [x] **Version 1.12:** documents with their file, locked with Face ID, Touch ID, PIN or password
 - [x] **Version 1.13:** the app explains itself: ⓘ help, how it all fits together, first steps
+- [x] **Version 1.14:** document files on the second device with one pick, recognised by name and size
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -798,7 +803,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.13 · entwickelt für Western Australia**<br>
+**Version 1.14 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
@@ -907,6 +912,10 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 </td></tr></table>
 
 ---
+
+## 🔁 Neu in Version 1.14
+
+**Deine Dokumente auf dem zweiten Gerät, ohne alles doppelt.** Das Backup trägt jedes Dokument mit Nummer, Datum und der Liste seiner Dateien, die Dateien selbst bleiben auf dem Gerät. Nach dem Import auf dem iPhone steht unter Dokumente „Fehlende Dateien zuordnen“: die Dateien einmal auswählen, alle auf einmal, und jede landet an ihrem Dokument, erkannt an Name und Größe. Pass und Visum reisen nie im Backup mit.
 
 ## 🧭 Neu in Version 1.13
 
@@ -1525,6 +1534,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.11:** Buchungen füllen sich aus der Mail aus, Tickets und Eintritte, Ausgaben über einen Zeitraum, von oben bis unten geprüft
 - [x] **Version 1.12:** Dokumente mit Datei, gesperrt mit Face ID, Touch ID, PIN oder Passwort
 - [x] **Version 1.13:** die App erklärt sich selbst: ⓘ-Hilfe, so hängt alles zusammen, erste Schritte
+- [x] **Version 1.14:** Dateien der Dokumente auf dem zweiten Gerät mit einer Auswahl, erkannt an Name und Größe
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

@@ -20,6 +20,7 @@
   import TresorEinstellung from './TresorEinstellung.svelte'
   import { tresor, ladeTresor, entsperreDann } from './tresor.js'
   import { zeigeToast } from './toast.js'
+  import { fehlendeDateien, ordneDokumenteZu } from './dokument-dateien.js'
   import { zumAnzeigen } from './pdf-portfolio.js'
   import { onDestroy } from 'svelte'
   import { klapp, dauer } from './motion.js'
@@ -133,7 +134,7 @@
         const pfad = eigenerPfad('dok-' + d.id, name, belegt)
         belegt.add(pfad)
         await speichereBeleg(pfad, f)
-        neu.push({ datei: pfad, name, typ: f.type || '' })
+        neu.push({ datei: pfad, name, typ: f.type || '', groesse: f.size })   // Größe: zum Wiederfinden auf einem anderen Gerät
       }
       try { await navigator.storage?.persist?.() } catch {}
     } catch (err) { zeigeToast(t('Speichern fehlgeschlagen: ') + (err?.message || err), 'fehler', 4000) }
@@ -141,6 +142,24 @@
       updateDokument(d.id, { dateien: [...(d.dateien || []), ...neu] })
       zeigeToast(neu.length === 1 ? je(`📎 „${neu[0].name}“ gespeichert`, `📎 “${neu[0].name}” saved`) : je(`📎 ${neu.length} Dateien gespeichert`, `📎 ${neu.length} files saved`), 'ok')
     }
+  }
+  // V18: Nach dem Import eines Backups fehlen die Dateien auf dem neuen Gerät. Einmal auswählen,
+  // jede landet am Pfad, den ihr Dokument erwartet (Name, und wo bekannt die Größe).
+  const dokFehlend = $derived(fehlendeDateien($dokumente, istLokal))
+  let dokZuordnenFeld = $state()
+  async function dokZuordnen(e) {
+    const dateien = [...(e.currentTarget.files || [])]
+    e.currentTarget.value = ''
+    if (!dateien.length) return
+    const r = ordneDokumenteZu(dokFehlend, dateien)
+    try {
+      for (const z of r.zugeordnet) await speichereBeleg(z.ziel.datei, z.datei)
+      try { await navigator.storage?.persist?.() } catch {}
+    } catch (err) { zeigeToast(t('Speichern fehlgeschlagen: ') + (err?.message || err), 'fehler', 4000); return }
+    const n = r.zugeordnet.length, rest = r.offen.length
+    const text = n === 0 ? je('Keine der Dateien passt zu einem Dokument. Name oder Größe sind anders.', 'None of the files matches a document. Name or size differ.')
+      : je(`📎 ${n === 1 ? '1 Datei' : n + ' Dateien'} zugeordnet${rest ? `, ${rest} fehlen noch` : ', alles da'}.`, `📎 ${n === 1 ? '1 file' : n + ' files'} matched${rest ? `, ${rest} still missing` : ', all there'}.`)
+    zeigeToast(text, n ? 'ok' : 'info', 4500)
   }
   async function dokDateiWeg(d, x) {
     if (!(await loeschFrage(je(`Datei „${x.name}“`, `File “${x.name}”`), je('Die Datei verschwindet von diesem Gerät. Das Dokument bleibt.', 'The file is removed from this device. The document stays.')))) return
@@ -458,6 +477,7 @@
         <span class="b-summe">
           {#if $dokumente.length === 0}{t('noch keine')}{:else}{t('{length} · {dokErledigt} erledigt', { length: $dokumente.length, dokErledigt })}{/if}
           {#if dokAbgelaufen}<span class="b-warn">{t('⚠︎ {dokAbgelaufen} abgelaufen', { dokAbgelaufen })}</span>{/if}
+          {#if dokFehlend.length}<span class="b-warn">{je(`📎 ${dokFehlend.length} nicht auf diesem Gerät`, `📎 ${dokFehlend.length} not on this device`)}</span>{/if}
         </span>
       {/if}
     </button>
@@ -471,6 +491,13 @@
   </div>
   {:else if dokAuf}
   <input bind:this={dokDateiFeld} class="d-unsichtbar" type="file" multiple accept="application/pdf,image/*" onchange={dokDateienDazu} tabindex="-1" aria-hidden="true" />
+  <input bind:this={dokZuordnenFeld} class="d-unsichtbar dok-zuordnen-feld" type="file" multiple accept="application/pdf,image/*" onchange={dokZuordnen} tabindex="-1" aria-hidden="true" />
+  {#if dokFehlend.length}
+    <div class="dok-fehlt" role="status">
+      <p>{je(`📎 ${dokFehlend.length === 1 ? '1 Datei liegt' : dokFehlend.length + ' Dateien liegen'} nicht auf diesem Gerät, zum Beispiel nach dem Import eines Backups. Wähl sie hier einmal aus, alle auf einmal: Die App legt jede an ihr Dokument.`, `📎 ${dokFehlend.length === 1 ? '1 file is' : dokFehlend.length + ' files are'} not on this device, for example after importing a backup. Pick them here once, all at once: the app puts each one with its document.`)}</p>
+      <button type="button" class="btn" onclick={() => dokZuordnenFeld?.click()}>{je('Fehlende Dateien zuordnen', 'Match missing files')}</button>
+    </div>
+  {/if}
   <div class="dok-vorschlaege">
     {#each DOKUMENT_TYPEN as typ}
       {@const da = dokTypVorhanden.has(typ) || dokTypVorhanden.has(t(typ))}
@@ -508,7 +535,7 @@
         </div>
       {/each}
     </div>
-    <p class="hinweis">{je('🔒 Alles bleibt nur auf deinem Gerät. Angaben wie Nummer und Datum sind im Backup, die Dateien nicht: Auf einem neuen Gerät legst du sie noch einmal hinein. Keine Passwörter eintragen.', '🔒 Everything stays on your device. Details like number and date are in the backup, the files are not: on a new device you add them again. Do not enter passwords.')}</p>
+    <p class="hinweis">{je('🔒 Alles bleibt nur auf deinem Gerät. Angaben wie Nummer und Datum sind im Backup, die Dateien nicht: Auf dem anderen Gerät wählst du sie unter „Fehlende Dateien zuordnen“ einmal aus. Keine Passwörter eintragen.', '🔒 Everything stays on your device. Details like number and date are in the backup, the files are not: on the other device you pick them once under “Match missing files”. Do not enter passwords.')}</p>
   {/if}
   <TresorEinstellung kontext="dokumente" anzahl={anzahlLokal} />
   {/if}
@@ -887,6 +914,8 @@
   .d-x { border: none; background: none; color: var(--muted); min-width: 40px; min-height: 40px; cursor: pointer; }
   .d-dazu { border: 1px dashed var(--line-stark); background: none; color: var(--brand-text); font: inherit; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; min-height: 40px; padding: 4px 12px; border-radius: 999px; cursor: pointer; }
   .d-unsichtbar { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .dok-fehlt { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 0 0 12px; padding: 10px 12px; border: 1px solid var(--warn-linie, var(--line-stark)); border-radius: 10px; background: var(--warn-flaeche); color: var(--warn-text); }
+  .dok-fehlt p { margin: 0; font-size: calc(13px * var(--schrift, 1)); line-height: 1.45; }
   .dok-zu { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--flaeche); }
   .dok-zu p { margin: 0; font-weight: 700; }
   .d-notiz { width: 100%; font-size: calc(12.5px * var(--schrift, 1)); padding: 6px 8px; border: 1px solid var(--line-stark); border-radius: 6px; background: var(--card); color: var(--ink); }
