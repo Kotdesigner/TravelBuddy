@@ -82,6 +82,23 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 
 ---
 
+## 🎬 See it in action
+
+Real recordings from the app with the made-up sample trip, nothing staged. The circle shows where you tap.
+
+<table>
+<tr>
+<td align="center" width="50%"><img src="bilder/en/ablauf-buchung.gif" width="260" alt="Booking from an email: paste it, the fields fill in, an overview shows what was found"><br><b>Paste the email, done</b><br>the form fills itself in and shows what to check</td>
+<td align="center" width="50%"><img src="bilder/en/ablauf-ausgabe.gif" width="260" alt="Expense over a period: 140 AUD spread over 7 days"><br><b>One shop, seven days</b><br>spread to the cent, each day gets its share</td>
+</tr>
+<tr>
+<td align="center"><img src="bilder/en/ablauf-dokumente.gif" width="260" alt="Attach passport files and lock the documents with a PIN"><br><b>Passport with its file, locked</b><br>Face ID, Touch ID, PIN or password</td>
+<td align="center"><img src="bilder/en/ablauf-naechte.gif" width="260" alt="Every night of the trip: booked, planned, on a flight or still open"><br><b>Every night at a glance</b><br>booked, planned or still open</td>
+</tr>
+</table>
+
+---
+
 ## 🔐 New in version 1.12
 
 **Your documents, with the file.** Under More → Trip preparation → Documents, passport, visa, insurance and licence get their file: tap “File or photo”, take a picture, pick a photo or a PDF. It opens with one tap, offline too, and stays on the device.
@@ -808,6 +825,23 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 | 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
 | 📔 **Schreibt dein Reisetagebuch** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
 | 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
+
+## 🎬 So sieht es aus
+
+Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgestellt. Der Kreis zeigt, wo getippt wird.
+
+<table>
+<tr>
+<td align="center" width="50%"><img src="bilder/de/ablauf-buchung.gif" width="260" alt="Buchung aus Mail: einfügen, die Felder füllen sich, ein Überblick zeigt, was gefunden wurde"><br><b>Mail einfügen, fertig</b><br>das Formular füllt sich aus und zeigt, was zu prüfen ist</td>
+<td align="center" width="50%"><img src="bilder/de/ablauf-ausgabe.gif" width="260" alt="Ausgabe über einen Zeitraum: 140 AUD auf 7 Tage verteilt"><br><b>Ein Einkauf, sieben Tage</b><br>centgenau verteilt, jeder Tag bekommt seinen Anteil</td>
+</tr>
+<tr>
+<td align="center"><img src="bilder/de/ablauf-dokumente.gif" width="260" alt="Dateien an den Reisepass hängen und die Dokumente mit PIN sperren"><br><b>Pass mit Datei, gesperrt</b><br>Face ID, Touch ID, PIN oder Passwort</td>
+<td align="center"><img src="bilder/de/ablauf-naechte.gif" width="260" alt="Jede Nacht der Reise: gebucht, geplant, im Flug oder noch offen"><br><b>Jede Nacht im Blick</b><br>gebucht, geplant oder noch offen</td>
+</tr>
+</table>
+
+---
 
 ## 🔐 Neu in Version 1.12
 
