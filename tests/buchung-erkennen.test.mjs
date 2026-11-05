@@ -358,6 +358,9 @@ console.log('\n15  Aktivitäten und Tickets (V17)')
   const kurz = erkenne('Booking confirmed for Pinnacles sunset tour on 14/12 at 3pm. Ref ABC123. Price 129', KTX)
   p('Kurz: 14/12 ohne Jahr in der Reise, Titel ohne Datum', w(kurz, 'von') === '2037-12-14' && w(kurz, 'titel') === 'Pinnacles sunset tour' && stufe(kurz.von.konfidenz) !== 'sicher', zeig(kurz))
   p('24/7 ist kein Datum', !findeDaten('Support 24/7 for you', KTX).length)
+  // Unbekannter Anbieter in eigener Zeile vor der Tour: gleich viele Treffer, die längere Zeile ist der Titel
+  const kar = erkenne('Your booking is confirmed!\nKarijini Eco Tours\nWeano Gorge & Hancock Gorge Adventure\nDate: Sat, 7 Nov 2037\nTime: 7:30 am\nMeeting point: Karijini Visitor Centre\nBooking reference: KET-48213\nTotal paid: AUD $189.00', KTX)
+  p('Anbieterzeile gegen Tourzeile: die Tour wird Titel', w(kar, 'titel') === 'Weano Gorge & Hancock Gorge Adventure', zeig(kar))
 }
 
 console.log(`\n${ok} bestanden · ${bad} gescheitert`)

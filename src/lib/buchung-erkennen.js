@@ -591,7 +591,8 @@ const AU_ADRESSE = /^.*\b(?:WA|NT|SA|QLD|NSW|VIC|TAS|ACT|Western Australia)\s+\d
 
 // ---------- Titel ----------
 // Touren und Tickets: der Name steht oft ohne Etikett in einer eigenen Zeile („Swan Valley: Ganztägige
-// Weintour mit Mittagessen“). Gewählt wird die Zeile mit den meisten passenden Wörtern; Zeilen wie
+// Weintour mit Mittagessen“). Gewählt wird die Zeile mit den meisten passenden Wörtern, bei Gleichstand die
+// längere; Zeilen wie
 // „Tour Grade: Standard“ zählen nur mit dem Teil hinter dem Doppelpunkt.
 const TITEL_WOERTER = {
   tour: /tour|ausflug|excursion|cruise|snorkel|swim|whale|walhai|dive|tauch|sky ?div|tandem|safari|sunset|sonnenunter|kayak|kajak|quad|helicopter|rundflug|scenic|wine|wein|tasting|surf|climb|camel|kamel|fishing|angel|lesson|kurs|day trip|tagestour|island|insel|reef|riff|gorge|schlucht/gi,
@@ -611,7 +612,8 @@ function titelZeile(text, art, anbieter) {
     if (/\d{3,}/.test(teil) || /\b\d{1,2}[:.]\d{2}\b/.test(teil)) continue
     re.lastIndex = 0
     const n = new Set((teil.match(re) || []).map((w) => w.toLowerCase())).size
-    if (n && (!best || n > best.n)) best = { zeile, n }
+    // Gleichstand: die längere Zeile. Anbieter heißen kurz („Karijini Eco Tours“), der Name der Tour ist länger.
+    if (n && (!best || n > best.n || (n === best.n && teil.length > best.laenge))) best = { zeile, n, laenge: teil.length }
   }
   return best?.zeile || null
 }
