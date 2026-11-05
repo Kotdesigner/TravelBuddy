@@ -1,6 +1,6 @@
 <script>
   import { druckeHtml } from './ausgabe.js'
-  import { t, LOCALE, istEn } from './i18n.js'
+  import { t, je, LOCALE, istEn } from './i18n.js'
   import { frage } from './dialog.js'
   import { packliste, togglePack, addPackItem, delPackItem, packZuruecksetzen, istAn } from './userdata.js'
   import { PACK_VORLAGE } from './packliste-daten.js'
@@ -86,7 +86,7 @@
           {/each}
         </ul>
         <div class="add">
-          <input placeholder={t('+ eigener Artikel …')} bind:value={neuItem[k.id]} onkeydown={(e) => e.key === 'Enter' && addNeu(k)} />
+          <input placeholder={t('+ eigener Artikel …')} aria-label={je(`Eigenen Artikel zu „${k.titel}“ hinzufügen`, `Add your own item to “${k.titel}”`)} bind:value={neuItem[k.id]} onkeydown={(e) => e.key === 'Enter' && addNeu(k)} />
           <button onclick={() => addNeu(k)} disabled={!(neuItem[k.id] || '').trim()}>+</button>
         </div>
       </section>
@@ -124,7 +124,7 @@
   .i-del { border: none; background: none; color: var(--danger-text); cursor: pointer; font-size: calc(12px * var(--schrift, 1)); }
   .add { display: flex; gap: 5px; margin-top: 8px; }
   .add input { flex: 1; font-size: calc(12.5px * var(--schrift, 1)); padding: 6px 8px; border: 1px solid var(--line-stark); border-radius: 6px; background: var(--eingabe); color: var(--ink); }
-  .add button { font-size: calc(14px * var(--schrift, 1)); font-weight: 700; width: 30px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 6px; cursor: pointer; }
+  .add button { font-size: calc(14px * var(--schrift, 1)); font-weight: 700; width: 44px; border: 1px solid var(--line-stark); background: var(--btn-flaeche); color: var(--btn-ink); border-radius: 6px; cursor: pointer; }
   .add button:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   @media (max-width: 640px) { .kats { columns: 1; } }
 </style>

@@ -72,7 +72,9 @@ console.log('\n4  Englische Inhaltsdateien passen zu den deutschen')
   const orte = json('public/orte.json'), orteEn = json('public/orte.en.json')
   p(`alle ${orte.length} Orte haben eine englische Beschreibung`, orte.every((o) => orteEn[o.id]?.beschreibung))
   p('Saison-Hinweise vollständig übersetzt', orte.filter((o) => o.saison).every((o) => orteEn[o.id]?.saison))
-  p('orte.en.json enthält nur Beschreibung und Saison (Gruppen bleiben Schlüssel)', Object.values(orteEn).every((x) => Object.keys(x).every((k) => k === 'beschreibung' || k === 'saison')))
+  // V17: dazu ein Anzeigename, wo der Name deutsche Wörter trägt. Der Name selbst bleibt Schlüssel.
+  p('orte.en.json enthält nur Beschreibung, Saison und Anzeigename (Name und Gruppen bleiben Schlüssel)', Object.values(orteEn).every((x) => Object.keys(x).every((k) => ['beschreibung', 'saison', 'anzeigeName'].includes(k))))
+  p('kein eingebauter Ortsname zeigt auf Englisch deutsche Wörter', orte.every((o) => !/[äöüß]|\baus der\b/i.test(orteEn[o.id]?.anzeigeName || o.name)))
   const q = json('public/quiz.json'), qe = json('public/quiz.en.json')
   p('Quiz: gleiche Fragen, gleiche richtige Antwort, gleich viele Antworten',
     q.fragen.length === qe.fragen.length && q.fragen.every((f, i) => qe.fragen[i].id === f.id && qe.fragen[i].richtig === f.richtig && qe.fragen[i].antworten.length === f.antworten.length))

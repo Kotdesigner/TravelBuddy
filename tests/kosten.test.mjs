@@ -1,7 +1,7 @@
 // Kosten aufgeschlüsselt, Auswertung ohne Rundungsfehler, Logbuch-Einträge über mehrere Tage.
 // Mit erfundenen Daten. Ausführen: node tests/kosten.test.mjs
 import fs from 'node:fs'
-import { KOSTEN_KATEGORIEN, KATEGORIE, KOSTEN_CLUSTER, CLUSTER_KATS, clusterVon, postenAuswahl, betragVon, ausgabenVon, felderMitAusgaben, ausgabenSumme, kostenAuswertung } from '../src/lib/kosten.js'
+import { KOSTEN_KATEGORIEN, KATEGORIE, KOSTEN_CLUSTER, CLUSTER_KATS, clusterVon, postenAuswahl, betragVon, ausgabenVon, felderMitAusgaben, ausgabenSumme, kostenAuswertung, verteileBetrag } from '../src/lib/kosten.js'
 import { eintragTage, deckt, offenerZeitraum, chronik } from '../src/lib/plan.js'
 import { berechneBilanz } from '../src/lib/reise-bilanz.js'
 import { zielEintrag } from '../src/lib/foto-zuordnung.js'
@@ -129,6 +129,15 @@ console.log('\n5  Offene Tage nachtragen')
   const o4 = offenerZeitraum(et, [], '2037-02-01')
   p('Etappe in der Zukunft', o4.datum === '2037-03-01' && o4.bis === '2037-03-03', JSON.stringify(o4))
   p('Etappe gehört zum Vorschlag', o4.reiseId === 'et1')
+}
+
+// V17: Betrag über einen Zeitraum verteilen
+{
+  const t7 = verteileBetrag('120', 7)
+  p('120 auf 7 Tage: Summe genau 120', t7.length === 7 && Math.round(t7.reduce((a, b) => a + b, 0) * 100) === 12000, t7.join())
+  p('Teile unterscheiden sich höchstens um 1 Cent', Math.round((Math.max(...t7) - Math.min(...t7)) * 100) <= 1, t7.join())
+  p('„24,50“ auf 2 Tage: je 12,25', verteileBetrag('24,50', 2).join() === '12.25,12.25')
+  p('kein Betrag oder 0 Tage: leer', !verteileBetrag('', 3).length && !verteileBetrag('10', 0).length)
 }
 
 console.log(`\n  ${ok} bestanden · ${bad} gescheitert\n`)

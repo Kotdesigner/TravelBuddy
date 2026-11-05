@@ -8,7 +8,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.10 · built for Western Australia**<br>
+**Version 1.11 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
@@ -81,6 +81,14 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 | 🔒 **Yours alone** | No account, no server, no tracking. All data stays on your device. |
 
 ---
+
+## 🎟️ New in version 1.11
+
+**Bookings fill themselves in.** Under “+ New” → Booking the form is open straight away. Tap “Fill in from email”, paste the confirmation, and TravelBuddy fills in the fields. At the top it shows what was filled in, what you should check and what it couldn't find, and a tap jumps to the field. Tours and activities get their real name, and there is a new type for **tickets and admissions**: concerts, zoos, museums, events.
+
+**Expenses with all categories, also over several days.** “+ New” → Expense shows all 23 categories in the four groups of the costs page, each one opens up. For shopping that lasts a week, choose a period: the amount is spread over the days to the cent, and each day gets its share in the logbook. A date before the trip becomes an expense before the trip.
+
+**Checked from top to bottom.** Every page and link, light and dark, iPhone and Mac, large text, keyboard and screen reader. Labels for VoiceOver added, small buttons got larger tap areas, the English version has no German left in its interface, and the manual covers everything new.
 
 ## 🏕️ New in version 1.10
 
@@ -277,7 +285,7 @@ Sorted by how much it helps on the road: safety and planning first, photo tools 
 - 👨‍👩‍👧 **Share with family:** the travel report as one file via Messages, WhatsApp, Mail or AirDrop
 - 💌 **Opens anywhere:** no app, no account, even offline, without bookings or exact coordinates
 - 📥 **Travel calendar import** that sorts bookings in by itself
-- 📨 **Booking from email:** paste it, everything is recognised
+- 📨 **Booking from email:** paste it, the form fills itself in and shows what was found, also for tours, tickets and admissions
 - 🎫 **One booking, everywhere:** date, booking number to copy, cost and documents together, with or without an email
 - 🎫 **Tickets and documents offline** on the device
 - 🔐 **Face ID, Touch ID or Windows Hello** to protect your documents
@@ -286,6 +294,7 @@ Sorted by how much it helps on the road: safety and planning first, photo tools 
 - 💶 **Budget in euro and AU$** at the daily exchange rate
 - 🧾 **Costs per day** in 23 categories, as many single items as you like
 - 💸 **Quick expense** on the home screen and an evening check whether you spent anything
+- 🧾 **Expense over a period:** one amount spread over several days to the cent, all 23 categories in four groups
 - 💰 **Cost analysis** by short values, long values, transport, stays and experiences, per stage and down to the single item
 - 💶 **Facts and spending at the end of the journal**, plus the cost of each leg
 - 🎒 **Outback packing list**
@@ -494,7 +503,7 @@ TravelBuddy collects the music of the places you pass through, **automatically, 
 - Needs **Spotify Premium** and your own free app on developer.spotify.com. It runs while TravelBuddy is open.
 
 ### 🎟️ Organise
-- **Booking from email:** paste the confirmation, and date, time, place, booking number and price are recognised and attached to the right stage.
+- **Booking from email:** paste the confirmation, and type, title, date, time, place, booking number and price are filled in and attached to the right stage. You see what was found and check the rest.
 - **Tickets and documents** open offline, protected by **Face ID, Touch ID or Windows Hello** if you like. They never leave the device.
 - **Trip preparation** with a countdown and a ready-made checklist (weeks before, just before, departure day) plus your own points, **documents** with expiry dates and warnings.
 - **Budget in euro and AU$** at the daily rate, pre-trip costs, an outback **packing list**.
@@ -707,6 +716,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.8:** photo conditions on the home screen, temperature on the edge, calendar as a PDF file, tidy panels
 - [x] **Version 1.9:** second weather service, location in the Mac app, safer maps
 - [x] **Version 1.10:** nights at a glance, routes with dates, places saved for later, bookings in one place, quick expenses
+- [x] **Version 1.11:** bookings fill themselves in from an email, tickets and admissions, expenses over a period, checked from top to bottom
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -728,7 +738,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.10 · entwickelt für Western Australia**<br>
+**Version 1.11 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
@@ -791,6 +801,14 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 | 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
 | 📔 **Schreibt dein Reisetagebuch** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
 | 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
+
+## 🎟️ Neu in Version 1.11
+
+**Buchungen füllen sich selbst aus.** Unter „+ Neu“ → Buchung steht das Formular gleich offen. „Aus Mail ausfüllen“ antippen, Bestätigung einfügen, und TravelBuddy trägt die Felder ein. Oben steht, was übernommen wurde, was du prüfen solltest und was nicht gefunden wurde, ein Tipp springt zum Feld. Touren und Aktivitäten bekommen ihren richtigen Namen, und es gibt eine neue Art für **Tickets und Eintritte**: Konzert, Zoo, Museum, Event.
+
+**Ausgaben mit allen Kategorien, auch über mehrere Tage.** „+ Neu“ → Ausgabe zeigt alle 23 Kategorien in den vier Gruppen der Kosten-Seite, jede klappt auf. Für einen Einkauf, der eine Woche reicht, wählst du einen Zeitraum: Der Betrag wird auf den Cent genau auf die Tage verteilt, jeder Tag bekommt seinen Anteil im Logbuch. Ein Datum vor der Reise wird eine Ausgabe vorab.
+
+**Von oben bis unten geprüft.** Jede Seite und jeder Link, hell und dunkel, iPhone und Mac, große Schrift, Tastatur und Bildschirmleser. Beschriftungen für VoiceOver ergänzt, kleine Knöpfe mit größerer Trefferfläche, die englische Fassung ohne deutsche Reste in der Oberfläche, und das Handbuch beschreibt alles Neue.
 
 ## 🏕️ Neu in Version 1.10
 
@@ -981,7 +999,7 @@ Sortiert nach Nutzen unterwegs: Sicherheit und Planung zuerst, Fotohelfer und Op
 - 👨‍👩‍👧 **Mit der Familie teilen:** der Reisebericht als eine Datei über Nachrichten, WhatsApp, Mail oder AirDrop
 - 💌 **Öffnet sich überall:** ohne App, ohne Konto, auch offline, ohne Buchungen und genaue Koordinaten
 - 📥 **Reisekalender-Import**, der Buchungen selbst einsortiert
-- 📨 **Buchung aus Mail:** einfügen, alles wird erkannt
+- 📨 **Buchung aus Mail:** einfügen, das Formular füllt sich aus und zeigt, was gefunden wurde, auch für Touren, Tickets und Eintritte
 - 🎫 **Eine Buchung, überall:** Termin, Buchungsnummer zum Kopieren, Kosten und Belege zusammen, mit oder ohne Mail
 - 🎫 **Tickets und Dokumente offline** auf dem Gerät
 - 🔐 **Face ID, Touch ID oder Windows Hello** schützen deine Dokumente
@@ -990,6 +1008,7 @@ Sortiert nach Nutzen unterwegs: Sicherheit und Planung zuerst, Fotohelfer und Op
 - 💶 **Budget in Euro und AU$** zum Tageskurs
 - 🧾 **Kosten je Tag** in 23 Kategorien, beliebig viele einzelne Posten
 - 💸 **Schnell-Ausgabe** auf der Startseite und eine Abendfrage, ob du etwas ausgegeben hast
+- 🧾 **Ausgabe über einen Zeitraum:** ein Betrag centgenau auf mehrere Tage verteilt, alle 23 Kategorien in vier Gruppen
 - 💰 **Kostenauswertung** nach Short-Values, Long-Values, Verkehr, Unterkunft und Erlebnissen, je Etappe und bis zum einzelnen Posten
 - 💶 **Daten und Ausgaben am Ende des Tagebuchs**, dazu die Kosten je Etappe
 - 🎒 **Packliste fürs Outback**
@@ -1196,7 +1215,7 @@ TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, wäh
 - Braucht **Spotify Premium** und eine eigene, kostenlose App auf developer.spotify.com. Läuft, solange TravelBuddy offen ist.
 
 ### 🎟️ Organisieren
-- **Buchung aus Mail:** Bestätigung einfügen, Datum, Uhrzeit, Ort, Buchungsnummer und Preis werden erkannt und an die passende Etappe gehängt.
+- **Buchung aus Mail:** Bestätigung einfügen, Art, Titel, Datum, Uhrzeit, Ort, Buchungsnummer und Preis werden eingetragen und an die passende Etappe gehängt. Du siehst, was gefunden wurde, und prüfst den Rest.
 - **Tickets und Dokumente** öffnen sich auch offline, auf Wunsch geschützt mit **Face ID, Touch ID oder Windows Hello**. Sie verlassen nie das Gerät.
 - **Reisevorbereitung** mit Countdown und fertiger Checkliste (Wochen vorher, kurz vorher, Abreisetag) plus eigenen Punkten, **Dokumente** mit Ablaufdatum und Warnung.
 - **Budget in Euro und AU$** zum Tageskurs, Vorab-Ausgaben, **Packliste** fürs Outback.
@@ -1385,6 +1404,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.8:** Fotolage auf der Startseite, Temperatur am Rand, Kalender als PDF-Datei, aufgeräumte Felder
 - [x] **Version 1.9:** zweiter Wetterdienst, Standort in der Mac-App, sicherere Karten
 - [x] **Version 1.10:** Nächte im Blick, Routen mit Zeitraum, Orte vormerken, Buchungen an einem Ort, Schnell-Ausgabe
+- [x] **Version 1.11:** Buchungen füllen sich aus der Mail aus, Tickets und Eintritte, Ausgaben über einen Zeitraum, von oben bis unten geprüft
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

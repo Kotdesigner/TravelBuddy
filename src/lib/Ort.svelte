@@ -46,6 +46,21 @@
     holt = false
     setTimeout(() => (holMsg = ''), 3500)
   }
+  // V17: Nur den Lexikon-Text neu holen, in der eingestellten Sprache (zuerst Deutsch, dann Englisch).
+  // Bild und eigene Notiz bleiben. Für Orte, deren Text aus einer früheren Abfrage englisch ist.
+  async function textNeu() {
+    holt = true; holMsg = ''
+    try {
+      const d = await holeOrtsdaten(ort.name, { lat: ort.lat, lon: ort.lon, mitBild: false })
+      const neu = (d.beschreibung || '').trim()
+      const alt = ((ort.info ?? ort.beschreibung) || '').trim()
+      if (!neu) holMsg = t('nichts Neues gefunden')
+      else if (neu === alt) holMsg = je('Text ist schon aktuell', 'Text is already up to date')
+      else { ortSpeichern(ort.id, ort.info || !(ort.beschreibung || '').trim() ? { [ort.info ? 'info' : 'beschreibung']: neu } : { info: neu }); holMsg = je('✓ Text erneuert', '✓ Text renewed') }
+    } catch { holMsg = t('fehlgeschlagen') }
+    holt = false
+    setTimeout(() => (holMsg = ''), 3500)
+  }
 
   let { ort, gefahr = null, warnung = null } = $props()
   let textAuf = $state(false)
@@ -205,14 +220,14 @@
     {:else}
       <div class="fallback"><span>{ort.emoji || '📍'}</span></div>
     {/if}
-    <BildAendern name={ort.name} status={ort.eigen ? '' : nachweis?.status === 'belegt' ? '' : nachweis?.status} eigenes={!!eintrag.bilder?.length} onbild={neuesBild} onzurueck={() => removeFoto(0)} />
+    <BildAendern name={ort.anzeigeName || ort.name} status={ort.eigen ? '' : nachweis?.status === 'belegt' ? '' : nachweis?.status} eigenes={!!eintrag.bilder?.length} onbild={neuesBild} onzurueck={() => removeFoto(0)} />
     {#if nachweis?.status === 'symbol' && !eintrag.bilder?.length}<span class="symbol-marke">{je('Symbolbild', 'Sample picture')}</span>{/if}
     <!-- Alle Marken in EINEM Behälter. Am Schreibtisch sitzen sie wie bisher in den
          Ecken; auf dem Handy (152 px Kachelbreite) stießen sie dort zusammen, deshalb
          werden sie dort zu einer Reihe am unteren Bildrand. Reihenfolge im Markup =
          Wichtigkeit: Gefahr zuerst. `.lang` sind die Wortteile, die auf dem Handy
          wegfallen — die volle Auskunft steht weiterhin im title. -->
-    <h3 class="name">{#if vorgemerkt}<span class="vm-stern" title={je('vorgemerkt', 'saved for later')}>⭐ </span>{/if}{ort.name}</h3>
+    <h3 class="name">{#if vorgemerkt}<span class="vm-stern" title={je('vorgemerkt', 'saved for later')}>⭐ </span>{/if}{ort.anzeigeName || ort.name}</h3>
     <div class="marken">
       {#if warnung}
         <span class="warn" style="background:{warnung.farbe};color:{schriftAuf(warnung.farbe)}" title="{warnung.titel}{warnung.km > 1 ? ', ' + t('{km} km entfernt', { km: Math.round(warnung.km) }) : ''}">
@@ -348,6 +363,7 @@
       </div>
       <div class="eigen-daten">
         <button class="e-btn" onclick={datenHolen} disabled={holt}>{holt ? t('⏳ hole Daten …') : t('✨ Daten & Bild holen')}</button>
+        <button class="e-btn" onclick={textNeu} disabled={holt}>{je('🔄 Beschreibung neu laden', '🔄 Reload description')}</button>
         {#if holMsg}<span class="e-msg">{holMsg}</span>{/if}
         {#if ort.lat == null}<span class="e-hinweis">{t('ohne Koordinaten: keine Sonnen-/Sternen-Zeiten und keine Rubrik. Der Knopf holt beides.')}</span>{/if}
       </div>
@@ -473,7 +489,7 @@
   .et-titel { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); margin-right: 2px; }
   .e-tag {
     font-size: calc(12px * var(--schrift, 1)); font-weight: 800; letter-spacing: 0.3px; color: #fff; border: none;
-    border-radius: 9px; padding: 4px 9px; min-height: 26px; cursor: pointer;
+    border-radius: 9px; padding: 4px 9px; min-height: 26px; cursor: pointer; position: relative;
     transition: background var(--t-fast) var(--ease-out);
   }
   /* Aus: lesbar, aber deutlich als „nicht gewählt“ — früher 32 % Deckkraft (1,5 : 1). */
@@ -522,6 +538,7 @@
     display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .e-tag::after, .mehr-btn::after, .saison-btn::after { content: ''; position: absolute; inset: -8px 0; }
   .mehr-btn {
     /* 32 px hoch statt 19 — auf dem iPhone traf man „mehr“ kaum (Prüfung 19.09.) */
     display: inline-flex; align-items: center; min-height: 32px; position: relative;
@@ -529,7 +546,7 @@
     color: var(--brand-text); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; cursor: pointer;
   }
   .saison-btn {
-    display: inline-block; margin: 2px 0 6px; padding: 4px 10px;
+    display: inline-block; margin: 2px 0 6px; padding: 4px 10px; position: relative;
     background: #fdf0e6; border: 1px solid #eab98d; border-radius: 14px;
     color: #8a5a2b; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; cursor: pointer;
   }

@@ -163,7 +163,8 @@
   "saison": "According to the operator, the 2026/27 season starts in November; daily in Dec/Jan (except 25 Dec), only 48 seats — book weeks ahead. The penguins are at sea during the day, so you'll practically never see them on the day tour. A sure thing is Melbourne: St Kilda Breakwater (free) and the Penguin Parade on Phillip Island — both in the app, breeding season Oct–Feb fits."
  },
  "middle_island_lake_hillier_aus_der_luft": {
-  "beschreibung": "Private landings are forbidden (strictly protected reserve). Scenic flight: Fly Esperance from A$189 (pink lakes route) up to the ~1 hr 40 min big archipelago flight. New: HeliSpirit reopens its Esperance base in December 2026 — heli beach tour with 1.5 hrs on Middle Island incl. picnic, A$1,499."
+  "beschreibung": "Private landings are forbidden (strictly protected reserve). Scenic flight: Fly Esperance from A$189 (pink lakes route) up to the ~1 hr 40 min big archipelago flight. New: HeliSpirit reopens its Esperance base in December 2026 — heli beach tour with 1.5 hrs on Middle Island incl. picnic, A$1,499.",
+  "anzeigeName": "Middle Island & Lake Hillier from the air"
  },
  "king_george_sound_safari_albany": {
   "beschreibung": "There are no landings on Breaksea/Michaelmas Island — but Nov–April the 2-hour boat safari runs through King George Sound (A$95, 3× daily): seals, seabirds, island coasts. Whale season only starts again around May."
@@ -426,7 +427,8 @@
  },
  "mount_bartle_frere": {
   "beschreibung": "Queensland's highest mountain, climbed from the trailhead at Josephine Falls: about 15 km return, around 1,500 m of climbing through rainforest, officially two days recommended (camps Broken Nose/Big Rock), 10–12 hard hours as a day walk. Free, but self-registration and a camping permit from QPWS are needed, no mobile coverage, a personal locator beacon (PLB) is strongly advised.",
-  "saison": "is the worst possible time: monsoon rain, constantly wet roots and granite slabs, leeches, extreme humidity, creek crossings impassable after rain, and the summit is almost always in cloud. For a solo traveller without a partner the summit is not a responsible option in this season — at most the lower section towards Broken Nose is realistic, and even that only with a PLB, a weather check and a return time left with someone."
+  "saison": "is the worst possible time: monsoon rain, constantly wet roots and granite slabs, leeches, extreme humidity, creek crossings impassable after rain, and the summit is almost always in cloud. For a solo traveller without a partner the summit is not a responsible option in this season — at most the lower section towards Broken Nose is realistic, and even that only with a PLB, a weather check and a return time left with someone.",
+  "anzeigeName": "Mount Bartle Frere (south peak, 1,622 m)"
  },
  "innisfail": {
   "beschreibung": "Sugar cane town on the Johnstone River, rebuilt in Art Deco and Streamline style after the 1918 cyclone — a consistent streetscape with the Shire Hall, cinema and 1930s shopfronts, plus the Chinese temple Lit Sung Goong (current building from 1940, limited access, plan to see it from outside). 1–2 hours on foot, free; a good lunch stop on the way to Mission Beach, about 1.5 hours south of Cairns.",

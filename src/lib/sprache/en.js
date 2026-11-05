@@ -743,6 +743,7 @@ export default {
  "A5 quer": "A5 landscape",
  "ab": "from",
  "Abbrechen": "Cancel",
+ "{text}: ohne Jahr, gelesen als {datum}. Bitte prüfen.": "{text}: no year given, read as {datum}. Please check.",
  "abends {wert}–{wert2}": "evening {wert}–{wert2}",
  "Abfahrt": "Departure",
  "Abfahrtsort": "Departure point",

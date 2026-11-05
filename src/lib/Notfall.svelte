@@ -1,5 +1,5 @@
 <script>
-  import { t } from './i18n.js'
+  import { t, je } from './i18n.js'
   import { dezimal, zahl } from './format.js'
   // Notfall-Karte — funktioniert komplett OFFLINE.
   // Zeigt GPS-Standort (kopierbar), nächste Hilfe aus den Offline-POIs (Tank/Wasser/
@@ -166,8 +166,8 @@
     <details class="manuell">
       <summary>{t('Koordinaten manuell eingeben')}</summary>
       <div class="man-zeile">
-        <input type="number" step="0.0001" bind:value={manLat} placeholder={t('Lat (z.B. -25.90)')} />
-        <input type="number" step="0.0001" bind:value={manLon} placeholder={t('Lon (z.B. 113.53)')} />
+        <input type="number" step="0.0001" bind:value={manLat} placeholder={t('Lat (z.B. -25.90)')} aria-label={je('Breitengrad', 'Latitude')} />
+        <input type="number" step="0.0001" bind:value={manLon} placeholder={t('Lon (z.B. 113.53)')} aria-label={je('Längengrad', 'Longitude')} />
         <button class="btn" onclick={manuellUebernehmen}>{t('Übernehmen')}</button>
       </div>
     </details>
@@ -315,4 +315,6 @@
   .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #2b2621; color: #fff; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; padding: 10px 18px; border-radius: 22px; box-shadow: 0 6px 20px rgba(0,0,0,0.25); z-index: 60; }
 
   @media (max-width: 520px) { .notruf-grid { grid-template-columns: 1fr; } }
+  /* V17: größere Trefferfläche, sichtbar gleich (wie .ba-knopf::after) */
+  summary { padding: 12px 0; }   /* Dreieck bleibt (display: list-item), Zeile wird 44 px hoch */
 </style>

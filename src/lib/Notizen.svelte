@@ -78,7 +78,7 @@
     </div>
     <div class="bedien-block">
       <span class="bedien-titel">{je('Neuer Eintrag', 'New entry')}</span>
-      <input class="bedien-feld" placeholder={t('Neuer Eintrag …')} bind:value={neuText} onkeydown={(e) => e.key === 'Enter' && add()} />
+      <input class="bedien-feld" placeholder={t('Neuer Eintrag …')} aria-label={je('Neuer Eintrag', 'New entry')} bind:value={neuText} onkeydown={(e) => e.key === 'Enter' && add()} />
       <select class="bedien-feld" bind:value={neuEtappe} aria-label={je('Etappe', 'Leg')}>
         <option value="">{je('Keine Etappe', 'No leg')}</option>
         {#each etappen as e (e.id)}<option value={e.id}>{e.name}</option>{/each}

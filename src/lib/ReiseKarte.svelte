@@ -258,7 +258,7 @@
         },
       })
       if (import.meta.env.DEV) window.__reisekarte = map   // nur für Tests auf dem Entwicklungsserver
-      map.getCanvas().setAttribute('aria-label', 'Übersichtskarte der Reisen')   // VoiceOver: beide Karten hießen „Map"
+      map.getCanvas().setAttribute('aria-label', je('Übersichtskarte der Reisen', 'Overview map of the trip'))   // VoiceOver: beide Karten hießen „Map"
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
       map.addControl(baueExportKnopf(() => (expOffen = true)), 'top-right')
 

@@ -300,4 +300,7 @@
   .cbox :global(ul) { margin: 8px 0 0; padding-left: 20px; }
   .cbox :global(li) { margin-bottom: 6px; }
   @media (max-width: 520px) { .etappe { flex-wrap: wrap; } .datum { flex: 1 1 100%; } .row { flex-direction: column; gap: 4px; } .date { flex: none; } }
+  /* V17: größere Trefferfläche, sichtbar gleich (wie .ba-knopf::after) */
+  .doku { position: relative; }
+  .doku::after { content: ''; position: absolute; inset: -8px 0; }
 </style>

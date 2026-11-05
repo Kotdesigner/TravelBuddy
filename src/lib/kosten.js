@@ -70,6 +70,13 @@ export function ausgabenVon(e) {
     .map((k) => ({ id: 'alt-' + k.id, kat: k.id, betrag: betragVon(e.felder[k.id]), text: '' }))
 }
 
+/** V17: Einen Betrag gleichmäßig auf n Tage verteilen, auf den Cent genau (die Teile ergeben die Summe). */
+export function verteileBetrag(betrag, n) {
+  const cent = Math.round(betragVon(betrag) * 100)
+  if (!(n >= 1) || cent <= 0) return []
+  return rundeAufSumme(Array(n).fill(cent / n), cent).map((c) => c / 100)
+}
+
 /** Die Felder eines Eintrags mit den Summen aus der Ausgabenliste. */
 export function felderMitAusgaben(felder = {}, liste = []) {
   const neu = { ...felder }

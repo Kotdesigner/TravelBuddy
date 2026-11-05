@@ -2,9 +2,9 @@
 // schnelle Ausgaben in den Logbuch-Eintrag des Tages ein.
 import { get } from 'svelte/store'
 import { buchungen, vorabKosten, updateVorabKosten, reisen, gesamtStart, journal, neuerJournalEintrag, updateJournalEintrag } from './userdata.js'
-import { etappenMitDatum, deckt } from './plan.js'
+import { etappenMitDatum, deckt, plusTage } from './plan.js'
 import { buendle, verbindungsVorschlaege } from './buchung.js'
-import { ausgabenVon, felderMitAusgaben, betragVon } from './kosten.js'
+import { ausgabenVon, felderMitAusgaben, betragVon, verteileBetrag } from './kosten.js'
 
 const eintraege = () => etappenMitDatum(get(reisen), get(gesamtStart))
 
@@ -23,7 +23,7 @@ export function verbindeSichere() {
 }
 
 /** Eine Ausgabe heute: landet im Logbuch-Eintrag des Tages, der notfalls angelegt wird. Gibt die Eintrags-ID zurück. */
-export function schnellAusgabe(datum, { kat, betrag, text = '' }, etappeId = null) {
+export function schnellAusgabe(datum, { kat, betrag, text = '', gruppe = '' }, etappeId = null) {
   let e = get(journal).find((j) => deckt(j, datum))
   if (!e) {
     const id = neuerJournalEintrag({ datum, ...(etappeId ? { etappeId } : {}) })
@@ -32,9 +32,24 @@ export function schnellAusgabe(datum, { kat, betrag, text = '' }, etappeId = nul
     e = get(journal).find((j) => j.id === id)
   }
   if (!e) return null
-  const neu = [...ausgabenVon(e), { id: Math.random().toString(36).slice(2, 10), kat, betrag: betragVon(betrag), text: String(text || '').trim() }]
+  const neu = [...ausgabenVon(e), { id: Math.random().toString(36).slice(2, 10), kat, betrag: betragVon(betrag), text: String(text || '').trim(), ...(gruppe ? { gruppe } : {}) }]
   updateJournalEintrag(e.id, { ausgaben: neu, felder: felderMitAusgaben(e.felder, neu) })
   return e.id
+}
+
+/**
+ * V17: Ein Betrag für einen Zeitraum (z. B. Lebensmittel für die Woche), gleichmäßig auf die Tage verteilt.
+ * Jeder Tag bekommt seinen Anteil im Logbuch, so stimmen Schnitt pro Tag und Etappe. Die Teile tragen
+ * dieselbe `gruppe`. etappeFuer(datum) liefert die Etappe des Tages. Gibt die Zahl der Tage zurück.
+ */
+export function ausgabeZeitraum(von, bis, { kat, betrag, text = '' }, etappeFuer = () => null) {
+  const tage = []
+  for (let d = von; d <= bis && tage.length < 366; d = plusTage(d, 1)) tage.push(d)
+  const teile = verteileBetrag(betrag, tage.length)
+  if (!teile.length) return 0
+  const gruppe = Math.random().toString(36).slice(2, 10)
+  tage.forEach((d, i) => { if (teile[i] > 0) schnellAusgabe(d, { kat, betrag: teile[i], text, gruppe }, etappeFuer(d)) })
+  return tage.length
 }
 
 /** Zuletzt benutzte Kategorien, neueste zuerst. */

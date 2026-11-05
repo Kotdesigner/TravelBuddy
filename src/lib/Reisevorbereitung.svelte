@@ -399,7 +399,7 @@
   {/if}
 
   <div class="add">
-    <input placeholder={t('Eigenen Punkt hinzufügen …')} bind:value={neuText} onkeydown={(e) => e.key === 'Enter' && addCustom()} />
+    <input placeholder={t('Eigenen Punkt hinzufügen …')} aria-label={je('Eigenen Punkt hinzufügen', 'Add your own item')} bind:value={neuText} onkeydown={(e) => e.key === 'Enter' && addCustom()} />
     <button onclick={addCustom} disabled={!neuText.trim()}>{t('+ hinzufügen')}</button>
   </div>
 </section>
@@ -790,7 +790,7 @@
   .gruppe { margin-bottom: 10px; }
   .g-titel { font-size: calc(12px * var(--schrift, 1)); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 6px 0 4px; }
   .item-zeile { display: flex; align-items: center; gap: 4px; }
-  .item { flex: 1; display: flex; align-items: center; gap: 9px; width: 100%; text-align: left; background: none; border: none; cursor: pointer; font-size: calc(13.5px * var(--schrift, 1)); color: var(--ink); padding: 6px 4px; border-radius: 6px; font-family: inherit; }
+  .item { flex: 1; display: flex; align-items: center; gap: 9px; width: 100%; min-height: 44px; text-align: left; background: none; border: none; cursor: pointer; font-size: calc(13.5px * var(--schrift, 1)); color: var(--ink); padding: 6px 4px; border-radius: 6px; font-family: inherit; }
   .item:hover { background: var(--flaeche); }
   .item.an { color: var(--muted); text-decoration: line-through; }
   .box { width: 20px; height: 20px; flex: 0 0 auto; border: 1.5px solid #b7a888; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; font-size: calc(12px * var(--schrift, 1)); color: #2f7a63; font-weight: 800; }
@@ -845,4 +845,6 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .b-warn { color: var(--danger-text); margin-left: 6px; }
+  /* V17: größere Trefferfläche, sichtbar gleich (wie .ba-knopf::after) */
+  .b-auf { min-height: 44px; }
 </style>

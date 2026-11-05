@@ -206,6 +206,7 @@
     else if (r.typ === 'route') geh(r.etappeId ? `plan/etappe/${r.etappeId}/${r.id}` : 'plan/route/' + r.id)
     else if (r.typ === 'wanderung') geh('plan/wanderungen/' + r.id)
     else if (r.typ === 'buchung') geh(r.etappeId ? 'plan/etappe/' + r.etappeId : 'mehr/vorbereitung')
+    else if (r.typ === 'ausgabe') return   // bleibt, wo man war; die Meldung sagt, wohin die Ausgabe ging
     else geh('logbuch/tag/' + r.datum)
   }
 
@@ -1698,4 +1699,7 @@
     border-radius: 10px; background: var(--card); color: var(--btn-ink); cursor: pointer; }
   .imp-ersetz { display: block; margin: 12px auto 0; background: none; border: none; cursor: pointer;
     font-size: calc(12px * var(--schrift, 1)); color: var(--danger-text); text-decoration: underline; }
+  /* V17: größere Trefferfläche, sichtbar gleich (wie .ba-knopf::after) */
+  .app-footer .af-by a, .mo-del { position: relative; }
+  .app-footer .af-by a::after, .mo-del::after { content: ''; position: absolute; inset: -6px 0; }
 </style>

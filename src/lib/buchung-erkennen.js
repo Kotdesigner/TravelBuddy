@@ -18,6 +18,8 @@ export const ARTEN = jeSprache(() => ([
   { id: 'unterkunft', label: t('Unterkunft'), kat: 'hotel', emoji: '🏨', vorab: 'kosten_unterkunft' },
   { id: 'fahrzeug', label: t('Camper / Mietwagen'), kat: 'camper', emoji: '🚐', vorab: 'kosten_mietfahrzeug' },
   { id: 'tour', label: je('Tour / Aktivität', 'Tour / activity'), kat: 'tour', emoji: '🎟️', vorab: 'kosten_attraktion' },
+  // V17: Konzert, Zoo, Museum, Event. Im Kalender wie eine Tour (kat 'tour'), in den Kosten bei „Touren und Eintritte“.
+  { id: 'ticket', label: je('Ticket / Eintritt', 'Ticket / admission'), kat: 'tour', emoji: '🎫', vorab: 'kosten_attraktion' },
   { id: 'faehre', label: je('Fähre / Bootsfahrt', 'Ferry / boat trip'), kat: 'boat', emoji: '⛴️', vorab: 'kosten_boot' },
   { id: 'bahn', label: je('Bahn', 'Train'), kat: 'train', emoji: '🚆', vorab: 'kosten_bahn' },
   { id: 'shuttle', label: je('Shuttle / Bus', 'Shuttle / bus'), kat: 'shuttle', emoji: '🚌', vorab: 'kosten_bus' },
@@ -235,6 +237,21 @@ export function findeDaten(text, kontext = {}) {
     push({ iso, start: a, ende: b, konfidenz: 0.6, ohneJahr: true, wt: wochentagDavor(text, a) })
   }
 
+  // 8  Zahlen ohne Jahr: „14/12“. Nur, wenn es in die Reise fällt (sonst wäre „24/7“ ein Datum).
+  if (kontext.zeitraum?.von) {
+    for (const m of text.matchAll(/(?<![\d.\/:\-])(\d{1,2})\/(\d{1,2})(?![\d\/]|\.\d)/g)) {
+      const a = m.index, b = a + m[0].length
+      if (!frei(a, b)) continue
+      const tg = formatMD ? +m[2] : +m[1], mo = formatMD ? +m[1] : +m[2]
+      if (mo < 1 || mo > 12) continue
+      const iso = mitJahr(mo, tg, kontext)
+      if (!iso || !imZeitraum(iso, kontext.zeitraum, 20)) continue
+      nimm(a, b)
+      push({ iso, start: a, ende: b, konfidenz: 0.55, ohneJahr: true, wt: wochentagDavor(text, a) })
+      hinweise.push(t('{text}: ohne Jahr, gelesen als {datum}. Bitte prüfen.', { text: m[0], datum: deutsch(iso) }))
+    }
+  }
+
   // Wochentag passt nicht: Konfidenz runter, Hinweis.
   for (const d of out) {
     if (d.wt == null) continue
@@ -281,7 +298,7 @@ export function findeZeiten(text) {
 const STICHWORTE = [
   ['ignorieren', /booked on|booking date|date booked|date of booking|buchungsdatum|gebucht am|issued|issue date|date of issue|ausgestellt|ausstellungsdatum|payment|paid on|bezahlt am|zahlung|zahlungsdatum|cancel|cancellation|storn|kostenlos stornierbar|refund|erstattung|date of birth|born|geburt|\bdob\b|expir|gültig bis|valid until|deadline|due date|fällig|\bsent\b|gesendet|received|empfangen|printed|gedruckt|order date|bestelldatum/gi],
   ['boarding', /boarding|gate closes|gate schließt|check-?in closes|check-?in schließt/gi],
-  ['start', /check[\s-]?in|anreise|pick[\s-]?up|pickup|collection|abholung|übernahme|uebernahme|starts?\b|start date|begins?|beginn|\bfrom\b|\bab\b|tour date|travel date|date of travel|reisedatum|activity date|meeting time|treffzeit|report(?:ing)? time|\bvon\b|\bam\b/gi],
+  ['start', /check[\s-]?in|anreise|pick[\s-]?up|pickup|collection|abholung|übernahme|uebernahme|starts?\b|start date|begins?|beginn|\bfrom\b|\bab\b|tour date|travel date|date of travel|reisedatum|activity date|visit date|date of visit|besuchsdatum|event date|show date|veranstaltungsdatum|meeting time|treffzeit|report(?:ing)? time|\bvon\b|\bam\b/gi],
   ['ende', /check[\s-]?out|checkout|abreise|drop[\s-]?off|dropoff|\breturn\b|rückgabe|rueckgabe|abgabe|\buntil\b|\btill\b|\bbis\b|\bends?\b|end date|\bende\b|finish/gi],
   ['abfahrt', /depart(?:s|ure|ing)?\b|abflug|abfahrt|\bdep\b|\bleaves?\b|sailing time/gi],
   ['ankunft', /arriv(?:e|es|al|ing)\b|ankunft|\barr\b|landing|landung/gi],
@@ -368,6 +385,9 @@ const ANBIETER = [
   [/exmouth dive/i, 'Exmouth Dive & Whalesharks Ningaloo', 'tour'], [/three islands/i, 'Three Islands', 'tour'], [/kings ningaloo/i, 'Kings Ningaloo Reef Tours', 'tour'],
   [/live ningaloo/i, 'Live Ningaloo', 'tour'], [/ningaloo (?:discovery|whaleshark|blue)/i, 'Ningaloo Discovery', 'tour'],
   [/getyourguide/i, 'GetYourGuide', 'tour'], [/viator/i, 'Viator', 'tour'], [/klook/i, 'Klook', 'tour'],
+  [/skydive australia/i, 'Skydive Australia', 'tour'], [/skydive geronimo/i, 'Skydive Geronimo', 'tour'],
+  [/ticketek/i, 'Ticketek', 'ticket'], [/ticketmaster/i, 'Ticketmaster', 'ticket'], [/moshtix/i, 'Moshtix', 'ticket'],
+  [/\boztix\b/i, 'Oztix', 'ticket'], [/eventbrite/i, 'Eventbrite', 'ticket'], [/perth zoo/i, 'Perth Zoo', 'ticket'], [/\baqwa\b/i, 'AQWA', 'ticket'],
   [/expedia/i, 'Expedia', null],
 ]
 const CAMPER = /campervan|camper|motorhome|wohnmobil|\brv\b|berth|britz|maui|apollo|jucy|mighty/i
@@ -375,12 +395,14 @@ const ART_WOERTER = {
   flug: [/\bflight\b|\bflug\b|flüge|boarding|e-?ticket|\bpnr\b|baggage|gepäck|\bseat\b|sitzplatz|airport|flughafen|terminal|\bfare\b|economy|business class/gi],
   unterkunft: [/hotel|motel|resort|\blodge|apartment|\broom\b|zimmer|check[\s-]?in|check[\s-]?out|\bnights?\b|nächte|übernachtung|\bguests?\b|\bgäste\b|\bhost\b|unterkunft|accommodation|campsite|camp site|campground|caravan park|stellplatz|powered site|\bsite\b|zeltplatz/gi],
   fahrzeug: [/campervan|camper|motorhome|wohnmobil|\bvehicle\b|fahrzeug|rental|mietwagen|car hire|\bpick[\s-]?up\b|drop[\s-]?off|\bbranch\b|\bdepot\b|\bdriver\b|fahrer|excess|unlimited km|kilometres|\bberth\b/gi],
-  tour: [/\btour\b|excursion|ausflug|cruise|snorkel|whale ?shark|walhai|\bdive\b|tauch|experience|activity|aktivität|voucher|meeting point|treffpunkt|\bguide\b|safari|eco/gi],
+  tour: [/\btour\b|excursion|ausflug|cruise|snorkel|whale ?shark|walhai|\bdive\b|tauch|experience|activity|aktivität|voucher|meeting point|treffpunkt|\bguide\b|safari|eco/gi,
+    /sky ?div|fallschirm|tandem|surf(?:ing)? lesson|surfkurs|kayak|kajak|\bquad\b|helicopter|hubschrauber|scenic flight|rundflug|wine tasting|weinprobe|weintour|bridge climb|camel|kamel|horse ?rid|reiten|fishing charter|angeltour|\blesson\b|\bkurs\b|teilnehmer|participants?|lead traveller|lead traveler/gi],
+  ticket: [/\btickets?\b|admission|eintritt|\bentry\b|entrance|\bgate\b|\bvenue\b|\bevent\b|veranstaltung|konzert|concert|festival|\bshow\b|museum|\bzoo\b|aquarium|gallery|galerie|general admission|stehplatz|sitzplatz|\border\b|bestellung|visit date|besuchsdatum|arena|stadium|stadion|theatre|theater/gi],
   faehre: [/ferry|fähre|faehre|\bjetty\b|anleger|crossing|überfahrt|sailing|return trip|b shed|barrack street/gi],
 }
 
 export function erkenneArt(text) {
-  const punkte = { flug: 0, unterkunft: 0, fahrzeug: 0, tour: 0, faehre: 0 }
+  const punkte = { flug: 0, unterkunft: 0, fahrzeug: 0, tour: 0, ticket: 0, faehre: 0 }
   let anbieter = null
   for (const [re, name, art] of ANBIETER) {
     if (re.test(text)) {
@@ -394,6 +416,8 @@ export function erkenneArt(text) {
   if (FLUGNR_RE().test(text)) punkte.flug += 3
   const sortiert = Object.entries(punkte).sort((a, b) => b[1] - a[1])
   const [beste, p1] = sortiert[0], p2 = sortiert[1][1]
+  // Ein einziges passendes Wort und sonst nichts („Pinnacles sunset tour“): als Vorschlag, aber unsicher
+  if (p1 === 1 && p2 === 0) return { art: { wert: beste, konfidenz: 0.4 }, anbieter, punkte }
   if (p1 < 2) return { art: { wert: 'sonstiges', konfidenz: 0.4 }, anbieter, punkte }
   const k = Math.min(0.95, 0.45 + 0.1 * (p1 - p2) + (anbieter?.art === beste ? 0.2 : 0))
   return { art: { wert: beste, konfidenz: Math.round(k * 100) / 100 }, anbieter, punkte }
@@ -483,8 +507,8 @@ function etikettWert(text, etiketten, { saeubern = true } = {}) {
 const REF_ETIKETTEN = [
   'booking reference(?: number)?', 'booking ref\\.?(?:erence)?(?: no\\.?)?', 'airline booking reference', 'booking (?:number|no\\.?|id|code|#)',
   'confirmation (?:number|no\\.?|code|#)', 'confirmation', 'reservation (?:number|no\\.?|code|id|#)', 'reservation',
-  'record locator', 'pnr', 'itinerary (?:number|no\\.?)', 'order (?:number|no\\.?|id)', 'reference(?: number| no\\.?)?', 'ref\\.?(?: no\\.?)?',
-  'buchungs(?:nummer|code|referenz|nr\\.?)', 'best[äa]tigungs(?:nummer|code|nr\\.?)', 'reservierungs(?:nummer|code|nr\\.?)', 'vorgangsnummer', 'auftragsnummer',
+  'record locator', 'pnr', 'itinerary (?:number|no\\.?)', 'order (?:number|no\\.?|id)', 'order\\s*#', 'ticket (?:number|no\\.?|id)', 'voucher (?:number|no\\.?|code)', 'reference(?: number| no\\.?)?', 'ref\\.?(?: no\\.?)?',
+  'buchungs(?:nummer|code|referenz|nr\\.?)', 'best[äa]tigungs(?:nummer|code|nr\\.?)', 'reservierungs(?:nummer|code|nr\\.?)', 'vorgangsnummer', 'auftragsnummer', 'bestell(?:nummer|nr\\.?)',
 ]
 function istRef(s) {
   if (!s) return false
@@ -555,7 +579,7 @@ export function findeBetrag(text) {
 }
 
 // ---------- Ort ----------
-const ORT_ETIKETTEN = 'property address|hotel address|address|adresse|anschrift|location|meeting point|treffpunkt|pick[\\s-]?up (?:location|branch|address|depot|point)|pickup location|abholort|übernahmeort|übernahmestation|departure point|departs from|abfahrtsort|abfahrt ab|venue|campground|campsite|park|standort'
+const ORT_ETIKETTEN = 'property address|hotel address|address|adresse|anschrift|location|meeting point|treffpunkt|pick[\\s-]?up (?:location|branch|address|depot|point)|pickup location|abholort|übernahmeort|übernahmestation|departure point|departs from|abfahrtsort|abfahrt ab|venue|veranstaltungsort|pick[\\s-]?up|abholung|campground|campsite|park|standort'
 const ORT_BIS_ETIKETTEN = 'drop[\\s-]?off (?:location|branch|address|depot)|dropoff location|return (?:location|branch|depot)|rückgabeort|rückgabestation|abgabeort'
 /** „Pick-up: 7:15am from Exmouth Escape Resort, …“ → „Exmouth Escape Resort, …“ */
 function saeubereOrt(z) {
@@ -566,11 +590,36 @@ function saeubereOrt(z) {
 const AU_ADRESSE = /^.*\b(?:WA|NT|SA|QLD|NSW|VIC|TAS|ACT|Western Australia)\s+\d{4}\b.*$/m
 
 // ---------- Titel ----------
+// Touren und Tickets: der Name steht oft ohne Etikett in einer eigenen Zeile („Swan Valley: Ganztägige
+// Weintour mit Mittagessen“). Gewählt wird die Zeile mit den meisten passenden Wörtern; Zeilen wie
+// „Tour Grade: Standard“ zählen nur mit dem Teil hinter dem Doppelpunkt.
+const TITEL_WOERTER = {
+  tour: /tour|ausflug|excursion|cruise|snorkel|swim|whale|walhai|dive|tauch|sky ?div|tandem|safari|sunset|sonnenunter|kayak|kajak|quad|helicopter|rundflug|scenic|wine|wein|tasting|surf|climb|camel|kamel|fishing|angel|lesson|kurs|day trip|tagestour|island|insel|reef|riff|gorge|schlucht/gi,
+  ticket: /ticket|admission|eintritt|entry|concert|konzert|festival|show|museum|zoo|aquarium|gallery|galerie|theatre|theater|arena|exhibition|ausstellung|tour\b/gi,
+}
+const KEIN_TITEL = /confirm|bestätig|bestaetig|thank|danke|vielen dank|^hi\b|^hallo|^dear|^liebe|your (?:order|booking)|deine buchung|ihre buchung|reference|referenz|stornier|cancel|refund|attached|anhang|please|bitte|price|preis|total|gesamt|paid|bezahlt|this email|diese mail|@|https?:/i
+function titelZeile(text, art, anbieter) {
+  const re = TITEL_WOERTER[art]
+  let best = null
+  for (const zeile of zeilenListe(text)) {
+    if (zeile.length < 8 || zeile.length > 90 || KEIN_TITEL.test(zeile)) continue
+    if (anbieter && zeile.toLowerCase() === anbieter.toLowerCase()) continue
+    const etikett = zeile.match(/^([^:]{1,22}):\s*(.+)$/)
+    // „Datum: …“, „Treffpunkt: …“ sind Felder, kein Name. Ein Name mit Doppelpunkt hat danach viele Wörter.
+    const teil = etikett ? etikett[2] : zeile
+    if (etikett && teil.split(/\s+/).length < 3) continue
+    if (/\d{3,}/.test(teil) || /\b\d{1,2}[:.]\d{2}\b/.test(teil)) continue
+    re.lastIndex = 0
+    const n = new Set((teil.match(re) || []).map((w) => w.toLowerCase())).size
+    if (n && (!best || n > best.n)) best = { zeile, n }
+  }
+  return best?.zeile || null
+}
 function findeTitel(text, art, anbieter, extra) {
   const nimm = (s) => s && s.replace(/\s+/g, ' ').replace(/["“”„]/g, '').replace(/[.!,:;]+$/, '').trim()
   const sätze = [
     /your (?:booking|reservation|stay) (?:at|in|with) (.+?)(?: is| has|!|\.|,|\n| for |$)/i,
-    /(?:booking|reservation) (?:confirmed|confirmation)\s*(?:at|for|:|–|-)\s*(.+?)(?:!|\n|$)/i,
+    /(?:booking|reservation) (?:confirmed|confirmation)\s*(?:at|for|:|–|-)\s*(.+?)(?:!|\n|$| on \d| am \d| at \d|\.\s)/i,
     /(?:thanks|thank you) for (?:booking|choosing|staying)(?: with| at)? (.+?)(?:!|\.|,|\n|$)/i,
     /ihre (?:buchung|reservierung) (?:im|in der|in|bei|für|fuer)\s+(.+?)(?: ist| wurde|!|\.|,|\n|$)/i,
     /you'?re (?:going|off) to (.+?)(?:!|\.|\n|$)/i,
@@ -579,6 +628,7 @@ function findeTitel(text, art, anbieter, extra) {
     unterkunft: 'hotel|hotel name|property|property name|accommodation|unterkunft|campground|campsite|camp ground|park name|listing',
     fahrzeug: 'vehicle|vehicle type|fahrzeug|fahrzeugtyp|vehicle model|camper',
     tour: 'tour|tour name|activity|product|experience|aktivität|ausflug|trip|excursion',
+    ticket: 'event|veranstaltung|show|attraction|attraktion|ticket type|product',
     faehre: 'route|ticket|product|service|fahrt',
     sonstiges: 'product|event|veranstaltung|ticket',
   }
@@ -595,6 +645,10 @@ function findeTitel(text, art, anbieter, extra) {
       if (art === 'fahrzeug' && anbieter && !w.toLowerCase().includes(anbieter.toLowerCase())) return { wert: `${anbieter} ${w}`, konfidenz: 0.8 }
       return { wert: nimm(w), konfidenz: 0.8 }
     }
+  }
+  if (art === 'tour' || art === 'ticket') {
+    const z = titelZeile(text, art, anbieter)
+    if (z) return { wert: nimm(z), konfidenz: 0.7 }
   }
   if (art !== 'fahrzeug') {
     for (const re of sätze) {
@@ -616,7 +670,7 @@ function findeTitel(text, art, anbieter, extra) {
     const b = nimm(betreff.replace(/^(?:re|aw|fwd?|wg):\s*/i, '').replace(/\b(?:booking|reservation)?\s*(?:confirmation|confirmed|bestätigung|buchungsbestätigung)\b\s*[-–:|]?\s*/gi, ''))
     if (b && b.length >= 3 && b.length < 80) return { wert: b, konfidenz: 0.55 }
   }
-  const nameArt = { unterkunft: t('Unterkunft'), fahrzeug: extra.camper ? t('Camper') : t('Mietwagen'), tour: t('Tour'), faehre: t('Fähre'), sonstiges: t('Buchung') }[art] || t('Buchung')
+  const nameArt = { unterkunft: t('Unterkunft'), fahrzeug: extra.camper ? t('Camper') : t('Mietwagen'), tour: t('Tour'), ticket: je('Ticket', 'Ticket'), faehre: t('Fähre'), sonstiges: t('Buchung') }[art] || t('Buchung')
   if (anbieter) return { wert: art === 'fahrzeug' ? `${anbieter} ${nameArt}` : `${nameArt} ${anbieter}`, konfidenz: 0.45 }
   return { wert: nameArt, konfidenz: 0.2 }
 }

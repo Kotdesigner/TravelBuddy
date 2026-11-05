@@ -210,7 +210,8 @@
   .bu-k1 small, .bu-nichts { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); }
   .bu-faellig { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--warn, #b45309); }
   .bu-belege { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; flex: 1; min-width: 0; }
-  .bu-mini { border: 1px solid var(--line-stark); background: var(--eingabe); color: var(--ink); border-radius: var(--radius-s); min-height: 32px; min-width: 32px; padding: 2px 8px; font-size: calc(13px * var(--schrift, 1)); cursor: pointer; display: inline-flex; align-items: center; }
+  .bu-mini::after { content: ''; position: absolute; inset: -6px 0; }
+  .bu-mini { position: relative; border: 1px solid var(--line-stark); background: var(--eingabe); color: var(--ink); border-radius: var(--radius-s); min-height: 32px; min-width: 32px; padding: 2px 8px; font-size: calc(13px * var(--schrift, 1)); cursor: pointer; display: inline-flex; align-items: center; }
   .bu-weg { border: none; background: none; color: var(--muted); }
   .bu-datei input { position: absolute; width: 1px; height: 1px; opacity: 0; }
   .bu-datei { position: relative; }

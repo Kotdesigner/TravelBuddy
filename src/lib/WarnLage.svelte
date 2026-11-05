@@ -41,6 +41,7 @@
         <span>
           {#if h.art === 'route' && h.aufRoute && h.w.kmBis < 10}{t('Direkt vor dir: {titel}', { titel: h.w.titel })}
           {:else if h.art === 'route' && h.aufRoute}{t('In etwa {km} km voraus: {titel}', { km: rund(h.w.kmBis), titel: h.w.titel })}
+          {:else if h.art === 'route' && h.w.kmBis < 10}{je(`Am Anfang der Strecke: ${h.w.titel}`, `At the start of the route: ${h.w.titel}`)}
           {:else if h.art === 'route'}{t('Nach etwa {km} km Strecke: {titel}', { km: rund(h.w.kmBis), titel: h.w.titel })}
           {:else}{h.w.km === 0 ? t('Im Warngebiet: {titel}', { titel: h.w.titel }) : t('{km} km daneben: {titel}', { km: km(h.w.km), titel: h.w.titel })}{/if}
           {#if h.art === 'route' && h.w.km > 0}<small>{t('{km} km neben der Strecke', { km: km(h.w.km) })}</small>{/if}

@@ -1,11 +1,14 @@
 <script>
   // Mehr → Datenschutz & Impressum. Liegt in der App und geht deshalb auch offline.
   // Die Liste der Dienste muss zu dem passen, was die App wirklich anspricht.
-  import { je } from './i18n.js'
+  import { je, istEn } from './i18n.js'
   import { IMPRESSUM, impressumFertig } from './impressum.js'
   import { bildNachweis } from './bild-nachweis.js'
 
-  const fotos = $derived(Object.values($bildNachweis).sort((a, b) => a.name.localeCompare(b.name)))
+  // Auf Englisch die Anzeigenamen aus orte.en.json, der deutsche Name bleibt Schlüssel
+  let enNamen = $state({})
+  if (istEn) fetch('/orte.en.json').then((r) => r.json()).then((d) => { enNamen = Object.fromEntries(Object.entries(d).filter(([, v]) => v.anzeigeName).map(([k, v]) => [k, v.anzeigeName])) }).catch(() => {})
+  const fotos = $derived(Object.values($bildNachweis).map((f) => (enNamen[f.id] ? { ...f, name: enNamen[f.id] } : f)).sort((a, b) => a.name.localeCompare(b.name)))
 
   const DIENSTE = [
     [je('Wetter', 'Weather'), 'Open-Meteo', je('Koordinaten deiner Orte und, wenn du es erlaubst, dein Standort', 'Coordinates of your places and, if you allow it, your location')],
@@ -15,7 +18,7 @@
     [je('Orte suchen und beschreiben', 'Searching and describing places'), 'Photon, Nominatim, Overpass, Wikipedia, Wikidata, Wikimedia Commons', je('Suchbegriffe, Ortsnamen, Koordinaten', 'Search terms, place names, coordinates')],
     [je('Wechselkurs', 'Exchange rate'), 'Frankfurter', je('Nur der Abruf', 'Only the request')],
     [je('Gelände auf der Karte', 'Terrain on the map'), 'Amazon S3 (Mapzen/AWS)', je('Der sichtbare Kartenausschnitt', 'The visible map area')],
-    [je('Flüge, nur mit deinem Schlüssel', 'Flights, only with your key'), 'AeroDataBox über RapidAPI', je('Flugnummer, Datum, dein Schlüssel', 'Flight number, date, your key')],
+    [je('Flüge, nur mit deinem Schlüssel', 'Flights, only with your key'), je('AeroDataBox über RapidAPI', 'AeroDataBox via RapidAPI'), je('Flugnummer, Datum, dein Schlüssel', 'Flight number, date, your key')],
     [je('Züge, nur bei eingetragenen Zügen', 'Trains, only if you add one'), 'DBF (dbf.finalrewind.org)', je('Name des Bahnhofs', 'Station name')],
     [je('Musik, nur wenn du sie einschaltest', 'Music, only if you turn it on'), 'Spotify, MusicBrainz, Last.fm', je('Region, Spotify-Anmeldung, Playlist', 'Region, Spotify sign-in, playlist')],
     [je('Karten-Links, nur beim Antippen', 'Map links, only when tapped'), 'Google Maps, Apple Karten', je('Die Position im Link', 'The position in the link')],

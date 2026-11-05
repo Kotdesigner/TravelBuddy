@@ -1,7 +1,7 @@
 <script>
   // Mehr → Kosten: alles, was die Reise gekostet hat, aus Vorabausgaben und Logbuch, nach Clustern.
   // Eine Reihe Balken je Liste in einer Farbe, die Beträge stehen immer als Zahl daneben.
-  import { t, tn } from './i18n.js'
+  import { t, tn, je } from './i18n.js'
   import { journal, vorabKosten, reisen, gesamtStart } from './userdata.js'
   import { etappenMitDatum } from './plan.js'
   import { fxKurse } from './fx.js'
@@ -22,7 +22,7 @@
 <section class="ko" aria-label={t('Kosten')}>
   {#if !a.gesamt.eur && !a.gesamt.aud}
     <div class="ko-karte">
-      <p>{t('Noch keine Ausgaben. Trag sie im Logbuch unter „Kosten & Verkehr“ ein oder vorab in der Reisevorbereitung.')}</p>
+      <p>{je('Noch keine Ausgaben. Trag sie über „+ Neu“ → Ausgabe ein, auf der Startseite oder im Logbuch am Tag unter „Kosten & Verkehr“.', 'No expenses yet. Add them via “+ New” → Expense, on the start page or in the logbook under “Costs & transport”.')}</p>
       <a class="btn-primary ko-link" href="#/logbuch">{t('Zum Logbuch')}</a>
     </div>
   {:else}

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TravelBuddy · Handbuch</title>
 <!-- Vorlage für public/handbuch.pdf. Neu erzeugen: sh scripts/handbuch-pdf.sh
-     Inhalt nach dem Code der Basic-Fassung (Stand Oktober 2026). Texte ohne Gedankenstriche in Sätzen. -->
+     Inhalt nach dem Code der Basic-Fassung 1.11 (Stand November 2026). Texte ohne Gedankenstriche in Sätzen. -->
 <style>
   @font-face { font-family: 'Anton'; src: url('/fonts/anton.woff2') format('woff2'); }
   @page { size: A4; margin: 18mm 17mm 18mm 17mm; }
@@ -81,7 +81,7 @@
   <div class="titel">Travel<span>Buddy</span></div>
   <div class="striche"><i></i><i></i><i></i><i></i></div>
   <div class="unter">Reiseplaner, Logbuch und Begleiter für den Roadtrip durch Westaustralien, auf dem Mac und auf dem iPhone, auch ohne Netz.</div>
-  <div class="meta">Basic-Fassung · Stand 29. Oktober 2026</div>
+  <div class="meta">Basic-Fassung 1.11 · Stand 5. November 2026</div>
 </section>
 
 <section class="seite">
@@ -96,10 +96,11 @@
     <div><span>7</span>Orte</div>
     <div><span>8</span>Logbuch und Tagebuch</div>
     <div><span>9</span>Mehr: Notfall bis Quiz</div>
-    <div><span>10</span>Belege und Dokumente aufs Gerät</div>
-    <div><span>11</span>Sichern und Mac mit iPhone abgleichen</div>
-    <div><span>12</span>Offline im Outback</div>
-    <div><span>13</span>Wenn etwas hakt</div>
+    <div><span>10</span>Buchungen und Ausgaben eintragen</div>
+    <div><span>11</span>Belege und Dokumente aufs Gerät</div>
+    <div><span>12</span>Sichern und Mac mit iPhone abgleichen</div>
+    <div><span>13</span>Offline im Outback</div>
+    <div><span>14</span>Wenn etwas hakt</div>
   </div>
   <div class="kasten">
     <p><b>Kurz gesagt:</b> Am Mac planen, das iPhone einmal mit Internet einrichten, unterwegs das iPhone benutzen. Abgeglichen wird über eine Backup-Datei, die beim Import zusammengeführt wird. Nichts landet auf einem fremden Server, es gibt kein Konto und keine Werbung.</p>
@@ -142,11 +143,11 @@
   <h2>2 · Fünf Bereiche</h2>
   <table>
     <tr><th>Bereich</th><th>Was dort ist</th></tr>
-    <tr><td>Heute</td><td>Countdown oder Reisetag, die Fahrt des Tages, Cockpit, Daten und Fakten, Ausgaben, die Weltkugel</td></tr>
-    <tr><td>Plan</td><td>Etappen und Routen, Wanderungen, Offline-Karte, Kalender</td></tr>
+    <tr><td>Heute</td><td>Countdown oder Reisetag, Fahrt des Tages, Warnungen, nächster Flug, Ausgaben, Cockpit, Weltkugel</td></tr>
+    <tr><td>Plan</td><td>Etappen und Routen, Wanderungen, Offline-Karte, Kalender, Nächte</td></tr>
     <tr><td>Orte</td><td>144 Orte in Süden, Norden und Ostküste, Meine Orte, Routen-Ideen</td></tr>
     <tr><td>Logbuch</td><td>Einträge, Tagebuch lesen und als Datei erstellen, Tierwelt, Notizen</td></tr>
-    <tr><td>Mehr</td><td>Notfall, Reisevorbereitung, Flüge &amp; Bahn, Kosten, Gefahrenlage, Packliste, Praxis, Musik, Reisebericht teilen, Quiz, dazu Backup, Import, Handbuch und Design</td></tr>
+    <tr><td>Mehr</td><td>Notfall, Vorbereitung, Buchungen, Flüge &amp; Bahn, Kosten, Gefahren, Packliste, Praxis, Musik, Teilen, Quiz, Backup, Import, Handbuch, Design</td></tr>
   </table>
 
   <h3>iPhone</h3>
@@ -188,6 +189,8 @@
     <li>Quiz-Stufe, ab dem ersten Logbuchtag Reisetage, km, Temperatur, Fliegen, Kängurus und Roadkill.</li>
     <li>Gefahrene und geflogene km, Sprit und Spritkosten (geschätzt mit 13 Litern je 100 km), Stunden am Steuer, Vergleiche.</li>
   </ul>
+  <h3>Ausgabe, Warnung, Flug</h3>
+  <p><b>💸 Ausgabe</b>: Betrag eintippen, Kategorie antippen, fertig, sie kommt ins Logbuch des Tages (mehr unter „+ Neu“ → Ausgabe, Teil 10). Amtliche Warnungen an deinen Routen stehen oben, 24 Stunden vor einem Flug die Flug-Karte.</p>
   <h3>Ausgaben und Budget</h3>
   <p>Trage ein Budget in Euro ein. Die App zählt die Kosten aus dem Logbuch und die Vorab-Ausgaben zusammen und zeigt alles in Euro und AU$, umgerechnet zum Tageskurs des jeweiligen Tages. Ohne Netz rechnet sie mit einem Näherungskurs und sagt das dazu. Alle angezeigten Teilbeträge ergeben genau die angezeigte Summe.</p>
   <h3>Meine Reise-Karte</h3>
@@ -205,13 +208,16 @@
   <h2>4 · Etappen und Routen</h2>
   <div class="kasten">
     <p><b>Etappe</b> = ein Zeitabschnitt mit festem Datum, zum Beispiel „Roadtrip Westaustralien, 13.12. bis 27.01.“. Die meisten kommen aus deinem Reisekalender.</p>
-    <p><b>Route</b> = eine Strecke mit Stopps innerhalb einer Etappe, zum Beispiel „Coral Coast: Perth → Exmouth“. Eine Route verlängert die Reise nicht.</p>
+    <p><b>Route</b> = eine Strecke mit Stopps innerhalb einer Etappe, zum Beispiel „Coral Coast: Perth → Exmouth“. Eine Route hat einen eigenen Zeitraum (ab Datum, Zahl der Tage) und verlängert die Reise nicht. Eine Route ohne Datum ist „noch nicht eingeplant“, eine <b>Idee</b> zählt nirgends mit.</p>
   </div>
   <ul>
     <li><b>Etappen</b>: Liste mit Datum, km, Routen, Wanderungen, Buchungen und wie viele Tage im Logbuch stehen. Die App weist auf Lücken und Überschneidungen hin.</li>
     <li>Etappe antippen: Name, Farbe, Datum, Gebuchtes mit 📎 Belegen, Routen, Wanderungen, Logbuch.</li>
-    <li><b>„+ Neu“</b> legt eine Etappe, Route, Wanderung oder einen Logbuchtag an, mit nur den nötigsten Feldern.</li>
+    <li><b>„+ Neu“</b> legt eine Etappe, Route, Wanderung, einen Logbuchtag, eine Buchung oder eine Ausgabe an, mit nur den nötigsten Feldern.</li>
+    <li>Kommt eine Route aus den Routen-Ideen oder einem Ort, fragt die App <b>„Wohin damit?“</b>: Etappe, Zeitraum und Name. Vorgeschlagen wird eine Etappe in der Nähe, nie Hin- oder Heimreise.</li>
   </ul>
+  <h3>Nächte (Plan → Nächte)</h3>
+  <p>Wo du jede Nacht schläfst: <b>gebucht</b> aus deinen Buchungen, <b>geplant</b> aus den Stopps einer Route mit ihren Nächten, dazu Nächte im Flug und Nächte, die noch <b>offen</b> sind. Feiertage ohne Platz (Weihnachten, Neujahr, Australia Day) stehen extra, weil Campingplätze an der Küste dann schnell voll sind.</p>
   <h3>Route bearbeiten</h3>
   <ol class="schritte">
     <li>Route aufklappen, oben 🚗 Auto, ✈️ Flug oder 🚆 Bahn wählen. Bei Flug und Bahn fragt die App gleich nach Nummer, Datum, Buchung, Sitzplatz und Dokument.</li>
@@ -236,7 +242,7 @@
     <tr><td>⛽ Tankstellen</td><td>Längste Strecke ohne Tankstelle und jede lange Strecke mit letzter und nächster Tankstelle beim Namen. Rot, wenn sie länger ist als deine Reichweite (einstellbar, Vorgabe 500 km).</td></tr>
     <tr><td>Versorgung unterwegs</td><td>Tankstellen, Wasser, Toiletten, Camps, Rastplätze, Läden, Werkstätten und Kliniken neben der Strecke mit Streckenkilometer, nach Abschnitten. Lange Strecken ohne Sprit oder Wasser rot. Offline aus OpenStreetMap.</td></tr>
     <tr><td>Fahrtage</td><td>Je Fahrtag km, Fahrzeit mit Pausen und späteste Abfahrt vor Sonnenuntergang. Zu lange Tage mit Vorschlag zum Aufteilen.</td></tr>
-    <tr><td>Sehenswertes</td><td>Orte aus der Sammlung bis 25 km neben der Route, mit „+“ an der richtigen Stelle einplanen oder ausblenden.</td></tr>
+    <tr><td>Sehenswertes</td><td>Orte aus der Sammlung bis 75 km neben der Route, vorgemerkte Orte bis 100 km, mit „+“ an der richtigen Stelle einplanen oder ausblenden.</td></tr>
     <tr><td>🌦️ Wetter</td><td>Vorhersage an der Strecke für die nächsten drei Tage (braucht Netz).</td></tr>
     <tr><td>Warnungen</td><td>Amtliche Warnungen im eingestellten Umkreis um die Route.</td></tr>
   </table>
@@ -280,6 +286,7 @@
     <li><b>📷</b> unten rechts auf dem Foto ändert das Bild: vom Gerät wählen, die Bildersuche öffnen oder einen Ausschnitt einfügen. Dein Bild bleibt auf dem Gerät. <b>✨</b> erscheint an derselben Stelle, wo noch ein Ersatzfoto oder Symbolbild steht.</li>
     <li><b>Am iPhone</b> lässt sich ein Bild in der Google-Suche oft nicht speichern, weil es nur online liegt. Dann mach einen Screenshot, schneide ihn zu und wähle ihn über „Bild vom Gerät wählen“.</li>
     <li>💬 öffnet deine Notiz, Fotos und die Logbuchtage zu diesem Ort.</li>
+    <li><b>Einplanen</b> bietet die Routen in der Nähe an. Liegt der Ort weit weg, merkst du ihn mit <b>„⭐ Vormerken, für eine spätere Route“</b>. Kommt später eine Route bis 100 km an ihm vorbei, schlägt die App ihn dort zuerst vor. Unter Meine Orte steht, ob er schon in einer Route liegt.</li>
   </ul>
   <h3>Ort hinzufügen</h3>
   <p><b>„+ Ort hinzufügen“</b> (in Süden, Norden, Ostküste und Meine Orte) fragt zuerst, welcher Ort gemeint ist: Beim Tippen erscheinen Vorschläge aus OpenStreetMap mit Typ und Bundesstaat, zum Beispiel „Margaret River · Stadt · Westaustralien“. Gibt es den Ort schon in der App, steht er obenan. Ohne Netz legst du ihn von Hand an.</p>
@@ -331,10 +338,12 @@
   <h2>🧳 Reisevorbereitung</h2>
   <ul>
     <li>Checkliste „Wochen vorher“, „Kurz vorher“, „Abreisetag“ mit eigenen Punkten.</li>
-    <li>Dokumente mit Ablaufdatum, Buchungen mit Belegen (Teil 10), Vorab-Ausgaben.</li>
-    <li><b>„+ Aus Mail“</b>: Text einer Buchungsmail einfügen. Art, Titel, Datum, Uhrzeit, Ort, Buchungsnummer und Preis werden erkannt. Du prüfst und übernimmst.</li>
+    <li>Dokumente mit Ablaufdatum, Buchungen mit Belegen (Teil 11), Vorab-Ausgaben.</li>
+    <li>Buchungen aus einer Mail: Teil 10.</li>
     <li><b>„Bereit für unterwegs?“</b> prüft fünf Punkte: Offline-Karten, App und Versorgungspunkte offline, Routen berechnet, Spotify verbunden, letzte Sicherung.</li>
   </ul>
+  <h2>🎫 Buchungen</h2>
+  <p>Alles Gebuchte an einer Stelle: wann, Buchungsnummer zum Kopieren, Kosten und Belege. Unter <b>Zum Bestätigen</b> stehen Ausgaben, die wahrscheinlich zu einer Buchung gehören. „Ja“ verbindet sie. „+ Buchung“ trägt eine neue ein (Teil 10).</p>
   <h2>⚠️ Gefahrenlage</h2>
   <p>Amtliche Warnungen aus WA, Victoria und Queensland zu Feuer, Flut und Unwetter im eingestellten Umkreis um deine Orte, dazu die <b>Straßenlage WA</b> (Sperrungen von Main Roads, getrennt nach „auf deiner Route“ und „in der Nähe“). Ohne Netz bleibt der letzte Stand sichtbar. Die Wetter-Hinweise darunter sind abgeleitet, keine amtlichen Warnungen.</p>
   <p>Die App prüft deinen Standort, die Strecke voraus, jede Etappe und jede Wanderung. Zu jeder Warnung stehen die Größe des Gebiets und die Entfernung da, dazu die Knöpfe für Google Maps und die Offline-Karte mit Umkreis und deinem Standort. Der <b>Testmodus</b> zeigt das Ganze mit einem frei gewählten Standort und erfundenen Warnungen.</p>
@@ -351,6 +360,30 @@
 
 <section class="seite">
   <div class="teil">Teil 10</div>
+  <h1>Buchungen und Ausgaben eintragen</h1>
+  <h2>10 · Buchung (+ Neu → Buchung)</h2>
+  <p>Das Formular steht gleich offen: Art, Titel, Anbieter, Datum, Uhrzeit, Ort, Buchungsnummer und Betrag. So trägst du auch etwas ein, das du vor Ort gebucht hast.</p>
+  <ol class="schritte">
+    <li><b>„📋 Aus Mail ausfüllen“</b> antippen.</li>
+    <li>Die Bestätigungsmail öffnen, alles markieren, kopieren und einfügen (oder „📋 Aus Zwischenablage“).</li>
+    <li><b>„Felder ausfüllen“</b>. Oben steht danach, was <b>übernommen</b> wurde, was du <b>bitte prüfen</b> solltest und was <b>nicht gefunden</b> wurde. Ein Tipp auf den Namen springt zum Feld. Übernommene Felder sind leicht grün.</li>
+    <li>Ändern, was nicht stimmt, „Bezahlt?“ wählen, wenn du willst einen Beleg anhängen, dann <b>„Übernehmen“</b>.</li>
+  </ol>
+  <p>Erkannt werden Flug, Unterkunft, Camper und Mietwagen, Tour oder Aktivität, <b>Ticket oder Eintritt</b> (Konzert, Zoo, Museum), Fähre und Bootsfahrt. Bahn und Shuttle wählst du von Hand. Datum ohne Jahr („14/12“) liest die App nur, wenn es in deine Reise fällt.</p>
+  <div class="kasten">
+    <p><b>Die App liest nur Text.</b> Ein PDF oder ein Foto der Mail erkennt sie nicht. Der Mailtext wird nur auf dem Gerät ausgewertet und nicht gespeichert. Gespeichert wird, was du übernimmst. Danach steht die Buchung am Tag, in der Etappe, im Kalender, unter Buchungen und in den Kosten.</p>
+  </div>
+  <h2>Ausgabe (+ Neu → Ausgabe)</h2>
+  <ul>
+    <li>Betrag, Datum und eine Kategorie. Die Kategorien stehen in den vier Gruppen der Kosten-Seite, jede Gruppe klappt auf. Die gewählte steht im Kopf der Gruppe mit ✓.</li>
+    <li><b>Zeitraum</b>: Für einen Einkauf, der mehrere Tage reicht, Von und Bis wählen. Die App verteilt den Betrag auf den Cent genau auf die Tage, zum Beispiel 100 AU$ auf drei Tage mit 33,34 + 33,33 + 33,33. Jeder Tag bekommt seinen Anteil im Logbuch.</li>
+    <li>Ein Datum <b>vor der Reise</b> wird eine Ausgabe vorab (Reisevorbereitung), dann wählst du Euro oder AU$.</li>
+    <li>Unten steht immer, wohin die Ausgabe kommt. Ändern und löschen geht im Logbuch am Tag unter „Kosten &amp; Verkehr“.</li>
+  </ul>
+</section>
+
+<section class="seite">
+  <div class="teil">Teil 11</div>
   <h1>Belege und Dokumente aufs Gerät</h1>
   <div class="kasten warn">
     <p><b>Die Belege liegen nicht im Netz.</b> Tickets, Hotelbestätigungen, Reisepass und Visum tragen Namen und Buchungsnummern. Deshalb ist in der hochgeladenen App kein einziger Beleg. Du legst sie auf jedem Gerät einmal selbst hinein.</p>
@@ -368,9 +401,9 @@
     <li><b>🔒 Belege schützen:</b> „Mit Face ID schützen“ (Mac: Touch ID) zeigt einen <b>Notfall-Code</b>. Auf Papier schreiben, eintippen, mit Face ID bestätigen. Danach liegen die Belege verschlüsselt auf dem Gerät und öffnen sich nur nach Face ID oder mit dem Code, auch offline. Einmal entsperrt, bleiben sie fünf Minuten offen. Auf iPhone und Mac je einmal einrichten.</li>
   </ul>
 
-  <div class="teil" style="margin-top:9mm">Teil 11</div>
+  <div class="teil" style="margin-top:9mm">Teil 12</div>
   <h1>Sichern und abgleichen</h1>
-  <h2>11 · Backup und Import</h2>
+  <h2>12 · Backup und Import</h2>
   <ul>
     <li><b>💾 Backup</b> speichert eine Datei <code>WA-Reiseplan-Backup_JJJJ-MM-TT.json</code> und öffnet das Teilen-Menü (AirDrop, Mail).</li>
     <li><b>📂 Import</b> zeigt erst eine Vorschau und <b>führt zusammen</b>: Neues kommt dazu, Ergänzungen werden übernommen, nichts auf diesem Gerät wird gelöscht. Danach geht „Rückgängig“.</li>
@@ -383,9 +416,9 @@
 </section>
 
 <section class="seite">
-  <div class="teil">Teil 12</div>
+  <div class="teil">Teil 13</div>
   <h1>Offline im Outback</h1>
-  <h2>12 · Was ohne Netz geht</h2>
+  <h2>13 · Was ohne Netz geht</h2>
   <div class="zwei">
     <div>
       <h3>Geht offline</h3>
@@ -397,6 +430,7 @@
         <li>Versorgung an der Route, Fahrtage</li>
         <li>Sonnenzeiten, Sternenhimmel</li>
         <li>Notfall, Packliste, Quiz</li>
+        <li>Buchung aus Mail erkennen, Ausgaben eintragen</li>
         <li>Belege, die auf dem Gerät liegen</li>
         <li>Letzter Stand der Gefahrenlage, der Flüge und der Züge</li>
         <li>Warngebiete auf der Offline-Karte, Kosten</li>
@@ -429,7 +463,7 @@
 </section>
 
 <section class="seite">
-  <div class="teil">Teil 13</div>
+  <div class="teil">Teil 14</div>
   <h1>Wenn etwas hakt</h1>
   <table>
     <tr><th>Problem</th><th>Lösung</th></tr>
@@ -437,14 +471,15 @@
     <tr><td>Daten fehlen</td><td>Läuft gerade der Safari-Tab statt der App vom Home-Bildschirm? Beide haben getrennte Speicher. Am Mac: derselbe Browser wie beim Einrichten?</td></tr>
     <tr><td>Route nur Luftlinie</td><td>Mit Netz die Route öffnen oder „🔄 Neu berechnen“.</td></tr>
     <tr><td>„x von 6 Kartenteilen“</td><td>Mit WLAN „Ganz Australien sichern“ und warten, bis alles geladen ist.</td></tr>
-    <tr><td>📎 öffnet nichts</td><td>Belege liegen noch nicht auf diesem Gerät: Teil 10.</td></tr>
+    <tr><td>📎 öffnet nichts</td><td>Belege liegen noch nicht auf diesem Gerät: Teil 11.</td></tr>
     <tr><td>Druck oder PDF startet nicht</td><td>Den Pop-up-Blocker für die App erlauben.</td></tr>
     <tr><td>Spotify sammelt nicht</td><td>Mehr → Musik: verbunden? „eingeschaltet“? Netz da? Wartende Orte holt „Jetzt nachholen“.</td></tr>
+    <tr><td>Mail wird nicht erkannt</td><td>Nur Text einfügen, kein PDF und kein Foto. Fehlt etwas, steht es unter „nicht gefunden“ und lässt sich von Hand eintragen.</td></tr>
     <tr><td>Falsche Sprache</td><td>Unten in der Seitenleiste (Mac) oder im Mehr-Blatt (iPhone) umschalten.</td></tr>
   </table>
   <h2>Drei kleine Extras</h2>
   <p>Tippe <code>sn4ke</code>, <code>xoxo</code> oder <code>4444</code> ins Suchfeld.</p>
-  <p style="margin-top:12mm; color: var(--muted); font-size: 9pt">TravelBuddy Basic by Kotdesigner · Stand 29. Oktober 2026</p>
+  <p style="margin-top:12mm; color: var(--muted); font-size: 9pt">TravelBuddy Basic 1.11 by Kotdesigner · Stand 5. November 2026</p>
 </section>
 
 </body>

@@ -1,5 +1,5 @@
 <script>
-  import { t } from './i18n.js'
+  import { t, je } from './i18n.js'
   import { blattRaus, ausblenden } from './motion.js'
   import { heuteTag } from './heute.js'
   // Schnell anlegen: Etappe, Route, Wanderung oder Logbuch-Tag mit den wenigen
@@ -16,6 +16,7 @@
   import Stepper from './Stepper.svelte'
   import OrtWahl from './OrtWahl.svelte'
   import BuchungEinfuegen from './BuchungEinfuegen.svelte'
+  import AusgabeNeu from './AusgabeNeu.svelte'
   import { etappeVorschlag } from './abschnitte.js'
 
   let { typ: startTyp = 'route', vorlage = {}, orte = [], onclose = () => {}, onfertig = () => {} } = $props()
@@ -26,6 +27,7 @@
     { id: 'wanderung', label: t('Wanderung') },
     { id: 'tag', label: t('Logbuch') },
     { id: 'buchung', label: t('Buchung') },
+    { id: 'ausgabe', label: je('Ausgabe', 'Expense') },
   ]
   let typ = $state(startTyp)
   const heute = $derived($heuteTag)
@@ -133,7 +135,9 @@
   </div>
 
   {#if typ === 'buchung'}
-  <BuchungEinfuegen kompakt onfertig={(r) => onfertig(r)} />
+  <BuchungEinfuegen kompakt start="formular" onfertig={(r) => onfertig(r)} />
+  {:else if typ === 'ausgabe'}
+  <AusgabeNeu {vorlage} onfertig={(r) => onfertig(r)} />
   {:else}
   <form class="nb-form" onsubmit={(e) => { e.preventDefault(); anlegen() }}>
     {#if typ === 'etappe'}
@@ -222,7 +226,7 @@
   .nb-kopf { display: flex; align-items: center; justify-content: space-between; }
   h2 { margin: 0; font-size: calc(20px * var(--schrift, 1)); }
   .nb-zu { width: 44px; height: 44px; border-radius: 50%; border: none; background: var(--flaeche-2); color: var(--ink); font-size: calc(16px * var(--schrift, 1)); cursor: pointer; }
-  .nb-typen { display: grid; grid-template-columns: repeat(5, 1fr); }
+  .nb-typen { display: grid; grid-template-columns: repeat(3, 1fr); }
   .nb-typen button { padding: 8px 2px; font-size: calc(12.5px * var(--schrift, 1)); min-height: 44px; }
   .nb-form { display: flex; flex-direction: column; gap: 12px; }
   .nb-k { margin: 0; font-size: calc(14px * var(--schrift, 1)); color: var(--muted); }

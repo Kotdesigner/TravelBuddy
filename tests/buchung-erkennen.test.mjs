@@ -324,7 +324,7 @@ Total AUD 540.00`, KTX)
   const auto = alsBuchungen({ ...f, art: 'fahrzeug', fahrzeug: 'car', titel: 'Hertz' }, { jetzt: 'x' })
   p('Mietwagen: kat car, Übernahme und Rückgabe', auto.length === 2 && auto[0].kat === 'car' && /^Übernahme/.test(auto[0].sub) && /^Rückgabe/.test(auto[1].sub))
   p('zahlAus: 1.234,56 / 1,234.56 / 1.234 / 12,5', zahlAus('1.234,56') === 1234.56 && zahlAus('1,234.56') === 1234.56 && zahlAus('1.234') === 1234 && zahlAus('12,5') === 12.5)
-  p('acht Arten', ARTEN.map((a) => a.id).join() === 'flug,unterkunft,fahrzeug,tour,faehre,bahn,shuttle,sonstiges')
+  p('neun Arten', ARTEN.map((a) => a.id).join() === 'flug,unterkunft,fahrzeug,tour,ticket,faehre,bahn,shuttle,sonstiges')
 }
 
 console.log('\n13  Ohne Buchung')
@@ -339,6 +339,25 @@ console.log('\n14  Hausname in eigener Zeile')
   const r = erkenne('Booking confirmation\nBooking reference: KX7Q2P\nKalbarri Beach Resort\nCheck-in: Sunday, 20 December 2037 from 14:00\nCheck-out: Tuesday, 22 December 2037 by 10:00\n2 nights, Total AUD 412.00', KTX)
   p('Titel Kalbarri Beach Resort', w(r, 'titel') === 'Kalbarri Beach Resort', zeig(r))
   p('Art Unterkunft, 20. bis 22.12.', w(r, 'art') === 'unterkunft' && w(r, 'von') === '2037-12-20' && w(r, 'bis') === '2037-12-22', zeig(r))
+}
+
+console.log('\n15  Aktivitäten und Tickets (V17)')
+{
+  const sky = erkenne('Subject: Your Skydive Booking Confirmation\nHi Alex,\nThanks for booking with Skydive Australia!\nBooking reference: SKY-48213\nActivity: Rottnest Island Tandem Skydive 15,000ft\nDate: Saturday 19 December 2037\nCheck-in time: 9:30am\nLocation: Rottnest Island Airport, Rottnest Island WA 6161\nTotal paid: AUD $399.00', KTX)
+  p('Skydive: Tour mit Namen der Aktivität', w(sky, 'art') === 'tour' && w(sky, 'titel') === 'Rottnest Island Tandem Skydive 15,000ft' && w(sky, 'anbieter') === 'Skydive Australia', zeig(sky))
+  const gyg = erkenne('Deine Buchung ist bestätigt!\nGetYourGuide\nSwan Valley: Ganztägige Weintour mit Mittagessen\nDatum: Mi., 16. Dez. 2037\nUhrzeit: 10:00\nTeilnehmer: 1 Erwachsener\nBuchungsreferenz: GYG7XK9P2\nTreffpunkt: Perth Convention Centre\nGesamtpreis: 189,00 AU$', KTX)
+  p('GetYourGuide: Titel aus der Zeile ohne Etikett', w(gyg, 'art') === 'tour' && w(gyg, 'titel') === 'Swan Valley: Ganztägige Weintour mit Mittagessen' && w(gyg, 'von') === '2037-12-16', zeig(gyg))
+  const via = erkenne('Viator Booking Confirmed\nSwim with Whale Sharks - Full Day Tour from Exmouth\nTravel Date: Jan 5, 2038\nTour Grade: Standard\nBooking Reference: BR-1029384756\nDeparture Time: 7:00 AM\nPickup: Exmouth accommodation\nTotal Price: A$449.00', KTX)
+  p('Viator: Titel nicht „Tour Grade“, Abholort als Ort', w(via, 'titel') === 'Swim with Whale Sharks - Full Day Tour from Exmouth' && w(via, 'ort') === 'Exmouth accommodation', zeig(via))
+  const konz = erkenne('Ticketek\nYour order is confirmed\nOrder number: 7731902455\nEvent: Midnight Oil – The Final Tour\nVenue: RAC Arena, Perth\nDate: Friday 1 January 2038 at 7:30pm\nTickets: 2 x General Admission\nTotal: $158.90', KTX)
+  p('Konzert: Art Ticket, Titel aus „Event“', w(konz, 'art') === 'ticket' && w(konz, 'titel') === 'Midnight Oil – The Final Tour' && w(konz, 'ort') === 'RAC Arena, Perth', zeig(konz))
+  const zoo = erkenne('Perth Zoo – Online Tickets\nThank you for your purchase.\nOrder #PZ-55120\nVisit date: 22/12/2037\nAdult x 2   $72.00\nTotal (incl. GST) $72.00\nShow this email at the entry gate.', KTX)
+  p('Zoo: Ticket, Nummer hinter „Order #“, Titel aus der ersten Zeile', w(zoo, 'art') === 'ticket' && w(zoo, 'ref') === 'PZ-55120' && w(zoo, 'titel') === 'Perth Zoo – Online Tickets', zeig(zoo))
+  const zf = alsBuchungen(alsFormular(zoo), { jetzt: 'x' })
+  p('Ticket wird ein Termin mit kat tour und 🎫', zf.length === 1 && zf[0].kat === 'tour' && zf[0].emoji === '🎫')
+  const kurz = erkenne('Booking confirmed for Pinnacles sunset tour on 14/12 at 3pm. Ref ABC123. Price 129', KTX)
+  p('Kurz: 14/12 ohne Jahr in der Reise, Titel ohne Datum', w(kurz, 'von') === '2037-12-14' && w(kurz, 'titel') === 'Pinnacles sunset tour' && stufe(kurz.von.konfidenz) !== 'sicher', zeig(kurz))
+  p('24/7 ist kein Datum', !findeDaten('Support 24/7 for you', KTX).length)
 }
 
 console.log(`\n${ok} bestanden · ${bad} gescheitert`)

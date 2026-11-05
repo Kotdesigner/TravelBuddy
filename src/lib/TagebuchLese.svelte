@@ -682,7 +682,7 @@
         <div class="d-zeit">{tn(gesamt.tage, '{datumKurz} – {datumKurz2} · {n} Reisetag', '{datumKurz} – {datumKurz2} · {n} Reisetage', { datumKurz: datumKurz(gesamt.von), datumKurz2: datumKurz(gesamt.bis) })}</div>
       {/if}
       {#if zeige.kugeln && ganzeKugel}
-        <div class="d-kugel"><Weltkugel {...ganzeKugel} groesse={breitesBild ? 300 : 230} minP={2} titel="Weltkugel mit der ganzen Reise" /></div>
+        <div class="d-kugel"><Weltkugel {...ganzeKugel} groesse={breitesBild ? 300 : 230} minP={2} titel={t('Weltkugel mit der ganzen Reise')} /></div>
       {/if}
       <div class="d-stats">
         {#if gesamt.km}<span>🛣️ {gesamt.km} km</span>{/if}
@@ -724,7 +724,7 @@
           {#if k.untertitel}<span>{k.untertitel}{#if k.etappe}&nbsp;· {tageText(k.etappe.tage)}{/if}</span>{/if}
         </div>
         {#if zeige.kugeln && pl?.kugel}
-          <Weltkugel {...pl.kugel} groesse={breitesBild ? 200 : 132} titel="Weltkugel: {k.titel}" />
+          <Weltkugel {...pl.kugel} groesse={breitesBild ? 200 : 132} titel={je(`Weltkugel: ${k.titel}`, `Globe: ${k.titel}`)} />
         {/if}
       </header>
       {#if pl && zeige.etappen}

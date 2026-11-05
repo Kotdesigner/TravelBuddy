@@ -432,7 +432,7 @@
     })
     if (import.meta.env.DEV) window.__karte = map   // nur für Tests auf dem Entwicklungsserver
     // VoiceOver: beide Karten hießen „Map" — jetzt unterscheidbar
-    map.getCanvas().setAttribute('aria-label', 'Offline-Karte von Australien')
+    map.getCanvas().setAttribute('aria-label', je('Offline-Karte von Australien', 'Offline map of Australia'))
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
     map.addControl(baueExportKnopf(() => (expOffen = true)), 'top-right')
     // Marker können sofort gesetzt werden (unabhängig vom 'load'-Event, das
@@ -953,8 +953,9 @@
   .off-ok { color: var(--ok-text); font-weight: 700; }
   .off-lauf { color: var(--brand-text); font-weight: 700; }
   .off-hinweis { color: var(--muted); font-weight: 600; }
+  .off-btn::after { content: ''; position: absolute; inset: -6px 0; }
   .off-btn {
-    padding: 5px 12px; border: 1px solid var(--brand); background: none; color: var(--brand-text);
+    position: relative; padding: 5px 12px; border: 1px solid var(--brand); background: none; color: var(--brand-text);
     border-radius: 14px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; cursor: pointer;
   }
   .off-btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }

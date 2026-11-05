@@ -39,7 +39,8 @@
 <style>
   .bz { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 4px; font-size: calc(13px * var(--schrift, 1)); }
   .bz.klein { font-size: calc(12px * var(--schrift, 1)); gap: 4px; }
-  .bz-ref { border: 1px solid var(--line-stark); background: var(--eingabe); color: var(--ink); border-radius: var(--radius-s); min-height: 32px; padding: 2px 8px; font-size: 1em; font-weight: 700; letter-spacing: 0.03em; cursor: pointer; }
+  .bz-ref::after { content: ''; position: absolute; inset: -6px 0; }
+  .bz-ref { position: relative; border: 1px solid var(--line-stark); background: var(--eingabe); color: var(--ink); border-radius: var(--radius-s); min-height: 32px; padding: 2px 8px; font-size: 1em; font-weight: 700; letter-spacing: 0.03em; cursor: pointer; }
   .bz-k { display: inline-flex; gap: 4px; align-items: center; flex-wrap: wrap; font-weight: 700; }
   .bz-k small { font-weight: 400; color: var(--muted); font-size: 1em; }
   .bz-k.offen { color: var(--warn, #b45309); }

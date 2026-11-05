@@ -157,7 +157,7 @@
         <div class="c-kopf">
           <button class="aufklapp" class:offen={offen[w.id]} onclick={() => toggle(w.id)} title={offen[w.id] ? t('zuklappen') : t('aufklappen')} aria-expanded={!!offen[w.id]}></button>
           <div class="c-titel">
-            <input class="c-name" value={w.name} oninput={(e) => set(w.id, { name: e.target.value })} placeholder={t('Name der Wanderung')} />
+            <input class="c-name" value={w.name} oninput={(e) => set(w.id, { name: e.target.value })} placeholder={t('Name der Wanderung')} aria-label={t('Name der Wanderung')} />
             <div class="c-sub">
               <span class="badge stat-{w.status}">{stx?.emoji} {stx?.label}</span>
               {#if w.datum}<span class="badge termin">📅 {fmtTag(w.datum, w.zeit)}</span>{/if}
