@@ -96,7 +96,23 @@ const PRF = crypto.getRandomValues(new Uint8Array(32))
   p('ohne Passkey: nur der Code', nurCode.privPrf === null && !!(await wirft(() => T.oeffneMitPrf(nurCode, PRF))))
   p('unvollständiger Code wird abgelehnt', !!(await wirft(() => T.neuerTresor({ code: 'ABCD' }))))
   p('der private Schlüssel ist nicht exportierbar', k.extractable === false)
-  p('im Datensatz liegt der private Schlüssel nur verschlüsselt', Object.keys(d).sort().join() === 'angelegt,codeSalz,credId,iterationen,prfSalz,privCode,privPrf,pub,version')
+  p('im Datensatz liegt der private Schlüssel nur verschlüsselt', Object.keys(d).sort().join() === 'angelegt,codeArt,codeSalz,credId,iterationen,prfSalz,privCode,privPrf,pub,version')
+}
+
+console.log('\n2b  Eigene PIN oder eigenes Passwort (V17)')
+{
+  const { datensatz: pin } = await T.neuerTresor({ code: '482913', codeArt: 'pin', iterationen: SCHNELL })
+  p('PIN: öffnet mit der PIN, auch mit Leerzeichen', pin.codeArt === 'pin' && (await T.oeffneMitCode(pin, '482 913'))?.type === 'private')
+  p('PIN: falsche PIN öffnet nicht', (await wirft(() => T.oeffneMitCode(pin, '482914')))?.name === 'FalscherSchluessel')
+  p('PIN unter 6 Ziffern oder mit Buchstaben wird abgelehnt', !!(await wirft(() => T.neuerTresor({ code: '1234', codeArt: 'pin' }))) && !!(await wirft(() => T.neuerTresor({ code: '12345a', codeArt: 'pin' }))))
+  const { datensatz: pw } = await T.neuerTresor({ code: 'Känguru-Sprung 7', codeArt: 'passwort', iterationen: SCHNELL })
+  p('Passwort: öffnet genau mit dem Passwort', (await T.oeffneMitCode(pw, 'Känguru-Sprung 7'))?.type === 'private')
+  p('Passwort: Groß und klein zählen', (await wirft(() => T.oeffneMitCode(pw, 'känguru-sprung 7')))?.name === 'FalscherSchluessel')
+  p('Passwort unter 8 Zeichen wird abgelehnt', !!(await wirft(() => T.neuerTresor({ code: 'kurz', codeArt: 'passwort' }))))
+  p('codeGueltig prüft je Art', T.codeGueltig('123456', 'pin') && !T.codeGueltig('12345', 'pin') && T.codeGueltig('achtZeic', 'passwort') && T.codeGueltig(CODE) && !T.codeGueltig('ABCD'))
+  const alt = { ...(await T.neuerTresor({ code: CODE, iterationen: SCHNELL })).datensatz }
+  delete alt.codeArt
+  p('alter Tresor ohne codeArt öffnet weiter mit dem Notfall-Code', (await T.oeffneMitCode(alt, CODE))?.type === 'private')
 }
 
 console.log('\n3  Ein Beleg')

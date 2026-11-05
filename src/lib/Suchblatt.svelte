@@ -13,6 +13,7 @@
   // Packliste und Vorbereitung (gesamtsuche.js). Orte bleiben oben, mit Etiketten und Kacheln.
   import { gesamtsuche } from './gesamtsuche.js'
   import { journal, wanderungen, buchungen, notizen, reisen, gesamtStart, packliste, vorbereitung, dokumente } from './userdata.js'
+  import { tresor } from './tresor.js'
   import { etappenMitDatum } from './plan.js'
   import { ARTEN, artVon } from './tierwelt.js'
   import { PACK_VORLAGE } from './packliste-daten.js'
@@ -53,7 +54,7 @@
   const weitere = $derived(tags.length ? [] : gesamtsuche(q, {
     journal: $journal, wanderungen: $wanderungen, buchungen: $buchungen, notizen: $notizen, reisen: $reisen,
     etappen: etappenMitDatum($reisen, $gesamtStart), start: $gesamtStart, arten: ARTEN, artVon, katInfo, notizTyp: NOTIZ_TYP,
-    packVorlage: PACK_VORLAGE, pack: $packliste, vorbVorlage: VORBEREITUNG, vorb: $vorbereitung, dokumente: $dokumente, texte: TEXTE,
+    packVorlage: PACK_VORLAGE, pack: $packliste, vorbVorlage: VORBEREITUNG, vorb: $vorbereitung, dokumente: $tresor.aktiv && !$tresor.entsperrt ? [] : $dokumente, texte: TEXTE,   // V17: gesperrte Dokumente findet die Suche nicht
   }))
   const weitereZahl = $derived(weitere.reduce((n, g) => n + g.treffer.length, 0))
   const JE_GRUPPE = 5

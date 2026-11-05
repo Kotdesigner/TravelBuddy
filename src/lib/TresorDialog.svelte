@@ -1,16 +1,19 @@
 <script>
-  import { t } from './i18n.js'
+  import { t, je } from './i18n.js'
   // Entsperren vor dem Öffnen eines Belegs (tresor.js). Face ID oder Touch ID startet schon beim
   // Antippen des Belegs; hier steht, was gerade passiert, danach der Knopf „Beleg öffnen“.
   // Klappt es nicht: nochmal oder mit dem Notfall-Code.
   import { onMount } from 'svelte'
   import { modal } from './modal.js'
-  import { tresorAnfrage, starteFaceId, codeEingeben, weiter, abbrechen, ladeTresor, bioName } from './tresor.js'
+  import { tresor, tresorAnfrage, starteFaceId, codeEingeben, weiter, abbrechen, ladeTresor, bioName } from './tresor.js'
 
   const a = $derived($tresorAnfrage)
   const bio = bioName()
   let code = $state('')
   let prueft = $state(false)
+  // V17: Notfall-Code, eigene PIN oder eigenes Passwort, je nachdem, wie der Schutz eingerichtet ist
+  const art = $derived($tresor.codeArt || 'notfall')
+  const codeName = $derived(art === 'pin' ? je('PIN', 'PIN') : art === 'passwort' ? je('Passwort', 'Password') : t('Notfall-Code'))
   onMount(() => { ladeTresor() })
   $effect(() => { if (!a) { code = ''; prueft = false } })
 
@@ -27,14 +30,14 @@
 {#if a}
   <div class="td-hg" data-dialog-hg onclick={abbrechen} aria-hidden="true"></div>
   <div class="td" role="dialog" aria-labelledby="td-titel" use:modal={{ onclose: abbrechen, fokus: a.zustand === 'bereit' ? '.td-ja' : a.zustand === 'code' ? 'input' : null }}>
-    <h2 id="td-titel"><span aria-hidden="true">{a.zustand === 'bereit' ? '🔓' : '🔒'}</span> {a.zustand === 'bereit' ? t('Entsperrt') : t('Belege sind geschützt')}</h2>
+    <h2 id="td-titel"><span aria-hidden="true">{a.zustand === 'bereit' ? '🔓' : '🔒'}</span> {a.zustand === 'bereit' ? t('Entsperrt') : je('Dokumente und Belege sind geschützt', 'Documents and vouchers are protected')}</h2>
 
     {#if a.zustand === 'passkey'}
       <p aria-live="polite">{t('Bestätige mit {bio} …', { bio })}</p>
       <div class="td-knoepfe einzeln"><button class="td-nein" onclick={abbrechen}>{t('Abbrechen')}</button></div>
 
     {:else if a.zustand === 'bereit'}
-      <p>{t('Für fünf Minuten bleiben deine Belege offen.')}</p>
+      <p>{je('Für fünf Minuten bleiben deine Dokumente und Belege offen.', 'Your documents and vouchers stay open for five minutes.')}</p>
       <div class="td-knoepfe">
         <button class="td-nein" onclick={abbrechen}>{t('Abbrechen')}</button>
         <button class="td-ja" onclick={weiter}>{a.knopf}</button>
@@ -43,14 +46,15 @@
     {:else if a.zustand === 'wahl'}
       {#if a.fehler}<p class="td-fehler" role="alert">{a.fehler}</p>{:else}<p>{t('{bio} hat nicht geklappt.', { bio })}</p>{/if}
       <div class="td-knoepfe">
-        <button class="td-nein" onclick={() => tresorAnfrage.update((x) => x && { ...x, zustand: 'code', fehler: '' })}>{t('Notfall-Code')}</button>
+        <button class="td-nein" onclick={() => tresorAnfrage.update((x) => x && { ...x, zustand: 'code', fehler: '' })}>{codeName}</button>
         <button class="td-ja" onclick={starteFaceId}>{t('Nochmal mit {bio}', { bio })}</button>
       </div>
 
     {:else}
       <form onsubmit={mitCode}>
-        <label class="td-feld">{t('Notfall-Code')}
-          <input bind:value={code} autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX" />
+        <label class="td-feld">{codeName}
+          {#if art === 'notfall'}<input bind:value={code} autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX" />
+          {:else}<input type="password" bind:value={code} autocomplete="current-password" inputmode={art === 'pin' ? 'numeric' : 'text'} autocapitalize="off" spellcheck="false" />{/if}
         </label>
         {#if a.fehler}<p class="td-fehler" role="alert">{a.fehler}</p>{/if}
         <div class="td-knoepfe">

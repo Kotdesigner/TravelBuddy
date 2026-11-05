@@ -1,5 +1,5 @@
 <script>
-  import { t, tn } from './i18n.js'
+  import { t, tn, je } from './i18n.js'
   // Belege mit Face ID oder Touch ID schützen (tresor.js): einrichten, Zustand, sperren, aufheben.
   // Einrichten: Notfall-Code zeigen, zur Kontrolle eintippen lassen, dann Passkey anlegen (Face ID
   // oder Touch ID), dann alle Belege auf dem Gerät verschlüsseln. Kann das Gerät keinen Passkey mit
@@ -10,11 +10,20 @@
   import { klapp, dauer } from './motion.js'
   import {
     tresor, ladeTresor, erzeugeCode, normCode, passkeyMoeglich, passkeyAnlegen, passkeyPrf, richteEin, sperre,
-    entsperreDann, entferneTresor, bioName,
+    entsperreDann, entferneTresor, bioName, codeGueltig,
   } from './tresor.js'
   import { verschluesseleAlleBelege, entschluesseleAlleBelege, belegSchutz } from './belege.js'
 
-  let { anzahl = 0 } = $props()   // Belege auf diesem Gerät (zum Auffrischen der Zählung)
+  /** kontext 'dokumente': Texte für „Dokumente sperren“ (Reisevorbereitung → Dokumente). Derselbe Tresor. */
+  let { anzahl = 0, kontext = 'belege' } = $props()   // anzahl: Belege auf diesem Gerät (zum Auffrischen der Zählung)
+  const dok = kontext === 'dokumente'
+  // V17: eigene PIN oder eigenes Passwort statt Notfall-Code (geht auch ohne Passkey, z. B. in der Mac-App)
+  let art = $state('notfall')
+  let eigen1 = $state(''), eigen2 = $state('')
+  const eigenOk = $derived(codeGueltig(eigen1, art) && eigen1 === eigen2)
+  const artName = (a) => (a === 'pin' ? je('PIN', 'PIN') : a === 'passwort' ? je('Passwort', 'password') : t('Notfall-Code'))
+  function eigenStarten(a) { art = a; eigen1 = ''; eigen2 = ''; meldung = ''; schritt = 'eigen' }
+  function eigenFertig() { if (!eigenOk) return; code = eigen1; fertigstellen(null, null) }
 
   const bio = bioName()
   let schritt = $state('zu')       // zu | code | bestaetigen | arbeit
@@ -37,6 +46,7 @@
   $effect(() => { anzahl; $tresor.aktiv; zaehle() })
 
   function starten() {
+    art = 'notfall'
     code = erzeugeCode()
     kontrolle = ''
     meldung = ''
@@ -66,11 +76,14 @@
     schritt = 'arbeit'
     arbeit = { n: 0, von: 0, text: t('Richte den Schutz ein …') }
     try {
-      await richteEin({ code, passkey: pk, prf })
-      code = ''; kontrolle = ''; passkey = null
+      await richteEin({ code, codeArt: art, passkey: pk, prf })
+      code = ''; kontrolle = ''; passkey = null; eigen1 = ''; eigen2 = ''
       arbeit = { n: 0, von: 0, text: t('Verschlüssele die Belege …') }
       const r = await verschluesseleAlleBelege((n, von) => (arbeit = { n, von, text: t('Verschlüssele die Belege …') }))
-      zeigeToast(prf ? t('🔒 Geschützt: Belege öffnen sich nur noch mit {bio} oder dem Notfall-Code.', { bio }) : t('🔒 Geschützt: Belege öffnen sich nur noch mit dem Notfall-Code.'), 'ok', 5000)
+      zeigeToast(prf ? t('🔒 Geschützt: Belege öffnen sich nur noch mit {bio} oder dem Notfall-Code.', { bio })
+        : art === 'pin' ? je('🔒 Geschützt: Dokumente und Belege öffnen sich nur noch mit deiner PIN.', '🔒 Protected: documents and vouchers now only open with your PIN.')
+        : art === 'passwort' ? je('🔒 Geschützt: Dokumente und Belege öffnen sich nur noch mit deinem Passwort.', '🔒 Protected: documents and vouchers now only open with your password.')
+        : t('🔒 Geschützt: Belege öffnen sich nur noch mit dem Notfall-Code.'), 'ok', 5000)
       schritt = 'zu'
       if (!r.verschluesselt && !anzahl) meldung = t('Neue Belege werden ab jetzt verschlüsselt abgelegt.')
     } catch (e) {
@@ -100,8 +113,8 @@
 <div class="ts">
   {#if $tresor.aktiv}
     <div class="ts-kopf">
-      <span class="ts-titel">{$tresor.entsperrt ? '🔓' : '🔒'} {$tresor.passkey ? t('Geschützt mit {bio}', { bio }) : t('Geschützt mit Notfall-Code')}</span>
-      <span class="ts-zahl">{tn(schutz.verschluesselt, '{n} Beleg verschlüsselt', '{n} Belege verschlüsselt')}{#if $tresor.entsperrt} · {t('gerade offen')}{/if}</span>
+      <span class="ts-titel">{$tresor.entsperrt ? '🔓' : '🔒'} {$tresor.passkey ? t('Geschützt mit {bio}', { bio }) : $tresor.codeArt === 'pin' ? je('Geschützt mit PIN', 'Protected with PIN') : $tresor.codeArt === 'passwort' ? je('Geschützt mit Passwort', 'Protected with password') : t('Geschützt mit Notfall-Code')}</span>
+      <span class="ts-zahl">{dok ? (schutz.verschluesselt === 1 ? je('1 Datei verschlüsselt', '1 file encrypted') : je(`${schutz.verschluesselt} Dateien verschlüsselt`, `${schutz.verschluesselt} files encrypted`)) : tn(schutz.verschluesselt, '{n} Beleg verschlüsselt', '{n} Belege verschlüsselt')}{#if $tresor.entsperrt}{' · '}{t('gerade offen')}{/if}</span>
     </div>
     {#if schritt === 'arbeit'}
       <p class="ts-status" aria-live="polite">{arbeit.text}{#if arbeit.von} {t('{n} von {von}', { n: arbeit.n, von: arbeit.von })}{/if}</p>
@@ -112,11 +125,36 @@
       </div>
     {/if}
   {:else if schritt === 'zu'}
-    <div class="ts-kopf"><span class="ts-titel">{t('🔒 Belege schützen')}</span></div>
-    <p class="ts-k">{mitPasskey
+    <div class="ts-kopf"><span class="ts-titel">{dok ? je('🔒 Dokumente sperren', '🔒 Lock documents') : t('🔒 Belege schützen')}</span></div>
+    <p class="ts-k">{dok
+      ? je('Deine Dokumente und Belege öffnen sich dann nur nach Entsperren, auch ohne Netz. Die Dateien liegen verschlüsselt auf diesem Gerät.', 'Your documents and vouchers then only open after unlocking, even without signal. The files are stored encrypted on this device.')
+      : mitPasskey
       ? t('Tickets, Pass und Visum öffnen sich dann nur nach {bio}, auch ohne Netz. Die Belege liegen verschlüsselt auf diesem Gerät.', { bio })
       : t('Tickets, Pass und Visum öffnen sich dann nur mit deinem Notfall-Code. Die Belege liegen verschlüsselt auf diesem Gerät.')}</p>
-    <div class="ts-akt"><button class="btn" onclick={starten}>{mitPasskey ? t('Mit {bio} schützen', { bio }) : t('Mit Notfall-Code schützen')}</button></div>
+    <div class="ts-akt">
+      {#if mitPasskey}<button class="btn" onclick={starten}>{t('Mit {bio} schützen', { bio })}</button>{/if}
+      <button class="btn" onclick={() => eigenStarten('pin')}>{je('Mit PIN', 'With PIN')}</button>
+      <button class="btn" onclick={() => eigenStarten('passwort')}>{je('Mit Passwort', 'With password')}</button>
+      {#if !mitPasskey}<button class="btn btn-ghost" onclick={starten}>{t('Mit Notfall-Code schützen')}</button>{/if}
+    </div>
+  {:else if schritt === 'eigen'}
+    <form class="ts-panel" onsubmit={(e) => { e.preventDefault(); eigenFertig() }} transition:klapp={{ duration: dauer(220) }}>
+      <span class="ts-titel">{art === 'pin' ? je('Eigene PIN', 'Your own PIN') : je('Eigenes Passwort', 'Your own password')}</span>
+      <p class="ts-k">{art === 'pin'
+        ? je('6 bis 12 Ziffern. Merk sie dir gut: ohne PIN sind die Dateien nicht mehr lesbar. Ein Passwort ist sicherer als eine PIN.', '6 to 12 digits. Remember it well: without the PIN the files can no longer be read. A password is safer than a PIN.')
+        : je('Mindestens 8 Zeichen. Merk es dir gut: ohne Passwort sind die Dateien nicht mehr lesbar.', 'At least 8 characters. Remember it well: without the password the files can no longer be read.')}</p>
+      <label class="ts-feld">{artName(art)}
+        <input type="password" bind:value={eigen1} autocomplete="new-password" inputmode={art === 'pin' ? 'numeric' : 'text'} autocapitalize="off" spellcheck="false" />
+      </label>
+      <label class="ts-feld">{je('Noch einmal', 'Once more')}
+        <input type="password" bind:value={eigen2} autocomplete="new-password" inputmode={art === 'pin' ? 'numeric' : 'text'} autocapitalize="off" spellcheck="false" />
+      </label>
+      {#if eigen2 && eigen1 !== eigen2}<p class="ts-k">{je('Die beiden Eingaben sind nicht gleich.', 'The two entries do not match.')}</p>{/if}
+      <div class="ts-akt">
+        <button type="button" class="btn btn-ghost" onclick={() => (schritt = 'zu')}>{t('Abbrechen')}</button>
+        <button type="submit" class="btn" disabled={!eigenOk}>{je('Sperren', 'Lock')}</button>
+      </div>
+    </form>
   {:else if schritt === 'code' || schritt === 'bestaetigen'}
     <div class="ts-panel" transition:klapp={{ duration: dauer(220) }}>
       {#if schritt === 'code'}

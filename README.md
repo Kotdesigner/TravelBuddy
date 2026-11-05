@@ -8,7 +8,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.11 · built for Western Australia**<br>
+**Version 1.12 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
@@ -81,6 +81,12 @@ Perth to Broome is 2,200 kilometres. In between: roadhouses up to 300 km apart, 
 | 🔒 **Yours alone** | No account, no server, no tracking. All data stays on your device. |
 
 ---
+
+## 🔐 New in version 1.12
+
+**Your documents, with the file.** Under More → Trip preparation → Documents, passport, visa, insurance and licence get their file: tap “File or photo”, take a picture, pick a photo or a PDF. It opens with one tap, offline too, and stays on the device.
+
+**Lock them the way you like.** “Lock documents” protects them with Face ID, Touch ID or Windows Hello, with your own PIN or with a password. The files are encrypted on the device. While locked, the documents stay hidden and search doesn't find them. PIN and password also work where a device can't do Face ID, for example in the Mac app.
 
 ## 🎟️ New in version 1.11
 
@@ -288,9 +294,9 @@ Sorted by how much it helps on the road: safety and planning first, photo tools 
 - 📨 **Booking from email:** paste it, the form fills itself in and shows what was found, also for tours, tickets and admissions
 - 🎫 **One booking, everywhere:** date, booking number to copy, cost and documents together, with or without an email
 - 🎫 **Tickets and documents offline** on the device
-- 🔐 **Face ID, Touch ID or Windows Hello** to protect your documents
+- 🔐 **Lock your documents** with Face ID, Touch ID, Windows Hello, a PIN or a password
 - ✈️ **Trip preparation** with countdown and checklist
-- 🪪 **Document expiry warnings** for passport, visa and more
+- 🪪 **Documents with their file:** passport, visa and more with expiry warning and the PDF or photo attached
 - 💶 **Budget in euro and AU$** at the daily exchange rate
 - 🧾 **Costs per day** in 23 categories, as many single items as you like
 - 💸 **Quick expense** on the home screen and an evening check whether you spent anything
@@ -504,8 +510,8 @@ TravelBuddy collects the music of the places you pass through, **automatically, 
 
 ### 🎟️ Organise
 - **Booking from email:** paste the confirmation, and type, title, date, time, place, booking number and price are filled in and attached to the right stage. You see what was found and check the rest.
-- **Tickets and documents** open offline, protected by **Face ID, Touch ID or Windows Hello** if you like. They never leave the device.
-- **Trip preparation** with a countdown and a ready-made checklist (weeks before, just before, departure day) plus your own points, **documents** with expiry dates and warnings.
+- **Tickets and documents** open offline, protected by **Face ID, Touch ID, Windows Hello, a PIN or a password** if you like. They never leave the device.
+- **Trip preparation** with a countdown and a ready-made checklist (weeks before, just before, departure day) plus your own points, **documents** with expiry dates, warnings and their file (PDF or photo).
 - **Budget in euro and AU$** at the daily rate, pre-trip costs, an outback **packing list**.
 - **Flights and trains:** add them under route, stage or pre-trip costs with number, booking, seat and document. Under More → Flights & trains you see status, new times, terminal, gate, check-in desk, platform, baggage belt and connections. It also shows up on the Today page and 24 hours before departure. Flights need your own free [AeroDataBox](https://aerodatabox.com) key from RapidAPI, German trains need none. Without internet you see the last status.
 - **Costs:** under More → Costs everything from pre-trip costs and logbook comes together: short values, long values, transport, stays and experiences, per stage and per item. Long values stay out of the daily average. Every list adds up exactly to the total.
@@ -690,7 +696,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 | Live data | [Open-Meteo](https://open-meteo.com), [MET Norway](https://api.met.no), DFES Emergency WA, VicEmergency, Queensland Fire Department, Main Roads WA, [frankfurter.app](https://frankfurter.app), [AeroDataBox](https://aerodatabox.com) via RapidAPI for flights, [DBF](https://dbf.finalrewind.org) for German trains |
 | Places | Nominatim, Wikipedia and Wikimedia Commons |
 | Sun and moon | [SunCalc](https://github.com/mourner/suncalc), offline |
-| Security | WebAuthn with the PRF extension (Face ID, Touch ID, Windows Hello), AES-GCM, all in the browser |
+| Security | WebAuthn with the PRF extension (Face ID, Touch ID, Windows Hello) or PIN and password with PBKDF2, AES-GCM, all in the browser |
 | Music | Spotify Web API, MusicBrainz, Last.fm |
 
 ---
@@ -717,6 +723,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.9:** second weather service, location in the Mac app, safer maps
 - [x] **Version 1.10:** nights at a glance, routes with dates, places saved for later, bookings in one place, quick expenses
 - [x] **Version 1.11:** bookings fill themselves in from an email, tickets and admissions, expenses over a period, checked from top to bottom
+- [x] **Version 1.12:** documents with their file, locked with Face ID, Touch ID, PIN or password
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -738,7 +745,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.11 · entwickelt für Western Australia**<br>
+**Version 1.12 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
@@ -801,6 +808,12 @@ Zwischen Perth und Broome liegen 2.200 Kilometer. Dazwischen: Roadhouses, die te
 | 🎵 **Spielt, wo du bist** | Sammelt die Musik jedes Ortes, durch den du kommst, in deine eigene Spotify-Playlist: lokale Bands, ihr meistgehörter Song zuerst. |
 | 📔 **Schreibt dein Reisetagebuch** | Logbuch mit 16 Modulen, vom Fliegen-Faktor bis zum Roadkill-Zähler, daraus entstehen Reisetagebuch, Reise-Film und Reisebericht. |
 | 🔒 **Gehört dir** | Kein Konto, kein Server, kein Tracking. Alle Daten bleiben auf deinem Gerät. |
+
+## 🔐 Neu in Version 1.12
+
+**Deine Dokumente, mit Datei.** Unter Mehr → Reisevorbereitung → Dokumente bekommen Pass, Visum, Versicherung und Führerschein ihre Datei: „Datei oder Foto“ antippen, fotografieren, ein Foto oder ein PDF wählen. Sie öffnet sich mit einem Tipp, auch offline, und bleibt auf dem Gerät.
+
+**Sperren, wie du willst.** „Dokumente sperren“ schützt sie mit Face ID, Touch ID oder Windows Hello, mit einer eigenen PIN oder einem Passwort. Die Dateien liegen verschlüsselt auf dem Gerät. Gesperrt bleiben die Dokumente verborgen, und die Suche findet sie nicht. PIN und Passwort gehen auch dort, wo ein Gerät kein Face ID kann, zum Beispiel in der Mac-App.
 
 ## 🎟️ Neu in Version 1.11
 
@@ -1002,9 +1015,9 @@ Sortiert nach Nutzen unterwegs: Sicherheit und Planung zuerst, Fotohelfer und Op
 - 📨 **Buchung aus Mail:** einfügen, das Formular füllt sich aus und zeigt, was gefunden wurde, auch für Touren, Tickets und Eintritte
 - 🎫 **Eine Buchung, überall:** Termin, Buchungsnummer zum Kopieren, Kosten und Belege zusammen, mit oder ohne Mail
 - 🎫 **Tickets und Dokumente offline** auf dem Gerät
-- 🔐 **Face ID, Touch ID oder Windows Hello** schützen deine Dokumente
+- 🔐 **Dokumente sperren** mit Face ID, Touch ID, Windows Hello, PIN oder Passwort
 - ✈️ **Reisevorbereitung** mit Countdown und Checkliste
-- 🪪 **Warnung vor Ablaufdaten** für Pass, Visum und mehr
+- 🪪 **Dokumente mit Datei:** Pass, Visum und mehr mit Warnung vor dem Ablaufdatum und dem PDF oder Foto dazu
 - 💶 **Budget in Euro und AU$** zum Tageskurs
 - 🧾 **Kosten je Tag** in 23 Kategorien, beliebig viele einzelne Posten
 - 💸 **Schnell-Ausgabe** auf der Startseite und eine Abendfrage, ob du etwas ausgegeben hast
@@ -1216,8 +1229,8 @@ TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, wäh
 
 ### 🎟️ Organisieren
 - **Buchung aus Mail:** Bestätigung einfügen, Art, Titel, Datum, Uhrzeit, Ort, Buchungsnummer und Preis werden eingetragen und an die passende Etappe gehängt. Du siehst, was gefunden wurde, und prüfst den Rest.
-- **Tickets und Dokumente** öffnen sich auch offline, auf Wunsch geschützt mit **Face ID, Touch ID oder Windows Hello**. Sie verlassen nie das Gerät.
-- **Reisevorbereitung** mit Countdown und fertiger Checkliste (Wochen vorher, kurz vorher, Abreisetag) plus eigenen Punkten, **Dokumente** mit Ablaufdatum und Warnung.
+- **Tickets und Dokumente** öffnen sich auch offline, auf Wunsch geschützt mit **Face ID, Touch ID, Windows Hello, PIN oder Passwort**. Sie verlassen nie das Gerät.
+- **Reisevorbereitung** mit Countdown und fertiger Checkliste (Wochen vorher, kurz vorher, Abreisetag) plus eigenen Punkten, **Dokumente** mit Ablaufdatum, Warnung und ihrer Datei (PDF oder Foto).
 - **Budget in Euro und AU$** zum Tageskurs, Vorab-Ausgaben, **Packliste** fürs Outback.
 - **Flüge und Züge:** Du trägst sie unter Route, Etappe oder Vorabausgaben ein, mit Nummer, Buchung, Sitzplatz und Dokument. Unter Mehr → Flüge & Bahn stehen Status, neue Zeiten, Terminal, Gate, Schalter, Gleis, Gepäckband und Umstieg. Das zeigt auch die Heute-Seite, und 24 Stunden vor dem Abflug kommt ein Hinweis. Für Flüge brauchst du einen eigenen kostenlosen [AeroDataBox](https://aerodatabox.com)-Schlüssel von RapidAPI, für deutsche Züge keinen. Ohne Netz siehst du den letzten Stand.
 - **Kosten:** Unter Mehr → Kosten läuft alles aus Vorabausgaben und Logbuch zusammen: Short-Values, Long-Values, Verkehr, Unterkunft und Erlebnisse, je Etappe und je Posten. Long-Values zählen nicht in den Tagesschnitt. Jede Liste ergibt genau die Gesamtsumme.
@@ -1405,6 +1418,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.9:** zweiter Wetterdienst, Standort in der Mac-App, sicherere Karten
 - [x] **Version 1.10:** Nächte im Blick, Routen mit Zeitraum, Orte vormerken, Buchungen an einem Ort, Schnell-Ausgabe
 - [x] **Version 1.11:** Buchungen füllen sich aus der Mail aus, Tickets und Eintritte, Ausgaben über einen Zeitraum, von oben bis unten geprüft
+- [x] **Version 1.12:** Dokumente mit Datei, gesperrt mit Face ID, Touch ID, PIN oder Passwort
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

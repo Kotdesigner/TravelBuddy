@@ -13,7 +13,7 @@
 //
 // Eigene Datenbank `wa-tresor`, nicht im Backup, wie die Belege selbst.
 import { writable, get } from 'svelte/store'
-import { t } from './i18n.js'
+import { t, je } from './i18n.js'
 
 export const ITERATIONEN = 600000
 export const OFFEN_MS = 5 * 60 * 1000
@@ -38,10 +38,22 @@ export function erzeugeCode() {
 export const normCode = (s) => String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
 export const codeVollstaendig = (s) => normCode(s).length === 16 && [...normCode(s)].every((c) => ZEICHEN.includes(c))
 
+// V17: Statt des Notfall-Codes geht auch eine eigene PIN (6 bis 12 Ziffern) oder ein eigenes Passwort
+// (mindestens 8 Zeichen). Eine PIN ist schwächer als der Code: wer das Gerät hat, kann sie durchprobieren.
+export const CODE_ARTEN = ['notfall', 'pin', 'passwort']
+const ohneLeer = (s) => String(s || '').replace(/\s+/g, '')
+export function codeGueltig(code, art = 'notfall') {
+  if (art === 'pin') return /^\d{6,12}$/.test(ohneLeer(code))
+  if (art === 'passwort') return String(code || '').length >= 8
+  return codeVollstaendig(code)
+}
+/** Was aus der Eingabe in den Schlüssel geht: Code ohne Striche, PIN ohne Leerzeichen, Passwort genau so. */
+const codeBytes = (code, art) => enc.encode(art === 'pin' ? ohneLeer(code) : art === 'passwort' ? String(code).normalize('NFC') : normCode(code))
+
 // ---------- Schlüssel ----------
 
-async function kekAusCode(code, salz, iter) {
-  const basis = await crypto.subtle.importKey('raw', enc.encode(normCode(code)), 'PBKDF2', false, ['deriveKey'])
+async function kekAusCode(code, salz, iter, art = 'notfall') {
+  const basis = await crypto.subtle.importKey('raw', codeBytes(code, art), 'PBKDF2', false, ['deriveKey'])
   return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: u8(salz), iterations: iter, hash: 'SHA-256' }, basis, AES, false, ['encrypt', 'decrypt'])
 }
 async function kekAusPrf(prf) {
@@ -59,15 +71,16 @@ const privatImport = (pkcs8) => crypto.subtle.importKey('pkcs8', pkcs8, KURVE, f
  * Neuer Tresor-Datensatz. `prf` (32 Byte aus dem Passkey) ist optional: ohne ihn öffnet nur der Code.
  * @returns { datensatz, privat }  privat = CryptoKey, nicht exportierbar
  */
-export async function neuerTresor({ code, prf = null, credId = null, prfSalz = null, iterationen = ITERATIONEN }) {
-  if (!codeVollstaendig(code)) throw new Error(t('Der Notfall-Code ist nicht vollständig.'))
+export async function neuerTresor({ code, codeArt = 'notfall', prf = null, credId = null, prfSalz = null, iterationen = ITERATIONEN }) {
+  if (!CODE_ARTEN.includes(codeArt)) codeArt = 'notfall'
+  if (!codeGueltig(code, codeArt)) throw new Error(codeArt === 'pin' ? t('Die PIN braucht 6 bis 12 Ziffern.') : codeArt === 'passwort' ? t('Das Passwort braucht mindestens 8 Zeichen.') : t('Der Notfall-Code ist nicht vollständig.'))
   const paar = await crypto.subtle.generateKey(KURVE, true, ['deriveBits'])
   const pub = u8(await crypto.subtle.exportKey('raw', paar.publicKey))
   const priv = u8(await crypto.subtle.exportKey('pkcs8', paar.privateKey))
   const codeSalz = zufall(16)
   const datensatz = {
     version: 1, angelegt: new Date().toISOString(), pub,
-    codeSalz, iterationen, privCode: await einpacken(await kekAusCode(code, codeSalz, iterationen), priv),
+    codeArt, codeSalz, iterationen, privCode: await einpacken(await kekAusCode(code, codeSalz, iterationen, codeArt), priv),
     credId: credId ? u8(credId) : null, prfSalz: prfSalz ? u8(prfSalz) : null,
     privPrf: prf ? await einpacken(await kekAusPrf(prf), priv) : null,
   }
@@ -83,7 +96,7 @@ async function oeffne(kek, paket) {
   priv.fill(0)
   return k
 }
-export const oeffneMitCode = async (d, code) => oeffne(await kekAusCode(code, d.codeSalz, d.iterationen || ITERATIONEN), d.privCode)
+export const oeffneMitCode = async (d, code) => oeffne(await kekAusCode(code, d.codeSalz, d.iterationen || ITERATIONEN, d.codeArt || 'notfall'), d.privCode)
 export async function oeffneMitPrf(d, prf) {
   if (!d.privPrf) throw new Error(t('Dieser Tresor hat keinen Passkey.'))
   return oeffne(await kekAusPrf(prf), d.privPrf)
@@ -192,8 +205,8 @@ async function lies() {
 
 let datensatz = null, privat = null, timer = null
 /** { geladen, aktiv, passkey, entsperrt } */
-export const tresor = writable({ geladen: false, aktiv: false, passkey: false, entsperrt: false })
-const melde = () => tresor.set({ geladen: true, aktiv: !!datensatz, passkey: !!datensatz?.privPrf, entsperrt: !!privat })
+export const tresor = writable({ geladen: false, aktiv: false, passkey: false, entsperrt: false, codeArt: 'notfall' })
+const melde = () => tresor.set({ geladen: true, aktiv: !!datensatz, passkey: !!datensatz?.privPrf, entsperrt: !!privat, codeArt: datensatz?.codeArt || 'notfall' })
 
 let laden = null
 export function ladeTresor() {
@@ -214,8 +227,8 @@ function entsperrt(k) { privat = k; verlaengere(); melde() }
 export function sperre() { clearTimeout(timer); privat = null; melde() }
 
 /** Tresor anlegen und gleich entsperren. passkey = Ergebnis von passkeyAnlegen (optional), prf dazu. */
-export async function richteEin({ code, passkey = null, prf = null, iterationen = ITERATIONEN }) {
-  const { datensatz: d, privat: k } = await neuerTresor({ code, prf, credId: passkey?.credId, prfSalz: passkey?.prfSalz, iterationen })
+export async function richteEin({ code, codeArt = 'notfall', passkey = null, prf = null, iterationen = ITERATIONEN }) {
+  const { datensatz: d, privat: k } = await neuerTresor({ code, codeArt, prf, credId: passkey?.credId, prfSalz: passkey?.prfSalz, iterationen })
   await schreibe(d)
   datensatz = d; laden = Promise.resolve(d)
   entsperrt(k)
@@ -273,7 +286,12 @@ export function starteFaceId() {
 }
 export async function codeEingeben(code) {
   try { await entsperreMitCode(code); fertig(); return true }
-  catch (e) { aendere({ zustand: 'code', fehler: String(e?.message || e) }); return false }
+  catch (e) {
+    const art = datensatz?.codeArt
+    const text = e?.name === 'FalscherSchluessel' && art === 'pin' ? je('Die PIN stimmt nicht.', 'The PIN is wrong.')
+      : e?.name === 'FalscherSchluessel' && art === 'passwort' ? je('Das Passwort stimmt nicht.', 'The password is wrong.') : String(e?.message || e)
+    aendere({ zustand: 'code', fehler: text }); return false
+  }
 }
 /** Nach dem Entsperren: der Knopf „Beleg öffnen“ (ein neuer Fingertipp). */
 export function weiter() {

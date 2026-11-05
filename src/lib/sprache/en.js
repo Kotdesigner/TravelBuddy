@@ -1017,6 +1017,8 @@ export default {
  "Der Dienst ist gerade nicht erreichbar. Später noch einmal versuchen.": "The service can't be reached right now. Try again later.",
  "Der Film ließ sich nicht vorbereiten. ": "The film couldn't be prepared. ",
  "Der Notfall-Code ist nicht vollständig.": "The emergency code is incomplete.",
+ "Die PIN braucht 6 bis 12 Ziffern.": "The PIN needs 6 to 12 digits.",
+ "Das Passwort braucht mindestens 8 Zeichen.": "The password needs at least 8 characters.",
  "Der Passkey ist angelegt. Bestätige noch einmal mit {bio}, dann werden die Belege verschlüsselt.": "The passkey is set up. Confirm once more with {bio}, then the vouchers are encrypted.",
  "Der Sound heute war …": "Today sounded like …",
  "Der Speicher im Browser ist voll. Lösche Fotos oder gib Platz auf dem Gerät frei.": "The browser's storage is full. Delete photos or free up space on the device.",

@@ -17,6 +17,8 @@
   import BuchungEinfuegen from './BuchungEinfuegen.svelte'
   import BelegKnoepfe from './BelegKnoepfe.svelte'
   import TresorEinstellung from './TresorEinstellung.svelte'
+  import { tresor, ladeTresor, entsperreDann } from './tresor.js'
+  import { zeigeToast } from './toast.js'
   import { zumAnzeigen } from './pdf-portfolio.js'
   import { onDestroy } from 'svelte'
   import { klapp, dauer } from './motion.js'
@@ -108,6 +110,47 @@
   // Dateiauswahl; danach liegen sie in der App und nirgends sonst.
   let groessen = $state(null)
   ladeBelegListe()
+  ladeTresor()
+
+  // V17: Dateien an Dokumenten (Pass, Visum, Versicherung …): PDF oder Foto, offline auf dem Gerät
+  // in derselben Ablage wie die Belege (eigen/dok-<id>/…), nicht im Backup. Mit Tresor verschlüsselt.
+  // Ist der Tresor eingerichtet und gesperrt, zeigt der Block „Dokumente“ nichts, bis man entsperrt.
+  const dokGesperrt = $derived($tresor.aktiv && !$tresor.entsperrt)
+  let dokDateiFeld = $state()
+  let dokZiel = null
+  function dokDateiWaehlen(id) { dokZiel = id; dokDateiFeld?.click() }
+  async function dokDateienDazu(e) {
+    const dateien = [...(e.currentTarget.files || [])]
+    e.currentTarget.value = ''
+    const d = $dokumente.find((x) => x.id === dokZiel)
+    if (!d || !dateien.length) return
+    const belegt = new Set((d.dateien || []).map((x) => x.datei))
+    const neu = []
+    try {
+      for (const f of dateien) {
+        const name = f.name || (istBildDatei(f) ? 'Foto.jpg' : 'Dokument.pdf')
+        const pfad = eigenerPfad('dok-' + d.id, name, belegt)
+        belegt.add(pfad)
+        await speichereBeleg(pfad, f)
+        neu.push({ datei: pfad, name, typ: f.type || '' })
+      }
+      try { await navigator.storage?.persist?.() } catch {}
+    } catch (err) { zeigeToast(t('Speichern fehlgeschlagen: ') + (err?.message || err), 'fehler', 4000) }
+    if (neu.length) {
+      updateDokument(d.id, { dateien: [...(d.dateien || []), ...neu] })
+      zeigeToast(neu.length === 1 ? je(`📎 „${neu[0].name}“ gespeichert`, `📎 “${neu[0].name}” saved`) : je(`📎 ${neu.length} Dateien gespeichert`, `📎 ${neu.length} files saved`), 'ok')
+    }
+  }
+  async function dokDateiWeg(d, x) {
+    if (!(await loeschFrage(je(`Datei „${x.name}“`, `File “${x.name}”`), je('Die Datei verschwindet von diesem Gerät. Das Dokument bleibt.', 'The file is removed from this device. The document stays.')))) return
+    await loescheBeleg(x.datei)
+    updateDokument(d.id, { dateien: (d.dateien || []).filter((y) => y.datei !== x.datei) })
+  }
+  async function dokumentWeg(d) {
+    if (!(await loeschFrage(t('Dokument')))) return
+    for (const x of d.dateien || []) { try { await loescheBeleg(x.datei) } catch {} }
+    loescheDokument(d.id)
+  }
   ladeGroessen().then((g) => (groessen = g))
 
   // Alle Belegpfade, die der importierte Reisekalender kennt.
@@ -409,17 +452,23 @@
   <div class="b-kopf">
     <button class="b-auf" onclick={() => (dokAuf = !dokAuf)} aria-expanded={dokAuf}>
       <span class="b-pfeil">{dokAuf ? '▾' : '▸'}</span>
-      <h3>{t('🗂️ Dokumente')}</h3>
-      {#if !dokAuf}
+      <h3>{t('🗂️ Dokumente')}{#if $tresor.aktiv}<span class="d-schloss" aria-label={dokGesperrt ? je('gesperrt', 'locked') : je('entsperrt', 'unlocked')}>{dokGesperrt ? ' 🔒' : ' 🔓'}</span>{/if}</h3>
+      {#if !dokAuf && !dokGesperrt}
         <span class="b-summe">
           {#if $dokumente.length === 0}{t('noch keine')}{:else}{t('{length} · {dokErledigt} erledigt', { length: $dokumente.length, dokErledigt })}{/if}
           {#if dokAbgelaufen}<span class="b-warn">{t('⚠︎ {dokAbgelaufen} abgelaufen', { dokAbgelaufen })}</span>{/if}
         </span>
       {/if}
     </button>
-    <button class="neu" onclick={() => { dokAuf = true; neuesDokument() }}>{t('+ Dokument')}</button>
+    {#if !dokGesperrt}<button class="neu" onclick={() => { dokAuf = true; neuesDokument() }}>{t('+ Dokument')}</button>{/if}
   </div>
-  {#if dokAuf}
+  {#if dokAuf && dokGesperrt}
+  <div class="dok-zu">
+    <p>{je('🔒 Deine Dokumente sind gesperrt.', '🔒 Your documents are locked.')}</p>
+    <button class="btn" onclick={() => entsperreDann(() => {}, { sofort: true })}>{je('Entsperren', 'Unlock')}</button>
+  </div>
+  {:else if dokAuf}
+  <input bind:this={dokDateiFeld} class="d-unsichtbar" type="file" multiple accept="application/pdf,image/*" onchange={dokDateienDazu} tabindex="-1" aria-hidden="true" />
   <div class="dok-vorschlaege">
     {#each DOKUMENT_TYPEN as typ}
       {@const da = dokTypVorhanden.has(typ) || dokTypVorhanden.has(t(typ))}
@@ -436,7 +485,7 @@
           <div class="dok-z1">
             <input class="d-typ" value={d.typ} oninput={(e) => updateDokument(d.id, { typ: e.target.value })} placeholder={t('Art (z.B. Reisepass)')} />
             <label class="d-check"><input type="checkbox" checked={d.erledigt} onchange={(e) => updateDokument(d.id, { erledigt: e.target.checked })} /> {t('erledigt')}</label>
-            <button class="del" onclick={async () => { if (await loeschFrage(t('Dokument'))) loescheDokument(d.id) }} title={t('löschen')}>🗑</button>
+            <button class="del" onclick={() => dokumentWeg(d)} title={t('löschen')}>🗑</button>
           </div>
           <div class="dok-z2">
             <input class="d-nr" value={d.nummer} oninput={(e) => updateDokument(d.id, { nummer: e.target.value })} placeholder={t('Nummer / Referenz')} />
@@ -444,11 +493,22 @@
             {#if abgelaufen(d.gueltigBis)}<span class="d-warn">{t('⚠︎ abgelaufen')}</span>{/if}
           </div>
           <input class="d-notiz" value={d.notiz} oninput={(e) => updateDokument(d.id, { notiz: e.target.value })} placeholder={t('Notiz (Ablageort, Police-Nr., Hotline …)')} />
+          <div class="d-dateien">
+            {#each d.dateien || [] as x (x.datei)}
+              {@const da = $lokaleBelege.has(x.datei.normalize('NFC'))}
+              <span class="d-datei">
+                <button class="d-auf" onclick={() => oeffneBeleg(x.datei)} disabled={!da} title={da ? je('Öffnen', 'Open') : je('Liegt nicht auf diesem Gerät', 'Not on this device')}>{(x.typ || '').startsWith('image/') ? '🖼️' : '📄'} {x.name}{#if !da}<small>{je(' · nicht auf diesem Gerät', ' · not on this device')}</small>{/if}</button>
+                <button class="d-x" onclick={() => dokDateiWeg(d, x)} aria-label={je(`${x.name} entfernen`, `Remove ${x.name}`)}>✕</button>
+              </span>
+            {/each}
+            <button class="d-dazu" onclick={() => dokDateiWaehlen(d.id)}>{je('📎 Datei oder Foto', '📎 File or photo')}</button>
+          </div>
         </div>
       {/each}
     </div>
-    <p class="hinweis">{t('🔒 Alles bleibt nur auf deinem Gerät (offline, im Backup). Keine sensiblen Passwörter eintragen.')}</p>
+    <p class="hinweis">{je('🔒 Alles bleibt nur auf deinem Gerät. Angaben wie Nummer und Datum sind im Backup, die Dateien nicht: Auf einem neuen Gerät legst du sie noch einmal hinein. Keine Passwörter eintragen.', '🔒 Everything stays on your device. Details like number and date are in the backup, the files are not: on a new device you add them again. Do not enter passwords.')}</p>
   {/if}
+  <TresorEinstellung kontext="dokumente" anzahl={anzahlLokal} />
   {/if}
 </section>
 
@@ -817,6 +877,16 @@
   .d-gueltig { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
   .d-gueltig input { font-size: calc(12px * var(--schrift, 1)); padding: 5px 7px; border: 1px solid var(--line-stark); border-radius: 6px; }
   .d-warn { font-size: calc(12px * var(--schrift, 1)); font-weight: 800; color: var(--danger-text); }
+  .d-dateien { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .d-datei { display: inline-flex; align-items: center; border: 1px solid var(--line-stark); border-radius: 999px; background: var(--card); max-width: 100%; }
+  .d-auf { border: none; background: none; color: var(--ink); font: inherit; font-size: calc(13px * var(--schrift, 1)); font-weight: 600; min-height: 40px; padding: 4px 4px 4px 12px; cursor: pointer; text-align: left; overflow-wrap: anywhere; }
+  .d-auf:disabled { color: var(--muted); cursor: default; }
+  .d-auf small { font-weight: 400; font-size: 1em; }
+  .d-x { border: none; background: none; color: var(--muted); min-width: 40px; min-height: 40px; cursor: pointer; }
+  .d-dazu { border: 1px dashed var(--line-stark); background: none; color: var(--brand-text); font: inherit; font-size: calc(13px * var(--schrift, 1)); font-weight: 700; min-height: 40px; padding: 4px 12px; border-radius: 999px; cursor: pointer; }
+  .d-unsichtbar { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .dok-zu { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--flaeche); }
+  .dok-zu p { margin: 0; font-weight: 700; }
   .d-notiz { width: 100%; font-size: calc(12.5px * var(--schrift, 1)); padding: 6px 8px; border: 1px solid var(--line-stark); border-radius: 6px; background: var(--card); color: var(--ink); }
   .hinweis { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); margin: 10px 0 0; }
 
