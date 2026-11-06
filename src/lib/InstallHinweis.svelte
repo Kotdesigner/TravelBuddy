@@ -5,10 +5,11 @@
   import { je } from './i18n.js'
   import { modal } from './modal.js'
   import { blattRaus, ausblenden } from './motion.js'
-  import { hinweisArt, erledigt, merkeErledigt, laeuftAlsApp, installOffen, installAngebot } from './install.js'
+  import { hinweisArt, istIPad, erledigt, merkeErledigt, laeuftAlsApp, installOffen, installAngebot } from './install.js'
 
   const SPAETER = 'tb-install-spaeter'
   let art = $state(null)
+  let ipad = $state(false)
 
   function pruefe() {
     let spaeter = false
@@ -18,6 +19,7 @@
       ua: navigator.userAgent, platform: navigator.platform, touch: navigator.maxTouchPoints || 0,
       standalone: laeuftAlsApp(), erledigt: erledigt(), knopf: !!$installAngebot,
     })
+    ipad = istIPad({ ua: navigator.userAgent, platform: navigator.platform, touch: navigator.maxTouchPoints || 0 })
     art = a
     installOffen.set(!!a)
   }
@@ -40,6 +42,8 @@
   }
 </script>
 
+{#snippet teilen()}<svg class="ih-teilen" viewBox="0 0 24 24" role="img" aria-label={je('Teilen', 'Share')}><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>{/snippet}
+
 {#if art}
   <div class="ih-hg" out:ausblenden data-dialog-hg aria-hidden="true"></div>
   <div class="ih" out:blattRaus role="dialog" aria-labelledby="ih-titel" aria-describedby="ih-text" use:modal={{ onclose: () => (art === 'danach' ? zu() : spaeter()) }}>
@@ -53,11 +57,11 @@
       <ol class="ih-schritte">
         <li>
           <span class="ih-nr" aria-hidden="true">1</span>
-          <span>{je('Tippe auf', 'Tap')} <svg class="ih-teilen" viewBox="0 0 24 24" role="img" aria-label={je('Teilen', 'Share')}><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> <b>{je('Teilen', 'Share')}</b>. {je('Bei neuem iOS steckt es hinter „•••“.', 'On newer iOS it sits behind “•••”.')}</span>
+          <span>{je('Tippe auf', 'Tap')} {@render teilen()} <b>{je('Teilen', 'Share')}</b>{#if ipad}{je(', oben rechts neben der Adresse. Bei neuem iPadOS steckt es hinter „•••“.', ', top right next to the address. On newer iPadOS it sits behind “•••”.')}{:else}{je(', unten in der Leiste. Bei neuem iOS steckt es hinter „•••“.', ', in the bar at the bottom. On newer iOS it sits behind “•••”.')}{/if}</span>
         </li>
         <li>
           <span class="ih-nr" aria-hidden="true">2</span>
-          <span>{je('Wähle', 'Choose')} <b>{je('„Zum Home-Bildschirm“', '“Add to Home Screen”')}</b>{je('. Ist „Als Web-App öffnen“ zu sehen, bleibt der Schalter an.', '. If you see “Open as Web App”, leave it on.')}</span>
+          <span>{je('Wähle', 'Choose')} <b>{je('„Zum Home-Bildschirm“', '“Add to Home Screen”')}</b>{je('. Steht es nicht in der Liste, tippe unten rechts auf „Mehr anzeigen“ oder wische nach unten. Ist „Als Web-App öffnen“ zu sehen, bleibt der Schalter an.', '. If it is not in the list, tap “View More” at the bottom right or scroll down. If you see “Open as Web App”, leave it on.')}</span>
         </li>
         <li>
           <span class="ih-nr" aria-hidden="true">3</span>
@@ -74,6 +78,33 @@
       <div class="ih-knoepfe">
         <button class="ih-leise" onclick={zu}>{je('Trotzdem hier im Browser weiter', 'Continue here in the browser anyway')}</button>
       </div>
+    {:else if art === 'android'}
+      <p id="ih-text">{je('Dann startet TravelBuddy wie eine echte App, mit eigenem Symbol und auch ohne Netz. Was du schon eingetragen hast, bleibt dabei erhalten.', 'Then TravelBuddy starts like a real app, with its own icon and even without signal. Anything you have already entered stays.')}</p>
+      {#if $installAngebot}
+        <div class="ih-knoepfe">
+          <button class="btn-primary ih-los" onclick={installieren}>{je('Installieren', 'Install')}</button>
+          <button class="ih-leise" onclick={spaeter}>{je('Später', 'Later')}</button>
+        </div>
+      {:else}
+        <ol class="ih-schritte">
+          <li>
+            <span class="ih-nr" aria-hidden="true">1</span>
+            <span>{je('Tippe im Browser auf das Menü', 'Tap the browser menu')} <b>⋮</b> {je('oben rechts, in Samsung Internet auf', 'at the top right, in Samsung Internet on')} <b>≡</b> {je('unten.', 'at the bottom.')}</span>
+          </li>
+          <li>
+            <span class="ih-nr" aria-hidden="true">2</span>
+            <span>{je('Wähle', 'Choose')} <b>{je('„App installieren“', '“Install app”')}</b> {je('oder', 'or')} <b>{je('„Zum Startbildschirm hinzufügen“', '“Add to Home screen”')}</b>{je('. In Samsung Internet heißt es „Seite hinzufügen zu“ und dann „Startbildschirm“.', '. In Samsung Internet it is “Add page to”, then “Home screen”.')}</span>
+          </li>
+          <li>
+            <span class="ih-nr" aria-hidden="true">3</span>
+            <span>{je('Bestätige mit', 'Confirm with')} <b>{je('„Installieren“', '“Install”')}</b> {je('oder', 'or')} <b>{je('„Hinzufügen“', '“Add”')}</b>.</span>
+          </li>
+        </ol>
+        <div class="ih-knoepfe">
+          <button class="btn-primary ih-los" onclick={fertig}>{je('Erledigt', 'Done')}</button>
+          <button class="ih-leise" onclick={spaeter}>{je('Später', 'Later')}</button>
+        </div>
+      {/if}
     {:else}
       <p id="ih-text">{je('Dann startet TravelBuddy wie eine echte App, mit eigenem Symbol und auch ohne Netz.', 'Then TravelBuddy starts like a real app, with its own icon and even without signal.')}</p>
       <div class="ih-knoepfe">

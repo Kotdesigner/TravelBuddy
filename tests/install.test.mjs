@@ -1,5 +1,5 @@
 // Hinweis „Zum Home-Bildschirm“: wann er kommt und wann nicht
-import { hinweisArt, istIOS } from '../src/lib/install.js'
+import { hinweisArt, istIOS, istIPad } from '../src/lib/install.js'
 import fs from 'node:fs'
 let fehler = 0
 const p = (name, ok, info = '') => { console.log(ok ? '  ✓' : '  ✗', name, ok ? '' : info); if (!ok) fehler++ }
@@ -13,14 +13,21 @@ p('iPhone ist iOS', istIOS({ ua: IPHONE, touch: 5 }))
 p('iPad mit Mac-Kennung und Touch ist iOS', istIOS({ ua: IPAD, platform: 'MacIntel', touch: 5 }))
 p('Mac ohne Touch ist kein iOS', !istIOS({ ua: MAC, platform: 'MacIntel', touch: 0 }))
 p('Android ist kein iOS', !istIOS({ ua: ANDROID, touch: 5 }))
+p('iPad wird als iPad erkannt', istIPad({ ua: IPAD, platform: 'MacIntel', touch: 5 }))
+p('iPhone ist kein iPad', !istIPad({ ua: IPHONE, platform: 'iPhone', touch: 5 }))
 
 console.log('\n2  Wann der Hinweis kommt')
 p('iPhone in Safari: Anleitung', hinweisArt({ ua: IPHONE, touch: 5 }) === 'ios')
 p('iPhone vom Home-Bildschirm: nichts', hinweisArt({ ua: IPHONE, touch: 5, standalone: true }) === null)
 p('iPhone, schon erledigt: nichts', hinweisArt({ ua: IPHONE, touch: 5, erledigt: true }) === null)
-p('Android mit Angebot: Knopf', hinweisArt({ ua: ANDROID, touch: 5, knopf: true }) === 'knopf')
-p('Android ohne Angebot: nichts', hinweisArt({ ua: ANDROID, touch: 5 }) === null)
+p('Android mit Angebot: Android-Hinweis', hinweisArt({ ua: ANDROID, touch: 5, knopf: true }) === 'android')
+p('Android ohne Angebot: Anleitung trotzdem', hinweisArt({ ua: ANDROID, touch: 5 }) === 'android')
+p('Android als App: nichts', hinweisArt({ ua: ANDROID, touch: 5, standalone: true }) === null)
 p('Mac mit Angebot: nichts, am Rechner nicht lästig', hinweisArt({ ua: MAC, platform: 'MacIntel', touch: 0, knopf: true }) === null)
+
+const ih = fs.readFileSync(new URL('../src/lib/InstallHinweis.svelte', import.meta.url), 'utf8')
+p('iPhone-Text nennt „Mehr anzeigen“', ih.includes('„Mehr anzeigen“') && ih.includes('“View More”'))
+p('iPad-Text nennt oben rechts', ih.includes('oben rechts neben der Adresse'))
 
 console.log('\n3  Reihenfolge in der App')
 const app = fs.readFileSync(new URL('../src/App.svelte', import.meta.url), 'utf8')

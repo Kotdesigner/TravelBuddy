@@ -10,14 +10,20 @@ export const KEY = 'tb-install-hinweis-v1'
 export function istIOS({ ua = '', platform = '', touch = 0 } = {}) {
   return /iPhone|iPad|iPod/.test(ua) || (platform === 'MacIntel' && touch > 1) || (/Macintosh/.test(ua) && touch > 1)
 }
+/** iPad: dort sitzt Teilen oben rechts neben der Adresse, nicht unten. */
+export function istIPad({ ua = '', platform = '', touch = 0 } = {}) {
+  return /iPad/.test(ua) || (!/iPhone|iPod/.test(ua) && istIOS({ ua, platform, touch }))
+}
+export const istAndroid = ({ ua = '' } = {}) => /Android/.test(ua)
 
 /**
- * Welcher Hinweis passt? 'ios', 'knopf' (Browser bietet Installieren an) oder null.
+ * Welcher Hinweis passt? 'ios', 'android', 'knopf' (anderes Gerät, Browser bietet Installieren an) oder null.
  * Nichts zeigen, wenn die App schon vom Home-Bildschirm läuft oder der Hinweis erledigt ist.
  */
 export function hinweisArt({ ua = '', platform = '', touch = 0, standalone = false, erledigt = false, knopf = false } = {}) {
   if (standalone || erledigt) return null
   if (istIOS({ ua, platform, touch })) return 'ios'
+  if (istAndroid({ ua })) return 'android'
   // Den Knopf nur auf Handy und Tablet anbieten, am Rechner wäre er eher lästig
   return knopf && touch > 0 ? 'knopf' : null
 }

@@ -130,7 +130,7 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ## 📲 New in version 1.16
 
-**Onto the home screen in ten seconds.** An iPhone does not let a website install itself, it only works via Share and “Add to Home Screen”. The first time you open TravelBuddy in Safari, it shows exactly these three steps, before you enter anything, because Safari and the home screen app keep separate storage. On Android the app offers an “Install” button instead.
+**Onto the home screen in ten seconds.** An iPhone does not let a website install itself, it only works via Share and “Add to Home Screen”. The first time you open TravelBuddy in Safari, it shows exactly these three steps, before you enter anything, because Safari and the home screen app keep separate storage. On Android, phone or tablet, the app offers an “Install” button, or shows the way via the browser menu.
 
 ## 🗺️ New in version 1.15
 
@@ -925,7 +925,7 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ## 📲 Neu in Version 1.16
 
-**In zehn Sekunden auf dem Home-Bildschirm.** Ein iPhone lässt keine Webseite sich selbst installieren, das geht nur über Teilen und „Zum Home-Bildschirm“. Beim ersten Öffnen in Safari zeigt TravelBuddy genau diese drei Schritte, bevor du etwas einträgst, denn Safari und die App auf dem Home-Bildschirm haben getrennte Speicher. Unter Android bietet die App stattdessen den Knopf „Installieren“ an.
+**In zehn Sekunden auf dem Home-Bildschirm.** Ein iPhone lässt keine Webseite sich selbst installieren, das geht nur über Teilen und „Zum Home-Bildschirm“. Beim ersten Öffnen in Safari zeigt TravelBuddy genau diese drei Schritte, bevor du etwas einträgst, denn Safari und die App auf dem Home-Bildschirm haben getrennte Speicher. Unter Android, ob Handy oder Tablet, bietet die App den Knopf „Installieren“ an oder zeigt den Weg über das Browser-Menü.
 
 ## 🗺️ Neu in Version 1.15
 
