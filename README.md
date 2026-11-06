@@ -23,6 +23,8 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 **[✨ What's new in 1.20](#-new-in-version-120)**
 
+🌏 **Website: [kotdesigner.github.io/TravelBuddy](https://kotdesigner.github.io/TravelBuddy/)** · the whole app in 40 seconds, the FAQ and how to install it
+
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
 <br>
@@ -858,6 +860,8 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
 **[✨ Neu in 1.20](#-neu-in-version-120)**
+
+🌏 **Website: [kotdesigner.github.io/TravelBuddy](https://kotdesigner.github.io/TravelBuddy/)** · die ganze App in 40 Sekunden, Fragen und Antworten und die Installation (auf Englisch)
 
 **[📲 Als App einrichten](#-auf-jedem-gerät-als-app-einrichten)**
 
