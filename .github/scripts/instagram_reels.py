@@ -26,10 +26,8 @@ def facebook_media(token):
     pages = json.loads(get(f"{fb}/me/accounts?{q}")).get("data", [])
     ig = next((p["instagram_business_account"] for p in pages if p.get("instagram_business_account")), None)
     if not ig:
-        me = json.loads(get(f"{fb}/me?{q}"))
-        ig = me.get("instagram_business_account")
-    if not ig:
-        sys.exit(f"Facebook token works, but no Instagram account is linked to its pages ({len(pages)} pages found).")
+        sys.exit(f"This Facebook token sees {len(pages)} pages and no linked Instagram account. "
+                 "Use an Instagram token instead (it starts with IGAA), see INSTAGRAM-AUTOMATIK.md.")
     print(f"Instagram account via Facebook: @{ig.get('username', '?')}")
     q = urllib.parse.urlencode({"fields": FIELDS, "limit": 25, "access_token": token})
     return json.loads(get(f"{fb}/{ig['id']}/media?{q}"))
@@ -43,7 +41,7 @@ def main():
         return
     token = token.strip().strip('"').strip("'")
     kind = ("Instagram (IGAA...)" if token.startswith("IG") else
-            "Facebook (EAA...), not usable here" if token.startswith("EAA") else "unknown format")
+            "Facebook (EA...), trying the Facebook route" if token.startswith("EA") else "unknown format")
     hints = [w for w, c in (("a link", "http" in token), ("an equals sign", "=" in token),
              ("an ampersand", "&" in token), ("a hash", "#" in token), ("a line break", "\n" in token)) if c]
     print(f"token check: {kind}, {len(token)} characters, starts with {token[:3]!r}, contains {', '.join(hints) or 'nothing odd'}")
