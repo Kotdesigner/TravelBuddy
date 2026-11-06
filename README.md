@@ -13,7 +13,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **Version 1.17 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
+**[📱 Try it on your phone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -31,16 +31,19 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 
 ---
 
-## 📱 Try it now on your iPhone
+## 📱 Try it now on your phone
 
 <table>
 <tr>
 <td align="center"><a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/qr-iphone.png" width="170" alt="QR code to the TravelBuddy web app"></a></td>
 <td>
 
-1. Scan the code or open **[travelbuddy-v1-wa.netlify.app](https://travelbuddy-v1-wa.netlify.app)** in **Safari**.
-2. Tap **Share**, then **Add to Home Screen**.
-3. Open TravelBuddy from your home screen and tap **🧪 Play with a test trip first**.
+Scan the code or open **[travelbuddy-v1-wa.netlify.app](https://travelbuddy-v1-wa.netlify.app)**. The app shows you the next step itself.
+
+**iPhone and iPad:** in **Safari** tap **Share**, then **Add to Home Screen** (if needed under **View More**).<br>
+**Android:** in **Chrome** tap **Install** in the app, or in the menu **⋮** choose **Install app**.
+
+Then open TravelBuddy from your home screen and tap **🧪 Play with a test trip first**.
 
 No account, nothing to install from a store, and your data stays on your phone. On a computer, the link works straight away.
 
@@ -823,7 +826,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Version 1.17 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
+**[📱 Auf dem Handy ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
 
 **[⬇️ Mac-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)**
 
@@ -835,16 +838,19 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 
 > Alle Bilder zeigen eine ausgedachte **Beispielreise**. Echte Reisedaten, Buchungen oder Dokumente sind darin nicht zu sehen. Die Ortsfotos auf den Bildschirmen sind in der App nachgewiesen.
 
-## 📱 Gleich auf dem iPhone ausprobieren
+## 📱 Gleich auf dem Handy ausprobieren
 
 <table>
 <tr>
 <td align="center"><a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/qr-iphone.png" width="170" alt="QR-Code zur TravelBuddy-Web-App"></a></td>
 <td>
 
-1. Code scannen oder **[travelbuddy-v1-wa.netlify.app](https://travelbuddy-v1-wa.netlify.app)** in **Safari** öffnen.
-2. Auf **Teilen** tippen, dann **Zum Home-Bildschirm**.
-3. TravelBuddy vom Home-Bildschirm öffnen und **🧪 Erst mit einer Testreise spielen** tippen.
+Code scannen oder **[travelbuddy-v1-wa.netlify.app](https://travelbuddy-v1-wa.netlify.app)** öffnen. Den nächsten Schritt zeigt dir die App selbst.
+
+**iPhone und iPad:** in **Safari** auf **Teilen**, dann **Zum Home-Bildschirm** (notfalls unter **Mehr anzeigen**).<br>
+**Android:** in **Chrome** in der App auf **Installieren** tippen oder im Menü **⋮** **App installieren** wählen.
+
+Danach TravelBuddy vom Home-Bildschirm öffnen und **🧪 Erst mit einer Testreise spielen** tippen.
 
 Kein Konto, kein App Store, und deine Daten bleiben auf deinem Handy. Am Computer funktioniert der Link sofort.
 
