@@ -6,14 +6,22 @@
 
 ### One app. The whole road trip. Even where the signal ends.
 
-Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first, no account, no cloud.<br>
+Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offline first, no account, no cloud.<br>
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
 **Version 1.20 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your phone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-119)**
+<img src="https://img.shields.io/badge/version-1.20-e07b28?style=flat-square" alt="version: 1.20"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+
+<br>
+
+<a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/knopf-testen-en.svg" width="460" alt="Try TravelBuddy now: free, no account, works offline"></a>
+
+<sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
+
+**[✨ What's new in 1.20](#-new-in-version-120)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -137,6 +145,9 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 **Your entries stay safe, even when the device is full.** If saving fails, for example because storage is full, a red note now stays at the top with “💾 Save backup” and “Try saving again”. Before, the app looked fine and the entries were gone after closing it. TravelBuddy also asks the browser to protect its data from automatic clean-up as soon as you add your first entry, and the bottom of “More” shows how much space is used and free. A damaged or hand-edited backup no longer breaks pages: wrong fields are repaired during import and at start. Voice notes record at speech quality and stop by themselves after 5 minutes, so they take about a quarter of the space.
 
+<details>
+<summary><b>📜 Earlier versions: 1.19 to 1.1</b></summary>
+
 ## 🧹 New in version 1.19
 
 **One app for every device, straight from the browser.** The separate Mac, Windows and Linux downloads are gone. TravelBuddy sets itself up as an app in Chrome, Edge and Safari on every computer and phone, without warnings from Apple or Microsoft, with the same data as the web app and always up to date. The repo is leaner: no more Swift and Go start programs.
@@ -217,8 +228,6 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
-<details>
-<summary><b>Earlier versions: 1.7 to 1.1</b></summary>
 
 ## 🎬 New in version 1.7
 
@@ -812,6 +821,16 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 
 <br>
 
+<div align="center">
+
+**Ready for the road?**
+
+<a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/knopf-testen-en.svg" width="420" alt="Try TravelBuddy now"></a>
+
+</div>
+
+<br>
+
 ---
 ---
 
@@ -823,14 +842,22 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 
 ### Eine App. Der ganze Roadtrip. Auch dort, wo das Netz endet.
 
-Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, ohne Konto und ohne Cloud.<br>
+Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline first, ohne Konto und ohne Cloud.<br>
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
 **Version 1.20 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem Handy ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-119)**
+<img src="https://img.shields.io/badge/version-1.20-e07b28?style=flat-square" alt="version: 1.20"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+
+<br>
+
+<a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/knopf-testen-de.svg" width="480" alt="TravelBuddy jetzt ausprobieren: kostenlos, ohne Konto, läuft offline"></a>
+
+<sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
+
+**[✨ Neu in 1.20](#-neu-in-version-120)**
 
 **[📲 Als App einrichten](#-auf-jedem-gerät-als-app-einrichten)**
 
@@ -944,6 +971,9 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 **Deine Einträge bleiben sicher, auch wenn das Gerät voll ist.** Klappt das Speichern nicht, etwa weil der Speicher voll ist, steht jetzt oben ein roter Hinweis mit „💾 Backup sichern“ und „Erneut speichern“. Vorher sah alles gut aus, und nach dem Schließen waren die Einträge weg. TravelBuddy bittet den Browser außerdem gleich beim ersten eigenen Eintrag, die Daten nicht von selbst aufzuräumen, und ganz unten unter „Mehr“ steht, wie viel Platz belegt und frei ist. Eine beschädigte oder von Hand bearbeitete Sicherung legt keine Seiten mehr lahm: Falsche Felder werden beim Import und beim Start repariert. Sprachnotizen nehmen in Sprachqualität auf und enden nach 5 Minuten von selbst, so brauchen sie etwa ein Viertel des Platzes.
 
+<details>
+<summary><b>📜 Frühere Versionen: 1.19 bis 1.1</b></summary>
+
 ## 🧹 Neu in Version 1.19
 
 **Eine App für jedes Gerät, direkt aus dem Browser.** Die eigenen Downloads für Mac, Windows und Linux sind weg. TravelBuddy richtet sich in Chrome, Edge und Safari auf jedem Rechner und Handy als App ein, ohne Warnungen von Apple oder Microsoft, mit denselben Daten wie die Web-App und immer aktuell. Das Repo ist schlanker: keine Startprogramme in Swift und Go mehr.
@@ -1024,8 +1054,6 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
-<details>
-<summary><b>Frühere Versionen: 1.7 bis 1.1</b></summary>
 
 ## 🎬 Neu in Version 1.7
 
@@ -1584,6 +1612,16 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder
+
+<br>
+
+<div align="center">
+
+**Bereit für die Straße?**
+
+<a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/knopf-testen-de.svg" width="440" alt="TravelBuddy jetzt ausprobieren"></a>
+
+</div>
 
 ---
 
