@@ -6,7 +6,7 @@
 // für beide Male, wie bei den Tank-Lücken in routenhinweise.js.
 import { stichproben, baueGitter, durchgaenge, stoppKmAufRoute, distanzKm, streckenOhne } from './routenhinweise.js'
 import { dezimal } from './format.js'
-import { t, jeSprache } from './i18n.js'
+import { t, je, jeSprache } from './i18n.js'
 
 export const KATEGORIEN = jeSprache(() => ([
   { k: 'fuel', label: t('Tankstelle'), mehrzahl: t('Tankstellen'), emoji: '⛽' },
@@ -14,9 +14,9 @@ export const KATEGORIEN = jeSprache(() => ([
   { k: 'wc', label: t('Toilette'), mehrzahl: t('Toiletten'), emoji: '🚻' },
   { k: 'camp', label: t('Camping'), mehrzahl: t('Camps'), emoji: '🏕️' },
   { k: 'rast', label: t('Rastplatz'), mehrzahl: t('Rastplätze'), emoji: '🅿️' },
-  { k: 'laden', label: t('Laden'), mehrzahl: t('Läden'), emoji: '🛒' },
+  { k: 'laden', label: je('Laden', 'Shop'), mehrzahl: t('Läden'), emoji: '🛒' },
   { k: 'werkstatt', label: t('Werkstatt'), mehrzahl: t('Werkstätten'), emoji: '🔧' },
-  { k: 'klinik', label: 'Klinik/Arzt', mehrzahl: t('Kliniken'), emoji: '🏥' },
+  { k: 'klinik', label: je('Klinik/Arzt', 'Clinic/Doctor'), mehrzahl: t('Kliniken'), emoji: '🏥' },
 ]))
 export const KAT = jeSprache(() => Object.fromEntries(KATEGORIEN.map((k) => [k.k, k])))
 

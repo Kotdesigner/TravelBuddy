@@ -251,7 +251,7 @@
           {$rechnet[r.id] ? t('rechnet …') : (r.route ? t('🔄 Neu berechnen') : t('🛣️ Route berechnen'))}
         </button>
         {#if !gerade(r)}
-          <span class="reich">⛽ <Stepper value={$reichweite} min={50} max={2000} step={50} einheit="km Reichweite" label={t('Reichweite pro Tankfüllung in km')}
+          <span class="reich">⛽ <Stepper value={$reichweite} min={50} max={2000} step={50} einheit={je('km Reichweite', 'km range')} label={t('Reichweite pro Tankfüllung in km')}
             onchange={(v) => { reichweite.set(v); tankNeu(r) }} /></span>
         {/if}
       </div>

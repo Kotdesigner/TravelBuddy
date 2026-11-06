@@ -1,5 +1,5 @@
 <script>
-  import { t, LOCALE, tn } from './i18n.js'
+  import { t, je, LOCALE, tn } from './i18n.js'
   import { kurzTag, kurzZeit, eur } from './format.js'
   import { reisen, neueReise, updateReise, loescheReise, verschiebeReise, journal, wanderungen, vorabKosten,
     gesamtStart, berechneKalender, ymd } from './userdata.js'
@@ -333,7 +333,7 @@
         title={offen[r.id] ? t('zuklappen') : t('aufklappen')} aria-expanded={!!offen[r.id]}></button>
       <input class="name" aria-label={t('Name der Reise')} value={r.name} oninput={(e) => updateReise(r.id, { name: e.target.value })} />
       <span class="tage" title={t('Dauer in Tagen')}>
-        <Stepper value={r.tage} min={1} max={60} einheit="Tg" label={t('Dauer in Tagen')} onchange={(v) => updateReise(r.id, { tage: v })} />
+        <Stepper value={r.tage} min={1} max={60} einheit={je('Tg', 'd')} label={t('Dauer in Tagen')} onchange={(v) => updateReise(r.id, { tage: v })} />
       </span>
       <label class="plan" title={t('Teil der Gesamtreise?')}>
         <input type="checkbox" checked={r.imGesamtplan} onchange={(e) => updateReise(r.id, { imGesamtplan: e.target.checked })} /> {t('Plan')}
@@ -485,7 +485,7 @@
                 disabled={!$online || rechnet[r.id] || stops(r).filter((s) => s.lat != null).length < 2}>
                 {rechnet[r.id] ? t('rechnet …') : (r.route ? t('🔄 Route aktualisieren') : t('🛣️ Route berechnen'))}
               </button>
-              <span class="reich" title={t('Reichweite pro Tankfüllung')}>⛽ <Stepper value={reichweite} min={50} max={2000} step={50} einheit="km Reichweite" label={t('Reichweite pro Tankfüllung in km')} onchange={(v) => { reichweite = v; tankNeu(r) }} /></span>
+              <span class="reich" title={t('Reichweite pro Tankfüllung')}>⛽ <Stepper value={reichweite} min={50} max={2000} step={50} einheit={je('km Reichweite', 'km range')} label={t('Reichweite pro Tankfüllung in km')} onchange={(v) => { reichweite = v; tankNeu(r) }} /></span>
             </div>
             {#if routeMsg[r.id]}<div class="r-fehler">{routeMsg[r.id]}</div>{/if}
             {#if hinweisMeldung[r.id]}<div class="hw-ok" role="status">{hinweisMeldung[r.id]}</div>{/if}

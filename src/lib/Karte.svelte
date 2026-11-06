@@ -280,9 +280,9 @@
     { k: 'rast', label: t('Rastplatz'), emoji: '🅿️', farbe: '#8c6239', rang: 5 },
     { k: 'camp', label: t('Camping'), emoji: '🏕️', farbe: '#2f9e44', rang: 6 },
     { k: 'wc', label: t('Toilette'), emoji: '🚻', farbe: '#7048e8', rang: 8 },
-    { k: 'laden', label: t('Laden'), emoji: '🛒', farbe: '#d6336c', rang: 7 },
+    { k: 'laden', label: je('Laden', 'Shop'), emoji: '🛒', farbe: '#d6336c', rang: 7 },
     { k: 'werkstatt', label: t('Werkstatt'), emoji: '🔧', farbe: '#495057', rang: 4 },
-    { k: 'klinik', label: 'Klinik/Arzt', emoji: '🏥', farbe: '#c92a2a', rang: 3 },
+    { k: 'klinik', label: je('Klinik/Arzt', 'Clinic/Doctor'), emoji: '🏥', farbe: '#c92a2a', rang: 3 },
     { k: 'sicht', label: t('Sehenswert'), emoji: '👀', farbe: '#0c8599', rang: 9 },
   ]
   const POI_LAYER = ['poi-lyr', 'poi-punkt']
