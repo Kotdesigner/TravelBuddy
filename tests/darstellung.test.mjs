@@ -22,11 +22,12 @@ console.log('\n1  Stufen')
 
 console.log('\n2  Gesamtgröße am iPhone über den Viewport')
 {
-  p('Standard: der normale Viewport', viewportInhalt(1, 393) === 'width=device-width, initial-scale=1.0, viewport-fit=cover')
+  p('Standard: der normale Viewport', viewportInhalt(1, 393) === 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover')
   const v = viewportInhalt(1.2, 393)
-  p('größer: schmaler bauen, dann vergrößern', v === 'width=328, initial-scale=1.2, minimum-scale=1.2, viewport-fit=cover', v)
+  p('größer: schmaler bauen, dann vergrößern', v === 'width=328, initial-scale=1.2, minimum-scale=1.2, maximum-scale=1.2, user-scalable=no, viewport-fit=cover', v)
   p('kompakt: breiter bauen, verkleinert', viewportInhalt(0.9, 393).startsWith('width=437, initial-scale=0.9'))
-  p('Heranzoomen mit zwei Fingern bleibt möglich (kein maximum-scale, kein user-scalable)', !/maximum-scale|user-scalable/.test(v))
+  // Seit 1.16 auf Steves Wunsch: die ganze App zoomt nicht, nur Karten und Weltkugel. Größer geht über Darstellung.
+  p('Kein Zoomen mit zwei Fingern, die Größe bleibt fest', /maximum-scale=1\.2, user-scalable=no/.test(v), v)
   p('ohne Breite: normaler Viewport', viewportInhalt(1.2, 0).startsWith('width=device-width'))
 }
 
@@ -72,7 +73,7 @@ console.log('\n3b Vor dem ersten Bild (index.html) gleich gerechnet wie viewport
   p('Skript steht im Kopf vor der App', html.indexOf('<script>') < html.indexOf('</head>') && /tb-darstellung/.test(skript))
   // Skript mit nachgebauter Umgebung ausführen
   const lauf = (gespeichert, breite = 393, touch = true) => {
-    const meta = { inhalt: 'width=device-width, initial-scale=1.0, viewport-fit=cover', setAttribute(k, v) { this.inhalt = v } }
+    const meta = { inhalt: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover', setAttribute(k, v) { this.inhalt = v } }
     const umgebung = { localStorage: { getItem: () => JSON.stringify(gespeichert) }, matchMedia: (q) => ({ matches: q.includes('coarse') ? touch : false }),
       screen: { width: breite, height: 852 }, document: { querySelector: () => meta }, Math, JSON }
     new Function(...Object.keys(umgebung), skript)(...Object.values(umgebung))
@@ -85,6 +86,15 @@ console.log('\n3b Vor dem ersten Bild (index.html) gleich gerechnet wie viewport
   p('Mac (keine Touch-Bedienung): unverändert, dort gilt CSS-zoom', lauf({ gesamt: 'gross' }, 1440, false).startsWith('width=device-width'))
   const st = Object.fromEntries(GESAMT.map((x) => [x.id, x.wert]))
   p('Stufen im Skript = Stufen in darstellung.js', /kompakt: 0\.9, gross: 1\.1, sehrgross: 1\.2/.test(skript) && st.kompakt === 0.9 && st.gross === 1.1 && st.sehrgross === 1.2)
+}
+
+console.log('\n3c Die App zoomt nicht als Ganzes')
+{
+  const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+  const css = fs.readFileSync(new URL('../src/app.css', import.meta.url), 'utf8')
+  p('Viewport sperrt Zoom', /user-scalable=no/.test(html) && /maximum-scale=1\.0/.test(html))
+  p('Auch mit Gesamtgröße gesperrt', viewportInhalt(1.1, 393).includes('maximum-scale=1.1, user-scalable=no'))
+  p('Kein Zwei-Finger-Zoom, kein Wackeln', /touch-action: pan-x pan-y/.test(css) && /overscroll-behavior: none/.test(css))
 }
 
 console.log('\n4  Einbindung')

@@ -68,7 +68,7 @@
           <span>{je('Tippe auf', 'Tap')} <b>{je('„Hinzufügen“', '“Add”')}</b> {je('und öffne TravelBuddy ab jetzt vom Home-Bildschirm.', 'and from now on open TravelBuddy from your home screen.')}</span>
         </li>
       </ol>
-      <p class="ih-k">{je('Geht das nicht, bist du vielleicht in einer anderen App. Dann die Seite in Safari öffnen.', 'If it does not work you may be inside another app. Open the page in Safari.')}</p>
+      <p class="ih-k">{je('Klappt nicht? Dann die Seite in Safari öffnen.', 'Not working? Open the page in Safari.')}</p>
       <div class="ih-knoepfe">
         <button class="btn-primary ih-los" onclick={iosErledigt}>{je('Erledigt', 'Done')}</button>
         <button class="ih-leise" onclick={spaeter}>{je('Später', 'Later')}</button>
@@ -120,23 +120,28 @@
   .ih {
     position: fixed; z-index: 131; left: 0; right: 0; bottom: 0; max-height: 92dvh; overflow: auto;
     background: var(--bg); color: var(--ink); border-radius: 22px 22px 0 0; box-shadow: var(--shadow-float);
-    padding: 14px 20px calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 12px;
+    --unten: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 12px 18px var(--unten); display: flex; flex-direction: column; gap: 10px;
     animation: hoch var(--t-slow) var(--ease-spring);
   }
   @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
-    .ih { left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 520px; border-radius: var(--radius-l); padding: 18px 24px 22px; animation: rein var(--t-med) var(--ease-spring); }
+    .ih { --unten: 22px; left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 520px; max-height: calc(100dvh - 16px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); border-radius: var(--radius-l); padding: 18px 24px var(--unten); animation: rein var(--t-med) var(--ease-spring); }
   }
   .ih-kopf { display: flex; align-items: center; justify-content: space-between; }
-  .ih-icon { font-size: calc(36px * var(--schrift, 1)); line-height: 1; }
+  .ih-icon { font-size: calc(30px * var(--schrift, 1)); line-height: 1; }
   .ih-zu { width: 44px; height: 44px; border-radius: 50%; border: none; background: var(--flaeche-2); color: var(--ink); font-size: calc(16px * var(--schrift, 1)); cursor: pointer; }
-  h2 { margin: 0; font-size: calc(22px * var(--schrift, 1)); line-height: 1.2; }
+  h2 { margin: 0; font-size: calc(21px * var(--schrift, 1)); line-height: 1.2; }
   .ih p { margin: 0; font-size: calc(15px * var(--schrift, 1)); line-height: 1.5; }
   .ih .ih-k { font-size: calc(13.5px * var(--schrift, 1)); color: var(--muted); }
-  .ih-schritte { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-  .ih-schritte li { display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--flaeche-2); font-size: calc(15px * var(--schrift, 1)); line-height: 1.45; }
+  .ih-schritte { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .ih-schritte li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px; border-radius: 12px; background: var(--flaeche-2); font-size: calc(15px * var(--schrift, 1)); line-height: 1.45; }
   .ih-nr { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: #fff; font-weight: 800; font-size: calc(13px * var(--schrift, 1)); }
   .ih-teilen { width: 20px; height: 20px; vertical-align: -4px; color: #1f6fd1; }
-  .ih-knoepfe { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
-  .ih-los { min-height: 52px; font-size: calc(17px * var(--schrift, 1)); }
-  .ih-leise { min-height: 44px; border: none; background: none; color: var(--brand-text); font-size: calc(15px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+  /* Nebeneinander statt untereinander: in Safari liegt unten die schwebende Leiste, so passt alles ohne Wischen */
+  .ih-knoepfe { display: flex; flex-direction: row-reverse; gap: 10px; margin-top: 2px; }
+  /* Knöpfe bleiben unten stehen, auch wenn der Inhalt höher ist als der Bildschirm (iPhone quer) */
+  .ih-knoepfe { position: sticky; bottom: calc(-1 * var(--unten)); z-index: 1; padding-top: 8px; padding-bottom: var(--unten); margin-bottom: calc(-1 * var(--unten)); background: var(--bg); }
+  .ih-knoepfe > * { flex: 1; }
+  .ih-knoepfe > :only-child { flex: 1 1 100%; }
+  .ih-los { min-height: 50px; font-size: calc(17px * var(--schrift, 1)); }
+  .ih-leise { min-height: 50px; border: 1px solid var(--line-stark); border-radius: 14px; background: none; color: var(--brand-text); font-size: calc(15px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
 </style>

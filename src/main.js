@@ -6,6 +6,14 @@ import { beobachteNetz } from './lib/netz-aktivitaet.js'
 import App from './App.svelte'
 import { beimSprachwechsel } from './lib/i18n.js'
 
+// Die App zoomt nicht als Ganzes. Safari übergeht „user-scalable=no“ im Browser-Tab, deshalb fangen wir
+// die Zwei-Finger-Geste hier ab. Karten und Weltkugeln (Canvas) zoomen weiter mit ihren eigenen Gesten.
+for (const art of ['gesturestart', 'gesturechange']) {
+  document.addEventListener(art, (e) => {
+    if (!e.target?.closest?.('.maplibregl-map, canvas')) e.preventDefault()
+  }, { passive: false })
+}
+
 // Neue Fassung sofort übernehmen.
 //
 // Der Service-Worker cacht die App-Hülle. Er installiert sich zwar im Hintergrund

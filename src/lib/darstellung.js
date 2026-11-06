@@ -44,10 +44,12 @@ export const eineSpalte = (breite, s) => !!breite && breite / 2 / (s || 1) < 150
  * @param breite  CSS-Breite des Bildschirms in der aktuellen Lage (Hochformat: schmale Seite)
  */
 export function viewportInhalt(g, breite) {
-  if (!g || g === 1 || !breite) return 'width=device-width, initial-scale=1.0, viewport-fit=cover'
+  // Die ganze App lässt sich nicht zoomen (wie eine echte App). Karten und Weltkugel zoomen selbst,
+  // für größere Schrift gibt es die Einstellung Darstellung.
+  if (!g || g === 1 || !breite) return 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'
   const w = Math.round(breite / g)
   const s = Math.round(g * 1000) / 1000
-  return `width=${w}, initial-scale=${s}, minimum-scale=${s}, viewport-fit=cover`
+  return `width=${w}, initial-scale=${s}, minimum-scale=${s}, maximum-scale=${s}, user-scalable=no, viewport-fit=cover`
 }
 
 const lies = () => { try { return bereinige(JSON.parse(localStorage.getItem(KEY) || 'null')) } catch { return { ...VORGABE } } }

@@ -4,6 +4,12 @@
   import { netzAktiv } from './netz-aktivitaet.js'
   import { effekte } from './effekte.js'
   import { goldRahmen } from './stimmung.js'
+  import { bildschirmEcke } from './ecken.js'
+  import { istIOS, istIPad, laeuftAlsApp } from './install.js'
+
+  // Nur vom Home-Bildschirm liegt die App an den Bildschirmecken an, im Browser-Tab ist der Rand eckig
+  const geraet = { ua: navigator.userAgent, platform: navigator.platform, touch: navigator.maxTouchPoints || 0 }
+  const ecke = laeuftAlsApp() ? bildschirmEcke({ breite: screen.width, hoehe: screen.height, ios: istIOS(geraet), ipad: istIPad(geraet) }) : 0
 
   const FARBE = { gps: '#e8bd82', daten: '#8fc2ef', spotify: '#5fdc8f' }
   const ERST_NACH = 150, MINDESTENS = 1400
@@ -26,4 +32,4 @@
   })
 </script>
 
-{#if $effekte.rahmen || $goldRahmen}<div class="netz-rahmen" class:an={($effekte.rahmen && sichtbar) || $goldRahmen} style="--nf:{$goldRahmen ? '#f0b453' : FARBE[art]}" aria-hidden="true"></div>{/if}
+{#if $effekte.rahmen || $goldRahmen}<div class="netz-rahmen" class:an={($effekte.rahmen && sichtbar) || $goldRahmen} style="--nf:{$goldRahmen ? '#f0b453' : FARBE[art]}; --nr-ecke:{ecke}px" aria-hidden="true"></div>{/if}

@@ -262,11 +262,11 @@
   .ef {
     position: fixed; z-index: 131; left: 0; right: 0; bottom: 0; max-height: 92dvh; overflow: auto;
     background: var(--bg); color: var(--ink); border-radius: 22px 22px 0 0; box-shadow: var(--shadow-float);
-    padding: 14px 20px calc(20px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 12px;
+    --unten: calc(20px + env(safe-area-inset-bottom, 0px)); padding: 14px 20px var(--unten); display: flex; flex-direction: column; gap: 12px;
     animation: hoch var(--t-slow) var(--ease-spring);
   }
   @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
-    .ef { left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 520px; border-radius: var(--radius-l); padding: 18px 24px 22px; animation: rein var(--t-med) var(--ease-spring); }
+    .ef { --unten: 22px; left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 520px; max-height: calc(100dvh - 16px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); border-radius: var(--radius-l); padding: 18px 24px var(--unten); animation: rein var(--t-med) var(--ease-spring); }
   }
   .ef-kopf { display: flex; align-items: center; justify-content: space-between; }
   .ef-nr { font-size: calc(13px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }

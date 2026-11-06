@@ -113,6 +113,10 @@ html {
      Bildschirm-Stile rechnen „Größe × --schrift“; rem und em folgen über diese Grundschrift mit. */
   font-size: calc(16px * var(--schrift, 1));
   -webkit-text-size-adjust: 100%;
+  /* Die App steht fest wie eine echte App: kein Zoomen mit zwei Fingern oder Doppeltipp, kein Wackeln
+     am Rand. Karten und Weltkugel haben eigene Gesten (MapLibre), Schrift und Größe stellt man unter Darstellung ein. */
+  touch-action: pan-x pan-y;
+  overscroll-behavior: none;
   scroll-behavior: smooth;
   scroll-padding-top: 58px;
 }
@@ -339,7 +343,7 @@ article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 
 }
 .netz-rahmen.an { opacity: 0.8; animation-play-state: running; }
 @keyframes nr-dreh { to { --nw: 360deg; } }
-@media (display-mode: standalone) and (pointer: coarse) { .netz-rahmen { --nr-ecke: 54px; } }
+/* Eckrundung je Gerät setzt NetzRahmen.svelte (ecken.js) */
 @media (prefers-reduced-motion: reduce) {
   .netz-rahmen { animation: none; background: var(--nf); }
   .netz-rahmen.an { opacity: 0.5; }

@@ -1468,6 +1468,9 @@
   /* ---- Rahmen. Mac: Seitenleiste links + Inhalt. iPhone: Inhalt + Leiste unten ---- */
   .app { display: flex; align-items: flex-start; min-height: 100dvh; }
   .inhalt { flex: 1; min-width: 0; min-height: 100dvh; display: flex; flex-direction: column; }
+  /* Querformat am iPhone: liegt die Dynamic Island oder Notch rechts, rückt der Inhalt davon ab.
+     Links sorgt die Seitenleiste dafür. Am iPad und am Mac ist der Wert 0. */
+  .inhalt { padding-right: max(0px, calc(env(safe-area-inset-right, 0px) - 16px)); }
   .inhalt > main { width: 100%; }
   .sl-mac { display: contents; }
   .bb-mobil { display: none; }
