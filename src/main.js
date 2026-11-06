@@ -3,6 +3,7 @@ import './app.css'
 // Schrift- und Gesamtgröße vor dem ersten Bild setzen (sonst springt die Seite nach dem Start)
 import './lib/darstellung.js'
 import { beobachteNetz } from './lib/netz-aktivitaet.js'
+import { starteZaehler } from './lib/zaehler.js'
 import App from './App.svelte'
 import { beimSprachwechsel } from './lib/i18n.js'
 
@@ -46,6 +47,8 @@ if ('caches' in window) {
 beobachteNetz()
 const ziel = document.getElementById('app')
 let app = mount(App, { target: ziel })
+// Anonyme Zählung der App-Starts, nur auf der veröffentlichten Adresse (siehe zaehler.js)
+starteZaehler()
 
 // Sprachwechsel: alles neu aufbauen und an derselben Stelle stehen bleiben. Das Bild wechselt
 // erst, wenn die Daten da sind (der Kreis wartet darauf), spätestens nach drei Sekunden.

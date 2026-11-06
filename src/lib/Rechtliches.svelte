@@ -4,6 +4,7 @@
   import { je, istEn } from './i18n.js'
   import { IMPRESSUM, impressumFertig } from './impressum.js'
   import { bildNachweis } from './bild-nachweis.js'
+  import { zaehlungAus, browserWillNicht } from './zaehler.js'
 
   // Auf Englisch die Anzeigenamen aus orte.en.json, der deutsche Name bleibt Schlüssel
   let enNamen = $state({})
@@ -39,13 +40,23 @@
 
   <section>
     <h2>{je('Datenschutz', 'Privacy')}</h2>
-    <p>{je('Verantwortlich ist der oben genannte Anbieter. TravelBuddy hat kein Konto, keine Werbung, kein Tracking und keinen eigenen Server für deine Daten.', 'The provider named above is responsible. TravelBuddy has no account, no ads, no tracking and no server of its own for your data.')}</p>
+    <p>{je('Verantwortlich ist der oben genannte Anbieter. TravelBuddy hat kein Konto, keine Werbung, keine Cookies und keinen eigenen Server für deine Daten. Gezählt wird nur, wie oft die App geöffnet wird, ohne dass du dabei erkennbar bist.', 'The provider named above is responsible. TravelBuddy has no account, no ads, no cookies and no server of its own for your data. The only thing counted is how often the app is opened, without identifying you.')}</p>
 
     <h3>{je('Deine Daten bleiben auf dem Gerät', 'Your data stays on your device')}</h3>
     <p>{je('Reisen, Logbuch, Fotos, Kosten, Dokumente und Einstellungen liegen nur im Speicher deines Browsers oder der App. Der Anbieter sieht davon nichts. Ein Backup entsteht nur, wenn du es selbst auslöst. Den Standort nutzt die App nur, wenn du es erlaubst.', 'Trips, logbook, photos, costs, documents and settings are kept only in the storage of your browser or the app. The provider sees none of it. A backup is only made when you start one. The app only uses your location if you allow it.')}</p>
 
     <h3>{je('Hosting', 'Hosting')}</h3>
     <p>{je('Die Web-App liegt bei Netlify, Inc., 512 2nd Street, Suite 200, San Francisco, CA 94107, USA. Beim Abruf verarbeitet Netlify technisch nötige Daten wie IP-Adresse, Zeitpunkt, Browsertyp und abgerufene Datei. Das dient dem sicheren Betrieb der Seite, Art. 6 Abs. 1 lit. f DSGVO. Dabei können Daten in die USA gelangen.', 'The web app is hosted by Netlify, Inc., 512 2nd Street, Suite 200, San Francisco, CA 94107, USA. When you open it, Netlify processes technically necessary data such as IP address, time, browser type and requested file. This serves the secure operation of the site, Art. 6(1)(f) GDPR. Data may be transferred to the USA.')}</p>
+
+    <h3>{je('Anonyme Zählung der App-Starts', 'Anonymous count of app starts')}</h3>
+    <p>{je('Damit der Anbieter weiß, wie viele Menschen TravelBuddy nutzen, meldet die Web-App beim Öffnen und alle fünf Minuten, solange sie offen ist, ein kurzes „geöffnet“ an Umami Cloud (umami.is). Die Meldung enthält nur die Adresse der App: keine Inhalte, keine Orte, kein Cookie. Umami sieht dabei technisch deine IP-Adresse und deinen Browsertyp und bildet daraus einen Schlüssel, der sich jeden Monat ändert. Der Anbieter sieht nur Zahlen, nie wer du bist. Dabei können Daten in die USA gelangen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.', 'So the provider knows how many people use TravelBuddy, the web app sends a short “opened” to Umami Cloud (umami.is) when it starts and every five minutes while it is open. The message contains only the app’s address: no content, no places, no cookie. Umami technically sees your IP address and browser type and turns them into a key that changes every month. The provider only sees numbers, never who you are. Data may be transferred to the USA. Legal basis is Art. 6(1)(f) GDPR.')}</p>
+    <p>{je('Offline wird nichts gezählt und nichts nachgeholt. Sendet dein Browser „Do Not Track“ oder „Global Privacy Control“, zählt die App gar nicht.', 'Nothing is counted offline and nothing is sent later. If your browser sends “Do Not Track” or “Global Privacy Control”, the app does not count at all.')}</p>
+    {#if browserWillNicht()}
+      <p class="re-stand">{je('Dein Browser möchte nicht gezählt werden. Daran hält sich die App.', 'Your browser asks not to be counted. The app respects that.')}</p>
+    {:else}
+      <label class="re-schalter"><input type="checkbox" checked={!$zaehlungAus} onchange={(e) => zaehlungAus.set(!e.currentTarget.checked)}> {je('Anonyme Zählung auf diesem Gerät erlauben', 'Allow the anonymous count on this device')}</label>
+      {#if $zaehlungAus}<p class="re-stand">{je('Ausgeschaltet. Dieses Gerät wird nicht mehr gezählt.', 'Turned off. This device is no longer counted.')}</p>{/if}
+    {/if}
 
     <h3>{je('Quellcode und Downloads', 'Source code and downloads')}</h3>
     <p>{je('Der Quellcode und die Downloads liegen bei GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. Beim Besuch der Seiten oder beim Herunterladen verarbeitet GitHub technische Daten und IP-Adressen nach eigenen Datenschutzbestimmungen.', 'The source code and downloads are hosted by GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. When you visit those pages or download a file, GitHub processes technical data and IP addresses under its own privacy terms.')}</p>
@@ -100,4 +111,6 @@
   .re-stand { color: var(--muted); }
   .re summary { min-height: 44px; display: flex; align-items: center; font-weight: 700; cursor: pointer; }
   .re li span { overflow-wrap: anywhere; }
+  .re-schalter { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: calc(14.5px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
+  .re-schalter input { width: 22px; height: 22px; margin: 0; accent-color: var(--accent); flex: none; }
 </style>
