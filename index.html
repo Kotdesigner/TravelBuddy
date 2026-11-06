@@ -243,6 +243,17 @@
     </div>
   </section>
 
+  <section class="section reels" id="latest" aria-labelledby="latest-title" hidden>
+    <div class="container">
+      <div class="reels-head">
+        <h2 id="latest-title">Fresh from the road</h2>
+        <p class="lead">The latest reels from <a class="text-link" href="https://www.instagram.com/travelbuddy.oz/">@travelbuddy.oz</a>. Tap one to play it here.</p>
+      </div>
+      <ul class="reels-grid" data-reels></ul>
+      <small class="reels-note">Playing a reel loads it from Instagram, which may set cookies.</small>
+    </div>
+  </section>
+
 </main>
 
 <footer class="footer">
@@ -278,6 +289,43 @@
   };
   addEventListener('scroll', () => { if (!wait) { wait = true; setTimeout(pick, 60); } }, { passive: true });
   pick();
+})();
+</script>
+<script>
+(async () => {
+  const sec = document.getElementById('latest');
+  const list = sec && sec.querySelector('[data-reels]');
+  if (!list) return;
+  let reels = [];
+  try { const r = await fetch('reels.json', { cache: 'no-cache' }); if (r.ok) reels = await r.json(); } catch (e) { return; }
+  reels = (Array.isArray(reels) ? reels : []).filter((x) => x && /^https:\/\/www\.instagram\.com\/(reel|p)\/[\w-]+\/?$/.test(x.permalink)).slice(0, 6);
+  if (!reels.length) return;
+  const fmt = new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'short' });
+  for (const x of reels) {
+    const li = document.createElement('li');
+    const card = document.createElement('div');
+    card.className = 'reel-card';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'reel-play';
+    const title = (x.caption || 'Reel').split('\n')[0].slice(0, 90);
+    btn.setAttribute('aria-label', 'Play on this page: ' + title);
+    if (x.thumb) { const img = new Image(); img.src = x.thumb; img.alt = ''; img.loading = 'lazy'; img.width = 360; img.height = 640; btn.append(img); }
+    const icon = document.createElement('span'); icon.className = 'reel-icon'; icon.setAttribute('aria-hidden', 'true'); btn.append(icon);
+    btn.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = x.permalink.replace(/\/?$/, '/') + 'embed/';
+      f.title = title; f.loading = 'lazy'; f.allow = 'autoplay; encrypted-media; picture-in-picture'; f.setAttribute('allowfullscreen', '');
+      card.replaceChild(f, btn);
+    }, { once: true });
+    const cap = document.createElement('p'); cap.className = 'reel-cap';
+    const a = document.createElement('a'); a.href = x.permalink; a.textContent = title; a.className = 'text-link';
+    cap.append(a);
+    const d = x.timestamp ? new Date(String(x.timestamp).replace(/([+-]\d\d)(\d\d)$/, '$1:$2')) : null;
+    if (d && !isNaN(d)) { const t = document.createElement('small'); t.textContent = fmt.format(d); cap.append(t); }
+    card.append(btn); li.append(card, cap); list.append(li);
+  }
+  sec.hidden = false;
 })();
 </script>
 <script>window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
