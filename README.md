@@ -8,7 +8,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.15 · built for Western Australia**<br>
+**Version 1.16 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
@@ -127,6 +127,10 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 </td></tr></table>
 
 ---
+
+## 📲 New in version 1.16
+
+**Onto the home screen in ten seconds.** An iPhone does not let a website install itself, it only works via Share and “Add to Home Screen”. The first time you open TravelBuddy in Safari, it shows exactly these three steps, before you enter anything, because Safari and the home screen app keep separate storage. On Android the app offers an “Install” button instead.
 
 ## 🗺️ New in version 1.15
 
@@ -787,6 +791,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.13:** the app explains itself: ⓘ help, how it all fits together, first steps
 - [x] **Version 1.14:** document files on the second device with one pick, recognised by name and size
 - [x] **Version 1.15:** a clearer offline map: layers below the map, clearer warnings, your location on top
+- [x] **Version 1.16:** the app shows how to put it on the home screen, Android gets an install button
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -808,7 +813,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.15 · entwickelt für Western Australia**<br>
+**Version 1.16 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
@@ -917,6 +922,10 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 </td></tr></table>
 
 ---
+
+## 📲 Neu in Version 1.16
+
+**In zehn Sekunden auf dem Home-Bildschirm.** Ein iPhone lässt keine Webseite sich selbst installieren, das geht nur über Teilen und „Zum Home-Bildschirm“. Beim ersten Öffnen in Safari zeigt TravelBuddy genau diese drei Schritte, bevor du etwas einträgst, denn Safari und die App auf dem Home-Bildschirm haben getrennte Speicher. Unter Android bietet die App stattdessen den Knopf „Installieren“ an.
 
 ## 🗺️ Neu in Version 1.15
 
@@ -1545,6 +1554,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.13:** die App erklärt sich selbst: ⓘ-Hilfe, so hängt alles zusammen, erste Schritte
 - [x] **Version 1.14:** Dateien der Dokumente auf dem zweiten Gerät mit einer Auswahl, erkannt an Name und Größe
 - [x] **Version 1.15:** übersichtlichere Offline-Karte: Ebenen unter der Karte, deutlichere Warngebiete, dein Standort obenauf
+- [x] **Version 1.16:** die App zeigt, wie sie auf den Home-Bildschirm kommt, Android bekommt einen Knopf zum Installieren
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

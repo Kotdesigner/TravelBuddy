@@ -30,6 +30,8 @@
   import Heute from './lib/Heute.svelte'
   import NeuBlatt from './lib/NeuBlatt.svelte'
   import Einfuehrung from './lib/Einfuehrung.svelte'
+  import InstallHinweis from './lib/InstallHinweis.svelte'
+  import { installOffen } from './lib/install.js'
   import { einfuehrung, einfuehrungStarten } from './lib/einfuehrung.js'
   import { testreiseAn, testreiseKnopf } from './lib/testreise-dienst.js'
   import { kartenLauf } from './lib/karten-laden.js'
@@ -888,7 +890,7 @@
     return () => clearInterval(uhr)
   })
   let sprachFrage = $state(spracheOffen())
-  $effect(() => { if (ansicht.tab === 'orte' && !$einfuehrung && !sprachFrage) zeigeOrteHinweis() })
+  $effect(() => { if (ansicht.tab === 'orte' && !$einfuehrung && !sprachFrage && !$installOffen) zeigeOrteHinweis() })
   // Leisten darunter halten genau an der Unterkante des Kopfes, auch wenn er schrumpft
   function merkeKopf(el) {
     let alt = 0, wartet = false
@@ -1380,7 +1382,9 @@
     onzeigen={(o) => { ortNeuOffen = false; zuOrt(o) }} />
 {/if}
 
-{#if !sprachFrage}<Einfuehrung {geh} anzahlOrte={orte.length} />{/if}
+<!-- Erst auf den Home-Bildschirm, dann die Einführung: Safari und App haben getrennte Speicher -->
+{#if !sprachFrage}<InstallHinweis />{/if}
+{#if !sprachFrage && !$installOffen}<Einfuehrung {geh} anzahlOrte={orte.length} />{/if}
 
 {#if neuOffen}
   <NeuBlatt typ={neuOffen.typ} vorlage={neuOffen.vorlage} orte={[...orte, ...$eigeneOrte]}
