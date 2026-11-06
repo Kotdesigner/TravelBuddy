@@ -17,13 +17,14 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <br>
 
-<a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/knopf-testen-en.svg" width="460" alt="Try TravelBuddy now: free, no account, works offline"></a>
+<a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/knopf-testen-en.svg" width="390" alt="Try TravelBuddy now: free, no account, works offline"></a> <a href="https://kotdesigner.github.io/TravelBuddy/"><img src="bilder/knopf-website-en.svg" width="390" alt="Visit the TravelBuddy website: the reel, FAQ and how to install"></a>
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
 **[✨ What's new in 1.20](#-new-in-version-120)**
 
-🌏 **Website: [kotdesigner.github.io/TravelBuddy](https://kotdesigner.github.io/TravelBuddy/)** · the whole app in 40 seconds, the FAQ and how to install it
+<a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
+<sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
@@ -855,13 +856,14 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <br>
 
-<a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/knopf-testen-de.svg" width="480" alt="TravelBuddy jetzt ausprobieren: kostenlos, ohne Konto, läuft offline"></a>
+<a href="https://travelbuddy-v1-wa.netlify.app"><img src="bilder/knopf-testen-de.svg" width="390" alt="TravelBuddy jetzt ausprobieren: kostenlos, ohne Konto, läuft offline"></a> <a href="https://kotdesigner.github.io/TravelBuddy/"><img src="bilder/knopf-website-de.svg" width="390" alt="Zur TravelBuddy-Website: Reel, Fragen und Installation"></a>
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
 **[✨ Neu in 1.20](#-neu-in-version-120)**
 
-🌏 **Website: [kotdesigner.github.io/TravelBuddy](https://kotdesigner.github.io/TravelBuddy/)** · die ganze App in 40 Sekunden, Fragen und Antworten und die Installation (auf Englisch)
+<a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
+<sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
 
 **[📲 Als App einrichten](#-auf-jedem-gerät-als-app-einrichten)**
 
