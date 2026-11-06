@@ -74,7 +74,7 @@ async function lies() {
 async function schreib(wert) {
   const d = await db()
   return new Promise((ok) => {
-    try { const x = d.transaction(TOPF, 'readwrite'); x.objectStore(TOPF).put(JSON.parse(JSON.stringify(wert)), SCHLUESSEL); x.oncomplete = ok; x.onerror = ok } catch { ok() }
+    try { const x = d.transaction(TOPF, 'readwrite'); x.objectStore(TOPF).put(JSON.parse(JSON.stringify(wert)), SCHLUESSEL); x.oncomplete = ok; x.onerror = ok; x.onabort = ok } catch { ok() }
   })
 }
 

@@ -7,6 +7,7 @@ import { t } from './i18n.js'
 import { haengeBelegeAn, nimmBelegAb, eigeneBelegeUebernehmen } from './belege.js'
 import { musikFuerBackup, musikAusBackup } from './musik/speicher.js'
 import { datiereAbschnitte } from './abschnitte.js'
+import { heileListe, heileOrtDaten, heileBuchungen } from './heilen.js'
 
 const DB_NAME = 'wa-plan'
 const STORE = 'kv'
@@ -59,6 +60,8 @@ export async function idbGet(key) {
     const req = tx.objectStore(STORE).get(key)
     req.onsuccess = () => resolve(req.result)
     req.onerror = () => reject(req.error)
+    tx.onabort = () => reject(tx.error || new DOMException('Lesen abgebrochen', 'AbortError'))
+    tx.oncomplete = () => db.close()
   })
 }
 
@@ -67,8 +70,13 @@ export async function idbSet(key, value) {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE, 'readwrite')
     tx.objectStore(STORE).put(value, key)
-    tx.oncomplete = () => resolve()
-    tx.onerror = () => reject(tx.error)
+    tx.oncomplete = () => { db.close(); resolve() }
+    // Bei einem Abbruch kommt zuerst ein Fehler ohne Inhalt. Immer einen echten Fehler weitergeben,
+    // sonst hielte die Speicherwache das für einen Erfolg.
+    tx.onerror = (ev) => reject(tx.error || ev?.target?.error || new DOMException('Speichern fehlgeschlagen', 'UnknownError'))
+    // Speicher voll meldet der Browser beim Festschreiben nur als Abbruch, nicht als Fehler.
+    // Ohne diese Zeile wartete das Speichern dann ewig: kein Notspeicher, kein Hinweis.
+    tx.onabort = () => { db.close(); reject(tx.error || new DOMException('Speichern abgebrochen', 'AbortError')) }
   })
 }
 
@@ -171,8 +179,10 @@ export const stempeln = (o) => ({ ...o, geaendert: jetzt() })
 // NICHT „jetzt". Sonst gälte jeder alte Eintrag als frisch bearbeitet und
 // gewänne beim ersten Abgleich gegen echte Änderungen des anderen Geräts.
 export const URZEIT = '2000-01-01T00:00:00.000Z'
+// Dabei auch gleich beschädigte Einträge reparieren (siehe heilen.js), sonst stürzt die App
+// bei jedem Start über einen einzelnen Eintrag.
 const nachruesten = (liste) => Array.isArray(liste)
-  ? liste.map((e) => (e && typeof e === 'object' && !e.geaendert
+  ? heileListe(liste).map((e) => (!e.geaendert
       ? { ...e, geaendert: URZEIT, herkunft: 'vor-merge' } : e))
   : liste
 
@@ -211,7 +221,7 @@ const timers = {}
 export async function initUserData() {
   try {
     const data = await idbGet(KEY)
-    if (data && typeof data === 'object') userData.set(data)
+    if (data && typeof data === 'object') userData.set(heileOrtDaten(data))
     const rs = await idbGet(KEY_REISEN)
     if (Array.isArray(rs)) reisen.set(nachruesten(rs))
     else {
@@ -238,7 +248,7 @@ export async function initUserData() {
     const wd = await idbGet(KEY_WANDER)
     if (Array.isArray(wd)) wanderungen.set(nachruesten(wd))
     const ci = await idbGet(KEY_CHECKINS)
-    if (Array.isArray(ci)) checkins.set(ci)
+    if (Array.isArray(ci)) checkins.set(heileListe(ci))
     // Ostküste: getrennte Töpfe des Altformats einmalig in die Haupttöpfe überführen.
     const schonZusammen = await idbGet(KEY_ZUSAMMEN)
     const ur = await idbGet(KEY_U_REISEN)
@@ -264,7 +274,7 @@ export async function initUserData() {
     const vk = await idbGet(KEY_VORAB)
     if (Array.isArray(vk)) vorabKosten.set(nachruesten(vk))
     const bu = await idbGet(KEY_BUCHUNGEN)
-    if (bu && Array.isArray(bu.events)) buchungen.set(bu)
+    if (bu && Array.isArray(bu.events)) buchungen.set(heileBuchungen(bu))
     const gr = await idbGet(KEY_GRAB)
     if (gr && typeof gr === 'object') grabsteine.set(gr)
     const sn = await idbGet(KEY_SCHNAPP)
@@ -534,6 +544,45 @@ export function packZuruecksetzen() {
   packliste.update((p) => ({ ...p, checked: Object.fromEntries(Object.keys(p.checked).map((k) => [k, haken(false)])) }))
 }
 
+// ---------- Speicherwache ----------
+// Scheitert das Speichern (meist: Speicher voll), stand das bisher nur in der Konsole. Auf dem
+// Bildschirm sah alles gut aus, nach dem Schließen war es weg. Jetzt merkt
+// sich die App, welche Töpfe nicht gesichert sind, und zeigt oben einen Hinweis mit Backup-Knopf.
+// Der Wetter- und Gefahren-Vorrat zählt nicht, der kommt beim nächsten Abruf ohnehin neu.
+const NUR_VORRAT = new Set([KEY_GEFAHR])
+const offenesSpeichern = new Map()          // key -> letzter Wert, der nicht in die Datenbank kam
+/** { anzahl, zeit, voll } solange etwas nicht gesichert ist, sonst null */
+export const speicherProblem = writable(null)
+function meldeSpeicher(key, val, ok, fehler = null) {
+  if (NUR_VORRAT.has(key)) return
+  if (!ok) offenesSpeichern.set(key, val)
+  else if (!offenesSpeichern.delete(key)) return
+  speicherProblem.set(offenesSpeichern.size
+    ? { anzahl: offenesSpeichern.size, zeit: new Date().toISOString(), voll: fehler?.name === 'QuotaExceededError' || get(speicherProblem)?.voll || false }
+    : null)
+}
+/** Alles, was nicht gesichert werden konnte, noch einmal versuchen. Gibt true zurück, wenn jetzt alles drin ist. */
+export async function nochmalSpeichern() {
+  for (const [key, val] of [...offenesSpeichern]) await persist(key, val)
+  return offenesSpeichern.size === 0
+}
+
+// Den Browser bitten, die Daten nicht bei Platznot von selbst zu löschen, sobald es eigene
+// Einträge gibt. Einmal je Start, und nur, wenn der Schutz noch nicht besteht.
+const EIGENE = new Set([KEY_REISEN, KEY_JOURNAL, KEY_ORTE, KEY_WANDER, KEY_NOTIZEN, KEY_DOKU, KEY_BUCHUNGEN, KEY_VORAB])
+let dauerhaftGefragt = false
+function bitteUmDauerhaft(key, val) {
+  if (dauerhaftGefragt || !EIGENE.has(key)) return
+  const hatInhalt = Array.isArray(val) ? val.length > 0 : !!(val && Array.isArray(val.events) && val.events.length)
+  if (!hatInhalt) return
+  dauerhaftGefragt = true
+  try {
+    const s = navigator.storage
+    if (!s?.persist) return
+    Promise.resolve(s.persisted?.()).then((schon) => (schon ? true : s.persist())).catch(() => {})
+  } catch {}
+}
+
 function autoSave(store, key) {
   store.subscribe((val) => {
     if (!loaded) return
@@ -549,12 +598,15 @@ async function persist(key, val) {
     // (DataCloneError). Als reine Daten geht es.
     try { await idbSet(key, JSON.parse(JSON.stringify(val))) }
     catch (e2) {
-      console.error(`Speichern von „${key}" fehlgeschlagen — Notspeicher`, e2)
+      console.error(`Speichern von „${key}" fehlgeschlagen, Notspeicher`, e2)
       try { localStorage.setItem(key, JSON.stringify(val)) } catch {}
+      meldeSpeicher(key, val, false, e2)
       return
     }
   }
   if (NOTSPEICHER[key]) { try { localStorage.removeItem(key) } catch {} }
+  meldeSpeicher(key, val, true)
+  bitteUmDauerhaft(key, val)
 }
 
 /** Einzelnes Feld eines Ortes setzen. */
@@ -1138,10 +1190,16 @@ export function saeubereBackup(p) {
   const sauber = { ...p }
   for (const k of BACKUP_LISTEN) {
     if (!(k in sauber)) continue
-    if (Array.isArray(sauber[k])) sauber[k] = sauber[k].filter((x) => x && typeof x === 'object')
+    if (Array.isArray(sauber[k])) sauber[k] = heileListe(sauber[k])
     else delete sauber[k]
   }
-  for (const k of BACKUP_OBJEKTE) if (k in sauber && (!sauber[k] || typeof sauber[k] !== 'object')) delete sauber[k]
+  for (const k of BACKUP_OBJEKTE) if (k in sauber && (!sauber[k] || typeof sauber[k] !== 'object' || Array.isArray(sauber[k]))) delete sauber[k]
+  // Auch innen: Etappen mit `stops` als Text, Fotos als Objekt und Ähnliches
+  if (sauber.daten) sauber.daten = heileOrtDaten(sauber.daten)
+  if (sauber.buchungen) sauber.buchungen = heileBuchungen(sauber.buchungen)
+  for (const k of ['urlaubReisen', 'urlaubOrte', 'urlaubJournal']) {
+    if (k in sauber) sauber[k] = Array.isArray(sauber[k]) ? heileListe(sauber[k]) : []
+  }
   return sauber
 }
 

@@ -25,7 +25,7 @@ async function lies() {
 }
 async function schreib(wert) {
   const d = await db()
-  return new Promise((ok) => { const t = d.transaction(TOPF, 'readwrite'); t.objectStore(TOPF).put(JSON.parse(JSON.stringify(wert)), SCHLUESSEL); t.oncomplete = ok; t.onerror = ok })
+  return new Promise((ok) => { const t = d.transaction(TOPF, 'readwrite'); t.objectStore(TOPF).put(JSON.parse(JSON.stringify(wert)), SCHLUESSEL); t.oncomplete = ok; t.onerror = ok; t.onabort = ok })
 }
 
 export const musik = writable({ ...LEER })

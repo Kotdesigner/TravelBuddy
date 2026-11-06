@@ -60,6 +60,8 @@
   import Reisevorbereitung from './lib/Reisevorbereitung.svelte'
   import BottomBar from './lib/BottomBar.svelte'
   import Toast from './lib/Toast.svelte'
+  import SpeicherHinweis from './lib/SpeicherHinweis.svelte'
+  import SpeicherStand from './lib/SpeicherStand.svelte'
   import { zeigeToast } from './lib/toast.js'
   import { haptic } from './lib/haptik.js'
   import { theme, setzeTheme } from './lib/theme.js'
@@ -953,6 +955,7 @@
 {/if}
 
 <main class="wrap" bind:this={hauptEl}>
+  <SpeicherHinweis onBackup={onExport} />
   {#if $kartenLauf}
     <p class="karten-band" role="status">📥 {t('Kartenmaterial wird geladen: {name}, {fertig} von {gesamt}', $kartenLauf)}</p>
   {/if}
@@ -1280,6 +1283,7 @@
           <li><a href="#/{pfad}" onclick={(e) => { e.preventDefault(); geh(pfad) }}><span class="ml-txt"><b>{label}</b><small>{MEHR_INFO[pfad]}</small></span><span class="ml-pfeil" aria-hidden="true">›</span></a></li>
         {/each}
       </ul>
+      <SpeicherStand />
     {/if}
   {/if}
 </main>

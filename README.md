@@ -10,7 +10,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.19 · built for Western Australia**<br>
+**Version 1.20 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your phone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-119)**
@@ -132,6 +132,10 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 </td></tr></table>
 
 ---
+
+## 🛟 New in version 1.20
+
+**Your entries stay safe, even when the device is full.** If saving fails, for example because storage is full, a red note now stays at the top with “💾 Save backup” and “Try saving again”. Before, the app looked fine and the entries were gone after closing it. TravelBuddy also asks the browser to protect its data from automatic clean-up as soon as you add your first entry, and the bottom of “More” shows how much space is used and free. A damaged or hand-edited backup no longer breaks pages: wrong fields are repaired during import and at start. Voice notes record at speech quality and stop by themselves after 5 minutes, so they take about a quarter of the space.
 
 ## 🧹 New in version 1.19
 
@@ -801,6 +805,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.17:** tap a warning area on the map, jump to the warning, animated logo in the sidebar
 - [x] **Version 1.18:** set up as an app in Chrome, Edge and Safari on the Mac, “Set up the app” in the menu, reset the app
 - [x] **Version 1.19:** no more separate desktop downloads, every device installs from the browser
+- [x] **Version 1.20:** a note when saving fails, protected storage, damaged backups are repaired, shorter voice notes
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -822,7 +827,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.19 · entwickelt für Western Australia**<br>
+**Version 1.20 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem Handy ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-119)**
@@ -934,6 +939,10 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 </td></tr></table>
 
 ---
+
+## 🛟 Neu in Version 1.20
+
+**Deine Einträge bleiben sicher, auch wenn das Gerät voll ist.** Klappt das Speichern nicht, etwa weil der Speicher voll ist, steht jetzt oben ein roter Hinweis mit „💾 Backup sichern“ und „Erneut speichern“. Vorher sah alles gut aus, und nach dem Schließen waren die Einträge weg. TravelBuddy bittet den Browser außerdem gleich beim ersten eigenen Eintrag, die Daten nicht von selbst aufzuräumen, und ganz unten unter „Mehr“ steht, wie viel Platz belegt und frei ist. Eine beschädigte oder von Hand bearbeitete Sicherung legt keine Seiten mehr lahm: Falsche Felder werden beim Import und beim Start repariert. Sprachnotizen nehmen in Sprachqualität auf und enden nach 5 Minuten von selbst, so brauchen sie etwa ein Viertel des Platzes.
 
 ## 🧹 Neu in Version 1.19
 
@@ -1571,6 +1580,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.17:** Warngebiet auf der Karte antippen, Sprung zur Warnung, animiertes Logo in der Seitenleiste
 - [x] **Version 1.18:** als App einrichten in Chrome, Edge und Safari am Mac, „App einrichten“ im Menü, App zurücksetzen
 - [x] **Version 1.19:** keine eigenen Desktop-Downloads mehr, jedes Gerät richtet die App aus dem Browser ein
+- [x] **Version 1.20:** Hinweis, wenn das Speichern scheitert, geschützter Speicher, beschädigte Sicherungen werden repariert, kürzere Sprachnotizen
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

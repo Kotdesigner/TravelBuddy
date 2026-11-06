@@ -12,7 +12,7 @@
   import { get } from 'svelte/store'
   import { updateJournalEintrag, setJournalFeld, loescheJournalEintrag, userData, journal } from './userdata.js'
   import { macheThumbnail } from './thumbnail.js'
-  import { audioVerfuegbar, starteAufnahme } from './audio.js'
+  import { audioVerfuegbar, starteAufnahme, restZeit } from './audio.js'
   import SonneWetter from './SonneWetter.svelte'
   import OrtWahl from './OrtWahl.svelte'
   import { etappeAm, etappeVonEintrag, etappenAm, routenDerEtappe, tageZwischen, gueltigesDatum } from './plan.js'
@@ -115,24 +115,34 @@
   const themenModule = MODULE.filter((m) => !m.immer)
   let offen = $state({})
   const kannAudio = audioVerfuegbar()
-  let aufnahme = $state(null) // laufende Aufnahme
+  let aufnahme = $state.raw(null) // laufende Aufnahme (roh, damit der Vergleich mit der Höchstdauer greift)
   let audioFehler = $state(null)
 
   let startet = false
+  let rest = $state('')              // Restzeit bis zur Höchstdauer, läuft im Knopf mit
+  let restUhr = null
   async function toggleAufnahme() {
     if (aufnahme) {
       const a = aufnahme; aufnahme = null
+      clearInterval(restUhr)
       try { const url = await a.stop(); setKopf({ audios: [...(eintrag.audios || []), url] }) } catch {}
     } else {
       if (startet) return          // Doppeltipp während der Mikrofon-Abfrage
       startet = true; audioFehler = null
-      try { aufnahme = await starteAufnahme() } catch (e) { audioFehler = t('Mikrofon nicht freigegeben') }
+      try {
+        let a = null
+        a = await starteAufnahme({ onEnde: () => { if (aufnahme === a) { toggleAufnahme(); audioFehler = t('Nach 5 Minuten automatisch gespeichert') } } })
+        aufnahme = a
+        rest = restZeit(a.start, a.maxSek)
+        restUhr = setInterval(() => { rest = restZeit(a.start, a.maxSek) }, 1000)
+      } catch (e) { audioFehler = t('Mikrofon nicht freigegeben') }
       finally { startet = false }
     }
   }
   // Wird der Tag gewechselt, während aufgenommen wird: Aufnahme beenden und trotzdem sichern
   $effect(() => () => {
     const a = aufnahme, id = eintrag.id
+    clearInterval(restUhr)
     if (!a) return
     aufnahme = null
     a.stop().then((url) => {
@@ -495,7 +505,7 @@
   {#if kannAudio}
     <div class="audio">
       <button class="rec" class:an={aufnahme} onclick={toggleAufnahme}>
-        {aufnahme ? t('⏹ Aufnahme stoppen & speichern') : t('🎙️ Sprachnotiz aufnehmen')}
+        {aufnahme ? t('⏹ Aufnahme stoppen & speichern') : t('🎙️ Sprachnotiz aufnehmen')}{#if aufnahme}<span class="rec-rest">&nbsp;· {t('noch {zeit}', { zeit: rest })}</span>{/if}
       </button>
       {#if audioFehler}<span class="a-fehler">{audioFehler}</span>{/if}
       {#each eintrag.audios || [] as a, i}
@@ -769,4 +779,5 @@
   .t-opt { min-height: 44px; }
   .f-in input, .f-in textarea, .feld select { min-height: 44px; }
   .rec { min-height: 44px; }
+  .rec-rest { font-variant-numeric: tabular-nums; font-weight: 600; }
 </style>
