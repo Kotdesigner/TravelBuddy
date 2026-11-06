@@ -1,0 +1,62 @@
+# Puts the latest Instagram reels on the website (branch gh-pages).
+# Setup: repository secret IG_TOKEN (Instagram API with Instagram Login, long-lived token).
+# Optional: secret GH_PAT (fine-grained token, this repo, "Secrets: read and write")
+# lets the workflow renew IG_TOKEN once a week, so it never runs out after 60 days.
+name: Instagram reels for the website
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram-reels
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the script
+        uses: actions/checkout@v4
+        with:
+          path: main
+          sparse-checkout: .github
+
+      - name: Get the website
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: site
+
+      - name: Fetch reels from Instagram
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+        run: |
+          if [ "$(date -u +%u)" = "1" ] && [ "$(date -u +%H)" -lt 6 ]; then export REFRESH=1; fi
+          python3 main/.github/scripts/instagram_reels.py site
+
+      - name: Publish changes
+        working-directory: site
+        run: |
+          git add reels.json reels
+          if git diff --cached --quiet; then echo "No new reels."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update the latest Instagram reels"
+          git push
+
+      - name: Renew the Instagram token
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          f="$RUNNER_TEMP/ig_token"
+          if [ -s "$f" ] && [ -n "$GH_TOKEN" ]; then
+            echo "::add-mask::$(cat "$f")"
+            gh secret set IG_TOKEN --repo "$GITHUB_REPOSITORY" < "$f"
+            echo "IG_TOKEN renewed."
+          fi
+          rm -f "$f"
