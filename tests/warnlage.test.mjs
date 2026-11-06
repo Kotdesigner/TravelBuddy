@@ -143,6 +143,8 @@ console.log('\n8  Einbau')
   p('Heute zeigt die Warnlage', src('lib/Heute.svelte').includes('WarnLage'))
   p('Gefahrenlage zeigt Lage, Knöpfe und Testmodus', ['WarnLage', 'WarnKnoepfe', 'WarnTest'].every((x) => src('lib/Gefahren.svelte').includes(x)))
   p('Karte zeichnet Warnungen', src('lib/Karte.svelte').includes('warnGeoJson'))
+  p('Warngebiet antippen zeigt Kurzinfo, zweiter Tipp springt zur Warnung', /function warnKlick/.test(src('lib/Karte.svelte')) && /warnFensterId === id\) \{ zurWarnung\(id\)/.test(src('lib/Karte.svelte')) && /'mehr\/gefahren\/' \+ encodeURIComponent\(id\)/.test(src('lib/Karte.svelte')))
+  p('Gefahrenlage findet die angetippte Warnung', /data-warn-id=\{w\.id\}/.test(src('lib/Gefahren.svelte')) && /fokusId=\{ansicht\.id\}/.test(src('App.svelte')))
   p('Plan, Etappe und Wanderung kennen die Lage', ['lib/PlanAnsicht.svelte', 'lib/EtappeDetail.svelte', 'lib/Wanderungen.svelte'].every((f) => src(f).includes('$lage')))
 }
 

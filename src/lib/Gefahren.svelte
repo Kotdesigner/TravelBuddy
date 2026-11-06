@@ -15,7 +15,7 @@
   let { standort = null, laden = false, fehler = null, stand = null, ausCache = false, betroffene = [],
     warnungen = [], betroffeneWarnungen = [], onRefresh,
     umkreisKm = $bindable(150), bedingungen = [], quellenFehler = [],
-    meinOrt = null, ortStatus = 'bereit', ortText = '', onOrt, orte = [] } = $props()
+    meinOrt = null, ortStatus = 'bereit', ortText = '', onOrt, orte = [], fokusId = '' } = $props()
 
   // „Aktualisieren“ holt auch die Straßenlage neu (eigene Quelle, eigener Speicher).
   function aktualisieren() {
@@ -32,6 +32,22 @@
   // Lange Listen: erst 3 zeigen, Rest ausklappbar
   const ZEIGE = 3
   let warnAlle = $state(false)
+
+  // Von der Karte aus angetippt (#/mehr/gefahren/<id>): Liste aufklappen, hinscrollen, kurz hervorheben
+  let fokus = $state('')
+  $effect(() => {
+    const id = fokusId
+    if (!id || !warnungen.length) return
+    const i = warnungen.findIndex((w) => w.id === id)
+    if (i < 0) return
+    if (i >= ZEIGE) warnAlle = true
+    fokus = id
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.querySelector(`[data-warn-id="${CSS.escape(id)}"]`)?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    }))
+    const weg = setTimeout(() => (fokus = ''), 2600)
+    return () => clearTimeout(weg)
+  })
   let stdAlle = $state(false)
   let betrAlle = $state(false)
 </script>
@@ -114,7 +130,7 @@
       {/if}
       <div class="w-liste">
         {#each (warnAlle ? warnungen : warnungen.slice(0, ZEIGE)) as w}
-          <div class="w-karte" style="border-left:5px solid {w.farbe}">
+          <div class="w-karte" class:fokus={fokus === w.id} data-warn-id={w.id} style="border-left:5px solid {w.farbe}">
             <div class="w-kopf">
               <span class="w-level" style="background:{w.farbe};color:{schriftAuf(w.farbe)}">{w.icon} {w.level}</span>
               <span class="w-staat">{STAAT[w.staat] || w.staat}</span>
@@ -223,7 +239,8 @@
   .amtlich { margin-top: 8px; }
   .betroffen-box { background: var(--danger-flaeche); border: 1px solid var(--danger-linie); color: var(--danger-text); font-size: calc(13px * var(--schrift, 1)); padding: 9px 12px; border-radius: 8px; margin-bottom: 10px; }
   .w-liste { display: flex; flex-direction: column; gap: 8px; }
-  .w-karte { background: var(--eingabe); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  .w-karte { background: var(--eingabe); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; transition: box-shadow .3s; scroll-margin-top: 120px; }
+  .w-karte.fokus { box-shadow: 0 0 0 3px var(--brand-2, var(--brand)), var(--shadow-float); }
   .w-kopf { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .w-level { color: #fff; font-size: calc(12px * var(--schrift, 1)); font-weight: 800; padding: 2px 9px; border-radius: 10px; }
   .w-event { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--ink); }

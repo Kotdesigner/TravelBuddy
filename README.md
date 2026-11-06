@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="bilder/logo-animiert.gif" width="140" height="140" alt="TravelBuddy logo: a turning globe, the route flows to the pin and circles the globe">
+
 # TravelBuddy
 
 ### One app. The whole road trip. Even where the signal ends.
@@ -8,7 +10,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.16 · built for Western Australia**<br>
+**Version 1.17 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
@@ -127,6 +129,10 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 </td></tr></table>
 
 ---
+
+## ⚠️ New in version 1.17
+
+**Tap a warning on the map.** A tap on a warning area on the offline map shows a short info: level, title, place and how far it is from you. Tap again, or on “Open warning”, and the app jumps straight to that warning under Hazards and highlights it. On the Mac and iPad, the sidebar now carries the animated logo: the globe turns, the route flows to the pin, and every 90 seconds it travels twice around the globe.
 
 ## 📲 New in version 1.16
 
@@ -792,6 +798,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.14:** document files on the second device with one pick, recognised by name and size
 - [x] **Version 1.15:** a clearer offline map: layers below the map, clearer warnings, your location on top
 - [x] **Version 1.16:** the app shows how to put it on the home screen, Android gets an install button
+- [x] **Version 1.17:** tap a warning area on the map, jump to the warning, animated logo in the sidebar
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -813,7 +820,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.16 · entwickelt für Western Australia**<br>
+**Version 1.17 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
@@ -922,6 +929,10 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 </td></tr></table>
 
 ---
+
+## ⚠️ Neu in Version 1.17
+
+**Warnungen auf der Karte antippen.** Ein Tipp auf ein Warngebiet der Offline-Karte zeigt eine Kurzinfo: Stufe, Titel, Ort und wie weit es von dir entfernt ist. Noch ein Tipp, oder auf „Zur Warnung“, und die App springt direkt zu dieser Warnung in der Gefahrenlage und hebt sie hervor. Am Mac und iPad trägt die Seitenleiste jetzt das animierte Logo: Die Kugel dreht sich, die Route fließt zum Pin, und alle 90 Sekunden fährt sie zweimal um die Kugel.
 
 ## 📲 Neu in Version 1.16
 
@@ -1555,6 +1566,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.14:** Dateien der Dokumente auf dem zweiten Gerät mit einer Auswahl, erkannt an Name und Größe
 - [x] **Version 1.15:** übersichtlichere Offline-Karte: Ebenen unter der Karte, deutlichere Warngebiete, dein Standort obenauf
 - [x] **Version 1.16:** die App zeigt, wie sie auf den Home-Bildschirm kommt, Android bekommt einen Knopf zum Installieren
+- [x] **Version 1.17:** Warngebiet auf der Karte antippen, Sprung zur Warnung, animiertes Logo in der Seitenleiste
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

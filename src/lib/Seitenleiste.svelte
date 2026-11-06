@@ -1,4 +1,5 @@
 <script>
+  import LogoAnimiert from './LogoAnimiert.svelte'
   import { t, LOCALE } from './i18n.js'
   // Seitenleiste am Mac: dieselben fünf Bereiche wie unten am iPhone, darunter die
   // Unterpunkte des offenen Bereichs. Ersetzt die Leiste oben mit ihren Aufklappmenüs
@@ -20,6 +21,8 @@
 </script>
 
 <nav class="sl" aria-label={t('Hauptnavigation')}>
+  <!-- App-Logo, animiert: die Kugel dreht sich, die Route fließt, alle 90 Sekunden fährt sie zweimal um die Kugel -->
+  <div class="sl-logo"><LogoAnimiert /></div>
   <div class="sl-marke">Travel<span>Buddy</span></div>
   <button class="sl-suche" onclick={onSuche} aria-keyshortcuts="Meta+K /">
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg>
@@ -63,6 +66,10 @@
   }
   .sl-marke { font-family: 'Anton', Impact, sans-serif; font-size: calc(30px * var(--schrift, 1)); line-height: 1.1; letter-spacing: 0.6px; color: var(--ink); text-align: center; white-space: nowrap; padding: 4px 0 10px; }
   .sl-marke span { color: var(--brand-text); }
+  /* Logo über dem Schriftzug, wie das App-Symbol */
+  .sl-logo { display: flex; justify-content: center; margin: 2px 0 -8px; }
+  /* iPhone quer: wenig Höhe, dort lieber Platz für die Bereiche */
+  @media (max-height: 520px) { .sl-logo { display: none; } }
   .sl-suche {
     display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 10px; border-radius: 10px;
     border: 1px solid var(--line-stark); background: var(--card); color: var(--muted); font-size: calc(14px * var(--schrift, 1)); cursor: pointer; text-align: left;

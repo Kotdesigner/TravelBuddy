@@ -21,6 +21,8 @@
   import { get } from 'svelte/store'
   import { je } from './i18n.js'
   import { warnGeoJson, warnAusschnitt, inAustralien as punktInAustralien } from './warnlage.js'
+  import { abstandKm } from './warnungen.js'
+  import { geh } from './navigation.js'
 
   let { orte = [], reisen = [], warnFokus = null } = $props()
   // Mehrere Routen gleichzeitig sichtbar (Menge der gewählten Reise-IDs).
@@ -334,12 +336,10 @@
   // Tippen: ein Punkt ist nur 3–5 px groß — mit dem Finger trifft man ihn nie genau.
   // Deshalb im Umkreis von 11 px suchen und den nächsten nehmen.
   function poiKlick(e) {
-    if (!map.getLayer('poi-punkt')) return
-    // Tipp auf einen Orts-Pin: der hat sein eigenes Fenster
-    if (e.originalEvent?.target?.closest?.('.maplibregl-marker, .maplibregl-popup')) return
+    if (!map.getLayer('poi-punkt')) return false
     const { x, y } = e.point
     const treffer = map.queryRenderedFeatures([[x - 11, y - 11], [x + 11, y + 11]], { layers: POI_LAYER.filter((id) => map.getLayer(id)) })
-    if (!treffer.length) return
+    if (!treffer.length) return false
     let f = treffer[0], best = Infinity
     for (const t of treffer) {
       const p = map.project(t.geometry.coordinates)
@@ -355,6 +355,49 @@
       + `<a href="https://www.google.com/maps/search/?api=1&query=${lat},${lon}" target="_blank" rel="noopener" style="font-size:12px">Google Maps ↗</a>`
       + ` · <a href="https://maps.apple.com/?ll=${lat},${lon}&q=${q}" target="_blank" rel="noopener" style="font-size:12px">Apple Karten ↗</a>`
     new maplibregl.Popup({ offset: 14, closeButton: true }).setLngLat([lon, lat]).setHTML(html).addTo(map)
+    return true
+  }
+
+  // Tipp auf ein Warngebiet: kurze Info im Fenster. Ein zweiter Tipp auf dieselbe Warnung
+  // (oder der Knopf im Fenster) springt zur Warnung in der Gefahrenlage.
+  let warnFenster = null, warnFensterId = null
+  function zurWarnung(id) {
+    warnFenster?.remove()
+    geh('mehr/gefahren/' + encodeURIComponent(id))
+  }
+  function warnKlick(e, ebenen) {
+    const da = ebenen.filter((id) => map.getLayer(id))
+    if (!da.length) return false
+    const { x, y } = e.point
+    const id = map.queryRenderedFeatures([[x - 8, y - 8], [x + 8, y + 8]], { layers: da }).find((f) => f.properties?.id)?.properties.id
+    const w = id && $warnListe.find((v) => v.id === id)
+    if (!w) return false
+    if (warnFenster?.isOpen() && warnFensterId === id) { zurWarnung(id); return true }
+    const p = $meinePosition
+    const km = p && punktInAustralien(p.lat, p.lon) ? abstandKm(w, p.lat, p.lon) : null
+    const html = `<div class="wf">`
+      + `<span class="wf-stufe" style="background:${w.farbe};color:${schriftAuf(w.farbe)}">${w.icon || '⚠️'} ${esc(w.level || '')}</span>`
+      + `<b class="wf-titel">${esc(w.titel || '')}</b>`
+      + (w.event ? `<span class="wf-klein">${esc(w.event)}${w.ort ? ' · ' + esc(String(w.ort).slice(0, 80)) : ''}</span>` : '')
+      + (km != null && km < Infinity ? `<span class="wf-klein">${km < 1 ? je('📍 Du bist in diesem Gebiet', '📍 You are inside this area') : je(`📍 ${Math.round(km)} km von dir`, `📍 ${Math.round(km)} km from you`)}</span>` : '')
+      + `<button type="button" class="wf-los">${je('Zur Warnung ›', 'Open warning ›')}</button>`
+      + `<span class="wf-tipp">${je('Oder noch einmal auf das Gebiet tippen', 'Or tap the area again')}</span>`
+      + `</div>`
+    warnFenster?.remove()
+    warnFenster = new maplibregl.Popup({ offset: 10, closeButton: true, maxWidth: '290px' }).setLngLat(e.lngLat).setHTML(html).addTo(map)
+    warnFensterId = id
+    warnFenster.getElement().querySelector('.wf-los')?.addEventListener('click', () => zurWarnung(id))
+    const dieses = warnFenster
+    dieses.on('close', () => { if (warnFenster === dieses) warnFensterId = null })
+    return true
+  }
+  // Reihenfolge beim Tippen: Warnzeichen, dann Tankstelle & Co., dann die Fläche der Warnung
+  function kartenKlick(e) {
+    // Orts-Pins und offene Fenster haben ihr eigenes Verhalten
+    if (e.originalEvent?.target?.closest?.('.maplibregl-marker, .maplibregl-popup')) return
+    if (warnKlick(e, ['warn-punkt'])) return
+    if (poiKlick(e)) return
+    warnKlick(e, ['warn-flaeche'])
   }
 
   // Alle vier POI-Dateien liegen gleichzeitig auf der Karte (≈ 26.000 Punkte).
@@ -404,10 +447,10 @@
         },
         paint: { 'text-color': '#33322e', 'text-halo-color': '#ffffff', 'text-halo-width': 1.4 },
       }, unterStrassenSchrift())
-      map.on('click', poiKlick)
       map.on('mousemove', (e) => {
         const { x, y } = e.point
-        const da = map.getLayer('poi-punkt') && map.queryRenderedFeatures([[x - 6, y - 6], [x + 6, y + 6]], { layers: POI_LAYER }).length
+        const da = (map.getLayer('poi-punkt') && map.queryRenderedFeatures([[x - 6, y - 6], [x + 6, y + 6]], { layers: POI_LAYER }).length)
+          || map.queryRenderedFeatures([[x - 4, y - 4], [x + 4, y + 4]], { layers: ['warn-punkt', 'warn-flaeche'].filter((id) => map.getLayer(id)) }).length
         map.getCanvas().style.cursor = da ? 'pointer' : ''
       })
       map.on('moveend', zaehlePois)
@@ -436,6 +479,7 @@
     map.getCanvas().setAttribute('aria-label', je('Offline-Karte von Australien', 'Offline map of Australia'))
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
     map.addControl(baueExportKnopf(() => (expOffen = true)), 'top-right')
+    map.on('click', kartenKlick)
     // Marker können sofort gesetzt werden (unabhängig vom 'load'-Event, das
     // bei manchen Umgebungen verzögert/nicht feuert).
     mapGeladen = true
@@ -1058,5 +1102,11 @@
   :global(.maplibregl-popup-content) { font-family: inherit; padding: 10px 14px; border-radius: 12px; color: #2b2620; background: #fffdf8; box-shadow: 0 6px 20px rgba(0,0,0,.22); }
   :global(.maplibregl-popup-content b) { color: #2b2620; }
   :global(.maplibregl-popup-content a) { color: #1864ab; font-weight: 600; }
+  :global(.wf) { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding-right: 10px; }
+  :global(.wf-stufe) { padding: 2px 8px; border-radius: 999px; font-size: calc(12px * var(--schrift, 1)); font-weight: 800; }
+  :global(.wf-titel) { font-size: calc(14px * var(--schrift, 1)); line-height: 1.3; }
+  :global(.wf-klein) { font-size: calc(12px * var(--schrift, 1)); color: #6b5f54; line-height: 1.35; }
+  :global(.wf-los) { margin-top: 4px; min-height: 40px; padding: 0 14px; border: none; border-radius: 10px; background: #8f3f17; color: #fff; font: inherit; font-size: calc(13.5px * var(--schrift, 1)); font-weight: 800; cursor: pointer; }
+  :global(.wf-tipp) { font-size: calc(11.5px * var(--schrift, 1)); color: #8a7d70; }
   :global(.maplibregl-popup-close-button) { color: #5c534a; font-size: calc(18px * var(--schrift, 1)); padding: 0 6px; }
 </style>

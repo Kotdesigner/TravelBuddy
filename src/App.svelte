@@ -1251,7 +1251,7 @@
         warnungen={warnungenSortiert} betroffeneWarnungen={betroffeneWarnungen} onRefresh={() => pruefeGefahren(true)}
         bind:umkreisKm={umkreisKm} bedingungen={auffaelligeBedingungen(bedingungen)}
         quellenFehler={quellenFehler}
-        meinOrt={$meinePosition} ortStatus={$standortStatus}
+        meinOrt={$meinePosition} ortStatus={$standortStatus} fokusId={ansicht.id}
         ortText={standortHinweis($standortStatus, $standortFehler)}
         onOrt={() => frageStandortAn({ hoheGenauigkeit: true, alterMs: 0 })} />
     {:else if ansicht.unter === 'packliste'}
