@@ -1,4 +1,5 @@
 <script>
+  import { inAustralien } from './warnlage.js'
   import { t, je } from './i18n.js'
   import { dezimal, zahl } from './format.js'
   // Notfall-Karte — funktioniert komplett OFFLINE.
@@ -195,7 +196,7 @@
     {:else if poiLaedt}
       <p class="leer">{t('⏳ Lade Offline-Punkte …')}</p>
     {:else if !pois.length}
-      <p class="leer">{t('Keine Offline-Punkte für diese Region geladen.')}</p>
+      <p class="leer">{!inAustralien(pos.lat, pos.lon) ? je('🌏 Du bist gerade nicht in Australien. Die nächste Tankstelle, Klinik und Werkstatt zeigt die App, sobald du dort bist.', '🌏 You are not in Australia right now. The app shows the nearest fuel, clinic and workshop once you are there.') : t('Keine Offline-Punkte für diese Region geladen.')}</p>
     {:else}
       <div class="hilfe-liste">
         {#each hilfen as h}

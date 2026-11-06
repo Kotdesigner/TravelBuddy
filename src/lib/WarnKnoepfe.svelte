@@ -3,13 +3,15 @@
   import { t } from './i18n.js'
   import { zahl, dezimal } from './format.js'
   import { gebietGroesse, warnMitte, abstandKm } from './warnungen.js'
-  import { mapsPosition, mapsWeg } from './warnlage.js'
+  import { mapsPosition, mapsWeg, inAustralien } from './warnlage.js'
   import { meinePosition } from './warnlage-dienst.js'
 
   let { w } = $props()
   const mitte = $derived(warnMitte(w))
   const groesse = $derived(gebietGroesse(w))
-  const vonMir = $derived($meinePosition ? abstandKm(w, $meinePosition.lat, $meinePosition.lon) : null)
+  // V18: Abstand und Weg nur, wenn du in Australien bist. Von zu Hause aus hilft beides nicht.
+  const vorOrt = $derived(!!$meinePosition && inAustralien($meinePosition.lat, $meinePosition.lon))
+  const vonMir = $derived(vorOrt ? abstandKm(w, $meinePosition.lat, $meinePosition.lon) : null)
   const km = (x) => (x < 10 ? dezimal(x, 1) : zahl(Math.round(x)))
 </script>
 
@@ -21,7 +23,7 @@
     <div class="wk-knoepfe">
       <a href="#/plan/karte/warnung/{encodeURIComponent(w.id)}">{t('🗺️ Auf der Karte')}</a>
       <a href={mapsPosition(mitte)} target="_blank" rel="noopener">{t('📍 Google Maps')}</a>
-      {#if $meinePosition}<a href={mapsWeg($meinePosition, mitte)} target="_blank" rel="noopener">{t('🧭 Weg von mir')}</a>{/if}
+      {#if vorOrt}<a href={mapsWeg($meinePosition, mitte)} target="_blank" rel="noopener">{t('🧭 Weg von mir')}</a>{/if}
     </div>
   {/if}
 </div>

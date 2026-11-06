@@ -20,7 +20,7 @@
   import { zeigeToast } from './toast.js'
   import { get } from 'svelte/store'
   import { je } from './i18n.js'
-  import { warnGeoJson, warnAusschnitt } from './warnlage.js'
+  import { warnGeoJson, warnAusschnitt, inAustralien as punktInAustralien } from './warnlage.js'
 
   let { orte = [], reisen = [], warnFokus = null } = $props()
   // Mehrere Routen gleichzeitig sichtbar (Menge der gewählten Reise-IDs).
@@ -411,6 +411,7 @@
         map.getCanvas().style.cursor = da ? 'pointer' : ''
       })
       map.on('moveend', zaehlePois)
+      warnNachOben()
     }
     setPoiFilter()
     poiGeladen = true
@@ -560,6 +561,7 @@
         layout: { 'line-join': 'round', 'line-cap': 'round' },
         paint: { 'line-color': ['get', 'farbe'], 'line-width': 5,
           'line-dasharray': [2.2, 1.6] } }, vor)
+      warnNachOben()
     }
     if (feats.length && !warnFokus) {
       try {
@@ -586,6 +588,9 @@
   $effect(() => { if (warnFokus) warnAn = true })
 
   let warnTimer = 0
+  // Warnungen liegen immer über Route und Tankstellen & Co., egal was zuletzt dazukam.
+  const WARN_EBENEN = ['warn-flaeche', 'warn-saum', 'warn-rand', 'warn-umkreis', 'warn-punkt', 'warn-zeichen']
+  function warnNachOben() { for (const id of WARN_EBENEN) if (map?.getLayer(id)) map.moveLayer(id) }
   function zeigeWarnungen() {
     if (!map || !mapGeladen) return
     clearTimeout(warnTimer)
@@ -596,17 +601,38 @@
     else {
       map.addSource('warnlage', { type: 'geojson', data: daten })
       const art = (a) => ['==', ['get', 'art'], a]
-      map.addLayer({ id: 'warn-flaeche', type: 'fill', source: 'warnlage', filter: art('flaeche'), paint: { 'fill-color': ['get', 'farbe'], 'fill-opacity': 0.32 } })
-      map.addLayer({ id: 'warn-rand', type: 'line', source: 'warnlage', filter: art('flaeche'), paint: { 'line-color': ['get', 'farbe'], 'line-width': 2.5 } })
-      map.addLayer({ id: 'warn-punkt', type: 'circle', source: 'warnlage', filter: art('punkt'), paint: { 'circle-color': ['get', 'farbe'], 'circle-radius': 9, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 2 } })
+      // Warngebiete sollen sofort auffallen: kräftigere Fläche, weißer Saum unter einem breiten Rand,
+      // Punktwarnungen und die Mitte jedes Gebiets als Kreis mit Ausrufezeichen. Der eigene Standort ist ein eigener Marker (zeigeIch).
+      map.addLayer({ id: 'warn-flaeche', type: 'fill', source: 'warnlage', filter: art('flaeche'), paint: { 'fill-color': ['get', 'farbe'], 'fill-opacity': 0.42 } })
+      map.addLayer({ id: 'warn-saum', type: 'line', source: 'warnlage', filter: art('flaeche'), layout: { 'line-join': 'round' }, paint: { 'line-color': '#ffffff', 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 4, 10, 7], 'line-opacity': 0.9 } })
+      map.addLayer({ id: 'warn-rand', type: 'line', source: 'warnlage', filter: art('flaeche'), layout: { 'line-join': 'round' }, paint: { 'line-color': ['get', 'farbe'], 'line-width': ['interpolate', ['linear'], ['zoom'], 4, 2.5, 10, 4] } })
+      map.addLayer({ id: 'warn-punkt', type: 'circle', source: 'warnlage', filter: ['any', art('punkt'), art('zeichen')], paint: { 'circle-color': ['get', 'farbe'], 'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 9, 10, 13], 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 3 } })
+      map.addLayer({ id: 'warn-zeichen', type: 'symbol', source: 'warnlage', filter: ['any', art('punkt'), art('zeichen')], layout: { 'text-field': '!', 'text-font': ['Noto Sans Regular'], 'text-size': ['interpolate', ['linear'], ['zoom'], 4, 13, 10, 17], 'text-allow-overlap': true, 'text-ignore-placement': true }, paint: { 'text-color': '#ffffff' } })
       map.addLayer({ id: 'warn-umkreis', type: 'line', source: 'warnlage', filter: art('umkreis'), paint: { 'line-color': '#1f6fd1', 'line-width': 2, 'line-dasharray': [2, 2] } })
-      map.addLayer({ id: 'warn-ich', type: 'circle', source: 'warnlage', filter: art('ich'), paint: { 'circle-color': '#1f6fd1', 'circle-radius': 8, 'circle-stroke-color': '#ffffff', 'circle-stroke-width': 3 } })
     }
     const w = warnFokus && $warnListe.find((x) => x.id === warnFokus)
     const rahmen = w && warnAusschnitt(w, $meinePosition)
     if (rahmen) { try { map.fitBounds(rahmen, { padding: 60, duration: 700, maxZoom: 11 }) } catch {} }
   }
   $effect(() => { $warnListe; $meinePosition; $warnUmkreis; warnFokus; warnAn; if (mapGeladen) untrack(zeigeWarnungen) })
+
+  // Standortpunkt als eigener Marker: liegt über Pins, Tankstellen & Co. und Warngebieten.
+  let ichMarker = null
+  function zeigeIch() {
+    if (!map || !mapGeladen) return
+    const p = $meinePosition
+    if (!p || !punktInAustralien(p.lat, p.lon)) { ichMarker?.remove(); ichMarker = null; return }
+    if (!ichMarker) {
+      const el = document.createElement('div')
+      el.className = 'ich-punkt'
+      el.setAttribute('role', 'img')
+      el.setAttribute('aria-label', je('Dein Standort', 'Your location'))
+      el.innerHTML = '<span class="ich-halo"></span><span class="ich-kern"></span>'
+      ichMarker = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat([p.lon, p.lat]).addTo(map)
+      el.style.zIndex = '20'
+    } else ichMarker.setLngLat([p.lon, p.lat])
+  }
+  $effect(() => { $meinePosition; if (mapGeladen) untrack(zeigeIch) })
 
   // Eigener Standort: läuft ohne Netz über GPS. Mit erteilter Freigabe folgt der Punkt von selbst.
   let suchtOrt = $state(false)
@@ -617,6 +643,8 @@
     suchtOrt = false
     const p = get(meinePosition)
     if (!ok || !p) { zeigeToast(standortHinweis(get(standortStatus), get(standortFehler)) || t('Kein Standort verfügbar.'), 'fehler'); return }
+    // Außerhalb Australiens gibt es auf der Offline-Karte nichts zu sehen: nicht ins Leere fliegen.
+    if (!punktInAustralien(p.lat, p.lon)) { zeigeToast(je('Du bist gerade nicht in Australien. Die Offline-Karte zeigt nur Australien, dein Standort erscheint, sobald du dort bist.', 'You are not in Australia right now. The offline map only covers Australia, your location appears once you are there.'), 'info', 5000); return }
     map?.flyTo({ center: [p.lon, p.lat], zoom: Math.max(map.getZoom(), 11), duration: 900 })
   }
 
@@ -737,7 +765,7 @@
         b.title = t('Karte als Bild speichern (drucken)')
         b.setAttribute('aria-label', 'Karte als Bild speichern')
         b.className = 'exp-ctrl'
-        b.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33322e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:auto"><path d="M12 3v11"/><path d="m7.2 9.4 4.8 4.8 4.8-4.8"/><path d="M4.5 19.5h15"/></svg>'
+        b.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:auto"><path d="M12 3v11"/><path d="m7.2 9.4 4.8 4.8 4.8-4.8"/><path d="M4.5 19.5h15"/></svg>'
         b.addEventListener('click', onKlick)
         d.appendChild(b)
         this._d = d
@@ -768,6 +796,7 @@
     expLaeuft = false
   }
 
+  const ichDa = $derived(!!$meinePosition && punktInAustralien($meinePosition.lat, $meinePosition.lon))
   const gespeichert = $derived(kartenteile.filter((r) => gecacht.has(r.id)).length)
   const alleDa = $derived(gespeichert === kartenteile.length)
   const gesamtMB = $derived(kartenteile.reduce((a, r) => a + r.mb, 0))
@@ -775,47 +804,14 @@
 </script>
 
 <div class="karten" data-zoom={zoomJetzt.toFixed(1)} data-teil={aktiv?.id || ''} data-pruefungen={pruefungen}>
-  <div class="offline-zeile">
-    {#if alleDa}
-      <span class="off-ok">{t('📴 Ganz Australien offline gespeichert ({round} MB)', { round: Math.round(gesamtMB) })}</span>
-    {:else if $kartenLauf}
-      <span class="off-lauf">📥 {$kartenLauf.name} … {$kartenLauf.fertig}/{$kartenLauf.gesamt}</span>
-    {:else}
-      <span class="off-hinweis">{t('📴 Offline: {size} von {length} Kartenteilen', { size: gespeichert, length: kartenteile.length })}</span>
-      <button class="off-btn" onclick={alleSichern} disabled={!$online}>
-        {$online ? t('📥 Ganz Australien sichern (~{round} MB)', { round: Math.round(offenMB) }) : t('zum Laden Netz nötig')}
-      </button>
-    {/if}
-    <span class="exp-trenner"></span>
-    {#if expOffen}
-      <select bind:value={expFormat} disabled={expLaeuft}>
-        {#each FORMATE as f}<option value={f.id}>{f.label} · {f.breite}×{f.hoehe}</option>{/each}
-      </select>
-      <select bind:value={expTyp} disabled={expLaeuft}>
-        {#each DATEITYPEN as t}<option value={t.id}>{t.label}</option>{/each}
-      </select>
-      <button class="off-btn go" onclick={exportiere} disabled={expLaeuft}>{expLaeuft ? t('rendert …') : t('↓ Speichern')}</button>
-      <button class="off-btn" onclick={() => { expOffen = false; expMeldung = '' }}>✕</button>
-      {#if expMeldung}<span class="exp-msg">{expMeldung}</span>{/if}
-    {/if}
-  </div>
-  {#if GROSSE_KARTE}
-    <div class="gross-zeile">
-      <button class="off-btn" class:go={$grosseKarteAn} aria-pressed={$grosseKarteAn} onclick={grosseKarteUmschalten}>🛣️ {$grosseKarteAn ? t('Große Karte: an') : t('Große Karte einschalten')}</button>
-      <span>{t('Jede Straße und Piste in Western Australia. Es lädt nur der Teil, in dem du unterwegs bist.')}</span>
-    </div>
-  {/if}
   <div class="map-wrap">
     <div class="map" bind:this={container}></div>
     <button class="ort-knopf" class:sucht={suchtOrt} onclick={zuMir} aria-label={je('Mein Standort', 'My location')} title={je('Mein Standort', 'My location')}><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg></button>
-    {#if $warnListe.length}
-      <button class="warn-knopf" class:aus={!warnAn} aria-pressed={warnAn} onclick={warnUmschalten}>{warnAn ? t('⚠️ Warngebiete ausblenden') : t('⚠️ Warngebiete einblenden')}</button>
-    {/if}
-    {#if ($warnListe.length && warnAn) || $meinePosition}
+    {#if ($warnListe.length && warnAn) || ichDa}
       <p class="warn-legende">
         {#if $warnListe.length && warnAn}<span><i class="wl-flaeche" aria-hidden="true"></i>{t('Warngebiet')}</span>{/if}
-        {#if $meinePosition}<span><i class="wl-ich" aria-hidden="true"></i>{t('Du')}</span>{/if}
-        {#if $meinePosition && $warnUmkreis && warnAn}<span><i class="wl-kreis" aria-hidden="true"></i>{t('Umkreis {km} km', { km: $warnUmkreis })}</span>{/if}
+        {#if ichDa}<span><i class="wl-ich" aria-hidden="true"></i>{t('Du')}</span>{/if}
+        {#if ichDa && $warnUmkreis && warnAn}<span><i class="wl-kreis" aria-hidden="true"></i>{t('Umkreis {km} km', { km: $warnUmkreis })}</span>{/if}
       </p>
     {/if}
     {#if laedt}
@@ -826,9 +822,82 @@
       <div class="teil-pille">{t('🔍 Mehr Details: {name} …', { name: laedtTeil.name })}</div>
     {:else if fehltHier}
       <div class="teil-pille warn">{t('📴 Mehr Details gibt es hier nur mit „{name}“, das liegt nicht auf diesem Gerät', { name: fehltHier.name })}</div>
+    {:else if poiGeladen && poiEinAn && poiSumme === 0}
+      <div class="teil-pille">
+        {#if poiAndere.length}{t('Im Ausschnitt nichts davon, aber {join}. Oben einblenden oder herauszoomen.', { join: poiAndere.map((kat) => `${kat.emoji} ${poiImBild[kat.k]}`).join(' · ') })}
+        {:else}{t('Hier sind keine Punkte gespeichert. Tankstellen & Co. gibt es offline für ganz WA, den Raum Melbourne, Cairns und die Whitsundays.')}{/if}
+      </div>
+    {/if}
+    {#if expOffen}
+      <div class="export-blatt" role="dialog" aria-label={je('Karte als Bild speichern', 'Save map as image')}>
+        <div class="eb-kopf">
+          <b>{je('Karte als Bild speichern', 'Save map as image')}</b>
+          <button class="eb-zu" onclick={() => { expOffen = false; expMeldung = '' }} aria-label={je('Schließen', 'Close')}>✕</button>
+        </div>
+        <div class="eb-felder">
+          <label><span>{je('Format', 'Format')}</span>
+            <select class="bedien-feld" bind:value={expFormat} disabled={expLaeuft}>
+              {#each FORMATE as f}<option value={f.id}>{f.label} · {f.breite}×{f.hoehe}</option>{/each}
+            </select></label>
+          <label><span>{je('Dateityp', 'File type')}</span>
+            <select class="bedien-feld" bind:value={expTyp} disabled={expLaeuft}>
+              {#each DATEITYPEN as t}<option value={t.id}>{t.label}</option>{/each}
+            </select></label>
+        </div>
+        <button class="bedien-knopf haupt" onclick={exportiere} disabled={expLaeuft}>{expLaeuft ? t('rendert …') : t('↓ Speichern')}</button>
+        {#if expMeldung}<p class="exp-msg" role="status">{expMeldung}</p>{/if}
+      </div>
     {/if}
   </div>
   <div class="karten-fuss">
+    <!-- Ebenen als Chips unter der Karte: die Karte bleibt frei, ein Tipp blendet ein oder aus. -->
+    <div class="ebenen-karte">
+      <span class="bedien-titel" id="ebenen-titel">{je('Was die Karte zeigt', 'What the map shows')}</span>
+      <div class="ebenen" role="group" aria-labelledby="ebenen-titel">
+      {#if $warnListe.length}
+        <button class="ebene" class:an={warnAn} aria-pressed={warnAn} onclick={warnUmschalten} style="--pf:#e8730c;--pt:{schriftAuf('#e8730c')}"
+          title={warnAn ? t('⚠️ Warngebiete ausblenden') : t('⚠️ Warngebiete einblenden')}>
+          <span class="e-sym" aria-hidden="true">⚠️</span>{je('Warngebiete', 'Warnings')}
+        </button>
+      {/if}
+      <button class="ebene" class:an={orteZeigen} aria-pressed={orteZeigen} onclick={() => (orteZeigen = !orteZeigen)} style="--pf:#c0392b;--pt:#fff"
+        title={orteZeigen ? t('Vorschlagsorte ausblenden, besuchte bleiben') : t('Alle Orte deiner Sammlung zeigen')}>
+        <span class="e-sym" aria-hidden="true">📍</span>{je('Alle Orte', 'All places')}{#if !orteZeigen && anzahlDokumentiert}<span class="e-zahl">{je(`nur ${anzahlDokumentiert} besuchte`, `only ${anzahlDokumentiert} visited`)}</span>{/if}
+      </button>
+      {#each POI_KAT as kat}
+        <button class="ebene" class:an={poiAktiv[kat.k]} onclick={() => togglePoi(kat.k)} title={kat.label}
+          style="--pf:{kat.farbe};--pt:{schriftAuf(kat.farbe)}" aria-pressed={poiAktiv[kat.k]}>
+          <span class="e-sym" aria-hidden="true">{kat.emoji}</span>{kat.label}{#if poiAktiv[kat.k] && poiGeladen}<span class="e-zahl">{(poiImBild[kat.k] || 0).toLocaleString(LOCALE)}</span>{/if}
+        </button>
+      {/each}
+      </div>
+    </div>
+    <!-- Offline-Stand mit Balken: auf einen Blick, wie viel der Karte ohne Netz geht. -->
+    <div class="off-karte" class:fertig={alleDa}>
+      <div class="off-kopf">
+        <span class="off-titel">{alleDa ? '✅' : '📴'} {je('Offline-Karte', 'Offline map')}</span>
+        <span class="off-stand">
+          {#if alleDa}{je(`Ganz Australien gespeichert · ${Math.round(gesamtMB)} MB`, `All of Australia saved · ${Math.round(gesamtMB)} MB`)}
+          {:else if $kartenLauf}{$kartenLauf.name || '…'} · {$kartenLauf.fertig}/{$kartenLauf.gesamt}
+          {:else}{je(`${gespeichert} von ${kartenteile.length} Kartenteilen`, `${gespeichert} of ${kartenteile.length} map parts`)}{/if}
+        </span>
+      </div>
+      <div class="off-balken" role="progressbar" aria-label={je('Offline gespeichert', 'Saved offline')}
+        aria-valuemin="0" aria-valuemax={$kartenLauf ? $kartenLauf.gesamt : kartenteile.length} aria-valuenow={$kartenLauf ? $kartenLauf.fertig : gespeichert}>
+        <i class:lauf={!!$kartenLauf} style="width:{Math.round(100 * ($kartenLauf ? ($kartenLauf.gesamt ? $kartenLauf.fertig / $kartenLauf.gesamt : 0) : gespeichert / kartenteile.length))}%"></i>
+      </div>
+      {#if !alleDa && !$kartenLauf}
+        <button class="bedien-knopf" class:haupt={$online} onclick={alleSichern} disabled={!$online}>
+          {$online ? t('📥 Ganz Australien sichern (~{round} MB)', { round: Math.round(offenMB) }) : t('zum Laden Netz nötig')}
+        </button>
+      {/if}
+      {#if GROSSE_KARTE}
+        <div class="gross-zeile">
+          <button class="bedien-wahl" class:an={$grosseKarteAn} aria-pressed={$grosseKarteAn} onclick={grosseKarteUmschalten}>🛣️ {$grosseKarteAn ? t('Große Karte: an') : t('Große Karte einschalten')}</button>
+          <span>{t('Jede Straße und Piste in Western Australia. Es lädt nur der Teil, in dem du unterwegs bist.')}</span>
+        </div>
+      {/if}
+    </div>
     {#if reisen.length}
       <TourenWahl touren={tourenWahl} istAn={istGewaehlt} umschalten={toggleReise} alle={alleReisen} keine={keineReisen}
         alleAn={gewaehlteReisen.size === reisen.length} keineAn={gewaehlteReisen.size === 0}>
@@ -855,115 +924,139 @@
         {/snippet}
       </TourenWahl>
     {/if}
-    <div class="bedien poi-feld">
-      <div class="bedien-block">
-        <span class="bedien-titel">{je('Orte auf der Karte', 'Places on the map')}</span>
-        <button class="bedien-wahl" class:an={orteZeigen} aria-pressed={orteZeigen} onclick={() => (orteZeigen = !orteZeigen)}
-          title={orteZeigen ? t('Vorschlagsorte ausblenden, besuchte bleiben') : t('Alle Orte deiner Sammlung zeigen')}>
-          {je('Alle Orte', 'All places')}{#if !orteZeigen && anzahlDokumentiert}<span class="bedien-zahl">{je(`nur ${anzahlDokumentiert} besuchte`, `only ${anzahlDokumentiert} visited`)}</span>{/if}
-        </button>
-      </div>
-      <div class="bedien-block">
-        <span class="bedien-titel">{je('Unterwegs', 'On the road')}</span>
-        <div class="bedien-raster">
-        {#each POI_KAT as kat}
-          <button class="poi-chip" class:an={poiAktiv[kat.k]} onclick={() => togglePoi(kat.k)} title={kat.label}
-            style="--pf:{kat.farbe}" aria-pressed={poiAktiv[kat.k]}>
-            <span class="poi-punkt"></span><span class="poi-name">{kat.label}</span>{#if poiAktiv[kat.k] && poiGeladen}<span class="poi-zahl" style="color:{schriftAuf(kat.farbe)}">{(poiImBild[kat.k] || 0).toLocaleString(LOCALE)}</span>{/if}
-          </button>
-        {/each}
-        </div>
-    {#if poiGeladen && poiEinAn && poiSumme === 0}
-      {#if poiAndere.length}
-        <span class="poi-leer">{t('Im Ausschnitt nichts davon, aber {join}. Oben einblenden oder herauszoomen.', { join: poiAndere.map((kat) => `${kat.emoji} ${poiImBild[kat.k]}`).join(' · ') })}</span>
-      {:else}
-        <span class="poi-leer">{t('Hier sind keine Punkte gespeichert. Tankstellen & Co. gibt es offline für ganz WA, den Raum Melbourne, Cairns und die Whitsundays.')}</span>
-      {/if}
-    {/if}
-      </div>
-      <p class="bedien-text hinweis">
-    {#if aktiv}{t('🔍 Details hier:')} <b>{detailStufe(aktiv)}</b> <span class="teil-name">({aktiv.name})</span> · {/if}
-    {#if $online}{t('Gelände-Schattierung online')}{:else}{t('Gelände nur online')}{/if}
-    {t('· Pins = deine {length} Orte · Tankstellen & Co.: Punkte immer, Symbole ab Zoom 10, Namen ab 13. Antippen zeigt Details.', { length: orte.filter((o) => o.lat != null).length })}
-  </p>
-    </div>
+    <p class="bedien-text hinweis">
+      {#if aktiv}{t('🔍 Details hier:')} <b>{detailStufe(aktiv)}</b> <span class="teil-name">({aktiv.name})</span> · {/if}
+      {#if $online}{t('Gelände-Schattierung online')}{:else}{t('Gelände nur online')}{/if}
+      {t('· Pins = deine {length} Orte · Tankstellen & Co.: Punkte immer, Symbole ab Zoom 10, Namen ab 13. Antippen zeigt Details.', { length: orte.filter((o) => o.lat != null).length })}
+    </p>
   </div>
 </div>
 
 <style>
-  .karten { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--card); }
-  .map-wrap { position: relative; }
-  .map { height: 62vh; min-height: 380px; width: 100%; }
-  .map-overlay {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    text-align: center; padding: 20px; font-size: calc(13.5px * var(--schrift, 1)); font-weight: 600; color: #6b5a49;
-    background: rgba(246, 240, 226, 0.85); backdrop-filter: blur(1px); pointer-events: none;
+  /* Karte als großes Bild mit schwebender Bedienung, darunter die Einstellungen als Karten. */
+  .karten { display: flex; flex-direction: column; gap: 12px; }
+  .map-wrap { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-l, 16px); background: #cfe3ee; box-shadow: var(--shadow); isolation: isolate; }
+  .map { height: clamp(380px, 66dvh, 760px); width: 100%; }
+
+  /* Gemeinsames Aussehen der schwebenden Teile auf der Karte: leicht durchscheinend, Schatten, runde Ecken. */
+  .ort-knopf, .warn-legende, .teil-pille, .export-blatt,
+  .map-wrap :global(.maplibregl-ctrl-group) {
+    background: color-mix(in srgb, var(--card) 90%, transparent);
+    -webkit-backdrop-filter: blur(10px) saturate(1.3); backdrop-filter: blur(10px) saturate(1.3);
+    border: 1px solid color-mix(in srgb, var(--line-stark) 70%, transparent);
+    box-shadow: var(--shadow-float, 0 4px 14px rgba(0,0,0,.18));
+    color: var(--ink);
   }
-  .map-overlay.fehler { color: #a23b2b; background: rgba(250, 235, 232, 0.92); }
-  /* Klein und oben links: die Karte bleibt bedienbar, während ein Teil nachlädt. */
-  .teil-pille {
-    position: absolute; left: 8px; top: 8px; max-width: calc(100% - 64px);
-    padding: 4px 10px; border-radius: 12px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700;
-    color: #4a4038; background: rgba(246, 240, 226, 0.94); box-shadow: 0 1px 3px rgba(0,0,0,.18);
-    pointer-events: none;
+
+  /* Ebenen-Chips unter der Karte: alle sichtbar, umbrechend. */
+  .ebenen-karte { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--card); }
+  .ebenen { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ebene {
+    position: relative; display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 0 14px;
+    border: 1px solid var(--line-stark); border-radius: 999px; background: none; font: inherit;
+    font-size: calc(13.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted);
+    white-space: nowrap; cursor: pointer; transition: background-color .15s, color .15s, border-color .15s;
   }
-  .ort-knopf { position: absolute; right: 10px; bottom: 46px; z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--brand-text); box-shadow: var(--shadow); cursor: pointer; }
-  .ort-knopf.sucht { opacity: 0.6; }
-  .warn-knopf { position: absolute; top: 10px; left: 10px; z-index: 2; min-height: 40px; padding: 0 12px; border: 1px solid var(--line-stark); border-radius: 20px; background: var(--card); color: var(--ink); font-weight: 700; font-size: calc(13px * var(--schrift, 1)); box-shadow: var(--shadow); cursor: pointer; }
-  .warn-knopf.aus { color: var(--muted); }
-  .warn-legende { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0 0; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
+  .ebene::after { content: ''; position: absolute; inset: -2px 0; }
+  .ebene:hover { color: var(--ink); border-color: var(--pf); }
+  .ebene.an { background: var(--pf); border-color: var(--pf); color: var(--pt, #fff); }
+  .e-sym { font-size: 1.05em; line-height: 1; }
+  .ebene:not(.an) .e-sym { filter: grayscale(.6); opacity: .75; }
+  .e-zahl { font-size: calc(11.5px * var(--schrift, 1)); font-weight: 800; font-variant-numeric: tabular-nums; padding: 1px 7px; border-radius: 999px; background: color-mix(in srgb, currentColor 18%, transparent); }
+
+  /* MapLibre-Knöpfe im selben Stil, 44 px zum Tippen, unter den Chips. */
+  .map-wrap :global(.maplibregl-ctrl-top-right .maplibregl-ctrl) { margin: 10px 10px 0 0; }
+  .map-wrap :global(.maplibregl-ctrl-group) { border-radius: 14px; overflow: hidden; }
+  .map-wrap :global(.maplibregl-ctrl-group:not(:empty)) { box-shadow: var(--shadow-float, 0 4px 14px rgba(0,0,0,.18)); }
+  .map-wrap :global(.maplibregl-ctrl-group button) { width: 44px; height: 44px; background-color: transparent; color: var(--ink); }
+  .map-wrap :global(.maplibregl-ctrl-group button + button) { border-top: 1px solid var(--line); }
+  .map-wrap :global(.maplibregl-ctrl-group button:not(:disabled):hover) { background-color: color-mix(in srgb, var(--ink) 8%, transparent); }
+  :global(:root[data-theme='dark']) .map-wrap :global(.maplibregl-ctrl-icon) { filter: invert(1) brightness(1.6); }
+  .map-wrap :global(.maplibregl-ctrl-attrib) { border-radius: 10px 0 0 0; }
+
+  .ort-knopf { position: absolute; right: 10px; bottom: 40px; z-index: 2; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; color: var(--brand-text); cursor: pointer; }
+  .ort-knopf:hover { color: var(--brand); }
+  .ort-knopf.sucht svg { animation: suche 1s linear infinite; }
+  @keyframes suche { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .ort-knopf.sucht svg { animation: none; } .ort-knopf.sucht { opacity: .6; } }
+
+  .warn-legende {
+    position: absolute; left: 10px; bottom: 40px; z-index: 2; max-width: calc(100% - 84px); box-sizing: border-box;
+    display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0; padding: 7px 12px; border-radius: 14px;
+    font-size: calc(12px * var(--schrift, 1)); font-weight: 600; color: var(--muted); pointer-events: none;
+  }
   .warn-legende span { display: inline-flex; align-items: center; gap: 6px; }
-  .warn-legende i { display: inline-block; width: 14px; height: 14px; }
+  .warn-legende i { display: inline-block; width: 12px; height: 12px; }
   .wl-flaeche { background: rgba(232, 115, 12, 0.35); border: 2px solid #e8730c; border-radius: 3px; }
   .wl-ich { background: #1f6fd1; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px #1f6fd1; }
   .wl-kreis { border: 2px dashed #1f6fd1; border-radius: 50%; }
-  .teil-pille.warn { color: var(--warn-text, #a05a1e); background: var(--warn-flaeche, #fdf1e0); }
+
+  .map-overlay {
+    position: absolute; inset: 0; z-index: 4; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 20px; font-size: calc(13.5px * var(--schrift, 1)); font-weight: 600; color: var(--ink);
+    background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(2px); pointer-events: none;
+  }
+  .map-overlay.fehler { color: var(--warn-text, #a23b2b); }
+  /* Klein oben links: die Karte bleibt bedienbar, während ein Teil nachlädt. */
+  .teil-pille {
+    position: absolute; left: 10px; top: 10px; z-index: 2; max-width: calc(100% - 84px); box-sizing: border-box;
+    padding: 6px 12px; border-radius: 12px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; line-height: 1.35;
+    pointer-events: none;
+  }
+  .teil-pille.warn { color: var(--warn-text, #a05a1e); background: color-mix(in srgb, var(--warn-flaeche, #fdf1e0) 92%, transparent); }
   .teil-name { color: var(--muted); }
+
+  /* Export als Blatt über der Karte statt Auswahlfelder in einer Zeile. */
+  .export-blatt {
+    position: absolute; left: 10px; right: 10px; bottom: 10px; z-index: 5; display: flex; flex-direction: column; gap: 10px;
+    max-width: 420px; margin-left: auto; padding: 14px; border-radius: var(--radius-l, 16px);
+    background: color-mix(in srgb, var(--card) 96%, transparent);
+  }
+  .eb-kopf { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .eb-zu { position: relative; width: 36px; height: 36px; border: none; border-radius: 50%; background: var(--flaeche-2, var(--flaeche)); color: var(--ink); cursor: pointer; font-size: calc(14px * var(--schrift, 1)); }
+  .eb-zu::after { content: ''; position: absolute; inset: -4px; }
+  .eb-felder { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 8px; }
+  .eb-felder label { display: flex; flex-direction: column; gap: 4px; min-width: 0; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
+  .exp-msg { margin: 0; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--ok-text, #1a7f37); }
+
+  .karten-fuss { display: flex; flex-direction: column; gap: 12px; }
+  .off-karte { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--card); }
+  .off-kopf { display: flex; align-items: baseline; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap; }
+  .off-titel { font-weight: 800; font-size: calc(14.5px * var(--schrift, 1)); color: var(--ink); }
+  .off-stand { font-size: calc(13px * var(--schrift, 1)); font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .off-karte.fertig .off-stand { color: var(--ok-text); }
+  .off-balken { height: 8px; border-radius: 999px; background: var(--flaeche-2, var(--flaeche)); overflow: hidden; }
+  .off-balken i { display: block; height: 100%; min-width: 8px; border-radius: inherit; background: var(--brand); transition: width .4s ease; }
+  .off-karte.fertig .off-balken i { background: var(--ok-linie, #2f9e44); }
+  .off-balken i.lauf { background-image: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent); background-size: 200% 100%; animation: lauf 1.2s linear infinite; }
+  @keyframes lauf { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .off-balken i.lauf { animation: none; } }
+  .gross-zeile { display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid var(--line); font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
+  .hinweis { padding: 0 4px; font-size: calc(12.5px * var(--schrift, 1)); }
+
   .rs-warn { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--warn-text, #a05a1e); background: var(--warn-flaeche, #fdf1e0);
     border: 1px solid var(--warn-linie, #e8c9a0); border-radius: 14px; padding: 4px 10px; }
   .rs-info { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
-  .karten-fuss { display: flex; flex-direction: column; gap: 8px; padding: 8px; border-top: 1px solid var(--line); background: var(--flaeche); }
-  .poi-feld { margin: 0; }
   .rs-meldungen { display: flex; flex-direction: column; gap: 6px; }
   .rs-meldungen:empty { display: none; }
-  .poi-chip { display: flex; align-items: center; gap: 8px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: none; color: var(--muted); font-size: calc(14px * var(--schrift, 1)); font-weight: 600; text-align: left; cursor: pointer; }
-  .poi-chip.an { border-color: var(--pf); color: var(--ink); }
-  .poi-name { flex: 1; min-width: 0; }
-  .poi-punkt { width: 9px; height: 9px; border-radius: 50%; background: var(--pf); border: 1.5px solid #fff; box-shadow: 0 0 0 1px var(--pf); opacity: .35; }
-  .poi-chip.an .poi-punkt { opacity: 1; }
-  .poi-zahl { font-size: calc(12px * var(--schrift, 1)); font-weight: 800; color: #fff; background: var(--pf); border-radius: 8px; padding: 0 5px; min-width: 14px; text-align: center; }
-  .poi-leer { font-size: calc(12px * var(--schrift, 1)); color: var(--warn-text, #a05a1e); width: 100%; }
+
+  /* Standortpunkt: blau mit weißem Ring und ruhigem Puls, immer obenauf. */
+  :global(.ich-punkt) { position: relative; width: 24px; height: 24px; pointer-events: none; }
+  :global(.ich-kern) { position: absolute; inset: 2px; border-radius: 50%; background: #1f6fd1; border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,.5); }
+  :global(.ich-halo) { position: absolute; inset: -12px; border-radius: 50%; background: rgba(31,111,209,.28); animation: -global-ich-puls 2.2s ease-out infinite; }
+  @keyframes -global-ich-puls { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(1.4); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { :global(.ich-halo) { animation: none; opacity: .5; } }
+  :global(.maplibregl-popup) { z-index: 25; }
   :global(.pin) {
     width: 14px; height: 14px; background: #c0392b; border: 2px solid #fff;
     border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 1px 3px rgba(0,0,0,0.4); cursor: pointer;
   }
+  /* Besuchte Orte heben sich ab — sie bleiben auch bei ausgeblendeten Vorschlägen. */
+  :global(.pin.besucht) { background: #2f7a63; box-shadow: 0 0 0 2px #fff, 0 1px 4px rgba(0,0,0,.35); }
   /* Das Kartenfenster ist immer hell. Im dunklen Design erbte der Text sonst die helle Schrift
      der Seite und wäre auf Weiß kaum lesbar. Farben deshalb fest. */
-  :global(.maplibregl-popup-content) { font-family: inherit; padding: 8px 12px; border-radius: 8px; color: #2b2620; background: #fffdf8; }
+  :global(.maplibregl-popup-content) { font-family: inherit; padding: 10px 14px; border-radius: 12px; color: #2b2620; background: #fffdf8; box-shadow: 0 6px 20px rgba(0,0,0,.22); }
   :global(.maplibregl-popup-content b) { color: #2b2620; }
   :global(.maplibregl-popup-content a) { color: #1864ab; font-weight: 600; }
   :global(.maplibregl-popup-close-button) { color: #5c534a; font-size: calc(18px * var(--schrift, 1)); padding: 0 6px; }
-  .offline-zeile {
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-    padding: 7px 12px; font-size: calc(12.5px * var(--schrift, 1)); background: var(--flaeche);
-    border-bottom: 1px solid var(--line);
-  }
-  .gross-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 7px 12px; border-bottom: 1px solid var(--line); background: var(--flaeche); font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
-  .gross-zeile .off-btn { min-height: 40px; }
-  .off-ok { color: var(--ok-text); font-weight: 700; }
-  .off-lauf { color: var(--brand-text); font-weight: 700; }
-  .off-hinweis { color: var(--muted); font-weight: 600; }
-  .off-btn::after { content: ''; position: absolute; inset: -6px 0; }
-  .off-btn {
-    position: relative; padding: 5px 12px; border: 1px solid var(--brand); background: none; color: var(--brand-text);
-    border-radius: 14px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; cursor: pointer;
-  }
-  .off-btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
-  .off-btn.go { background: var(--brand); color: #fff; }
-  .exp-trenner { flex: 1; }
-  .offline-zeile select { font-size: calc(12px * var(--schrift, 1)); padding: 4px 6px; border-radius: 7px; border: 1px solid var(--line); background: var(--eingabe); }
-  .exp-msg { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: #1a7f37; width: 100%; }
-  /* Routenauswahl: antippbare Chips statt Einfachauswahl — mehrere gleichzeitig. */
-  /* Besuchte Orte heben sich ab — sie bleiben auch bei ausgeblendeten Vorschlägen. */
-  :global(.pin.besucht) { background: #2f7a63; box-shadow: 0 0 0 2px #fff, 0 1px 4px rgba(0,0,0,.35); }
 </style>

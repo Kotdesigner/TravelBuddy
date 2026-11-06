@@ -8,7 +8,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.14 · built for Western Australia**<br>
+**Version 1.15 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your iPhone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
@@ -127,6 +127,10 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 </td></tr></table>
 
 ---
+
+## 🗺️ New in version 1.15
+
+**A clearer offline map.** The map stays free, everything it can show sits right below as chips: warnings, places, fuel, water, rest areas, camping and more, with the number in view. Warning areas stand out with a strong outline and a “!” in the middle, always above routes and fuel stations. Your location is a blue dot on top of everything. A bar shows how much of the map is saved for offline use. Outside Australia the map no longer flies into the void, it tells you that it only covers Australia.
 
 ## 🔁 New in version 1.14
 
@@ -782,6 +786,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.12:** documents with their file, locked with Face ID, Touch ID, PIN or password
 - [x] **Version 1.13:** the app explains itself: ⓘ help, how it all fits together, first steps
 - [x] **Version 1.14:** document files on the second device with one pick, recognised by name and size
+- [x] **Version 1.15:** a clearer offline map: layers below the map, clearer warnings, your location on top
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -803,7 +808,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.14 · entwickelt für Western Australia**<br>
+**Version 1.15 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem iPhone ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
@@ -912,6 +917,10 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 </td></tr></table>
 
 ---
+
+## 🗺️ Neu in Version 1.15
+
+**Eine übersichtlichere Offline-Karte.** Die Karte bleibt frei, alles, was sie zeigen kann, steht direkt darunter als Chips: Warngebiete, Orte, Tankstellen, Wasser, Rastplätze, Camping und mehr, mit der Anzahl im Ausschnitt. Warngebiete fallen mit kräftigem Rand und einem „!“ in der Mitte auf und liegen immer über Route und Tankstellen. Dein Standort ist ein blauer Punkt über allem. Ein Balken zeigt, wie viel der Karte offline gespeichert ist. Außerhalb Australiens fliegt die Karte nicht mehr ins Leere, sondern sagt dir, dass sie nur Australien zeigt.
 
 ## 🔁 Neu in Version 1.14
 
@@ -1535,6 +1544,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.12:** Dokumente mit Datei, gesperrt mit Face ID, Touch ID, PIN oder Passwort
 - [x] **Version 1.13:** die App erklärt sich selbst: ⓘ-Hilfe, so hängt alles zusammen, erste Schritte
 - [x] **Version 1.14:** Dateien der Dokumente auf dem zweiten Gerät mit einer Auswahl, erkannt an Name und Größe
+- [x] **Version 1.15:** übersichtlichere Offline-Karte: Ebenen unter der Karte, deutlichere Warngebiete, dein Standort obenauf
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

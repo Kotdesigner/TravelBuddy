@@ -143,6 +143,12 @@ export function warnGeoJson(warnungen = [], pos = null, umkreisKm = 0) {
     const props = { farbe: w.farbe, id: w.id }
     for (const ring of w.ringe || []) features.push({ type: 'Feature', geometry: { type: 'Polygon', coordinates: [ring] }, properties: { ...props, art: 'flaeche' } })
     if (!w.ringe?.length) for (const p of w.punkte || []) features.push({ type: 'Feature', geometry: { type: 'Point', coordinates: p }, properties: { ...props, art: 'punkt' } })
+    // Zeichen in der Mitte eines Gebiets: auch beim Herauszoomen sofort zu finden.
+    if (w.ringe?.length) {
+      const r = w.ringe[0]
+      const mitte = w.lat != null && w.lon != null ? [w.lon, w.lat] : [r.reduce((a, c) => a + c[0], 0) / r.length, r.reduce((a, c) => a + c[1], 0) / r.length]
+      features.push({ type: 'Feature', geometry: { type: 'Point', coordinates: mitte }, properties: { ...props, art: 'zeichen' } })
+    }
   }
   if (pos) {
     if (umkreisKm > 0) features.push({ type: 'Feature', geometry: { type: 'LineString', coordinates: kreis(pos.lat, pos.lon, umkreisKm) }, properties: { art: 'umkreis' } })
@@ -159,5 +165,11 @@ export function warnAusschnitt(w, pos) {
   return [[Math.min(...lon), Math.min(...lat)], [Math.max(...lon), Math.max(...lat)]]
 }
 
+/**
+ * V18: Ist ein Standort in Australien (Festland, Tasmanien, vorgelagerte Inseln)? Grober Rahmen um den
+ * Kontinent. Weit weg (z. B. noch zu Hause) zeigt die App keinen Abstand „von dir“ und keinen Weg dorthin,
+ * die Warnungen gelten dann deinen Orten und Routen.
+ */
+export const inAustralien = (lat, lon) => lat != null && lon != null && lat <= -9 && lat >= -45 && lon >= 112 && lon <= 155
 export const mapsPosition = (p) => `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}`
 export const mapsWeg = (von, nach) => `https://www.google.com/maps/dir/?api=1&origin=${von.lat},${von.lon}&destination=${nach.lat},${nach.lon}`

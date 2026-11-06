@@ -1,4 +1,5 @@
 <script>
+  import { inAustralien } from './warnlage.js'
   import { t, je, LOCALE, tn } from './i18n.js'
   import { ZWEI, dezimal, zahl } from './format.js'
   import { STUFE_FARBE, typName } from './gefahren.js'
@@ -62,6 +63,9 @@
       {/if}
     {/if}
   </div>
+  {#if meinOrt && !meinOrt.test && !inAustralien(meinOrt.lat, meinOrt.lon)}
+    <p class="fern" role="note">{je('🌏 Du bist gerade nicht in Australien. Die Warnungen beziehen sich auf deine Orte und Routen. Sobald du dort bist, zählt auch dein Standort, mit Abstand und Weg.', '🌏 You are not in Australia right now. The warnings refer to your places and routes. Once you are there, your location counts too, with distance and directions.')}</p>
+  {/if}
 
   <div class="lage"><WarnLage gross {geh} /></div>
 
@@ -256,4 +260,5 @@
 .oz-hinweis.warn { color: var(--warn-text); font-weight: 600; width: 100%; flex: none; }
 .oz-btn { min-height: 36px; padding: 4px 12px; border: 1px solid var(--brand); background: none; color: var(--brand-text); border-radius: 18px; font-size: calc(12px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
 .oz-btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
+.fern{margin:.2rem 0 .7rem;padding:.55rem .75rem;border-radius:10px;background:var(--info-flaeche);color:var(--info-text);font-size:calc(.84rem * var(--schrift, 1));line-height:1.45}
 </style>

@@ -2,7 +2,7 @@
 // Ausführen: node tests/warnlage.test.mjs
 import fs from 'node:fs'
 import { warnungenAnRoute, warnRahmen, warnMitte, gebietGroesse } from '../src/lib/warnungen.js'
-import { warnlage, buendleHinweise, punktAufRoute, probeWarnung, warnGeoJson, warnAusschnitt, kreis, mapsPosition, mapsWeg } from '../src/lib/warnlage.js'
+import { warnlage, buendleHinweise, punktAufRoute, probeWarnung, warnGeoJson, warnAusschnitt, kreis, mapsPosition, mapsWeg, inAustralien } from '../src/lib/warnlage.js'
 
 let ok = 0, bad = 0
 const p = (name, bed, zusatz = '') => {
@@ -122,6 +122,9 @@ console.log('\n7  Karte')
   const w = warnung('feuer', -20, 120)
   const f = warnGeoJson([w, { id: 'p', farbe: '#000', ringe: [], punkte: [[121, -21]] }], { lat: -19, lon: 119 }, 100).features
   p('Gebiet, Punkt, Umkreis und eigener Punkt', ['flaeche', 'punkt', 'umkreis', 'ich'].every((a) => f.some((x) => x.properties.art === a)), f.map((x) => x.properties.art))
+  const z = f.find((x) => x.properties.art === 'zeichen' && x.properties.id === w.id)
+  p('Gebiet bekommt ein Zeichen in der Mitte', !!z && Math.abs(z.geometry.coordinates[0] - 120) < 0.2 && Math.abs(z.geometry.coordinates[1] + 20) < 0.2, z?.geometry.coordinates)
+  p('Punktwarnung ohne Zusatzzeichen', !f.some((x) => x.properties.art === 'zeichen' && x.properties.id === 'p'))
   p('ohne Standort kein eigener Punkt', !warnGeoJson([w], null, 100).features.some((x) => x.properties.art === 'ich'))
   p('Umkreis 0 ohne Kreis', !warnGeoJson([], { lat: -19, lon: 119 }, 0).features.some((x) => x.properties.art === 'umkreis'))
   const k = kreis(-20, 120, 100)
@@ -135,7 +138,8 @@ console.log('\n8  Einbau')
   const src = (f) => fs.readFileSync(new URL('../src/' + f, import.meta.url), 'utf8')
   p('Wetterdienst kann die Warnungen nicht mitreißen', !/Promise\.all\(\[\s*holeGefahren/.test(src('App.svelte')) && src('App.svelte').indexOf('await holeWarnungen()') < src('App.svelte').indexOf('await holeGefahren(punkte)'))
   p('Warnungen werden auch nach dem Hintergrund neu geholt', /addEventListener\('visibilitychange', nachsehen\)/.test(src('App.svelte')))
-  p('Karte hat den Knopf für Warngebiete', /warn-knopf/.test(src('lib/Karte.svelte')) && /tb-karte-warn/.test(src('lib/Karte.svelte')))
+  p('Karte hat den Knopf für Warngebiete', /onclick=\{warnUmschalten\}/.test(src('lib/Karte.svelte')) && /tb-karte-warn/.test(src('lib/Karte.svelte')))
+  p('Mein Standort fliegt außerhalb Australiens nicht ins Leere', /if \(!punktInAustralien\(p\.lat, p\.lon\)\) \{ zeigeToast/.test(src('lib/Karte.svelte')))
   p('Heute zeigt die Warnlage', src('lib/Heute.svelte').includes('WarnLage'))
   p('Gefahrenlage zeigt Lage, Knöpfe und Testmodus', ['WarnLage', 'WarnKnoepfe', 'WarnTest'].every((x) => src('lib/Gefahren.svelte').includes(x)))
   p('Karte zeichnet Warnungen', src('lib/Karte.svelte').includes('warnGeoJson'))
@@ -158,6 +162,11 @@ console.log('\n9  Gleiche Warnung an mehreren Abschnitten (V15)')
   p('ohne Fahrt der nächste zuerst', buendleHinweise(h.slice(0, 3))[0].id === 'r3')
   p('einzelne Warnung bleibt, wie sie ist', !b[1].weitere && b[1].id === 'w1')
 }
+
+// V18: in Australien oder weit weg (dann kein Abstand „von dir“, kein Weg)
+p('Perth, Cairns, Hobart, Broome liegen in Australien', inAustralien(-31.95, 115.86) && inAustralien(-16.92, 145.77) && inAustralien(-42.88, 147.33) && inAustralien(-17.96, 122.24))
+p('Kiel, Frankfurt, Doha, Bali liegen nicht in Australien', !inAustralien(54.32, 10.13) && !inAustralien(50.11, 8.68) && !inAustralien(25.29, 51.53) && !inAustralien(-8.65, 115.22))
+p('ohne Standort: nicht in Australien', !inAustralien(null, null))
 
 console.log(`\n  ${ok} bestanden · ${bad} gescheitert\n`)
 process.exit(bad ? 1 : 0)
