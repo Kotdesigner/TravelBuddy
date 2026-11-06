@@ -23,7 +23,7 @@
 <header class="nav">
   <div class="container">
     <a class="wordmark" href="#top" aria-label="TravelBuddy, back to the top"><img src="img/icon.svg" width="36" height="36" alt=""><span>TravelBuddy</span></a>
-    <a class="btn btn-primary" href="https://travelbuddy-v1-wa.netlify.app">Open the app</a>
+    <a class="btn btn-primary" data-goatcounter-click="open-app-nav" href="https://travelbuddy-v1-wa.netlify.app">Open the app</a>
   </div>
 </header>
 
@@ -35,7 +35,7 @@
         <h1 id="hero-title">Western Australia, even with zero bars</h1>
         <p class="lead">A free road trip app that keeps working where the signal stops.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="https://travelbuddy-v1-wa.netlify.app">Open the app</a>
+          <a class="btn btn-primary" data-goatcounter-click="open-app-hero" href="https://travelbuddy-v1-wa.netlify.app">Open the app</a>
           <a class="btn btn-quiet" href="#get">How to install it</a>
         </div>
       </div>
@@ -201,7 +201,7 @@
         <h2 id="gh-title">More on GitHub</h2>
         <p class="lead">For more information, visit TravelBuddy on GitHub. It’s all free to read.</p>
         <div class="hero-actions">
-          <a class="btn btn-quiet" href="https://github.com/Kotdesigner/TravelBuddy">Visit TravelBuddy on GitHub</a>
+          <a class="btn btn-quiet" data-goatcounter-click="github-button" href="https://github.com/Kotdesigner/TravelBuddy">Visit TravelBuddy on GitHub</a>
         </div>
         <small>Made by <a class="text-link" href="https://github.com/Kotdesigner">Kotdesigner</a> on GitHub.</small>
       </div>
@@ -231,7 +231,7 @@
           <div><dt>Runs on</dt><dd>iPhone, Android, Mac, Windows, Linux</dd></div>
           <div><dt>Languages</dt><dd>English and German</dd></div>
         </dl>
-        <div><a class="btn btn-primary" href="https://travelbuddy-v1-wa.netlify.app">Open the app</a></div>
+        <div><a class="btn btn-primary" data-goatcounter-click="open-app-install" href="https://travelbuddy-v1-wa.netlify.app">Open the app</a></div>
       </div>
       <div class="qr">
         <img src="img/qr.png" width="360" height="360" loading="lazy" alt="QR code that opens travelbuddy-v1-wa.netlify.app">
@@ -317,6 +317,7 @@
       f.src = x.permalink.replace(/\/?$/, '/') + 'embed/';
       f.title = title; f.loading = 'lazy'; f.allow = 'autoplay; encrypted-media; picture-in-picture'; f.setAttribute('allowfullscreen', '');
       card.replaceChild(f, btn);
+      if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'reel-play-' + (x.id || 'unknown'), title: title, event: true });
     }, { once: true });
     const cap = document.createElement('p'); cap.className = 'reel-cap';
     const a = document.createElement('a'); a.href = x.permalink; a.textContent = title; a.className = 'text-link';
@@ -328,6 +329,13 @@
   sec.hidden = false;
 })();
 </script>
+<script>
+(() => {
+  const v = document.querySelector('.reel-video video');
+  if (v) v.addEventListener('play', () => { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'reel01-video-play', title: 'Reel 01 played on the page', event: true }); }, { once: true });
+})();
+</script>
+<script data-goatcounter="https://travelbuddy-oz.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
 document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });</script>
 </body>
