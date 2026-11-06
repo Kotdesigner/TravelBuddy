@@ -19,6 +19,23 @@ def get(url):
         return r.read()
 
 
+BEHOLD = re.compile(r"^https://feeds\.behold\.so/[A-Za-z0-9_-]+/?$")
+
+
+def behold_media(feed):
+    """Behold JSON feed (behold.so): no Meta developer app needed."""
+    raw = json.loads(get(feed))
+    posts = raw.get("posts", []) if isinstance(raw, dict) else raw
+    out = []
+    for p in posts:
+        sizes = p.get("sizes") or {}
+        thumb = (sizes.get("medium") or sizes.get("small") or {}).get("mediaUrl") or p.get("thumbnailUrl", "")
+        out.append({"id": p.get("id", ""), "media_type": p.get("mediaType", ""), "permalink": p.get("permalink", ""),
+                    "thumbnail_url": thumb, "caption": p.get("prunedCaption") or p.get("caption", ""),
+                    "timestamp": p.get("timestamp", "")})
+    return {"data": out}
+
+
 def facebook_media(token):
     """Token from Facebook Login: find the Instagram account linked to the Facebook page."""
     fb = "https://graph.facebook.com/v21.0"
@@ -33,11 +50,56 @@ def facebook_media(token):
     return json.loads(get(f"{fb}/{ig['id']}/media?{q}"))
 
 
+def write(site, data):
+    items = [m for m in data.get("data", [])
+             if m.get("media_type") == "VIDEO" and PERMALINK.match(m.get("permalink", ""))]
+    items.sort(key=lambda m: m.get("timestamp", ""), reverse=True)
+    items = items[:KEEP]
+
+    folder = site / "reels"
+    folder.mkdir(exist_ok=True)
+    reels, keep_files = [], {".gitkeep"}
+    for m in items:
+        mid = re.sub(r"\D", "", m["id"])
+        ext = ".webp" if ".webp" in (m.get("thumbnail_url") or "").split("?")[0] else ".jpg"
+        name = f"{mid}{ext}"
+        keep_files.add(name)
+        target = folder / name
+        if not target.exists() and m.get("thumbnail_url"):
+            try:
+                target.write_bytes(get(m["thumbnail_url"]))
+            except Exception as e:
+                print(f"thumbnail for {mid} failed: {type(e).__name__}")
+        reels.append({
+            "id": mid,
+            "permalink": m["permalink"],
+            "caption": (m.get("caption") or "").strip()[:200],
+            "timestamp": m.get("timestamp", ""),
+            "thumb": f"reels/{name}" if target.exists() else "",
+        })
+    for f in folder.iterdir():
+        if f.name not in keep_files:
+            f.unlink()
+    (site / "reels.json").write_text(json.dumps(reels, ensure_ascii=False, indent=1) + "\n")
+    print(f"{len(reels)} reels written.")
+
+
 def main():
     site = Path(sys.argv[1] if len(sys.argv) > 1 else "site")
+    feed = os.environ.get("BEHOLD_FEED", "").strip()
     token = os.environ.get("IG_TOKEN", "").strip()
+    if feed:
+        if not BEHOLD.match(feed):
+            sys.exit("BEHOLD_FEED must look like https://feeds.behold.so/<feed id>")
+        try:
+            data = behold_media(feed)
+        except Exception as e:
+            sys.exit(f"Behold feed request failed: {type(e).__name__}")
+        print(f"Behold feed: {len(data['data'])} posts")
+        write(site, data)
+        return
     if not token:
-        print("IG_TOKEN is not set yet, nothing to do.")
+        print("Neither BEHOLD_FEED nor IG_TOKEN is set yet, nothing to do.")
         return
     token = token.strip().strip('"').strip("'")
     kind = ("Instagram (IGAA...)" if token.startswith("IG") else
@@ -60,36 +122,7 @@ def main():
         sys.exit(f"Instagram API request failed: HTTP {e.code} {detail}".replace(token, "***"))
     except Exception as e:
         sys.exit(f"Instagram API request failed: {type(e).__name__}")
-    items = [m for m in data.get("data", [])
-             if m.get("media_type") == "VIDEO" and PERMALINK.match(m.get("permalink", ""))]
-    items.sort(key=lambda m: m.get("timestamp", ""), reverse=True)
-    items = items[:KEEP]
-
-    folder = site / "reels"
-    folder.mkdir(exist_ok=True)
-    reels, keep_files = [], {".gitkeep"}
-    for m in items:
-        mid = re.sub(r"\D", "", m["id"])
-        name = f"{mid}.jpg"
-        keep_files.add(name)
-        target = folder / name
-        if not target.exists() and m.get("thumbnail_url"):
-            try:
-                target.write_bytes(get(m["thumbnail_url"]))
-            except Exception as e:
-                print(f"thumbnail for {mid} failed: {type(e).__name__}")
-        reels.append({
-            "id": mid,
-            "permalink": m["permalink"],
-            "caption": (m.get("caption") or "").strip()[:200],
-            "timestamp": m.get("timestamp", ""),
-            "thumb": f"reels/{name}" if target.exists() else "",
-        })
-    for f in folder.iterdir():
-        if f.name not in keep_files:
-            f.unlink()
-    (site / "reels.json").write_text(json.dumps(reels, ensure_ascii=False, indent=1) + "\n")
-    print(f"{len(reels)} reels written.")
+    write(site, data)
 
     if os.environ.get("REFRESH") == "1":
         q = urllib.parse.urlencode({"grant_type": "ig_refresh_token", "access_token": token})

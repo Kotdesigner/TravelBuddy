@@ -1,5 +1,6 @@
 # Puts the latest Instagram reels on the website (branch gh-pages).
-# Setup: repository secret IG_TOKEN (Instagram API with Instagram Login, long-lived token).
+# Setup, easiest: repository secret BEHOLD_FEED (JSON feed URL from behold.so, free plan is enough).
+# Or: secret IG_TOKEN (Instagram API with Instagram Login, long-lived token).
 # Optional: secret GH_PAT (fine-grained token, this repo, "Secrets: read and write")
 # lets the workflow renew IG_TOKEN once a week, so it never runs out after 60 days.
 name: Instagram reels for the website
@@ -35,6 +36,7 @@ jobs:
       - name: Fetch reels from Instagram
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          BEHOLD_FEED: ${{ secrets.BEHOLD_FEED }}
         run: |
           if [ "$(date -u +%u)" = "1" ] && [ "$(date -u +%H)" -lt 6 ]; then export REFRESH=1; fi
           python3 main/.github/scripts/instagram_reels.py site
