@@ -14,8 +14,12 @@ KEEP = 6
 PERMALINK = re.compile(r"^https://www\.instagram\.com/(reel|p)/[\w-]+/?$")
 
 
+UA = "TravelBuddyWebsite/1.0 (+https://kotdesigner.github.io/TravelBuddy/)"
+
+
 def get(url):
-    with urllib.request.urlopen(url, timeout=30) as r:
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json, image/*"})
+    with urllib.request.urlopen(req, timeout=30) as r:
         return r.read()
 
 
@@ -93,6 +97,9 @@ def main():
             sys.exit("BEHOLD_FEED must look like https://feeds.behold.so/<feed id>")
         try:
             data = behold_media(feed)
+        except urllib.error.HTTPError as e:
+            body = e.read()[:300].decode("utf-8", "replace").replace(feed, "<feed>")
+            sys.exit(f"Behold feed request failed: HTTP {e.code} {body}")
         except Exception as e:
             sys.exit(f"Behold feed request failed: {type(e).__name__}")
         print(f"Behold feed: {len(data['data'])} posts")
