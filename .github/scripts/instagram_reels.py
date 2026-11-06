@@ -19,6 +19,22 @@ def get(url):
         return r.read()
 
 
+def facebook_media(token):
+    """Token from Facebook Login: find the Instagram account linked to the Facebook page."""
+    fb = "https://graph.facebook.com/v21.0"
+    q = urllib.parse.urlencode({"fields": "name,instagram_business_account{username}", "access_token": token})
+    pages = json.loads(get(f"{fb}/me/accounts?{q}")).get("data", [])
+    ig = next((p["instagram_business_account"] for p in pages if p.get("instagram_business_account")), None)
+    if not ig:
+        me = json.loads(get(f"{fb}/me?{q}"))
+        ig = me.get("instagram_business_account")
+    if not ig:
+        sys.exit(f"Facebook token works, but no Instagram account is linked to its pages ({len(pages)} pages found).")
+    print(f"Instagram account via Facebook: @{ig.get('username', '?')}")
+    q = urllib.parse.urlencode({"fields": FIELDS, "limit": 25, "access_token": token})
+    return json.loads(get(f"{fb}/{ig['id']}/media?{q}"))
+
+
 def main():
     site = Path(sys.argv[1] if len(sys.argv) > 1 else "site")
     token = os.environ.get("IG_TOKEN", "").strip()
@@ -31,9 +47,12 @@ def main():
     hints = [w for w, c in (("a link", "http" in token), ("an equals sign", "=" in token),
              ("an ampersand", "&" in token), ("a hash", "#" in token), ("a line break", "\n" in token)) if c]
     print(f"token check: {kind}, {len(token)} characters, starts with {token[:3]!r}, contains {', '.join(hints) or 'nothing odd'}")
-    q = urllib.parse.urlencode({"fields": FIELDS, "limit": 25, "access_token": token})
     try:
-        data = json.loads(get(f"{API}/me/media?{q}"))
+        if token.startswith("EA"):
+            data = facebook_media(token)
+        else:
+            q = urllib.parse.urlencode({"fields": FIELDS, "limit": 25, "access_token": token})
+            data = json.loads(get(f"{API}/me/media?{q}"))
     except urllib.error.HTTPError as e:  # never echo the URL, it carries the token
         try:
             err = json.loads(e.read()).get("error", {})
