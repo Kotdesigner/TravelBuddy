@@ -33,7 +33,8 @@ def behold_media(feed):
     out = []
     for p in posts:
         sizes = p.get("sizes") or {}
-        thumb = (sizes.get("medium") or sizes.get("small") or {}).get("mediaUrl") or p.get("thumbnailUrl", "")
+        # Reels: the original portrait thumbnail first, Behold's square sizes only as a fallback
+        thumb = p.get("thumbnailUrl") or (sizes.get("large") or sizes.get("medium") or {}).get("mediaUrl", "")
         out.append({"id": p.get("id", ""), "media_type": p.get("mediaType", ""), "permalink": p.get("permalink", ""),
                     "thumbnail_url": thumb, "caption": p.get("prunedCaption") or p.get("caption", ""),
                     "timestamp": p.get("timestamp", "")})
@@ -66,7 +67,7 @@ def write(site, data):
     for m in items:
         mid = re.sub(r"\D", "", m["id"])
         ext = ".webp" if ".webp" in (m.get("thumbnail_url") or "").split("?")[0] else ".jpg"
-        name = f"{mid}{ext}"
+        name = f"{mid}-p{ext}"
         keep_files.add(name)
         target = folder / name
         if not target.exists() and m.get("thumbnail_url"):
