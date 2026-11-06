@@ -31,7 +31,6 @@ p('Chrome am Mac: Installieren wie am PC', hinweisArt({ ua: MAC_CHROME, platform
 p('Chrome unter Windows: Installieren', hinweisArt({ ua: WIN_CHROME, platform: 'Win32' }) === 'rechner')
 p('Edge unter Windows: Installieren', hinweisArt({ ua: WIN_EDGE, platform: 'Win32' }) === 'rechner')
 p('Firefox: kurzer Hinweis', hinweisArt({ ua: WIN_FIREFOX, platform: 'Win32' }) === 'firefox' && istFirefox({ ua: WIN_FIREFOX }))
-p('Mac- und Windows-App aus dem Paket: nichts', hinweisArt({ ua: WIN_CHROME, paket: true }) === null)
 
 const ih = fs.readFileSync(new URL('../src/lib/InstallHinweis.svelte', import.meta.url), 'utf8')
 p('iPhone-Text nennt „Mehr anzeigen“', ih.includes('„Mehr anzeigen“') && ih.includes('“View More”'))

@@ -24,11 +24,10 @@ export const istMacSafari = ({ ua = '', touch = 0 } = {}) =>
 /**
  * Welcher Hinweis passt? 'ios', 'android', 'mac' (Safari am Mac), 'firefox' (kann nicht installieren),
  * 'rechner' (Chrome, Edge & Co. an Windows, Mac und Linux) oder null.
- * Nichts zeigen, wenn die App schon installiert läuft, der Hinweis erledigt ist oder die
- * Mac- oder Windows-App aus dem Paket läuft (`paket`).
+ * Nichts zeigen, wenn die App schon installiert läuft oder der Hinweis erledigt ist.
  */
-export function hinweisArt({ ua = '', platform = '', touch = 0, standalone = false, erledigt = false, paket = false } = {}) {
-  if (standalone || erledigt || paket) return null
+export function hinweisArt({ ua = '', platform = '', touch = 0, standalone = false, erledigt = false } = {}) {
+  if (standalone || erledigt) return null
   if (istIOS({ ua, platform, touch })) return 'ios'
   if (istAndroid({ ua })) return 'android'
   if (istFirefox({ ua })) return 'firefox'
@@ -36,8 +35,6 @@ export function hinweisArt({ ua = '', platform = '', touch = 0, standalone = fal
   return 'rechner'
 }
 
-/** Die Mac- und Windows-App aus dem Paket öffnet sich unter dieser Adresse, dort ist alles schon eingerichtet. */
-export const istPaket = () => typeof location !== 'undefined' && location.hostname === '127.0.0.1' && location.port === '8990'
 export const geraet = () => (typeof navigator === 'undefined' ? {} : { ua: navigator.userAgent, platform: navigator.platform, touch: navigator.maxTouchPoints || 0 })
 
 export function erledigt() {
@@ -54,7 +51,7 @@ export const laeuftAlsApp = () =>
 
 /** Eingerichtet? Dann verschwindet „📲 App einrichten“ aus Menü und Seitenleiste. */
 export const eingerichtet = writable(erledigt())
-export const einrichtenZeigen = derived(eingerichtet, (e) => !e && !laeuftAlsApp() && !!hinweisArt({ ...geraet(), paket: istPaket() }))
+export const einrichtenZeigen = derived(eingerichtet, (e) => !e && !laeuftAlsApp() && !!hinweisArt(geraet()))
 /** Menü: hochzählen öffnet den Hinweis noch einmal, auch nach „Später“ */
 export const installOeffnen = writable(0)
 export const appEinrichten = () => installOeffnen.update((n) => n + 1)

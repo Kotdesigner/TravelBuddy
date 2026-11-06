@@ -17,7 +17,6 @@
   let abgebrochen = false
 
   const handy = typeof navigator !== 'undefined' && (/iPhone|iPad|iPod|Android/.test(navigator.userAgent) || (/Mac/.test(navigator.platform) && 'ontouchend' in document))
-  const macApp = typeof location !== 'undefined' && location.port === '8990' && /Mac/.test(navigator.platform)
   const kannTeilen = (d) => !!navigator.canShare?.({ files: d })
   const groesse = $derived(ergebnis ? ergebnis.dateien.reduce((n, d) => n + d.size, 0) : 0)
   const mb = (n) => (n < 1048576 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1048576).toFixed(1)} MB`)
@@ -93,10 +92,6 @@
     location.href = `mailto:?subject=${encodeURIComponent(titel)}`
   }
   function drucken() {
-    if (macApp) {
-      zeigeToast(je('Die Datei kommt in deine Downloads. Öffne sie dort und drücke ⌘ P.', 'The file goes to your Downloads. Open it there and press ⌘ P.'), 'ok')
-      return ladeHerunter()
-    }
     druckeBilder(ergebnis.bilder, quer)
   }
 </script>

@@ -58,14 +58,6 @@ __pycache__/
 
 # Upload-Paket (wird aus dist/ erzeugt)
 *Netlify.zip
-mac/build/
-mac/build-gross/
-win/build/
-win/build-gross/
-win/web/
-win/*.syso
 
 # Große Karte (Stufe 14): zu groß fürs Repo, holen mit karten-gross/holen.sh
 karten-gross/*.pmtiles
-win/build-linux/
-win/build-linux-gross/

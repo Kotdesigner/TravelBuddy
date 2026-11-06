@@ -10,16 +10,16 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.18 · built for Western Australia**<br>
+**Version 1.19 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-**[📱 Try it on your phone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
+**[📱 Try it on your phone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-119)**
 
 <sub>🇩🇪 **[Deutsche Version weiter unten](#deutsch)** · the full README in German follows below.</sub>
 
 <br>
 
-**[⬇️ Mac app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux app](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[🌐 Web app for Netlify](#-put-it-online-with-netlify-for-iphone)** · **[🚀 Everything it can do](#-everything-travelbuddy-can-do)** · **[🛠️ Run it yourself](#run-it-without-the-ready-made-apps)**
+**[📲 Set up as an app](#-set-up-as-an-app-on-any-device)** · **[🌐 Web app for Netlify](#-put-it-online-with-netlify-for-iphone)** · **[🚀 Everything it can do](#-everything-travelbuddy-can-do)** · **[🛠️ Run it yourself](#run-it-yourself)**
 
 <br>
 
@@ -132,6 +132,10 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 </td></tr></table>
 
 ---
+
+## 🧹 New in version 1.19
+
+**One app for every device, straight from the browser.** The separate Mac, Windows and Linux downloads are gone. TravelBuddy sets itself up as an app in Chrome, Edge and Safari on every computer and phone, without warnings from Apple or Microsoft, with the same data as the web app and always up to date. The repo is leaner: no more Swift and Go start programs.
 
 ## 💻 New in version 1.18
 
@@ -387,7 +391,7 @@ Sorted by how much it helps on the road: safety and planning first, photo tools 
 - 🌍 **Trip map and 3D globe** with every stage, route and flight
 - 🖨️ **Map as a print image** in any size
 - 🔄 **Backup and sync** between Mac and iPhone, merged safely
-- 🖥️ **Mac app**, 🪟 **Windows app**, 🐧 **Linux app** and 📱 **iPhone web app**
+- 📲 **Runs as an app** on iPhone, iPad, Android, Windows, Mac and Linux, installed straight from the browser
 - 🎵 **Spotify soundtrack:** music from every place lands in your playlist automatically
 - 🎸 **Local bands first**, each with their most-played song
 - 📴 **Music offline too:** places are noted and caught up later
@@ -614,21 +618,23 @@ TravelBuddy collects the music of the places you pass through, **automatically, 
 
 ---
 
-## Download
+## 📲 Set up as an app on any device
 
-| | |
+There is nothing to download. Open **[travelbuddy-v1-wa.netlify.app](https://travelbuddy-v1-wa.netlify.app)** and set TravelBuddy up as an app: it then has its own window and icon, works offline and updates itself.
+
+| Device | How |
 |---|---|
-| 🖥️ **Mac** | `TravelBuddy-Mac.zip` (small map) or `TravelBuddy-Mac-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, move to Applications, open. Apple Silicon and Intel, macOS 13 or newer. |
-| 🪟 **Windows** | `TravelBuddy-Windows.zip` (small map) or `TravelBuddy-Windows-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unzip, double-click `TravelBuddy.exe`. Windows 10 and 11 (64-bit). Opens in its own Microsoft Edge window. |
-| 🐧 **Linux** | `TravelBuddy-Linux-x64.tar.gz` or `TravelBuddy-Linux-arm64.tar.gz`, each also as `…-Grosse-Karte.tar.gz` (every road), from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): unpack, run `./TravelBuddy`. Opens in its own window with Chrome, Chromium, Edge or Brave, otherwise in your default browser. |
-| 📱 **iPhone and any browser** | `TravelBuddy-Netlify.zip` (small map) or `TravelBuddy-Netlify-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): drag into Netlify's "Deploy manually" ([step by step](#-put-it-online-with-netlify-for-iphone)). Then open the address in Safari and choose "Add to Home Screen". |
-| 🔁 **Straight from GitHub** | In Netlify, choose "Import an existing project" and pick this repo. The settings are in `netlify.toml`, and every push publishes the new version. |
+| 📱 **iPhone, iPad** | In **Safari**: **Share → Add to Home Screen** (if needed under **View More**) |
+| 🤖 **Android** | In **Chrome**, **Edge** or **Samsung Internet**: tap **Install** in the app |
+| 🪟 **Windows**, 🐧 **Linux**, 🖥️ **Mac** | In **Chrome** or **Edge**: click **Install** in the app, the install window opens right away |
+| 🖥️ **Mac with Safari** | **File → Add to Dock** (macOS Sonoma or newer) |
+| 🦊 **Firefox** | cannot install apps, TravelBuddy runs in the tab, offline too |
 
-**Small or large map?** Every download comes in two versions. The small one (≈ 100 MB) shows Western Australia up to zoom level 10 with the main roads. The large one (≈ 280 MB) goes up to zoom level 14 with every road, gravel road and track, street names and buildings. Your data stays when you switch from one Mac or Windows version to the other.
+The first time you open it, TravelBuddy shows the right steps for your device, and until it is done **“📲 Set up the app”** waits in the menu.
 
-The Mac and Windows apps need no internet and no extra software. They are not signed by Apple or Microsoft, so the first launch shows a warning:
-- **Mac:** System Settings → Privacy & Security → "Open Anyway".
-- **Windows:** "Windows protected your PC" → "More info" → "Run anyway".
+Up to version 1.9 there were separate Mac, Windows and Linux downloads. Since 1.19 the browser does this job better: no warnings from Apple or Microsoft, the same data as the web app, and always the latest version.
+
+**Host it yourself?** `TravelBuddy-Netlify.zip` (small map) or `TravelBuddy-Netlify-Grosse-Karte.zip` (every road) from [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest) is the complete app for your own Netlify site or server: [step by step](#-put-it-online-with-netlify-for-iphone). Or in Netlify choose "Import an existing project" and pick this repo, every push then publishes the new version.
 
 ---
 
@@ -645,7 +651,7 @@ iPhones only install web apps from an **HTTPS** address. A free Netlify site is 
 
 The large map is cut into four parts (Southwest & Perth, Central west coast, Pilbara & Coral Coast, Kimberley & Broome). The phone only loads a part once you zoom in there. Saving everything for offline takes about 270 MB on the phone instead of about 66 MB.
 
-With the large package every person chooses for themselves: in the web app the large map stays **off** until they tap **🛣️ Turn on large map** on the map page. Only then does the phone download the part it is in, 33 to 76 MB each. Turning it off frees the storage again. In the Mac and Windows apps the parts are already on the disk, so it starts switched on.
+With the large package every person chooses for themselves: in the web app the large map stays **off** until they tap **🛣️ Turn on large map** on the map page. Only then does the phone download the part it is in, 33 to 76 MB each. Turning it off frees the storage again.
 
 ### Option A: ready-made `dist` from Releases (nothing to install)
 
@@ -701,9 +707,9 @@ More detail (in German): **[docs/VEROEFFENTLICHEN.md](docs/VEROEFFENTLICHEN.md)*
 
 ---
 
-## Run it without the ready-made apps
+## Run it yourself
 
-You don't have to use the downloads. TravelBuddy is a static web app and runs anywhere a browser does.
+TravelBuddy is a static web app and runs anywhere a browser does. To run it from the code:
 
 ### What you need
 
@@ -712,8 +718,6 @@ You don't have to use the downloads. TravelBuddy is a static web app and runs an
 | **Node.js 20 or newer** (22 LTS recommended), includes npm | building and running | [nodejs.org](https://nodejs.org) |
 | **Git** (or "Code → Download ZIP" on this page) | getting the code | [git-scm.com](https://git-scm.com) |
 | **A current browser:** Safari 16+, Chrome or Edge 110+, Firefox 115+ | using the app | already on your computer |
-| *optional:* **Xcode** | building the Mac app yourself | Mac App Store |
-| *optional:* **Go 1.22+** | building the Windows app yourself | [go.dev](https://go.dev) or `brew install go` |
 
 ### Start it on your computer
 
@@ -735,17 +739,6 @@ Good to know:
 ### On the iPhone
 
 iPhones only install web apps from an **HTTPS** address. Step by step: **[Put it online with Netlify](#-put-it-online-with-netlify-for-iphone)**.
-
-### Build the apps yourself
-
-```
-sh mac/baue-mac-app.sh     # → mac/build/TravelBuddy.app and TravelBuddy-Mac.zip (needs Xcode)
-sh win/baue-windows.sh     # → win/build/TravelBuddy.exe and TravelBuddy-Windows.zip (needs Go, works on Mac/Linux too)
-```
-
-For the large map, run `sh karten-gross/holen.sh` once, then put `KARTE=gross` in front: `KARTE=gross sh mac/baue-mac-app.sh` or `KARTE=gross sh win/baue-windows.sh`. The packages end up in `mac/build-gross/` and `win/build-gross/`.
-
-The Windows build embeds the icon with `rsrc`: install it once with `go install github.com/akavel/rsrc@v0.10.2`.
 
 ### Tests
 
@@ -807,6 +800,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.16:** the app shows how to put it on the home screen, Android gets an install button
 - [x] **Version 1.17:** tap a warning area on the map, jump to the warning, animated logo in the sidebar
 - [x] **Version 1.18:** set up as an app in Chrome, Edge and Safari on the Mac, “Set up the app” in the menu, reset the app
+- [x] **Version 1.19:** no more separate desktop downloads, every device installs from the browser
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -828,12 +822,12 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.18 · entwickelt für Western Australia**<br>
+**Version 1.19 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-**[📱 Auf dem Handy ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
+**[📱 Auf dem Handy ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-119)**
 
-**[⬇️ Mac-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Windows-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)** · **[⬇️ Linux-App](https://github.com/Kotdesigner/TravelBuddy/releases/latest)**
+**[📲 Als App einrichten](#-auf-jedem-gerät-als-app-einrichten)**
 
 <br>
 
@@ -940,6 +934,10 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 </td></tr></table>
 
 ---
+
+## 🧹 Neu in Version 1.19
+
+**Eine App für jedes Gerät, direkt aus dem Browser.** Die eigenen Downloads für Mac, Windows und Linux sind weg. TravelBuddy richtet sich in Chrome, Edge und Safari auf jedem Rechner und Handy als App ein, ohne Warnungen von Apple oder Microsoft, mit denselben Daten wie die Web-App und immer aktuell. Das Repo ist schlanker: keine Startprogramme in Swift und Go mehr.
 
 ## 💻 Neu in Version 1.18
 
@@ -1189,7 +1187,7 @@ Sortiert nach Nutzen unterwegs: Sicherheit und Planung zuerst, Fotohelfer und Op
 - 🌍 **Reise-Karte und 3D-Weltkugel** mit allen Etappen, Routen und Flügen
 - 🖨️ **Karte als Druckbild** in jeder Größe
 - 🔄 **Backup und Abgleich** zwischen Mac und iPhone, sicher zusammengeführt
-- 🖥️ **Mac-App**, 🪟 **Windows-App**, 🐧 **Linux-App** und 📱 **Web-App fürs iPhone**
+- 📲 **Läuft als App** auf iPhone, iPad, Android, Windows, Mac und Linux, direkt aus dem Browser eingerichtet
 - 🎵 **Spotify-Soundtrack:** Musik von jedem Ort landet automatisch in deiner Playlist
 - 🎸 **Lokale Bands zuerst**, jeweils mit ihrem meistgehörten Song
 - 📴 **Musik auch offline:** Orte werden vorgemerkt und später nachgeholt
@@ -1410,21 +1408,23 @@ TravelBuddy sammelt die Musik der Orte, durch die du kommst, **automatisch, wäh
 | Fahrtage, Sonnenzeiten, Notfall, Packliste, Quiz | Tageskurs für die Ausgaben |
 | Belege auf dem Gerät, letzter Stand der Gefahrenlage | Musik unterwegs |
 
-## Herunterladen
+## 📲 Auf jedem Gerät als App einrichten
 
-| | |
+Herunterladen musst du nichts. Öffne **[travelbuddy-v1-wa.netlify.app](https://travelbuddy-v1-wa.netlify.app)** und richte TravelBuddy als App ein: Dann hat sie ein eigenes Fenster und Symbol, läuft ohne Netz und hält sich selbst aktuell.
+
+| Gerät | So geht es |
 |---|---|
-| 🖥️ **Mac** | `TravelBuddy-Mac.zip` (kleine Karte) oder `TravelBuddy-Mac-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, in „Programme“ ziehen, öffnen. Apple Silicon und Intel, ab macOS 13. |
-| 🪟 **Windows** | `TravelBuddy-Windows.zip` (kleine Karte) oder `TravelBuddy-Windows-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, Doppelklick auf `TravelBuddy.exe`. Windows 10 und 11 (64 Bit). Öffnet sich in einem eigenen Fenster von Microsoft Edge. |
-| 🐧 **Linux** | `TravelBuddy-Linux-x64.tar.gz` oder `TravelBuddy-Linux-arm64.tar.gz`, jeweils auch als `…-Grosse-Karte.tar.gz` (jede Straße), unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): entpacken, `./TravelBuddy` starten. Öffnet sich mit Chrome, Chromium, Edge oder Brave im eigenen Fenster, sonst im Standardbrowser. |
-| 📱 **iPhone und jeder Browser** | `TravelBuddy-Netlify.zip` (kleine Karte) oder `TravelBuddy-Netlify-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest): bei Netlify unter „Deploy manually“ hineinziehen ([Schritt für Schritt](#-mit-netlify-ins-netz-stellen-für-das-iphone)). Danach die Adresse in Safari öffnen und „Zum Home-Bildschirm“. |
-| 🔁 **Direkt aus GitHub** | Bei Netlify „Import an existing project“ und dieses Repo wählen. Die Einstellungen stehen in `netlify.toml`, jeder Push veröffentlicht die neue Fassung. |
+| 📱 **iPhone, iPad** | In **Safari**: **Teilen → Zum Home-Bildschirm** (notfalls unter **Mehr anzeigen**) |
+| 🤖 **Android** | In **Chrome**, **Edge** oder **Samsung Internet**: in der App auf **Installieren** tippen |
+| 🪟 **Windows**, 🐧 **Linux**, 🖥️ **Mac** | In **Chrome** oder **Edge**: in der App auf **Installieren** klicken, das Installieren-Fenster öffnet sich sofort |
+| 🖥️ **Mac mit Safari** | **Ablage → Zum Dock hinzufügen** (ab macOS Sonoma) |
+| 🦊 **Firefox** | kann keine Apps installieren, TravelBuddy läuft im Tab, auch offline |
 
-**Kleine oder große Karte?** Jeder Download kommt in zwei Fassungen. Die kleine (≈ 100 MB) zeigt Western Australia bis Zoomstufe 10 mit den Hauptstraßen. Die große (≈ 280 MB) geht bis Zoomstufe 14 mit jeder Straße, Schotterpiste und jedem Track, Straßennamen und Gebäuden. Deine Daten bleiben erhalten, wenn du am Mac oder unter Windows von einer Fassung zur anderen wechselst.
+Beim ersten Öffnen zeigt TravelBuddy die passenden Schritte für dein Gerät, und bis es erledigt ist, wartet **„📲 App einrichten“** im Menü.
 
-Mac- und Windows-App brauchen kein Internet und keine weiteren Programme. Sie sind nicht von Apple oder Microsoft signiert, deshalb kommt beim ersten Start eine Warnung:
-- **Mac:** Systemeinstellungen → Datenschutz & Sicherheit → „Trotzdem öffnen“.
-- **Windows:** „Der Computer wurde durch Windows geschützt“ → „Weitere Informationen“ → „Trotzdem ausführen“.
+Bis Version 1.9 gab es eigene Downloads für Mac, Windows und Linux. Seit 1.19 macht das der Browser besser: keine Warnungen von Apple oder Microsoft, dieselben Daten wie in der Web-App und immer die neueste Fassung.
+
+**Selbst bereitstellen?** `TravelBuddy-Netlify.zip` (kleine Karte) oder `TravelBuddy-Netlify-Grosse-Karte.zip` (jede Straße) unter [Releases](https://github.com/Kotdesigner/TravelBuddy/releases/latest) ist die ganze App für deine eigene Netlify-Seite oder deinen Server: [Schritt für Schritt](#-mit-netlify-ins-netz-stellen-für-das-iphone). Oder bei Netlify „Import an existing project“ und dieses Repo wählen, dann veröffentlicht jeder Push die neue Fassung.
 
 ---
 
@@ -1441,7 +1441,7 @@ Web-Apps installiert das iPhone nur von einer **HTTPS**-Adresse. Am einfachsten 
 
 Die große Karte ist in vier Teile geschnitten (Südwesten & Perth, Mittlere Westküste, Pilbara & Coral Coast, Kimberley & Broome). Das Handy lädt einen Teil erst, wenn du dort hineinzoomst. Alles offline sichern braucht auf dem Handy dann etwa 270 MB statt etwa 66 MB.
 
-Mit dem großen Paket entscheidet jede Person selbst: In der Web-App bleibt die große Karte **aus**, bis man auf der Kartenseite **🛣️ Große Karte einschalten** tippt. Erst dann lädt das Handy den Teil, in dem es gerade ist, je 33 bis 76 MB. Ausschalten gibt den Speicher wieder frei. In den Apps für Mac und Windows liegen die Teile schon auf der Platte, dort ist sie von Anfang an an.
+Mit dem großen Paket entscheidet jede Person selbst: In der Web-App bleibt die große Karte **aus**, bis man auf der Kartenseite **🛣️ Große Karte einschalten** tippt. Erst dann lädt das Handy den Teil, in dem es gerade ist, je 33 bis 76 MB. Ausschalten gibt den Speicher wieder frei.
 
 ### Weg A: fertiges `dist` aus den Releases (nichts installieren)
 
@@ -1497,9 +1497,9 @@ Mehr Einzelheiten: **[docs/VEROEFFENTLICHEN.md](docs/VEROEFFENTLICHEN.md)**.
 
 ---
 
-## Ohne die fertigen Apps ausführen
+## Selbst ausführen
 
-Die Downloads sind kein Muss. TravelBuddy ist eine statische Web-App und läuft überall, wo ein Browser läuft.
+TravelBuddy ist eine statische Web-App und läuft überall, wo ein Browser läuft. So startest du sie aus dem Code:
 
 ### Was du brauchst
 
@@ -1508,8 +1508,6 @@ Die Downloads sind kein Muss. TravelBuddy ist eine statische Web-App und läuft 
 | **Node.js 20 oder neuer** (empfohlen 22 LTS), mit npm | Bauen und Starten | [nodejs.org](https://nodejs.org) |
 | **Git** (oder auf dieser Seite „Code → Download ZIP“) | Code holen | [git-scm.com](https://git-scm.com) |
 | **Ein aktueller Browser:** Safari 16+, Chrome oder Edge 110+, Firefox 115+ | die App benutzen | ist schon da |
-| *freiwillig:* **Xcode** | Mac-App selbst bauen | Mac App Store |
-| *freiwillig:* **Go 1.22+** | Windows-App selbst bauen | [go.dev](https://go.dev) oder `brew install go` |
 
 ### Auf dem eigenen Rechner starten
 
@@ -1531,17 +1529,6 @@ Gut zu wissen:
 ### Auf dem iPhone
 
 Web-Apps installiert das iPhone nur von einer **HTTPS**-Adresse. Schritt für Schritt: **[Mit Netlify ins Netz stellen](#-mit-netlify-ins-netz-stellen-für-das-iphone)**.
-
-### Die Apps selbst bauen
-
-```
-sh mac/baue-mac-app.sh     # → mac/build/TravelBuddy.app und TravelBuddy-Mac.zip (braucht Xcode)
-sh win/baue-windows.sh     # → win/build/TravelBuddy.exe und TravelBuddy-Windows.zip (braucht Go, geht auch auf Mac/Linux)
-```
-
-Für die große Karte einmal `sh karten-gross/holen.sh` ausführen und dann `KARTE=gross` davorsetzen: `KARTE=gross sh mac/baue-mac-app.sh` oder `KARTE=gross sh win/baue-windows.sh`. Die Pakete liegen dann in `mac/build-gross/` und `win/build-gross/`.
-
-Das Symbol der Windows-App bettet `rsrc` ein: einmal `go install github.com/akavel/rsrc@v0.10.2`.
 
 ### Tests
 
@@ -1583,6 +1570,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.16:** die App zeigt, wie sie auf den Home-Bildschirm kommt, Android bekommt einen Knopf zum Installieren
 - [x] **Version 1.17:** Warngebiet auf der Karte antippen, Sprung zur Warnung, animiertes Logo in der Seitenleiste
 - [x] **Version 1.18:** als App einrichten in Chrome, Edge und Safari am Mac, „App einrichten“ im Menü, App zurücksetzen
+- [x] **Version 1.19:** keine eigenen Desktop-Downloads mehr, jedes Gerät richtet die App aus dem Browser ein
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

@@ -58,8 +58,6 @@
   function testreise() { beenden(); testreiseKnopf() }
 
   // Läuft im Hintergrund weiter, die Einführung kann derweil weitergehen
-  // In den Apps für Mac und Windows liegt die Karte schon bei, dort entfällt die Frage
-  const aufDemRechner = location.hostname === '127.0.0.1' && location.port === '8990'
   let kartenFertig = $state(false)
   async function karten(gross) {
     try { await ladePaket(gross); kartenFertig = true }
@@ -120,7 +118,6 @@
           <button class:an={sprache === s} aria-pressed={sprache === s} lang={s} onclick={() => setzeSprache(s)}>{l}</button>
         {/each}
       </div>
-      {#if !aufDemRechner}
       <div class="ef-karten">
         {#if $kartenLauf}<p class="ef-k" role="status">📥 {t('{name} wird geladen, {fertig} von {gesamt}', $kartenLauf)}</p>
         {:else if kartenFertig}<p class="ef-ok" role="status">✓ {t('Kartenmaterial liegt auf dem Gerät')}</p>
@@ -132,7 +129,6 @@
           </div>
         {/if}
       </div>
-      {/if}
       <div class="ef-knoepfe">
         <button class="btn-primary ef-los" onclick={weiter}>{t('Los geht’s')}</button>
         <button class="btn ef-test" onclick={testreise}>🧪 {t('Erst mit einer Testreise spielen')}</button>

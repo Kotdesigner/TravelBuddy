@@ -5,7 +5,7 @@
   import { je } from './i18n.js'
   import { modal } from './modal.js'
   import { blattRaus, ausblenden } from './motion.js'
-  import { hinweisArt, istIPad, erledigt, merkeErledigt, laeuftAlsApp, installOffen, installAngebot, installOeffnen, istPaket, geraet } from './install.js'
+  import { hinweisArt, istIPad, erledigt, merkeErledigt, laeuftAlsApp, installOffen, installAngebot, installOeffnen, geraet } from './install.js'
 
   const SPAETER = 'tb-install-spaeter'
   let art = $state(null)
@@ -18,7 +18,7 @@
     try { spaeter = sessionStorage.getItem(SPAETER) === '1' } catch {}
     if (laeuftAlsApp()) merkeErledigt()
     const g = geraet()
-    const a = spaeter && !erzwungen ? null : hinweisArt({ ...g, standalone: laeuftAlsApp(), erledigt: erzwungen ? false : erledigt(), paket: istPaket() })
+    const a = spaeter && !erzwungen ? null : hinweisArt({ ...g, standalone: laeuftAlsApp(), erledigt: erzwungen ? false : erledigt() })
     ipad = istIPad(g)
     mac = a === 'mac'
     art = a

@@ -41,8 +41,8 @@ nie eine fremde Seite überschreiben.
 ## 4 · Textvorschlag zum Weitergeben
 
 > Hier ist TravelBuddy, eine Reise-App für Western Australia: https://travelbuddy-wa.netlify.app
-> Am iPhone in Safari öffnen, dann Teilen und „Zum Home-Bildschirm“. Beim ersten Öffnen führt dich die App
-> durch alles. Deine Daten bleiben nur auf deinem Handy. Ab und zu unter Mehr ein Backup machen.
+> Beim ersten Öffnen zeigt dir die App, wie du sie als App einrichtest, am iPhone, unter Android und am
+> Rechner. Danach führt sie dich durch alles. Deine Daten bleiben nur auf deinem Handy. Ab und zu unter Mehr ein Backup machen.
 
 ## 5 · Musik unterwegs (freiwillig)
 
@@ -51,19 +51,11 @@ eigene, kostenlose App auf developer.spotify.com. Dort als **Redirect URI** die 
 TravelBuddy unter Mehr → Musik steht, und die **Client-ID** in TravelBuddy übernehmen. Die Playlist legt
 die App dann im eigenen Konto an. Ein Last.fm-Schlüssel bringt zusätzlich die Charts des Landes.
 
-## 6 · Mac-App
+## 6 · Am Rechner als App
 
-`sh mac/baue-mac-app.sh` baut `mac/build/TravelBuddy.app` und `mac/build/TravelBuddy-Mac.zip` (braucht Xcode).
-Die App bringt die fertige Web-App mit und zeigt sie über einen eingebauten Server auf `127.0.0.1:8990` in
-einem eigenen Fenster. Daten liegen im Speicher der App und bleiben über Neustarts erhalten.
-
-Unterschiede zum Browser: Die Sperre mit Touch ID für Belege braucht einen Browser (Safari, Chrome), in der
-App steht sie nicht zur Verfügung. Backups landen in „Downloads“, Links nach draußen öffnet der Standardbrowser.
-
-## 7 · Windows-App
-
-`sh win/baue-windows.sh` baut `win/build/TravelBuddy.exe` und `win/build/TravelBuddy-Windows.zip`, auch auf dem
-Mac (braucht Go, für das Symbol einmal `go install github.com/akavel/rsrc@v0.10.2`). Die Web-App steckt in der
-exe. Beim Start liefert ein eingebauter Server sie auf `127.0.0.1:8990` aus, Microsoft Edge zeigt sie als
-eigenes Fenster ohne Adressleiste, mit eigenem Profil unter `%LOCALAPPDATA%\TravelBuddy`. Fehlt Edge, nimmt die
-App Chrome oder den Standardbrowser. In Edge funktioniert die Sperre für Belege mit Windows Hello.
+Eigene Pakete für Mac, Windows und Linux gibt es seit Version 1.19 nicht mehr. Jeder Rechner richtet
+TravelBuddy aus dem Browser ein: in Chrome oder Edge (Windows, Linux, Mac) ein Klick auf „Installieren“ im
+Blatt beim ersten Öffnen, in Safari am Mac „Ablage → Zum Dock hinzufügen“. Firefox kann keine Apps einrichten,
+dort läuft TravelBuddy im Tab. Die eingerichtete App hat ein eigenes Fenster, läuft offline und holt sich
+jede neue Fassung selbst. In Chrome und Edge teilt sie sich die Daten mit dem Browser, in Safari am Mac hat
+die App im Dock einen eigenen Speicher (wie am iPhone).
