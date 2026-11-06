@@ -5,7 +5,7 @@ into the website branch (gh-pages): reels.json plus one thumbnail per reel.
 The access token comes only from the environment (GitHub secret IG_TOKEN).
 It is never written to the website or printed in the log.
 """
-import json, os, re, sys, urllib.parse, urllib.request
+import json, os, re, sys, urllib.error, urllib.parse, urllib.request
 from pathlib import Path
 
 API = "https://graph.instagram.com"
@@ -28,7 +28,14 @@ def main():
     q = urllib.parse.urlencode({"fields": FIELDS, "limit": 25, "access_token": token})
     try:
         data = json.loads(get(f"{API}/me/media?{q}"))
-    except Exception as e:  # do not echo the URL, it carries the token
+    except urllib.error.HTTPError as e:  # never echo the URL, it carries the token
+        try:
+            err = json.loads(e.read()).get("error", {})
+            detail = f"{err.get('type', '')} {err.get('code', '')}: {err.get('message', '')}"
+        except Exception:
+            detail = ""
+        sys.exit(f"Instagram API request failed: HTTP {e.code} {detail}".replace(token, "***"))
+    except Exception as e:
         sys.exit(f"Instagram API request failed: {type(e).__name__}")
     items = [m for m in data.get("data", [])
              if m.get("media_type") == "VIDEO" and PERMALINK.match(m.get("permalink", ""))]
