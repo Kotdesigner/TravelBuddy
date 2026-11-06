@@ -2,7 +2,7 @@
 // installieren, das geht nur über Teilen → „Zum Home-Bildschirm“. Die App erklärt das einmal,
 // bevor jemand in Safari etwas einträgt: Safari und Home-Bildschirm haben getrennte Speicher.
 // Android und Chrome am Rechner bieten einen eigenen Knopf (beforeinstallprompt).
-import { writable } from 'svelte/store'
+import { writable, derived } from 'svelte/store'
 
 export const KEY = 'tb-install-hinweis-v1'
 
@@ -16,28 +16,48 @@ export function istIPad({ ua = '', platform = '', touch = 0 } = {}) {
 }
 export const istAndroid = ({ ua = '' } = {}) => /Android/.test(ua)
 
+export const istFirefox = ({ ua = '' } = {}) => /Firefox\/|FxiOS/.test(ua)
+/** Safari am Mac (kein iPad): dort heißt es „Zum Dock hinzufügen“ */
+export const istMacSafari = ({ ua = '', touch = 0 } = {}) =>
+  /Macintosh/.test(ua) && touch <= 1 && /Safari\//.test(ua) && !/Chrome|Chromium|CriOS|Edg|OPR|Firefox/.test(ua)
+
 /**
- * Welcher Hinweis passt? 'ios', 'android', 'knopf' (anderes Gerät, Browser bietet Installieren an) oder null.
- * Nichts zeigen, wenn die App schon vom Home-Bildschirm läuft oder der Hinweis erledigt ist.
+ * Welcher Hinweis passt? 'ios', 'android', 'mac' (Safari am Mac), 'firefox' (kann nicht installieren),
+ * 'rechner' (Chrome, Edge & Co. an Windows, Mac und Linux) oder null.
+ * Nichts zeigen, wenn die App schon installiert läuft, der Hinweis erledigt ist oder die
+ * Mac- oder Windows-App aus dem Paket läuft (`paket`).
  */
-export function hinweisArt({ ua = '', platform = '', touch = 0, standalone = false, erledigt = false, knopf = false } = {}) {
-  if (standalone || erledigt) return null
+export function hinweisArt({ ua = '', platform = '', touch = 0, standalone = false, erledigt = false, paket = false } = {}) {
+  if (standalone || erledigt || paket) return null
   if (istIOS({ ua, platform, touch })) return 'ios'
   if (istAndroid({ ua })) return 'android'
-  // Den Knopf nur auf Handy und Tablet anbieten, am Rechner wäre er eher lästig
-  return knopf && touch > 0 ? 'knopf' : null
+  if (istFirefox({ ua })) return 'firefox'
+  if (istMacSafari({ ua, touch })) return 'mac'
+  return 'rechner'
 }
+
+/** Die Mac- und Windows-App aus dem Paket öffnet sich unter dieser Adresse, dort ist alles schon eingerichtet. */
+export const istPaket = () => typeof location !== 'undefined' && location.hostname === '127.0.0.1' && location.port === '8990'
+export const geraet = () => (typeof navigator === 'undefined' ? {} : { ua: navigator.userAgent, platform: navigator.platform, touch: navigator.maxTouchPoints || 0 })
 
 export function erledigt() {
   try { return localStorage.getItem(KEY) === 'fertig' } catch { return false }
 }
 export function merkeErledigt() {
   try { localStorage.setItem(KEY, 'fertig') } catch {}
+  eingerichtet.set(true)
 }
 
 export const laeuftAlsApp = () =>
   (typeof navigator !== 'undefined' && navigator.standalone === true) ||
   (typeof matchMedia === 'function' && matchMedia('(display-mode: standalone)').matches)
+
+/** Eingerichtet? Dann verschwindet „📲 App einrichten“ aus Menü und Seitenleiste. */
+export const eingerichtet = writable(erledigt())
+export const einrichtenZeigen = derived(eingerichtet, (e) => !e && !laeuftAlsApp() && !!hinweisArt({ ...geraet(), paket: istPaket() }))
+/** Menü: hochzählen öffnet den Hinweis noch einmal, auch nach „Später“ */
+export const installOeffnen = writable(0)
+export const appEinrichten = () => installOeffnen.update((n) => n + 1)
 
 /** Offen, solange der Hinweis zu sehen ist. Die Einführung wartet so lange. */
 export const installOffen = writable(false)

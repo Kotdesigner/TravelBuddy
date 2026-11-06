@@ -1,5 +1,5 @@
 // Hinweis „Zum Home-Bildschirm“: wann er kommt und wann nicht
-import { hinweisArt, istIOS, istIPad } from '../src/lib/install.js'
+import { hinweisArt, istIOS, istIPad, istMacSafari, istFirefox } from '../src/lib/install.js'
 import fs from 'node:fs'
 let fehler = 0
 const p = (name, ok, info = '') => { console.log(ok ? '  ✓' : '  ✗', name, ok ? '' : info); if (!ok) fehler++ }
@@ -20,14 +20,28 @@ console.log('\n2  Wann der Hinweis kommt')
 p('iPhone in Safari: Anleitung', hinweisArt({ ua: IPHONE, touch: 5 }) === 'ios')
 p('iPhone vom Home-Bildschirm: nichts', hinweisArt({ ua: IPHONE, touch: 5, standalone: true }) === null)
 p('iPhone, schon erledigt: nichts', hinweisArt({ ua: IPHONE, touch: 5, erledigt: true }) === null)
-p('Android mit Angebot: Android-Hinweis', hinweisArt({ ua: ANDROID, touch: 5, knopf: true }) === 'android')
-p('Android ohne Angebot: Anleitung trotzdem', hinweisArt({ ua: ANDROID, touch: 5 }) === 'android')
+p('Android: Android-Hinweis', hinweisArt({ ua: ANDROID, touch: 5 }) === 'android')
 p('Android als App: nichts', hinweisArt({ ua: ANDROID, touch: 5, standalone: true }) === null)
-p('Mac mit Angebot: nichts, am Rechner nicht lästig', hinweisArt({ ua: MAC, platform: 'MacIntel', touch: 0, knopf: true }) === null)
+const WIN_CHROME = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
+const WIN_EDGE = WIN_CHROME + ' Edg/130.0'
+const WIN_FIREFOX = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0'
+const MAC_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
+p('Safari am Mac: Dock', hinweisArt({ ua: MAC, platform: 'MacIntel', touch: 0 }) === 'mac' && istMacSafari({ ua: MAC, touch: 0 }))
+p('Chrome am Mac: Installieren wie am PC', hinweisArt({ ua: MAC_CHROME, platform: 'MacIntel', touch: 0 }) === 'rechner')
+p('Chrome unter Windows: Installieren', hinweisArt({ ua: WIN_CHROME, platform: 'Win32' }) === 'rechner')
+p('Edge unter Windows: Installieren', hinweisArt({ ua: WIN_EDGE, platform: 'Win32' }) === 'rechner')
+p('Firefox: kurzer Hinweis', hinweisArt({ ua: WIN_FIREFOX, platform: 'Win32' }) === 'firefox' && istFirefox({ ua: WIN_FIREFOX }))
+p('Mac- und Windows-App aus dem Paket: nichts', hinweisArt({ ua: WIN_CHROME, paket: true }) === null)
 
 const ih = fs.readFileSync(new URL('../src/lib/InstallHinweis.svelte', import.meta.url), 'utf8')
 p('iPhone-Text nennt „Mehr anzeigen“', ih.includes('„Mehr anzeigen“') && ih.includes('“View More”'))
 p('iPad-Text nennt oben rechts', ih.includes('oben rechts neben der Adresse'))
+
+const bb = fs.readFileSync(new URL('../src/lib/BottomBar.svelte', import.meta.url), 'utf8')
+const sl = fs.readFileSync(new URL('../src/lib/Seitenleiste.svelte', import.meta.url), 'utf8')
+p('Menü und Seitenleiste: „App einrichten“, solange nicht erledigt', /\$einrichtenZeigen/.test(bb) && /\$einrichtenZeigen/.test(sl))
+p('Hinweis öffnet sich aus dem Menü auch nach „Später“', /installOeffnen\) untrack\(\(\) => pruefe\(true\)\)/.test(ih))
+p('Windows und Android: Knopf löst das Installieren direkt aus', /e\.prompt\(\)/.test(ih) && /art === 'mac'/.test(ih) && /art === 'firefox'/.test(ih))
 
 console.log('\n3  Reihenfolge in der App')
 const app = fs.readFileSync(new URL('../src/App.svelte', import.meta.url), 'utf8')

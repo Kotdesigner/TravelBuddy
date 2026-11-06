@@ -8,7 +8,8 @@
   // Monochrome SVG-Icons (einfärbbar für Aktiv-Zustand), Glass-Look,
   // Safe-Area unten, gleitender Indikator.
   import { online } from './netz.js'
-  import { testreiseAn } from './testreise-dienst.js'
+  import { testreiseAn, testreiseKnopfZeigen } from './testreise-dienst.js'
+  import { einrichtenZeigen } from './install.js'
   import { haptic } from './haptik.js'
   import { modal } from './modal.js'
   import { syncZeiten } from './userdata.js'
@@ -24,6 +25,8 @@
     onHandbuch = () => {},
     onEinfuehrung = () => {},
     onTestreise = () => {},
+    onEinrichten = () => {},
+    onZuruecksetzen = () => {},
     onDesign = () => {},
   } = $props()
 
@@ -165,11 +168,14 @@
     </div>
     <!-- Basic: statt „Startdaten laden“ die Einführung vom ersten Öffnen noch einmal -->
     <button class="s-einf" onclick={() => sheetAktion(onEinfuehrung)}>🧭 {t('Einführung noch einmal')}</button>
-    <button class="s-einf" onclick={() => sheetAktion(onTestreise)}>🧪 {$testreiseAn ? t('Testreise beenden') : t('Testreise ausprobieren')}</button>
+    {#if $einrichtenZeigen}<button class="s-einf" onclick={() => sheetAktion(onEinrichten)}>📲 {je('App einrichten', 'Set up the app')}</button>{/if}
+    {#if $testreiseKnopfZeigen}<button class="s-einf" onclick={() => sheetAktion(onTestreise)}>🧪 {$testreiseAn ? t('Testreise beenden') : t('Testreise ausprobieren')}</button>{/if}
+    <button class="s-einf s-gefahr" onclick={() => sheetAktion(onZuruecksetzen)}>↩️ {je('App zurücksetzen', 'Reset the app')}</button>
   </div>
 {/if}
 
 <style>
+  .s-gefahr { color: var(--danger-text); }
   .s-design { display: flex; flex-direction: column; gap: 2px; width: 100%; min-height: 56px; margin-top: 12px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); font-size: calc(15px * var(--schrift, 1)); font-weight: 700; text-align: left; cursor: pointer; }
   .s-design small { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 500; }
   /* ---------- Bar ----------

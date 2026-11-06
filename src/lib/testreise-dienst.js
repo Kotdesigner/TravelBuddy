@@ -1,9 +1,10 @@
 // Testreise laden und wieder beenden. Der eigene Stand kommt vorher komplett zur Seite und beim
 // Beenden unverändert zurück; alles aus der Testreise verschwindet dann, auch was man darin geändert hat.
 // Eigener Schlüssel im Topf von userdata.js, die Marke liegt in localStorage und gehört zum Gerät.
-import { writable, get } from 'svelte/store'
+import { writable, derived, get } from 'svelte/store'
 import { t } from './i18n.js'
-import { baueBackupPayload, wendeBackupAn, datenStand, buchungen, idbGet, idbSet } from './userdata.js'
+import { baueBackupPayload, wendeBackupAn, datenStand, buchungen, idbGet, idbSet, reisen } from './userdata.js'
+import { hatEigeneEtappe } from './plan.js'
 import { flugspeicher, tauscheFlugstand } from './flug-dienst.js'
 import { testmodus, TEST_AUS } from './warnlage-dienst.js'
 import { baueTestreise, flugStaende, TEST_FOTOS, TEST_STANDORT } from './testreise.js'
@@ -17,6 +18,8 @@ const KEY_VORHER = 'testreise-vorher-v1'
 
 function marke() { try { return localStorage.getItem(KEY_MARKE) === '1' } catch { return false } }
 export const testreiseAn = writable(marke())
+/** Menü und Seitenleiste: „Testreise“ nur, solange es keine eigene Etappe gibt. Läuft eine, bleibt „beenden“. */
+export const testreiseKnopfZeigen = derived([testreiseAn, reisen], ([an, r]) => an || !hatEigeneEtappe(r))
 function setzeMarke(an) {
   try { if (an) localStorage.setItem(KEY_MARKE, '1'); else localStorage.removeItem(KEY_MARKE) } catch {}
   testreiseAn.set(an)

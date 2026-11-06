@@ -53,6 +53,8 @@ export function istRoute(r) {
   return r.quelle !== 'reisekalender' && r.imGesamtplan === false
 }
 export const istEtappe = (r) => !!r && !istRoute(r)
+/** Hat die Reise schon eine eigene Etappe? Dann braucht es die Testreise im Menü nicht mehr. */
+export const hatEigeneEtappe = (reisen) => (reisen || []).some((r) => istEtappe(r) && !r.idee)
 export const tageVon = (r) => Math.max(1, Math.round(Number(r?.tage) || 1))
 
 /**

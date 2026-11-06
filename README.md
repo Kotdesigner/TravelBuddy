@@ -10,7 +10,7 @@ Plan it, drive it, remember it. On iPhone, Mac, Windows and Linux, offline first
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.17 · built for Western Australia**<br>
+**Version 1.18 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
 **[📱 Try it on your phone](https://travelbuddy-v1-wa.netlify.app)** · **[✨ What's new](#-new-in-version-19)**
@@ -132,6 +132,10 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 </td></tr></table>
 
 ---
+
+## 💻 New in version 1.18
+
+**Set up as an app in every common browser.** The first time you open it, TravelBuddy shows the right way for your device: on Windows, Linux and the Mac in Chrome or Edge a single click on “Install” opens the install window right away, on the Mac in Safari “File → Add to Dock”, on iPhone and Android as before. Firefox gets a short note that it cannot install apps. Until it is done, “📲 Set up the app” waits in the menu. The test trip leaves the menu once you have a leg of your own, and “↩️ Reset the app” deletes everything on the device and starts fresh.
 
 ## ⚠️ New in version 1.17
 
@@ -802,6 +806,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.15:** a clearer offline map: layers below the map, clearer warnings, your location on top
 - [x] **Version 1.16:** the app shows how to put it on the home screen, Android gets an install button
 - [x] **Version 1.17:** tap a warning area on the map, jump to the warning, animated logo in the sidebar
+- [x] **Version 1.18:** set up as an app in Chrome, Edge and Safari on the Mac, “Set up the app” in the menu, reset the app
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -823,7 +828,7 @@ Planen, fahren, festhalten. Auf iPhone, Mac, Windows und Linux, offline first, o
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.17 · entwickelt für Western Australia**<br>
+**Version 1.18 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
 **[📱 Auf dem Handy ausprobieren](https://travelbuddy-v1-wa.netlify.app)** · **[✨ Was ist neu](#-neu-in-version-19)**
@@ -935,6 +940,10 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 </td></tr></table>
 
 ---
+
+## 💻 Neu in Version 1.18
+
+**In jedem gängigen Browser als App einrichten.** Beim ersten Öffnen zeigt TravelBuddy den passenden Weg für dein Gerät: unter Windows, Linux und am Mac in Chrome oder Edge ein Klick auf „Installieren“, der sofort das Installieren-Fenster öffnet, am Mac in Safari „Ablage → Zum Dock hinzufügen“, auf iPhone und Android wie bisher. Firefox bekommt einen kurzen Hinweis, dass er keine Apps installieren kann. Bis es erledigt ist, wartet „📲 App einrichten“ im Menü. Die Testreise verschwindet aus dem Menü, sobald du eine eigene Etappe hast, und „↩️ App zurücksetzen“ löscht alles auf dem Gerät und fängt neu an.
 
 ## ⚠️ Neu in Version 1.17
 
@@ -1573,6 +1582,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.15:** übersichtlichere Offline-Karte: Ebenen unter der Karte, deutlichere Warngebiete, dein Standort obenauf
 - [x] **Version 1.16:** die App zeigt, wie sie auf den Home-Bildschirm kommt, Android bekommt einen Knopf zum Installieren
 - [x] **Version 1.17:** Warngebiet auf der Karte antippen, Sprung zur Warnung, animiertes Logo in der Seitenleiste
+- [x] **Version 1.18:** als App einrichten in Chrome, Edge und Safari am Mac, „App einrichten“ im Menü, App zurücksetzen
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

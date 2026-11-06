@@ -31,7 +31,8 @@
   import NeuBlatt from './lib/NeuBlatt.svelte'
   import Einfuehrung from './lib/Einfuehrung.svelte'
   import InstallHinweis from './lib/InstallHinweis.svelte'
-  import { installOffen } from './lib/install.js'
+  import { installOffen, appEinrichten } from './lib/install.js'
+  import { appZuruecksetzen } from './lib/zuruecksetzen.js'
   import { einfuehrung, einfuehrungStarten } from './lib/einfuehrung.js'
   import { testreiseAn, testreiseKnopf } from './lib/testreise-dienst.js'
   import { kartenLauf } from './lib/karten-laden.js'
@@ -914,7 +915,7 @@
 <div class="app">
 <div class="sl-mac">
   <Seitenleiste {ansicht} unterpunkte={UNTER} {geh} onSuche={zurSuche} onBackup={onExport}
-    onImport={() => importInput.click()} onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')} onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} />
+    onImport={() => importInput.click()} onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')} onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} onEinrichten={appEinrichten} onZuruecksetzen={() => appZuruecksetzen(onExport)} />
 </div>
 
 <div class="inhalt">
@@ -1294,7 +1295,7 @@
   <BottomBar {aktivTab} onTab={tabZu} {springeZu}
     onSuche={zurSuche} onBackup={onExport} onImport={() => importInput.click()}
     onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')}
-    onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} />
+    onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} onEinrichten={appEinrichten} onZuruecksetzen={() => appZuruecksetzen(onExport)} />
 </div>
 
 <svelte:window bind:scrollY onkeydown={globaleTaste} />

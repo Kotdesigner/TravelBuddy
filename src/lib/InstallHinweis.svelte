@@ -1,37 +1,45 @@
 <script>
   // Einmal beim ersten Öffnen im Browser: so kommt TravelBuddy auf den Home-Bildschirm.
   // Kommt vor der Einführung, damit niemand erst in Safari einträgt und es dann in der App vermisst.
-  import { onMount } from 'svelte'
+  import { onMount, untrack } from 'svelte'
   import { je } from './i18n.js'
   import { modal } from './modal.js'
   import { blattRaus, ausblenden } from './motion.js'
-  import { hinweisArt, istIPad, erledigt, merkeErledigt, laeuftAlsApp, installOffen, installAngebot } from './install.js'
+  import { hinweisArt, istIPad, erledigt, merkeErledigt, laeuftAlsApp, installOffen, installAngebot, installOeffnen, istPaket, geraet } from './install.js'
 
   const SPAETER = 'tb-install-spaeter'
   let art = $state(null)
   let ipad = $state(false)
+  let mac = $state(false)                      // „danach“: Dock statt Home-Bildschirm
 
-  function pruefe() {
+  // erzwungen: aus dem Menü „📲 App einrichten“, dann auch nach „Später“ oder „Erledigt“
+  function pruefe(erzwungen = false) {
     let spaeter = false
     try { spaeter = sessionStorage.getItem(SPAETER) === '1' } catch {}
     if (laeuftAlsApp()) merkeErledigt()
-    const a = spaeter ? null : hinweisArt({
-      ua: navigator.userAgent, platform: navigator.platform, touch: navigator.maxTouchPoints || 0,
-      standalone: laeuftAlsApp(), erledigt: erledigt(), knopf: !!$installAngebot,
-    })
-    ipad = istIPad({ ua: navigator.userAgent, platform: navigator.platform, touch: navigator.maxTouchPoints || 0 })
+    const g = geraet()
+    const a = spaeter && !erzwungen ? null : hinweisArt({ ...g, standalone: laeuftAlsApp(), erledigt: erzwungen ? false : erledigt(), paket: istPaket() })
+    ipad = istIPad(g)
+    mac = a === 'mac'
     art = a
     installOffen.set(!!a)
   }
-  onMount(pruefe)
+  onMount(() => pruefe())
   // Chrome meldet sein Angebot manchmal erst nach dem Start
-  $effect(() => { if ($installAngebot && !art) pruefe() })
+  $effect(() => { if ($installAngebot && !art) untrack(() => pruefe()) })
+  $effect(() => { if ($installOeffnen) untrack(() => pruefe(true)) })
 
   function zu() { art = null; installOffen.set(false) }
   function spaeter() { try { sessionStorage.setItem(SPAETER, '1') } catch {} zu() }
   function fertig() { merkeErledigt(); zu() }
   // Auf dem iPhone läuft nach „Erledigt“ noch der Safari-Tab: sagen, wo es weitergeht
   function iosErledigt() { merkeErledigt(); art = 'danach' }
+  const TITEL = {
+    danach: () => (mac ? je('Jetzt aus dem Dock öffnen', 'Now open it from the Dock') : je('Jetzt vom Home-Bildschirm öffnen', 'Now open it from your home screen')),
+    mac: () => je('TravelBuddy ins Dock', 'Put TravelBuddy in the Dock'),
+    rechner: () => je('TravelBuddy als App einrichten', 'Set up TravelBuddy as an app'),
+    firefox: () => je('TravelBuddy als App', 'TravelBuddy as an app'),
+  }
   async function installieren() {
     const e = $installAngebot
     if (!e) return fertig()
@@ -51,7 +59,7 @@
       <span class="ih-icon" aria-hidden="true">{art === 'danach' ? '✅' : '📲'}</span>
       <button class="ih-zu" onclick={art === 'danach' ? zu : spaeter} aria-label={art === 'danach' ? je('Schließen', 'Close') : je('Später', 'Later')}>✕</button>
     </div>
-    <h2 id="ih-titel">{art === 'danach' ? je('Jetzt vom Home-Bildschirm öffnen', 'Now open it from your home screen') : je('TravelBuddy auf den Home-Bildschirm', 'Put TravelBuddy on your home screen')}</h2>
+    <h2 id="ih-titel">{TITEL[art] ? TITEL[art]() : je('TravelBuddy auf den Home-Bildschirm', 'Put TravelBuddy on your home screen')}</h2>
     {#if art === 'ios'}
       <p id="ih-text">{je('Dann startet TravelBuddy wie eine echte App, auch ohne Netz. Mach das am besten jetzt, bevor du etwas einträgst: Safari und Home-Bildschirm haben getrennte Speicher.', 'Then TravelBuddy starts like a real app, even without signal. Best do it now, before you enter anything: Safari and the home screen keep separate storage.')}</p>
       <ol class="ih-schritte">
@@ -74,7 +82,8 @@
         <button class="ih-leise" onclick={spaeter}>{je('Später', 'Later')}</button>
       </div>
     {:else if art === 'danach'}
-      <p id="ih-text">{je('Super. Öffne TravelBuddy jetzt über das neue Symbol auf dem Home-Bildschirm, dort geht es mit der Einführung weiter. Diesen Safari-Tab kannst du schließen.', 'Great. Now open TravelBuddy from the new icon on your home screen, the introduction continues there. You can close this Safari tab.')}</p>
+      {#if mac}<p id="ih-text">{je('Super. Öffne TravelBuddy jetzt über das neue Symbol im Dock, dort geht es mit der Einführung weiter. Dieses Safari-Fenster kannst du schließen.', 'Great. Now open TravelBuddy from the new icon in the Dock, the introduction continues there. You can close this Safari window.')}</p>{:else}
+      <p id="ih-text">{je('Super. Öffne TravelBuddy jetzt über das neue Symbol auf dem Home-Bildschirm, dort geht es mit der Einführung weiter. Diesen Safari-Tab kannst du schließen.', 'Great. Now open TravelBuddy from the new icon on your home screen, the introduction continues there. You can close this Safari tab.')}</p>{/if}
       <div class="ih-knoepfe">
         <button class="ih-leise" onclick={zu}>{je('Trotzdem hier im Browser weiter', 'Continue here in the browser anyway')}</button>
       </div>
@@ -105,12 +114,42 @@
           <button class="ih-leise" onclick={spaeter}>{je('Später', 'Later')}</button>
         </div>
       {/if}
-    {:else}
-      <p id="ih-text">{je('Dann startet TravelBuddy wie eine echte App, mit eigenem Symbol und auch ohne Netz.', 'Then TravelBuddy starts like a real app, with its own icon and even without signal.')}</p>
+    {:else if art === 'mac'}
+      <p id="ih-text">{je('Dann startet TravelBuddy wie eine eigene App aus dem Dock, auch ohne Netz. Mach das am besten jetzt, bevor du etwas einträgst: Safari und die App im Dock haben getrennte Speicher.', 'Then TravelBuddy starts like its own app from the Dock, even without signal. Best do it now, before you enter anything: Safari and the Dock app keep separate storage.')}</p>
+      <ol class="ih-schritte">
+        <li><span class="ih-nr" aria-hidden="true">1</span><span>{je('Klicke in Safari oben auf', 'In Safari click')} <b>{je('Ablage', 'File')}</b> {je('oder in der Symbolleiste auf', 'or in the toolbar on')} {@render teilen()} <b>{je('Teilen', 'Share')}</b>.</span></li>
+        <li><span class="ih-nr" aria-hidden="true">2</span><span>{je('Wähle', 'Choose')} <b>{je('„Zum Dock hinzufügen“', '“Add to Dock”')}</b>.</span></li>
+        <li><span class="ih-nr" aria-hidden="true">3</span><span>{je('Klicke auf', 'Click')} <b>{je('„Hinzufügen“', '“Add”')}</b> {je('und öffne TravelBuddy ab jetzt aus dem Dock.', 'and from now on open TravelBuddy from the Dock.')}</span></li>
+      </ol>
+      <p class="ih-k">{je('„Zum Dock hinzufügen“ gibt es ab macOS Sonoma.', '“Add to Dock” is available from macOS Sonoma.')}</p>
       <div class="ih-knoepfe">
-        <button class="btn-primary ih-los" onclick={installieren}>{je('Installieren', 'Install')}</button>
+        <button class="btn-primary ih-los" onclick={iosErledigt}>{je('Erledigt', 'Done')}</button>
         <button class="ih-leise" onclick={spaeter}>{je('Später', 'Later')}</button>
       </div>
+    {:else if art === 'firefox'}
+      <p id="ih-text">{je('Firefox kann TravelBuddy nicht als App einrichten. Das geht in Chrome, Edge oder am Mac in Safari. Hier im Firefox läuft trotzdem alles, auch ohne Netz.', 'Firefox cannot set up TravelBuddy as an app. Chrome, Edge or Safari on the Mac can. Here in Firefox everything still works, even without signal.')}</p>
+      <div class="ih-knoepfe">
+        <button class="btn-primary ih-los" onclick={fertig}>{je('Verstanden', 'Got it')}</button>
+      </div>
+    {:else}
+      <!-- Chrome, Edge & Co. an Windows, Mac und Linux: ein Klick auf den Knopf öffnet das Installieren-Fenster -->
+      <p id="ih-text">{je('Dann startet TravelBuddy wie ein eigenes Programm, mit eigenem Fenster und Symbol, auch ohne Netz. Was du schon eingetragen hast, bleibt dabei erhalten.', 'Then TravelBuddy starts like its own program, with its own window and icon, even without signal. Anything you have already entered stays.')}</p>
+      {#if $installAngebot}
+        <div class="ih-knoepfe">
+          <button class="btn-primary ih-los" onclick={installieren}>{je('Installieren', 'Install')}</button>
+          <button class="ih-leise" onclick={spaeter}>{je('Später', 'Later')}</button>
+        </div>
+      {:else}
+        <ol class="ih-schritte">
+          <li><span class="ih-nr" aria-hidden="true">1</span><span>{je('Klicke rechts in der Adressleiste auf das Symbol zum Installieren', 'Click the install icon at the right of the address bar')} <b>⊕</b>.</span></li>
+          <li><span class="ih-nr" aria-hidden="true">2</span><span>{je('Oder öffne das Menü', 'Or open the menu')} <b>⋮</b> {je('in Chrome bzw.', 'in Chrome or')} <b>…</b> {je('in Edge und wähle', 'in Edge and choose')} <b>{je('„TravelBuddy installieren“', '“Install TravelBuddy”')}</b> {je('bzw.', 'or')} <b>{je('„Apps“ → „Diese Website als App installieren“', '“Apps” → “Install this site as an app”')}</b>.</span></li>
+          <li><span class="ih-nr" aria-hidden="true">3</span><span>{je('Bestätige mit', 'Confirm with')} <b>{je('„Installieren“', '“Install”')}</b>.</span></li>
+        </ol>
+        <div class="ih-knoepfe">
+          <button class="btn-primary ih-los" onclick={fertig}>{je('Erledigt', 'Done')}</button>
+          <button class="ih-leise" onclick={spaeter}>{je('Später', 'Later')}</button>
+        </div>
+      {/if}
     {/if}
   </div>
 {/if}

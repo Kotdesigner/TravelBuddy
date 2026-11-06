@@ -5,10 +5,12 @@
   // Unterpunkte des offenen Bereichs. Ersetzt die Leiste oben mit ihren Aufklappmenüs
   // und das ⋯-Dock unten rechts (Backup, Import, Design wohnen jetzt hier).
   import { online } from './netz.js'
-  import { testreiseAn } from './testreise-dienst.js'
+  import { testreiseAn, testreiseKnopfZeigen } from './testreise-dienst.js'
+  import { einrichtenZeigen } from './install.js'
+  import { je } from './i18n.js'
   import { syncZeiten } from './userdata.js'
 
-  let { ansicht, unterpunkte = {}, geh = () => {}, onSuche = () => {}, onBackup = () => {}, onImport = () => {}, onHandbuch = () => {}, onDesign = () => {}, onEinfuehrung = () => {}, onTestreise = () => {} } = $props()
+  let { ansicht, unterpunkte = {}, geh = () => {}, onSuche = () => {}, onBackup = () => {}, onImport = () => {}, onHandbuch = () => {}, onDesign = () => {}, onEinrichten = () => {}, onZuruecksetzen = () => {}, onEinfuehrung = () => {}, onTestreise = () => {} } = $props()
 
   const BEREICHE = [
     { id: 'heute', label: t('Heute') },
@@ -52,13 +54,16 @@
       <button onclick={onHandbuch}>{t('📖 Handbuch')}</button>
       <button onclick={onDesign}>🎨 {t('Design')}</button>
       <button onclick={onEinfuehrung}>{t('🧭 Einführung')}</button>
-      <button onclick={onTestreise}>🧪 {$testreiseAn ? t('Testreise beenden') : t('Testreise')}</button>
+      {#if $einrichtenZeigen}<button onclick={onEinrichten}>📲 {je('App einrichten', 'Set up the app')}</button>{/if}
+      {#if $testreiseKnopfZeigen}<button onclick={onTestreise}>🧪 {$testreiseAn ? t('Testreise beenden') : t('Testreise')}</button>{/if}
+      <button class="sl-gefahr" onclick={onZuruecksetzen}>↩️ {je('App zurücksetzen', 'Reset the app')}</button>
     </div>
     <p class="sl-status"><span class="sl-punkt" class:an={$online} aria-hidden="true"></span>{$online ? t('Online') : t('Offline')}{#if gesichert}&nbsp;{t('· Backup {gesichert}', { gesichert })}{/if}</p>
   </div>
 </nav>
 
 <style>
+  .sl-gefahr { color: var(--danger-text) !important; }
   .sl {
     position: sticky; top: 0; height: 100dvh; overflow: auto; width: 232px; flex: none;
     background: var(--flaeche); border-right: 1px solid var(--line); padding: 18px 12px 14px max(12px, env(safe-area-inset-left, 0px));
