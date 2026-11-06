@@ -114,6 +114,7 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 .reel-video video { width: 100%; height: auto; aspect-ratio: 9 / 16; border-radius: var(--screen-radius); background: var(--color-paper-2); outline: 1px solid color-mix(in oklab, var(--color-ink) 9%, transparent); outline-offset: -1px; }
 .reel-video video:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
 .reel-text { display: grid; gap: var(--space-lg); }
+.follow { color: var(--color-ink-2); }
 
 /* FAQ: answers behind disclosures */
 .faq h2 { margin-bottom: var(--space-2xl); }
