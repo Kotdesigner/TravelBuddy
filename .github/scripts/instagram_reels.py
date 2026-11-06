@@ -25,6 +25,10 @@ def main():
     if not token:
         print("IG_TOKEN is not set yet, nothing to do.")
         return
+    token = token.strip().strip('"').strip("'")
+    kind = ("Instagram (IGAA...)" if token.startswith("IG") else
+            "Facebook (EAA...), not usable here" if token.startswith("EAA") else "unknown format")
+    print(f"token check: {kind}, {len(token)} characters, spaces inside: {' ' in token}")
     q = urllib.parse.urlencode({"fields": FIELDS, "limit": 25, "access_token": token})
     try:
         data = json.loads(get(f"{API}/me/media?{q}"))
