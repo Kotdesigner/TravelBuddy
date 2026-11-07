@@ -1,28 +1,27 @@
-// Anonyme Zählung der App-Starts mit Umami Cloud.
+// Anonyme Zählung der App-Starts mit GoatCounter (dieselbe Seite wie die Website, travelbuddy-oz).
 //
-// Bewusst OHNE das Umami-Skript: Fremder Code hätte im Browser Zugriff auf Logbuch, Fotos und
-// Dokumente. Stattdessen schickt die App selbst eine winzige Meldung, und zwar nur das hier:
-// Kennung der Website, Hostname und „/“. Kein Cookie, keine Bildschirmgröße, keine Sprache,
-// kein Referrer, keine Inhalte. IP-Adresse und Browsertyp sieht Umami technisch trotzdem,
-// daraus bildet Umami einen Besucher-Schlüssel, der sich jeden Monat ändert.
+// Bewusst OHNE das GoatCounter-Skript: Fremder Code hätte im Browser Zugriff auf Logbuch, Fotos und
+// Dokumente. Stattdessen schickt die App selbst eine winzige Meldung an den öffentlichen Zähler, und
+// zwar nur einen Seitennamen („app“ oder „app-aktiv“) und einen Titel. Kein Cookie, keine
+// Bildschirmgröße, keine Inhalte. GoatCounter sieht technisch IP-Adresse und Browser, speichert die
+// IP-Adresse aber nicht und leitet daraus nur Land, Browser, System und Sprache ab.
 //
 // Gezählt wird:
-//  - einmal beim Start (Seitenaufruf, ergibt „Besucher“)
+//  - einmal beim Start („app“, ergibt Besucher)
 //  - alle 5 Minuten, solange die App sichtbar ist, und beim Zurückkommen in die App
-//    (Ereignis „aktiv“, ergibt „gerade aktiv“). Offline wird nichts gezählt und nichts nachgeholt.
+//    (Ereignis „app-aktiv“, ergibt „gerade aktiv“). Offline wird nichts gezählt und nichts nachgeholt.
 //
 // Nicht gezählt wird:
-//  - solange UMAMI_ID leer ist
 //  - auf jeder anderen Adresse als der veröffentlichten (localhost, Vorschau, Forks, Tests)
 //  - wenn der Browser „Do Not Track“ oder „Global Privacy Control“ sendet
 //  - wenn man unter Mehr → Datenschutz & Impressum die Zählung ausschaltet
 
 import { writable } from 'svelte/store'
 
-/** Website-Kennung aus Umami Cloud (öffentlich, kein Geheimnis). Leer = Zählung aus. */
-export const UMAMI_ID = 'f60fc04e-e4f7-4641-a650-b058ade26956'
+export const ZAEHL_ZIEL = 'https://travelbuddy-oz.goatcounter.com/count'
 export const ZAEHL_HOST = 'travelbuddy-v1-wa.netlify.app'
-export const ZAEHL_ZIEL = 'https://cloud.umami.is/api/send'
+export const PFAD_START = 'app'
+export const PFAD_AKTIV = 'app-aktiv'
 export const TAKT_MS = 5 * 60 * 1000
 const KEY_AUS = 'tb-zaehlung-aus'
 
@@ -42,31 +41,24 @@ export function browserWillNicht(nav = globalThis.navigator) {
 }
 
 /** Darf hier überhaupt gezählt werden? */
-export function zaehlenErlaubt({ id = UMAMI_ID, host = globalThis.location?.hostname, nav = globalThis.navigator, aus = liesAus() } = {}) {
-  return !!id && host === ZAEHL_HOST && !aus && !browserWillNicht(nav)
+export function zaehlenErlaubt({ host = globalThis.location?.hostname, nav = globalThis.navigator, aus = liesAus() } = {}) {
+  return host === ZAEHL_HOST && !aus && !browserWillNicht(nav)
 }
 
-/** Die Meldung, genau so wie sie an Umami geht */
-export function meldung(id, host, name) {
-  const payload = { website: id, hostname: host, url: '/' }
-  if (name) payload.name = name
-  return { type: 'event', payload }
+/** Die Adresse, genau so wie sie an GoatCounter geht */
+export function zaehlAdresse(aktiv = false, rnd = Math.random().toString(36).slice(2, 7)) {
+  const q = new URLSearchParams({ p: aktiv ? PFAD_AKTIV : PFAD_START, t: aktiv ? 'TravelBuddy App aktiv' : 'TravelBuddy App' })
+  if (aktiv) q.set('e', 'true')
+  q.set('b', '0')
+  q.set('rnd', rnd)
+  return `${ZAEHL_ZIEL}?${q}`
 }
 
 let letzte = 0
-async function sende(name, { senden = globalThis.fetch } = {}) {
+function sende(aktiv = false) {
   if (!zaehlenErlaubt() || !navigator.onLine) return
   letzte = Date.now()
-  try {
-    await senden(ZAEHL_ZIEL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(meldung(UMAMI_ID, location.hostname, name)),
-      credentials: 'omit',
-      referrerPolicy: 'no-referrer',
-      keepalive: true,
-    })
-  } catch {}
+  try { fetch(zaehlAdresse(aktiv), { method: 'GET', mode: 'no-cors', credentials: 'omit', cache: 'no-store', keepalive: true }).catch(() => {}) } catch {}
 }
 
 let gestartet = false
@@ -75,7 +67,7 @@ export function starteZaehler() {
   if (gestartet || typeof window === 'undefined' || !zaehlenErlaubt()) return
   gestartet = true
   sende()
-  const weiter = () => { if (document.visibilityState === 'visible' && Date.now() - letzte >= TAKT_MS - 5000) sende('aktiv') }
+  const weiter = () => { if (document.visibilityState === 'visible' && Date.now() - letzte >= TAKT_MS - 5000) sende(true) }
   setInterval(weiter, TAKT_MS)
   document.addEventListener('visibilitychange', weiter)
 }

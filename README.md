@@ -765,7 +765,7 @@ Each test runs on its own, for example `node tests/plan.test.mjs`. There are **o
 ## Privacy
 
 - No account, no server, no ads, no cookies.
-- The web app only counts anonymously how often it is opened, via [Umami](https://umami.is), without content, places or cookies. Browsers with Do Not Track or Global Privacy Control are not counted, and you can turn it off under **Privacy & legal notice** at the bottom of the app.
+- The web app only counts anonymously how often it is opened, via [GoatCounter](https://www.goatcounter.com) (servers in the EU), without content, places or cookies. Browsers with Do Not Track or Global Privacy Control are not counted, and you can turn it off under **Privacy & legal notice** at the bottom of the app.
 - All data stays in your device's storage. Sync Mac and iPhone with a backup file, for example via AirDrop. Importing merges, nothing gets deleted.
 - Tickets, IDs and journal photos stay on the device and are not part of the backup.
 - Live flight and train data are optional. Only then does the flight number with date go to AeroDataBox via RapidAPI, or the station name to DBF. Your key stays on this device and is not part of the backup.
@@ -1581,7 +1581,7 @@ Tests laufen einzeln, zum Beispiel `node tests/plan.test.mjs`. Es sind **über 1
 ## Datenschutz
 
 - Kein Konto, kein Server, keine Werbung, keine Cookies.
-- Die Web-App zählt nur anonym, wie oft sie geöffnet wird, über [Umami](https://umami.is), ohne Inhalte, Orte oder Cookies. Browser mit Do Not Track oder Global Privacy Control werden nicht gezählt, und du schaltest es unten in der App unter **Datenschutz & Impressum** aus.
+- Die Web-App zählt nur anonym, wie oft sie geöffnet wird, über [GoatCounter](https://www.goatcounter.com) (Server in der EU), ohne Inhalte, Orte oder Cookies. Browser mit Do Not Track oder Global Privacy Control werden nicht gezählt, und du schaltest es unten in der App unter **Datenschutz & Impressum** aus.
 - Alle Daten bleiben im Speicher deines Geräts. Mac und iPhone gleichst du über eine Backup-Datei ab, zum Beispiel per AirDrop. Beim Import wird zusammengeführt, nichts wird gelöscht.
 - Tickets, Ausweise und Fotos fürs Tagebuch bleiben auf dem Gerät und kommen nicht ins Backup.
 - Live-Daten zu Flug und Bahn sind freiwillig. Nur dann geht die Flugnummer mit Datum über RapidAPI an AeroDataBox oder der Bahnhof an DBF. Dein Schlüssel bleibt auf diesem Gerät und kommt nicht ins Backup.
