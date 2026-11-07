@@ -1,0 +1,53 @@
+{
+ "qld": {
+  "name": "Cairns bis Whitsundays",
+  "haupt": {
+   "bytes": 356212,
+   "knoten": 8171,
+   "kanten": 12009,
+   "km": 11311,
+   "pisteKm": 2894
+  },
+  "pisten": {
+   "bytes": 2486148,
+   "knoten": 68837,
+   "kanten": 86844,
+   "km": 44333,
+   "pisteKm": 26586
+  }
+ },
+ "wa": {
+  "name": "Western Australia",
+  "haupt": {
+   "bytes": 1552076,
+   "knoten": 38639,
+   "kanten": 58947,
+   "km": 58577,
+   "pisteKm": 18976
+  },
+  "pisten": {
+   "bytes": 11402460,
+   "knoten": 316583,
+   "kanten": 428787,
+   "km": 267289,
+   "pisteKm": 191656
+  }
+ },
+ "vic": {
+  "name": "Melbourne und Umgebung",
+  "haupt": {
+   "bytes": 1912456,
+   "knoten": 52357,
+   "kanten": 80300,
+   "km": 20555,
+   "pisteKm": 863
+  },
+  "pisten": {
+   "bytes": 12862740,
+   "knoten": 393328,
+   "kanten": 528486,
+   "km": 83667,
+   "pisteKm": 29734
+  }
+ }
+}

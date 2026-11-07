@@ -1,6 +1,7 @@
 <script>
   import { ladePois } from './versorgung.js'
   import TourenWahl from './TourenWahl.svelte'
+  import PistenNetz from './PistenNetz.svelte'
   import { t, LOCALE } from './i18n.js'
   import { dezimal } from './format.js'
   import { fehlerText } from './fehlertext.js'
@@ -1036,6 +1037,7 @@
         </div>
       {/if}
     </div>
+    <PistenNetz />
     {#if reisen.length}
       <TourenWahl touren={tourenWahl} istAn={istGewaehlt} umschalten={toggleReise} alle={alleReisen} keine={keineReisen}
         alleAn={gewaehlteReisen.size === reisen.length} keineAn={gewaehlteReisen.size === 0}>

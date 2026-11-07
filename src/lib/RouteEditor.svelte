@@ -17,13 +17,34 @@
   import OrtWahl from './OrtWahl.svelte'
   import Fahrtag from './Fahrtag.svelte'
   import { dauer, klapp } from './motion.js'
-  import { rechnet, routeMsg, hinweise, wetter, reichweite, routeRechnen, setArt, tankNeu, wetterPruefen,
+  import { gebietFuer, pistenStand, pistenLaedt, pistenLaden, pistenPruefen, netzInfo, GEBIETE } from './routing-offline.js'
+  import { rechnet, routeMsg, hinweise, wetter, reichweite, routeRechnen, setArt, setAllrad, tankNeu, wetterPruefen, routeQuelleText,
     veraltet, artVon, gerade, tagText } from './routen-dienst.js'
   import VerkehrBlock from './VerkehrBlock.svelte'
+  import { strassenlage } from './strassenlage-dienst.js'
+  import { sperrungenAnRoute } from './sperrungen.js'
+  import { umleitungRechnen, umleitungText, sperrendeFuer } from './sperr-dienst.js'
   import { lage } from './warnlage-dienst.js'
   import { zahl } from './format.js'
 
   let { r, orte = [], reisen = [], warnungen = [], umkreisKm = 150 } = $props()
+
+  // Offline-Routen: Gebiet der Stopps und Vorschlag, das Pisten-Netz zu laden
+  const gebiet = $derived(gebietFuer(r.stops))
+  let netzMB = $state({})
+  $effect(() => { if (gebiet) { pistenPruefen(); netzInfo().then((m) => (netzMB = Object.fromEntries(Object.entries(m).map(([g, x]) => [g, Math.round((x.pisten?.bytes || 0) / 1048576)])))) } })
+  const pistenVorschlag = $derived.by(() => {
+    if (!gebiet || $pistenStand[gebiet] || gerade(r)) return null
+    const offlineMitLuftlinie = r.route?.offline && r.route.quelle === 'haupt' && (r.route.anschlussKm || 0) >= 5
+    // Mit 4WD rechnet die App auf dem Pisten-Netz, auch online; ohne das Netz geht das nicht
+    if (r.allrad && artVon(r) === 'auto') return { id: gebiet, name: GEBIETE[gebiet].name, mb: netzMB[gebiet] || 0, allrad: true }
+    // Ohne Netz keine Route gefunden: noch gar keine oder nur eine für die alten Stopps
+    const ohneWeg = (!r.route || veraltet(r)) && !$online && !$rechnet[r.id] && (r.stops || []).filter((s) => s.lat != null).length >= 2
+    return offlineMitLuftlinie || ohneWeg ? { id: gebiet, name: GEBIETE[gebiet].name, mb: netzMB[gebiet] || 0 } : null
+  })
+  async function pistenJetzt() {
+    try { await pistenLaden(gebiet); routeRechnen(r) } catch { /* bleibt bei den Hauptstraßen */ }
+  }
   // Vorschläge an der Strecke: zugeklappt, damit die Route nicht endlos lang wird
   let vorschlaegeOffen = $state(false)
   const bildVon = (o) => o?.bildData || (o?.bild ? '/' + String(o.bild).replace(/^\//, '') : o?.img || null)
@@ -36,6 +57,8 @@
   const h = $derived($hinweise[r.id])
   const w = $derived($wetter[r.id])
   const alt = $derived(veraltet(r))
+  // Sperrungen von Main Roads WA auf dieser Route (V29); bei einer Umleitung zeigt die Route, was sie umfährt
+  const sperrAn = $derived(r.route?.geometry && !r.route.flug && !gerade(r) && !r.route.umleitung ? sperrungenAnRoute(r.route.geometry, sperrendeFuer(r, $strassenlage.meldungen), { allrad: !!r.allrad }) : [])
   let meldung = $state('')
   let aktivStopp = $state(-1)   // angetippter Stopp zeigt Foto und Entfernen
   let mTimer
@@ -107,6 +130,11 @@
       <button class:an={artVon(r) === 'boot'} aria-pressed={artVon(r) === 'boot'} onclick={() => setArt(r, 'boot')}>{t('⛵ Schippern')}</button>
     </div>
     <label class="re-film"><input type="checkbox" checked={r.imFilm !== false} onchange={(e) => updateReise(r.id, { imFilm: e.currentTarget.checked })} /><span>{je('Im Animationsfilm', 'In the animated film')}</span></label>
+    {#if artVon(r) === 'auto'}
+      <!-- 4WD (V29): Pisten und Tracks ohne Aufschlag, auch online, wenn OSRM weit außen herum fährt -->
+      <label class="re-film re-allrad"><input type="checkbox" checked={!!r.allrad} onchange={(e) => setAllrad(r, e.currentTarget.checked)} />
+        <span>{je('🚙 4WD: Pisten und Tracks wie geplant', '🚙 4WD: unsealed roads and tracks as planned')}<small>{r.allrad ? je('Die App nimmt Pisten, wenn sie kürzer sind, auch statt der Straßenroute von OSRM.', 'The app takes tracks when they are shorter, also instead of the OSRM road route.') : je('Aus: Fernstrecken bleiben auf Asphalt, Pisten nur, wo es nicht anders geht.', 'Off: long distances stay on sealed roads, tracks only where there is no other way.')}</small></span></label>
+    {/if}
     {#if gerade(r) && artVon(r) !== 'boot'}<VerkehrBlock art={artVon(r)} terminId={r.terminId} titel={r.name} onverknuepft={(id) => updateReise(r.id, { terminId: id })} />{/if}
 
     {#if st.length}
@@ -148,11 +176,20 @@
         <div class="r-stats">
           <span class="r-km">{artVon(r) === 'boot' ? '⛵' : r.route.flug ? '✈️' : '🛣️'} {r.route.km} km</span>
           <span>⏱️ {fahrzeitText(r.route.dauerMin)}</span>
+          {#if (r.route.offline || r.route.allradWahl) && r.route.pisteKm}<span class="r-piste">{je(`🪨 davon ${zahl(r.route.pisteKm)} km Piste`, `🪨 of which ${zahl(r.route.pisteKm)} km unsealed`)}</span>{/if}
           {#if r.route.tank}
             {@const maxL = h?.tank?.maxLuecke ?? r.route.tank.maxLuecke}
             <span class="r-tank" class:warn={maxL > $reichweite}>{t('⛽ längste Strecke ohne Tankstelle {maxL} km', { maxL })}</span>
           {/if}
         </div>
+        {#if r.route.umleitung}
+          <div class="r-sperr umgeht">⛔ {je('Umleitung wegen Sperrung', 'Detour because of a closure')}: {r.route.umleitung.sperrungen.map((s) => `${s.strasse} (${s.was})`).join(', ')} · {umleitungText(r.route.umleitung)}</div>
+        {:else if sperrAn.length}
+          <div class="r-sperr">
+            <span>⛔ {je('Gesperrt auf der Strecke', 'Closed on the way')}: {sperrAn.map((b) => je(`${b.meldung.strasse} (${[b.meldung.sperrungDe || b.meldung.level, b.meldung.artDe].filter(Boolean).join(', ')}) bei km ${zahl(b.km)}`, `${b.meldung.strasse} (${[b.meldung.sperrung || b.meldung.level, b.meldung.art].filter(Boolean).join(', ')}) at km ${zahl(b.km)}`)).join(', ')} · Main Roads WA</span>
+            <button class="btn" onclick={() => umleitungRechnen(r)} disabled={$rechnet[r.id]}>{$rechnet[r.id] ? t('rechnet …') : je('Umleitung berechnen', 'Calculate detour')}</button>
+          </div>
+        {/if}
         {@const tk = h?.tank}
         {#if tk?.luecken.length}
           {@const zuLang = tk.luecken.some((l) => l.ueberReichweite)}
@@ -233,11 +270,26 @@
             {#each routenWarnungen as x}<div class="rg-w"><span class="rg-stufe" style="background:{x.farbe};color:{schriftAuf(x.farbe)}">{x.icon} {x.level}</span> {x.titel}<small class="rg-km">{routeLage?.aufRoute ? (x.kmBis < 10 ? t('Direkt vor dir') : t('In etwa {km} km voraus', { km: zahl(Math.round(x.kmBis / 10) * 10) })) : t('Nach etwa {km} km Strecke', { km: zahl(Math.round(x.kmBis / 10) * 10) })}{#if x.km > 0}&nbsp;· {t('{km} km neben der Strecke', { km: zahl(Math.round(x.km)) })}{/if}</small></div>{/each}
           </div>
         {/if}
-        <div class="r-fuss">{t('berechnet {kurz} · {wert}', { kurz: kurz(r.route.berechnetAm), wert: r.route.flug ? t('Flugstrecke (Luftlinie, Zeit geschätzt)') : t('Straßenroute (OSRM)') })}</div>
+        <div class="r-fuss">{t('berechnet {kurz} · {wert}', { kurz: kurz(r.route.berechnetAm), wert: routeQuelleText(r.route) })}</div>
+        {#if pistenVorschlag}
+          <!-- Offline auf Hauptstraßen mit langem Stück Luftlinie: das Pisten-Netz würde es genau rechnen -->
+          <div class="r-pisten">
+            <span>{pistenVorschlag.allrad
+              ? je(`Für 4WD braucht die App das Pisten-Netz ${pistenVorschlag.name}${pistenVorschlag.mb ? ` (${pistenVorschlag.mb} MB)` : ''}, sonst bleibt es bei der Straßenroute.`, `For 4WD the app needs the track network for ${pistenVorschlag.name}${pistenVorschlag.mb ? ` (${pistenVorschlag.mb} MB)` : ''}, otherwise it stays with the road route.`)
+              : je(`Für genaue Offline-Routen abseits der Hauptstraßen: Pisten-Netz ${pistenVorschlag.name} laden${pistenVorschlag.mb ? ` (${pistenVorschlag.mb} MB)` : ''}.`, `For exact offline routes off the main roads: load the track network for ${pistenVorschlag.name}${pistenVorschlag.mb ? ` (${pistenVorschlag.mb} MB)` : ''}.`)}</span>
+            <button class="btn" onclick={pistenJetzt} disabled={!$online || $pistenLaedt[pistenVorschlag.id]}>{$pistenLaedt[pistenVorschlag.id] ? je('lädt …', 'loading …') : $online ? je('Laden', 'Load') : je('braucht Netz', 'needs internet')}</button>
+          </div>
+        {/if}
       {:else if alt}
-        <div class="r-stats"><span class="r-km">🛣️ {r.route.km} km</span><span class="rm-alt">{t('Stopps geändert, wird neu berechnet{wert}', { wert: $online ? '' : t(', sobald Netz da ist') })}</span></div>
+        <div class="r-stats"><span class="r-km">🛣️ {r.route.km} km</span><span class="rm-alt">{t('Stopps geändert, wird neu berechnet{wert}', { wert: $online || $rechnet[r.id] ? '' : t(', sobald Netz da ist') })}</span></div>
+        {#if !$online && pistenVorschlag}
+          <div class="r-pisten"><span>{je(`Offline fand das Hauptstraßen-Netz keinen Weg. Mit dem Pisten-Netz ${pistenVorschlag.name} ginge es, laden lässt es sich mit Netz.`, `Offline, the main road network found no way. The track network for ${pistenVorschlag.name} would work, it loads once you are online.`)}</span></div>
+        {/if}
       {:else if st.filter((s) => s.lat != null).length >= 2}
-        <div class="r-hint">{t('🛣️ etwa {luftlinieKm} km Luftlinie{wert}', { luftlinieKm: luftlinieKm(r.stops), wert: $online ? t(', Straßenroute wird berechnet …') : t('. Echte km und Fahrzeit, sobald Netz da ist.') })}</div>
+        <div class="r-hint">{t('🛣️ etwa {luftlinieKm} km Luftlinie{wert}', { luftlinieKm: luftlinieKm(r.stops), wert: $online ? t(', Straßenroute wird berechnet …') : $rechnet[r.id] ? je(', Route wird offline berechnet …', ', calculating the route offline …') : t('. Echte km und Fahrzeit, sobald Netz da ist.') })}</div>
+        {#if !$online && pistenVorschlag}
+          <div class="r-pisten"><span>{je(`Offline fand das Hauptstraßen-Netz keinen Weg. Mit dem Pisten-Netz ${pistenVorschlag.name} ginge es, laden lässt es sich mit Netz.`, `Offline, the main road network found no way. The track network for ${pistenVorschlag.name} would work, it loads once you are online.`)}</span></div>
+        {/if}
       {/if}
 
       <!-- Fahrtag-Planer: spätestens losfahren, um vor Sonnenuntergang anzukommen -->
@@ -247,7 +299,7 @@
 
       <div class="r-ctrl">
         <button class="btn" onclick={openMaps} disabled={st.length < 2}>{t('📍 In Google Maps öffnen')}</button>
-        <button class="btn" onclick={() => routeRechnen(r)} disabled={!$online || $rechnet[r.id] || st.filter((s) => s.lat != null).length < 2}>
+        <button class="btn" onclick={() => routeRechnen(r)} disabled={(!$online && !gebiet) || $rechnet[r.id] || st.filter((s) => s.lat != null).length < 2}>
           {$rechnet[r.id] ? t('rechnet …') : (r.route ? t('🔄 Neu berechnen') : t('🛣️ Route berechnen'))}
         </button>
         {#if !gerade(r)}
@@ -278,6 +330,10 @@
 <style>
   .re-film { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: calc(14px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
   .re-film input { width: 20px; height: 20px; accent-color: var(--brand); }
+  .re-allrad { align-items: flex-start; padding: 4px 0; }
+  .re-allrad input { flex: none; margin-top: 2px; }
+  .re-allrad span { display: flex; flex-direction: column; gap: 2px; }
+  .re-allrad small { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 500; color: var(--muted); line-height: 1.4; }
   .re { display: flex; flex-wrap: wrap; gap: 18px; }
   .re-haupt { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
   .preview { flex: 0 0 220px; }
@@ -318,6 +374,9 @@
   .re-tipp { margin: 0; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
 
   .route { display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .r-piste { color: var(--warn-text, #b45309); }
+  .r-pisten { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 6px; padding: 8px 10px; border: 1px dashed var(--line-stark); border-radius: 10px; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); font-weight: 600; }
+  .r-pisten span { flex: 1 1 200px; }
   .r-stats { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; color: var(--ink); }
   .r-km { color: var(--brand-text); }
   .r-tank { color: var(--ok-text); } .r-tank.warn { color: var(--danger-text); }
@@ -325,6 +384,9 @@
   .rg-w { margin-top: 4px; }
   .rg-stufe { display: inline-block; font-size: calc(12px * var(--schrift, 1)); font-weight: 800; padding: 1px 7px; border-radius: 8px; }
   .r-fuss { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
+  .r-sperr { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: calc(13px * var(--schrift, 1)); font-weight: 600; color: var(--ink); background: var(--danger-flaeche); border: 1px solid var(--danger-linie); border-radius: 10px; padding: 8px 10px; }
+  .r-sperr span { flex: 1 1 200px; }
+  .r-sperr.umgeht { background: var(--card); border-style: dashed; }
   .rm-alt { color: var(--warn-text); font-weight: 600; font-size: calc(13px * var(--schrift, 1)); }
   .r-hint { font-size: calc(13px * var(--schrift, 1)); color: var(--muted); }
   .r-ctrl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }

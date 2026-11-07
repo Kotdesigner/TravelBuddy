@@ -14,6 +14,7 @@
   import { poiRegionFuer } from './karten-config.js'
   import { online } from './netz.js'
   import { berechneRoute, flugRoute, luftlinieKm, tankAnalyse, stopsSignatur, fahrzeitText } from './routing.js'
+  import { routeQuelleText } from './routen-dienst.js'
   import { warnungenAnRoute } from './warnungen.js'
   import Stepper from './Stepper.svelte'
 
@@ -466,7 +467,7 @@
                   {#each gw as w}<div class="rg-w"><span class="rg-stufe" style="background:{w.farbe};color:{schriftAuf(w.farbe)}">{w.icon} {w.level}</span> {w.titel}</div>{/each}
                 </div>
               {/if}
-              <div class="r-fuss">{t('berechnet {kurz} · {wert}', { kurz: kurz(r.route.berechnetAm), wert: r.route.flug ? t('Flugstrecke (Luftlinie, Zeit geschätzt)') : t('Straßenroute (OSRM)') })}</div>
+              <div class="r-fuss">{t('berechnet {kurz} · {wert}', { kurz: kurz(r.route.berechnetAm), wert: routeQuelleText(r.route) })}</div>
             {:else if veraltet(r)}
               <div class="r-stats">
                 <span class="r-km">🛣️ {r.route.km} km</span>

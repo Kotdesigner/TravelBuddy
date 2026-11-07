@@ -231,6 +231,8 @@
   const APP_ZUSATZ_HINTEN = [
     ['mehr/design', '🎨 ' + t('Design'), je('Hell und Dunkel, Sprache, Schrift, Effekte.', 'Light and dark, language, text, effects.')],
     ['mehr/handbuch', t('📖 Handbuch'), je('Alles zur App zum Nachlesen, auch als PDF.', 'Everything about the app to read, also as PDF.')],
+    // Öffnet das Fenster zum letzten großen Update (keine eigene Seite)
+    ['mehr/updates', je('📋 Updates', '📋 Updates'), je('Was in der letzten Version neu ist.', 'What’s new in the latest version.')],
   ]
   const MEHR_INFO = {
     'mehr/notfall': t('Notrufnummern, nächste Hilfe und dein Standort zum Durchsagen. Geht auch offline.'),
@@ -1314,7 +1316,7 @@
     {:else if ansicht.unter === 'funfacts'}
       <FunFacts />
     {:else if ansicht.unter === 'fehler'}
-      <FehlerMelden version="Basic 1.26" build={buildText} />
+      <FehlerMelden version="Basic 1.27" build={buildText} />
     {:else if ansicht.unter === 'backup'}
       <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
     {:else if ansicht.unter === 'kosten'}
@@ -1353,7 +1355,7 @@
         <h2 class="ml-gruppe"><span aria-hidden="true">{gruppe.icon}</span> {je(...gruppe.titel)}</h2>
         <ul class="mehr-liste">
           {#each gruppe.id === 'app' ? [...APP_ZUSATZ_VORN, ...eintraege, ...APP_ZUSATZ_HINTEN] : eintraege as [pfad, label, info] (pfad)}
-            <li><a href="#/{pfad}" onclick={(e) => { e.preventDefault(); geh(pfad) }}><span class="ml-txt"><b>{label}</b><small>{info ?? MEHR_INFO[pfad]}</small></span><span class="ml-pfeil" aria-hidden="true">›</span></a></li>
+            <li><a href="#/{pfad}" onclick={(e) => { e.preventDefault(); if (pfad === 'mehr/updates') updateOffen = true; else geh(pfad) }}><span class="ml-txt"><b>{label}</b><small>{info ?? MEHR_INFO[pfad]}</small></span><span class="ml-pfeil" aria-hidden="true">›</span></a></li>
           {/each}
         </ul>
       {/each}

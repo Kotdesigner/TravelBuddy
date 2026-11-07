@@ -10,6 +10,7 @@ import { writable, get } from 'svelte/store'
 import { updateReise, userData } from './userdata.js'
 import { zeigeToast } from './toast.js'
 import { berechneRoute, flugRoute, tankAnalyse, stopsSignatur } from './routing.js'
+import { offlineRoute, gebietFuer, pistenStand, pistenLaden, allradBesser } from './routing-offline.js'
 import { tankLuecken, orteAnRoute, wetterPunkte } from './routenhinweise.js'
 import { holeGefahren } from './gefahren.js'
 import { poiRegionFuer } from './karten-config.js'
@@ -35,6 +36,9 @@ export const artVon = (r) => r.art || 'auto'
 // Flug, Bahn und Boot laufen als gerade Linie, nur das Auto bekommt eine Straßenroute
 export const gerade = (r) => ['flug', 'bahn', 'boot'].includes(artVon(r))
 export const artPasst = (r) => !r.route || gerade(r) === !!r.route.flug
+/** Route passt zum 4WD-Schalter (Flüge, Bahn, Boot kennen ihn nicht) */
+export const allradPasst = (r) => !r.route || gerade(r) || !!r.route.allrad === !!r.allrad
+
 export const veraltet = (r) => !!(r.route && r.route.sig !== stopsSignatur(r.stops))
 export const stops = (r) => r.stops || []
 
@@ -76,12 +80,21 @@ export async function routeRechnen(r) {
   }
   setze(rechnet, r.id, true)
   try {
-    const route = await berechneRoute(r.stops)
-    const fuel = await ladeTankstellenFuer(r.stops)
-    const rw = get(reichweite)
-    route.tank = tankAnalyse(route.geometry, fuel, rw, route.km)
-    route.reichweite = rw
-    updateReise(r.id, { route })
+    // Online OSRM. Ohne Netz oder wenn OSRM ausfällt: offline auf dem Straßennetz (V29),
+    // Pisten-Netz zuerst, sonst Hauptstraßen. Findet keins einen Weg, bleibt die Schätzung.
+    let route = null
+    const netzDa = istOnline()
+    if (netzDa) {
+      try { route = await berechneRoute(r.stops) } catch (e) { route = await offlineBerechnen(r); if (!route) throw e }
+      if (r.allrad && !route.offline) {
+        const p = await offlineBerechnen(r)
+        if (p?.quelle === 'pisten' && allradBesser(route, p)) route = { ...p, offline: false, allradWahl: true, osrmKm: route.km }
+      }
+    } else {
+      route = await offlineBerechnen(r)
+      if (!route) { setze(routeMsg, r.id, ohneNetzKeinWeg(r)); return }
+    }
+    await speichereRoute(r, route)
   } catch (e) {
     setze(routeMsg, r.id, fehlerText(e))
   } finally {
@@ -89,13 +102,70 @@ export async function routeRechnen(r) {
   }
 }
 
-export const autoVersucht = new Map() // reise.id -> zuletzt automatisch versuchte Signatur|Art
+/** Route mit Tank-Analyse speichern (gemeinsam für normale Routen und Umleitungen) */
+export async function speichereRoute(r, route, extra = {}) {
+  route.allrad = !!r.allrad
+  const fuel = await ladeTankstellenFuer(r.stops)
+  const rw = get(reichweite)
+  route.tank = tankAnalyse(route.geometry, fuel, rw, route.km)
+  route.reichweite = rw
+  updateReise(r.id, { route, ...extra })
+}
+
+/** Woher die Zahlen einer Route kommen, für die Zeile unter der Route */
+export function routeQuelleText(route) {
+  if (!route) return ''
+  if (route.flug) return t('Flugstrecke (Luftlinie, Zeit geschätzt)')
+  if (route.umleitung) {
+    const netz = route.quelle === 'pisten' ? je('Pisten-Netz', 'track network') : je('Hauptstraßen-Netz', 'main road network')
+    const stand = route.umleitung.stand ? new Date(route.umleitung.stand).toLocaleTimeString(je('de-DE', 'en-AU'), { hour: '2-digit', minute: '2-digit' }) : ''
+    return je(`Umleitung um die Sperrung, berechnet auf dem ${netz}${stand ? ` · Main Roads WA ${stand}` : ''}`, `Detour around the closure, calculated on the ${netz}${stand ? ` · Main Roads WA ${stand}` : ''}`)
+  }
+  if (route.allradWahl) return je(`4WD auf dem Pisten-Netz, kürzer als die Straßenroute von OSRM (${route.osrmKm} km)`, `4WD on the track network, shorter than the OSRM road route (${route.osrmKm} km)`)
+  if (!route.offline) return t('Straßenroute (OSRM)')
+  const netz = (route.quelle === 'pisten' ? je('offline berechnet, Pisten-Netz', 'calculated offline, track network') : je('offline berechnet, Hauptstraßen', 'calculated offline, main roads')) + (route.allrad ? ' · 4WD' : '')
+  const anschluss = route.anschlussKm ? je(` · ${route.anschlussKm} km Luftlinie bis zur Straße`, ` · ${route.anschlussKm} km straight line to the road`) : ''
+  return netz + anschluss + je(' · genau, sobald Netz da ist', ' · exact once you are online')
+}
+
+// Ohne Netz kein Weg zu allen Stopps: sagen, woran es liegt (die bisherige Route bleibt stehen)
+function ohneNetzKeinWeg(r) {
+  const g = gebietFuer(r.stops)
+  const bleibt = r.route ? je(' Die bisherige Route bleibt.', ' The current route stays.') : je(' Echte km und Fahrzeit, sobald Netz da ist.', ' Real km and time once you are online.')
+  if (!g) return je('Ohne Netz gibt es für diese Stopps kein Straßennetz auf dem Gerät.', 'Offline there is no road network on the device for these stops.') + bleibt
+  if (!get(pistenStand)[g]) return je('Ohne Netz fand die App auf den Hauptstraßen keinen Weg zu allen Stopps, einer liegt zu weit abseits. Mit dem Pisten-Netz dieses Gebiets klappt es meist (Plan, Karte, Offline-Routen).', 'Offline, the app found no way to all stops on the main roads, one is too far off. The track network for this area usually works (Plan, Map, Offline routes).') + bleibt
+  return je('Ohne Netz fand die App keinen Weg zu allen Stopps.', 'Offline, the app found no way to all stops.') + bleibt
+}
+
+const istOnline = () => (typeof navigator === 'undefined' ? true : navigator.onLine !== false)
+
+/** Offline-Route auf dem Straßennetz, in der Form von berechneRoute, oder null */
+export async function offlineBerechnen(r) {
+  let res = null
+  try { res = await offlineRoute(r.stops, { meidePiste: !!r.nurBefestigt, allrad: !!r.allrad }) } catch { res = null }
+  if (!res) return null
+  return { ...res.route, quelle: res.quelle, gebiet: res.gebiet, berechnetAm: new Date().toISOString(), sig: stopsSignatur(r.stops) }
+}
+
+export const autoVersucht = new Map() // reise.id -> zuletzt automatisch versuchte Signatur|Art|Netz
 
 /** Verkehrsmittel umstellen → Route neu bestimmen (km, Zeit und Sprit ändern sich). */
 export function setArt(r, art) {
   updateReise(r.id, { art })
   autoVersucht.delete(r.id)
   if ((r.stops || []).filter((x) => x.lat != null).length >= 2) routeRechnen({ ...r, art })
+}
+
+/** 4WD an oder aus: Route neu bestimmen. Beim Einschalten mit Netz das Pisten-Netz des Gebiets laden. */
+export async function setAllrad(r, an) {
+  updateReise(r.id, { allrad: an })
+  autoVersucht.delete(r.id)
+  const neu = { ...r, allrad: an }
+  const g = gebietFuer(r.stops)
+  if (an && g && !get(pistenStand)[g] && istOnline()) {
+    try { await pistenLaden(g); zeigeToast(je('Pisten-Netz für 4WD gespeichert, Routen stimmen jetzt auch offline auf Pisten', 'Track network saved for 4WD, routes on tracks now work offline too'), 'ok') } catch {}
+  }
+  if ((r.stops || []).filter((x) => x.lat != null).length >= 2) routeRechnen(neu)
 }
 
 /** Tank-Warnung bei geänderter Reichweite ohne Neu-Routing aktualisieren. */
@@ -112,12 +182,15 @@ export function autoRouten(rs, online) {
   for (const r of rs) {
     const koord = (r.stops || []).filter((s) => s.lat != null)
     if (koord.length < 2) continue
-    if (!gerade(r) && !online) continue   // Straßenroute braucht Netz, Flug nicht
+    // Straßenroute ohne Netz: nur, wenn ein Offline-Straßennetz das Gebiet kennt (V29)
+    if (!gerade(r) && !online && !gebietFuer(r.stops)) continue
     const sig = stopsSignatur(r.stops)
-    if (r.route && r.route.sig === sig && artPasst(r)) continue
-    if (autoVersucht.get(r.id) === sig + '|' + artVon(r)) continue
+    // Fertig, außer eine Offline-Route und jetzt ist Netz da: dann genau nachrechnen
+    if (r.route && r.route.sig === sig && artPasst(r) && allradPasst(r) && !(online && r.route.offline)) continue
+    const versuch = sig + '|' + artVon(r) + '|' + (online ? 'on' : 'off') + '|' + (r.nurBefestigt ? '2wd' : '') + (r.allrad ? '4wd' : '')
+    if (autoVersucht.get(r.id) === versuch) continue
     if (get(rechnet)[r.id]) continue
-    autoVersucht.set(r.id, sig + '|' + artVon(r))
+    autoVersucht.set(r.id, versuch)
     routeRechnen(r)
   }
 }

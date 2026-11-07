@@ -696,6 +696,8 @@ export function neueReise(vorlage = {}) {
   // V16: ein Abschnitt kann gleich mit Zeitraum entstehen, oder als Idee, die nicht mitzählt
   if (typ === 'route' && vorlage.von) r.von = vorlage.von
   if (typ === 'route' && vorlage.idee) r.idee = true
+  // V29: Routen-Ideen für 4WD kommen mit eingeschaltetem 4WD-Schalter (Pisten wie geplant)
+  if (typ === 'route' && vorlage.allrad) r.allrad = true
   reisen.update((rs) => sortiereReisen([...rs, stempeln(r)]))
   return r.id
 }

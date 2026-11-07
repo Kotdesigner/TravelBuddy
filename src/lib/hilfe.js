@@ -87,4 +87,13 @@ export const HILFE = jeSprache(() => ({
     ],
     teil: 9,
   },
+  // V29: hinter dem ⓘ in der Box Offline-Routen (Plan, Karte)
+  sperrungen: {
+    titel: je('Straßensperrungen umfahren', 'Getting around road closures'),
+    text: [
+      je('Meldet Main Roads WA eine gesperrte Straße, etwa nach einem Unwetter, bei einem überfluteten Floodway oder einer ausgespülten Fahrbahn, sagt die App Bescheid und fragt, ob sie eine Umleitung rechnen soll. Das geht auch ohne Netz, mit dem zuletzt geladenen Stand.', 'When Main Roads WA reports a closed road, for example after a storm, a flooded floodway or a washed out road, the app tells you and asks whether it should calculate a detour. That also works offline, with the last loaded status.'),
+      je('Mit dem Pisten-Netz findet sie mehr Wege drumherum. Beispiel Kununurra → Wyndham bei gesperrtem Victoria Highway: 7 km Umweg statt 766 km auf den Hauptstraßen.', 'With the track network it finds more ways around. Example Kununurra → Wyndham with the Victoria Highway closed: a 7 km detour instead of 766 km on the main roads.'),
+      je('„Nur mit Allrad“ gilt mit dem 4WD-Schalter an der Route als frei. Sperrdaten gibt es für WA. Warnungen zu Feuer, Flut und Zyklon bleiben Hinweise an der Route.', '“4WD only” counts as open with the 4WD switch on the route. Closure data is available for WA. Warnings about fire, flood and cyclones stay as notes on the route.'),
+    ],
+  },
 }))

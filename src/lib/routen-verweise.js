@@ -65,6 +65,7 @@ export const STOPP = {
   'Gascoyne Junction': { etappe: 'gascoyne_junction' }, 'Kennedy Range National Park': { ort: 'kennedy_range_np_temple_gorge' },
   'Mount Augustus': { ort: 'mount_augustus_burringurrah' }, 'Tom Price': { etappe: 'tom_price' }, 'Karijini National Park': { ort: 'karijini_np' },
   'Millstream Chichester National Park': { ort: 'millstream_chichester_np' }, 'Marble Bar': { ort: 'marble_bar_carawine_gorge' },
+  'Karratha': { etappe: 'karratha' },
 }
 
 // Neue Orte, die die Routen nennen und die es noch nicht gibt: kommen nach Steves Freigabe in orte.json.

@@ -1,8 +1,9 @@
-// „Großes Update“: einmal nach dem Update ein Fenster mit dem, was neu ist.
-// Nur für Nutzer, die schon eine ältere Version hatten (Sprache oder Einführung gespeichert).
-// Wer die App zum ersten Mal öffnet, bekommt die Einführung, kein Update-Fenster.
+// „Großes Update“: einmal nach dem Update ein Fenster mit dem, was neu ist (seit 1.26).
+// Nur für Nutzer, die die App schon kannten (Sprache oder Einführung gespeichert). Wer sie zum ersten
+// Mal öffnet, bekommt kein Update-Fenster. Unter Mehr, „Updates“ lässt es sich jederzeit wieder öffnen.
 // Je Gerät in localStorage. Für ein späteres großes Update nur UPDATE_VERSION und die Liste ändern.
-export const UPDATE_VERSION = '1.26'
+export const UPDATE_VERSION = '1.27'
+export const UPDATE_NAME = 'TravelBuddy Basic 1.27'
 export const UPDATE_KEY = 'tb-update-gesehen'
 const SPUREN = ['wa-sprache', 'tb-einfuehrung-v1']
 

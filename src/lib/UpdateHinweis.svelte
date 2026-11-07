@@ -1,20 +1,25 @@
 <script>
-  // Fenster „Großes Update“, erscheint einmal nach dem Update (siehe update-hinweis.js).
+  // Fenster „Großes Update“: einmal nach dem Update (siehe update-hinweis.js) und jederzeit über
+  // Mehr, „Updates“. Oben die Zahlen zur Offline-Berechnung (gemessen 7.11., tests/offline-routing),
+  // darunter was neu ist. Dieselbe Datei in der eigenen App und in der Basic.
   import { je } from './i18n.js'
   import { modal } from './modal.js'
-  import { UPDATE_VERSION, updateGesehen } from './update-hinweis.js'
+  import { UPDATE_NAME, updateGesehen } from './update-hinweis.js'
 
   let { onfertig = () => {}, onhandbuch = null } = $props()
 
+  const ZAHLEN = [
+    [je('0,4 %', '0.4 %'), je('Kilometer auf Asphalt, neben online', 'km on sealed roads, off online')],
+    [je('22 von 22', '22 of 22'), je('Teststrecken gefunden, auch Pisten und Tracks', 'test routes found, tracks too')],
+    [je('0,06 s', '0.06 s'), je('für 4.200 km mit 10 Stopps', 'for 4,200 km with 10 stops')],
+  ]
   const NEU = [
-    ['🗺️', je('Echte Karten überall.', 'Real maps everywhere.'), je('Orte, Routen-Ideen und Wanderungen auf der Offline-Karte mit Grenzen, Highways und Parks. Mit zwei Fingern zoomen, heraus bis ganz Australien.', 'Places, route ideas and hikes on the offline map with borders, highways and parks. Zoom with two fingers, out to all of Australia.')],
-    ['🔢', je('Karte je Gegend.', 'A map for every area.'), je('Nummern wie auf den Kacheln, ein kleines Australien zeigt, wo du gerade bist.', 'Numbers match the tiles, a small Australia shows where you are.')],
-    ['🛣️', je('Routen-Ideen auf echten Straßen.', 'Route ideas on real roads.'), je('Kräftige Farben, Stopps mit Nummer, Orte an der Strecke zum Antippen.', 'Strong colours, numbered stops, places along the way to tap.')],
-    ['🏠', je('Etappenorte.', 'Stopover towns.'), je('Städte zum Tanken, Einkaufen und Übernachten, mit Versorgung, auch an der Ostküste.', 'Towns for fuel, shopping and the night, with supplies, on the East Coast too.')],
-    ['🥾', je('Gut 20 Wander-Ideen.', 'Over 20 hike ideas.'), je('Mit Karte und Sommersperren, für die Wunschliste oder gleich in die Route.', 'With a map and summer closures, for your wish list or straight into a route.')],
-    ['🌗', je('Karten hell oder dunkel.', 'Light or dark maps.'), je('Unter Design, die große Karte auch direkt mit ◐.', 'Under Design, the big map also right on the map with ◐.')],
-    ['📍', je('149 Orte.', '149 places.'), je('Neu sind Hutt Lagoon, der Super Pit und das Space Museum in Carnarvon. Inseln zeigen die Anreise.', 'New: Hutt Lagoon, the Super Pit and the space museum in Carnarvon. Islands show how to get there.')],
-    ['⚡', je('Schneller und genauer.', 'Faster and more accurate.'), je('Ortskacheln bis zu sechsmal so schnell, Kilometer nicht mehr doppelt gezählt, Wetter an der Strecke mit zweitem Dienst.', 'Place tiles up to six times as fast, kilometres no longer counted twice, route weather with a second service.')],
+    ['🛣️', je('Routen ohne Netz, auf echten Straßen.', 'Routes without internet, on real roads.'), je('Die App rechnet selbst, Fahrzeit auf Asphalt im Mittel 0,9 % neben online. Mit Netz übernimmt sie die Online-Werte von selbst.', 'The app calculates by itself, driving time on sealed roads 0.9 % off online on average. Online, it takes over the online values by itself.')],
+    ['🪨', je('Pisten-Netz je Gebiet.', 'Track network per area.'), je('Auch Schotter, Pisten und 4WD-Tracks, bis Steep Point oder Israelite Bay. Laden unter Plan, Karte, Offline-Routen.', 'Gravel, unsealed roads and 4WD tracks too, out to Steep Point or Israelite Bay. Load it under Plan, Map, Offline routes.')],
+    ['🚙', je('4WD-Schalter an der Route.', '4WD switch on the route.'), je('Pisten wie geplant, auch statt der Straßenroute, wenn sie kürzer sind: Mount Augustus bis Tom Price 346 statt 687 km.', 'Tracks as planned, also instead of the road route when shorter: Mount Augustus to Tom Price 346 instead of 687 km.')],
+    ['⛔', je('Sperrungen umfahren.', 'Around road closures.'), je('Meldet Main Roads WA eine gesperrte Straße, etwa nach Unwetter oder bei überflutetem Floodway, fragt die App nach einer Umleitung. Auch ohne Netz.', 'When Main Roads WA reports a closed road, for example after a storm or a flooded floodway, the app offers a detour. Offline too.')],
+    ['🧭', je('Fernstrecken bleiben auf Asphalt.', 'Long drives stay on sealed roads.'), je('Ohne 4WD nimmt die App Pisten nur, wo es nicht anders geht. Die Routen-Idee Nord 3 fährt jetzt wie geplant über Karratha.', 'Without 4WD the app only takes tracks where there is no other way. Route idea North 3 now goes via Karratha as planned.')],
+    ['📋', je('Updates nachlesen.', 'Read the updates.'), je('Was neu ist, steht jetzt immer unter Mehr, Updates.', 'What’s new is now always under More, Updates.')],
   ]
 
   function zu() { updateGesehen(); onfertig() }
@@ -27,11 +32,15 @@
   <div class="uh-kopf">
     <span class="uh-symbol" aria-hidden="true">✨</span>
     <div>
-      <h2 id="uh-titel">{je('Großes Update', 'Big update')}</h2>
-      <p class="uh-ver">TravelBuddy Basic {UPDATE_VERSION}</p>
+      <h2 id="uh-titel">{je('Das größte Update', 'The biggest update')}</h2>
+      <p class="uh-ver">{UPDATE_NAME}</p>
     </div>
   </div>
-  <p class="uh-einl">{je('TravelBuddy hat echte Karten, mehr Orte und ist schneller geworden. Deine Reise, dein Logbuch und deine Orte sind alle noch da.', 'TravelBuddy has real maps, more places and got faster. Your trip, your logbook and your places are all still there.')}</p>
+  <p class="uh-einl">{je('TravelBuddy rechnet deine Routen jetzt auch ohne Netz, auf echten Straßen und fast so genau wie online. Deine Reise, dein Logbuch und deine Orte sind alle noch da.', 'TravelBuddy now calculates your routes without internet too, on real roads and almost as accurately as online. Your trip, your logbook and your places are all still there.')}</p>
+  <div class="uh-zahlen">
+    {#each ZAHLEN as [zahl, was]}<div class="uh-zahl"><b>{zahl}</b><span>{was}</span></div>{/each}
+  </div>
+  <p class="uh-quelle">{je('Gemessen an 22 Strecken mit 19.289 km in WA, um Melbourne und in Queensland.', 'Measured on 22 routes with 19,289 km in WA, around Melbourne and in Queensland.')}</p>
   <ul class="uh-liste">
     {#each NEU as [zeichen, titel, text]}
       <li><span class="uh-z" aria-hidden="true">{zeichen}</span><span><b>{titel}</b> <span class="uh-t">{text}</span></span></li>
@@ -45,14 +54,19 @@
 
 <style>
   .uh-hg { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, 0.6); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); animation: uh-blende 0.2s ease-out; }
-  .uh { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(380px, calc(100% - 28px)); max-height: calc(100dvh - 40px); overflow-y: auto; padding: 18px 18px 16px;
+  .uh { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(400px, calc(100% - 28px)); max-height: calc(100dvh - 40px); overflow-y: auto; padding: 18px 18px 16px;
     border-radius: 18px; border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25); animation: uh-auf 0.24s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .uh-griff { width: 36px; height: 4px; border-radius: 2px; background: var(--line-stark); margin: -6px auto 12px; }
   .uh-kopf { display: flex; align-items: center; gap: 12px; }
   .uh-symbol { width: 44px; height: 44px; flex: none; border-radius: 12px; background: var(--brand); display: flex; align-items: center; justify-content: center; font-size: calc(22px * var(--schrift, 1)); }
   .uh h2 { margin: 0; font-size: calc(19px * var(--schrift, 1)); }
   .uh-ver { margin: 2px 0 0; color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; }
-  .uh-einl { margin: 12px 0; color: var(--muted); font-size: calc(14px * var(--schrift, 1)); line-height: 1.5; }
+  .uh-einl { margin: 12px 0 10px; color: var(--muted); font-size: calc(14px * var(--schrift, 1)); line-height: 1.5; }
+  .uh-zahlen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .uh-zahl { display: flex; flex-direction: column; gap: 3px; padding: 10px 8px; border-radius: 12px; background: var(--flaeche); border: 1px solid var(--line); }
+  .uh-zahl b { font-size: calc(16.5px * var(--schrift, 1)); color: var(--brand-text); line-height: 1.1; white-space: nowrap; }
+  .uh-zahl span { font-size: calc(11.5px * var(--schrift, 1)); color: var(--muted); line-height: 1.3; }
+  .uh-quelle { margin: 6px 0 12px; color: var(--muted); font-size: calc(11.5px * var(--schrift, 1)); line-height: 1.4; }
   .uh-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
   .uh-liste li { display: flex; gap: 10px; align-items: flex-start; font-size: calc(14px * var(--schrift, 1)); line-height: 1.45; }
   .uh-z { flex: none; width: 24px; text-align: center; }

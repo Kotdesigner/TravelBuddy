@@ -210,7 +210,8 @@ export default defineConfig({
         // App-Hülle + Inhalte vorab cachen. pmtiles NICHT vorab (sonst 22 MB Precache) —
         // sie werden SEGMENTWEISE bei Bedarf geholt: die App lädt die ganze Region-Datei
         // (normaler 200-Request) und pmtiles liest lokal daraus. Kein HTTP-Range nötig.
-        globPatterns: ['**/*.{js,css,html,svg,json,png,webp,jpg,jpeg,woff2,pbf,pdf}'],
+        // V29: Hauptstraßen-Netze für Offline-Routen gleich mit (zusammen ca. 4 MB); Pisten-Netze nur auf Wunsch
+        globPatterns: ['**/*.{js,css,html,svg,json,png,webp,jpg,jpeg,woff2,pbf,pdf}', 'routing/*-haupt.bin'],
         // Reisedokumente werden erst NACH dem Bundle kopiert und sind hier ohnehin
         // nicht sichtbar — der Eintrag steht trotzdem da, damit die Absicht klar ist.
         globIgnores: ['**/*.pmtiles', '**/startdaten.json', 'dokumente/**'],

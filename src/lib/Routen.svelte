@@ -5,7 +5,7 @@
   import { geh } from './navigation.js'
   import { get } from 'svelte/store'
   import { schriftAuf } from './kontrast.js'
-  import { stoppsAusRoute } from './routen-ideen.js'
+  import { stoppsAusRoute, brauchtAllrad } from './routen-ideen.js'
   import { je } from './i18n.js'
   import ZuordnenBlatt from './ZuordnenBlatt.svelte'
   import { orteAmTag } from './routen-verweise.js'
@@ -35,7 +35,7 @@
     const { r, stops } = frage
     frage = null
     const etappe = w.etappeId ? get(reisen).find((x) => x.id === w.etappeId) : null
-    const id = neueRoute({ name: w.name, farbe: r.farbe, tage: w.tage, stops, etappeId: w.etappeId, von: w.von, idee: w.idee })
+    const id = neueRoute({ name: w.name, farbe: r.farbe, tage: w.tage, stops, etappeId: w.etappeId, von: w.von, idee: w.idee, allrad: brauchtAllrad(r) })
     meldung = w.idee ? je(`„${w.name}“ ist als Idee gemerkt${etappe ? ` in „${etappe.name}“` : ''}.`, `“${w.name}” is saved as an idea${etappe ? ` in “${etappe.name}”` : ''}.`)
       : je(`„${w.name}“ ist jetzt eine Route${etappe ? ` in „${etappe.name}“` : ''}.`, `“${w.name}” is now a route${etappe ? ` in “${etappe.name}”` : ''}.`)
     clearTimeout(mTimer); mTimer = setTimeout(() => (meldung = ''), 6000)

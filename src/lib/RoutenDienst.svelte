@@ -5,6 +5,8 @@
   import { online } from './netz.js'
   import { etappenMitDatum, ymd, plusTage } from './plan.js'
   import { autoRouten, hinweiseRechnen, autoWetter, reichweite, vorgemerkteIds } from './routen-dienst.js'
+  import { strassenlage } from './strassenlage-dienst.js'
+  import { pruefeSperrungen } from './sperr-dienst.js'
 
   let { orte = [] } = $props()
 
@@ -28,6 +30,16 @@
     clearTimeout(hinweisTimer)
     hinweisTimer = setTimeout(() => hinweiseRechnen(rs, alle, vm), Math.max(400, 3000 - (performance.now() - start)))
     return () => clearTimeout(hinweisTimer)
+  })
+
+  // Sperrungen von Main Roads WA an den Routen: Fenster mit der Frage nach einer Umleitung (V29).
+  // Wartet, bis Routen und Straßenlage ruhig sind, damit nicht während einer Rechnung gefragt wird.
+  let sperrTimer
+  $effect(() => {
+    const rs = $reisen, lage = $strassenlage
+    clearTimeout(sperrTimer)
+    sperrTimer = setTimeout(() => pruefeSperrungen(rs, lage), 2500)
+    return () => clearTimeout(sperrTimer)
   })
 
   // Wetter an der Strecke automatisch für die laufende Etappe (nur online)

@@ -51,7 +51,7 @@ p('Nächste Route nur an einer Stelle berechnet', /naechsteReise\(abfahrtPunkt\(
 p('Linien nebeneinander versetzt', /versatz: \(i - \(gleich\.length - 1\) \/ 2\) \* ABSTAND/.test(ru) && /function versetze\(d, off\)/.test(uk))
 p('Zeile klappt die Route auf und zu, offene Route kräftig', /onclick=\{\(\) => umschalten\(r\.id\)\}/.test(ru) && /<Routen routen=\{\[r\]\} eingebettet \{orteNachId\} onort=/.test(ru) && /an: !offen \|\| offen === r\.id/.test(ru))
 p('Keine lange Liste der Routenkarten mehr unter der Übersicht', !/<Routen routen=\{routenSued\}/.test(app) && /<RoutenUebersicht \{routen\} bind:gruppe=\{routenGruppe\} orte=/.test(app))
-p('Routenkarte eingebettet ohne eigenen Kopf', /eingebettet = false/.test(rt) && /\{#if !eingebettet\}/.test(rt) && /import \{ stoppsAusRoute \} from '\.\/routen-ideen\.js'/.test(rt))
+p('Routenkarte eingebettet ohne eigenen Kopf', /eingebettet = false/.test(rt) && /\{#if !eingebettet\}/.test(rt) && /import \{ stoppsAusRoute(, brauchtAllrad)? \} from '\.\/routen-ideen\.js'/.test(rt))
 
 console.log('\nSelbst zoomen und Fenster')
 p('Keine Zoom-Knöpfe; zwei Finger, Ziehen, Strg und Mausrad', !/uk-zoom|zoomUm\(1\.7\)|zoomUm\(1 \/ 1\.7\)/.test(uk) && /onpointerdown=\{runter\} onpointermove=\{bewege\} onpointerup=\{hoch\}/.test(uk) && /onwheel=\{rad\}/.test(uk) && /if \(!bedienbar \|\| !\(e\.ctrlKey \|\| e\.metaKey\)\) return/.test(uk))

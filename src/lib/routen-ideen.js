@@ -2,9 +2,17 @@
 import { findeKoordinaten } from './wa-orte.js'
 
 // Stopps aus den Google-Maps-Links der Route ziehen (origin, waypoints, destination).
+/** Routen-Idee braucht 4WD (laut 🚙-Angabe: „Echtes 4WD“, „Erfahrenes 4WD“, „Expedition“), nicht bei „2WD + …“ */
+export function brauchtAllrad(r) {
+  const fz = (r.meta || []).find((m) => m.includes('🚙')) || ''
+  return /4WD|Expedition/i.test(fz) && !/🚙\s*(Überwiegend\s*|Mostly\s*)?2WD/i.test(fz)
+}
+
 export function stoppsAusRoute(r) {
   const namen = []
   for (const l of r.links || []) {
+    // Optionale Verlängerungen (z. B. Nord 3: Karijini → Marble Bar) gehören nicht zur Route
+    if (/^\W*Optional/i.test(l.label || '')) continue
     let u
     try { u = new URL(l.url) } catch { continue }
     const p = u.searchParams
