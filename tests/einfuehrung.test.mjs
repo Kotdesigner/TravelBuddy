@@ -2,6 +2,7 @@
 // Ausführen: node tests/einfuehrung.test.mjs
 import fs from 'node:fs'
 import { SCHRITTE, bereinige, sollZeigen, istLeer, KEY } from '../src/lib/einfuehrung.js'
+import { neueRouteAllrad } from '../src/lib/fahrzeug.js'
 import { vorgabeStart, reiseZeitraum } from '../src/lib/plan.js'
 import { fuehreZusammen } from '../src/lib/zusammenfuehren.js'
 
@@ -40,6 +41,7 @@ console.log('\n2  Gespeicherter Stand')
     p('Vorabausgaben statt Buchungen: Ausgabe vorab, Flug oder Zug mit Nummer, Buchungsmail', /\{:else if id === 'ausgaben'\}/.test(ef) && /blatt\('ausgabe'\)/.test(ef) && /blatt\('route', \{ art: 'flug' \}\)/.test(ef) && /blatt\('buchung'\)/.test(ef) && !/\{:else if id === 'buchung'\}/.test(ef))
     p('Bereit für unterwegs: Daten schützen, Home-Bildschirm, Backup, Notfall, Haken für Karten, Pisten-Netz, Routen', /\{:else if id === 'bereit'\}/.test(ef) && /navigator\.storage\?\.persist\?\.\(\)/.test(ef) && /onclick=\{appEinrichten\}/.test(ef) && /seite\('mehr\/backup'\)/.test(ef) && /seite\('mehr\/notfall'\)/.test(ef) && /karten-pmtiles-v2/.test(ef))
     p('Erste Schritte: Vorabausgaben statt Buchung', /id: 'ausgaben'/.test(es) && /oeffneNeu\('ausgabe'\)/.test(es) && !/id: 'buchung'/.test(es))
+    p('4WD-Vorgabe: neue Auto-Route mit 4WD nur bei Vorgabe 4WD, 4WD-Idee immer, Flug nie, 2WD-Idee folgt der Vorgabe', neueRouteAllrad({}, true) === true && neueRouteAllrad({}, false) === false && neueRouteAllrad({ allrad: true }, false) === true && neueRouteAllrad({ art: 'flug' }, true) === false && neueRouteAllrad({ allrad: undefined }, true) === true && /allrad: brauchtAllrad\(r\) \|\| undefined/.test(fs.readFileSync(new URL('../src/lib/Routen.svelte', import.meta.url), 'utf8')))
     p('Erste Schritte auf Heute: „Pisten-Netz laden“, hakt sich ab, sobald eins geladen ist, führt zur aufgeklappten Box', /id: 'pisten'/.test(es) && /fertig: Object\.values\(\$pistenStand\)\.some\(Boolean\)/.test(es) && /localStorage\.setItem\('tb-offline-routen-offen', '1'\); sessionStorage\.setItem\('tb-offline-routen-zeigen', '1'\)/.test(es) && /geh\('plan\/karte'\)/.test(es))
   }
   p('Anlegen, Route, Vorabausgaben und Dokumente sind dabei, Buchungen stecken im Schritt Vorabausgaben', ['start', 'etappe', 'route', 'ausgaben', 'dokumente'].every((s) => SCHRITTE.includes(s)) && !SCHRITTE.includes('buchung'))

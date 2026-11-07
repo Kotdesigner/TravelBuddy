@@ -116,6 +116,19 @@ const fein = []; for (let i = 1; i < gm.geometry.length; i++) { const [a, b] = [
 p('Auch eine fein gezeichnete Linie (wie von OSRM) wird erkannt', sperrungenAnRoute(fein, meld).length === 1)
 p('Mit „befahrbar mit Vorsicht“ (so wie die echten Meldungen heute) kein Fenster', sperrungenAnRoute(gm.geometry, liesStrassen(JSON.parse(lies('tests/daten/mainroads-beispiel.json')))).length === 0)
 
+console.log('\nEchte Sperrung nur einer Fahrbahn (Mitchell Fwy nach Süden, Perth)')
+{
+  const mf = liesStrassen(JSON.parse(lies('tests/daten/mainroads-mitchell-sued.json')))[0]
+  p('Meldung: gesperrt, nur Richtung Süden', mf.rang === 3 && /southbound/i.test(mf.ort))
+  const { kanten } = kantenFuerMeldung(wh, mf)
+  const richtung = kanten.map((e) => { const n = wh.eGeoS[e + 1] - wh.eGeoS[e]; return punkt(wh, e, n + 1)[1] < punkt(wh, e, 0)[1] ? 'S' : 'N' })
+  p('Getrennte Fahrbahnen: nur die Einbahn-Abschnitte nach Süden gesperrt, die Gegenfahrbahn bleibt frei', kanten.length > 0 && richtung.every((r) => r === 'S') && kanten.every((e) => wh.eFlag[e] & 32), richtung.join(''))
+  const st = [{ lat: -31.79, lon: 115.77 }, { lat: -31.95, lon: 115.86 }], nord = [{ lat: -31.95, lon: 115.86 }, { lat: -31.79, lon: 115.77 }]
+  const a = routeOffline(wh, st), u = routeOffline(wh, st, { gesperrt: sperrKanten(wh, [mf]).gesperrt })
+  p('Joondalup → Perth (nach Süden) führt durch, die Umleitung nicht mehr', sperrungenAnRoute(a.geometry, [mf]).length === 1 && u && sperrungenAnRoute(u.geometry, [mf]).length === 0)
+  p('Perth → Joondalup (nach Norden) ist nicht betroffen', sperrungenAnRoute(routeOffline(wh, nord).geometry, [mf]).length === 0)
+}
+
 console.log('\nEinbau in die App')
 const sd = lies('src/lib/sperr-dienst.js'), re = lies('src/lib/RouteEditor.svelte'), rd = lies('src/lib/routen-dienst.js'), wk = lies('src/lib/routing-worker.js'), sp = lies('src/lib/sperrungen.js')
 p('Route wird normal berechnet, die Prüfung läuft danach im Hintergrund (Routen und Straßenlage)', /pruefeSperrungen\(rs, lage\)/.test(lies('src/lib/RoutenDienst.svelte')) && !/sperr/i.test(rd.match(/export async function routeRechnen[\s\S]*?\n\}/)[0]))
