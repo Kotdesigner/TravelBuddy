@@ -24,6 +24,10 @@
   import TiereGesehen from './TiereGesehen.svelte'
   import AusgabenListe from './AusgabenListe.svelte'
   import { bereich } from './format.js'
+  import { untrack } from 'svelte'
+  import { online } from './netz.js'
+  import { buchungen } from './userdata.js'
+  import { ermittle, wendeAn, istAuto, istSchaetzung, punkteVon, punkteSig, bericht, buchungenAm } from './logbuch-auto.js'
 
   let { eintrag, orte = [], reisen = [], warnungen = [], umkreisKm = 150, neuAngelegt = false, immerOffen = false, eintraege = [] } = $props()
 
@@ -293,6 +297,46 @@
   const ziele = $derived(zieleVon(eintrag))
   const filmPunkte = $derived(tagesPunkte(eintrag))
   const zielWeg = (i) => setKopf({ ziele: ziele.filter((_, k) => k !== i), ziel: null })
+  // ---- Automatisch ausfüllen: km, Wetter, Sternenhimmel, Verkehrsmittel (nur leere Felder) ----
+  let autoLaeuft = $state(false)
+  let autoMeldung = $state('')
+  const heuteIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` }
+  const autoSchluessel = $derived(`${eintrag.id}|${eintrag.datum}|${eintrag.bis || ''}|${punkteSig(punkteVon(eintrag))}|${streckenWert}|${abschnittKm}|${$online}`)
+  $effect(() => {
+    autoSchluessel
+    if (!aufgeklappt) return
+    const h = setTimeout(() => untrack(() => autoFuellen(false)), 1200)
+    return () => clearTimeout(h)
+  })
+  async function autoFuellen(erzwingen) {
+    if (autoLaeuft) return
+    const id = eintrag.id
+    const jetzt = get(journal).find((j) => j.id === id)
+    if (!jetzt) return
+    autoLaeuft = true
+    try {
+      const ctx = {
+        online: get(online), heute: heuteIso(),
+        art: etappeHeute ? (etappeHeute.reise.art || 'auto') : null,
+        buchungen: buchungenAm(get(buchungen)?.events, eintragTage(jetzt)),
+        strecke: streckenWert && abschnittKm != null ? { km: abschnittKm, sig: 'strecke|' + streckenWert } : null,
+      }
+      const erg = await ermittle(jetzt, ctx, { erzwingen })
+      const frisch = get(journal).find((j) => j.id === id)
+      const patch = frisch && wendeAn(frisch, erg)
+      if (patch) updateJournalEintrag(id, patch)
+      if (erzwingen) {
+        // Nur nennen, was sich wirklich geändert hat
+        const neu = Object.fromEntries(Object.entries(erg.werte).filter(([f, v]) => patch && JSON.stringify(frisch.felder?.[f]) !== JSON.stringify(v.w) && JSON.stringify(patch.felder[f]) === JSON.stringify(v.w)))
+        const was = bericht(neu)
+        autoMeldung = was ? je(`✓ Ausgefüllt: ${was}`, `✓ Filled in: ${was}`)
+          : !ctx.online ? je('Ohne Netz gibt es kein Wetter. Es kommt von selbst, sobald du wieder Netz hast.', 'No weather without a connection. It arrives by itself once you are back online.')
+          : je('Alles aktuell. Was du selbst eingetragen hast, bleibt.', 'All up to date. What you entered yourself stays.')
+        setTimeout(() => (autoMeldung = ''), 5000)
+      }
+    } catch {} finally { autoLaeuft = false }
+  }
+
   async function loeschen() {
     if (await loeschFrage(t('Diesen Logbuch-Eintrag'), t('Text, Fotos, Sprachnotizen und alle Themen dieses Eintrags. Das lässt sich nicht rückgängig machen.'))) loescheJournalEintrag(eintrag.id)
   }
@@ -335,7 +379,7 @@
 
 {#snippet feld(f)}
   <div class="feld" role="group" aria-labelledby={lblId(f.id)}>
-    <span class="f-label" id={lblId(f.id)}>{f.icon} {f.label}</span>
+    <span class="f-label" id={lblId(f.id)}>{f.icon} {f.label}{#if istAuto(eintrag, f.id)} <span class="f-auto" title={je('Automatisch eingetragen. Du kannst es jederzeit ändern.', 'Filled in automatically. You can change it any time.')}>✨ {istSchaetzung(eintrag, f.id) ? je('ca.', 'approx.') : 'auto'}</span>{/if}</span>
     {#if f.typ === 'text' || f.typ === 'zahl'}
       <div class="f-in">
         <input aria-labelledby={lblId(f.id)} type={f.typ === 'zahl' ? 'number' : 'text'} value={wert(f.id) ?? ''}
@@ -549,6 +593,12 @@
   <div class="quickstats">
     {#each metaModul.felder as f}{@render feld(f)}{/each}
   </div>
+  <div class="auto-zeile">
+    <button class="auto-btn" onclick={() => autoFuellen(true)} disabled={autoLaeuft}>
+      {autoLaeuft ? je('✨ Wird ausgefüllt …', '✨ Filling in …') : je('✨ Automatisch ausfüllen', '✨ Fill in automatically')}
+    </button>
+    <span class="auto-info" role="status">{autoMeldung || je('Kilometer, Wetter, Sternenhimmel und Verkehrsmittel trägt die App selbst ein. Was du änderst, bleibt.', 'The app fills in distance, weather, night sky and transport. What you change stays.')}</span>
+  </div>
 
   {#if streckenWahl.length}
     <label class="k4-strecke">{t('Gefahrene Strecke (für die km)')}
@@ -671,6 +721,14 @@
   .on-quelle { display: block; margin-top: 4px; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-style: italic; }
   .abschnitt-km { font-size: calc(12px * var(--schrift, 1)); font-weight: 800; color: var(--brand-text); }
 
+  .auto-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 8px; }
+  .auto-btn {
+    font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 7px 12px; border-radius: 8px; cursor: pointer; min-height: 36px;
+    border: 1px solid var(--line); background: var(--card); color: var(--brand-text);
+  }
+  .auto-btn:disabled { opacity: .6; cursor: progress; }
+  .auto-info { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); flex: 1 1 200px; min-width: 0; }
+  .f-auto { margin-left: 4px; font-size: calc(10px * var(--schrift, 1)); font-weight: 800; color: var(--brand-text); white-space: nowrap; }
   .lage { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 8px; }
   .lage-btn {
     font-size: calc(12px * var(--schrift, 1)); font-weight: 700; padding: 7px 12px; border-radius: 8px; cursor: pointer;

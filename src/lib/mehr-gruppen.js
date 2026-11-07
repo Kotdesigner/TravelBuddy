@@ -6,7 +6,7 @@ export const GRUPPEN = [
   { id: 'sicherheit', icon: '🛟', titel: ['Sicherheit', 'Safety'], punkte: ['notfall', 'gefahren', 'praxis'] },
   { id: 'unterwegs', icon: '🧭', titel: ['Unterwegs', 'On the road'], punkte: ['buchungen', 'fluege', 'kosten'] },
   { id: 'vorbereitung', icon: '🧳', titel: ['Vorbereitung', 'Preparation'], punkte: ['vorbereitung', 'packliste'] },
-  { id: 'extras', icon: '✨', titel: ['Extras', 'Extras'], punkte: ['teilen', 'musik', 'quiz'] },
+  { id: 'extras', icon: '✨', titel: ['Extras', 'Extras'], punkte: ['funfacts', 'teilen', 'musik', 'quiz'] },
   { id: 'app', icon: '⚙️', titel: ['App', 'App'], punkte: ['statistik'] },
 ]
 

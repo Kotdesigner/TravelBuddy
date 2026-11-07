@@ -5,8 +5,25 @@
   import { je, LOCALE } from './i18n.js'
   import { syncZeiten, schnappschuss } from './userdata.js'
   import SpeicherStand from './SpeicherStand.svelte'
+  import { zeigeToast } from './toast.js'
+  import { autoStand, groesse, setzeAn, ladeStand, sichere, alsDatei, ordnerMoeglich, waehleOrdner, vergissOrdner, ordnerFreigeben, SCHLUSS_STUNDE } from './autosicherung.js'
 
-  let { onBackup = () => {}, onImport = () => {}, onRueckgaengig = null } = $props()
+  let { onBackup = () => {}, onImport = () => {}, onRueckgaengig = null, onImportDatei = null, baueBackup = null, autoPause = false } = $props()
+  ladeStand()
+  const wannMs = (ms) => wann(new Date(ms).toISOString())
+  async function jetztAuto() {
+    if (!baueBackup) return
+    if (!baueBackup()) { zeigeToast(je('Während der Testreise wird nicht automatisch gesichert', 'No automatic backup during the test trip'), 'info'); return }
+    const ok = await sichere(baueBackup, { erzwingen: true })
+    zeigeToast(ok ? je('Automatische Sicherung angelegt', 'Automatic backup created') : je('Sichern hat nicht geklappt', 'Backup did not work'), ok ? 'ok' : 'fehler')
+  }
+  async function zurueckholen(zeit) {
+    const f = await alsDatei(zeit)
+    if (f && onImportDatei) onImportDatei(f)
+  }
+  async function ordnerWaehlen() {
+    try { const n = await waehleOrdner(); zeigeToast(je('Ordner gewählt: ', 'Folder chosen: ') + n, 'ok'); if (baueBackup) sichere(baueBackup, { erzwingen: true }) } catch {}
+  }
 
   const wann = (iso) => {
     if (!iso) return ''
@@ -43,6 +60,40 @@
   </section>
 
   <section class="bi-karte">
+    <h2>🕙 {je('Automatische Sicherung', 'Automatic backup')}</h2>
+    <p>{je('Jeden Tag sichert die App deinen Stand von selbst: um {h} Uhr, wenn sie offen ist, sonst beim nächsten Start gleich im Hintergrund. Die letzten drei Tage bleiben auf diesem Gerät.', 'Every day the app saves your data by itself: at {h}:00 if it is open, otherwise right away in the background the next time you start it. The last three days are kept on this device.').replace('{h}', SCHLUSS_STUNDE)}</p>
+    <label class="bi-schalter"><input type="checkbox" switch checked={$autoStand.an} onchange={(e) => setzeAn(e.currentTarget.checked)} /> {je('Automatisch sichern', 'Back up automatically')}</label>
+    {#if $autoStand.an}
+      {#if $autoStand.liste.length}
+        <ul class="bi-liste">
+          {#each $autoStand.liste as s, i (s.zeit)}
+            <li><span><b>{wannMs(s.zeit)}</b>{#if i === 0} · {je('neueste', 'latest')}{/if}<small>{groesse(s.groesse)}</small></span>
+              {#if onImportDatei}<button class="btn bi-klein" onclick={() => zurueckholen(s.zeit)}>{je('Zurückholen', 'Restore')}</button>{/if}</li>
+          {/each}
+        </ul>
+      {:else}
+        <p class="bi-stand fehlt">{autoPause ? je('Während der Testreise wird nicht automatisch gesichert. Danach geht es von selbst weiter.', 'No automatic backup during the test trip. It continues by itself afterwards.') : je('Noch keine automatische Sicherung. Die erste entsteht in wenigen Sekunden.', 'No automatic backup yet. The first one is made within seconds.')}</p>
+      {/if}
+      {#if $autoStand.fehler === 'speicher'}<p class="bi-stand fehlt">{je('Die letzte automatische Sicherung hat nicht geklappt, vermutlich ist der Speicher voll.', 'The last automatic backup failed, storage is probably full.')}</p>{/if}
+      <button class="btn bi-knopf" onclick={jetztAuto} disabled={$autoStand.laeuft}>{$autoStand.laeuft ? je('Sichert …', 'Saving …') : je('Jetzt automatisch sichern', 'Back up automatically now')}</button>
+      {#if ordnerMoeglich()}
+        <div class="bi-ordner">
+          <p class="bi-leise">{je('Dieser Browser kann die Sicherung zusätzlich als Datei in einen Ordner schreiben, zum Beispiel in einen Cloud-Ordner. Dann liegt sie auch außerhalb der App.', 'This browser can also write the backup as a file into a folder, for example a cloud folder. Then it is kept outside the app too.')}</p>
+          {#if $autoStand.ordner}
+            <p class="bi-stand">{je('Ordner:', 'Folder:')} <b>{$autoStand.ordner}</b></p>
+            {#if $autoStand.ordnerNeu}<p class="bi-stand fehlt">{je('Der Browser möchte den Zugriff auf den Ordner neu bestätigt haben.', 'The browser wants access to the folder confirmed again.')}</p>
+              <button class="btn bi-klein" onclick={() => baueBackup && ordnerFreigeben(baueBackup)}>{je('Zugriff bestätigen', 'Confirm access')}</button>{/if}
+            <div class="bi-reihe"><button class="btn bi-klein" onclick={ordnerWaehlen}>{je('Anderen Ordner wählen', 'Choose another folder')}</button><button class="btn bi-klein" onclick={vergissOrdner}>{je('Ordner entfernen', 'Remove folder')}</button></div>
+          {:else}
+            <button class="btn bi-klein" onclick={ordnerWaehlen}>📁 {je('Ordner für Sicherungen wählen', 'Choose a folder for backups')}</button>
+          {/if}
+        </div>
+      {/if}
+    {/if}
+    <p class="bi-leise">{je('Gegen Verlust oder Wechsel des Geräts hilft nur ein Backup außerhalb: „Backup sichern“ oben, dann per AirDrop, Mail oder in die Cloud.', 'Only a backup kept elsewhere protects against losing or switching the device: use “Save backup” above, then AirDrop, mail or the cloud.')}</p>
+  </section>
+
+  <section class="bi-karte">
     <h2>🔄 {je('Zwischen Geräten abgleichen', 'Sync between devices')}</h2>
     <p>{je('Die Backup-Datei ist auf jedem Gerät gleich: iPhone, Android, Mac, Windows oder Linux, im Browser oder als installierte App. Du kannst also zwischen allen hin und her abgleichen.', 'The backup file is the same on every device: iPhone, Android, Mac, Windows or Linux, in the browser or as an installed app. So you can sync between any of them.')}</p>
     <ol class="bi-schritte">
@@ -72,5 +123,12 @@
   .bi-stand.alt, .bi-stand.fehlt { background: var(--warn-flaeche); color: var(--warn-text); }
   .bi-knopf { align-self: flex-start; min-height: 48px; }
   .bi-reihe { display: flex; flex-wrap: wrap; gap: 8px; }
+  .bi-schalter { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: calc(14.5px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
+  .bi-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .bi-liste li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: calc(14px * var(--schrift, 1)); }
+  .bi-liste li span { display: flex; flex-direction: column; gap: 1px; }
+  .bi-liste small { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); }
+  .bi-klein { min-height: 40px; font-size: calc(13.5px * var(--schrift, 1)); align-self: flex-start; }
+  .bi-ordner { display: flex; flex-direction: column; gap: 6px; padding-top: 6px; border-top: 1px solid var(--line); }
   .bi-schritte { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; font-size: calc(14.5px * var(--schrift, 1)); line-height: 1.5; }
 </style>

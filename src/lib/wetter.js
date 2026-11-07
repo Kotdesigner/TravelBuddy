@@ -12,6 +12,9 @@ const WMO = jeSprache(() => ({
   95: ['⛈️', t('Gewitter')], 96: ['⛈️', t('Gewitter mit Hagel')], 99: ['⛈️', t('Starkes Gewitter')],
 }))
 
+/** Symbol und Text zu einem WMO-Wettercode */
+export const wetterBild = (code) => WMO[code] || ['🌡️', '—']
+
 async function openMeteo(lat, lon) {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
     + `&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,cloud_cover`

@@ -90,6 +90,7 @@
     { id: 'kosten', icon: '💰', label: t('Kosten'), info: t('Wofür, je Etappe und pro Tag') },
     { id: 'vorbereitung', icon: '🧳', label: t('Reisevorbereitung'), info: t('Checkliste, Dokumente, Buchungen') },
     { id: 'packliste', icon: '🎒', label: t('Packliste'), info: t('Zum Abhaken, fürs Outback') },
+    { id: 'funfacts', icon: '💡', label: je('Fun Facts', 'Fun facts'), info: je('Wissenswertes da, wo du bist', 'Facts about where you are') },
     { id: 'teilen', icon: '📤', label: t('Reisebericht teilen'), info: t('Etappen, Routen und Fotos als eine Datei') },
     { id: 'musik', icon: '🎵', label: t('Musik unterwegs'), info: t('Sounds of the Road, Musik aus der Gegend') },
     { id: 'quiz', icon: '🇦🇺', label: t('Australien-Quiz'), info: t('Fragen mit Stufen vom Touri zum Local') },

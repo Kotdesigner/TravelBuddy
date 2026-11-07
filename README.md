@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.21 · built for Western Australia**<br>
+**Version 1.22 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.21-e07b28?style=flat-square" alt="version: 1.21"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.22-e07b28?style=flat-square" alt="version: 1.22"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
-**[✨ What's new in 1.21](#-new-in-version-121)**
+**[✨ What's new in 1.22](#-new-in-version-122)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
@@ -144,12 +144,16 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 💡 New in version 1.22
+
+**Fun facts, a logbook that fills itself in, and a daily backup.** 💡 Fun facts show short facts from Wikipedia about where you are and along your route: on Today for the day’s stop, as a short note while you drive, and on their own page under More → Extras. The app loads them ahead for your planned legs and routes, so they are there offline, and with a connection fresh ones from nearby are added. Tap “Save” and a fact lands in that day’s logbook under “Learned today”. The logbook now fills in what it can work out by itself: the road distance of the day’s route (estimated offline and marked “approx.”), the day’s weather with high, low, rain and wind, how hot it felt with UV and humidity, the night sky with moon and clouds, and the day’s transport from your leg and bookings. Only empty fields are filled, a small ✨ marks them, and anything you change stays yours. TravelBuddy also makes an automatic backup once a day: at 10 pm if the app is open, otherwise right at the next start, quietly in the background. The last three days stay on the device and can be restored under Backup & Import. In Chrome and Edge on a computer it can also write the file into a folder you choose.
+
+<details>
+<summary><b>📜 Earlier versions: 1.21 to 1.1</b></summary>
+
 ## 💾 New in version 1.21
 
 **Backup & Import in one place.** Saving and importing now live together on their own page under More, with a short explanation: what is in the file and what is not, how “Merge” and “Replace” work, how to take your data between iPhone, Android, Mac, Windows or Linux, and when it is worth saving. The page shows your last backup and reminds you after a week. Working connections fold away with a green check: the flight key, Spotify and Last.fm, whose key is now checked when you save it. More is now sorted into groups, the same on the phone, on the computer and in the menu: Safety, On the road, Preparation, Extras and App. Exchange rates load again, after the rate service moved to a new address. At the very bottom, “TravelBuddy” now links to the source code here on GitHub, with a small link to the website below.
-
-<details>
-<summary><b>📜 Earlier versions: 1.20 to 1.1</b></summary>
 
 ## 🛟 New in version 1.20
 
@@ -824,6 +828,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.19:** no more separate desktop downloads, every device installs from the browser
 - [x] **Version 1.20:** a note when saving fails, protected storage, damaged backups are repaired, shorter voice notes
 - [x] **Version 1.21:** Backup & Import on one page, green checks for working connections, More in groups, exchange rates fixed
+- [x] **Version 1.22:** fun facts along the route, a logbook that fills itself in, an automatic daily backup
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -855,10 +860,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.21 · entwickelt für Western Australia**<br>
+**Version 1.22 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.21-e07b28?style=flat-square" alt="version: 1.21"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.22-e07b28?style=flat-square" alt="version: 1.22"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -866,7 +871,7 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
-**[✨ Neu in 1.21](#-neu-in-version-121)**
+**[✨ Neu in 1.22](#-neu-in-version-122)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
@@ -979,12 +984,16 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 💡 Neu in Version 1.22
+
+**Fun Facts, ein Logbuch, das sich selbst ausfüllt, und ein tägliches Backup.** 💡 Fun Facts zeigen kurze Fakten aus Wikipedia zu dem Ort, an dem du bist, und entlang deiner Route: auf Heute zum Stopp des Tages, als kurzer Hinweis beim Fahren und auf einer eigenen Seite unter Mehr → Extras. Für deine geplanten Etappen und Routen lädt die App sie vorab, so sind sie auch ohne Netz da, und mit Netz kommen frische aus der Nähe dazu. Ein Tipp auf „Merken“, und der Fakt steht im Logbuch des Tages unter „Heute gelernt“. Das Logbuch trägt jetzt selbst ein, was sich ableiten lässt: die Straßenkilometer der Tagesstrecke (ohne Netz geschätzt und mit „ca.“ markiert), das Tageswetter mit Höchst- und Tiefstwert, Regen und Wind, die gefühlte Hitze mit UV und Luftfeuchte, den Sternenhimmel mit Mond und Wolken und die Verkehrsmittel des Tages aus Etappe und Buchungen. Gefüllt werden nur leere Felder, ein kleines ✨ zeigt sie an, und was du änderst, bleibt deins. Außerdem sichert TravelBuddy einmal am Tag von selbst: um 22 Uhr, wenn die App offen ist, sonst gleich beim nächsten Start, still im Hintergrund. Die letzten drei Tage bleiben auf dem Gerät und lassen sich unter Backup & Import zurückholen. In Chrome und Edge am Rechner schreibt sie die Datei auf Wunsch auch in einen Ordner.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.21 bis 1.1</b></summary>
+
 ## 💾 Neu in Version 1.21
 
 **Backup & Import an einem Ort.** Sichern und Importieren stehen jetzt zusammen auf einer eigenen Seite unter Mehr, mit kurzer Erklärung: was in der Datei steckt und was nicht, wie „Zusammenführen“ und „Ersetzen“ wirken, wie du deine Daten zwischen iPhone, Android, Mac, Windows oder Linux mitnimmst und wann sich Sichern lohnt. Die Seite zeigt dein letztes Backup und erinnert nach einer Woche daran. Funktionierende Verbindungen klappen mit grünem Haken zu: der Flugschlüssel, Spotify und Last.fm, dessen Schlüssel jetzt beim Speichern geprüft wird. Mehr ist jetzt in Gruppen sortiert, gleich am Handy, am Rechner und im Menü: Sicherheit, Unterwegs, Vorbereitung, Extras und App. Die Wechselkurse laden wieder, nachdem der Kursdienst auf eine neue Adresse umgezogen ist. Ganz unten führt „TravelBuddy“ jetzt zum Quellcode hier auf GitHub, darunter klein ein Link zur Website.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.20 bis 1.1</b></summary>
 
 ## 🛟 Neu in Version 1.20
 
@@ -1627,6 +1636,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.19:** keine eigenen Desktop-Downloads mehr, jedes Gerät richtet die App aus dem Browser ein
 - [x] **Version 1.20:** Hinweis, wenn das Speichern scheitert, geschützter Speicher, beschädigte Sicherungen werden repariert, kürzere Sprachnotizen
 - [x] **Version 1.21:** Backup & Import auf einer Seite, grüne Haken für funktionierende Verbindungen, Mehr in Gruppen, Wechselkurse repariert
+- [x] **Version 1.22:** Fun Facts entlang der Route, ein Logbuch, das sich selbst ausfüllt, ein automatisches tägliches Backup
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

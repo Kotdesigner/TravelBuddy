@@ -5,7 +5,7 @@
 // jedem Start abstürzen. Hier wird nur repariert, was sicher falsch ist, nichts Gültiges ändert sich.
 
 /** Felder, die in der App immer Listen sind */
-export const LISTEN_FELDER = ['stops', 'fotos', 'audios', 'fotoMeta', 'tags', 'sichtungen', 'segmente',
+export const LISTEN_FELDER = ['gelernt', 'stops', 'fotos', 'audios', 'fotoMeta', 'tags', 'sichtungen', 'segmente',
   'bilder', 'tagebuch', 'dateien', 'docs']
 /** Felder, die immer Texte sind */
 const TEXT_FELDER = ['name', 'text', 'notiz', 'bericht', 'beschreibung']

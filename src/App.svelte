@@ -20,6 +20,10 @@
   import { starteFluege } from './lib/flug-dienst.js'
   import Fluege from './lib/Fluege.svelte'
   import BackupImport from './lib/BackupImport.svelte'
+  import FunFacts from './lib/FunFacts.svelte'
+  import FunFactUnterwegs from './lib/FunFactUnterwegs.svelte'
+  import { vorabWennNoetig } from './lib/funfacts.js'
+  import { starteWaechter } from './lib/autosicherung.js'
   import { gruppiere, neueGruppe } from './lib/mehr-gruppen.js'
   import Buchungen from './lib/Buchungen.svelte'
   import Naechte from './lib/Naechte.svelte'
@@ -75,7 +79,7 @@
   import { quizAntworten } from './lib/userdata.js'
   import { auswerten } from './lib/quiz.js'
   import { istReisekalender, leseReisekalender, kalenderInfo, baueAbschnitte } from './lib/reisekalender.js'
-  import { initUserData, userData, exportBackup, leseBackup, saeubereBackup, wendeBackupAn, backupInfo, datenStand, syncZeiten,
+  import { initUserData, userData, exportBackup, baueBackupPayload, leseBackup, saeubereBackup, wendeBackupAn, backupInfo, datenStand, syncZeiten,
     eigeneOrte, updateEigenenOrt, loescheEigenenOrt, gefahrenCache, journal, reisen, reiseBudget, vorabKosten, buchungen, importiereReisekalender,
     vorschauZusammenfuehren, fuehreBackupZusammen, importRueckgaengig, schnappschuss, rettung,
     gesamtStart, reiseTage, berechneKalender, ready } from './lib/userdata.js'
@@ -106,6 +110,20 @@
   import { standort, standortStatus, standortFehler, starteStandort, frageStandortAn, standortHinweis } from './lib/standort.js'
 
   let orte = $state([])
+  // Fun Facts: Sobald die Daten da sind und Netz besteht, einmal am Tag (oder nach einer Routenänderung)
+  // die Fakten für die geplante Route vorab laden. Mit Verzögerung, damit der Start nicht leidet.
+  // Ändert sich die Route (Planung, Import), wird neu geprüft: 8 Sekunden nach der letzten Änderung.
+  // Automatische Sicherung: erst wenn die Daten geladen sind, sonst sicherte sie einen leeren Stand
+  // Während der Testreise nicht sichern: sonst ersetzte die ausgedachte Reise die echte Sicherung des Tages
+  const autoPayload = () => (get(testreiseAn) ? null : baueBackupPayload())
+  $effect(() => { if (laden) return; return starteWaechter(autoPayload) })
+  let funfactsUhr = null
+  $effect(() => {
+    $reisen
+    if (laden || !$online) return
+    clearTimeout(funfactsUhr)
+    funfactsUhr = setTimeout(() => { vorabWennNoetig(get(reisen), { sprache: istEn ? 'en' : 'de' }).catch(() => {}) }, 8000)
+  })
   let routen = $state([])
   let inhalt = $state(null)
   let quizData = $state({ fragen: [], levels: [] })
@@ -188,7 +206,7 @@
     orte: [['orte/sueden', t('Süden')], ['orte/norden', t('Norden')], ['orte/osten', t('Ostküste')], ['orte/meine', t('Meine Orte')], ['orte/routen', t('Routen-Ideen')]],
     logbuch: [['logbuch', je('Einträge', 'Entries')], ['logbuch/lesen', t('Lesen')], ['logbuch/tiere', t('Tierwelt')], ['logbuch/notizen', t('Notizen')]],
     // Dieselben Namen und Zeichen wie im Mehr-Blatt am iPhone und in den Seitentiteln
-    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/buchungen', je('🎫 Buchungen', '🎫 Bookings')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
+    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/buchungen', je('🎫 Buchungen', '🎫 Bookings')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/funfacts', je('💡 Fun Facts', '💡 Fun facts')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
   }
   // V15 (Design B2): Unter Mehr heißt der große Titel wie die Seite, ohne Zeichen davor, statt immer „Mehr“
   const mehrName = $derived(ansicht.tab === 'mehr' && ansicht.unter ? (UNTER.mehr.find(([p]) => p === 'mehr/' + ansicht.unter)?.[1] || '').replace(/^[^\p{L}]+/u, '') : '')
@@ -210,6 +228,7 @@
     'mehr/packliste': t('Zum Abhaken, abgestimmt auf allein mit dem Auto durchs Outback.'),
     'mehr/praxis': t('Was du vorab buchen musst, Permits, Tanken im Norden, Reifen, Buschfeuer.'),
     'mehr/musik': t('Sounds of the Road: Musik aus der Gegend, unterwegs in einer Spotify-Playlist gesammelt.'),
+    'mehr/funfacts': je('Kurze Fakten zu dem Ort, an dem du bist, und entlang deiner Route. Auch offline.', 'Short facts about where you are and along your route. Offline too.'),
     'mehr/teilen': t('Reisebericht als eine Datei für Familie und Freunde. Ohne Buchungen, Kosten und Dokumente.'),
     'mehr/quiz': t('Fragen zu Australien. Mit jeder richtigen Antwort steigst du eine Stufe auf.'),
   }
@@ -821,7 +840,7 @@
   let importLaeuft = $state(false)
   let importBericht = $state(null)
 
-  const herkunftName = (p) => p?.geraet || (backupInfo(p).exportiert ? t('anderem Gerät') : t('Datei'))
+  const herkunftName = (p) => (p?.automatisch ? je('der automatischen Sicherung', 'the automatic backup') : '') || p?.geraet || (backupInfo(p).exportiert ? t('anderem Gerät') : t('Datei'))
 
   async function importZusammenfuehren() {
     if (!importDatei) return
@@ -979,7 +998,7 @@
     <p class="info fehler">{t('Fehler beim Laden: {fehler}', { fehler })}</p>
 
   {:else if ansicht.tab === 'heute'}
-    <Heute warnAnzahl={betroffeneWarnungen.length} sperrAnzahl={strassenZahl.sperrungen} sperrRoute={strassenZahl.sperrungenAufRoute} onneu={oeffneNeu} ontag={(d) => geh('logbuch/tag/' + d)} {geh} />
+    <Heute orte={[...orte, ...$eigeneOrte]} warnAnzahl={betroffeneWarnungen.length} sperrAnzahl={strassenZahl.sperrungen} sperrRoute={strassenZahl.sperrungenAufRoute} onneu={oeffneNeu} ontag={(d) => geh('logbuch/tag/' + d)} {geh} />
     <section class="heute-zahlen" aria-label={t('Zahlen zur Reise')}>
       <button type="button" class="hz-auf" aria-expanded={zahlenOffen} aria-controls="hz-inhalt" onclick={() => (zahlenOffen = !zahlenOffen)}>
         <span class="hz-titel">{t('📊 Zahlen zur Reise')}</span>
@@ -1257,8 +1276,10 @@
       <Buchungen {geh} />
     {:else if ansicht.unter === 'fluege'}
       <Fluege />
+    {:else if ansicht.unter === 'funfacts'}
+      <FunFacts />
     {:else if ansicht.unter === 'backup'}
-      <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} />
+      <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
     {:else if ansicht.unter === 'kosten'}
       <Kosten />
     {:else if ansicht.unter === 'gefahren'}
@@ -1303,6 +1324,7 @@
     {/if}
   {/if}
 </main>
+<FunFactUnterwegs orte={[...orte, ...$eigeneOrte]} />
 
 <footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online besuchen', 'Visit TravelBuddy online')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
 </div>

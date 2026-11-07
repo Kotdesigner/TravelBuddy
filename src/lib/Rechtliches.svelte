@@ -12,11 +12,11 @@
   const fotos = $derived(Object.values($bildNachweis).map((f) => (enNamen[f.id] ? { ...f, name: enNamen[f.id] } : f)).sort((a, b) => a.name.localeCompare(b.name)))
 
   const DIENSTE = [
-    [je('Wetter', 'Weather'), 'Open-Meteo', je('Koordinaten deiner Orte und, wenn du es erlaubst, dein Standort', 'Coordinates of your places and, if you allow it, your location')],
+    [je('Wetter', 'Weather'), 'Open-Meteo', je('Koordinaten deiner Orte und Tagesstrecken im Logbuch und, wenn du es erlaubst, dein Standort', 'Coordinates of your places and logbook day routes and, if you allow it, your location')],
     [je('Wetter, wenn Open-Meteo ausfällt', 'Weather when Open-Meteo is down'), 'MET Norway', je('Koordinaten deiner Orte und, wenn du es erlaubst, dein Standort', 'Coordinates of your places and, if you allow it, your location')],
     [je('Amtliche Warnungen und Straßenlage', 'Official warnings and road conditions'), 'DFES WA, VicEmergency, Queensland Fire Department, Main Roads WA', je('Nur der Abruf, keine Eingaben', 'Only the request, none of your entries')],
-    [je('Straßenrouten', 'Road routes'), 'OSRM', je('Koordinaten deiner Stopps', 'Coordinates of your stops')],
-    [je('Orte suchen und beschreiben', 'Searching and describing places'), 'Photon, Nominatim, Overpass, Wikipedia, Wikidata, Wikimedia Commons', je('Suchbegriffe, Ortsnamen, Koordinaten', 'Search terms, place names, coordinates')],
+    [je('Straßenrouten', 'Road routes'), 'OSRM', je('Koordinaten deiner Stopps und Tagesstrecken im Logbuch', 'Coordinates of your stops and logbook day routes')],
+    [je('Orte suchen und beschreiben, Fun Facts', 'Searching and describing places, fun facts'), 'Photon, Nominatim, Overpass, Wikipedia, Wikidata, Wikimedia Commons', je('Suchbegriffe, Ortsnamen, Koordinaten, für Fun Facts die Koordinaten deiner Route und deines Standorts', 'Search terms, place names, coordinates, for fun facts the coordinates of your route and location')],
     [je('Wechselkurs', 'Exchange rate'), 'Frankfurter', je('Nur der Abruf', 'Only the request')],
     [je('Gelände auf der Karte', 'Terrain on the map'), 'Amazon S3 (Mapzen/AWS)', je('Der sichtbare Kartenausschnitt', 'The visible map area')],
     [je('Flüge, nur mit deinem Schlüssel', 'Flights, only with your key'), je('AeroDataBox über RapidAPI', 'AeroDataBox via RapidAPI'), je('Flugnummer, Datum, dein Schlüssel', 'Flight number, date, your key')],

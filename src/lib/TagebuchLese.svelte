@@ -1,4 +1,5 @@
 <script>
+  import { saubereGelernt } from './funfacts.js'
   import { t, je, LOCALE, tn } from './i18n.js'
   import Ausgabe from './Ausgabe.svelte'
   import { A4_HOCH, htmlBlaetter, sammleDatei } from './ausgabe.js'
@@ -69,7 +70,7 @@
   const wandErzaehlt = (w) => w.status === 'gemacht' || (w.beschreibung || '').trim() || (w.fotos || []).length || w.bewertung
   const tagGilt = (t) => t.journal.length > 0 || t.fotos.length > 0 || (zeige.wanderungen && t.wanderungen.some(wandErzaehlt)) || (zeige.orte && t.ortTage.length > 0)
   // Leere Einträge (angelegt, nie beschrieben) sind keine Tagebuchseite
-  const eintragHatInhalt = (e) => !!((e.text || '').trim() || (e.ort || '').trim() || (e.fotos || []).length || (e.audios || []).length
+  const eintragHatInhalt = (e) => !!((e.text || '').trim() || (e.ort || '').trim() || (e.fotos || []).length || (e.audios || []).length || saubereGelernt(e.gelernt).length
     // V16: Nur Ausgaben (etwa aus der Schnell-Ausgabe) machen noch keine Tagebuchseite
     || Object.entries(e.felder || {}).filter(([k]) => !k.startsWith('kosten_') && k !== 'waehrung').map(([, w]) => w).some((w) => w != null && w !== '' && !(Array.isArray(w) && !w.length) && !(typeof w === 'object' && !Array.isArray(w) && !Object.keys(w).length)))
   const kapitel = $derived.by(() => {
@@ -434,6 +435,7 @@
       ${stats ? `<div class="t-stats">${stats}</div>` : ''}</header>
       ${hatWert(e.text) ? `<p class="t-lead">${esc(e.text)}</p>` : ''}
       ${gal}${fotosDazu}${mod}${(e.ereignisse || []).length ? `<section class="modul"><h3 class="m-titel"><span>⚠️</span> ${esc(je('Erlebt unterwegs', 'On the road'))}</h3>${e.ereignisse.map((x) => `<p class="tn-print">${esc(x.icon)} ${esc(x.level)}: ${esc(x.titel)}</p>`).join('')}</section>` : ''}${notizHTML(verteilung.tag.get(e.datum), t('Notizen dieses Tages'))}
+      ${saubereGelernt(e.gelernt).length ? `<section class="modul"><h3 class="m-titel"><span>💡</span> ${esc(je('Heute gelernt', 'Learned today'))}</h3>${saubereGelernt(e.gelernt).map((g) => `<p class="tn-print">${esc(g.text)}${g.titel ? ` <em>(${esc(g.titel)})</em>` : ''}</p>`).join('')}</section>` : ''}
       ${nachspann}
       ${bil ? `<footer class="t-bilanz">${bil}</footer>` : ''}</article>`
   }
@@ -870,6 +872,12 @@
         {#if bil.length}
           <footer class="t-bilanz">{#each bil as b}<span>{b}</span>{/each}</footer>
         {/if}
+        {/if}
+        {#if saubereGelernt(e.gelernt).length}
+          <section class="modul">
+            <h3 class="m-titel"><span>💡</span> {je('Heute gelernt', 'Learned today')}</h3>
+            <ul class="tn-liste">{#each saubereGelernt(e.gelernt) as g (g.id)}<li><span>{g.text}{#if g.titel} <em class="tl-titel">({g.titel})</em>{/if}</span></li>{/each}</ul>
+          </section>
         {/if}
         {#if e.ereignisse?.length}
           <section class="modul">

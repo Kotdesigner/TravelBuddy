@@ -6,7 +6,7 @@ const lies = (f) => fs.readFileSync(new URL('../src/' + f, import.meta.url), 'ut
 const app = lies('App.svelte'), bi = lies('lib/BackupImport.svelte'), bar = lies('lib/BottomBar.svelte'), sl = lies('lib/Seitenleiste.svelte')
 
 console.log('\nBackup & Import')
-p('Seite eingebunden unter mehr/backup', /ansicht\.unter === 'backup'\}\s*<BackupImport onBackup=\{onExport\} onImport=\{\(\) => importInput\.click\(\)\} onRueckgaengig=\{importZurueck\} \/>/.test(app))
+p('Seite eingebunden unter mehr/backup', /ansicht\.unter === 'backup'\}\s*<BackupImport onBackup=\{onExport\} onImport=\{\(\) => importInput\.click\(\)\} onRueckgaengig=\{importZurueck\} onImportDatei=/.test(app))
 p('Titel „Backup & Import“', /ansicht\.unter === 'backup' \? je\('Backup & Import'/.test(app))
 p('Keine Chip-Reihe auf der Seite (wie Handbuch, Design)', /'design', 'backup'\]\.includes\(ansicht\.unter\)/.test(app))
 p('iPhone-Blatt: ein Knopf statt Backup und Import', /sheetLink\('backup'\)/.test(bar) && !/sheetAktion\(onBackup\)|sheetAktion\(onImport\)/.test(bar))

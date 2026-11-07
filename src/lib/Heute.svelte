@@ -16,6 +16,7 @@
   import FlugKarte from './FlugKarte.svelte'
   import WarnLage from './WarnLage.svelte'
   import FotoLage from './FotoLage.svelte'
+  import FunFactKarte from './FunFactKarte.svelte'
   import { fluege, flugspeicher, uhr } from './flug-dienst.js'
   import { flugImFokus, umstiege, dringendeMeldungen } from './flug.js'
   import { je } from './i18n.js'
@@ -25,7 +26,7 @@
   import { etappeJetzt, wechselZeit, uhrzeitIn } from './buchung.js'
   import { ausgabenVon } from './kosten.js'
   import { stelleAm } from './abschnitte.js'
-  let { warnAnzahl = 0, sperrAnzahl = 0, sperrRoute = 0, onneu = () => {}, ontag = () => {}, geh = () => {} } = $props()
+  let { orte = [], warnAnzahl = 0, sperrAnzahl = 0, sperrRoute = 0, onneu = () => {}, ontag = () => {}, geh = () => {} } = $props()
 
   const heute = $derived($heuteTag)
   const morgen = $derived(plusTage(heute, 1))
@@ -38,6 +39,11 @@
   const fotoOrt = $derived.by(() => {
     const st = (s.etappe?.reise || eintraege.find((e) => e.bis >= heute)?.reise)?.stops?.find((x) => x.lat != null)
     return st ? { lat: st.lat, lon: st.lon, name: st.name } : null
+  })
+  // Fun Facts ohne Standort: erster Stopp mit Koordinaten in den Routen der heutigen Etappe, sonst wie das Foto
+  const faktOrt = $derived.by(() => {
+    for (const r of routenJetzt) { const st = (r.stops || []).find((x) => x?.lat != null); if (st) return { lat: st.lat, lon: st.lon, name: st.name } }
+    return fotoOrt
   })
   const wandAm = (d) => $wanderungen.filter((w) => w.datum === d)
   const heuteGeschrieben = $derived($journal.some((j) => deckt(j, heute)))
@@ -166,6 +172,7 @@
     </button>
   {/if}
   <FotoLage ersatz={fotoOrt} />
+  <FunFactKarte ersatz={faktOrt} {orte} {geh} />
 </section>
 
 <style>
