@@ -1,3 +1,13 @@
+<script module>
+  // Genaue Küste samt Rahmen je Ring: einmal für die ganze App, nicht je Karte neu
+  let feinVersprechen = null
+  const rahmenVon = (r) => r.reduce((b, [lon, lat]) => [Math.min(b[0], lon), Math.min(b[1], lat), Math.max(b[2], lon), Math.max(b[3], lat)], [180, 90, -180, -90])
+  export function ladeFein() {
+    feinVersprechen ??= import('./kueste-fein.js').then((m) => m.LAND_FEIN.map((r) => [r, rahmenVon(r)]))
+    return feinVersprechen
+  }
+</script>
+
 <script>
   // Kleine Übersichtskarte ohne Netz: echte Küstenlinie, Linien (Routen) und Punkte (Orte).
   // Der Ausschnitt passt sich an die hervorgehobenen Punkte und Linien an.
@@ -9,15 +19,14 @@
   import { je } from './i18n.js'
   import { AUS_RINGS } from './geo-australia.js'
 
-  // Einmal geladen, für alle Karten der App
+  // Einmal geladen, für alle Karten der App. Vorschaubilder (bedienbar = false) bleiben bei der groben Küste.
   let fein = $state(null)
-  let feinLaden = null
   onMount(() => {
-    feinLaden ??= import('./kueste-fein.js')
-    feinLaden.then((m) => { fein = m.LAND_FEIN }).catch(() => {})
+    if (!bedienbar) return
+    ladeFein().then((boxen) => { fein = boxen }).catch(() => {})
   })
 
-  let { punkte = [], linien = [], gewaehlt = null, onpunkt = null, onlinie = null, label = '', breite = 320, hoehe = 300, rahmen = 'alles', zoomBeiEnge = false } = $props()
+  let { punkte = [], linien = [], gewaehlt = null, onpunkt = null, onlinie = null, label = '', breite = 320, hoehe = 300, rahmen = 'alles', zoomBeiEnge = false, bedienbar = true } = $props()
   // rahmen: 'alles' = Ausschnitt aus Punkten und Linien, 'punkte' = nur aus den hervorgehobenen Punkten,
   // 'alle-punkte' = immer aus allen Punkten, der Ausschnitt bleibt beim Wählen einer Gegend stehen,
   // 'alle' = immer aus allen Punkten und Linien, auch den grauen
@@ -99,11 +108,15 @@
     if (!manuell) lokal = null
   }
   function runter(e) {
-    if (!svgEl) return
+    if (!svgEl || !bedienbar) return
+    // Erster Finger einer neuen Geste: alte Einträge weg (ein Loslassen außerhalb kam nie an)
+    if (e.isPrimary) zeiger.clear()
     zeiger.set(e.pointerId, zuEinheiten(e))
     gezogen = false
     if (zeiger.size === 1 && !vergroessert && e.pointerType === 'touch') { start = null; return } // ein Finger ungezoomt: Seite scrollen
     const p = [...zeiger.values()]
+    // Beim Zwicken alle Finger festhalten, damit auch ein Loslassen neben der Karte ankommt
+    if (p.length >= 2) for (const id of zeiger.keys()) { try { svgEl.setPointerCapture(id) } catch {} }
     start = { p, tx: 0, ty: 0, k: 1 }
     geste = { tx: 0, ty: 0, k: 1 }
   }
@@ -135,7 +148,7 @@
   }
   // Mausrad nur mit Strg oder Cmd (und Trackpad-Zwicken), sonst scrollt die Seite wie gewohnt
   function rad(e) {
-    if (!(e.ctrlKey || e.metaKey)) return
+    if (!bedienbar || !(e.ctrlKey || e.metaKey)) return
     e.preventDefault()
     const [cx, cy] = zuEinheiten(e)
     zoomUm(Math.exp(-e.deltaY * 0.01), cx, cy)
@@ -225,7 +238,7 @@
 
   // Grobe Ringe außerhalb des Ausschnitts gleich weglassen (Rahmen je Ring vorab)
   const box = (r) => r.reduce((b, [lon, lat]) => [Math.min(b[0], lon), Math.min(b[1], lat), Math.max(b[2], lon), Math.max(b[3], lat)], [180, 90, -180, -90])
-  const feinBoxen = $derived(fein ? fein.map((r) => [r, box(r)]) : null)
+  const feinBoxen = $derived(fein)
   const land = $derived.by(() => {
     const a = ausschnitt, mx = (a.e - a.w) * 0.3, my = (a.n - a.s) * 0.3
     const ringe = feinBoxen ? feinBoxen.filter(([, b]) => b[2] >= a.w - mx && b[0] <= a.e + mx && b[3] >= a.s - my && b[1] <= a.n + my).map(([r]) => r) : AUS_RINGS
@@ -280,11 +293,13 @@
   {/each}
   </g>
 </svg>
+{#if bedienbar}
 <div class="uk-zoom">
   <button onclick={() => zoomUm(1.7)} aria-label={je('Näher heran', 'Zoom in')}>+</button>
   <button onclick={() => zoomUm(1 / 1.7)} disabled={!vergroessert} aria-label={je('Weiter weg', 'Zoom out')}>−</button>
 </div>
-{#if vergroessert}<button class="uk-zurueck" onclick={ganz}>⤢ {je('Ganze Karte', 'Whole map')}</button>{/if}
+{/if}
+{#if bedienbar && vergroessert}<button class="uk-zurueck" onclick={ganz}>⤢ {je('Ganze Karte', 'Whole map')}</button>{/if}
 </div>
 
 <style>

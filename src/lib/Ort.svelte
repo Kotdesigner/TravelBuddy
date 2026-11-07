@@ -12,7 +12,7 @@
   import { istWanderung, istPerle } from './wander-orte.js'
   import { istRoute, abstandZurRoute, ymd as ymdPlan } from './plan.js'
   import { INSELN, ANREISE_ZEICHEN, abfahrtPunkt } from './inseln.js'
-  import { abstandZur, zuordenbar, NAH_KM } from './wander-zuordnung.js'
+  import { naechsteReise } from './wander-zuordnung.js'
   import { norm } from './suche.js'
   import { geh } from './navigation.js'
   import { oeffneNeu } from './neu.js'
@@ -92,16 +92,7 @@
   const routen = $derived(alleReisen.filter(istRoute))
   // Inseln: wie man hinkommt. Nächste eigene Route höchstens NAH_KM entfernt, bei Inseln ab dem Hafen.
   const insel = $derived(INSELN[ort.id] || null)
-  const nahFahrt = $derived.by(() => {
-    const p = abfahrtPunkt(ort)
-    let b = null
-    for (const r of routen) {
-      if (!zuordenbar(r)) continue
-      const a = abstandZur(p, r)
-      if (a && a.km <= NAH_KM && (!b || a.km < b.km)) b = { r, km: a.km }
-    }
-    return b
-  })
+  const nahFahrt = $derived.by(() => { const n = naechsteReise(abfahrtPunkt(ort), routen); return n ? { r: n.reise, km: n.km } : null })
   // V16: nur Fahrten (keine Flüge, Transfers, Bahn) und nur bis 300 km, mit dem Namen der Etappe
   const etappeName = (id) => alleReisen.find((x) => x.id === id)?.name || ''
   // Nur Fahrten, nie Strecken aus Hin- oder Heimreise (etwa „Ab Kiel“)

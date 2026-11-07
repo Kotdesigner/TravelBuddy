@@ -51,7 +51,7 @@
     {#each sichtbar as r (r.id)}
       <li>
         <button class="ru-zeile" id="ru-z-{r.id}" class:aktiv={offen === r.id} aria-expanded={offen === r.id} onclick={() => umschalten(r.id)}>
-          <span class="ru-mini" aria-hidden="true"><UebersichtsKarte linien={[{ id: r.id, farbe: r.farbe, punkte: linieVon[r.id] }]} breite={64} hoehe={54} /></span>
+          <span class="ru-mini" aria-hidden="true"><UebersichtsKarte linien={[{ id: r.id, farbe: r.farbe, punkte: linieVon[r.id] }]} breite={64} hoehe={54} bedienbar={false} /></span>
           <span class="ru-text"><b>{kurzTitel(r.titel)}</b><small>{(r.meta || []).join(' · ')}</small></span>
           <span class="ru-pfeil" class:auf={offen === r.id} aria-hidden="true">›</span>
         </button>

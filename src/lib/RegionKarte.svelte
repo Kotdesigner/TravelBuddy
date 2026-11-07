@@ -6,7 +6,7 @@
   import { tick } from 'svelte'
   import { t, je } from './i18n.js'
   import UebersichtsKarte from './UebersichtsKarte.svelte'
-  import { punkteVon, zuordenbar, abstandZur, NAH_KM } from './wander-zuordnung.js'
+  import { punkteVon, zuordenbar, naechsteReise } from './wander-zuordnung.js'
   import { INSELN, ANREISE_ZEICHEN, abfahrtPunkt } from './inseln.js'
   import { userData } from './userdata.js'
   import { reiseDatum } from './reisedatum.js'
@@ -23,17 +23,7 @@
   const o = $derived(gewaehlt ? orte.find((x) => x.id === gewaehlt) : null)
   const bildVon = (x) => $userData[x.id]?.bilder?.[0] || x.bildData || (x.bild ? '/' + x.bild : null)
   const sonne = $derived(o?.lat != null ? sonnenZeiten(o.lat, o.lon, $reiseDatum) : null)
-  const nah = $derived.by(() => {
-    if (!o) return null
-    const p = abfahrtPunkt(o)
-    let b = null
-    for (const r of reisen) {
-      if (!zuordenbar(r)) continue
-      const a = abstandZur(p, r)
-      if (a && a.km <= NAH_KM && (!b || a.km < b.km)) b = { name: r.name, km: a.km }
-    }
-    return b
-  })
+  const nah = $derived.by(() => { const n = o ? naechsteReise(abfahrtPunkt(o), reisen) : null; return n ? { name: n.reise.name, km: n.km } : null })
   const mapsUrl = (x) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(x.mapsQuery || `${x.lat},${x.lon}`)
 
   async function zurKachel(id, einplanen = false) {

@@ -41,7 +41,7 @@ export function zuViele(schluessel, jetzt = Date.now()) {
 /** Tageszähler im Speicher `store` (Netlify Blobs). Rückgabe: null = darf senden, sonst der Grund.
     Ohne Speicher oder bei einem Fehler im Speicher wird durchgelassen: lieber eine Meldung zu viel
     als eine echte verloren. */
-export async function tagesGrenze(store, wer, jetzt = new Date()) {
+export async function tagesGrenze(store, wer, jetzt = new Date(), { zaehlen = true } = {}) {
   if (!store) return null
   try {
     const tag = jetzt.toISOString().slice(0, 10)
@@ -49,7 +49,9 @@ export async function tagesGrenze(store, wer, jetzt = new Date()) {
     const d = (await store.get(schluessel, { type: 'json' })) || { gesamt: 0, je: {} }
     const pruef = createHash('sha256').update(tag + '|' + wer).digest('hex').slice(0, 16)
     if (d.gesamt >= PRO_TAG) return 'tageslimit'
-    if ((d.je?.[pruef] || 0) >= PRO_TAG_JE_ADRESSE) return 'tageslimit'
+    // Ohne bekannte Adresse nur die Gesamtgrenze, sonst teilten sich alle Unbekannten zehn Meldungen
+    if (wer !== 'unbekannt' && (d.je?.[pruef] || 0) >= PRO_TAG_JE_ADRESSE) return 'tageslimit'
+    if (!zaehlen) return null
     d.gesamt = (d.gesamt || 0) + 1
     d.je = { ...(d.je || {}), [pruef]: (d.je?.[pruef] || 0) + 1 }
     await store.setJSON(schluessel, d)
@@ -131,13 +133,16 @@ export default async function handler(req, context = {}, { f = fetch, env = proc
   // Honigtopf gefüllt: so tun, als wäre alles gut, damit Bots nichts lernen
   if (erg.stumm) return antwort(200, { ok: true })
   if (erg.fehler) return antwort(erg.status, { ok: false, grund: erg.fehler })
-  const grenze = await tagesGrenze(speicher === undefined ? await blobSpeicher() : speicher, wer)
+  // Erst prüfen, gezählt wird nur, was wirklich als Mail rausging
+  const sp = speicher === undefined ? await blobSpeicher() : speicher
+  const grenze = await tagesGrenze(sp, wer, new Date(), { zaehlen: false })
   if (grenze) return antwort(429, { ok: false, grund: grenze })
   try {
     if (!(await schicke(erg.mail, schluessel, f))) return antwort(502, { ok: false, grund: 'mail' })
   } catch {
     return antwort(502, { ok: false, grund: 'mail' })
   }
+  await tagesGrenze(sp, wer)
   return antwort(200, { ok: true })
 }
 
