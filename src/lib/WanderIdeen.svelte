@@ -129,10 +129,10 @@
     {/if}
   </div>
 
-  <div class="wi-chips" role="group" aria-label={je('Gegend', 'Area')}>
-    <button class="wi-chip" class:an={gegend === 'alle'} aria-pressed={gegend === 'alle'} onclick={() => { gegend = 'alle'; auswahl = null }}>{je('Alle', 'All')} <span>{anzahl('alle')}</span></button>
+  <div class="bedien-raster wi-chips" role="group" aria-label={je('Gegend', 'Area')}>
+    <button class="bedien-wahl wi-chip" class:an={gegend === 'alle'} aria-pressed={gegend === 'alle'} onclick={() => { gegend = 'alle'; auswahl = null }}>{je('Alle', 'All')}<span class="bedien-zahl">{anzahl('alle')}</span></button>
     {#each GEGENDEN as g (g.id)}
-      <button class="wi-chip" class:an={gegend === g.id} aria-pressed={gegend === g.id} title={g.unter} onclick={() => { gegend = g.id; auswahl = null }}>{g.titel} <span>{anzahl(g.id)}</span></button>
+      <button class="bedien-wahl wi-chip" class:an={gegend === g.id} aria-pressed={gegend === g.id} title={g.unter} onclick={() => { gegend = g.id; auswahl = null }}><span>{g.titel}</span><span class="bedien-zahl">{anzahl(g.id)}</span></button>
     {/each}
   </div>
 
@@ -189,11 +189,7 @@
   .badge.ok { background: var(--ok-flaeche); color: var(--ok-text); border-color: #b0d8c6; }
   .badge.nah { background: var(--info-flaeche); color: var(--info-text); border-color: var(--info-linie); }
 
-  .wi-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .wi-chip { min-height: 40px; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); font-weight: 700; font-size: calc(13px * var(--schrift, 1)); cursor: pointer; }
-  .wi-chip span { color: var(--muted); font-weight: 600; margin-left: 2px; }
-  .wi-chip.an { background: var(--brand); border-color: var(--brand); color: #fff; }
-  .wi-chip.an span { color: #fff; opacity: 0.85; }
+  .wi-chip { padding-top: 6px; padding-bottom: 6px; line-height: 1.25; }
 
   .wi-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
   .wi-zeile { width: 100%; text-align: left; background: none; border: none; border-top: 1px solid var(--line); padding: 10px 4px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; color: var(--ink); font: inherit; min-height: 44px; }

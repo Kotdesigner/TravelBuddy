@@ -3,7 +3,7 @@
   // Der Ausschnitt passt sich an die hervorgehobenen Punkte und Linien an.
   // Küste: zuerst die grobe (sofort da), dann die genaue aus der Offline-Karte (kueste-fein.js, wird nachgeladen).
   // Liegen hervorgehobene Punkte im ganzen Ausschnitt aufeinander (eng), zoomt die Karte auf sie heran.
-  // punkte: [{ id, lat, lon, an, rot, ring }]   linien: [{ id, farbe, punkte: [[lon, lat]], an, gestrichelt, versatz }]
+  // punkte: [{ id, lat, lon, an, rot, ring, nr }]  nr: Nummer im Punkt, passend zur Nummer auf der Kachel   linien: [{ id, farbe, punkte: [[lon, lat]], an, gestrichelt, versatz }]
   // versatz: Pixel quer zur Fahrtrichtung. Routen auf derselben Straße liegen so nebeneinander statt übereinander.
   import { onMount } from 'svelte'
   import { je } from './i18n.js'
@@ -164,9 +164,11 @@
   const pfad = (d) => d.map(([x, y], i) => (i ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1)).join(' ')
   // Punkte, die fast aufeinanderliegen, ein Stück auseinanderschieben (hervorgehobene zuerst).
   // Ein feiner Strich führt dann von der echten Lage zum Punkt. Höchstens 16 Pixel Versatz.
-  const ABST = 12, WEIT = 16
+  const mitNummern = $derived(punkte.some((p) => p.nr != null))
+  const ABST = $derived(mitNummern ? 20 : 12), WEIT = $derived(mitNummern ? 22 : 16)
   // Häufungen: ab HAUFEN hervorgehobenen Punkten, die enger als HR Pixel um einen ersten liegen, eine Blase mit Zahl
-  const HAUFEN = 4, HR = 16
+  const HAUFEN = 4
+  const HR = $derived(mitNummern ? 12 : 16)
   const haufen = $derived.by(() => {
     const q = punkte.filter((p) => p.an !== false).map((p) => { const [x, y] = xy(p.lon, p.lat); return { p, x, y } }).filter((a) => !raus([a.x, a.y]))
     const frei = new Set(q.map((_, i) => i)), aus = []
@@ -258,7 +260,12 @@
       <g class="uk-punkt" class:aus={p.an === false} class:rot={p.rot} class:gewaehlt={gewaehlt === p.id}
         role="button" tabindex="-1" aria-label={p.label || ''} onclick={() => onpunkt?.(p.id)} onkeydown={(e) => e.key === 'Enter' && onpunkt?.(p.id)}>
         <circle cx={x} cy={y} r="14" class="uk-treffer" />
-        <circle cx={x} cy={y} r={gewaehlt === p.id ? 8 : p.an === false ? 3.5 : 5.5} class="uk-kreis" class:ring={p.ring} />
+        {#if p.nr != null}
+          <circle cx={x} cy={y} r={gewaehlt === p.id ? 11.5 : 9.5} class="uk-kreis uk-nr-kreis" class:ring={p.ring} />
+          <text {x} {y} class="uk-nr" text-anchor="middle" dominant-baseline="central">{p.nr}</text>
+        {:else}
+          <circle cx={x} cy={y} r={gewaehlt === p.id ? 8 : p.an === false ? 3.5 : 5.5} class="uk-kreis" class:ring={p.ring} />
+        {/if}
       </g>
     {/if}
   {/each}
@@ -300,6 +307,8 @@
   .uk-kreis { fill: #c1662f; stroke: var(--card); stroke-width: 2; }
   .uk-punkt.rot .uk-kreis { fill: #c0392b; }
   .uk-punkt.aus .uk-kreis { fill: var(--aus-ink); stroke-width: 1; opacity: 0.6; }
+  .uk-nr { fill: #fff; font-weight: 800; font-size: calc(10.5px * var(--schrift, 1)); pointer-events: none; }
+  .uk-punkt.gewaehlt .uk-nr-kreis { fill: #8a3f16; }
   .uk-strich { stroke: var(--muted); stroke-width: 0.9; opacity: 0.7; }
   .uk-kreis.ring { stroke: var(--ink); stroke-width: 2.5; }
   .uk-punkt.gewaehlt .uk-kreis { stroke: var(--ink); stroke-width: 3; }

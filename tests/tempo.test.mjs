@@ -33,7 +33,7 @@ console.log('\nStart und Kacheln')
 const app = lies('src/App.svelte')
 p('Weltkugel erst bauen, wenn man hinscrollt', /use:beiSicht=\{\(\) => \(reiseKarteAn = true\)\}/.test(app) && /\{#if reiseKarteAn\}/.test(app) && /export function beiSicht/.test(lies('src/lib/motion.js')))
 p('Hinweise an der Route erst 3 Sekunden nach dem Start', /Math\.max\(400, 3000 - \(performance\.now\(\) - start\)\)/.test(lies('src/lib/RoutenDienst.svelte')))
-p('Kacheln außerhalb des Bildschirms nicht vorab zeichnen', /\.region \.grid > article\.card \{ content-visibility: auto;/.test(lies('src/app.css')))
+p('Kacheln außerhalb des Bildschirms nicht vorab zeichnen', /\.or-grid > article\.card \{ content-visibility: auto;/.test(lies('src/app.css')))
 const weit = { route: { geometry: [[150, -33], [151, -34]] }, stops: [] }
 p('Weit entfernte Route ist sofort erledigt', abstandZur({ lat: -31.95, lon: 115.86 }, weit) === null)
 

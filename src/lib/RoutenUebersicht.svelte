@@ -42,9 +42,9 @@
 <div class="ru">
   <UebersichtsKarte {linien} gewaehlt={offen} onlinie={(id) => umschalten(id, true)} label={je('Karte mit allen Routen-Ideen', 'Map of all route ideas')} hoehe={300} rahmen="alle" />
   <div class="ru-legende">{offen ? je('Die offene Route ist hervorgehoben, die anderen grau.', 'The open route is highlighted, the others are grey.') : je('Routen auf derselben Straße liegen nebeneinander. Tippe eine Linie oder Zeile an.', 'Routes on the same road run side by side. Tap a line or a row.')}</div>
-  <div class="ru-chips" role="group" aria-label={je('Gegend', 'Area')}>
+  <div class="bedien-raster ru-chips" role="group" aria-label={je('Gegend', 'Area')}>
     {#each GRUPPEN as [id, name] (id)}
-      <button class="ru-chip" class:an={gruppe === id} aria-pressed={gruppe === id} onclick={() => { gruppe = id; if (offen && !sichtbar.some((r) => r.id === offen)) offen = null }}>{name()} <span>{anzahl(id)}</span></button>
+      <button class="bedien-wahl ru-chip" class:an={gruppe === id} aria-pressed={gruppe === id} onclick={() => { gruppe = id; if (offen && !sichtbar.some((r) => r.id === offen)) offen = null }}>{name()}<span class="bedien-zahl">{anzahl(id)}</span></button>
     {/each}
   </div>
   <ul class="ru-liste">
@@ -66,11 +66,6 @@
 <style>
   .ru { display: flex; flex-direction: column; gap: 8px; margin: 4px 0 16px; }
   .ru-legende { text-align: center; font-size: calc(11.5px * var(--schrift, 1)); color: var(--muted); font-weight: 600; }
-  .ru-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .ru-chip { min-height: 40px; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); font-weight: 700; font-size: calc(13px * var(--schrift, 1)); cursor: pointer; }
-  .ru-chip span { color: var(--muted); font-weight: 600; margin-left: 2px; }
-  .ru-chip.an { background: var(--brand); border-color: var(--brand); color: #fff; }
-  .ru-chip.an span { color: #fff; opacity: 0.85; }
   .ru-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
   .ru-zeile { width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; background: none; border: none; border-top: 1px solid var(--line); padding: 10px 4px; min-height: 64px; cursor: pointer; color: var(--ink); font: inherit; }
   .ru-zeile.aktiv { background: var(--flaeche); border-radius: 8px; }

@@ -4,7 +4,8 @@
   import { dezimal, ZWEI, eur, aud, zahl } from './lib/format.js'
   import Ort from './lib/Ort.svelte'
   import Uebersicht from './lib/Uebersicht.svelte'
-  import OrteUebersicht from './lib/OrteUebersicht.svelte'
+  import OrteGesamtkarte from './lib/OrteGesamtkarte.svelte'
+  import OrteRegionen from './lib/OrteRegionen.svelte'
   import RoutenUebersicht from './lib/RoutenUebersicht.svelte'
   import Kalender from './lib/Kalender.svelte'
   import Praxis from './lib/Praxis.svelte'
@@ -705,10 +706,17 @@
   }
 
   // Gewählte Gegend je Reiter (Orte → Karte und Knöpfe oben)
-  let orteGegend = $state({ sueden: 'alle', norden: 'alle', osten: 'alle' })
+  // Welche Gegenden aufgeklappt sind, je Reiter. Zu Beginn alle zu, das hält die Seite kurz.
+  let orteOffen = $state({ sueden: {}, norden: {}, osten: {} })
+  const regionAuf = (tab, titel) => { orteOffen[tab] = { ...orteOffen[tab], [titel]: true } }
+  // Ring auf der Gesamtkarte: Gegend aufklappen und zu ihrem Balken springen
+  async function zurRegion(tab, titel) {
+    regionAuf(tab, titel)
+    await tick()
+    document.querySelector(`.or-balken[data-region="${CSS.escape(titel)}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
   let routenGruppe = $state('alle')
   let reiseKarteAn = $state(false)
-  const nurGegend = (liste, g) => (g === 'alle' || !liste.some((r) => r.titel === g) ? liste : liste.filter((r) => r.titel === g))
   const sueden = $derived(regionen([...orte, ...$eigeneOrte].filter((o) => o.abschnitt?.startsWith('Süden') && passt(o))))
   const norden = $derived(regionen([...orte, ...$eigeneOrte].filter((o) => o.abschnitt?.startsWith('Norden') && passt(o))))
   // Ostküste: ein Abschnitt wie Süden und Norden.
@@ -1205,31 +1213,16 @@
     {#if treffer.length === 0}
       <p class="info">{t('Keine Orte für diese Filter.')}</p>
     {:else}
-      {#each treffer as r}
-        <section class="region">
-          <div class="region-titel">{t(r.titel)} <span class="anz">{r.orte.length}</span></div>
-          <div class="grid">{#each r.orte as o (o.id)}<Ort ort={o} gefahr={ortGefahren[o.id]} warnung={ortWarnungen[o.id]} />{/each}</div>
-        </section>
-      {/each}
+      <OrteRegionen regionen={treffer} alleOffen mitKarte={false} gefahren={ortGefahren} warnungen={ortWarnungen} />
     {/if}
     {:else if orteUnter === 'norden'}
       <h2 class="abschnitt">{t('Norden: Steep Point, Ningaloo & Pilbara')}</h2>
-      <OrteUebersicht regionen={norden} reisen={reisenOhneIdeen} bind:gegend={orteGegend.norden} />
-      {#each nurGegend(norden, orteGegend.norden) as r}
-        <section class="region">
-          <div class="region-titel">{t(r.titel)} <span class="anz">{r.orte.length}</span></div>
-          <div class="grid">{#each r.orte as o (o.id)}<Ort ort={o} gefahr={ortGefahren[o.id]} warnung={ortWarnungen[o.id]} />{/each}</div>
-        </section>
-      {/each}
+      <OrteGesamtkarte regionen={norden} offen={orteOffen.norden} onwahl={(r) => zurRegion('norden', r)} />
+      <OrteRegionen regionen={norden} bind:offen={orteOffen.norden} reisen={reisenOhneIdeen} gefahren={ortGefahren} warnungen={ortWarnungen} />
     {:else if orteUnter === 'osten'}
       <h2 class="abschnitt">{t('Ostküste: Melbourne, Cairns & Whitsundays')}</h2>
-      <OrteUebersicht regionen={osten} reisen={reisenOhneIdeen} bind:gegend={orteGegend.osten} />
-      {#each nurGegend(osten, orteGegend.osten) as r}
-        <section class="region">
-          <div class="region-titel">{t(r.titel)} <span class="anz">{r.orte.length}</span></div>
-          <div class="grid">{#each r.orte as o (o.id)}<Ort ort={o} gefahr={ortGefahren[o.id]} warnung={ortWarnungen[o.id]} />{/each}</div>
-        </section>
-      {/each}
+      <OrteGesamtkarte regionen={osten} offen={orteOffen.osten} onwahl={(r) => zurRegion('osten', r)} />
+      <OrteRegionen regionen={osten} bind:offen={orteOffen.osten} reisen={reisenOhneIdeen} gefahren={ortGefahren} warnungen={ortWarnungen} />
     {:else if orteUnter === 'meine'}
       <h2 class="abschnitt">{t('Meine Orte')} <span class="count">{$eigeneOrte.length}</span></h2>
       <VorgemerkteOrte orte={[...orte, ...$eigeneOrte]} {geh} />
@@ -1259,13 +1252,8 @@
       <div class="ueberblick-konzept"><Uebersicht tour={inhalt?.tour} /></div>
     {:else}
       <h2 class="abschnitt">{t('Süden: Margaret River bis jenseits von Esperance')}</h2>
-      <OrteUebersicht regionen={sueden} reisen={reisenOhneIdeen} bind:gegend={orteGegend.sueden} />
-      {#each nurGegend(sueden, orteGegend.sueden) as r}
-        <section class="region">
-          <div class="region-titel">{t(r.titel)} <span class="anz">{r.orte.length}</span></div>
-          <div class="grid">{#each r.orte as o (o.id)}<Ort ort={o} gefahr={ortGefahren[o.id]} warnung={ortWarnungen[o.id]} />{/each}</div>
-        </section>
-      {/each}
+      <OrteGesamtkarte regionen={sueden} offen={orteOffen.sueden} onwahl={(r) => zurRegion('sueden', r)} />
+      <OrteRegionen regionen={sueden} bind:offen={orteOffen.sueden} reisen={reisenOhneIdeen} gefahren={ortGefahren} warnungen={ortWarnungen} />
     {/if}
 
   {:else if ansicht.tab === 'logbuch'}
@@ -1700,15 +1688,6 @@
   .b-item { display: inline-block; background: var(--flaeche-2); border-radius: 8px; padding: 2px 9px; margin: 0 5px 5px 0; color: var(--ink); }
   .b-item b { color: var(--warn-text); }
 
-  .region { margin: 14px 0 26px; }
-  /* Die Leiste bleibt stehen, bis die Region zu Ende ist. Dann schiebt die nächste sie weg. */
-  .region-titel {
-    position: sticky; top: var(--kopf-h, 98px); z-index: 31; display: flex; align-items: center; gap: 8px; min-height: 44px; box-sizing: border-box; margin-bottom: 12px; padding: 6px 14px 6px 18px;
-    border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink);
-    font-size: calc(15px * var(--schrift, 1)); font-weight: 800; box-shadow: 0 3px 10px rgba(0, 0, 0, .16);
-  }
-  .region-titel::before { content: ''; position: absolute; left: 8px; top: 11px; bottom: 11px; width: 3px; border-radius: 2px; background: var(--brand); }
-  .region-titel .anz { margin-left: auto; color: var(--muted); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; font-variant-numeric: tabular-nums; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
   .info { color: var(--muted); padding: 40px 0; text-align: center; }
   .fehler { color: var(--danger-text); }
@@ -1745,7 +1724,6 @@
     .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     /* Mit großer Schrift passen zwei Karten nicht mehr nebeneinander (darstellung.js entscheidet) */
     :global(html[data-eine-spalte]) .grid { grid-template-columns: minmax(0, 1fr); }
-    .region-titel { font-size: calc(14px * var(--schrift, 1)); }
     /* Kennzahl-Kacheln: 2 kleine nebeneinander, große (Quiz) volle Breite */
     .cockpit { grid-template-columns: 1fr 1fr; }
     .fb-grid { grid-template-columns: 1fr 1fr; }

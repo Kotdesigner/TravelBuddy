@@ -64,7 +64,8 @@
     setTimeout(() => (holMsg = ''), 3500)
   }
 
-  let { ort, gefahr = null, warnung = null } = $props()
+  // nummer: dieselbe Nummer wie der Punkt auf der Karte der Gegend
+  let { ort, gefahr = null, warnung = null, nummer = null } = $props()
   let textAuf = $state(false)
   let saisonAuf = $state(false)
   // Kurze Beschreibungen brauchen keinen Aufklapper — sonst steht unter jedem
@@ -241,7 +242,7 @@
          werden sie dort zu einer Reihe am unteren Bildrand. Reihenfolge im Markup =
          Wichtigkeit: Gefahr zuerst. `.lang` sind die Wortteile, die auf dem Handy
          wegfallen — die volle Auskunft steht weiterhin im title. -->
-    <h3 class="name">{#if vorgemerkt}<span class="vm-stern" title={je('vorgemerkt', 'saved for later')}>⭐ </span>{/if}{ort.anzeigeName || ort.name}</h3>
+    <h3 class="name">{#if nummer != null}<span class="ort-nr" aria-label={je(`Nummer ${nummer} auf der Karte`, `Number ${nummer} on the map`)}>{nummer}</span>{/if}{#if vorgemerkt}<span class="vm-stern" title={je('vorgemerkt', 'saved for later')}>⭐ </span>{/if}{ort.anzeigeName || ort.name}</h3>
     <div class="marken">
       {#if warnung}
         <span class="warn" style="background:{warnung.farbe};color:{schriftAuf(warnung.farbe)}" title="{warnung.titel}{warnung.km > 1 ? ', ' + t('{km} km entfernt', { km: Math.round(warnung.km) }) : ''}">
@@ -427,6 +428,7 @@
 <style>
   .in-route.vm { color: var(--brand-text); }
   .vm-stern { font-size: 0.9em; }
+  .ort-nr { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 5px; margin-right: 6px; border-radius: 11px; background: #c1662f; color: #fff; border: 2px solid #fff; font-size: calc(12px * var(--schrift, 1)); font-weight: 800; vertical-align: 2px; text-shadow: none; }
   .anreise { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--info-text); }
   .nah-route { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--brand-text); }
   .in-route { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--ok-text); }

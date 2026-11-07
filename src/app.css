@@ -412,4 +412,4 @@ article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 
 
 /* Ortskacheln außerhalb des Bildschirms nicht vorab zeichnen: spart am iPhone beim Aufbau und Scrollen
    (der Platz bleibt reserviert, damit die Seite nicht springt) */
-.region .grid > article.card { content-visibility: auto; contain-intrinsic-size: auto 460px; }
+.or-grid > article.card { content-visibility: auto; contain-intrinsic-size: auto 460px; }
