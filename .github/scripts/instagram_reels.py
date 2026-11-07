@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Fetches the latest Instagram reels of the TravelBuddy account and writes them
-into the website branch (gh-pages): reels.json plus one thumbnail per reel.
+"""Fetches the latest Instagram reels of the TravelBuddy account and adds them to
+the website branch (gh-pages): reels.json plus one thumbnail per reel. Reels that
+are already listed stay, so the website shows every reel, not just the newest.
+To take a reel off the website, delete its entry from reels.json on gh-pages.
 
 The access token comes only from the environment (GitHub secret IG_TOKEN).
 It is never written to the website or printed in the log.
 """
 import json, os, re, sys, urllib.error, urllib.parse, urllib.request
-from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 API = "https://graph.instagram.com"
 FIELDS = "id,caption,media_type,media_product_type,permalink,thumbnail_url,timestamp"
-KEEP = 6
+KEEP = 300  # upper limit for the whole list on the website
 PERMALINK = re.compile(r"^https://www\.instagram\.com/(reel|p)/[\w-]+/?$")
 
 
@@ -60,10 +61,17 @@ def write(site, data):
     items = [m for m in data.get("data", [])
              if m.get("media_type") == "VIDEO" and PERMALINK.match(m.get("permalink", ""))]
     items.sort(key=lambda m: m.get("timestamp", ""), reverse=True)
-    items = items[:KEEP]
 
     folder = site / "reels"
     folder.mkdir(exist_ok=True)
+    try:
+        before = json.loads((site / "reels.json").read_text())
+    except Exception:
+        before = []
+    if not isinstance(before, list):
+        before = []
+    old_thumb = {r.get("permalink", "").rstrip("/"): r.get("thumb", "")
+                 for r in before if isinstance(r, dict)}
     reels, keep_files = [], {".gitkeep"}
     for m in items:
         mid = re.sub(r"\D", "", m["id"])
@@ -76,26 +84,26 @@ def write(site, data):
                 target.write_bytes(get(m["thumbnail_url"]))
             except Exception as e:
                 print(f"thumbnail for {mid} failed: {type(e).__name__}")
+        thumb = f"reels/{name}" if target.exists() else ""
+        prev = old_thumb.get(m["permalink"].rstrip("/"), "")
+        if not thumb and prev.startswith("reels/") and (site / prev).exists():
+            thumb = prev  # keep the cover we already have
+            keep_files.add(prev[len("reels/"):])
         reels.append({
             "id": mid,
             "permalink": m["permalink"],
             "caption": (m.get("caption") or "").strip()[:200],
             "timestamp": m.get("timestamp", ""),
-            "thumb": f"reels/{name}" if target.exists() else "",
+            "thumb": thumb,
         })
-    # Behold (free plan) refreshes once a day. A reel added to reels.json by hand
-    # stays until the feed has it, as long as it is newer than the feed and
-    # younger than three days. Matching is by permalink, so it is never doubled.
-    try:
-        before = json.loads((site / "reels.json").read_text())
-    except Exception:
-        before = []
+    # The feed only has the newest posts (Behold free plan: 6), so every reel that
+    # is already listed stays. A feed entry replaces an old one with the same
+    # permalink, so a reel added by hand is never doubled.
     seen = {r["permalink"].rstrip("/") for r in reels}
-    floor = max(reels[0]["timestamp"] if reels else "",
-                (datetime.now(timezone.utc) - timedelta(days=3)).strftime("%Y-%m-%dT%H:%M:%S+0000"))
-    for r in before if isinstance(before, list) else []:
-        link = r.get("permalink", "")
-        if PERMALINK.match(link) and link.rstrip("/") not in seen and r.get("timestamp", "") > floor:
+    for r in before:
+        link = r.get("permalink", "") if isinstance(r, dict) else ""
+        if PERMALINK.match(link) and link.rstrip("/") not in seen:
+            seen.add(link.rstrip("/"))
             reels.append(r)
             if r.get("thumb", "").startswith("reels/"):
                 keep_files.add(r["thumb"][len("reels/"):])
