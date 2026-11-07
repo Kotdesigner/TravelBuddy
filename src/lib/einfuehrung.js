@@ -3,8 +3,9 @@
 import { writable } from 'svelte/store'
 
 export const KEY = 'tb-einfuehrung-v1'
-// 'routen' (1.27): gleich nach dem Kartenmaterial, Offline-Routen und Pisten-Netz, damit es nicht untergeht
-export const SCHRITTE = ['willkommen', 'routen', 'start', 'begriffe', 'etappe', 'buchung', 'dokumente', 'orte', 'logbuch', 'sichern']
+// 1.27: Reihenfolge nach „Was baut worauf auf“: erst Aussehen und Datum, dann Fahrzeug und Netze, dann
+// Etappe (mit den Begriffen) und Route, dann das Geld, zuletzt Tagebuch und der Check „Bereit für unterwegs?“
+export const SCHRITTE = ['willkommen', 'design', 'start', 'fahrzeug', 'routen', 'etappe', 'route', 'ausgaben', 'dokumente', 'orte', 'logbuch', 'bereit']
 
 /** Gespeicherten Stand prüfen: { schritt, fertig } oder null (noch nie gestartet). */
 export function bereinige(roh) {

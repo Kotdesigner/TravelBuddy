@@ -2,7 +2,7 @@
   // V18: Erste Schritte auf Heute. Sechs Schritte, die eine Reise rund machen (1.27 mit Pisten-Netz). Jeder hakt sich von selbst
   // ab, sobald es das gibt. Sind alle erledigt oder blendet man die Liste aus, verschwindet sie.
   import { je } from './i18n.js'
-  import { reisen, buchungen, dokumente, journal } from './userdata.js'
+  import { reisen, buchungen, dokumente, journal, vorabKosten } from './userdata.js'
   import { istRoute, istEtappe } from './plan.js'
   import { oeffneNeu } from './neu.js'
   import InfoKnopf from './InfoKnopf.svelte'
@@ -24,8 +24,8 @@
       fertig: $reisen.some((r) => istRoute(r) && (r.stops || []).length >= 2), los: () => oeffneNeu('route') },
     { id: 'pisten', icon: '🪨', titel: je('Pisten-Netz laden', 'Load the track network'), text: je('Routen ohne Netz auch auf Pisten und 4WD-Tracks, unter Plan, Karte', 'Offline routes on unsealed roads and 4WD tracks too, under Plan, Map'),
       fertig: Object.values($pistenStand).some(Boolean), los: zuOfflineRouten },
-    { id: 'buchung', icon: '🎫', titel: je('Eine Buchung eintragen', 'Add a booking'), text: je('Mail einfügen, die Felder füllen sich aus', 'Paste the email, the fields fill in'),
-      fertig: ($buchungen?.events || []).length > 0, los: () => oeffneNeu('buchung') },
+    { id: 'ausgaben', icon: '💶', titel: je('Vorabausgaben eintragen', 'Add expenses before the trip'), text: je('Flug, Camper, Versicherung: Plan und Kosten füllen sich von selbst', 'Flight, camper, insurance: plan and costs fill in by themselves'),
+      fertig: ($vorabKosten || []).length > 0 || ($buchungen?.events || []).length > 0, los: () => oeffneNeu('ausgabe') },
     { id: 'dokumente', icon: '🗂️', titel: je('Dokumente einpflegen', 'Add your documents'), text: je('Pass und Visum mit Datei, auf Wunsch gesperrt', 'Passport and visa with their file, locked if you like'),
       fertig: $dokumente.length > 0, los: () => geh('mehr/vorbereitung') },
     { id: 'tag', icon: '📖', titel: je('Den ersten Tag schreiben', 'Write your first day'), text: je('Daraus wird später dein Tagebuch', 'This becomes your journal later'),

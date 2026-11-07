@@ -47,7 +47,7 @@
   let rName = $state('')
   let rEtappe = $state('')
   let rStops = $state(vorlage.stops || [])
-  let rArt = $state('auto')
+  let rArt = $state(vorlage.art || 'auto')   // 1.27: Einführung öffnet gleich „Flug“
   let rGesetzt = false   // nur einmal vorbelegen, damit „keine Etappe“ wählbar bleibt
   $effect(() => {
     if (rGesetzt || rEtappe || !eintraege.length) return

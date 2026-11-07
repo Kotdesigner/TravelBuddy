@@ -1,4 +1,5 @@
 // Nutzerdaten-Schicht: offline-first in IndexedDB.
+import { neueRouteAllrad } from './fahrzeug.js'
 import { writable, get } from 'svelte/store'
 import { baueAbschnitte, alsReisen } from './reisekalender.js'
 import { fuehreZusammen, URZEIT as URZEIT_M } from './zusammenfuehren.js'
@@ -697,7 +698,7 @@ export function neueReise(vorlage = {}) {
   if (typ === 'route' && vorlage.von) r.von = vorlage.von
   if (typ === 'route' && vorlage.idee) r.idee = true
   // V29: Routen-Ideen für 4WD kommen mit eingeschaltetem 4WD-Schalter (Pisten wie geplant)
-  if (typ === 'route' && vorlage.allrad) r.allrad = true
+  if (typ === 'route' && neueRouteAllrad(vorlage)) r.allrad = true   // 4WD-Idee oder 4WD als Vorgabe (fahrzeug.js)
   reisen.update((rs) => sortiereReisen([...rs, stempeln(r)]))
   return r.id
 }

@@ -28,13 +28,21 @@ console.log('\n2  Gespeicherter Stand')
   p('unbrauchbar wird „noch nie gestartet“', bereinige(null) === null && bereinige('x') === null)
   p('Schritt wird begrenzt', bereinige({ schritt: 99 }).schritt === SCHRITTE.length - 1 && bereinige({ schritt: -2 }).schritt === 0 && bereinige({ schritt: 'a' }).schritt === 0)
   p('fertig bleibt', bereinige({ schritt: 2, fertig: true }).fertig === true)
-  p('zehn Schritte, vom Willkommen bis zum Sichern, gleich nach dem Willkommen die Offline-Routen', SCHRITTE.length === 10 && SCHRITTE[0] === 'willkommen' && SCHRITTE[1] === 'routen' && SCHRITTE.at(-1) === 'sichern')
+  p('zwölf Schritte in der Reihenfolge von „Was baut worauf auf“: Aussehen, Datum, Fahrzeug, Netze, Etappe, Route, Geld, Tagebuch, Check', SCHRITTE.join() === 'willkommen,design,start,fahrzeug,routen,etappe,route,ausgaben,dokumente,orte,logbuch,bereit')
   {
     const ef = fs.readFileSync(new URL('../src/lib/Einfuehrung.svelte', import.meta.url), 'utf8'), es = fs.readFileSync(new URL('../src/lib/ErsteSchritte.svelte', import.meta.url), 'utf8')
     p('Schritt Offline-Routen: erklärt Hauptstraßen, Pisten-Netz und Sperrungen, lädt das Pisten-Netz je Gebiet direkt', /\{:else if id === 'routen'\}/.test(ef) && /onclick=\{\(\) => pisten\(g\)\}/.test(ef) && /pistenLaden\(g\)/.test(ef) && /Floodway/.test(ef) && /disabled=\{!\$online \|\| \$pistenLaedt\[g\]\}/.test(ef))
+    const hilfe = fs.readFileSync(new URL('../src/lib/hilfe.js', import.meta.url), 'utf8')
+    p('ⓘ „Was baut worauf auf“ gezielt je Schritt: alles beim Willkommen, je ein Teil bei Datum, Fahrzeug, Etappe, Route, Ausgaben, Orte, Logbuch, Bereit', ['aufbau', 'aufbau-datum', 'aufbau-route', 'aufbau-etappe', 'aufbau-ausgaben', 'aufbau-orte', 'aufbau-logbuch', 'aufbau-bereit'].every((id) => ef.includes(`<InfoKnopf id="${id}" />`) && (hilfe.includes(`'${id}': {`) || hilfe.includes(`${id}: {`))) && /Einmal eintragen, überall nutzen/.test(ef))
+    p('Die Kette steht drin: erst Datum, dann Etappe, dann Route und Fahrzeug, dann Geld, zuletzt Tagebuch; WLAN-Hinweis bei Bereit; ein Eintrag, viele Stellen bei den Ausgaben', /erst das Datum, dann die Etappe, dann Route und Fahrzeug, dann das Geld, zuletzt das Tagebuch/.test(hilfe) && /Am besten zu Hause im WLAN/.test(hilfe) && /Ein Eintrag, viele Stellen/.test(hilfe))
+    p('Design am Anfang: Erscheinungsbild, Karten, Schrift', /\{:else if id === 'design'\}/.test(ef) && /setzeTheme\(m\)/.test(ef) && /setzeKarten\(m\)/.test(ef) && /setzeSchrift\(s\.id\)/.test(ef))
+    p('Fahrzeug: Reichweite und 2WD oder 4WD als Vorgabe für neue Routen', /\{:else if id === 'fahrzeug'\}/.test(ef) && /reichweite\.set\(v\)/.test(ef) && /allradVorgabe\.set\(true\)/.test(ef) && /neueRouteAllrad\(vorlage\)/.test(fs.readFileSync(new URL('../src/lib/userdata.js', import.meta.url), 'utf8')))
+    p('Vorabausgaben statt Buchungen: Ausgabe vorab, Flug oder Zug mit Nummer, Buchungsmail', /\{:else if id === 'ausgaben'\}/.test(ef) && /blatt\('ausgabe'\)/.test(ef) && /blatt\('route', \{ art: 'flug' \}\)/.test(ef) && /blatt\('buchung'\)/.test(ef) && !/\{:else if id === 'buchung'\}/.test(ef))
+    p('Bereit für unterwegs: Daten schützen, Home-Bildschirm, Backup, Notfall, Haken für Karten, Pisten-Netz, Routen', /\{:else if id === 'bereit'\}/.test(ef) && /navigator\.storage\?\.persist\?\.\(\)/.test(ef) && /onclick=\{appEinrichten\}/.test(ef) && /seite\('mehr\/backup'\)/.test(ef) && /seite\('mehr\/notfall'\)/.test(ef) && /karten-pmtiles-v2/.test(ef))
+    p('Erste Schritte: Vorabausgaben statt Buchung', /id: 'ausgaben'/.test(es) && /oeffneNeu\('ausgabe'\)/.test(es) && !/id: 'buchung'/.test(es))
     p('Erste Schritte auf Heute: „Pisten-Netz laden“, hakt sich ab, sobald eins geladen ist, führt zur aufgeklappten Box', /id: 'pisten'/.test(es) && /fertig: Object\.values\(\$pistenStand\)\.some\(Boolean\)/.test(es) && /localStorage\.setItem\('tb-offline-routen-offen', '1'\); sessionStorage\.setItem\('tb-offline-routen-zeigen', '1'\)/.test(es) && /geh\('plan\/karte'\)/.test(es))
   }
-  p('Anlegen, Buchung und Dokumente sind dabei', ['start', 'etappe', 'buchung', 'dokumente'].every((s) => SCHRITTE.includes(s)))
+  p('Anlegen, Route, Vorabausgaben und Dokumente sind dabei, Buchungen stecken im Schritt Vorabausgaben', ['start', 'etappe', 'route', 'ausgaben', 'dokumente'].every((s) => SCHRITTE.includes(s)) && !SCHRITTE.includes('buchung'))
   p('je Gerät, nicht im Backup', !fs.readFileSync(wurzel + 'lib/userdata.js', 'utf8').includes(KEY))
 }
 

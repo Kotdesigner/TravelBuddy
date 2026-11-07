@@ -21,6 +21,15 @@
   import { online } from './netz.js'
   import { zeigeToast } from './toast.js'
   import { GEBIETE, pistenStand, pistenLaedt, pistenLaden, pistenPruefen, netzInfo } from './routing-offline.js'
+  import InfoKnopf from './InfoKnopf.svelte'
+  import { theme, setzeTheme } from './theme.js'
+  import { kartenThema, grossThema } from './karten-thema.js'
+  import { darstellung, setzeSchrift, SCHRIFT } from './darstellung.js'
+  import { reichweite } from './routen-dienst.js'
+  import { allradVorgabe } from './fahrzeug.js'
+  import { vorabKosten } from './userdata.js'
+  import { istRoute } from './plan.js'
+  import { appEinrichten } from './install.js'
 
   let { geh = () => {}, anzahlOrte = 0 } = $props()
 
@@ -39,6 +48,25 @@
   const nr = $derived(offen ? offen.schritt + 1 : 0)
   const etappen = $derived($reisen.filter(istEtappe).length)
   const termine = $derived(($buchungen?.events || []).filter((b) => !b.platzhalter).length)
+  // 1.27: Route, Vorabausgaben, Verkehrsmittel, Begriffe zum Aufklappen, Check „Bereit für unterwegs?“
+  const routen = $derived($reisen.filter((r) => istRoute(r) && (r.stops || []).length >= 2 && !['flug', 'bahn', 'boot'].includes(r.art)).length)
+  const verkehr = $derived($reisen.filter((r) => istRoute(r) && ['flug', 'bahn'].includes(r.art)).length)
+  const vorab = $derived(($vorabKosten || []).length)
+  const SCHRIFT_NAME = { klein: t('Klein'), standard: t('Standard'), gross: t('Groß'), sehrgross: t('Sehr groß') }
+  let begriffeAuf = $state(false)
+  let geschuetzt = $state(null), kartenDa = $state(false)
+  $effect(() => {
+    if (id !== 'bereit') return
+    try { navigator.storage?.persisted?.().then((x) => (geschuetzt = x)).catch(() => {}) } catch {}
+    try { caches.open('karten-pmtiles-v2').then((c) => c.keys()).then((k) => (kartenDa = k.length > 0)).catch(() => {}) } catch {}
+    pistenPruefen()
+  })
+  async function schuetzen() {
+    try { geschuetzt = !!(await navigator.storage?.persist?.()) } catch { geschuetzt = false }
+    if (!geschuetzt) zeigeToast(je('Der Browser hat den Schutz noch nicht erteilt. Auf dem Home-Bildschirm klappt es meist von selbst.', 'The browser did not grant protection yet. From the home screen it usually works by itself.'), 'info', 6000)
+  }
+  const kartenThemaWahl = $derived($kartenThema === $grossThema ? $kartenThema : 'auto')
+  function setzeKarten(m) { kartenThema.set(m); grossThema.set(m) }
 
   // Startdatum: das Feld zeigt den gespeicherten Wert (Vorgabe: Erster des nächsten Monats)
   let start = $state('')
@@ -123,6 +151,7 @@
       <h2 id="ef-titel">{t('Willkommen bei TravelBuddy')}</h2>
       <p id="ef-text">{t('Deine Reise-App für Western Australia: Orte, Routen, Plan, Buchungen und Notfall. Und ganz nebenbei entsteht dein Reisetagebuch. Alles bleibt auf deinem Gerät, ohne Konto und ohne Anmeldung, und vieles geht auch offline.')}</p>
       <p class="ef-k">{t('In ein paar Schritten richtest du alles ein. Jeden Schritt kannst du überspringen.')}</p>
+      <p class="ef-leit">{je('Einmal eintragen, überall nutzen: Ein Flug steht danach im Plan, im Kalender und in den Kosten, eine Route liefert Kilometer, Tankstopps und Wetter, und aus deinem Logbuch wird der Reisebericht.', 'Enter it once, use it everywhere: a flight then shows in the plan, the calendar and the costs, a route brings kilometres, fuel stops and weather, and your logbook becomes the travel report.')}<InfoKnopf id="aufbau" /></p>
       <div class="segment ef-sprache" role="group" aria-label={t('Sprache')}>
         {#each [['de', 'Deutsch'], ['en', 'English']] as [s, l]}
           <button class:an={sprache === s} aria-pressed={sprache === s} lang={s} onclick={() => setzeSprache(s)}>{l}</button>
@@ -143,6 +172,48 @@
         <button class="btn-primary ef-los" onclick={weiter}>{t('Los geht’s')}</button>
         <button class="btn ef-test" onclick={testreise}>🧪 {t('Erst mit einer Testreise spielen')}</button>
         <button class="ef-leise" onclick={beenden}>{t('Später')}</button>
+      </div>
+
+    {:else if id === 'design'}
+      <p class="ef-icon" aria-hidden="true">🎨</p>
+      <h2 id="ef-titel">{je('So sieht es für dich gut aus', 'Make it look right for you')}</h2>
+      <p id="ef-text">{je('Hell, dunkel oder wie das Gerät, die Karten passend dazu und die Schrift so groß, wie du sie gut lesen kannst. Alles lässt sich später unter Mehr, Design ändern.', 'Light, dark or like your device, the maps to match and text as large as you read it well. You can change it all later under More, Design.')}</p>
+      <div class="ef-wahl">
+        <span class="ef-f">{je('Erscheinungsbild', 'Appearance')}</span>
+        <div class="segment" role="group" aria-label={je('Erscheinungsbild', 'Appearance')}>
+          {#each [['auto', t('Auto')], ['hell', t('Hell')], ['dunkel', t('Dunkel')]] as [m, l]}<button class:an={$theme === m} aria-pressed={$theme === m} onclick={() => setzeTheme(m)}>{l}</button>{/each}
+        </div>
+        <span class="ef-f">{je('Karten', 'Maps')}</span>
+        <div class="segment" role="group" aria-label={je('Karten', 'Maps')}>
+          {#each [['auto', je('Wie die App', 'Like the app')], ['hell', t('Hell')], ['dunkel', t('Dunkel')]] as [m, l]}<button class:an={kartenThemaWahl === m} aria-pressed={kartenThemaWahl === m} onclick={() => setzeKarten(m)}>{l}</button>{/each}
+        </div>
+        <span class="ef-f">{t('Schrift')}</span>
+        <div class="segment" role="group" aria-label={t('Schriftgröße')}>
+          {#each SCHRIFT as s (s.id)}<button class:an={$darstellung.schrift === s.id} aria-pressed={$darstellung.schrift === s.id} onclick={() => setzeSchrift(s.id)}>{SCHRIFT_NAME[s.id]}</button>{/each}
+        </div>
+      </div>
+      <div class="ef-knoepfe">
+        <button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>
+        <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
+      </div>
+
+    {:else if id === 'fahrzeug'}
+      <p class="ef-icon" aria-hidden="true">🚙</p>
+      <h2 id="ef-titel">{je('Dein Fahrzeug', 'Your vehicle')}<InfoKnopf id="aufbau-route" /></h2>
+      <p id="ef-text">{je('Damit weiß die App später, wo du tanken musst und welche Wege für dich gehen.', 'This tells the app where you need to refuel and which roads work for you.')}</p>
+      <div class="ef-wahl">
+        <span class="ef-f">{je('Reichweite mit einer Tankfüllung', 'Range on one tank')}</span>
+        <Stepper value={$reichweite} min={50} max={2000} step={50} einheit="km" label={je('Reichweite in km', 'Range in km')} onchange={(v) => reichweite.set(v)} />
+        <span class="ef-f">{je('Antrieb', 'Drive')}</span>
+        <div class="segment" role="group" aria-label={je('Antrieb', 'Drive')}>
+          <button class:an={!$allradVorgabe} aria-pressed={!$allradVorgabe} onclick={() => allradVorgabe.set(false)}>🚗 2WD</button>
+          <button class:an={$allradVorgabe} aria-pressed={$allradVorgabe} onclick={() => allradVorgabe.set(true)}>🚙 4WD</button>
+        </div>
+        <p class="ef-k">{$allradVorgabe ? je('4WD: Die App nimmt Pisten und Tracks wie geplant, auch statt der Straßenroute, wenn sie kürzer sind.', '4WD: the app takes tracks as planned, also instead of the road route when shorter.') : je('2WD: Fernstrecken bleiben auf Asphalt, Pisten nur, wo es nicht anders geht.', '2WD: long drives stay on sealed roads, tracks only where there is no other way.')} {je('Gilt für jede neue Route und lässt sich an jeder Route einzeln umstellen.', 'Applies to every new route and can be switched on each route.')}</p>
+      </div>
+      <div class="ef-knoepfe">
+        <button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>
+        <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
       </div>
 
     {:else if id === 'routen'}
@@ -167,7 +238,7 @@
 
     {:else if id === 'start'}
       <p class="ef-icon" aria-hidden="true">📅</p>
-      <h2 id="ef-titel">{t('Wann geht es los, und wie lange?')}</h2>
+      <h2 id="ef-titel">{t('Wann geht es los, und wie lange?')}<InfoKnopf id="aufbau-datum" /></h2>
       <p id="ef-text">{t('Reisebeginn und Dauer deiner Reise. Der Zeitraum steht dann oben im Titelbild, und die App rechnet daraus den Countdown und die Tage deiner Etappen. Beides lässt sich später im Plan ändern.')}</p>
       <div class="ef-zeile">
         <label class="ef-f">{t('Reisebeginn')}<input type="date" bind:value={start} /></label>
@@ -179,10 +250,13 @@
         <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
       </div>
 
-    {:else if id === 'begriffe'}
-      <p class="ef-icon" aria-hidden="true">🧭</p>
-      <h2 id="ef-titel">{je('Drei Begriffe vorab', 'Three terms first')}</h2>
-      <p id="ef-text">{je('Die Etappe gliedert die Reise, der Kalender zeigt sie nach Datum, das Logbuch hält fest, was wirklich passiert ist.', 'A leg structures the trip, the calendar shows it by date, the logbook records what really happened.')}</p>
+    {:else if id === 'etappe'}
+      <p class="ef-icon" aria-hidden="true">🗺️</p>
+      <h2 id="ef-titel">{t('Deine erste Etappe')}<InfoKnopf id="aufbau-etappe" /></h2>
+      <p id="ef-text">{t('Eine Etappe ist ein Abschnitt deiner Reise mit Datum, zum Beispiel „Ankommen in Perth“ für drei Tage oder der Roadtrip mit dem Camper. Daran hängen später Routen, Orte und Buchungen.')}</p>
+      <button type="button" class="ef-leise ef-zh-knopf" aria-expanded={begriffeAuf} onclick={() => (begriffeAuf = !begriffeAuf)}>{begriffeAuf ? je('Drei Begriffe vorab ▴', 'Three terms first ▴') : je('Drei Begriffe vorab ▾', 'Three terms first ▾')}</button>
+      {#if begriffeAuf}
+      <p class="ef-k">{je('Die Etappe gliedert die Reise, der Kalender zeigt sie nach Datum, das Logbuch hält fest, was wirklich passiert ist.', 'A leg structures the trip, the calendar shows it by date, the logbook records what really happened.')}</p>
       <dl class="ef-begriffe">
         <div><svg class="ef-bild" viewBox="0 0 64 48" aria-hidden="true"><path d="M5 34h18" stroke="#c1662f" stroke-width="5" stroke-linecap="round"/><path d="M26 34h16" stroke="#2f7a63" stroke-width="5" stroke-linecap="round"/><path d="M45 34h14" stroke="#2a6fb5" stroke-width="5" stroke-linecap="round"/><circle cx="5" cy="34" r="4" fill="#c1662f"/><circle cx="59" cy="34" r="4" fill="#2a6fb5"/><path d="M34 26c-5-6-7-9-7-12a7 7 0 0 1 14 0c0 3-2 6-7 12Z" fill="#2f7a63"/><circle cx="34" cy="14" r="2.5" fill="#fff"/></svg><span><dt>{je('Etappe', 'Leg')}</dt><dd>{je('Ein Reiseabschnitt mit festem Datum. Daran hängen Routen, Wanderungen, Buchungen und Logbuchtage.', 'A part of the trip with fixed dates. Routes, hikes, bookings and logbook days belong to it.')}</dd><dd class="ef-wo">{je('Plan → Etappen', 'Plan → Legs')}</dd></span></div>
         <div><svg class="ef-bild" viewBox="0 0 64 48" aria-hidden="true"><rect x="3" y="4" width="58" height="42" rx="6" fill="none" stroke="currentColor" stroke-opacity=".5" stroke-width="2"/><path d="M3 13h58" stroke="currentColor" stroke-opacity=".5" stroke-width="2"/><rect x="6" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="14" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="22" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="30" y="17" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="38" y="17" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="46" y="17" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="54" y="17" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="6" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="14" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="22" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="30" y="25" width="6" height="6" rx="1.5" fill="#c1662f"/><rect x="38" y="25" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="46" y="25" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="54" y="25" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="6" y="33" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="14" y="33" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="22" y="33" width="6" height="6" rx="1.5" fill="#2f7a63"/><rect x="30" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="38" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="46" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/><rect x="54" y="33" width="6" height="6" rx="1.5" fill="currentColor" opacity=".22"/></svg><span><dt>{je('Kalender', 'Calendar')}</dt><dd>{je('Dein Blick auf die Reise nach Datum, als Liste, Monat oder Jahr. Hier trägst du nichts ein.', 'Your view of the trip by date, as list, month or year. You do not enter anything here.')}</dd><dd class="ef-wo">{je('Plan → Kalender', 'Plan → Calendar')}</dd></span></div>
@@ -191,15 +265,7 @@
       <!-- 1.13: das ganze Bild, auf Wunsch aufgeklappt -->
       <button type="button" class="ef-leise ef-zh-knopf" aria-expanded={zhAuf} onclick={() => (zhAuf = !zhAuf)}>{zhAuf ? je('So hängt alles zusammen ▴', 'How it all fits together ▴') : je('So hängt alles zusammen ▾', 'How it all fits together ▾')}</button>
       {#if zhAuf}<Zusammenhang />{/if}
-      <div class="ef-knoepfe">
-        <button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>
-        <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
-      </div>
-
-    {:else if id === 'etappe'}
-      <p class="ef-icon" aria-hidden="true">🗺️</p>
-      <h2 id="ef-titel">{t('Deine erste Etappe')}</h2>
-      <p id="ef-text">{t('Eine Etappe ist ein Abschnitt deiner Reise mit Datum, zum Beispiel „Ankommen in Perth“ für drei Tage oder der Roadtrip mit dem Camper. Daran hängen später Routen, Orte und Buchungen.')}</p>
+      {/if}
       {#if etappen}<p class="ef-ok">✓ {tn(etappen, '{n} Etappe angelegt', '{n} Etappen angelegt')}</p>{/if}
       <div class="ef-knoepfe">
         {#if etappen}
@@ -211,19 +277,29 @@
         {/if}
       </div>
 
-    {:else if id === 'buchung'}
-      <p class="ef-icon" aria-hidden="true">🎟️</p>
-      <h2 id="ef-titel">{t('Buchungen einfügen')}</h2>
-      <p id="ef-text">{t('Kopiere den Text einer Buchungsbestätigung, etwa aus der Mail von Airline, Hotel, Camper oder Tour, und füge ihn ein. Die App liest Datum, Uhrzeit, Ort, Buchungsnummer und Preis heraus und hängt die Buchung an die passende Etappe.')}</p>
-      {#if termine}<p class="ef-ok">✓ {tn(termine, '{n} Buchung gespeichert', '{n} Buchungen gespeichert')}</p>{/if}
+    {:else if id === 'route'}
+      <p class="ef-icon" aria-hidden="true">🛣️</p>
+      <h2 id="ef-titel">{je('Deine erste Route', 'Your first route')}<InfoKnopf id="aufbau-route" /></h2>
+      <p id="ef-text">{je('Mit einer Route rechnet die App Kilometer, Fahrzeit, Tank-Lücken und das Wetter an der Strecke. Nimm eine fertige Routen-Idee oder leg eine eigene an.', 'With a route the app works out kilometres, driving time, fuel gaps and the weather along the way. Take a ready-made route idea or create your own.')}</p>
+      {#if routen}<p class="ef-ok">✓ {je(`${routen} ${routen === 1 ? 'Route' : 'Routen'} angelegt`, `${routen} ${routen === 1 ? 'route' : 'routes'} created`)}</p>{/if}
       <div class="ef-knoepfe">
-        {#if termine}
-          <button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>
-          <button class="ef-leise" onclick={() => blatt('buchung')}>{t('Noch eine Buchung einfügen')}</button>
-        {:else}
-          <button class="btn-primary ef-los" onclick={() => blatt('buchung')}>{t('Buchung einfügen')}</button>
-          <button class="ef-leise" onclick={weiter}>{t('Überspringen')}</button>
-        {/if}
+        {#if routen}<button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>{/if}
+        <button class={routen ? 'btn' : 'btn-primary ef-los'} onclick={() => seite('orte/routen')}>{je('Routen-Ideen ansehen', 'See route ideas')}</button>
+        <button class="btn" onclick={() => blatt('route')}>{je('Eigene Route anlegen', 'Create your own route')}</button>
+        {#if !routen}<button class="ef-leise" onclick={weiter}>{t('Überspringen')}</button>{/if}
+      </div>
+
+    {:else if id === 'ausgaben'}
+      <p class="ef-icon" aria-hidden="true">💶</p>
+      <h2 id="ef-titel">{je('Was schon bezahlt ist', 'What you have already paid')}<InfoKnopf id="aufbau-ausgaben" /></h2>
+      <p id="ef-text">{je('Flug, Camper, Versicherung, Visum: trag ein, was du vor der Reise bezahlt hast. Flüge und Fahrzeuge kommen als Verkehrsmittel in den Plan, alle anderen Kosten bündelt die App von selbst unter Kosten.', 'Flight, camper, insurance, visa: enter what you paid before the trip. Flights and vehicles go into the plan as transport, all other costs are grouped by the app under Costs.')}</p>
+      {#if vorab || verkehr || termine}<p class="ef-ok">✓ {[vorab && je(`${vorab} Ausgaben vorab`, `${vorab} expenses before the trip`), verkehr && je(`${verkehr} Flug oder Zug`, `${verkehr} flight or train`), termine && tn(termine, '{n} Buchung gespeichert', '{n} Buchungen gespeichert')].filter(Boolean).join(' · ')}</p>{/if}
+      <div class="ef-knoepfe">
+        {#if vorab || verkehr || termine}<button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>{/if}
+        <button class={vorab || verkehr || termine ? 'btn' : 'btn-primary ef-los'} onclick={() => blatt('ausgabe')}>{je('💶 Ausgabe vorab eintragen', '💶 Add an expense before the trip')}</button>
+        <button class="btn" onclick={() => blatt('route', { art: 'flug' })}>{je('✈️ Flug oder Zug mit Nummer', '✈️ Flight or train with number')}</button>
+        <button class="btn" onclick={() => blatt('buchung')}>{je('📧 Buchungsmail einfügen', '📧 Paste a booking email')}</button>
+        {#if !(vorab || verkehr || termine)}<button class="ef-leise" onclick={weiter}>{t('Überspringen')}</button>{/if}
       </div>
 
     {:else if id === 'dokumente'}
@@ -238,7 +314,7 @@
 
     {:else if id === 'orte'}
       <p class="ef-icon" aria-hidden="true">📍</p>
-      <h2 id="ef-titel">{t('Orte entdecken')}</h2>
+      <h2 id="ef-titel">{t('Orte entdecken')}<InfoKnopf id="aufbau-orte" /></h2>
       <p id="ef-text">{anzahlOrte ? t('Unter Orte warten {n} Orte mit Bildern, Sonnenzeiten und Tipps.', { n: anzahlOrte }) : t('Unter Orte warten viele Orte mit Bildern, Sonnenzeiten und Tipps.')} {t('Mit „Einplanen“ kommt ein Ort in deine Etappe, eigene Orte legst du mit „+ Ort hinzufügen“ an.')}</p>
       <div class="ef-knoepfe">
         <button class="btn-primary ef-los" onclick={() => seite('orte')}>{t('Orte ansehen')}</button>
@@ -247,22 +323,27 @@
 
     {:else if id === 'logbuch'}
       <p class="ef-icon" aria-hidden="true">📖</p>
-      <h2 id="ef-titel">{t('Unterwegs entsteht dein Tagebuch')}</h2>
+      <h2 id="ef-titel">{t('Unterwegs entsteht dein Tagebuch')}<InfoKnopf id="aufbau-logbuch" /></h2>
       <p id="ef-text">{t('Jeden Abend ein paar Zeilen, Fotos, Kilometer und die Tiere des Tages ins Logbuch. Daraus baut TravelBuddy von selbst dein Reisetagebuch, fertig zum Drucken und zum Teilen mit der Familie. Unter Heute steht derweil, was ansteht.')}</p>
       <div class="ef-knoepfe">
         <button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>
         <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
       </div>
 
-    {:else if id === 'sichern'}
-      <p class="ef-icon" aria-hidden="true">📲</p>
-      <h2 id="ef-titel">{t('Zum Schluss')}</h2>
-      <ul class="ef-liste" id="ef-text">
-        <li><b>{t('Auf den Home-Bildschirm:')}</b> {t('In Safari auf Teilen tippen und „Zum Home-Bildschirm“ wählen. Dann startet TravelBuddy wie eine App und läuft offline.')}</li>
-        <li><b>{t('Backup:')}</b> {t('Deine Daten liegen nur auf diesem Gerät. Sichere sie ab und zu unter Mehr → Backup.')}</li>
-        <li><b>{t('Hilfe:')}</b> {t('Das Handbuch und diese Einführung findest du jederzeit unter Mehr.')}</li>
+    {:else if id === 'bereit'}
+      <p class="ef-icon" aria-hidden="true">🧳</p>
+      <h2 id="ef-titel">{t('Bereit für unterwegs?')}<InfoKnopf id="aufbau-bereit" /></h2>
+      <p id="ef-text">{je('Zum Schluss das, was unterwegs zählt. Am besten zu Hause im WLAN, denn Karten, Pisten-Netz und Fun Facts laden nur mit Netz vorab.', 'Finally, what counts on the road. Best done at home on Wi-Fi, because maps, the track network and fun facts only load ahead with internet.')}</p>
+      <ul class="ef-check">
+        <li class:ok={geschuetzt}><span>{geschuetzt ? '✓' : '💾'}</span><span><b>{je('Daten schützen', 'Protect your data')}</b><small>{geschuetzt ? je('Der Browser löscht nichts von selbst.', 'The browser will not delete anything by itself.') : je('Sonst darf der Browser bei Platzmangel alles löschen.', 'Otherwise the browser may delete everything when space runs low.')}</small></span>{#if !geschuetzt}<button class="btn" onclick={schuetzen}>{je('Schützen', 'Protect')}</button>{/if}</li>
+        <li><span>📲</span><span><b>{je('Auf den Home-Bildschirm', 'Add to home screen')}</b><small>{je('Startet wie eine App und läuft offline.', 'Starts like an app and works offline.')}</small></span><button class="btn" onclick={appEinrichten}>{je('Zeigen', 'Show me')}</button></li>
+        <li><span>🔁</span><span><b>{je('Tägliches Backup', 'Daily backup')}</b><small>{je('Läuft von selbst, am Computer auch in einen Ordner deiner Wahl.', 'Runs by itself, on a computer also into a folder you choose.')}</small></span><button class="btn" onclick={() => seite('mehr/backup')}>{je('Ansehen', 'View')}</button></li>
+        <li><span>🆘</span><span><b>{je('Notfall', 'Emergency')}</b><small>{je('Notrufnummern, nächste Hilfe und dein Standort zum Durchsagen.', 'Emergency numbers, nearest help and your location to read out.')}</small></span><button class="btn" onclick={() => seite('mehr/notfall')}>{je('Ansehen', 'View')}</button></li>
+        <li class:ok={kartenDa}><span>{kartenDa ? '✓' : '🗺️'}</span><span><b>{je('Kartenmaterial', 'Maps')}</b><small>{kartenDa ? je('liegt auf dem Gerät', 'on the device') : je('noch nicht geladen, beim Willkommen oder unter Plan, Karte', 'not loaded yet, in the welcome step or under Plan, Map')}</small></span></li>
+        <li class:ok={Object.values($pistenStand).some(Boolean)}><span>{Object.values($pistenStand).some(Boolean) ? '✓' : '🪨'}</span><span><b>{je('Pisten-Netz', 'Track network')}</b><small>{Object.values($pistenStand).some(Boolean) ? Object.entries(GEBIETE).filter(([g]) => $pistenStand[g]).map(([, x]) => x.name).join(', ') : je('noch keins, Hauptstraßen sind dabei', 'none yet, main roads are included')}</small></span></li>
+        <li class:ok={routen > 0}><span>{routen ? '✓' : '🛣️'}</span><span><b>{je('Routen', 'Routes')}</b><small>{routen ? je(`${routen} angelegt, die App rechnet sie aus`, `${routen} created, the app works them out`) : je('noch keine Route', 'no route yet')}</small></span></li>
       </ul>
-      {#if gueltigesDatum($gesamtStart) && etappen}<p class="ef-ok">✓ {t('Reisebeginn {datum}', { datum: tagMonatJahr($gesamtStart) })}</p>{/if}
+      <p class="ef-k">{t('Das Handbuch und diese Einführung findest du jederzeit unter Mehr.')}</p>
       <div class="ef-knoepfe">
         <button class="btn-primary ef-los" onclick={beenden}>{t('Fertig')}</button>
         <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
@@ -305,6 +386,15 @@
   .ef p { margin: 0; font-size: calc(16px * var(--schrift, 1)); line-height: 1.45; }
   .ef .ef-k { font-size: calc(14px * var(--schrift, 1)); color: var(--muted); }
   .ef .ef-ok { font-size: calc(15px * var(--schrift, 1)); font-weight: 700; color: var(--ok); }
+  .ef-leit { margin: 0; font-size: calc(14px * var(--schrift, 1)); line-height: 1.45; font-weight: 600; }
+  .ef-wahl { display: flex; flex-direction: column; gap: 8px; }
+  .ef-check { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .ef-check li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .ef-check li > span:first-child { flex: none; width: 24px; text-align: center; }
+  .ef-check li > span:nth-child(2) { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: calc(14px * var(--schrift, 1)); }
+  .ef-check small { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); }
+  .ef-check li.ok > span:first-child { color: var(--ok); font-weight: 800; }
+  .ef-check .btn { flex: none; }
   .ef-liste { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: calc(15px * var(--schrift, 1)); line-height: 1.45; }
   .ef-zeile { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
   .ef-zeile .ef-f { flex: 1 1 140px; min-width: 0; }

@@ -96,4 +96,68 @@ export const HILFE = jeSprache(() => ({
       je('„Nur mit Allrad“ gilt mit dem 4WD-Schalter an der Route als frei. Sperrdaten gibt es für WA. Warnungen zu Feuer, Flut und Zyklon bleiben Hinweise an der Route.', '“4WD only” counts as open with the 4WD switch on the route. Closure data is available for WA. Warnings about fire, flood and cyclones stay as notes on the route.'),
     ],
   },
+  // 1.27: „Was baut worauf auf“ hinter den ⓘ der Einführung, je Schritt das Passende, beim Willkommen alles
+  aufbau: {
+    titel: je('Was baut worauf auf', 'What builds on what'),
+    text: [
+      je('Einmal eintragen, überall nutzen. Die Einrichtung folgt dieser Kette: erst das Datum, dann die Etappe, dann Route und Fahrzeug, dann das Geld, zuletzt das Tagebuch. Jeder Schritt hat damit schon, was er braucht.', 'Enter it once, use it everywhere. The setup follows this chain: first the dates, then the leg, then route and vehicle, then the money, finally the journal. Each step already has what it needs.'),
+      [je('Reisebeginn und Dauer', 'Trip start and length'), je('Countdown, Kalender, Wetter und Sonnenzeiten am richtigen Tag, Etappen ohne Lücken.', 'Countdown, calendar, weather and sun times on the right day, legs without gaps.')],
+      [je('Etappe mit Datum', 'Leg with dates'), je('Buchungen, Nächte, Ausgaben und Logbuch-Tage hängen sich über das Datum von selbst an. Heute zeigt, was ansteht, die Kosten gibt es je Etappe und pro Tag.', 'Bookings, nights, expenses and logbook days attach themselves by date. Today shows what is coming up, costs come per leg and per day.')],
+      [je('Route und Fahrzeug', 'Route and vehicle'), je('Kilometer, Fahrzeit, Tank-Lücken, Versorgung, Sperrungen mit Umleitung, Wetter und Warnungen an der Strecke, Losfahrzeit vor Sonnenuntergang, Sehenswertes und Fun Facts unterwegs. Das Logbuch trägt die km selbst ein.', 'Kilometres, driving time, fuel gaps, supplies, closures with detours, weather and warnings along the way, when to leave before sunset, sights and fun facts on the road. The logbook fills in the km by itself.')],
+      [je('Verkehrsmittel mit Flug- oder Zugnummer', 'Transport with a flight or train number'), je('Status, Gate, Gleis, Verspätung, Hinweis 24 Stunden vorher, Flugstrecke im Plan und in den Kilometern.', 'Status, gate, platform, delays, a note 24 hours ahead, the flight route in the plan and in the kilometres.')],
+      [je('Vorabausgaben', 'Expenses before the trip'), je('Kosten nach Gruppen (Verkehr, Unterkunft und Erlebnisse, Short- und Long-Values), Schnitt pro Tag, Bilanz am Ende.', 'Costs by group (transport, stays and experiences, short and long values), average per day, a summary at the end.')],
+      [je('Buchungsmail und Belege', 'Booking email and documents'), je('Termin, Kosten und Beleg offline am richtigen Tag.', 'The date, the cost and the document offline on the right day.')],
+      [je('Vorgemerkte Orte', 'Saved places'), je('Vorschläge an jeder Route bis 100 km daneben, Wander-Ideen an der Strecke.', 'Suggestions on every route up to 100 km away, hike ideas along the way.')],
+      [je('Standort', 'Location'), je('Gefahren im Umkreis, Notfall, Fun Facts vor Ort.', 'Hazards nearby, emergency, fun facts on the spot.')],
+      [je('Logbuch und Fotos jeden Abend', 'Logbook and photos every evening'), je('Tagebuch, Reisebericht, Reisefilm, Tierwelt und Bilanz. Fotos sortieren sich nach Aufnahmezeit und Ort selbst ein.', 'Journal, travel report, travel film, wildlife and summary. Photos sort themselves by time and place.')],
+    ],
+  },
+  'aufbau-datum': {
+    titel: je('Wofür das Datum zählt', 'What the dates are for'),
+    text: [
+      je('Aus Reisebeginn und Dauer rechnet die App den Countdown und den Kalender. Wetter und Sonnenzeiten zeigt sie für den richtigen Tag, und neue Etappen schließen ohne Lücke an.', 'From the trip start and length the app works out the countdown and the calendar. It shows weather and sun times for the right day, and new legs follow on without gaps.'),
+    ],
+  },
+  'aufbau-etappe': {
+    titel: je('Was an der Etappe hängt', 'What hangs on a leg'),
+    text: [
+      je('Buchungen, Nächte, Ausgaben und Logbuch-Tage hängen sich über das Datum von selbst an die richtige Etappe.', 'Bookings, nights, expenses and logbook days attach themselves to the right leg by date.'),
+      je('Heute zeigt dann, was ansteht, und die Kosten gibt es je Etappe und pro Tag.', 'Today then shows what is coming up, and costs come per leg and per day.'),
+    ],
+  },
+  'aufbau-route': {
+    titel: je('Was die App aus Route und Fahrzeug macht', 'What the app makes of route and vehicle'),
+    text: [
+      je('Kilometer, Fahrzeit, Tank-Lücken nach deiner Reichweite und Versorgung an der Strecke. Sperrungen meldet sie mit Umleitung, dazu Wetter und Warnungen entlang der Route.', 'Kilometres, driving time, fuel gaps based on your range and supplies along the way. It reports closures with a detour, plus weather and warnings along the route.'),
+      je('Sie sagt, wann du losfahren musst, um vor Sonnenuntergang anzukommen, schlägt Sehenswertes vor und zeigt Fun Facts unterwegs. Das Logbuch trägt die Kilometer des Tages selbst ein.', 'It tells you when to leave to arrive before sunset, suggests sights and shows fun facts on the road. The logbook fills in the day’s kilometres by itself.'),
+      je('Mit 4WD nimmt sie Pisten und Tracks wie geplant, mit 2WD bleiben Fernstrecken auf Asphalt.', 'With 4WD it takes tracks as planned, with 2WD long drives stay on sealed roads.'),
+    ],
+  },
+  'aufbau-ausgaben': {
+    titel: je('Ein Eintrag, viele Stellen', 'One entry, many places'),
+    text: [
+      je('Wer einen Flug mit Nummer einträgt, hat ihn gleich im Plan, im Kalender, in den Kosten und in der Flugabfrage: Status, Gate, Gleis, Verspätung und ein Hinweis 24 Stunden vorher. Die Flugstrecke zählt in den Kilometern mit.', 'Enter a flight with its number and it is right there in the plan, the calendar, the costs and the flight check: status, gate, platform, delays and a note 24 hours ahead. The flight route counts in the kilometres.'),
+      je('Vorabausgaben bündelt die App von selbst nach Gruppen: Verkehr, Unterkunft und Erlebnisse, Short- und Long-Values. Daraus rechnet sie den Schnitt pro Tag und am Ende die Bilanz.', 'The app groups expenses before the trip by itself: transport, stays and experiences, short and long values. From this it works out the average per day and the summary at the end.'),
+      je('Eine eingefügte Buchungsmail wird zum Termin mit Kosten, der Beleg liegt offline am richtigen Tag.', 'A pasted booking email becomes a date with costs, and the document waits offline on the right day.'),
+    ],
+  },
+  'aufbau-orte': {
+    titel: je('Wofür vorgemerkte Orte gut sind', 'What saved places are for'),
+    text: [
+      je('Führt eine Route bis 100 km an einem vorgemerkten Ort vorbei, schlägt die App ihn dort zuerst vor. Wander-Ideen an der Strecke kommen von selbst dazu.', 'When a route passes within 100 km of a saved place, the app suggests it there first. Hike ideas along the way are added by themselves.'),
+    ],
+  },
+  'aufbau-logbuch': {
+    titel: je('Was aus dem Logbuch wird', 'What the logbook becomes'),
+    text: [
+      je('Aus ein paar Zeilen und Fotos jeden Abend entstehen Tagebuch, Reisebericht, Reisefilm, Tierwelt und Bilanz. Fotos sortieren sich nach Aufnahmezeit und Ort selbst ein.', 'A few lines and photos every evening turn into your journal, travel report, travel film, wildlife list and summary. Photos sort themselves by time and place.'),
+    ],
+  },
+  'aufbau-bereit': {
+    titel: je('Am besten zu Hause im WLAN', 'Best done at home on Wi-Fi'),
+    text: [
+      je('Kartenmaterial, Pisten-Netz, Fun Facts für die geplanten Etappen sowie Wetter und Warnungen lädt die App nur mit Netz vorab. Danach geht vieles auch im Funkloch.', 'Maps, the track network, fun facts for your planned legs and weather and warnings only load ahead with internet. After that, much of it works without signal too.'),
+      je('Mit dem Standort zeigt die App Gefahren im Umkreis, hilft im Notfall und bringt Fun Facts vor Ort.', 'With your location the app shows hazards nearby, helps in an emergency and brings fun facts on the spot.'),
+    ],
+  },
 }))

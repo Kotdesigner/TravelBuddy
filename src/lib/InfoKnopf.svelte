@@ -23,7 +23,8 @@
     <div class="ik-hg" data-dialog-hg aria-hidden="true" onclick={zu}></div>
     <div class="ik-blatt" role="dialog" aria-labelledby="ik-{id}" use:modal={{ onclose: zu }}>
       <h2 id="ik-{id}">{h.titel}</h2>
-      {#each h.text as absatz}<p>{absatz}</p>{/each}
+      <!-- Ein Absatz ist Text oder [Stichwort, Text]: dann steht das Stichwort fett vorn (1.27, „Was baut worauf auf“) -->
+      {#each h.text as absatz}<p>{#if Array.isArray(absatz)}<b>{absatz[0]}:</b> {absatz[1]}{:else}{absatz}{/if}</p>{/each}
       {#if h.bild}<Zusammenhang />{/if}
       <div class="ik-knoepfe">
         {#if h.teil}<button type="button" class="btn btn-ghost" onclick={handbuch}>{je(`Im Handbuch nachlesen (Teil ${h.teil})`, `Read more in the manual (part ${h.teil})`)}</button>{/if}
