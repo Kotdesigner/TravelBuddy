@@ -38,7 +38,7 @@ p('Gemeinsame Karte mit Routen und Punkten, zoomt bei Gedränge', /<UebersichtsK
 p('Gegend-Knöpfe filtern Karte und Liste', /gegend === 'alle' \? WANDER_VORSCHLAEGE : WANDER_VORSCHLAEGE\.filter\(\(v\) => v\.gegend === gegend\)/.test(ideen) && /aria-pressed=\{gegend === g\.id\}/.test(ideen))
 p('Punkt und Zeile öffnen das Fenster', /onpunkt=\{zeige\}/.test(ideen) && /onclick=\{\(\) => zeige\(v\.id\)\}/.test(ideen) && /role="dialog" aria-labelledby="wi-pop-titel"/.test(ideen))
 p('Fenster: vormerken, Etappe oder Route wählen, große Karte, Schließen mit Esc', /vormerken\(offen\)/.test(ideen) && /zuordnen\(offen, e\.target\.value\)/.test(ideen) && /optgroup label=\{je\('Etappen'/.test(ideen) && /onkarte\(offen\)/.test(ideen) && /e\.key === 'Escape'/.test(ideen))
-p('Tipp daneben schließt das Fenster', /<svelte:window onkeydown=\{taste\} onclick=\{daneben\} \/>/.test(ideen) && /closest\?\.\('\.wi-pop, \.uk-punkt, \.wi-zeile'\)/.test(ideen))
+p('Tipp daneben schließt das Fenster', /<svelte:window onkeydown=\{taste\} onclick=\{daneben\} \/>/.test(ideen) && /closest\?\.\('\.wi-pop, \.uk-punkt, \.wi-zeile, \.ug'\)/.test(ideen) && /onleer=\{\(\) => \(auswahl = null\)\}/.test(ideen))
 p('Selbst gewählt: reiseAuto false, Status geplant', /reiseId, reiseAuto: false, status: 'geplant'/.test(ideen))
 const app = lies('src/App.svelte'), karte = lies('src/lib/Karte.svelte')
 p('Große Karte springt zur Wanderung', /onkarte=\{\(v\) => geh\('plan\/karte\/wanderung\/' \+ v\.id\)\}/.test(app) && /punktFokus=\{ansicht\.id\?\.startsWith\('wanderung\/'\)/.test(app) && /function zeigePunktFokus\(\)/.test(karte) && /!warnFokus && !punktFokus/.test(karte))

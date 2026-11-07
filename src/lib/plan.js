@@ -53,6 +53,24 @@ export function istRoute(r) {
   return r.quelle !== 'reisekalender' && r.imGesamtplan === false
 }
 export const istEtappe = (r) => !!r && !istRoute(r)
+
+/**
+ * Strecken ohne Doppelzählung (Zahlen der Startseite, Tagebuch, Reisefilm). Eine Etappe hat oft selbst
+ * Stopps (Anreise und Orte der Etappe) und dazu Routen über dieselbe Strecke. Decken ihre gefahrenen
+ * Routen die Etappe ab (zusammen mindestens 80 % ihrer km), zählen nur die Routen. Fliegt die Etappe
+ * (Anreise per Flug), zählt sie weiter, denn das ist eine andere Strecke. Ideen zählen nie.
+ * @param kmVon (r) → km einer Reise (berechnet oder geschätzt)
+ */
+export function ohneDoppelteStrecken(reisen, kmVon = (r) => Number(r?.route?.km) || 0) {
+  const alle = (reisen || []).filter((r) => r && !r.idee)
+  const fliegt = (r) => (r.art || 'auto') === 'flug' || !!r.route?.flug
+  return alle.filter((r) => {
+    if (istRoute(r) || fliegt(r)) return true
+    const routenKm = alle.filter((x) => istRoute(x) && x.etappeId === r.id && !fliegt(x)).reduce((n, x) => n + kmVon(x), 0)
+    const eigene = kmVon(r)
+    return !(routenKm > 0 && eigene > 0 && routenKm >= eigene * 0.8)
+  })
+}
 /** Hat die Reise schon eine eigene Etappe? Dann braucht es die Testreise im Menü nicht mehr. */
 export const hatEigeneEtappe = (reisen) => (reisen || []).some((r) => istEtappe(r) && !r.idee)
 export const tageVon = (r) => Math.max(1, Math.round(Number(r?.tage) || 1))

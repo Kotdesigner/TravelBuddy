@@ -3,10 +3,19 @@
   // Jede Gegend ist ein Ring mit der Anzahl ihrer Orte, offene Gegenden sind kräftig gefüllt.
   // Ringe, die sich überdecken würden, rücken auseinander, ein feiner Strich zeigt die echte Lage.
   // Oben rechts ein kleines Australien mit dem gezeigten Ausschnitt. Ring antippen öffnet die Gegend.
+  // Liegt die Offline-Karte „Australien-Überblick“ auf dem Gerät, zeigt sie die echte Karte
+  // (UeberblickKarte: Grenzen, Highways, Parks, Städte, zoombar). Sonst diese gezeichnete Fassung.
+  import { onMount } from 'svelte'
   import { t, je } from './i18n.js'
   import { AUS_RINGS } from './geo-australia.js'
+  import UeberblickKarte from './UeberblickKarte.svelte'
+  import { ueberblick, ladeUeberblick } from './ueberblick-gl.js'
 
   let { regionen = [], offen = {}, onwahl = null } = $props()
+
+  onMount(() => { ladeUeberblick() })
+  const glRinge = $derived(regionen.map((r) => { const m = mitte(r); return m ? { titel: r.titel, n: r.orte.length, lon: m[0], lat: m[1], an: !!offen[r.titel] } : null }).filter(Boolean))
+  const alleOrte = $derived(regionen.flatMap((r) => r.orte.filter((o) => o.lat != null).map((o) => [o.lon, o.lat])))
 
   const B = 340, H = 250
   const median = (a) => { const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)] }
@@ -68,7 +77,13 @@
   })
 </script>
 
-{#if proj}
+{#if $ueberblick === 'bereit' && glRinge.length}
+  <figure class="gk gk-gl">
+    <UeberblickKarte art="ringe" ringe={glRinge} rahmenPunkte={alleOrte} fitMax={9} hoehe={340} onring={(titel) => onwahl?.(titel)}
+      label={je('Gesamtkarte mit den Gegenden', 'Overview map of the areas')} />
+    <figcaption>{je('Tippe eine Gegend an, um sie unten aufzuklappen. Zoomen mit zwei Fingern.', 'Tap an area to open it below. Zoom with two fingers.')}</figcaption>
+  </figure>
+{:else if proj}
   <figure class="gk">
     <svg viewBox="0 0 {B} {H}" role="img" aria-label={je('Gesamtkarte mit den Gegenden', 'Overview map of the areas')}>
       <rect width={B} height={H} rx="8" class="gk-meer" />
@@ -114,5 +129,7 @@
   .gk-einsatz { fill: var(--karte-meer); stroke: var(--karte-kueste); stroke-opacity: 0.6; }
   .gk-iland { fill: var(--karte-land); stroke: var(--karte-kueste); stroke-width: 0.7; }
   .gk-irahmen { fill: none; stroke: var(--karte-punkt); stroke-width: 1.5; }
+  .gk-gl { padding: 0 0 8px; overflow: hidden; }
+  .gk-gl :global(.ug) { border: none; border-radius: 12px 12px 0 0; }
   figcaption { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 700; text-align: center; }
 </style>

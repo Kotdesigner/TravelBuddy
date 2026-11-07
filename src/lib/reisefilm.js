@@ -7,7 +7,7 @@
 //   Bilanz (km, Tage)
 // Ziel: 30 bis 60 Sekunden. Gezeichnet wird in ReiseFilm.svelte bzw. reisefilm-zeichnen.js.
 
-import { etappenMitDatum, routenDerEtappe, tageZwischen } from './plan.js'
+import { etappenMitDatum, routenDerEtappe, tageZwischen, ohneDoppelteStrecken } from './plan.js'
 import { verdichte, vektor, lonlat, blick } from './globus.js'
 import { t } from './i18n.js'
 import { artDerTour, verlauf, logbuchTouren } from './reisefahrt.js'
@@ -125,7 +125,7 @@ export function gesamtBilanz(etappen, reisen, journal) {
   if (gefahren > 0) return { km: Math.round(gefahren), kmArt: 'gefahren', tage, etappen: etappen.length, von, bis }
   const ids = new Set(etappen.map((e) => e.reise.id))
   let geplant = 0
-  for (const r of reisen || []) {
+  for (const r of ohneDoppelteStrecken(reisen)) {
     if (ids.has(r.id) || (r.etappeId && ids.has(r.etappeId))) {
       const k = Number(r.route?.km)
       if (Number.isFinite(k) && k > 0 && !istFlug(r)) geplant += k

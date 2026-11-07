@@ -24,6 +24,8 @@
   import { warnGeoJson, warnAusschnitt, inAustralien as punktInAustralien } from './warnlage.js'
   import { abstandKm } from './warnungen.js'
   import { geh } from './navigation.js'
+  import { ladeKartenLib } from './ueberblick-gl.js'
+  import { grossDunkel, grossUmschalten } from './karten-thema.js'
 
   let { orte = [], reisen = [], warnFokus = null, punktFokus = null } = $props()
   // Mehrere Routen gleichzeitig sichtbar (Menge der gewählten Reise-IDs).
@@ -60,11 +62,11 @@
   async function ladeLib() {
     if (maplibregl) return
     // Standard-Build: Vite bündelt MapLibres Worker selbst (keine CSP im Projekt -> Blob-Worker ok).
-    const [ml, pm] = await Promise.all([import('./maplibre.js'), import('pmtiles')])
-    maplibregl = ml.default ?? ml
-    pmtilesLib = pm
-    protocol = new pm.Protocol()
-    maplibregl.addProtocol('pmtiles', protocol.tile)
+    // Ein gemeinsames pmtiles-Protokoll mit den Übersichtskarten, sonst überschreiben sie sich gegenseitig.
+    const l = await ladeKartenLib()
+    maplibregl = l.maplibregl
+    pmtilesLib = l.pmtiles
+    protocol = l.protocol
   }
 
   // Ein Kartenteil wird einmalig als ganze Datei geholt und pmtiles liest LOKAL daraus.
@@ -182,6 +184,45 @@
     ]
   }
 
+  // Kartendesign hell oder dunkel (Knopf ◐ auf der Karte, Mehr → Design → Große Karte). Es wechseln nur die Grundfarben,
+  // Routen, Warnungen und Versorgungspunkte bleiben, wie sie sind.
+  const GRUND = {
+    hell: {
+      bg: { 'background-color': '#a2cae0' }, erde: { 'fill-color': '#f6f0e2' }, 'landuse-gruen': { 'fill-color': '#d7e6c4' },
+      wasser: { 'fill-color': '#a2cae0' }, fluesse: { 'line-color': '#8fbdd6' }, grenze: { 'line-color': '#b09ab5' },
+      'ort-label': { 'text-color': '#4a4038', 'text-halo-color': '#f6f0e2' },
+      'strasse-neben': { 'line-color': '#ffffff' }, 'strasse-neben-rand': { 'line-color': '#a0785a' },
+      'strasse-haupt': { 'line-color': FUELLUNG }, 'strasse-haupt-rand': { 'line-color': ['case', ['>=', RANG, 2.5], '#7a3b1e', '#a0785a'] },
+      'strasse-piste': { 'line-color': '#8a6a4a' }, 'strasse-bahn': { 'line-color': '#6f6a64' },
+      'strasse-name': { 'text-color': '#4a3424', 'text-halo-color': '#fffdf8' },
+      'poi-lyr': { 'text-color': '#33322e', 'text-halo-color': '#ffffff' },
+      hillshade: { 'hillshade-highlight-color': '#ffffff', 'hillshade-shadow-color': '#5a4a37', 'hillshade-exaggeration': 0.5 },
+    },
+    dunkel: {
+      bg: { 'background-color': '#16303d' }, erde: { 'fill-color': '#3d342b' }, 'landuse-gruen': { 'fill-color': '#3b4630' },
+      wasser: { 'fill-color': '#16303d' }, fluesse: { 'line-color': '#2c5a70' }, grenze: { 'line-color': '#b3a2c2' },
+      'ort-label': { 'text-color': '#efe4d2', 'text-halo-color': '#2a231c' },
+      'strasse-neben': { 'line-color': '#8a7760' }, 'strasse-neben-rand': { 'line-color': '#241d16' },
+      'strasse-haupt': { 'line-color': ['match', ['get', 'kind_detail'], ['motorway', 'motorway_link', 'trunk', 'trunk_link'], '#d8692e', ['primary', 'primary_link', 'secondary', 'secondary_link'], '#c98a45', '#9a8468'] },
+      'strasse-haupt-rand': { 'line-color': ['case', ['>=', RANG, 2.5], '#1a120c', '#241d16'] },
+      'strasse-piste': { 'line-color': '#b39472' }, 'strasse-bahn': { 'line-color': '#9a948c' },
+      'strasse-name': { 'text-color': '#f0e4d0', 'text-halo-color': '#2a231c' },
+      'poi-lyr': { 'text-color': '#f0e4d0', 'text-halo-color': '#2a231c' },
+      // Gelände im Dunkeln leiser, sonst flimmert der Meeresboden hell über die ganze Karte
+      hillshade: { 'hillshade-highlight-color': 'rgba(255, 255, 255, 0.12)', 'hillshade-shadow-color': '#000000', 'hillshade-exaggeration': 0.35 },
+    },
+  }
+  const faerbe = (layers, dunkel) => { const g = GRUND[dunkel ? 'dunkel' : 'hell']; return layers.map((l) => (g[l.id] ? { ...l, paint: { ...l.paint, ...g[l.id] } } : l)) }
+  // Wechsel im laufenden Betrieb: nur die Farben der vorhandenen Ebenen umstellen, die Karte bleibt stehen
+  function faerbeKarte(dunkel) {
+    if (!map) return
+    for (const [id, paint] of Object.entries(GRUND[dunkel ? 'dunkel' : 'hell'])) {
+      if (!map.getLayer(id)) continue
+      for (const [k, v] of Object.entries(paint)) { try { map.setPaintProperty(id, k, v) } catch {} }
+    }
+  }
+  $effect(() => { const d = $grossDunkel; if (mapGeladen) faerbeKarte(d) })
+
   // Eigener, schlanker Kartenstil auf Basis des Protomaps-Kachelschemas.
   // Bewusst ausdrucks-arm gehalten (maximale Kompatibilität).
   function styleFor(region) {
@@ -195,7 +236,7 @@
           attribution: '© OpenStreetMap',
         },
       },
-      layers: [
+      layers: faerbe([
         { id: 'bg', type: 'background', paint: { 'background-color': '#a2cae0' } },
         { id: 'erde', type: 'fill', source: 'protomaps', 'source-layer': 'earth', paint: { 'fill-color': '#f6f0e2' } },
         { id: 'landuse-gruen', type: 'fill', source: 'protomaps', 'source-layer': 'landuse', paint: { 'fill-color': '#d7e6c4', 'fill-opacity': 0.6 } },
@@ -210,7 +251,7 @@
           layout: { 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Regular'], 'text-size': 12, 'text-anchor': 'top', 'text-offset': [0, 0.2] },
           paint: { 'text-color': '#4a4038', 'text-halo-color': '#f6f0e2', 'text-halo-width': 1.5 },
         },
-      ],
+      ], $grossDunkel),
     }
   }
 
@@ -233,6 +274,7 @@
       source: 'dem',
       paint: { 'hillshade-exaggeration': 0.5, 'hillshade-shadow-color': '#5a4a37' },
     }, firstSymbol)
+    faerbeKarte(get(grossDunkel))
   }
 
   // Vorschlagsorte lassen sich ausblenden — die Karte ist sonst zugepflastert.
@@ -457,6 +499,7 @@
       warnNachOben()
     }
     setPoiFilter()
+    faerbeKarte(get(grossDunkel))   // POI-Namen kamen eben erst dazu
     poiGeladen = true
     zaehlePois()
   }
@@ -479,6 +522,7 @@
     map.getCanvas().setAttribute('aria-label', je('Offline-Karte von Australien', 'Offline map of Australia'))
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
     map.addControl(baueExportKnopf(() => (expOffen = true)), 'top-right')
+    map.addControl(baueThemaKnopf(), 'top-right')
     map.on('click', kartenKlick)
     // Marker können sofort gesetzt werden (unabhängig vom 'load'-Event, das
     // bei manchen Umgebungen verzögert/nicht feuert).
@@ -836,6 +880,38 @@
       onRemove() { this._d?.remove() },
     }
   }
+
+  // Knopf ◐ unter dem Speichern-Knopf: nur diese Karte hell oder dunkel, merkt sich die Wahl
+  // (steht auch unter Mehr → Design → Große Karte). Das Zeichen zeigt, wohin der Knopf wechselt.
+  let themaKnopf = null
+  const MOND = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;margin:auto"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>'
+  const SONNE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="display:block;margin:auto"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>'
+  function themaKnopfZeigen(dunkel) {
+    if (!themaKnopf) return
+    themaKnopf.innerHTML = dunkel ? SONNE : MOND
+    const text = dunkel ? je('Karte hell', 'Light map') : je('Karte dunkel', 'Dark map')
+    themaKnopf.title = text
+    themaKnopf.setAttribute('aria-label', text)
+  }
+  function baueThemaKnopf() {
+    return {
+      onAdd() {
+        const d = document.createElement('div')
+        d.className = 'maplibregl-ctrl maplibregl-ctrl-group'
+        const b = document.createElement('button')
+        b.type = 'button'
+        b.className = 'thema-ctrl'
+        b.addEventListener('click', () => grossUmschalten(get(grossDunkel)))
+        d.appendChild(b)
+        themaKnopf = b
+        themaKnopfZeigen(get(grossDunkel))
+        this._d = d
+        return d
+      },
+      onRemove() { this._d?.remove(); themaKnopf = null },
+    }
+  }
+  $effect(() => { themaKnopfZeigen($grossDunkel) })
 
   async function exportiere() {
     if (!map || expLaeuft) return

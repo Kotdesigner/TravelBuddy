@@ -1,0 +1,771 @@
+[
+ {
+  "id": "perth",
+  "name": "Perth",
+  "art": "stadt",
+  "gegend": "beide",
+  "lat": -31.95,
+  "lon": 115.86,
+  "versorgung": {
+   "fuel": 93,
+   "wasser": 397,
+   "laden": 211,
+   "klinik": 232,
+   "werkstatt": 49,
+   "camp": 2,
+   "wc": 391
+  },
+  "tankKm": 1,
+  "region": "Perth → Coral Coast (Auftakt)",
+  "bereich": "norden"
+ },
+ {
+  "id": "margaret_river",
+  "name": "Margaret River",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -33.95,
+  "lon": 115.07,
+  "versorgung": {
+   "fuel": 3,
+   "wasser": 4,
+   "laden": 5,
+   "klinik": 5,
+   "werkstatt": 5,
+   "camp": 7,
+   "wc": 15
+  },
+  "tankKm": 1,
+  "region": "Margaret River & Augusta",
+  "bereich": "sueden"
+ },
+ {
+  "id": "augusta",
+  "name": "Augusta",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -34.31,
+  "lon": 115.16,
+  "versorgung": {
+   "fuel": 2,
+   "wasser": 4,
+   "laden": 2,
+   "klinik": 1,
+   "camp": 6,
+   "wc": 8
+  },
+  "tankKm": 0,
+  "region": "Margaret River & Augusta",
+  "bereich": "sueden"
+ },
+ {
+  "id": "pemberton",
+  "name": "Pemberton",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -34.44,
+  "lon": 116.04,
+  "versorgung": {
+   "fuel": 2,
+   "wasser": 1,
+   "laden": 2,
+   "klinik": 2,
+   "werkstatt": 1,
+   "camp": 4,
+   "wc": 6
+  },
+  "tankKm": 0,
+  "region": "Pemberton, Northcliffe & Warren NP",
+  "bereich": "sueden"
+ },
+ {
+  "id": "walpole",
+  "name": "Walpole",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -34.98,
+  "lon": 116.73,
+  "versorgung": {
+   "fuel": 2,
+   "laden": 1,
+   "klinik": 2,
+   "camp": 5,
+   "wc": 12
+  },
+  "tankKm": 0,
+  "region": "Walpole",
+  "bereich": "sueden"
+ },
+ {
+  "id": "denmark",
+  "name": "Denmark",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -34.96,
+  "lon": 117.35,
+  "versorgung": {
+   "fuel": 3,
+   "wasser": 5,
+   "laden": 2,
+   "klinik": 2,
+   "werkstatt": 2,
+   "camp": 4,
+   "wc": 10
+  },
+  "tankKm": 0,
+  "region": "Denmark",
+  "bereich": "sueden"
+ },
+ {
+  "id": "albany",
+  "name": "Albany",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -35.02,
+  "lon": 117.88,
+  "versorgung": {
+   "fuel": 17,
+   "wasser": 11,
+   "laden": 14,
+   "klinik": 10,
+   "werkstatt": 12,
+   "camp": 20,
+   "wc": 30
+  },
+  "tankKm": 0,
+  "region": "Albany",
+  "bereich": "sueden"
+ },
+ {
+  "id": "ravensthorpe",
+  "name": "Ravensthorpe",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -33.5814,
+  "lon": 120.0473,
+  "versorgung": {
+   "fuel": 2,
+   "laden": 2,
+   "klinik": 2,
+   "camp": 6,
+   "wc": 3
+  },
+  "tankKm": 0,
+  "region": "Fitzgerald River National Park",
+  "bereich": "sueden"
+ },
+ {
+  "id": "hopetoun",
+  "name": "Hopetoun",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -33.95,
+  "lon": 120.12,
+  "versorgung": {
+   "fuel": 2,
+   "wasser": 2,
+   "laden": 2,
+   "klinik": 1,
+   "werkstatt": 1,
+   "camp": 4,
+   "wc": 5
+  },
+  "tankKm": 1,
+  "region": "Fitzgerald River National Park",
+  "bereich": "sueden"
+ },
+ {
+  "id": "esperance",
+  "name": "Esperance",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -33.86,
+  "lon": 121.89,
+  "versorgung": {
+   "fuel": 5,
+   "wasser": 4,
+   "laden": 5,
+   "klinik": 2,
+   "werkstatt": 3,
+   "camp": 7,
+   "wc": 9
+  },
+  "tankKm": 0,
+  "region": "Esperance & Cape Le Grand",
+  "bereich": "sueden"
+ },
+ {
+  "id": "condingup",
+  "name": "Condingup",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -33.7495,
+  "lon": 122.5333,
+  "versorgung": {
+   "fuel": 1,
+   "camp": 1,
+   "wc": 1
+  },
+  "tankKm": 0,
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "bereich": "sueden"
+ },
+ {
+  "id": "norseman",
+  "name": "Norseman",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -32.2,
+  "lon": 121.78,
+  "versorgung": {
+   "fuel": 2,
+   "wasser": 3,
+   "laden": 1,
+   "klinik": 2,
+   "werkstatt": 1,
+   "camp": 2,
+   "wc": 4
+  },
+  "tankKm": 1,
+  "region": "Jenseits von Esperance — Geheimzone Richtung Nullarbor",
+  "bereich": "sueden"
+ },
+ {
+  "id": "kalgoorlie",
+  "name": "Kalgoorlie",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -30.75,
+  "lon": 121.47,
+  "versorgung": {
+   "fuel": 10,
+   "wasser": 2,
+   "laden": 9,
+   "klinik": 6,
+   "werkstatt": 1,
+   "camp": 5,
+   "wc": 10
+  },
+  "tankKm": 0,
+  "region": "Goldfields-Rückweg (Esperance → Perth)",
+  "bereich": "sueden"
+ },
+ {
+  "id": "menzies",
+  "name": "Menzies",
+  "art": "stadt",
+  "gegend": "sued",
+  "lat": -29.69,
+  "lon": 121.03,
+  "versorgung": {
+   "fuel": 1,
+   "camp": 1,
+   "wc": 4
+  },
+  "tankKm": 0,
+  "region": "Goldfields-Rückweg (Esperance → Perth)",
+  "bereich": "sueden"
+ },
+ {
+  "id": "cervantes",
+  "name": "Cervantes",
+  "art": "stadt",
+  "gegend": "nord",
+  "lat": -30.5,
+  "lon": 115.07,
+  "versorgung": {
+   "fuel": 1,
+   "wasser": 1,
+   "laden": 1,
+   "klinik": 1,
+   "camp": 2,
+   "wc": 2
+  },
+  "tankKm": 0,
+  "region": "Perth → Coral Coast (Auftakt)",
+  "bereich": "norden"
+ },
+ {
+  "id": "geraldton",
+  "name": "Geraldton",
+  "art": "stadt",
+  "gegend": "nord",
+  "lat": -28.77,
+  "lon": 114.61,
+  "versorgung": {
+   "fuel": 17,
+   "wasser": 10,
+   "laden": 11,
+   "klinik": 25,
+   "werkstatt": 8,
+   "camp": 6,
+   "wc": 14
+  },
+  "tankKm": 1,
+  "region": "Perth → Coral Coast (Auftakt)",
+  "bereich": "norden"
+ },
+ {
+  "id": "kalbarri",
+  "name": "Kalbarri",
+  "art": "stadt",
+  "gegend": "nord",
+  "lat": -27.71,
+  "lon": 114.16,
+  "versorgung": {
+   "fuel": 3,
+   "wasser": 1,
+   "laden": 1,
+   "klinik": 2,
+   "werkstatt": 1,
+   "camp": 4,
+   "wc": 10
+  },
+  "tankKm": 1,
+  "region": "Perth → Coral Coast (Auftakt)",
+  "bereich": "norden"
+ },
+ {
+  "id": "denham",
+  "name": "Denham",
+  "art": "stadt",
+  "gegend": "nord",
+  "lat": -25.93,
+  "lon": 113.53,
+  "versorgung": {
+   "fuel": 3,
+   "wasser": 2,
+   "laden": 2,
+   "klinik": 2,
+   "werkstatt": 1,
+   "camp": 3,
+   "wc": 6
+  },
+  "tankKm": 1,
+  "region": "Shark Bay — Edel Land, Steep Point & Dirk Hartog",
+  "bereich": "norden"
+ },
+ {
+  "id": "carnarvon",
+  "name": "Carnarvon",
+  "art": "stadt",
+  "gegend": "nord",
+  "lat": -24.88,
+  "lon": 113.66,
+  "versorgung": {
+   "fuel": 9,
+   "wasser": 4,
+   "laden": 3,
+   "klinik": 3,
+   "werkstatt": 1,
+   "camp": 8,
+   "wc": 5
+  },
+  "tankKm": 0,
+  "region": "Quobba Coast — Blowholes bis Gnaraloo",
+  "bereich": "norden"
+ },
+ {
+  "id": "gascoyne_junction",
+  "name": "Gascoyne Junction",
+  "art": "stadt",
+  "gegend": "nord",
+  "lat": -25.05,
+  "lon": 115.21,
+  "versorgung": {
+   "fuel": 1,
+   "laden": 1,
+   "camp": 1,
+   "wc": 1
+  },
+  "tankKm": 1,
+  "region": "Gascoyne-Outback — Kennedy Range & Mount Augustus",
+  "bereich": "norden"
+ },
+ {
+  "id": "exmouth",
+  "name": "Exmouth",
+  "art": "stadt",
+  "gegend": "nord",
+  "lat": -21.93,
+  "lon": 114.13,
+  "versorgung": {
+   "fuel": 4,
+   "wasser": 5,
+   "laden": 4,
+   "klinik": 2,
+   "werkstatt": 1,
+   "camp": 3,
+   "wc": 7
+  },
+  "tankKm": 0,
+  "region": "Ningaloo & Exmouth",
+  "bereich": "norden"
+ },
+ {
+  "id": "tom_price",
+  "name": "Tom Price",
+  "art": "stadt",
+  "gegend": "nord",
+  "lat": -22.69,
+  "lon": 117.79,
+  "versorgung": {
+   "fuel": 3,
+   "wasser": 2,
+   "laden": 1,
+   "klinik": 2,
+   "werkstatt": 1,
+   "camp": 3,
+   "wc": 3
+  },
+  "tankKm": 1,
+  "region": "Pilbara — Karijini, Millstream & Ost-Pilbara-Expedition",
+  "bereich": "norden"
+ },
+ {
+  "id": "karratha",
+  "name": "Karratha",
+  "art": "stadt",
+  "gegend": "nord",
+  "lat": -20.74,
+  "lon": 116.85,
+  "versorgung": {
+   "fuel": 5,
+   "laden": 4,
+   "klinik": 5,
+   "camp": 3,
+   "wc": 3
+  },
+  "tankKm": 1,
+  "region": "Pilbara — Karijini, Millstream & Ost-Pilbara-Expedition",
+  "bereich": "norden"
+ },
+ {
+  "id": "nanutarra",
+  "name": "Nanutarra",
+  "art": "roadhouse",
+  "gegend": "nord",
+  "lat": -22.53,
+  "lon": 115.5,
+  "versorgung": {
+   "fuel": 1,
+   "laden": 1,
+   "camp": 1,
+   "wc": 1
+  },
+  "tankKm": 1,
+  "region": "Ningaloo & Exmouth",
+  "bereich": "norden"
+ },
+ {
+  "id": "melbourne",
+  "name": "Melbourne",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -37.8141,
+  "lon": 144.9632,
+  "versorgung": {
+   "fuel": 156,
+   "wasser": 901,
+   "laden": 646,
+   "klinik": 609,
+   "werkstatt": 276,
+   "camp": 2,
+   "wc": 474
+  },
+  "tankKm": 2,
+  "region": "Melbourne & Bucht",
+  "bereich": "osten"
+ },
+ {
+  "id": "kinglake",
+  "name": "Kinglake",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -37.5329,
+  "lon": 145.3412,
+  "versorgung": {
+   "fuel": 2,
+   "laden": 2,
+   "camp": 1,
+   "wc": 9
+  },
+  "tankKm": 0,
+  "region": "Kinglake & Toolangi",
+  "bereich": "osten"
+ },
+ {
+  "id": "whittlesea",
+  "name": "Whittlesea",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -37.5122,
+  "lon": 145.1177,
+  "versorgung": {
+   "fuel": 4,
+   "wasser": 17,
+   "laden": 6,
+   "klinik": 5,
+   "werkstatt": 1,
+   "camp": 1,
+   "wc": 12
+  },
+  "tankKm": 0,
+  "region": "Kinglake & Toolangi",
+  "bereich": "osten"
+ },
+ {
+  "id": "yarra_glen",
+  "name": "Yarra Glen",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -37.6575,
+  "lon": 145.3745,
+  "versorgung": {
+   "fuel": 2,
+   "wasser": 5,
+   "laden": 5,
+   "klinik": 3,
+   "wc": 13
+  },
+  "tankKm": 0,
+  "region": "Yarra Valley & Healesville",
+  "bereich": "osten"
+ },
+ {
+  "id": "healesville",
+  "name": "Healesville",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -37.6537,
+  "lon": 145.5163,
+  "versorgung": {
+   "fuel": 4,
+   "wasser": 4,
+   "laden": 10,
+   "klinik": 3,
+   "werkstatt": 1,
+   "camp": 4,
+   "wc": 20
+  },
+  "tankKm": 1,
+  "region": "Yarra Valley & Healesville",
+  "bereich": "osten"
+ },
+ {
+  "id": "marysville",
+  "name": "Marysville",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -37.5094,
+  "lon": 145.7483,
+  "versorgung": {
+   "fuel": 2,
+   "wasser": 6,
+   "laden": 1,
+   "klinik": 2,
+   "camp": 5,
+   "wc": 11
+  },
+  "tankKm": 0,
+  "region": "Yarra Ranges, Black Spur & Marysville",
+  "bereich": "osten"
+ },
+ {
+  "id": "warburton",
+  "name": "Warburton",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -37.7536,
+  "lon": 145.6887,
+  "versorgung": {
+   "fuel": 2,
+   "wasser": 10,
+   "laden": 4,
+   "klinik": 4,
+   "camp": 9,
+   "wc": 20
+  },
+  "tankKm": 1,
+  "region": "Yarra Ranges, Black Spur & Marysville",
+  "bereich": "osten"
+ },
+ {
+  "id": "belgrave",
+  "name": "Belgrave",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -37.9095,
+  "lon": 145.354,
+  "versorgung": {
+   "fuel": 21,
+   "wasser": 62,
+   "laden": 60,
+   "klinik": 68,
+   "werkstatt": 106,
+   "camp": 5,
+   "wc": 85
+  },
+  "tankKm": 1,
+  "region": "Dandenong Ranges",
+  "bereich": "osten"
+ },
+ {
+  "id": "cowes",
+  "name": "Cowes",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -38.4504,
+  "lon": 145.2389,
+  "versorgung": {
+   "fuel": 3,
+   "wasser": 8,
+   "laden": 10,
+   "klinik": 4,
+   "werkstatt": 5,
+   "camp": 11,
+   "wc": 35
+  },
+  "tankKm": 0,
+  "region": "Phillip Island & Mornington Peninsula",
+  "bereich": "osten"
+ },
+ {
+  "id": "sorrento",
+  "name": "Sorrento",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -38.3392,
+  "lon": 144.7417,
+  "versorgung": {
+   "fuel": 3,
+   "wasser": 4,
+   "laden": 8,
+   "klinik": 5,
+   "camp": 8,
+   "wc": 26
+  },
+  "tankKm": 4,
+  "region": "Phillip Island & Mornington Peninsula",
+  "bereich": "osten"
+ },
+ {
+  "id": "cairns",
+  "name": "Cairns",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -16.9205,
+  "lon": 145.7721,
+  "versorgung": {
+   "fuel": 31,
+   "wasser": 51,
+   "laden": 42,
+   "klinik": 36,
+   "werkstatt": 10,
+   "camp": 7,
+   "wc": 58
+  },
+  "tankKm": 0,
+  "region": "Cairns & Küste",
+  "bereich": "osten"
+ },
+ {
+  "id": "port_douglas",
+  "name": "Port Douglas",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -16.4845,
+  "lon": 145.4638,
+  "versorgung": {
+   "fuel": 7,
+   "wasser": 11,
+   "laden": 5,
+   "klinik": 8,
+   "werkstatt": 4,
+   "camp": 6,
+   "wc": 14
+  },
+  "tankKm": 0,
+  "region": "Daintree & Port Douglas",
+  "bereich": "osten"
+ },
+ {
+  "id": "mossman",
+  "name": "Mossman",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -16.4614,
+  "lon": 145.3728,
+  "versorgung": {
+   "fuel": 7,
+   "wasser": 3,
+   "laden": 3,
+   "klinik": 8,
+   "werkstatt": 1,
+   "camp": 4,
+   "wc": 10
+  },
+  "tankKm": 0,
+  "region": "Daintree & Port Douglas",
+  "bereich": "osten"
+ },
+ {
+  "id": "kuranda",
+  "name": "Kuranda",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -16.821,
+  "lon": 145.6334,
+  "versorgung": {
+   "fuel": 8,
+   "wasser": 30,
+   "laden": 19,
+   "klinik": 13,
+   "werkstatt": 1,
+   "camp": 6,
+   "wc": 35
+  },
+  "tankKm": 0,
+  "region": "Atherton Tablelands",
+  "bereich": "osten"
+ },
+ {
+  "id": "mareeba",
+  "name": "Mareeba",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -16.9931,
+  "lon": 145.4226,
+  "versorgung": {
+   "fuel": 7,
+   "laden": 3,
+   "klinik": 2,
+   "werkstatt": 3,
+   "camp": 9,
+   "wc": 6
+  },
+  "tankKm": 0,
+  "region": "Atherton Tablelands",
+  "bereich": "osten"
+ },
+ {
+  "id": "atherton",
+  "name": "Atherton",
+  "art": "stadt",
+  "gegend": "ost",
+  "lat": -17.2667,
+  "lon": 145.4768,
+  "versorgung": {
+   "fuel": 4,
+   "wasser": 1,
+   "laden": 4,
+   "klinik": 3,
+   "werkstatt": 2,
+   "camp": 9,
+   "wc": 13
+  },
+  "tankKm": 0,
+  "region": "Atherton Tablelands",
+  "bereich": "osten"
+ }
+]

@@ -921,6 +921,19 @@
   "lon": 121.32969
  },
  {
+  "id": "super_pit_lookout",
+  "name": "Super Pit Lookout (Kalgoorlie)",
+  "abschnitt": "Süden: Margaret River bis jenseits von Esperance",
+  "region": "Goldfields-Rückweg (Esperance → Perth)",
+  "tags": [],
+  "beschreibung": "Eine der größten Goldminen Australiens unter freiem Himmel, rund 3,5 km lang, 1,5 km breit und gut 600 m tief. Vom Aussichtspunkt am Rand von Kalgoorlie-Boulder wirken die riesigen Muldenkipper wie Spielzeug. Eintritt frei. Wann gesprengt wird, gibt der Betreiber täglich bekannt.",
+  "emoji": "⛏️",
+  "mapsQuery": "Super Pit Lookout (Kalgoorlie), Western Australia",
+  "bild": "bilder/super_pit_lookout.jpg",
+  "lat": -30.7925,
+  "lon": 121.50558
+ },
+ {
   "id": "lancelin_sand_dunes",
   "name": "Lancelin Sand Dunes",
   "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
@@ -1016,6 +1029,21 @@
   "bild": "bilder/natures_window_the_loop.jpg",
   "lat": -27.55302,
   "lon": 114.44606
+ },
+ {
+  "id": "hutt_lagoon",
+  "name": "Hutt Lagoon (Pink Lake)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Perth → Coral Coast (Auftakt)",
+  "tags": [
+   "MUSS-SEHEN"
+  ],
+  "beschreibung": "Salzsee bei Port Gregory, rund 14 km lang, der je nach Licht rosa bis violett leuchtet. Die Farbe stammt von der Mikroalge Dunaliella salina, die hier auch gezüchtet wird. Am kräftigsten bei Sonne zwischen Vormittag und Mittag. Am besten von den Aussichtspunkten an der George Grey Drive.",
+  "emoji": "🩷",
+  "mapsQuery": "Hutt Lagoon (Pink Lake), Western Australia",
+  "bild": "bilder/hutt_lagoon.jpg",
+  "lat": -28.18493,
+  "lon": 114.25843
  },
  {
   "id": "steep_point_edel_land",
@@ -1145,6 +1173,19 @@
   "lat": -23.79,
   "lon": 113.53,
   "ungenau": true
+ },
+ {
+  "id": "carnarvon_space_museum",
+  "name": "Carnarvon Space & Technology Museum",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Quobba Coast — Blowholes bis Gnaraloo",
+  "tags": [],
+  "beschreibung": "Museum an der früheren OTC-Erdfunkstelle auf dem Brown's Range über Carnarvon. Die große Parabolantenne unterstützte in den 1960er Jahren die NASA bei den Apollo-Flügen. Ausstellung zu Raumfahrt und Funktechnik, viel zum Ausprobieren. Gut für eine heiße Mittagspause zwischen Shark Bay und Quobba.",
+  "emoji": "🛰️",
+  "mapsQuery": "Carnarvon Space & Technology Museum, Western Australia",
+  "bild": "bilder/carnarvon_space_museum.jpg",
+  "lat": -24.86904,
+  "lon": 113.705
  },
  {
   "id": "kennedy_range_np_temple_gorge",

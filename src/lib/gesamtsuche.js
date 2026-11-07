@@ -146,6 +146,14 @@ export function gesamtsuche(begriff, d = {}) {
     return { id: 'reise:' + x.id, titel: x.name, unter: [z ? bereich(z.von, z.bis) : '', stopps.slice(0, 4).join(' → ')].filter(Boolean).join(' · '), icon: istEtappe ? '🧭' : '🛣️', ziel: (istEtappe ? 'plan/etappe/' : 'plan/route/') + x.id, datum: z?.von, ...r }
   }))
 
+  // Etappenorte (Städte zum Tanken, Einkaufen, Übernachten): führt zur Karte ihrer Gegend und zeigt sie dort
+  if (!datum) dazu('etappenorte', T.etappenorte, '🏠', (d.etappenorte || []).map((e) => {
+    const r = bewerte(woerter, e.name, [e.region, e.routenText].join(' '))
+    if (!r) return null
+    return { id: 'et:' + e.id, titel: '🏠 ' + e.name, unter: [e.artText, e.region, e.versorgungText, e.routenText].filter(Boolean).join(' · '), icon: '🏠',
+      ziel: e.ziel || (e.bereich ? `orte/${e.bereich}/etappe:${e.id}` : 'orte/routen' + (e.routeId ? '/' + e.routeId : '')), ...r }
+  }))
+
   dazu('notizen', T.notizen, '🗒️', (d.notizen || []).map((n) => {
     const tag = (n.tsLokal || n.ts || '').slice(0, 10)
     const r = pruefe(n.text || '', '', tag)

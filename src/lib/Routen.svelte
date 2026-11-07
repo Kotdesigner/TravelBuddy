@@ -8,9 +8,10 @@
   import { stoppsAusRoute } from './routen-ideen.js'
   import { je } from './i18n.js'
   import ZuordnenBlatt from './ZuordnenBlatt.svelte'
+  import { orteAmTag } from './routen-verweise.js'
 
   // eingebettet: in der aufgeklappten Zeile der Übersicht, ohne eigenen Kopf
-  let { routen = [], eingebettet = false } = $props()
+  let { routen = [], eingebettet = false, orteNachId = null, onort = null } = $props()
 
   let meldung = $state('')
   let mTimer
@@ -59,15 +60,25 @@
     {/if}
     <div class="body">
       <div class="map">
-        {@html r.svg}
-        {#if r.legende}<div class="legende">{@html r.legende}</div>{/if}
-        {#if r.caption}<div class="caption">{r.caption}</div>{/if}
+        <!-- Eingebettet zeigt die große Karte darüber die Route: dann nur die Legende der Stopps -->
+        {#if !eingebettet}{@html r.svg}{/if}
+        {#if eingebettet}
+          <!-- Nummern wie auf der Karte darüber: aus denselben Stopps erzeugt, nicht aus dem alten Legendentext -->
+          <div class="legende">{#each stoppsAusRoute(r).filter((x) => x.lat != null) as st, n}{#if n} · {/if}<b>{n + 1}</b>&nbsp;{st.name}{/each}</div>
+        {:else if r.legende}<div class="legende">{@html r.legende}</div>{/if}
+        {#if r.caption && !eingebettet}<div class="caption">{r.caption}</div>{/if}
       </div>
       {#if r.summary}<p class="summary">{r.summary}</p>{/if}
-      {#each r.steps as s}
-        <div class="step">
+      {#each r.steps as s, i}
+        {@const amTag = orteNachId ? orteAmTag(r.id, i, orteNachId) : []}
+        <div class="step" id="ri-{r.id}-tag-{i}">
           <div class="tag">{s.tag}</div>
-          <div class="stext"><b>{s.titel}</b>{#if s.desc}<br /><span>{s.desc}</span>{/if}</div>
+          <div class="stext"><b>{s.titel}</b>{#if s.desc}<br /><span>{s.desc}</span>{/if}
+            {#if amTag.length}
+              <!-- Orte dieses Tages: antippen springt zum Ort mit allen Infos -->
+              <span class="ri-orte">{#each amTag as o (o.id)}<button class="ri-ort" onclick={() => onort?.(o)}>{o.anzeigeName || o.name}</button>{/each}</span>
+            {/if}
+          </div>
         </div>
       {/each}
       <div class="links">
@@ -91,6 +102,9 @@
   .body { padding: 16px 20px; }
   .map { float: left; width: 260px; margin: 0 20px 10px 0; }
   .map :global(svg) { width: 100%; height: auto; display: block; border-radius: 6px; }
+  .ri-orte { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .ri-ort { min-height: 32px; padding: 0 10px; border: 1px solid var(--line-stark); border-radius: 8px; background: var(--card); color: var(--brand-text); font: inherit; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+  .ri-ort::before { content: '📍 '; }
   .legende { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); margin-top: 6px; line-height: 1.7; }
   .caption { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); margin-top: 4px; line-height: 1.5; }
   .summary { color: var(--muted); font-size: calc(13.8px * var(--schrift, 1)); margin: 0 0 14px; }

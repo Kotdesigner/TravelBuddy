@@ -1,18 +1,23 @@
 <script>
   // Karte einer aufgeklappten Gegend: genaue Küste, jeder Ort als Punkt mit Nummer (dieselbe Nummer
   // steht auf seiner Kachel), unten links eine kleine Lageskizze von Australien.
-  // Ein Tipp auf einen Punkt zeigt die Kurzinfo UNTER der Karte, so bleibt die Karte frei.
-  // „Zur Kachel“ springt zur Kachel und hebt sie kurz hervor.
+  // Ein Tipp auf einen Punkt zeigt die Kurzinfo UNTER der Karte (OrtInfo), so bleibt die Karte frei.
+  // „Zur Kachel“ springt zur Kachel und hebt sie kurz hervor. Dazu die Etappenorte (weißes Häuschen):
+  // Städte zum Tanken, Einkaufen und Übernachten, antippen zeigt Versorgung und Sehenswertes in der Nähe.
   import { tick } from 'svelte'
   import { t, je } from './i18n.js'
   import UebersichtsKarte from './UebersichtsKarte.svelte'
-  import { punkteVon, zuordenbar, naechsteReise } from './wander-zuordnung.js'
-  import { INSELN, ANREISE_ZEICHEN, abfahrtPunkt } from './inseln.js'
-  import { userData } from './userdata.js'
-  import { reiseDatum } from './reisedatum.js'
-  import { sonnenZeiten } from './sonne.js'
+  import { punkteVon, zuordenbar } from './wander-zuordnung.js'
   import { AUS_RINGS } from './geo-australia.js'
-  import { dauer, klapp } from './motion.js'
+  import OrtInfo from './OrtInfo.svelte'
+  import UeberblickKarte from './UeberblickKarte.svelte'
+  import { ueberblick, ladeUeberblick } from './ueberblick-gl.js'
+  import { onMount } from 'svelte'
+  import EtappeInfo from './EtappeInfo.svelte'
+  import { ladeEtappenorte, etappeFokus, vonHierAus } from './routen-daten.js'
+
+  let etappen = $state([])
+  onMount(() => { ladeUeberblick(); ladeEtappenorte().then((e) => (etappen = e)) })
 
   let { orte = [], reisen = [], nummer = {}, titel = '' } = $props()
 
@@ -21,10 +26,20 @@
   const linien = $derived(reisen.filter(zuordenbar).map((r) => ({ id: r.id, farbe: r.farbe || '#7a6fd6', punkte: punkteVon(r), an: true, label: r.name })))
 
   const o = $derived(gewaehlt ? orte.find((x) => x.id === gewaehlt) : null)
-  const bildVon = (x) => $userData[x.id]?.bilder?.[0] || x.bildData || (x.bild ? '/' + x.bild : null)
-  const sonne = $derived(o?.lat != null ? sonnenZeiten(o.lat, o.lon, $reiseDatum) : null)
-  const nah = $derived.by(() => { const n = o ? naechsteReise(abfahrtPunkt(o), reisen) : null; return n ? { name: n.reise.name, km: n.km } : null })
-  const mapsUrl = (x) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(x.mapsQuery || `${x.lat},${x.lon}`)
+  // Etappenort gewählt (nur einer von beiden: Ort oder Etappenort)
+  let etappeWahl = $state(null)
+  const e = $derived(etappeWahl ? etappen.find((x) => x.id === etappeWahl) : null)
+  const waehleOrt = (id) => { etappeWahl = null; gewaehlt = gewaehlt === id ? null : id }
+  const waehleEtappe = (id) => { gewaehlt = null; etappeWahl = etappeWahl === id ? null : id }
+  // Aus der Suche: gehört der Etappenort zu dieser Gegend, hier auswählen und die Karte zeigen
+  let kartenEl = $state()
+  $effect(() => {
+    const id = $etappeFokus
+    const x = id && etappen.find((y) => y.id === id)
+    if (!x || x.region !== titel) return
+    waehleEtappe(id); etappeFokus.set(null)
+    setTimeout(() => kartenEl?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
+  })
 
   async function zurKachel(id, einplanen = false) {
     gewaehlt = null
@@ -55,7 +70,12 @@
   })
 </script>
 
-<div class="rk">
+<div class="rk" bind:this={kartenEl}>
+  {#if $ueberblick === 'bereit'}
+    <!-- Echte Offline-Karte: Ausschnitt mindestens so groß, dass ein bekannter Ort in der Nähe zu sehen ist -->
+    <UeberblickKarte art="nummern" {punkte} {linien} {gewaehlt} onpunkt={waehleOrt} {etappen} etappeGewaehlt={etappeWahl} onetappe={waehleEtappe} onleer={() => { gewaehlt = null; etappeWahl = null }}
+      spanne={[0.5, 0.32]} fitMax={10} hoehe={280} label={je(`Karte: ${titel}`, `Map: ${titel}`)} />
+  {:else}
   <div class="rk-karte">
     <UebersichtsKarte {punkte} {linien} {gewaehlt} onpunkt={(id) => (gewaehlt = gewaehlt === id ? null : id)} label={je(`Karte: ${titel}`, `Map: ${titel}`)} hoehe={240} rahmen="punkte" />
     <svg class="rk-lage" width={IB} height={IH} viewBox="0 0 {IB} {IH}" aria-hidden="true">
@@ -64,31 +84,12 @@
       {#if iring}<circle cx={iring.x} cy={iring.y} r="5" class="rk-lage-ring" />{/if}
     </svg>
   </div>
+  {/if}
 
   {#if o}
-    {@const insel = INSELN[o.id]}
-    {@const bild = bildVon(o)}
-    <div class="rk-info" transition:klapp={{ duration: dauer(180) }} role="region" aria-label={o.anzeigeName || o.name}>
-      <div class="rk-info-kopf">
-        {#if bild}<img class="rk-bild" src={bild} alt="" />{:else}<span class="rk-bild leer" aria-hidden="true">{o.emoji || '📍'}</span>{/if}
-        <div class="rk-info-titel">
-          <b><span class="rk-nr">{nummer[o.id]}</span> {o.anzeigeName || o.name}</b>
-          {#if o.tags?.length}<span class="rk-tags">{#each o.tags as tag}<span class="rk-tag" class:geheim={tag === 'GEHEIMTIPP'} class:wd={tag === 'NUR-4WD' || tag === 'EXPEDITION'}>{t(tag)}</span>{/each}</span>{/if}
-        </div>
-        <button class="rk-zu" onclick={() => (gewaehlt = null)} aria-label={je('Schließen', 'Close')}>✕</button>
-      </div>
-      {#if o.beschreibung}<p class="rk-text">{o.beschreibung}</p>{/if}
-      <p class="rk-zeilen">
-        {#if sonne}<span>🌅 {sonne.aufgang}</span><span>🌇 {sonne.untergang}</span>{/if}
-        {#if insel}<span class="rk-anreise">{ANREISE_ZEICHEN[insel.art]} {insel.text}</span>{/if}
-        {#if nah}<span class="rk-nah">🛣️ {nah.km < 1 ? je(`direkt an ${nah.name}`, `right on ${nah.name}`) : je(`${nah.km} km neben ${nah.name}`, `${nah.km} km from ${nah.name}`)}</span>{/if}
-      </p>
-      <div class="rk-knoepfe">
-        <a class="bedien-knopf" href={mapsUrl(o)} target="_blank" rel="noopener">Google Maps</a>
-        <button class="bedien-knopf" onclick={() => zurKachel(o.id, true)}>{je('Einplanen', 'Add to trip')}</button>
-        <button class="bedien-knopf haupt" onclick={() => zurKachel(o.id)}>{je('Zur Kachel ↓', 'To the tile ↓')}</button>
-      </div>
-    </div>
+    <OrtInfo {o} nummer={nummer[o.id]} {reisen} onzu={() => (gewaehlt = null)} onkachel={zurKachel} />
+  {:else if e}
+    <EtappeInfo {e} nah={vonHierAus(e, orte, nummer)} onzu={() => (etappeWahl = null)} />
   {/if}
 </div>
 
@@ -99,24 +100,4 @@
   .rk-lage-grund { fill: var(--karte-meer); stroke: var(--karte-kueste); stroke-opacity: 0.7; }
   .rk-lage-land { fill: var(--karte-land); stroke: var(--karte-kueste); stroke-width: 0.7; }
   .rk-lage-ring { fill: var(--karte-punkt); fill-opacity: 0.35; stroke: var(--karte-punkt); stroke-width: 1.5; }
-  .rk-info { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border: 1px solid var(--line-stark); border-radius: 12px; background: var(--flaeche); }
-  .rk-info-kopf { display: flex; gap: 10px; align-items: flex-start; }
-  .rk-bild { width: 60px; height: 60px; flex: none; border-radius: 8px; object-fit: cover; background: var(--card); }
-  .rk-bild.leer { display: flex; align-items: center; justify-content: center; font-size: calc(26px * var(--schrift, 1)); }
-  .rk-info-titel { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-  .rk-info-titel b { font-size: calc(15px * var(--schrift, 1)); color: var(--ink); }
-  .rk-nr { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 4px; border-radius: 10px; background: var(--karte-punkt); color: var(--karte-zahl); font-size: calc(11px * var(--schrift, 1)); font-weight: 800; vertical-align: 1px; }
-  .rk-tags { display: flex; flex-wrap: wrap; gap: 4px; }
-  .rk-tag { font-size: calc(11px * var(--schrift, 1)); font-weight: 800; padding: 2px 8px; border-radius: 20px; background: var(--ok-flaeche); color: var(--ok-text); }
-  .rk-tag.geheim { background: var(--info-flaeche); color: var(--info-text); }
-  .rk-tag.wd { background: var(--warn-flaeche); color: var(--btn-ink); }
-  .rk-zu { width: 44px; height: 44px; flex: none; border: 1px solid var(--line-stark); border-radius: 9px; background: var(--card); color: var(--btn-ink); cursor: pointer; }
-  .rk-info p { margin: 0; }
-  .rk-text { font-size: calc(13.5px * var(--schrift, 1)); line-height: 1.45; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-  .rk-zeilen { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
-  .rk-anreise { color: var(--info-text); }
-  .rk-nah { color: var(--brand-text); }
-  .rk-knoepfe { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 2px; }
-  .rk-knoepfe .bedien-knopf { text-decoration: none; text-align: center; padding: 0 8px; font-size: calc(13px * var(--schrift, 1)); }
-  @media (max-width: 380px) { .rk-knoepfe { grid-template-columns: 1fr 1fr; } .rk-knoepfe .haupt { grid-column: 1 / -1; } }
 </style>

@@ -56,7 +56,7 @@
   import { frage, hinweis, loeschFrage } from './lib/dialog.js'
   import { neuAnfrage, oeffneNeu } from './lib/neu.js'
   import { leseAdresse, geh, merke, fragWaechter, zurueck } from './lib/navigation.js'
-  import { etappenMitDatum, planUeberblick, reiseZeitraum, ymd as ymdPlan } from './lib/plan.js'
+  import { etappenMitDatum, planUeberblick, reiseZeitraum, ymd as ymdPlan, ohneDoppelteStrecken } from './lib/plan.js'
   import Quiz from './lib/Quiz.svelte'
   import Packliste from './lib/Packliste.svelte'
   import XoxoSpiel from './lib/XoxoSpiel.svelte'
@@ -64,7 +64,7 @@
   import VierSpiel from './lib/VierSpiel.svelte'
   import Suchblatt from './lib/Suchblatt.svelte'
   import { passtOrt } from './lib/suche.js'
-  import { tick } from 'svelte'
+  import { tick, untrack } from 'svelte'
   import Notizen from './lib/Notizen.svelte'
   import Wanderungen from './lib/Wanderungen.svelte'
   import Notfall from './lib/Notfall.svelte'
@@ -77,6 +77,8 @@
   import { zeigeToast } from './lib/toast.js'
   import { haptic } from './lib/haptik.js'
   import { theme, setzeTheme } from './lib/theme.js'
+  import { ladeEtappenorte, etappeFokus } from './lib/routen-daten.js'
+  import './lib/karten-thema.js'   // setzt data-karte (Kartendesign hell oder dunkel) gleich beim Start
   import { zaehlHoch, erscheine, leisteRand, wechsel, bildwechsel, beiSicht } from './lib/motion.js'
   import { fehlerText } from './lib/fehlertext.js'
   import MusikSymbol from './lib/musik/MusikSymbol.svelte'
@@ -508,7 +510,8 @@
   // V16: Ideen (Routen mit `idee`) zählen nicht: nicht auf Karte, Weltkugel, Film, im Tagebuch und in den Zahlen
   const reisenOhneIdeen = $derived($reisen.filter((r) => !r.idee))
   const fakten = $derived.by(() => {
-    const alle = $reisen.filter((r) => !r.idee).map((r) => ({ r, art: r.art || 'auto' }))
+    // Ohne Doppelzählung: Etappe und ihre Routen über dieselbe Strecke zählen nur einmal
+    const alle = ohneDoppelteStrecken($reisen, (r) => r.route?.km ?? luftlinieKm(r.stops || [])).map((r) => ({ r, art: r.art || 'auto' }))
     let km = 0, min = 0, flugKm = 0, flugMin = 0
     for (const { r, art } of alle) {
       // Ohne berechnete Route auf die Luftlinie der Stopps zurückfallen.
@@ -717,6 +720,18 @@
     await tick()
     document.querySelector(`.or-balken[data-region="${CSS.escape(titel)}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
+  // Sprung zu einem Etappenort (Suche): Adresse orte/<bereich>/etappe:<id> öffnet seine Gegend,
+  // die Karte der Gegend wählt ihn aus (etappeFokus) und zeigt Versorgung und Sehenswertes in der Nähe
+  $effect(() => {
+    const id = ansicht.tab === 'orte' && ansicht.id?.startsWith('etappe:') ? ansicht.id.slice(7) : null
+    if (!id) return
+    untrack(async () => {
+      const e = (await ladeEtappenorte()).find((x) => x.id === id)
+      if (!e) return
+      etappeFokus.set(id)
+      await zurRegion(e.bereich, e.region)
+    })
+  })
   let routenGruppe = $state('alle')
   let reiseKarteAn = $state(false)
   const sueden = $derived(regionen([...orte, ...$eigeneOrte].filter((o) => o.abschnitt?.startsWith('Süden') && passt(o))))
@@ -794,6 +809,11 @@
     el.classList.add('aufgerufen')
     setTimeout(() => el.classList.remove('aufgerufen'), 2200)
     try { el.focus({ preventScroll: true }) } catch {}
+  }
+  // Aus den Routen-Ideen zum Ort; „Einplanen“ öffnet danach gleich die Auswahl der Route auf der Kachel
+  async function zuOrtAusRoute(o, einplanen = false) {
+    await zuOrt(o)
+    if (einplanen) setTimeout(() => document.getElementById('ort-' + o.id)?.querySelector('.reise-btn')?.click(), 450)
   }
   function alsKacheln(q, tags) {
     suche = q; aktiveTags = [...tags]; sucheOffen = false
@@ -1255,7 +1275,7 @@
       {/if}
     {:else if orteUnter === 'routen'}
       <h2 class="abschnitt">{je('Routen-Ideen', 'Route ideas')}</h2>
-      <RoutenUebersicht {routen} bind:gruppe={routenGruppe} />
+      <RoutenUebersicht {routen} bind:gruppe={routenGruppe} orte={[...orte, ...$eigeneOrte]} reisen={reisenOhneIdeen} ziel={ansicht.id} onzumort={zuOrtAusRoute} />
       <div class="ueberblick-konzept"><Uebersicht tour={inhalt?.tour} /></div>
     {:else}
       <h2 class="abschnitt">{t('Süden: Margaret River bis jenseits von Esperance')}</h2>
@@ -1294,7 +1314,7 @@
     {:else if ansicht.unter === 'funfacts'}
       <FunFacts />
     {:else if ansicht.unter === 'fehler'}
-      <FehlerMelden version="Basic 1.25" build={buildText} />
+      <FehlerMelden version="Basic 1.26" build={buildText} />
     {:else if ansicht.unter === 'backup'}
       <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
     {:else if ansicht.unter === 'kosten'}
@@ -1360,7 +1380,7 @@
 <svelte:window bind:scrollY onkeydown={globaleTaste} />
 
 {#if sucheOffen}
-  <Suchblatt orte={[...orte, ...$eigeneOrte]} alleTags={ALLE_TAGS} {tagClass}
+  <Suchblatt orte={[...orte, ...$eigeneOrte]} {routen} alleTags={ALLE_TAGS} {tagClass}
     begriff={suche} etiketten={aktiveTags}
     onclose={() => (sucheOffen = false)} onwahl={zuOrt} onkacheln={alsKacheln}
     onxoxo={() => { sucheOffen = false; xoxoOffen = true }}

@@ -503,5 +503,14 @@
   "anzeigeName": "Stockyard Gully (cave tunnel)",
   "beschreibung": "A 250 m tunnel through the limestone, tall enough to walk upright. Drovers on their way to Perth used to rest here, the deep gully made a cool natural stockyard. The Cave Trail is 1.3 km return, through a sandy gully and then through the tunnel. The middle is pitch black, so bring a torch. Wild bee hives hang at the tunnel entrances, keep your distance. Access is 4WD only over soft sand and limestone, not with a caravan. Free entry. The parks service lists the area as Stockyard Gully Reserve.",
   "saison": "The tunnel stays cool, but the sand track gets soft and hot at midday. Go in the morning. Bring repellent for ticks and mosquitoes, after heavy rain the cave can flood."
+ },
+ "super_pit_lookout": {
+  "beschreibung": "One of Australia's largest open-cut gold mines, about 3.5 km long, 1.5 km wide and over 600 m deep. From the lookout on the edge of Kalgoorlie-Boulder the giant haul trucks look like toys. Free entry. The operator announces blast times daily."
+ },
+ "hutt_lagoon": {
+  "beschreibung": "Salt lake near Port Gregory, about 14 km long, glowing pink to violet depending on the light. The colour comes from the microalga Dunaliella salina, which is also farmed here. Strongest in sunshine between mid-morning and midday. Best seen from the lookouts on George Grey Drive."
+ },
+ "carnarvon_space_museum": {
+  "beschreibung": "Museum at the former OTC satellite earth station on Brown's Range above Carnarvon. The big dish supported NASA during the Apollo missions in the 1960s. Exhibits on space flight and radio technology, plenty to try out. A good stop for a hot midday break between Shark Bay and Quobba."
  }
 }

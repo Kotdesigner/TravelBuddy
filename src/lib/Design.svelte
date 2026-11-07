@@ -1,7 +1,8 @@
 <script>
-  // Alles zum Aussehen an einer Stelle: Hell und Dunkel, Sprache, Schrift, Größe und die Effekte.
+  // Alles zum Aussehen an einer Stelle: Hell und Dunkel, Kartendesign, Sprache, Schrift, Größe und die Effekte.
   import { t, je, sprache, setzeSprache } from './i18n.js'
   import { theme, setzeTheme } from './theme.js'
+  import { kartenThema, grossThema } from './karten-thema.js'
   import { darstellung, setzeSchrift, setzeGesamt, SCHRIFT, GESAMT } from './darstellung.js'
   import { effekte, setzeEffekt, setzeAlleEffekte } from './effekte.js'
 
@@ -27,6 +28,21 @@
         <button class:an={$theme === m} aria-pressed={$theme === m} onclick={() => setzeTheme(m)}>{l}</button>
       {/each}
     </div>
+  </section>
+
+  <section>
+    <h2>{je('Karten', 'Maps')}</h2>
+    {#each [[kartenThema, $kartenThema, je('Übersichtskarten', 'Overview maps'), je('Orte, Routen-Ideen, Wanderungen', 'Places, route ideas, hikes')],
+      [grossThema, $grossThema, je('Große Karte', 'Big map'), je('Plan → Karte, auch über den Knopf ◐ auf der Karte', 'Plan → Map, also via the ◐ button on the map')]] as [wahl, jetzt, titel, text] (titel)}
+      <div class="de-karte">
+        <b>{titel}</b><small>{text}</small>
+        <div class="segment" role="group" aria-label={titel}>
+          {#each [['auto', je('Wie die App', 'Like the app')], ['hell', t('Hell')], ['dunkel', t('Dunkel')]] as [m, l]}
+            <button class:an={jetzt === m} aria-pressed={jetzt === m} onclick={() => wahl.set(m)}>{l}</button>
+          {/each}
+        </div>
+      </div>
+    {/each}
   </section>
 
   <section>

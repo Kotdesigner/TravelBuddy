@@ -1,6 +1,8 @@
 // Wetter-abgeleitete Gefahren-Einschätzung über Open-Meteo (online, ohne Server).
 // KEINE amtlichen Warnungen — nur Risiko-Indikatoren aus der Vorhersage.
 import { t, je, jeSprache } from './i18n.js'
+import { metTageFuer } from './wetter-ausweich.js'
+import { zeitzoneFuer } from './sonne.js'
 
 export const STUFEN = jeSprache(() => ({ 0: 'keine', 1: t('erhöht'), 2: 'hoch', 3: 'extrem' }))
 export const STUFE_FARBE = { 1: '#c9a227', 2: '#d97a2b', 3: '#c0392b' }
@@ -53,24 +55,30 @@ export function bewerte(res) {
 const URL = 'https://api.open-meteo.com/v1/forecast'
 const FELDER = 'temperature_2m_max,precipitation_sum,wind_gusts_10m_max,weather_code'
 
-async function fetchBatch(punkte) {
+// Open-Meteo zuerst. Fällt es aus oder ist sein Tageslimit erreicht, springt MET Norway ein
+// (wie bei den Ortskacheln), damit das Wetter an der Strecke nicht einfach fehlt.
+async function fetchBatch(punkte, f = fetch) {
   const lat = punkte.map((p) => p.lat).join(',')
   const lon = punkte.map((p) => p.lon).join(',')
   const u = `${URL}?latitude=${lat}&longitude=${lon}&daily=${FELDER}&forecast_days=3&timezone=auto`
-  const r = await fetch(u)
-  if (!r.ok) throw new Error(t('Wetterdienst nicht erreichbar'))
-  const data = await r.json()
-  return Array.isArray(data) ? data : [data]
+  try {
+    const r = await f(u)
+    if (!r.ok) throw new Error('Open-Meteo ' + r.status)
+    const data = await r.json()
+    return Array.isArray(data) ? data : [data]
+  } catch {
+    try { return await metTageFuer(punkte, zeitzoneFuer, f) } catch { throw new Error(t('Wetterdienst nicht erreichbar')) }
+  }
 }
 
 /** Gefahren für viele Punkte (chunked). Gibt Array gleicher Länge zurück. */
-export async function holeGefahren(punkte) {
+export async function holeGefahren(punkte, { f = fetch } = {}) {
   const gueltig = punkte.filter((p) => p.lat != null && p.lon != null)
   const out = new Map()
   const CHUNK = 100
   for (let i = 0; i < gueltig.length; i += CHUNK) {
     const teil = gueltig.slice(i, i + CHUNK)
-    const res = await fetchBatch(teil)
+    const res = await fetchBatch(teil, f)
     teil.forEach((p, k) => out.set(p.id, bewerte(res[k])))
   }
   return out

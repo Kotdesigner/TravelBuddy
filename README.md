@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.25 · built for Western Australia**<br>
+**Version 1.26 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.25-e07b28?style=flat-square" alt="version: 1.25"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.26-e07b28?style=flat-square" alt="version: 1.26"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
-**[✨ What's new in 1.25](#-new-in-version-125)**
+**[✨ What's new in 1.26](#-new-in-version-126)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
@@ -144,12 +144,16 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 🌏 New in version 1.26
+
+**Real maps everywhere, route ideas on real roads and stopover towns.** Places, route ideas and hikes now sit on the offline map of the app itself, with state borders, highways, national parks and towns. Zoom with two fingers, out to all of Australia, and in only as far as the map stays sharp. A small Australia in the corner shows where you are looking. The route ideas follow the real roads, each in its own strong colour with its name along the line. Open a route and its stops carry the same numbers as the day plan, and the places of the app within 25 km of the road appear as orange dots. Tap one for a short card with photo, Google Maps, Add to trip and To the place. In the day plan every place is a button that takes you to its tile. New are 40 stopover towns in all areas, from Condingup to Kinglake and Cairns: a small house on the map, with fuel, water, shops and clinics within 10 km and the sights nearby. Search finds them too. Under Design you can switch the overview maps and the big map to light or dark separately, and the big map also has its own ◐ button. Three new places come from the route ideas: Hutt Lagoon, the Super Pit Lookout in Kalgoorlie and the Carnarvon Space & Technology Museum. Kilometres are no longer counted twice when a leg and its routes cover the same road, and the weather along the route switches to a second service when the first one is down.
+
+<details>
+<summary><b>📜 Earlier versions: 1.25 to 1.1</b></summary>
+
 ## 🧭 New in version 1.25
 
 **Maps that keep the overview, and over 20 hike ideas.** Places now open with a calm overview map: every area is a ring with the number of its places, and a small Australia shows where you are looking. Tap a ring and the area folds open below. Areas fold open and closed, so the page stays short. An open area starts with its own map with the detailed coastline from the offline map, each place numbered just like its tile, with a small locator map of Australia in the corner. Tap a number for a short card below the map with photo, description, sun times and the buttons Google Maps, Add to trip and To the tile. Dense spots become a bubble with a number, and you can zoom with + and −, two fingers or Ctrl and the mouse wheel. Islands show how to get there, for example the ferry from Fremantle to Rottnest. Every tile shows how far your nearest route passes by. Route ideas run side by side on the map instead of on top of each other, and each one folds open in place with its own small map. Under Plan → Hikes there are now over 20 popular hikes in Western Australia, from the Cape to Cape Track to Karijini, with length, time, water and summer closures, ready for your wish list or straight into a leg or route. Hikes on your list attach themselves to a route that passes within 25 km. On Today, Play trip, film and settings fold into one menu above the globe. And the app is faster: the place tiles build about three times as fast, and large files load only once.
-
-<details>
-<summary><b>📜 Earlier versions: 1.24 to 1.1</b></summary>
 
 ## 🐞 New in version 1.24
 
@@ -843,6 +847,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.22:** fun facts along the route, a logbook that fills itself in, an automatic daily backup
 - [x] **Version 1.23:** Lesueur National Park and the Stockyard Gully tunnel, park walks, fees and closures in the north, Eel Pool on the right spot
 - [x] **Version 1.24:** report a problem from the app, with screenshots, straight to the developer
+- [x] **Version 1.26:** real maps for places, route ideas and hikes, route ideas on real roads, 40 stopover towns with supplies, light or dark maps, three new places
 - [x] **Version 1.25:** maps with areas, zoom and pop-ups for places, route ideas and hikes, over 20 hike ideas, faster place tiles
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
@@ -875,10 +880,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.25 · entwickelt für Western Australia**<br>
+**Version 1.26 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.25-e07b28?style=flat-square" alt="version: 1.25"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.26-e07b28?style=flat-square" alt="version: 1.26"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -886,7 +891,7 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
-**[✨ Neu in 1.25](#-neu-in-version-125)**
+**[✨ Neu in 1.26](#-neu-in-version-126)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
@@ -999,12 +1004,16 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 🌏 Neu in Version 1.26
+
+**Echte Karten überall, Routen-Ideen auf echten Straßen und Etappenorte.** Orte, Routen-Ideen und Wanderungen liegen jetzt auf der Offline-Karte der App, mit Staatsgrenzen, Highways, Nationalparks und Städten. Mit zwei Fingern zoomen, heraus bis ganz Australien, hinein nur so weit, wie die Karte scharf bleibt. Ein kleines Australien in der Ecke zeigt, wo du gerade bist. Die Routen-Ideen folgen den echten Straßen, jede in einer eigenen kräftigen Farbe und mit ihrem Namen an der Linie. Öffnest du eine Route, tragen ihre Stopps die Nummern aus dem Tagesplan, und die Orte der App bis 25 km an der Strecke erscheinen als orange Punkte. Ein Tipp zeigt eine Kurzinfo mit Bild, Google Maps, Einplanen und Zum Ort. Im Tagesplan ist jeder Ort ein Knopf, der zu seiner Kachel führt. Neu sind 40 Etappenorte in allen Gegenden, von Condingup bis Kinglake und Cairns: ein kleines Häuschen auf der Karte, mit Tankstellen, Wasser, Läden und Kliniken im Umkreis von 10 km und den Sehenswürdigkeiten in der Nähe. Auch die Suche findet sie. Unter Design lassen sich die Übersichtskarten und die große Karte getrennt hell oder dunkel stellen, die große Karte hat dafür auch einen eigenen Knopf ◐. Drei neue Orte kommen aus den Routen-Ideen: Hutt Lagoon, der Super Pit Lookout in Kalgoorlie und das Carnarvon Space & Technology Museum. Kilometer zählen nicht mehr doppelt, wenn eine Etappe und ihre Routen dieselbe Strecke abdecken, und das Wetter an der Strecke weicht auf einen zweiten Dienst aus, wenn der erste ausfällt.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.25 bis 1.1</b></summary>
+
 ## 🧭 Neu in Version 1.25
 
 **Karten mit Überblick und gut 20 Wander-Ideen.** Die Orte beginnen jetzt mit einer ruhigen Gesamtkarte: Jede Gegend ist ein Ring mit der Anzahl ihrer Orte, und ein kleines Australien zeigt, wo du hinschaust. Ein Tipp auf einen Ring klappt die Gegend unten auf. Die Gegenden lassen sich auf- und zuklappen, so bleibt die Seite kurz. Eine offene Gegend beginnt mit ihrer eigenen Karte mit der genauen Küste aus der Offline-Karte, jeder Ort mit derselben Nummer wie seine Kachel, dazu eine kleine Lageskizze von Australien in der Ecke. Ein Tipp auf eine Nummer zeigt unter der Karte eine Kurzinfo mit Bild, Beschreibung, Sonnenzeiten und den Knöpfen Google Maps, Einplanen und Zur Kachel. Dichte Stellen werden zu einer Blase mit Zahl, und zoomen kannst du mit + und −, zwei Fingern oder Strg und Mausrad. Die Inseln zeigen, wie man hinkommt, etwa die Fähre von Fremantle nach Rottnest. Jede Kachel zeigt, wie weit deine nächste Route vorbeiführt. Die Routen-Ideen laufen auf der Karte nebeneinander statt übereinander, und jede klappt mit eigener kleiner Karte an Ort und Stelle auf. Unter Plan → Wanderungen stehen jetzt gut 20 beliebte Wanderungen in Western Australia, vom Cape to Cape Track bis Karijini, mit Länge, Dauer, Wasser und Sommersperren, für die Wunschliste oder gleich in eine Etappe oder Route. Wanderungen auf deiner Liste hängen sich von selbst an eine Route, die höchstens 25 km entfernt vorbeiführt. Auf Heute stecken Reise abspielen, Film und Einstellungen in einem Menü über der Weltkugel. Und die App ist schneller: Die Ortskacheln bauen sich etwa dreimal so schnell auf, große Dateien laden nur noch einmal.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.24 bis 1.1</b></summary>
 
 ## 🐞 Neu in Version 1.24
 
@@ -1666,6 +1675,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.22:** Fun Facts entlang der Route, ein Logbuch, das sich selbst ausfüllt, ein automatisches tägliches Backup
 - [x] **Version 1.23:** Lesueur-Nationalpark und der Tunnel von Stockyard Gully, Wege, Eintritt und Sperren der Parks im Norden, Eel Pool an der richtigen Stelle
 - [x] **Version 1.24:** Fehler melden aus der App, mit Bildschirmfotos, direkt an den Entwickler
+- [x] **Version 1.26:** echte Karten für Orte, Routen-Ideen und Wanderungen, Routen-Ideen auf echten Straßen, 40 Etappenorte mit Versorgung, Karten hell oder dunkel, drei neue Orte
 - [x] **Version 1.25:** Karten mit Gegenden, Zoom und Fenstern für Orte, Routen-Ideen und Wanderungen, gut 20 Wander-Ideen, schnellere Ortskacheln
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail

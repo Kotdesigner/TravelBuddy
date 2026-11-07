@@ -418,9 +418,19 @@ article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 
    blaues Meer, sandiges Land, kräftige Küste, volle Ringe und Punkte mit Zahl */
 :root {
   --karte-meer: #cfe4ef; --karte-land: #f1e7d3; --karte-kueste: #8a7a5c;
-  --karte-punkt: #c1662f; --karte-zahl: #ffffff; --karte-saum: #ffffff; --karte-strich: #8a7a5c; --karte-blass: #a99a80;
+  --karte-punkt: #c9612a; --karte-zahl: #ffffff; --karte-saum: #ffffff; --karte-strich: #8a7a5c; --karte-blass: #a99a80;
 }
 :root[data-theme='dark'] {
-  --karte-meer: #16303d; --karte-land: #4a3f33; --karte-kueste: #c9b99a;
-  --karte-punkt: #f08a3c; --karte-zahl: #1d130b; --karte-saum: #1d1814; --karte-strich: #c9b99a; --karte-blass: #8f826e;
+  --karte-meer: #16303d; --karte-land: #3d342b; --karte-kueste: #c9b99a;
+  --karte-punkt: #c9612a; --karte-zahl: #ffffff; --karte-saum: #ffffff; --karte-strich: #c9b99a; --karte-blass: #8f826e;
+}
+/* Kartendesign aus Mehr → Design → Karten (karten-thema.js setzt data-karte), steht nach den
+   Blöcken oben und gewinnt deshalb: dunkle Karte in heller App und umgekehrt */
+:root[data-karte='hell'] {
+  --karte-meer: #cfe4ef; --karte-land: #f1e7d3; --karte-kueste: #8a7a5c;
+  --karte-punkt: #c9612a; --karte-zahl: #ffffff; --karte-saum: #ffffff; --karte-strich: #8a7a5c; --karte-blass: #a99a80;
+}
+:root[data-karte='dunkel'] {
+  --karte-meer: #16303d; --karte-land: #3d342b; --karte-kueste: #c9b99a;
+  --karte-punkt: #c9612a; --karte-zahl: #ffffff; --karte-saum: #ffffff; --karte-strich: #c9b99a; --karte-blass: #8f826e;
 }

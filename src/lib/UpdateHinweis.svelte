@@ -7,14 +7,14 @@
   let { onfertig = () => {}, onhandbuch = null } = $props()
 
   const NEU = [
-    ['🗺️', je('Orte mit Gesamtkarte.', 'Places with an overview map.'), je('Jede Gegend ist ein Ring, ein Tipp klappt sie auf.', 'Every area is a ring, one tap opens it.')],
-    ['🔢', je('Karte je Gegend.', 'A map for every area.'), je('Nummern auf der Karte wie auf den Kacheln, Kurzinfo darunter.', 'Numbers on the map match the tiles, with a short card below.')],
-    ['🔍', je('Selbst zoomen.', 'Zoom yourself.'), je('Mit + und −, zwei Fingern oder Strg und Mausrad.', 'With + and −, two fingers or Ctrl and the mouse wheel.')],
-    ['⛴️', je('Inseln mit Anreise.', 'Islands with how to get there.'), je('Etwa die Fähre nach Rottnest, dazu der Abstand zu deiner Route.', 'For example the ferry to Rottnest, plus the distance to your route.')],
-    ['🥾', je('Gut 20 Wander-Ideen.', 'Over 20 hike ideas.'), je('Mit Sommersperren, für die Wunschliste oder gleich in die Route.', 'With summer closures, for your wish list or straight into a route.')],
-    ['🛣️', je('Routen-Ideen neu.', 'Route ideas, new look.'), je('Nebeneinander auf der Karte, jede zum Aufklappen.', 'Side by side on the map, each one folds open.')],
-    ['🌍', je('Weltkugel aufgeräumt.', 'A tidier globe.'), je('Abspielen, Film und Einstellungen in einem Menü.', 'Play, film and settings in one menu.')],
-    ['⚡', je('Schneller.', 'Faster.'), je('Die Ortskacheln bauen sich bis zu sechsmal so schnell auf.', 'Place tiles build up to six times as fast.')],
+    ['🗺️', je('Echte Karten überall.', 'Real maps everywhere.'), je('Orte, Routen-Ideen und Wanderungen auf der Offline-Karte mit Grenzen, Highways und Parks. Mit zwei Fingern zoomen, heraus bis ganz Australien.', 'Places, route ideas and hikes on the offline map with borders, highways and parks. Zoom with two fingers, out to all of Australia.')],
+    ['🔢', je('Karte je Gegend.', 'A map for every area.'), je('Nummern wie auf den Kacheln, ein kleines Australien zeigt, wo du gerade bist.', 'Numbers match the tiles, a small Australia shows where you are.')],
+    ['🛣️', je('Routen-Ideen auf echten Straßen.', 'Route ideas on real roads.'), je('Kräftige Farben, Stopps mit Nummer, Orte an der Strecke zum Antippen.', 'Strong colours, numbered stops, places along the way to tap.')],
+    ['🏠', je('Etappenorte.', 'Stopover towns.'), je('Städte zum Tanken, Einkaufen und Übernachten, mit Versorgung, auch an der Ostküste.', 'Towns for fuel, shopping and the night, with supplies, on the East Coast too.')],
+    ['🥾', je('Gut 20 Wander-Ideen.', 'Over 20 hike ideas.'), je('Mit Karte und Sommersperren, für die Wunschliste oder gleich in die Route.', 'With a map and summer closures, for your wish list or straight into a route.')],
+    ['🌗', je('Karten hell oder dunkel.', 'Light or dark maps.'), je('Unter Design, die große Karte auch direkt mit ◐.', 'Under Design, the big map also right on the map with ◐.')],
+    ['📍', je('149 Orte.', '149 places.'), je('Neu sind Hutt Lagoon, der Super Pit und das Space Museum in Carnarvon. Inseln zeigen die Anreise.', 'New: Hutt Lagoon, the Super Pit and the space museum in Carnarvon. Islands show how to get there.')],
+    ['⚡', je('Schneller und genauer.', 'Faster and more accurate.'), je('Ortskacheln bis zu sechsmal so schnell, Kilometer nicht mehr doppelt gezählt, Wetter an der Strecke mit zweitem Dienst.', 'Place tiles up to six times as fast, kilometres no longer counted twice, route weather with a second service.')],
   ]
 
   function zu() { updateGesehen(); onfertig() }
@@ -31,7 +31,7 @@
       <p class="uh-ver">TravelBuddy Basic {UPDATE_VERSION}</p>
     </div>
   </div>
-  <p class="uh-einl">{je('TravelBuddy hat viele neue Seiten und ist schneller geworden. Deine Reise, dein Logbuch und deine Orte sind alle noch da.', 'TravelBuddy has lots of new pages and got faster. Your trip, your logbook and your places are all still there.')}</p>
+  <p class="uh-einl">{je('TravelBuddy hat echte Karten, mehr Orte und ist schneller geworden. Deine Reise, dein Logbuch und deine Orte sind alle noch da.', 'TravelBuddy has real maps, more places and got faster. Your trip, your logbook and your places are all still there.')}</p>
   <ul class="uh-liste">
     {#each NEU as [zeichen, titel, text]}
       <li><span class="uh-z" aria-hidden="true">{zeichen}</span><span><b>{titel}</b> <span class="uh-t">{text}</span></span></li>

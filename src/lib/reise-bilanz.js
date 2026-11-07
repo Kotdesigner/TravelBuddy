@@ -2,7 +2,7 @@
 // Es kommt nur heraus, wofür es Daten gibt. Fehlt etwas, fehlt der Schlüssel ganz.
 import { kursFuer, inBeide } from './fx.js'
 import { album } from './tierwelt.js'
-import { eintragTage } from './plan.js'
+import { eintragTage, ohneDoppelteStrecken } from './plan.js'
 import { LOCALE, t, tn } from './i18n.js'
 import { dezimal, eur as euro, aud as audT } from './format.js'
 
@@ -54,8 +54,8 @@ export function berechneBilanz({ journal = [], wanderungen = [], reisen = [], pl
   if (kmTage.length) b.km = { wert: Math.round(kmTage.reduce((a, n) => a + n, 0)), quelle: 'logbuch', tage: kmTage.length }
   else {
     let km = 0
-    for (const r of reisen || []) {
-      if (!r || (r.art || 'auto') === 'flug' || r.route?.flug) continue
+    for (const r of ohneDoppelteStrecken(reisen)) {
+      if ((r.art || 'auto') === 'flug' || r.route?.flug) continue
       km += Number(r.route?.km) || 0
     }
     if (km > 0) b.km = { wert: Math.round(km), quelle: 'plan' }

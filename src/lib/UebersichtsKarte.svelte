@@ -239,10 +239,13 @@
   // Grobe Ringe außerhalb des Ausschnitts gleich weglassen (Rahmen je Ring vorab)
   const box = (r) => r.reduce((b, [lon, lat]) => [Math.min(b[0], lon), Math.min(b[1], lat), Math.max(b[2], lon), Math.max(b[3], lat)], [180, 90, -180, -90])
   const feinBoxen = $derived(fein)
+  const grobBoxen = AUS_RINGS.map((r) => [r, box(r)])
+  // Welche Landflächen gezeichnet werden, entscheidet allein ihr Rahmen. Früher fielen Flächen weg,
+  // deren Eckpunkte alle außerhalb lagen: mitten im Land (Kinglake) blieb dann nur blaues Meer.
   const land = $derived.by(() => {
     const a = ausschnitt, mx = (a.e - a.w) * 0.3, my = (a.n - a.s) * 0.3
-    const ringe = feinBoxen ? feinBoxen.filter(([, b]) => b[2] >= a.w - mx && b[0] <= a.e + mx && b[3] >= a.s - my && b[1] <= a.n + my).map(([r]) => r) : AUS_RINGS
-    return ringe.map((r) => r.map(([lon, lat]) => xy(lon, lat))).filter((d) => !d.every(raus)).map((d) => pfad(d) + ' Z')
+    return (feinBoxen || grobBoxen).filter(([, b]) => b[2] >= a.w - mx && b[0] <= a.e + mx && b[3] >= a.s - my && b[1] <= a.n + my)
+      .map(([r]) => pfad(r.map(([lon, lat]) => xy(lon, lat))) + ' Z')
   })
   const striche = $derived(linien.map((l) => {
     const schritt = Math.max(1, Math.ceil(l.punkte.length / 250))
@@ -293,26 +296,17 @@
   {/each}
   </g>
 </svg>
-{#if bedienbar}
-<div class="uk-zoom">
-  <button onclick={() => zoomUm(1.7)} aria-label={je('Näher heran', 'Zoom in')}>+</button>
-  <button onclick={() => zoomUm(1 / 1.7)} disabled={!vergroessert} aria-label={je('Weiter weg', 'Zoom out')}>−</button>
-</div>
-{/if}
+<!-- Keine Zoom-Knöpfe: Zoomen mit zwei Fingern oder Strg/⌘ und Mausrad, „Ganze Karte“ nur nach dem Zoomen -->
 {#if bedienbar && vergroessert}<button class="uk-zurueck" onclick={ganz}>⤢ {je('Ganze Karte', 'Whole map')}</button>{/if}
 </div>
 
 <style>
   .uk-rahmen { position: relative; max-width: 560px; margin: 0 auto; }
-  .uk-zoom { position: absolute; right: 8px; top: 8px; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; border: 1px solid var(--line-stark); background: var(--card); box-shadow: var(--shadow); }
-  .uk-zoom button { width: 40px; height: 40px; border: none; background: var(--card); color: var(--ink); font-size: calc(20px * var(--schrift, 1)); font-weight: 700; cursor: pointer; line-height: 1; }
-  .uk-zoom button + button { border-top: 1px solid var(--line); }
-  .uk-zoom button:disabled { color: var(--aus-ink); cursor: default; }
   .uk { touch-action: pan-y; user-select: none; -webkit-user-select: none; }
   .uk.zoomt { touch-action: none; cursor: grab; }
   .uk-zurueck { position: absolute; right: 8px; bottom: 8px; min-height: 40px; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); font-weight: 700; font-size: calc(12.5px * var(--schrift, 1)); cursor: pointer; box-shadow: var(--shadow); }
   .uk-haufen { cursor: pointer; }
-  .uk-haufen-kreis { fill: var(--karte-punkt); stroke: var(--karte-saum); stroke-width: 2.5; }
+  .uk-haufen-kreis { fill: var(--karte-punkt); stroke: var(--karte-saum); stroke-width: 2.5; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)); }
   .uk-haufen-zahl { fill: var(--karte-zahl); font-weight: 800; font-size: calc(11px * var(--schrift, 1)); pointer-events: none; }
   .uk { display: block; width: 100%; max-width: 560px; margin: 0 auto; height: auto; border-radius: 10px; border: 1px solid var(--line); }
   .uk-meer { fill: var(--karte-meer); }
@@ -322,7 +316,7 @@
   .uk-linie-treffer { fill: none; stroke: transparent; stroke-width: 16; cursor: pointer; }
   .uk-punkt { cursor: pointer; }
   .uk-treffer { fill: transparent; }
-  .uk-kreis { fill: var(--karte-punkt); stroke: var(--karte-saum); stroke-width: 2; }
+  .uk-kreis { fill: var(--karte-punkt); stroke: var(--karte-saum); stroke-width: 2; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35)); }
   .uk-punkt.rot .uk-kreis { fill: #c0392b; }
   .uk-punkt.aus .uk-kreis { fill: var(--karte-blass); stroke-width: 1; opacity: 0.7; }
   .uk-nr { fill: var(--karte-zahl); font-weight: 800; font-size: calc(10.5px * var(--schrift, 1)); pointer-events: none; }

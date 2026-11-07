@@ -2,7 +2,7 @@
 // Nur für Nutzer, die schon eine ältere Version hatten (Sprache oder Einführung gespeichert).
 // Wer die App zum ersten Mal öffnet, bekommt die Einführung, kein Update-Fenster.
 // Je Gerät in localStorage. Für ein späteres großes Update nur UPDATE_VERSION und die Liste ändern.
-export const UPDATE_VERSION = '1.25'
+export const UPDATE_VERSION = '1.26'
 export const UPDATE_KEY = 'tb-update-gesehen'
 const SPUREN = ['wa-sprache', 'tb-einfuehrung-v1']
 

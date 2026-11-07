@@ -12,6 +12,10 @@
   // Neben den Orten durchsucht das Blatt Tage, Tiere, Wanderungen, Buchungen, Etappen, Notizen,
   // Packliste und Vorbereitung (gesamtsuche.js). Orte bleiben oben, mit Etiketten und Kacheln.
   import { gesamtsuche } from './gesamtsuche.js'
+  import { ladeEtappenorte, kurzName } from './routen-daten.js'
+  import { STOPP } from './routen-verweise.js'
+  import { stoppsAusRoute } from './routen-ideen.js'
+  import { je } from './i18n.js'
   import { journal, wanderungen, buchungen, notizen, reisen, gesamtStart, packliste, vorbereitung, dokumente } from './userdata.js'
   import { tresor } from './tresor.js'
   import { etappenMitDatum } from './plan.js'
@@ -34,7 +38,18 @@
     onsnake = () => {},
     onvier = () => {},
     ongeh = () => {},        // (pfad) → zu einem Tag, einer Wanderung, Buchung … springen
+    routen = [],             // Routen-Ideen, für die Etappenorte (wo hält welche Route)
   } = $props()
+
+  // Etappenorte aller Gegenden: einmal laden, mit den Routen-Ideen, die dort halten
+  let etappenRoh = $state([])
+  ladeEtappenorte().then((e) => (etappenRoh = e))
+  const etappenorte = $derived(etappenRoh.map((e) => {
+    const halt = routen.filter((r) => stoppsAusRoute(r).some((s) => STOPP[s.name]?.etappe === e.id))
+    return { ...e, routeId: halt[0]?.id || '', artText: e.art === 'roadhouse' ? 'Roadhouse' : je('Etappenort', 'Stopover town'),
+      versorgungText: [['fuel', '⛽'], ['laden', '🛒']].filter(([k]) => e.versorgung?.[k]).map(([k, z]) => `${z} ${e.versorgung[k] > 9 ? '9+' : e.versorgung[k]}`).join(' '),
+      routenText: halt.length ? je('an ', 'on ') + halt.map((r) => kurzName(r.titel)).join(', ') : '' }
+  }))
 
   // Startwerte nur einmal übernehmen — danach gehört die Eingabe dem Blatt.
   let q = $state(untrack(() => begriff))
@@ -46,14 +61,14 @@
   const sichtbar = $derived(treffer.slice(0, GRENZE))
   const TEXTE = {
     tage: t('Logbuch-Tage'), tiere: t('Tiere'), wanderungen: t('Wanderungen'), buchungen: t('Buchungen und Belege'),
-    reisen: t('Etappen und Routen'), notizen: t('Notizen'), packliste: t('Packliste'), vorbereitung: t('Vorbereitung'),
+    reisen: t('Etappen und Routen'), etappenorte: je('Etappenorte', 'Stopover towns'), notizen: t('Notizen'), packliste: t('Packliste'), vorbereitung: t('Vorbereitung'),
     gesehen: (n, tage) => tn(n, '{n}× gesehen', '{n}× gesehen') + ', ' + tn(tage, 'an {n} Tag', 'an {n} Tagen'),
     nochNicht: t('noch nicht gesehen'), eigeneDokumente: t('Eigene Dokumente'), dokument: t('Dokument'), gueltigBis: t('gültig bis'),
   }
   // Mit Etiketten geht es um Orte; dann nur die Orte
   const weitere = $derived(tags.length ? [] : gesamtsuche(q, {
     journal: $journal, wanderungen: $wanderungen, buchungen: $buchungen, notizen: $notizen, reisen: $reisen,
-    etappen: etappenMitDatum($reisen, $gesamtStart), start: $gesamtStart, arten: ARTEN, artVon, katInfo, notizTyp: NOTIZ_TYP,
+    etappen: etappenMitDatum($reisen, $gesamtStart), start: $gesamtStart, etappenorte, arten: ARTEN, artVon, katInfo, notizTyp: NOTIZ_TYP,
     packVorlage: PACK_VORLAGE, pack: $packliste, vorbVorlage: VORBEREITUNG, vorb: $vorbereitung, dokumente: $tresor.aktiv && !$tresor.entsperrt ? [] : $dokumente, texte: TEXTE,   // V17: gesperrte Dokumente findet die Suche nicht
   }))
   const weitereZahl = $derived(weitere.reduce((n, g) => n + g.treffer.length, 0))

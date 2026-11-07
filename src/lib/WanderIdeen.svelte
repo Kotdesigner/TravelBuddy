@@ -10,6 +10,9 @@
   import { etappenMitDatum, istRoute } from './plan.js'
   import { mitWochentag } from './format.js'
   import UebersichtsKarte from './UebersichtsKarte.svelte'
+  import UeberblickKarte from './UeberblickKarte.svelte'
+  import { ueberblick, ladeUeberblick } from './ueberblick-gl.js'
+  import { onMount } from 'svelte'
   import { zeigeToast } from './toast.js'
 
   let { reisen = [], onkarte = null, onoeffne = null } = $props()
@@ -46,6 +49,10 @@
     an: gegend === 'alle' || v.gegend === gegend, rot: v.sommer === 'zu', ring: !!inListe(v) })))
   const linien = $derived(reisen.filter(zuordenbar).map((r) => ({ id: r.id, farbe: r.farbe || '#7a6fd6', punkte: punkteVon(r), label: r.name })))
 
+  // Echte Offline-Karte wie bei Orte und Routen-Ideen; Ausschnitt = die gewählte Gegend
+  onMount(() => { ladeUeberblick() })
+  const rahmenPunkte = $derived(sichtbar.map((v) => [v.lon, v.lat]))
+
   function zeige(id) {
     auswahl = id
     setTimeout(() => titelEl?.focus(), 30)
@@ -55,7 +62,8 @@
   // Tipp irgendwo daneben schließt das Fenster. Punkte und Zeilen öffnen ja selbst ein anderes.
   function daneben(e) {
     if (!auswahl) return
-    if (e.target?.closest?.('.wi-pop, .uk-punkt, .wi-zeile')) return
+    // Auf der echten Karte meldet die Karte selbst, ob daneben getippt wurde (onleer)
+    if (e.target?.closest?.('.wi-pop, .uk-punkt, .wi-zeile, .ug')) return
     auswahl = null
   }
 
@@ -84,7 +92,12 @@
   <p class="wi-hinweis">{je('Beliebte Wanderungen in Western Australia. Tippe einen Punkt oder eine Zeile an. Zahlen gerundet, vor Ort gelten die Schilder der Parkverwaltung.', 'Popular hikes in Western Australia. Tap a dot or a row. Figures are rounded, on site the park signs apply.')}</p>
 
   <div class="wi-karte-rahmen">
-    <UebersichtsKarte {punkte} {linien} gewaehlt={auswahl} onpunkt={zeige} label={je('Karte mit den Wander-Ideen', 'Map of the hike ideas')} hoehe={340} rahmen="alle-punkte" zoomBeiEnge />
+    {#if $ueberblick === 'bereit'}
+      <UeberblickKarte {punkte} {linien} gewaehlt={auswahl} onpunkt={zeige} onleer={() => (auswahl = null)} {rahmenPunkte} spanne={[0.4, 0.3]} fitMax={9}
+        label={je('Karte mit den Wander-Ideen', 'Map of the hike ideas')} hoehe={340} />
+    {:else}
+      <UebersichtsKarte {punkte} {linien} gewaehlt={auswahl} onpunkt={zeige} label={je('Karte mit den Wander-Ideen', 'Map of the hike ideas')} hoehe={340} rahmen="alle-punkte" zoomBeiEnge />
+    {/if}
     <div class="wi-legende">
       <span><i class="wi-l gruen"></i>{je('offen', 'open')}</span>
       <span><i class="wi-l rot"></i>{je('im Sommer gesperrt', 'closed in summer')}</span>
