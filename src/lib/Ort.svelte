@@ -11,6 +11,8 @@
   import { bildNachweis } from './bild-nachweis.js'
   import { istWanderung, istPerle } from './wander-orte.js'
   import { istRoute, abstandZurRoute, ymd as ymdPlan } from './plan.js'
+  import { INSELN, ANREISE_ZEICHEN, abfahrtPunkt } from './inseln.js'
+  import { abstandZur, zuordenbar, NAH_KM } from './wander-zuordnung.js'
   import { norm } from './suche.js'
   import { geh } from './navigation.js'
   import { oeffneNeu } from './neu.js'
@@ -87,6 +89,18 @@
 
   // V4: Einplanen = in eine Route (die passendste zuerst), neue Route, oder als Wanderung.
   const routen = $derived(alleReisen.filter(istRoute))
+  // Inseln: wie man hinkommt. Nächste eigene Route höchstens NAH_KM entfernt, bei Inseln ab dem Hafen.
+  const insel = $derived(INSELN[ort.id] || null)
+  const nahFahrt = $derived.by(() => {
+    const p = abfahrtPunkt(ort)
+    let b = null
+    for (const r of routen) {
+      if (!zuordenbar(r)) continue
+      const a = abstandZur(p, r)
+      if (a && a.km <= NAH_KM && (!b || a.km < b.km)) b = { r, km: a.km }
+    }
+    return b
+  })
   // V16: nur Fahrten (keine Flüge, Transfers, Bahn) und nur bis 300 km, mit dem Namen der Etappe
   const etappeName = (id) => alleReisen.find((x) => x.id === id)?.name || ''
   // Nur Fahrten, nie Strecken aus Hin- oder Heimreise (etwa „Ab Kiel“)
@@ -256,6 +270,8 @@
     {:else if vorgemerkt}
       <p class="in-route vm">⭐ {je('vorgemerkt, noch in keiner Route', 'saved, not in a route yet')}</p>
     {/if}
+    {#if insel}<p class="anreise">{ANREISE_ZEICHEN[insel.art]} {insel.text}</p>{/if}
+    {#if !inRouten.length && nahFahrt}<p class="nah-route">🛣️ {nahFahrt.km < 1 ? je(`direkt an ${nahFahrt.r.name}`, `right on ${nahFahrt.r.name}`) : je(`${nahFahrt.km} km neben ${nahFahrt.r.name}`, `${nahFahrt.km} km from ${nahFahrt.r.name}`)}{#if insel}{je(', ab dem Hafen', ', from the port')}{/if}</p>{/if}
     {#if ort.tags?.length}
       <div class="tags">
         {#each ort.tags as tag}
@@ -411,6 +427,8 @@
 <style>
   .in-route.vm { color: var(--brand-text); }
   .vm-stern { font-size: 0.9em; }
+  .anreise { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--info-text); }
+  .nah-route { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--brand-text); }
   .in-route { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--ok-text); }
   .rm-titel { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); padding: 4px 10px 0; }
   .rm-name { display: flex; flex-direction: column; text-align: left; line-height: 1.25; }

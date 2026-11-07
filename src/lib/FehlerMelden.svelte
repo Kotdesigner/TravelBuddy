@@ -86,6 +86,8 @@
     } else {
       zeigeToast(erg.grund === 'netz'
         ? je('Gerade kein Netz. Dein Text bleibt hier, schick ihn später ab.', 'No connection right now. Your text stays here, send it later.')
+        : erg.info === 'tageslimit'
+        ? je('Heute sind schon sehr viele Meldungen eingegangen. Dein Text bleibt hier, schick ihn bitte morgen ab.', 'A lot of reports have come in today. Your text stays here, please send it tomorrow.')
         : je('Senden hat nicht geklappt. Dein Text bleibt hier, versuch es gleich noch einmal.', 'Sending did not work. Your text stays here, try again in a moment.'), 'fehler', 5000)
     }
   }

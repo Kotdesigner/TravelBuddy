@@ -5,40 +5,15 @@
   import { geh } from './navigation.js'
   import { get } from 'svelte/store'
   import { schriftAuf } from './kontrast.js'
-  import { findeKoordinaten } from './wa-orte.js'
+  import { stoppsAusRoute } from './routen-ideen.js'
   import { je } from './i18n.js'
   import ZuordnenBlatt from './ZuordnenBlatt.svelte'
 
-  let { routen = [] } = $props()
+  // eingebettet: in der aufgeklappten Zeile der Übersicht, ohne eigenen Kopf
+  let { routen = [], eingebettet = false } = $props()
 
   let meldung = $state('')
   let mTimer
-
-  // Stopps aus den Google-Maps-Links der Route ziehen (origin, waypoints, destination).
-  function stoppsAusRoute(r) {
-    const namen = []
-    for (const l of r.links || []) {
-      let u
-      try { u = new URL(l.url) } catch { continue }
-      const p = u.searchParams
-      const add = (v) => { if (v) namen.push(v) }
-      add(p.get('origin'))
-      const wp = p.get('waypoints')
-      if (wp) wp.split('|').forEach((w) => add(w))
-      add(p.get('destination'))
-    }
-    // aufeinanderfolgende Duplikate (Teil-Grenzen) entfernen
-    const stops = []
-    let letzter = null
-    for (const voll of namen) {
-      if (voll === letzter) continue
-      letzter = voll
-      const name = voll.replace(/,\s*Western Australia\s*$/i, '').replace(/,\s*Australia\s*$/i, '').trim()
-      const koord = findeKoordinaten(voll)
-      stops.push({ name, lat: koord ? koord[0] : null, lon: koord ? koord[1] : null, img: null })
-    }
-    return stops
-  }
 
   function tageAusRoute(r) {
     for (const m of r.meta || []) {
@@ -73,13 +48,15 @@
   {#if letzte}<button class="zur-route" onclick={() => geh(letzte.etappeId ? `plan/etappe/${letzte.etappeId}/${letzte.id}` : 'plan/route/' + letzte.id)}>{je('Öffnen', 'Open')}</button>{/if}</div>{/if}
 
 {#each routen as r (r.id)}
-  <article class="route">
+  <article class="route" class:eingebettet id="ri-{r.id}" tabindex="-1" style={eingebettet ? `border-left-color:${r.farbe}` : null}>
+    {#if !eingebettet}
     <div class="head" style="background:{r.farbe};color:{schriftAuf(r.farbe)}">
       <div class="titel">{r.titel}</div>
       {#if r.meta?.length}
         <div class="meta">{#each r.meta as m}<span>{m}</span>{/each}</div>
       {/if}
     </div>
+    {/if}
     <div class="body">
       <div class="map">
         {@html r.svg}
@@ -105,6 +82,8 @@
 
 <style>
   .route { border-radius: var(--radius-m); overflow: clip; border: 1px solid var(--line); margin-bottom: 22px; background: var(--card); box-shadow: var(--shadow); }
+  .route.eingebettet { margin: 4px 0 10px; box-shadow: none; border-left: 4px solid var(--line-stark); }
+  .route.eingebettet .body { padding: 12px 14px; }
   .head { position: sticky; top: var(--kopf-h, 98px); z-index: 31; color: #fff; padding: 12px 16px; box-shadow: 0 2px 6px rgba(0, 0, 0, .18); }
   .titel { font-size: calc(18px * var(--schrift, 1)); font-weight: 800; }
   .meta { margin-top: 4px; font-size: calc(12.5px * var(--schrift, 1)); }

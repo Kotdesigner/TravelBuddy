@@ -18,11 +18,16 @@
     return () => clearTimeout(timer)
   })
 
-  // Tank-Lücken und Sehenswertes an der Route (offline)
+  // Tank-Lücken und Sehenswertes an der Route (offline). Kurz warten: beim Start lädt das die große
+  // Versorgungsdatei, die soll den ersten Bildaufbau nicht bremsen. Danach reicht ein ruhiger Moment.
+  let hinweisTimer
+  const start = performance.now()
   $effect(() => {
-    const rs = $reisen, alle = orte
+    const rs = $reisen, alle = orte, vm = vorgemerkteIds($userData)
     $reichweite
-    hinweiseRechnen(rs, alle, vorgemerkteIds($userData))
+    clearTimeout(hinweisTimer)
+    hinweisTimer = setTimeout(() => hinweiseRechnen(rs, alle, vm), Math.max(400, 3000 - (performance.now() - start)))
+    return () => clearTimeout(hinweisTimer)
   })
 
   // Wetter an der Strecke automatisch für die laufende Etappe (nur online)

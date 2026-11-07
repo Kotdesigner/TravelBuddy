@@ -1,4 +1,5 @@
 <script>
+  import { ladePois } from './versorgung.js'
   import TourenWahl from './TourenWahl.svelte'
   import { t, LOCALE } from './i18n.js'
   import { dezimal } from './format.js'
@@ -24,7 +25,7 @@
   import { abstandKm } from './warnungen.js'
   import { geh } from './navigation.js'
 
-  let { orte = [], reisen = [], warnFokus = null } = $props()
+  let { orte = [], reisen = [], warnFokus = null, punktFokus = null } = $props()
   // Mehrere Routen gleichzeitig sichtbar (Menge der gewählten Reise-IDs).
   let gewaehlteReisen = $state(new Set())
   const istGewaehlt = (id) => gewaehlteReisen.has(id)
@@ -409,8 +410,7 @@
       if (!map.hasImage(id)) { try { map.addImage(id, plakette(kat.emoji, kat.farbe), { pixelRatio: 2 }) } catch {} }
     }
     if (!poiDaten) {
-      poiDaten = Promise.all(POI_REGIONEN.map((r) => fetch('/pois-' + r.id + '.json')
-        .then((x) => (x.ok ? x.json() : [])).catch(() => []))).then((l) => l.flat())
+      poiDaten = Promise.all(POI_REGIONEN.map((r) => ladePois(r.id).catch(() => []))).then((l) => l.flat())
     }
     const daten = await poiDaten
     if (!map) return
@@ -607,7 +607,7 @@
           'line-dasharray': [2.2, 1.6] } }, vor)
       warnNachOben()
     }
-    if (feats.length && !warnFokus) {
+    if (feats.length && !warnFokus && !punktFokus) {
       try {
         const co = feats.flatMap((f) => f.geometry.coordinates.flat())
         const b = co.reduce((bb, c) => bb.extend(c), new maplibregl.LngLatBounds(co[0], co[0]))
@@ -659,6 +659,24 @@
     if (rahmen) { try { map.fitBounds(rahmen, { padding: 60, duration: 700, maxZoom: 11 }) } catch {} }
   }
   $effect(() => { $warnListe; $meinePosition; $warnUmkreis; warnFokus; warnAn; if (mapGeladen) untrack(zeigeWarnungen) })
+
+  // Aus den Wander-Ideen: zur Wanderung fliegen und sie mit Namen markieren
+  let fokusMarker = null
+  function zeigePunktFokus() {
+    if (!map || !mapGeladen) return
+    fokusMarker?.remove(); fokusMarker = null
+    const p = punktFokus
+    if (!p || p.lat == null) return
+    const el = document.createElement('div')
+    el.className = 'pin wander-fokus'
+    fokusMarker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
+      .setLngLat([p.lon, p.lat])
+      .setPopup(new maplibregl.Popup({ offset: 14, closeButton: false }).setHTML(`<b>🥾 ${esc(p.name)}</b><br><span style="font-size:12px;color:#777">${esc(p.gebiet || '')}</span>`))
+      .addTo(map)
+    fokusMarker.togglePopup()
+    map.flyTo({ center: [p.lon, p.lat], zoom: 10, duration: 900 })
+  }
+  $effect(() => { punktFokus; if (mapGeladen) untrack(zeigePunktFokus) })
 
   // Standortpunkt als eigener Marker: liegt über Pins, Tankstellen & Co. und Warngebieten.
   let ichMarker = null
@@ -1085,6 +1103,7 @@
   .rs-meldungen:empty { display: none; }
 
   /* Standortpunkt: blau mit weißem Ring und ruhigem Puls, immer obenauf. */
+  :global(.pin.wander-fokus) { filter: hue-rotate(-60deg) saturate(1.4); z-index: 15; }
   :global(.ich-punkt) { position: relative; width: 24px; height: 24px; pointer-events: none; }
   :global(.ich-kern) { position: absolute; inset: 2px; border-radius: 50%; background: #1f6fd1; border: 3px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,.5); }
   :global(.ich-halo) { position: absolute; inset: -12px; border-radius: 50%; background: rgba(31,111,209,.28); animation: -global-ich-puls 2.2s ease-out infinite; }

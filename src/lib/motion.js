@@ -45,6 +45,15 @@ export function zaehlHoch(node, { wert = 0, dauer = 650 } = {}) {
 }
 
 /** use:erscheine — Block gleitet beim ersten Sichtbarwerden sanft ein (einmalig). */
+/** Ruft `an()` einmal auf, sobald das Element in die Nähe des sichtbaren Bereichs kommt.
+    Für Teile, die viel laden (Weltkugel mit Kartenbibliothek): erst bauen, wenn man hinscrollt. */
+export function beiSicht(node, an) {
+  if (typeof IntersectionObserver === 'undefined') { an?.(); return }
+  const io = new IntersectionObserver((e) => { if (e.some((x) => x.isIntersecting)) { io.disconnect(); an?.() } }, { rootMargin: '400px 0px' })
+  io.observe(node)
+  return { destroy: () => io.disconnect() }
+}
+
 export function erscheine(node, { dauer = 240, y = 10 } = {}) {
   if (reduziert()) return {}
   node.style.opacity = '0'

@@ -8,6 +8,7 @@
 //   Ergebnis   „spätestens losfahren um …“ in der Zeitzone des Ziels
 // Reicht das Tageslicht nicht (Losfahren läge vor Sonnenaufgang), Vorschlag: Strecke teilen.
 import * as SunCalc from 'suncalc'
+import { uhrzeitFormat } from './sonne.js'
 import { zeitzoneFuer } from './sonne.js'
 import { etappenMitDatum, etappeAm, routenDerEtappe, gueltigesDatum, plusTage } from './plan.js'
 import { bereichVon } from './abschnitte.js'
@@ -118,7 +119,7 @@ export function sonneAm(lat, lon, datum) {
 /** Uhrzeit HH:MM in einer Zeitzone. */
 export function uhrzeit(date, tz) {
   if (!date || isNaN(date.getTime())) return '–'
-  return date.toLocaleTimeString(LOCALE, { timeZone: tz, hour: ZWEI, minute: '2-digit' })
+  return uhrzeitFormat(tz).format(date)
 }
 
 /** „4 h 05 min“ bzw. „45 min“. */

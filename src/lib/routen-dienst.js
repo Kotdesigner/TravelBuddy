@@ -4,6 +4,7 @@
 // Die Rechnung darf nicht davon abhängen, welcher Bildschirm gerade offen ist. Deshalb
 // ein Modul mit Stores, angestoßen einmal von
 // RoutenDienst.svelte (in App.svelte eingebunden), gelesen von jedem RouteEditor.
+import { ladePois } from './versorgung.js'
 import { fehlerText } from './fehlertext.js'
 import { writable, get } from 'svelte/store'
 import { updateReise, userData } from './userdata.js'
@@ -59,10 +60,7 @@ export async function ladeTankstellen(regionId) {
   if (!regionId) return []
   if (fuelCache.has(regionId)) return fuelCache.get(regionId)
   let fuel = []
-  try {
-    const alle = await fetch('/pois-' + regionId + '.json').then((r) => (r.ok ? r.json() : []))
-    fuel = alle.filter((p) => p.k === 'fuel')
-  } catch {}
+  try { fuel = (await ladePois(regionId)).filter((p) => p.k === 'fuel') } catch {}
   fuelCache.set(regionId, fuel)
   return fuel
 }

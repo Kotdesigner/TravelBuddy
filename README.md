@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.24 · built for Western Australia**<br>
+**Version 1.25 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.24-e07b28?style=flat-square" alt="version: 1.24"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.25-e07b28?style=flat-square" alt="version: 1.25"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
-**[✨ What's new in 1.24](#-new-in-version-124)**
+**[✨ What's new in 1.25](#-new-in-version-125)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
@@ -144,12 +144,16 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 🧭 New in version 1.25
+
+**Maps that keep the overview, and over 20 hike ideas.** Places, route ideas and hikes now each start with a map that works offline, with the detailed coastline taken from the offline map. Choose an area and only its places are shown, while their dots light up. Where dots crowd together, the map zooms in by itself, dense clusters become a bubble with a number, and you can zoom with + and −, two fingers or Ctrl and the mouse wheel. Tap a place on the map for a window with photo, description, sun times and the buttons Google Maps, Add to trip and More about this place. Islands have their own button and show how to get there, for example the ferry from Fremantle to Rottnest. Every tile shows how far your nearest route passes by. Route ideas run side by side on the map instead of on top of each other, and each one folds open in place with its own small map. Under Plan → Hikes there are now over 20 popular hikes in Western Australia, from the Cape to Cape Track to Karijini, with length, time, water and summer closures, ready for your wish list or straight into a leg or route. Hikes on your list attach themselves to a route that passes within 25 km. On Today, Play trip, film and settings fold into one menu above the globe. And the app is faster: the place tiles build about three times as fast, and large files load only once.
+
+<details>
+<summary><b>📜 Earlier versions: 1.24 to 1.1</b></summary>
+
 ## 🐞 New in version 1.24
 
 **Report a problem, straight from the app.** Something not working or looking wrong? Tap 🐞 Report a problem at the very bottom of any page and write briefly what happened. Grey hints in the empty field ask what is not working and when it happens. You can add up to three screenshots and, if you like, an email for questions. “Send” delivers the report as an email to the developer, and a short note thanks you. Only the app version, device, browser, language, screen size and the last page you had open go along, shown openly in the form. Trip data, logbook, places and your location never do. Without a connection your text stays in the field until you send it.
-
-<details>
-<summary><b>📜 Earlier versions: 1.23 to 1.1</b></summary>
 
 ## 🌼 New in version 1.23
 
@@ -839,6 +843,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.22:** fun facts along the route, a logbook that fills itself in, an automatic daily backup
 - [x] **Version 1.23:** Lesueur National Park and the Stockyard Gully tunnel, park walks, fees and closures in the north, Eel Pool on the right spot
 - [x] **Version 1.24:** report a problem from the app, with screenshots, straight to the developer
+- [x] **Version 1.25:** maps with areas, zoom and pop-ups for places, route ideas and hikes, over 20 hike ideas, faster place tiles
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -870,10 +875,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.24 · entwickelt für Western Australia**<br>
+**Version 1.25 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.24-e07b28?style=flat-square" alt="version: 1.24"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.25-e07b28?style=flat-square" alt="version: 1.25"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -881,7 +886,7 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
-**[✨ Neu in 1.24](#-neu-in-version-124)**
+**[✨ Neu in 1.25](#-neu-in-version-125)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
@@ -994,12 +999,16 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 🧭 Neu in Version 1.25
+
+**Karten mit Überblick und gut 20 Wander-Ideen.** Orte, Routen-Ideen und Wanderungen beginnen jetzt mit einer Karte, die ohne Netz läuft, mit der genauen Küste aus der Offline-Karte. Wählst du eine Gegend, stehen nur ihre Orte da und ihre Punkte leuchten auf. Wo Punkte dicht liegen, zoomt die Karte von selbst heran, dichte Häufungen werden zu einer Blase mit Zahl, und zoomen kannst du auch selbst mit + und −, zwei Fingern oder Strg und Mausrad. Ein Tipp auf einen Ort öffnet ein Fenster mit Bild, Beschreibung, Sonnenzeiten und den Knöpfen Google Maps, Einplanen und Mehr Infos zum Ort. Die Inseln haben einen eigenen Knopf und zeigen, wie man hinkommt, etwa die Fähre von Fremantle nach Rottnest. Jede Kachel zeigt, wie weit deine nächste Route vorbeiführt. Die Routen-Ideen laufen auf der Karte nebeneinander statt übereinander, und jede klappt mit eigener kleiner Karte an Ort und Stelle auf. Unter Plan → Wanderungen stehen jetzt gut 20 beliebte Wanderungen in Western Australia, vom Cape to Cape Track bis Karijini, mit Länge, Dauer, Wasser und Sommersperren, für die Wunschliste oder gleich in eine Etappe oder Route. Wanderungen auf deiner Liste hängen sich von selbst an eine Route, die höchstens 25 km entfernt vorbeiführt. Auf Heute stecken Reise abspielen, Film und Einstellungen in einem Menü über der Weltkugel. Und die App ist schneller: Die Ortskacheln bauen sich etwa dreimal so schnell auf, große Dateien laden nur noch einmal.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.24 bis 1.1</b></summary>
+
 ## 🐞 Neu in Version 1.24
 
 **Fehler melden, direkt aus der App.** Geht etwas nicht oder sieht falsch aus? Tippe ganz unten auf jeder Seite auf 🐞 Fehler melden und schreib kurz, was passiert ist. Graue Hinweise im leeren Feld fragen, was nicht geht und wann es auftritt. Bis zu drei Bildschirmfotos lassen sich anfügen, dazu freiwillig eine E-Mail für Rückfragen. „Absenden“ schickt die Meldung als Mail an den Entwickler, ein kurzer Hinweis bedankt sich. Mit gehen nur App-Version, Gerät, Browser, Sprache, Bildschirmgröße und die zuletzt offene Seite, offen im Formular aufgelistet. Reisedaten, Logbuch, Orte und dein Standort nie. Ohne Netz bleibt dein Text im Feld, bis du ihn abschickst.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.23 bis 1.1</b></summary>
 
 ## 🌼 Neu in Version 1.23
 
@@ -1657,6 +1666,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.22:** Fun Facts entlang der Route, ein Logbuch, das sich selbst ausfüllt, ein automatisches tägliches Backup
 - [x] **Version 1.23:** Lesueur-Nationalpark und der Tunnel von Stockyard Gully, Wege, Eintritt und Sperren der Parks im Norden, Eel Pool an der richtigen Stelle
 - [x] **Version 1.24:** Fehler melden aus der App, mit Bildschirmfotos, direkt an den Entwickler
+- [x] **Version 1.25:** Karten mit Gegenden, Zoom und Fenstern für Orte, Routen-Ideen und Wanderungen, gut 20 Wander-Ideen, schnellere Ortskacheln
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

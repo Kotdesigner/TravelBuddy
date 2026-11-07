@@ -16,13 +16,23 @@ export function zeitzoneFuer(lat, lon) {
   return 'Australia/Sydney'                                     // NSW/VIC — UTC+10 mit Sommerzeit
 }
 
+// Ein Formatierer je Sprache und Zeitzone. toLocaleTimeString legt bei jedem Aufruf einen neuen an,
+// das kostete bei 146 Ortskacheln mit je sieben Zeiten spürbar Zeit, am iPhone ein Vielfaches.
+const formatierer = new Map()
+export function uhrzeitFormat(tz) {
+  const k = LOCALE + '|' + tz
+  let f = formatierer.get(k)
+  if (!f) { f = new Intl.DateTimeFormat(LOCALE, { timeZone: tz, hour: ZWEI, minute: '2-digit' }); formatierer.set(k, f) }
+  return f
+}
+
 export function sonnenZeiten(lat, lon, datum, tz = null) {
   tz = tz || zeitzoneFuer(lat, lon)
   const d = new Date(datum + 'T12:00:00Z')
   const t = SunCalc.getTimes(d, lat, lon)
   const fmt = (date) =>
     date && !isNaN(date.getTime())
-      ? date.toLocaleTimeString(LOCALE, { timeZone: tz, hour: ZWEI, minute: '2-digit' })
+      ? uhrzeitFormat(tz).format(date)
       : '—'
   return {
     aufgang: fmt(t.sunrise),

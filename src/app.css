@@ -397,3 +397,19 @@ article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 
 .bedien-zahl { flex: none; color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; font-variant-numeric: tabular-nums; }
 .bedien-wahl.an .bedien-zahl { color: #fff; }
 .bedien-feld { width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; padding: 0 12px; border: 1px solid var(--line-stark); border-radius: 10px; background: var(--eingabe); color: var(--ink); font-size: calc(14px * var(--schrift, 1)); }
+
+/* Orte: Kachel kurz hervorheben, wenn man auf der Übersichtskarte ihren Punkt antippt */
+/* Fenster über den Übersichtskarten (Orte, Wander-Ideen): Karte darunter abgedunkelt,
+   Fenster klar erhöht mit kräftigem Schatten, eigener Kopfleiste und kurzem Einblenden */
+.karten-schleier { position: absolute; inset: 0; z-index: 2; border-radius: 10px; background: rgba(12, 10, 8, 0.5); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); animation: kp-blende 0.18s ease-out; }
+.karten-pop { z-index: 3 !important; border-radius: 16px !important; border: 1px solid var(--line-stark) !important; background: var(--card) !important;
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25) !important; animation: kp-auf 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.karten-pop::before { content: ''; display: block; width: 36px; height: 4px; border-radius: 2px; background: var(--line-stark); margin: -4px auto 4px; }
+@keyframes kp-auf { from { opacity: 0; transform: translateY(10px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes kp-blende { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .karten-pop, .karten-schleier { animation: none; } }
+.ort-hl { outline: 3px solid var(--brand); outline-offset: 2px; transition: outline-color 0.3s; }
+
+/* Ortskacheln außerhalb des Bildschirms nicht vorab zeichnen: spart am iPhone beim Aufbau und Scrollen
+   (der Platz bleibt reserviert, damit die Seite nicht springt) */
+.region .grid > article.card { content-visibility: auto; contain-intrinsic-size: auto 460px; }

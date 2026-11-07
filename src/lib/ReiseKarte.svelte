@@ -26,6 +26,7 @@
   import { bereich, dezimal, zahl } from './format.js'
   import { artDerTour, logbuchTouren, verlauf, punktBei, spitzenZoom, anzoom, zoomBei, dauerFuer, kmText, glaette, nahZoom, auszoomAnteil, leseFilm, merkeFilm, FILM_TEMPO, FILM_ZOOM, FAHRZEUG } from './reisefahrt.js'
   import ReiseFilm from './ReiseFilm.svelte'
+  import { dauer, klapp } from './motion.js'
 
   let {
     reisen = [], journal = [], orte = [], eigeneOrte = [], springeZu = () => {},
@@ -455,6 +456,8 @@
 
   let introLaeuft = $state(false)
   let spielt = $state(false)
+  // Abspielen, Film, Tempo und Zoom stecken in einem Menü über der Kugel, damit sie nicht ständig Platz nehmen
+  let abspielMenue = $state(false)
   let beschriftung = $state(null)   // { titel, zeit, farbe } während des Abspielens
   let animNr = 0
   const flugFeatures = () => touren.filter((t) => t.flug && istSichtbar(t.id) && t.geo.length > 1)
@@ -719,9 +722,18 @@
     </div>
   </div>
   {#if bereit && touren.length}
+    {#if spielt}
+      <button class="bedien-knopf haupt rk-stopp" onclick={abspielen} aria-pressed="true">{t('⏹ Anhalten')}</button>
+    {:else}
+      <button class="rk-menue-knopf" aria-expanded={abspielMenue} aria-controls="rk-menue" onclick={() => (abspielMenue = !abspielMenue)}>
+        <span>{je('▶ Reise abspielen, 🎬 Film und Einstellungen', '▶ Play trip, 🎬 film and settings')}</span><span class="rk-pfeil" class:auf={abspielMenue} aria-hidden="true">▾</span>
+      </button>
+    {/if}
+    {#if abspielMenue && !spielt}
+    <div class="rk-menue" id="rk-menue" transition:klapp={{ duration: dauer(200) }}>
     <div class="bedien-zwei rk-aktionen">
-      <button class="bedien-knopf" class:haupt={spielt} onclick={abspielen} aria-pressed={spielt}>{spielt ? t('⏹ Anhalten') : t('▶ Reise abspielen')}</button>
-      <button class="bedien-knopf" onclick={oeffneFilm} aria-haspopup="dialog" title={t('Reise als Video aufnehmen')}>{t('🎬 Film')}</button>
+      <button class="bedien-knopf haupt" onclick={() => { abspielMenue = false; abspielen() }}>{t('▶ Reise abspielen')}</button>
+      <button class="bedien-knopf" onclick={() => { abspielMenue = false; oeffneFilm() }} aria-haspopup="dialog" title={t('Reise als Video aufnehmen')}>{t('🎬 Film')}</button>
     </div>
     <div class="rk-regler">
       <div class="segment" role="group" aria-label={je('Tempo', 'Speed')}>
@@ -735,6 +747,8 @@
         {/each}
       </div>
     </div>
+    </div>
+    {/if}
   {/if}
 
   <div class="rk-buehne">
@@ -971,6 +985,12 @@
     background: var(--brand); color: #fff; font-size: calc(13.5px * var(--schrift, 1)); font-weight: 800; cursor: pointer;
   }
 
+  .rk-menue-knopf { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; padding: 8px 14px; margin-bottom: 8px; border-radius: var(--radius-s, 10px); border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); font: inherit; font-weight: 700; font-size: calc(14px * var(--schrift, 1)); cursor: pointer; text-align: left; }
+  .rk-pfeil { transition: transform 0.2s; color: var(--muted); }
+  .rk-pfeil.auf { transform: rotate(180deg); }
+  .rk-stopp { width: 100%; margin-bottom: 8px; }
+  .rk-menue { padding: 10px; margin-bottom: 10px; border: 1px solid var(--line); border-radius: var(--radius-s, 10px); background: var(--flaeche); }
+  .rk-menue .rk-regler { margin-bottom: 0; }
   .rk-aktionen { margin-bottom: 8px; }
   .rk-regler { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin-bottom: 10px; }
   .rk-regler .segment { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }

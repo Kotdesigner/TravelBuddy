@@ -5,7 +5,7 @@ import {
   ZIEL, FELDER, MAX_BILDER, MAX_BYTES, HILFE, geraetUndBrowser, technikZeilen, technikText,
   sendefertig, emailOk, bildBytes, baueFormular, sende, istNetlify, mailLink, EMPFAENGER, issueLink, ISSUES,
 } from '../src/lib/fehlermeldung.js'
-import handler, { baueMail, zuViele, MAX_BILD_BYTES } from '../netlify/functions/fehlermeldung.mjs'
+import handler, { baueMail, zuViele, tagesGrenze, PRO_TAG, PRO_TAG_JE_ADRESSE, MAX_BILD_BYTES } from '../netlify/functions/fehlermeldung.mjs'
 let fehler = 0
 const p = (name, ok, info = '') => { console.log(ok ? '  ✓' : '  ✗', name, ok ? '' : info); if (!ok) fehler++ }
 const lies = (f) => fs.readFileSync(new URL('../' + f, import.meta.url), 'utf8')
@@ -77,7 +77,7 @@ const resend = async (url, o) => { gesendet = { url, o, mail: JSON.parse(o.body)
 // Platzhalter ohne die Form echter Schlüssel, damit kein Geheimnis-Scanner anschlägt
 const AN = 'empfaenger@example.com'
 const env = { RESEND_API_KEY: 'platzhalter-schluessel-zum-testen', FEHLER_AN: AN }
-const ruf = async (felder, o = {}, opts = {}) => { const [req, ctx] = anfrageMit(felder, o); const r = await handler(req, ctx, { f: resend, env, ...opts }); return { status: r.status, j: await r.json() } }
+const ruf = async (felder, o = {}, opts = {}) => { const [req, ctx] = anfrageMit(felder, o); const r = await handler(req, ctx, { f: resend, env, speicher: null, ...opts }); return { status: r.status, j: await r.json() } }
 gesendet = null
 let r1 = await ruf({ 'bot-field': '', beschreibung: 'Karte bleibt grau\nNach dem Tippen auf Google Maps', email: 'leser@example.com', technik: 'Version: Basic 1.24', screenshot1: jpg('bild.jpg') })
 p('Meldung geht an Resend', r1.status === 200 && r1.j.ok === true && gesendet?.url === 'https://api.resend.com/emails')
@@ -96,7 +96,42 @@ p('Ohne Schlüssel: klare Antwort, keine Mail', await (async () => { gesendet = 
 p('Resend lehnt ab: Fehler zurück an die App', (await ruf({ beschreibung: 'Text da' }, {}, { f: async () => ({ ok: false }) })).j.grund === 'mail')
 p('Nur POST', (await ruf({}, { methode: 'GET' })).status === 405)
 p('Höchstens fünf je Minute und Adresse', (() => { const t = 1e6; for (let i = 0; i < 5; i++) if (zuViele('x', t + i)) return false; return zuViele('x', t + 10) && !zuViele('x', t + 61e3 + 10) })())
+// Obergrenze pro Tag mit nachgebautem Netlify-Blobs-Speicher
+function speicherNachbau() {
+  const daten = new Map()
+  return { daten,
+    get: async (k) => (daten.has(k) ? JSON.parse(daten.get(k)) : null),
+    setJSON: async (k, v) => { daten.set(k, JSON.stringify(v)) },
+    list: async ({ prefix = '' } = {}) => ({ blobs: [...daten.keys()].filter((k) => k.startsWith(prefix)).map((key) => ({ key })) }),
+    delete: async (k) => { daten.delete(k) },
+  }
+}
+await (async () => {
+  const sp = speicherNachbau(), tag = new Date('2037-03-02T10:00:00Z')
+  let ok = true
+  for (let i = 0; i < PRO_TAG_JE_ADRESSE; i++) if (await tagesGrenze(sp, '1.2.3.4', tag)) ok = false
+  p('Je Adresse höchstens ' + PRO_TAG_JE_ADRESSE + ' am Tag', ok && (await tagesGrenze(sp, '1.2.3.4', tag)) === 'tageslimit' && (await tagesGrenze(sp, '5.6.7.8', tag)) === null)
+  p('Adresse wird nicht gespeichert, nur ein Prüfwert', ![...sp.daten.values()].join('').includes('1.2.3.4'))
+  const sp2 = speicherNachbau()
+  for (let i = 0; i < PRO_TAG; i++) await tagesGrenze(sp2, 'a' + i, tag)
+  p('Insgesamt höchstens ' + PRO_TAG + ' am Tag', (await tagesGrenze(sp2, 'neu', tag)) === 'tageslimit')
+  const morgen = new Date('2037-03-03T10:00:00Z')
+  p('Am nächsten Tag wieder frei, alter Zähler wird gelöscht', (await tagesGrenze(sp2, 'neu', morgen)) === null && await new Promise((r) => setTimeout(r, 20)).then(() => [...sp2.daten.keys()].join() === 'tag-2037-03-03'))
+  p('Speicher kaputt: Meldung geht trotzdem durch', (await tagesGrenze({ get: async () => { throw new Error('weg') } }, 'x', tag)) === null && (await tagesGrenze(null, 'x', tag)) === null)
+  const sp3 = speicherNachbau()
+  for (let i = 0; i < PRO_TAG_JE_ADRESSE; i++) await tagesGrenze(sp3, 'gleich', new Date())
+  gesendet = null
+  const voll = await ruf({ beschreibung: 'Noch eine Meldung' }, { ip: 'gleich' }, { speicher: sp3 })
+  p('Funktion: über der Grenze 429 „tageslimit“, keine Mail', voll.status === 429 && voll.j.grund === 'tageslimit' && gesendet === null)
+  const sp4 = speicherNachbau()
+  await ruf({ 'bot-field': 'bot', beschreibung: 'Spam Spam' }, {}, { speicher: sp4 })
+  await ruf({ beschreibung: '  ' }, {}, { speicher: sp4 })
+  p('Bots und leere Meldungen zählen nicht mit', sp4.daten.size === 0)
+})()
 const fn = lies('netlify/functions/fehlermeldung.mjs')
+p('App zeigt eigene Meldung beim Tageslimit', /erg\.info === 'tageslimit'/.test(lies('src/lib/FehlerMelden.svelte')))
+p('Datenschutz nennt den Tageszähler', /Prüfwert \(Hash\)/.test(lies('src/lib/Rechtliches.svelte')))
+p('Netlify Blobs als Abhängigkeit', /"@netlify\/blobs"/.test(lies('package.json')))
 p('Kein Schlüssel und keine Adresse im Code', !/re_[A-Za-z0-9]{10,}/.test(fn) && /env\.RESEND_API_KEY/.test(fn) && /env\.FEHLER_AN/.test(fn) && !/@outlook\.|@gmail\./.test(fn))
 p('Ohne FEHLER_AN: nicht eingerichtet', await (async () => { const [req, ctx] = anfrageMit({ beschreibung: 'Text da' }); const r = await handler(req, ctx, { f: resend, env: { RESEND_API_KEY: 'x' } }); return r.status === 503 })())
 p('Pfad /api/fehlermeldung', /path: '\/api\/fehlermeldung'/.test(fn) && ZIEL === '/api/fehlermeldung')

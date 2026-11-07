@@ -10,7 +10,10 @@
   import WarnKnoepfe from './WarnKnoepfe.svelte'
   import { bereich, tageText, mitWochentag, zahl, eur, aud } from './format.js'
   import { katInfo } from './reisekalender.js'
-  import { STATUS_MAP, S_MAP } from './wanderungen-daten.js'
+  import { STATUS_MAP, S_MAP, dauerText } from './wanderungen-daten.js'
+  import { WANDER_VORSCHLAEGE, alsWanderung, schonDa, sommerText } from './wander-vorschlaege.js'
+  import { naechsteReise } from './wander-zuordnung.js'
+  import { neueWanderung } from './userdata.js'
   import { frage, loeschFrage } from './dialog.js'
   import { etappenSummen } from './kosten.js'
   import { fxKurse } from './fx.js'
@@ -80,6 +83,17 @@
   const gebucht = $derived(($buchungen?.events || []).filter((b) => !b.platzhalter && imZeitraum(b.datum)).sort((a, b) => a.datum.localeCompare(b.datum)))
   const ids = $derived(new Set([etappe?.id, ...routen.map((r) => r.id)].filter(Boolean)))
   const wand = $derived($wanderungen.filter((w) => (w.datum ? imZeitraum(w.datum) : ids.has(w.reiseId))))
+  // Wander-Ideen, die nah an dieser Etappe oder ihren Routen liegen und noch nicht auf der Liste stehen
+  const ideenNah = $derived.by(() => {
+    const kand = [etappe, ...routen].filter(Boolean)
+    if (!kand.length) return []
+    return WANDER_VORSCHLAEGE.filter((v) => !schonDa(v, $wanderungen))
+      .map((v) => ({ v, n: naechsteReise(v, kand) })).filter((x) => x.n).sort((a, b) => a.n.km - b.n.km)
+  })
+  function ideeMerken(v, reiseId) {
+    neueWanderung({ ...alsWanderung(v), reiseId, reiseAuto: true })
+    zeigeToast(je(`„${v.name}“ steht auf deiner Wunschliste`, `“${v.name}” is on your wish list`), 'ok')
+  }
   const geschrieben = $derived(new Set($journal.flatMap(eintragTage).filter(imZeitraum)).size)
   const vergangen = $derived(von && eintrag ? Math.max(0, Math.min(eintrag.tage, tageZwischen(von, ymd(new Date())) + 1)) : 0)
 
@@ -302,6 +316,17 @@
           {/each}
         </ul>
       {/if}
+      {#if ideenNah.length}
+        <div class="ed-ideen">
+          <span class="ed-ideen-titel">{ideenNah.length === 1 ? je('💡 1 Wander-Idee in der Nähe', '💡 1 hike idea nearby') : je(`💡 ${ideenNah.length} Wander-Ideen in der Nähe`, `💡 ${ideenNah.length} hike ideas nearby`)}</span>
+          {#each ideenNah as { v, n } (v.id)}
+            <div class="ed-idee">
+              <span class="ed-w-txt"><b>{v.name}</b><small>{je(`${n.km} km neben ${n.reise.name}`, `${n.km} km from ${n.reise.name}`)}{#if v.km}&nbsp;· {String(v.km).replace('.', je(',', '.'))} km{/if}{#if dauerText(v.dauerMin)}&nbsp;· {dauerText(v.dauerMin)}{/if}{#if sommerText(v.sommer)}&nbsp;· ☀️ {sommerText(v.sommer)}{/if}</small></span>
+              <button class="btn ed-merken" onclick={() => ideeMerken(v, n.reise.id)}>⭐ {je('Vormerken', 'Save')}</button>
+            </div>
+          {/each}
+        </div>
+      {/if}
       <button class="btn ed-dazu" onclick={() => onneu('wanderung', { datum: von, reiseId: etappe.id })}>{t('+ Wanderung')}</button>
     </section>
 
@@ -391,6 +416,10 @@
   .ed-weg { color: var(--danger-text); min-height: 44px; }
   .ed-ende { flex-direction: row; flex-wrap: wrap; justify-content: space-between; background: none; border: none; box-shadow: none; padding: 0; }
   .ed-ende .btn { min-height: 44px; }
+  .ed-ideen { display: flex; flex-direction: column; gap: 6px; padding: 10px; border: 1px dashed var(--line-stark); border-radius: 12px; }
+  .ed-ideen-titel { font-weight: 800; color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); }
+  .ed-idee { display: flex; align-items: center; gap: 10px; }
+  .ed-merken { min-height: 44px; flex: none; }
   .ed-wand { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
   .ed-w { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--flaeche); cursor: pointer; text-align: left; color: var(--ink); }
   .ed-w-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }

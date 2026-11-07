@@ -8,6 +8,13 @@
 //
 // Eigene einfache Sperren statt fremdem Spamfilter: Honigtopf-Feld, Größen- und Längengrenzen,
 // nur Bilder als Anhang, wenige Meldungen pro Minute je Adresse.
+//
+// Dazu eine Obergrenze pro Tag (Netlify Blobs, Speicher „fehlermeldungen“), damit Spam nicht das
+// Tageskontingent von Resend (100 Mails) aufbraucht und echte Meldungen liegen bleiben. Gezählt wird
+// nur, was wirklich als Mail rausgeht. Von der Adresse wird nur ein Prüfwert mit dem Datum gespeichert,
+// nie die Adresse selbst, und am nächsten Tag ist der Zähler weg.
+
+import { createHash } from 'node:crypto'
 
 export const ABSENDER = 'TravelBuddy <onboarding@resend.dev>'
 export const MAX_TEXT = 8000
@@ -15,6 +22,8 @@ export const MAX_BILDER = 3
 export const MAX_BILD_BYTES = 1.5 * 1024 * 1024
 export const MAX_ANFRAGE_BYTES = 5 * 1024 * 1024
 const PRO_MINUTE = 5
+export const PRO_TAG = 60
+export const PRO_TAG_JE_ADRESSE = 10
 const BILDTYPEN = ['image/jpeg', 'image/png', 'image/webp']
 
 const antwort = (status, daten) => new Response(JSON.stringify(daten), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } })
@@ -27,6 +36,38 @@ export function zuViele(schluessel, jetzt = Date.now()) {
   zuletzt.set(schluessel, liste)
   if (zuletzt.size > 500) for (const k of [...zuletzt.keys()].slice(0, 250)) zuletzt.delete(k)
   return liste.length > PRO_MINUTE
+}
+
+/** Tageszähler im Speicher `store` (Netlify Blobs). Rückgabe: null = darf senden, sonst der Grund.
+    Ohne Speicher oder bei einem Fehler im Speicher wird durchgelassen: lieber eine Meldung zu viel
+    als eine echte verloren. */
+export async function tagesGrenze(store, wer, jetzt = new Date()) {
+  if (!store) return null
+  try {
+    const tag = jetzt.toISOString().slice(0, 10)
+    const schluessel = 'tag-' + tag
+    const d = (await store.get(schluessel, { type: 'json' })) || { gesamt: 0, je: {} }
+    const pruef = createHash('sha256').update(tag + '|' + wer).digest('hex').slice(0, 16)
+    if (d.gesamt >= PRO_TAG) return 'tageslimit'
+    if ((d.je?.[pruef] || 0) >= PRO_TAG_JE_ADRESSE) return 'tageslimit'
+    d.gesamt = (d.gesamt || 0) + 1
+    d.je = { ...(d.je || {}), [pruef]: (d.je?.[pruef] || 0) + 1 }
+    await store.setJSON(schluessel, d)
+    // Zähler der Vortage löschen, ohne darauf zu warten
+    store.list({ prefix: 'tag-' }).then(({ blobs }) => Promise.all(blobs.filter((b) => b.key !== schluessel).map((b) => store.delete(b.key)))).catch(() => {})
+    return null
+  } catch {
+    return null
+  }
+}
+
+async function blobSpeicher() {
+  try {
+    const { getStore } = await import('@netlify/blobs')
+    return getStore('fehlermeldungen')
+  } catch {
+    return null
+  }
 }
 
 const emailOk = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)
@@ -75,7 +116,7 @@ export async function schicke(mail, schluessel, f = fetch) {
   return r.ok
 }
 
-export default async function handler(req, context = {}, { f = fetch, env = process.env } = {}) {
+export default async function handler(req, context = {}, { f = fetch, env = process.env, speicher } = {}) {
   if (req.method !== 'POST') return antwort(405, { ok: false, grund: 'methode' })
   const laenge = Number(req.headers.get('content-length') || 0)
   if (laenge > MAX_ANFRAGE_BYTES) return antwort(413, { ok: false, grund: 'zu-gross' })
@@ -90,6 +131,8 @@ export default async function handler(req, context = {}, { f = fetch, env = proc
   // Honigtopf gefüllt: so tun, als wäre alles gut, damit Bots nichts lernen
   if (erg.stumm) return antwort(200, { ok: true })
   if (erg.fehler) return antwort(erg.status, { ok: false, grund: erg.fehler })
+  const grenze = await tagesGrenze(speicher === undefined ? await blobSpeicher() : speicher, wer)
+  if (grenze) return antwort(429, { ok: false, grund: grenze })
   try {
     if (!(await schicke(erg.mail, schluessel, f))) return antwort(502, { ok: false, grund: 'mail' })
   } catch {

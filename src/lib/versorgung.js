@@ -144,18 +144,25 @@ export function abstandText(km) {
   return t('{km} km neben der Strecke', { km: dezimal(Math.round(km * 10) / 10) })
 }
 
-/** POI-Dateien laden (mit Zwischenspeicher). `holer` ist fetch oder eine Attrappe im Test. */
+/** POI-Dateien laden (mit Zwischenspeicher). `holer` ist fetch oder eine Attrappe im Test.
+    Einmal geladen für die ganze App: Versorgung, Tank-Analyse, Karte, Notfall und Reisen teilen sich
+    die Datei. Gleichzeitige Anfragen warten auf dieselbe, statt die große Datei mehrfach zu holen
+    und zu lesen (pois-wa.json hat gut eine halbe Million Zeichen). */
 const cache = new Map()
-export async function ladePois(regionId, holer = typeof fetch !== 'undefined' ? fetch : null) {
-  if (!regionId || !holer) return []
+export function ladePois(regionId, holer = typeof fetch !== 'undefined' ? fetch : null) {
+  if (!regionId || !holer) return Promise.resolve([])
   if (cache.has(regionId)) return cache.get(regionId)
-  let liste = []
-  try {
-    const r = await holer('/pois-' + regionId + '.json')
-    liste = r.ok ? await r.json() : []
-  } catch { liste = [] }
-  if (!Array.isArray(liste)) liste = []
-  if (liste.length) cache.set(regionId, liste)
-  return liste
+  const p = (async () => {
+    let liste = []
+    try {
+      const r = await holer('/pois-' + regionId + '.json')
+      liste = r.ok ? await r.json() : []
+    } catch { liste = [] }
+    if (!Array.isArray(liste)) liste = []
+    if (!liste.length) cache.delete(regionId)   // leer oder Fehler: beim nächsten Mal neu versuchen
+    return liste
+  })()
+  cache.set(regionId, p)
+  return p
 }
 export const _leereCache = () => cache.clear()

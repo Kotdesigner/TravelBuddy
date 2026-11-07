@@ -11,21 +11,23 @@
            gesamtStart, berechneKalender, ymd } from './userdata.js'
   import { SCHWIERIGKEIT, WEGART, WANDER_STATUS, S_MAP, ART_MAP, STATUS_MAP, dauerText } from './wanderungen-daten.js'
   import { macheThumbnail } from './thumbnail.js'
+  import { WANDER_VORSCHLAEGE } from './wander-vorschlaege.js'
+  import WanderIdeen from './WanderIdeen.svelte'
 
   import OrtWahl from './OrtWahl.svelte'
   import { loeschFrage } from './dialog.js'
   import { dauer, klapp } from './motion.js'
   import { etappenMitDatum, etappeAm, istRoute } from './plan.js'
 
-  let { orte = [], reisen = [], fokusId = null, onneu = null } = $props()
+  let { orte = [], reisen = [], fokusId = null, onneu = null, onkarte = null } = $props()
 
   // V4: aus dem Plan, dem Tag oder „+ Neu“ direkt auf eine Wanderung springen
-  $effect(() => {
-    if (!fokusId) return
+  $effect(() => { if (fokusId) zeigeKarte(fokusId) })
+  function zeigeKarte(id) {
     filter = 'alle'
-    offen[fokusId] = true
-    setTimeout(() => document.getElementById('wand-' + fokusId)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
-  })
+    offen[id] = true
+    setTimeout(() => document.getElementById('wand-' + id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
+  }
   async function loeschen(w) {
     if (await loeschFrage(t('Wanderung „{name}“', { name: w.name }))) loescheWanderung(w.id)
   }
@@ -161,6 +163,7 @@
             <div class="c-sub">
               <span class="badge stat-{w.status}">{stx?.emoji} {stx?.label}</span>
               {#if w.datum}<span class="badge termin">📅 {fmtTag(w.datum, w.zeit)}</span>{/if}
+              {#if w.reiseId && reiseName(w.reiseId)}<span class="badge sw">🛣️ {reiseName(w.reiseId)}</span>{/if}
               {#if s}<span class="badge sw">{s.emoji} {s.label}</span>{/if}
               {#if $lage.proWanderung[w.id]}<span class="badge warnung">{$lage.proWanderung[w.id][0].icon} {$lage.proWanderung[w.id][0].km === 0 ? t('Im Warngebiet') : t('{km} km neben einer Warnung', { km: Math.round($lage.proWanderung[w.id][0].km) })}</span>{/if}
               {#if kurz(w)}<span class="c-kurz">{kurz(w)}</span>{/if}
@@ -243,10 +246,11 @@
               </label>
               {#if routenWahl(w).length}
                 <label class="fld">{t('🛣️ Auf welcher Route')}
-                  <select value={reisen.some((r) => r.id === w.reiseId && istRoute(r)) ? w.reiseId : ''} onchange={(e) => set(w.id, { reiseId: e.target.value || null })}>
+                  <select value={reisen.some((r) => r.id === w.reiseId && istRoute(r)) ? w.reiseId : ''} onchange={(e) => set(w.id, { reiseId: e.target.value || null, reiseAuto: false })}>
                     <option value="">{t('keine Angabe')}</option>
                     {#each routenWahl(w) as r}<option value={r.id}>{r.name}</option>{/each}
                   </select>
+                  {#if w.reiseAuto && w.reiseId}<span class="hint">{je(`Von selbst zugeordnet: „${reiseName(w.reiseId)}“ führt nah vorbei.`, `Assigned automatically: “${reiseName(w.reiseId)}” passes close by.`)}</span>{/if}
                 </label>
               {/if}
             </div>
@@ -279,6 +283,11 @@
     {/each}
   </div>
 {/if}
+
+<details class="vorschlaege">
+  <summary>{je('💡 Wander-Ideen in Western Australia', '💡 Hike ideas in Western Australia')}<span class="bedien-zahl">{WANDER_VORSCHLAEGE.length}</span></summary>
+  <WanderIdeen {reisen} {onkarte} onoeffne={zeigeKarte} />
+</details>
 
 <style>
   .badge.warnung { background: var(--danger-flaeche); color: var(--danger-text); }
@@ -348,5 +357,9 @@
   }
 
   .c-del { width: 44px !important; height: 44px !important; }
+
+  .vorschlaege { margin-top: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 4px 12px 12px; }
+  .vorschlaege[open] summary { margin-bottom: 6px; }
+  .vorschlaege summary { display: flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 800; color: var(--brand-text); cursor: pointer; font-size: calc(15px * var(--schrift, 1)); }
   .c-name { min-height: 44px; font-size: calc(16px * var(--schrift, 1)); }
 </style>

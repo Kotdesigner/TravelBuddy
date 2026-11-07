@@ -4,7 +4,8 @@
   import { dezimal, ZWEI, eur, aud, zahl } from './lib/format.js'
   import Ort from './lib/Ort.svelte'
   import Uebersicht from './lib/Uebersicht.svelte'
-  import Routen from './lib/Routen.svelte'
+  import OrteUebersicht from './lib/OrteUebersicht.svelte'
+  import RoutenUebersicht from './lib/RoutenUebersicht.svelte'
   import Kalender from './lib/Kalender.svelte'
   import Praxis from './lib/Praxis.svelte'
   import Karte from './lib/Karte.svelte'
@@ -26,6 +27,8 @@
   import FunFactUnterwegs from './lib/FunFactUnterwegs.svelte'
   import { vorabWennNoetig } from './lib/funfacts.js'
   import { starteWaechter } from './lib/autosicherung.js'
+  import { starteWanderZuordnung } from './lib/wander-zuordnung.js'
+  import { WANDER_VORSCHLAEGE } from './lib/wander-vorschlaege.js'
   import { gruppiere, neueGruppe } from './lib/mehr-gruppen.js'
   import Buchungen from './lib/Buchungen.svelte'
   import Naechte from './lib/Naechte.svelte'
@@ -73,7 +76,7 @@
   import { zeigeToast } from './lib/toast.js'
   import { haptic } from './lib/haptik.js'
   import { theme, setzeTheme } from './lib/theme.js'
-  import { zaehlHoch, erscheine, leisteRand, wechsel, bildwechsel } from './lib/motion.js'
+  import { zaehlHoch, erscheine, leisteRand, wechsel, bildwechsel, beiSicht } from './lib/motion.js'
   import { fehlerText } from './lib/fehlertext.js'
   import MusikSymbol from './lib/musik/MusikSymbol.svelte'
   import MusikSeite from './lib/musik/MusikSeite.svelte'
@@ -119,6 +122,8 @@
   // Während der Testreise nicht sichern: sonst ersetzte die ausgedachte Reise die echte Sicherung des Tages
   const autoPayload = () => (get(testreiseAn) ? null : baueBackupPayload())
   $effect(() => { if (laden) return; return starteWaechter(autoPayload) })
+  // Wanderungen auf der Liste ordnen sich der Route zu, die nah vorbeiführt
+  $effect(() => { if (laden) return; return starteWanderZuordnung() })
   // Fehler melden: merkt sich die zuletzt offene Seite, damit sie in der Meldung steht
   $effect(() => merkeSeiten())
   let funfactsUhr = null
@@ -699,6 +704,11 @@
     return out
   }
 
+  // Gewählte Gegend je Reiter (Orte → Karte und Knöpfe oben)
+  let orteGegend = $state({ sueden: 'alle', norden: 'alle', osten: 'alle' })
+  let routenGruppe = $state('alle')
+  let reiseKarteAn = $state(false)
+  const nurGegend = (liste, g) => (g === 'alle' || !liste.some((r) => r.titel === g) ? liste : liste.filter((r) => r.titel === g))
   const sueden = $derived(regionen([...orte, ...$eigeneOrte].filter((o) => o.abschnitt?.startsWith('Süden') && passt(o))))
   const norden = $derived(regionen([...orte, ...$eigeneOrte].filter((o) => o.abschnitt?.startsWith('Norden') && passt(o))))
   // Ostküste: ein Abschnitt wie Süden und Norden.
@@ -1146,9 +1156,13 @@
 
       <!-- Reise-Karte: echte Karte mit allen Routen, nummerierten Stopps,
            Infofenster je Route und Vollbild-Ansicht -->
-      <div use:erscheine>
+      <!-- Erst bauen, wenn man in die Nähe scrollt: die Kugel lädt die Kartenbibliothek (rund 1 MB),
+           am iPhone kostete das beim Start spürbar Zeit -->
+      <div use:erscheine use:beiSicht={() => (reiseKarteAn = true)} class:rk-platz={!reiseKarteAn}>
+        {#if reiseKarteAn}
         <ReiseKarte reisen={reisenOhneIdeen} journal={$journal}
           orte={orte} eigeneOrte={$eigeneOrte} {springeZu} />
+        {/if}
       </div>
 
 
@@ -1165,9 +1179,10 @@
           onlogbuch={(id) => geh('logbuch/etappe/' + id)} onwanderung={(id) => geh('plan/wanderungen/' + id)} />
       {/key}
     {:else if ansicht.unter === 'wanderungen'}
-      <Wanderungen orte={[...orte, ...$eigeneOrte]} reisen={$reisen} fokusId={ansicht.id || null} onneu={() => oeffneNeu('wanderung')} />
+      <Wanderungen orte={[...orte, ...$eigeneOrte]} reisen={$reisen} fokusId={ansicht.id || null} onneu={() => oeffneNeu('wanderung')} onkarte={(v) => geh('plan/karte/wanderung/' + v.id)} />
     {:else if ansicht.unter === 'karte'}
-      <Karte {orte} reisen={reisenOhneIdeen} warnFokus={ansicht.id?.startsWith('warnung/') ? ansicht.id.slice(8) : null} />
+      <Karte {orte} reisen={reisenOhneIdeen} warnFokus={ansicht.id?.startsWith('warnung/') ? ansicht.id.slice(8) : null}
+        punktFokus={ansicht.id?.startsWith('wanderung/') ? (WANDER_VORSCHLAEGE.find((v) => v.id === ansicht.id.slice(10)) || null) : null} />
     {:else if ansicht.unter === 'naechte'}
       <Naechte {geh} />
     {:else if ansicht.unter === 'kalender'}
@@ -1199,7 +1214,8 @@
     {/if}
     {:else if orteUnter === 'norden'}
       <h2 class="abschnitt">{t('Norden: Steep Point, Ningaloo & Pilbara')}</h2>
-      {#each norden as r}
+      <OrteUebersicht regionen={norden} reisen={reisenOhneIdeen} bind:gegend={orteGegend.norden} />
+      {#each nurGegend(norden, orteGegend.norden) as r}
         <section class="region">
           <div class="region-titel">{t(r.titel)} <span class="anz">{r.orte.length}</span></div>
           <div class="grid">{#each r.orte as o (o.id)}<Ort ort={o} gefahr={ortGefahren[o.id]} warnung={ortWarnungen[o.id]} />{/each}</div>
@@ -1207,7 +1223,8 @@
       {/each}
     {:else if orteUnter === 'osten'}
       <h2 class="abschnitt">{t('Ostküste: Melbourne, Cairns & Whitsundays')}</h2>
-      {#each osten as r}
+      <OrteUebersicht regionen={osten} reisen={reisenOhneIdeen} bind:gegend={orteGegend.osten} />
+      {#each nurGegend(osten, orteGegend.osten) as r}
         <section class="region">
           <div class="region-titel">{t(r.titel)} <span class="anz">{r.orte.length}</span></div>
           <div class="grid">{#each r.orte as o (o.id)}<Ort ort={o} gefahr={ortGefahren[o.id]} warnung={ortWarnungen[o.id]} />{/each}</div>
@@ -1237,14 +1254,13 @@
         </div>
       {/if}
     {:else if orteUnter === 'routen'}
-      <h2 class="abschnitt">{t('Routen-Ideen Süden')}</h2>
-      <Routen routen={routenSued} />
-      <h2 class="abschnitt">{t('Routen-Ideen Norden')}</h2>
-      <Routen routen={routenNord} />
+      <h2 class="abschnitt">{je('Routen-Ideen', 'Route ideas')}</h2>
+      <RoutenUebersicht {routen} bind:gruppe={routenGruppe} />
       <div class="ueberblick-konzept"><Uebersicht tour={inhalt?.tour} /></div>
     {:else}
       <h2 class="abschnitt">{t('Süden: Margaret River bis jenseits von Esperance')}</h2>
-      {#each sueden as r}
+      <OrteUebersicht regionen={sueden} reisen={reisenOhneIdeen} bind:gegend={orteGegend.sueden} />
+      {#each nurGegend(sueden, orteGegend.sueden) as r}
         <section class="region">
           <div class="region-titel">{t(r.titel)} <span class="anz">{r.orte.length}</span></div>
           <div class="grid">{#each r.orte as o (o.id)}<Ort ort={o} gefahr={ortGefahren[o.id]} warnung={ortWarnungen[o.id]} />{/each}</div>
@@ -1283,7 +1299,7 @@
     {:else if ansicht.unter === 'funfacts'}
       <FunFacts />
     {:else if ansicht.unter === 'fehler'}
-      <FehlerMelden version="Basic 1.24" build={buildText} />
+      <FehlerMelden version="Basic 1.25" build={buildText} />
     {:else if ansicht.unter === 'backup'}
       <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
     {:else if ansicht.unter === 'kosten'}
@@ -1768,4 +1784,5 @@
   /* V17: größere Trefferfläche, sichtbar gleich (wie .ba-knopf::after) */
   .app-footer .af-by a, .app-footer .af-name, .mo-del { position: relative; }
   .app-footer .af-by a::after, .app-footer .af-name::after, .mo-del::after { content: ''; position: absolute; inset: -6px 0; }
+  .rk-platz { min-height: 420px; }
 </style>

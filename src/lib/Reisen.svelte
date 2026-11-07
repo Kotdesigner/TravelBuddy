@@ -1,4 +1,5 @@
 <script>
+  import { ladePois } from './versorgung.js'
   import { t, je, LOCALE, tn } from './i18n.js'
   import { kurzTag, kurzZeit, eur } from './format.js'
   import { reisen, neueReise, updateReise, loescheReise, verschiebeReise, journal, wanderungen, vorabKosten,
@@ -140,10 +141,7 @@
     if (!regionId) return []
     if (fuelCache.has(regionId)) return fuelCache.get(regionId)
     let fuel = []
-    try {
-      const alle = await fetch('/pois-' + regionId + '.json').then((r) => (r.ok ? r.json() : []))
-      fuel = alle.filter((p) => p.k === 'fuel')
-    } catch {}
+    try { fuel = (await ladePois(regionId)).filter((p) => p.k === 'fuel') } catch {}
     fuelCache.set(regionId, fuel)
     return fuel
   }

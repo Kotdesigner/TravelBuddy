@@ -1,4 +1,5 @@
 <script>
+  import { ladePois as holePois } from './versorgung.js'
   import { inAustralien } from './warnlage.js'
   import { t, je } from './i18n.js'
   import { dezimal, zahl } from './format.js'
@@ -98,9 +99,8 @@
     if (poiRegion === reg.id && pois.length) return
     poiLaedt = true
     try {
-      const res = await fetch(`/pois-${reg.id}.json`)
-      pois = res.ok ? await res.json() : []
-      poiRegion = res.ok ? reg.id : null
+      pois = await holePois(reg.id)
+      poiRegion = pois.length ? reg.id : null
     } catch { pois = []; poiRegion = null }
     poiLaedt = false
   }

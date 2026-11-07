@@ -794,6 +794,10 @@ export function neueWanderung(vorlage = {}) {
     status: vorlage.status || 'wunsch',
     bewertung: vorlage.bewertung ?? 0,
     fotos: vorlage.fotos || [],
+    // Aus welchem Vorschlag (Plan → Wanderungen → Vorschläge) sie stammt, sonst null
+    vorschlagId: vorlage.vorschlagId || null,
+    // true = die App hat sie der nahen Route zugeordnet, false = selbst gewählt, null = noch offen
+    reiseAuto: vorlage.reiseAuto ?? null,
   }
   wanderungen.update((ws) => [...ws, stempeln(w)])
   return w.id
