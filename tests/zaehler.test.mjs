@@ -39,5 +39,10 @@ p('Datenschutz erklärt die Zählung mit GoatCounter', /Anonyme Zählung der App
 p('Schalter zum Ausschalten', /type="checkbox" checked=\{!\$zaehlungAus\}/.test(r))
 p('README nennt die Zählung (de und en)', /zählt nur anonym[^\n]*GoatCounter/.test(lies('README.md')) && /only counts anonymously[^\n]*GoatCounter/.test(lies('README.md')))
 
+console.log('\n5  Statistik nur in der eigenen App, nie in der Basic')
+p('Keine Statistik-Seite', !fs.existsSync(new URL('../src/lib/Statistik.svelte', import.meta.url)) && !fs.existsSync(new URL('../src/lib/statistik.js', import.meta.url)))
+p('Kein Statistik-Eintrag unter Mehr', !/mehr\/statistik/.test(lies('src/App.svelte') + lies('src/lib/BottomBar.svelte')))
+p('Kein Lese-Schlüssel für Zählungen', !/tb-statistik|api\/v0\/stats/.test(lies('src/App.svelte') + z))
+
 if (fehler) { console.log(`\n${fehler} Fehler`); process.exit(1) }
 console.log('\nAlles grün')
