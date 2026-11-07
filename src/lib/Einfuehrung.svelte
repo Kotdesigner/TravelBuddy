@@ -20,6 +20,7 @@
   import { kartenLauf, ladePaket, paketMB } from './karten-laden.js'
   import { online } from './netz.js'
   import { zeigeToast } from './toast.js'
+  import { GEBIETE, pistenStand, pistenLaedt, pistenLaden, pistenPruefen, netzInfo } from './routing-offline.js'
 
   let { geh = () => {}, anzahlOrte = 0 } = $props()
 
@@ -56,6 +57,15 @@
   }
   function zurueck() { if (offen?.schritt > 0) setze(offen.schritt - 1) }
   function testreise() { beenden(); testreiseKnopf() }
+
+  // Offline-Routen (1.27): Pisten-Netz je Gebiet gleich hier laden, Größen aus netze.json
+  let netze = $state({})
+  $effect(() => { if (id === 'routen') { pistenPruefen(); netzInfo().then((m) => (netze = m)) } })
+  const mbVon = (g) => { const b = netze[g]?.pisten?.bytes; return b ? (b / 1048576).toFixed(b < 10485760 ? 1 : 0).replace('.', je(',', '.')) : '…' }
+  async function pisten(g) {
+    try { await pistenLaden(g); zeigeToast(je(`Pisten-Netz ${GEBIETE[g].name} gespeichert`, `Track network ${GEBIETE[g].name} saved`), 'ok') }
+    catch { zeigeToast(je('Laden ging nicht. Unter Plan, Karte, Offline-Routen kannst du es noch einmal versuchen.', 'Could not load. You can try again under Plan, Map, Offline routes.'), 'fehler', 6000) }
+  }
 
   // Läuft im Hintergrund weiter, die Einführung kann derweil weitergehen
   let kartenFertig = $state(false)
@@ -133,6 +143,26 @@
         <button class="btn-primary ef-los" onclick={weiter}>{t('Los geht’s')}</button>
         <button class="btn ef-test" onclick={testreise}>🧪 {t('Erst mit einer Testreise spielen')}</button>
         <button class="ef-leise" onclick={beenden}>{t('Später')}</button>
+      </div>
+
+    {:else if id === 'routen'}
+      <p class="ef-icon" aria-hidden="true">🛣️</p>
+      <h2 id="ef-titel">{je('Routen auch ohne Netz', 'Routes without internet too')}</h2>
+      <p id="ef-text">{je('Ohne Netz rechnet TravelBuddy deine Routen selbst, auf echten Straßen und fast so genau wie online. Die Hauptstraßen sind schon dabei. Für Nationalparks, Pisten und 4WD-Tracks lädst du das Pisten-Netz deines Gebiets dazu.', 'Without internet, TravelBuddy calculates your routes itself, on real roads and almost as accurately as online. The main roads are already included. For national parks, unsealed roads and 4WD tracks, add the track network for your area.')}</p>
+      <p class="ef-k">{je('Meldet Main Roads WA eine gesperrte Straße, etwa nach einem Unwetter oder bei überflutetem Floodway, bietet die App eine Umleitung an.', 'When Main Roads WA reports a closed road, for example after a storm or a flooded floodway, the app offers a detour.')}</p>
+      <div class="ef-karten">
+        <p class="ef-k">🪨 {je('Pisten-Netz laden, am besten im WLAN:', 'Load the track network, ideally on Wi-Fi:')}</p>
+        <div class="ef-karten-knoepfe">
+          {#each Object.entries(GEBIETE) as [g, geb] (g)}
+            {#if $pistenStand[g]}<p class="ef-ok" role="status">✓ {geb.name}</p>
+            {:else}<button class="btn" disabled={!$online || $pistenLaedt[g]} onclick={() => pisten(g)}>{$pistenLaedt[g] ? je('lädt …', 'loading …') : `${geb.name} · ${mbVon(g)} MB`}</button>{/if}
+          {/each}
+        </div>
+        {#if !$online}<p class="ef-k">{je('Braucht Netz. Später geht es unter Plan, Karte, Offline-Routen.', 'Needs internet. Later you can do it under Plan, Map, Offline routes.')}</p>{/if}
+      </div>
+      <div class="ef-knoepfe">
+        <button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>
+        <button class="ef-leise" onclick={zurueck}>{t('Zurück')}</button>
       </div>
 
     {:else if id === 'start'}

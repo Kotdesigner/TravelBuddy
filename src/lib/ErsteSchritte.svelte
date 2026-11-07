@@ -1,22 +1,29 @@
 <script>
-  // V18: Erste Schritte auf Heute. Fünf Schritte, die eine Reise rund machen. Jeder hakt sich von selbst
+  // V18: Erste Schritte auf Heute. Sechs Schritte, die eine Reise rund machen (1.27 mit Pisten-Netz). Jeder hakt sich von selbst
   // ab, sobald es das gibt. Sind alle erledigt oder blendet man die Liste aus, verschwindet sie.
   import { je } from './i18n.js'
   import { reisen, buchungen, dokumente, journal } from './userdata.js'
   import { istRoute, istEtappe } from './plan.js'
   import { oeffneNeu } from './neu.js'
   import InfoKnopf from './InfoKnopf.svelte'
+  import { pistenStand, pistenPruefen } from './routing-offline.js'
+  import { onMount } from 'svelte'
 
   let { geh = () => {} } = $props()
   const KEY = 'tb-erste-schritte-v1'
   let zu = $state((() => { try { return localStorage.getItem(KEY) === 'zu' } catch { return false } })())
   function ausblenden() { zu = true; try { localStorage.setItem(KEY, 'zu') } catch {} }
+  onMount(() => { pistenPruefen() })
+  // 1.27: zur Box Offline-Routen unter Plan, Karte, gleich aufgeklappt
+  function zuOfflineRouten() { try { localStorage.setItem('tb-offline-routen-offen', '1'); sessionStorage.setItem('tb-offline-routen-zeigen', '1') } catch {} geh('plan/karte') }
 
   const schritte = $derived([
     { id: 'etappe', icon: '🗓️', titel: je('Erste Etappe anlegen', 'Add your first leg'), text: je('Ein Zeitabschnitt mit Datum, das Rückgrat der Reise', 'A period with dates, the backbone of the trip'),
       fertig: $reisen.some(istEtappe), los: () => oeffneNeu('etappe') },
     { id: 'route', icon: '🛣️', titel: je('Eine Route planen', 'Plan a route'), text: je('Start, Ziel, Stopps: die App rechnet km, Zeit und Tank-Lücken', 'Start, destination, stops: the app works out km, time and fuel gaps'),
       fertig: $reisen.some((r) => istRoute(r) && (r.stops || []).length >= 2), los: () => oeffneNeu('route') },
+    { id: 'pisten', icon: '🪨', titel: je('Pisten-Netz laden', 'Load the track network'), text: je('Routen ohne Netz auch auf Pisten und 4WD-Tracks, unter Plan, Karte', 'Offline routes on unsealed roads and 4WD tracks too, under Plan, Map'),
+      fertig: Object.values($pistenStand).some(Boolean), los: zuOfflineRouten },
     { id: 'buchung', icon: '🎫', titel: je('Eine Buchung eintragen', 'Add a booking'), text: je('Mail einfügen, die Felder füllen sich aus', 'Paste the email, the fields fill in'),
       fertig: ($buchungen?.events || []).length > 0, los: () => oeffneNeu('buchung') },
     { id: 'dokumente', icon: '🗂️', titel: je('Dokumente einpflegen', 'Add your documents'), text: je('Pass und Visum mit Datei, auf Wunsch gesperrt', 'Passport and visa with their file, locked if you like'),

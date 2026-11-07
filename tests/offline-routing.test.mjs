@@ -136,6 +136,7 @@ const pn = lies('src/lib/PistenNetz.svelte'), hilfe = lies('src/lib/hilfe.js')
 p('Box Offline-Routen: Vergleich Hauptstraßen und Pisten-Netz als Tabelle mit fünf Zeilen', /class="pn-tab pn-vergleich"/.test(pn) && (pn.match(/^    \[je\('/gm) || []).length >= 9 && /Sperrungen umfahren/.test(pn))
 p('Größe und Genauigkeit zum Aufklappen', /<details class="pn-mehr">\s*<summary>\{je\('Größe', 'Size'\)\}/.test(pn) && /<summary>\{je\('Wie genau\?', 'How accurate\?'\)\}/.test(pn) && !/<details class="pn-mehr" open/.test(pn))
 p('Sperrungen hinter dem kleinen ⓘ oben, Fenster wie alle anderen (InfoKnopf, hilfe.js)', /<InfoKnopf id="sperrungen" \/>/.test(pn) && /sperrungen: \{\s*titel: je\('Straßensperrungen umfahren'/.test(hilfe) && /Floodway/.test(hilfe) && !/class="pn-sperr/.test(pn))
+p('Box Offline-Routen klappt auf und zu wie die anderen (runder Pfeil), anfangs zu, das ⓘ bleibt außerhalb des Knopfs', /<button class="pn-auf" aria-expanded=\{offen\} onclick=\{umschalten\}>\s*<span class="aufklapp klein" class:offen/.test(pn) && /\{#if offen\}<div class="pn-innen" transition:klapp/.test(pn) && /localStorage\.getItem\(OFFEN_KEY\) === '1'/.test(pn) && /<\/button>\s*<InfoKnopf id="sperrungen" \/>/.test(pn))
 p('Größe aus netze.json, nicht fest im Text', /info\[g\]\?\.haupt\?\.bytes/.test(pn) && /hauptZusammen/.test(pn))
 
 if (fehler) { console.log(`\n${fehler} Fehler`); process.exit(1) }

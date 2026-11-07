@@ -3,7 +3,8 @@
 import { writable } from 'svelte/store'
 
 export const KEY = 'tb-einfuehrung-v1'
-export const SCHRITTE = ['willkommen', 'start', 'begriffe', 'etappe', 'buchung', 'dokumente', 'orte', 'logbuch', 'sichern']
+// 'routen' (1.27): gleich nach dem Kartenmaterial, Offline-Routen und Pisten-Netz, damit es nicht untergeht
+export const SCHRITTE = ['willkommen', 'routen', 'start', 'begriffe', 'etappe', 'buchung', 'dokumente', 'orte', 'logbuch', 'sichern']
 
 /** Gespeicherten Stand prüfen: { schritt, fertig } oder null (noch nie gestartet). */
 export function bereinige(roh) {

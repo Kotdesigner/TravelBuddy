@@ -8,10 +8,23 @@
   import { online } from './netz.js'
   import { zeigeToast } from './toast.js'
   import InfoKnopf from './InfoKnopf.svelte'
+  import { dauer, klapp } from './motion.js'
   import { GEBIETE, pistenStand, pistenLaedt, pistenLaden, pistenEntfernen, pistenPruefen, netzInfo } from './routing-offline.js'
 
   let info = $state({})
-  onMount(() => { pistenPruefen(); netzInfo().then((m) => (info = m)) })
+  // Zu- und aufklappen wie die anderen Boxen; der Stand gilt je Gerät (nur Bequemlichkeit)
+  const OFFEN_KEY = 'tb-offline-routen-offen'
+  let offen = $state((() => { try { return localStorage.getItem(OFFEN_KEY) === '1' } catch { return false } })())
+  function umschalten() { offen = !offen; try { localStorage.setItem(OFFEN_KEY, offen ? '1' : '0') } catch {} }
+  const geladeneNamen = $derived(Object.entries(GEBIETE).filter(([g]) => $pistenStand[g]).map(([, x]) => x.name))
+  let box
+  onMount(() => {
+    pistenPruefen(); netzInfo().then((m) => (info = m))
+    // Kommt man über „Erste Schritte“ her, gleich zur Box scrollen
+    let zeigen = false
+    try { zeigen = sessionStorage.getItem('tb-offline-routen-zeigen') === '1'; sessionStorage.removeItem('tb-offline-routen-zeigen') } catch {}
+    if (zeigen) setTimeout(() => box?.scrollIntoView({ block: 'start', behavior: 'smooth' }), 300)
+  })
   const mb = (b) => (b ? (b / 1048576).toFixed(b < 1048576 * 10 ? 1 : 0).replace('.', je(',', '.')) : '…')
   const kmText = (n) => (n ? n.toLocaleString(je('de-DE', 'en-AU')) : '…')
   const hauptZusammen = $derived(Object.values(info).reduce((n, x) => n + (x?.haupt?.bytes || 0), 0))
@@ -40,11 +53,16 @@
   }
 </script>
 
-<div class="pn">
+<div class="pn" bind:this={box}>
   <div class="pn-kopf">
-    <span class="pn-titel">🛣️ {je('Offline-Routen', 'Offline routes')}<InfoKnopf id="sperrungen" /></span>
-    <span class="pn-stand">{je('Hauptstraßen immer dabei', 'Main roads always included')}</span>
+    <button class="pn-auf" aria-expanded={offen} onclick={umschalten}>
+      <span class="aufklapp klein" class:offen aria-hidden="true"></span>
+      <span class="pn-auf-txt"><b>🛣️ {je('Offline-Routen', 'Offline routes')}</b>
+        <small>{je('Hauptstraßen immer dabei', 'Main roads always included')} · {geladeneNamen.length ? je(`Pisten-Netz: ${geladeneNamen.join(', ')}`, `Track network: ${geladeneNamen.join(', ')}`) : je('kein Pisten-Netz geladen', 'no track network loaded')}</small></span>
+    </button>
+    <InfoKnopf id="sperrungen" />
   </div>
+  {#if offen}<div class="pn-innen" transition:klapp={{ duration: dauer(220) }}>
   <p class="pn-text">{je('Ohne Netz rechnet die App deine Routen selbst. Dafür hat sie zwei Straßennetze:', 'Offline, the app calculates your routes itself. It has two road networks for that:')}</p>
   <table class="pn-tab pn-vergleich">
     <thead><tr><th></th><th>{je('Hauptstraßen', 'Main roads')}</th><th>{je('Pisten-Netz', 'Track network')}</th></tr></thead>
@@ -84,13 +102,18 @@
       </li>
     {/each}
   </ul>
+  </div>{/if}
 </div>
 
 <style>
   .pn { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
-  .pn-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .pn-titel { font-weight: 800; font-size: calc(15px * var(--schrift, 1)); display: inline-flex; align-items: center; }
-  .pn-stand { font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); font-weight: 700; }
+  .pn-kopf { display: flex; align-items: center; gap: 6px; }
+  .pn-auf { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; background: none; border: none; padding: 0; cursor: pointer; text-align: left; color: var(--ink); min-height: 44px; }
+  .pn-auf:active { transform: none; }
+  .pn-auf-txt { display: flex; flex-direction: column; min-width: 0; }
+  .pn-auf-txt b { font-size: calc(15px * var(--schrift, 1)); font-weight: 800; }
+  .pn-auf-txt small { font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); font-weight: 600; }
+  .pn-innen { display: flex; flex-direction: column; gap: 8px; }
   .pn-text { margin: 0; font-size: calc(13px * var(--schrift, 1)); color: var(--muted); line-height: 1.45; }
   .pn-tab { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: calc(12.5px * var(--schrift, 1)); line-height: 1.35; }
   .pn-tab th, .pn-tab td { padding: 6px 5px; border-top: 1px solid var(--line); vertical-align: top; text-align: left; overflow-wrap: anywhere; }

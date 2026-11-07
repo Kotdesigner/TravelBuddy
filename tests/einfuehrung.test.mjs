@@ -28,7 +28,12 @@ console.log('\n2  Gespeicherter Stand')
   p('unbrauchbar wird „noch nie gestartet“', bereinige(null) === null && bereinige('x') === null)
   p('Schritt wird begrenzt', bereinige({ schritt: 99 }).schritt === SCHRITTE.length - 1 && bereinige({ schritt: -2 }).schritt === 0 && bereinige({ schritt: 'a' }).schritt === 0)
   p('fertig bleibt', bereinige({ schritt: 2, fertig: true }).fertig === true)
-  p('neun Schritte, vom Willkommen bis zum Sichern', SCHRITTE.length === 9 && SCHRITTE[0] === 'willkommen' && SCHRITTE.at(-1) === 'sichern')
+  p('zehn Schritte, vom Willkommen bis zum Sichern, gleich nach dem Willkommen die Offline-Routen', SCHRITTE.length === 10 && SCHRITTE[0] === 'willkommen' && SCHRITTE[1] === 'routen' && SCHRITTE.at(-1) === 'sichern')
+  {
+    const ef = fs.readFileSync(new URL('../src/lib/Einfuehrung.svelte', import.meta.url), 'utf8'), es = fs.readFileSync(new URL('../src/lib/ErsteSchritte.svelte', import.meta.url), 'utf8')
+    p('Schritt Offline-Routen: erklärt Hauptstraßen, Pisten-Netz und Sperrungen, lädt das Pisten-Netz je Gebiet direkt', /\{:else if id === 'routen'\}/.test(ef) && /onclick=\{\(\) => pisten\(g\)\}/.test(ef) && /pistenLaden\(g\)/.test(ef) && /Floodway/.test(ef) && /disabled=\{!\$online \|\| \$pistenLaedt\[g\]\}/.test(ef))
+    p('Erste Schritte auf Heute: „Pisten-Netz laden“, hakt sich ab, sobald eins geladen ist, führt zur aufgeklappten Box', /id: 'pisten'/.test(es) && /fertig: Object\.values\(\$pistenStand\)\.some\(Boolean\)/.test(es) && /localStorage\.setItem\('tb-offline-routen-offen', '1'\); sessionStorage\.setItem\('tb-offline-routen-zeigen', '1'\)/.test(es) && /geh\('plan\/karte'\)/.test(es))
+  }
   p('Anlegen, Buchung und Dokumente sind dabei', ['start', 'etappe', 'buchung', 'dokumente'].every((s) => SCHRITTE.includes(s)))
   p('je Gerät, nicht im Backup', !fs.readFileSync(wurzel + 'lib/userdata.js', 'utf8').includes(KEY))
 }
