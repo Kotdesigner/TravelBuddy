@@ -256,11 +256,11 @@ export function fuehreHaken(hier = {}, dort = {}) {
 export function fuehreSkalar(hier, dort, hierTs, dortTs, name, { grundwert = null, nurErgaenzen = false, zeige = String } = {}) {
   const leer = (v) => v == null || v === '' || v === grundwert
   if (leer(dort) || dort === hier) return { wert: hier, meldung: null, vonDort: false }
-  if (leer(hier)) return { wert: dort, meldung: `${name} aus der Datei übernommen: ${zeige(dort)}`, vonDort: true }
+  if (leer(hier)) return { wert: dort, meldung: t('{name} aus der Datei übernommen: {wert}', { name, wert: zeige(dort) }), vonDort: true }
   if (!nurErgaenzen && dortTs > hierTs) {
-    return { wert: dort, meldung: `${name}: in der Datei später geändert — ${zeige(hier)} → ${zeige(dort)}`, vonDort: true }
+    return { wert: dort, meldung: t('{name}: in der Datei später geändert, {alt} → {neu}', { name, alt: zeige(hier), neu: zeige(dort) }), vonDort: true }
   }
-  return { wert: hier, meldung: `${name}: hier ${zeige(hier)} bleibt (in der Datei ${zeige(dort)}, nicht jünger)`, vonDort: false }
+  return { wert: hier, meldung: t('{name}: hier bleibt {hier} (in der Datei {dort}, nicht jünger)', { name, hier: zeige(hier), dort: zeige(dort) }), vonDort: false }
 }
 const ZEIGE = {
   gesamtStart: (v) => String(v).split('-').reverse().join('.'),
@@ -304,7 +304,7 @@ export function fuehreZusammen(hier, datei, { quelle = t('anderes Gerät'), grun
   const versatzMs = datei.exportiert ? new Date(datei.exportiert) - new Date() : 0
   const nurErgaenzen = versatzMs > 3600000
   if (nurErgaenzen) {
-    hinweise.push(`Die Uhr des anderen Geräts geht etwa ${Math.round(versatzMs / 3600000)} Stunden vor. ` +
+    hinweise.push(t('Die Uhr des anderen Geräts geht etwa {stunden} Stunden vor.', { stunden: Math.round(versatzMs / 3600000) }) + ' ' +
       t('Es wird deshalb nur ergänzt und nichts überschrieben.'))
   }
 
@@ -361,7 +361,7 @@ export function fuehreZusammen(hier, datei, { quelle = t('anderes Gerät'), grun
     const vorher = ergebnis.buchungen.events.filter((e) => e.quelle === 'eigen').length
     const events = [...ergebnis.buchungen.events.filter((e) => e.quelle !== 'eigen'), ...eigene].sort((x, y) => (x.datum || '').localeCompare(y.datum || ''))
     ergebnis.buchungen = { ...ergebnis.buchungen, events }
-    if (eigene.length > vorher) hinweise.push(`Buchungen aus Mails: ${eigene.length - vorher} vom anderen Gerät ergänzt.`)
+    if (eigene.length > vorher) hinweise.push(t('Buchungen aus Mails: {zahl} vom anderen Gerät ergänzt.', { zahl: eigene.length - vorher }))
   }
 
   // Skalare — je Wert ein eigener Stempel (`skalarStand`), siehe fuehreSkalar.

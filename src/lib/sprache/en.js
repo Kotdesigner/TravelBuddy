@@ -2705,5 +2705,10 @@ export default {
  "Das Kartenmaterial ließ sich nicht laden. Auf der Kartenseite kannst du es noch einmal versuchen.": "The maps could not be downloaded. You can try again on the map page.",
  "Kartenmaterial wird geladen: {name}, {fertig} von {gesamt}": "Downloading maps: {name}, {fertig} of {gesamt}",
  "Datenschutz & Impressum": "Privacy & legal notice",
- "Zyklon": "cyclone"
+ "Zyklon": "cyclone",
+ "{name} aus der Datei übernommen: {wert}": "{name} taken from the file: {wert}",
+ "{name}: in der Datei später geändert, {alt} → {neu}": "{name}: changed later in the file, {alt} → {neu}",
+ "{name}: hier bleibt {hier} (in der Datei {dort}, nicht jünger)": "{name}: {hier} stays here (the file has {dort}, not newer)",
+ "Die Uhr des anderen Geräts geht etwa {stunden} Stunden vor.": "The other device's clock is about {stunden} hours ahead.",
+ "Buchungen aus Mails: {zahl} vom anderen Gerät ergänzt.": "Bookings from emails: {zahl} added from the other device."
 }
