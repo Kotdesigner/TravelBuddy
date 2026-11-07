@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.20 · built for Western Australia**<br>
+**Version 1.21 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.20-e07b28?style=flat-square" alt="version: 1.20"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.21-e07b28?style=flat-square" alt="version: 1.21"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
-**[✨ What's new in 1.20](#-new-in-version-120)**
+**[✨ What's new in 1.21](#-new-in-version-121)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
@@ -144,12 +144,16 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 💾 New in version 1.21
+
+**Backup & Import in one place.** Saving and importing now live together on their own page under More, with a short explanation: what is in the file and what is not, how “Merge” and “Replace” work, how to take your data between iPhone, Android, Mac, Windows or Linux, and when it is worth saving. The page shows your last backup and reminds you after a week. Working connections fold away with a green check: the flight key, Spotify and Last.fm, whose key is now checked when you save it. More is now sorted into groups, the same on the phone, on the computer and in the menu: Safety, On the road, Preparation, Extras and App. Exchange rates load again, after the rate service moved to a new address. At the very bottom, “TravelBuddy” now links to the source code here on GitHub, with a small link to the website below.
+
+<details>
+<summary><b>📜 Earlier versions: 1.20 to 1.1</b></summary>
+
 ## 🛟 New in version 1.20
 
 **Your entries stay safe, even when the device is full.** If saving fails, for example because storage is full, a red note now stays at the top with “💾 Save backup” and “Try saving again”. Before, the app looked fine and the entries were gone after closing it. TravelBuddy also asks the browser to protect its data from automatic clean-up as soon as you add your first entry, and the bottom of “More” shows how much space is used and free. A damaged or hand-edited backup no longer breaks pages: wrong fields are repaired during import and at start. Voice notes record at speech quality and stop by themselves after 5 minutes, so they take about a quarter of the space.
-
-<details>
-<summary><b>📜 Earlier versions: 1.19 to 1.1</b></summary>
 
 ## 🧹 New in version 1.19
 
@@ -819,6 +823,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.18:** set up as an app in Chrome, Edge and Safari on the Mac, “Set up the app” in the menu, reset the app
 - [x] **Version 1.19:** no more separate desktop downloads, every device installs from the browser
 - [x] **Version 1.20:** a note when saving fails, protected storage, damaged backups are repaired, shorter voice notes
+- [x] **Version 1.21:** Backup & Import on one page, green checks for working connections, More in groups, exchange rates fixed
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -850,10 +855,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.20 · entwickelt für Western Australia**<br>
+**Version 1.21 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.20-e07b28?style=flat-square" alt="version: 1.20"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.21-e07b28?style=flat-square" alt="version: 1.21"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -861,7 +866,7 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
-**[✨ Neu in 1.20](#-neu-in-version-120)**
+**[✨ Neu in 1.21](#-neu-in-version-121)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
@@ -974,12 +979,16 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 💾 Neu in Version 1.21
+
+**Backup & Import an einem Ort.** Sichern und Importieren stehen jetzt zusammen auf einer eigenen Seite unter Mehr, mit kurzer Erklärung: was in der Datei steckt und was nicht, wie „Zusammenführen“ und „Ersetzen“ wirken, wie du deine Daten zwischen iPhone, Android, Mac, Windows oder Linux mitnimmst und wann sich Sichern lohnt. Die Seite zeigt dein letztes Backup und erinnert nach einer Woche daran. Funktionierende Verbindungen klappen mit grünem Haken zu: der Flugschlüssel, Spotify und Last.fm, dessen Schlüssel jetzt beim Speichern geprüft wird. Mehr ist jetzt in Gruppen sortiert, gleich am Handy, am Rechner und im Menü: Sicherheit, Unterwegs, Vorbereitung, Extras und App. Die Wechselkurse laden wieder, nachdem der Kursdienst auf eine neue Adresse umgezogen ist. Ganz unten führt „TravelBuddy“ jetzt zum Quellcode hier auf GitHub, darunter klein ein Link zur Website.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.20 bis 1.1</b></summary>
+
 ## 🛟 Neu in Version 1.20
 
 **Deine Einträge bleiben sicher, auch wenn das Gerät voll ist.** Klappt das Speichern nicht, etwa weil der Speicher voll ist, steht jetzt oben ein roter Hinweis mit „💾 Backup sichern“ und „Erneut speichern“. Vorher sah alles gut aus, und nach dem Schließen waren die Einträge weg. TravelBuddy bittet den Browser außerdem gleich beim ersten eigenen Eintrag, die Daten nicht von selbst aufzuräumen, und ganz unten unter „Mehr“ steht, wie viel Platz belegt und frei ist. Eine beschädigte oder von Hand bearbeitete Sicherung legt keine Seiten mehr lahm: Falsche Felder werden beim Import und beim Start repariert. Sprachnotizen nehmen in Sprachqualität auf und enden nach 5 Minuten von selbst, so brauchen sie etwa ein Viertel des Platzes.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.19 bis 1.1</b></summary>
 
 ## 🧹 Neu in Version 1.19
 
@@ -1617,6 +1626,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.18:** als App einrichten in Chrome, Edge und Safari am Mac, „App einrichten“ im Menü, App zurücksetzen
 - [x] **Version 1.19:** keine eigenen Desktop-Downloads mehr, jedes Gerät richtet die App aus dem Browser ein
 - [x] **Version 1.20:** Hinweis, wenn das Speichern scheitert, geschützter Speicher, beschädigte Sicherungen werden repariert, kürzere Sprachnotizen
+- [x] **Version 1.21:** Backup & Import auf einer Seite, grüne Haken für funktionierende Verbindungen, Mehr in Gruppen, Wechselkurse repariert
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

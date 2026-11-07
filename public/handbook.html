@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TravelBuddy · Manual</title>
 <!-- Template for public/handbook.pdf (English). Regenerate: sh scripts/handbuch-pdf.sh
-     Inhalt nach dem Code der Basic-Fassung 1.20 (Stand November 2026). Texte ohne Gedankenstriche in Sätzen. -->
+     Inhalt nach dem Code der Basic-Fassung 1.21 (Stand November 2026). Texte ohne Gedankenstriche in Sätzen. -->
 <style>
   @font-face { font-family: 'Anton'; src: url('/fonts/anton.woff2') format('woff2'); }
   @page { size: A4; margin: 18mm 17mm 18mm 17mm; }
@@ -82,7 +82,7 @@
   <div class="titel">Travel<span>Buddy</span></div>
   <div class="striche"><i></i><i></i><i></i><i></i></div>
   <div class="unter">Trip planner, logbook and companion for the road trip through Western Australia, on the Mac and on the iPhone, even without signal.</div>
-  <div class="meta">Basic version 1.20 · as of 6 November 2026</div>
+  <div class="meta">Basic version 1.21 · as of 7 November 2026</div>
 </section>
 
 <section class="seite">
@@ -149,7 +149,7 @@
     <tr><td>Plan</td><td>Legs and routes, hikes, offline map, calendar, nights</td></tr>
     <tr><td>Places</td><td>144 places in the South, North and East Coast, My places, route ideas</td></tr>
     <tr><td>Logbook</td><td>Entries, reading the journal and creating a file, wildlife, notes</td></tr>
-    <tr><td>More</td><td>Emergency, trip preparation, bookings, flights &amp; trains, costs, hazards, packing list, tips, music, share travel report, quiz, plus backup, import, manual, theme and language</td></tr>
+    <tr><td>More</td><td>In groups: <b>Safety</b> (emergency, hazards, tips), <b>On the road</b> (bookings, flights &amp; trains, costs), <b>Preparation</b> (trip preparation, packing list), <b>Extras</b> (share travel report, music, quiz), <b>App</b> (backup &amp; import, manual, theme and language)</td></tr>
   </table>
 
   <h3>iPhone</h3>
@@ -161,7 +161,7 @@
   </ul>
   <h3>Mac (from 900 pixels wide)</h3>
   <ul>
-    <li>On the left a sidebar with the same sections and their sub-pages, at the bottom backup, import, manual, theme (auto, light, dark) and language.</li>
+    <li>On the left a sidebar with the same sections and their sub-pages, under More in the same groups, at the bottom backup &amp; import, manual, theme (auto, light, dark) and language.</li>
     <li>Search with <code>⌘K</code> or <code>/</code>. Back works with the browser's back button.</li>
   </ul>
   <h3>Language</h3>
@@ -353,13 +353,13 @@
   <p>The app checks your position, the road ahead, every leg and every hike. Each warning shows the size of the area and the distance, plus buttons for Google Maps and the offline map with radius and your position. <b>Test mode</b> shows all of this with a position of your choice and made-up warnings.</p>
   <h2>✈️ Flights &amp; trains</h2>
   <p>All flights and trains of the trip with status, new times, terminal, gate, check-in desk, platform, baggage belt and connections. Add them under route, leg or pre-trip costs. Every entry with a number is checked by itself, more often as departure gets closer. 24 hours before, a notice appears on Today.</p>
-  <p>Flights need your own free RapidAPI key (AeroDataBox, Basic plan). It stays on the device and is not part of the backup, and the app shows your quota. German trains need no key, and the departure board looks about 3 hours ahead.</p>
+  <p>Flights need your own free RapidAPI key (AeroDataBox, Basic plan). It stays on the device and is not part of the backup, and the app shows your quota. Once it is set up, the field folds into a line with a green check, and “Change key” opens it again. German trains need no key, and the departure board looks about 3 hours ahead.</p>
   <h2>💰 Costs</h2>
   <p>Everything from pre-trip costs and the logbook: short values, long values, transport, stays and experiences, per leg and under “Analyse items” down to the single expense. Long values stay out of the daily average. Every list adds up exactly to the total.</p>
   <h2>🎒 Packing list · 🛠️ Tips · 📤 Share · 🇦🇺 Quiz</h2>
   <p>A packing list for the outback to tick off, print and export as a spreadsheet. Tips on permits, fuel and tyres. <b>Share travel report</b> makes a single file for family and friends with legs, routes, places and the photos you choose, without bookings, costs, documents, contacts and exact coordinates. The quiz has 50 questions in five levels.</p>
   <h2>🎵 Music on the road</h2>
-  <p>Collects local music in a Spotify playlist of your own as you travel: bands from the area (MusicBrainz), your favourite styles first, with your own Last.fm key also charts. Needs <b>Spotify Premium</b> and your own free Spotify app on developer.spotify.com: enter the redirect address shown under More → Music there, copy the client ID into the app and “Connect to Spotify” once. Music is only collected while the app is open and “turned on”, in developer mode for at most five accounts.</p>
+  <p>Collects local music in a Spotify playlist of your own as you travel: bands from the area (MusicBrainz), your favourite styles first, with your own Last.fm key also charts. The app checks the Last.fm key when you save it, and once Spotify is connected the setup steps fold into a line with a green check. Needs <b>Spotify Premium</b> and your own free Spotify app on developer.spotify.com: enter the redirect address shown under More → Music there, copy the client ID into the app and “Connect to Spotify” once. Music is only collected while the app is open and “turned on”, in developer mode for at most five accounts.</p>
 </section>
 
 <section class="seite">
@@ -407,15 +407,16 @@
 
   <div class="teil" style="margin-top:9mm">Part 12</div>
   <h1>Backing up and syncing</h1>
-  <h2>12 · Backup and import</h2>
+  <h2>12 · Backup &amp; import</h2>
   <ul>
-    <li><b>💾 Backup</b> saves a file <code>WA-Reiseplan-Backup_YYYY-MM-DD.json</code> and opens the share menu (AirDrop, mail).</li>
-    <li><b>📂 Import</b> first shows a preview and <b>merges</b>: new things are added, additions are taken over, nothing on this device is deleted. Afterwards “Undo” works.</li>
+    <li>Both live on their own page <b>💾 Backup &amp; import</b>: on the phone at the bottom of the More sheet, on the computer at the bottom of the sidebar, and under More in the App group. The page briefly explains what is in the file and what is not, shows your last backup and reminds you after a week.</li>
+    <li><b>Save backup</b> saves a file <code>WA-Reiseplan-Backup_YYYY-MM-DD.json</code> and, where the device supports it, opens the share menu (AirDrop, Quick Share, mail).</li>
+    <li><b>Import backup</b> first shows a preview and <b>merges</b>: new things are added, additions are taken over, nothing on this device is deleted. Afterwards “Undo” works.</li>
     <li>Entries you deliberately deleted are passed on too. An empty field never overwrites a filled one.</li>
     <li>The import recognises a file from the calendar app by itself and builds the legs and bookings from it.</li>
   </ul>
   <div class="kasten">
-    <p><b>Mac and iPhone don't sync automatically.</b> The way: backup on one device, send it via AirDrop, import on the other. If you change the order of stops on the same route on both devices, sync first. Vouchers and music data are not in the backup.</p>
+    <p><b>Devices don't sync automatically.</b> The file is the same on every device: iPhone, Android, Mac, Windows or Linux. The way: save a backup on one device, get the file across (AirDrop, Quick Share, mail, cloud folder, USB stick), import it on the other and merge. If you change the order of stops on the same route on both devices, sync first. Vouchers and music data are not in the backup.</p>
     <p><b>Storage full:</b> if saving fails, a red note appears at the top. Then tap “💾 Save backup” straight away, free up space (delete photos or offline maps) and tap “Try saving again”. The bottom of “More” shows how much space is used and free, and whether the browser protects the data from automatic clean-up.</p>
     <p><b>Damaged backup:</b> the import repairs fields of the wrong type by itself and leaves out anything unusable.</p>
     <p><b>Document files:</b> number and date come along, the files don't. On the other device, Documents shows “Match missing files”: pick the files once, all at once, and each one goes to its document. They are recognised by name and size.</p>
@@ -486,7 +487,7 @@
   </table>
   <h2>Three little extras</h2>
   <p>Type <code>sn4ke</code>, <code>xoxo</code> or <code>4444</code> into the search field.</p>
-  <p style="margin-top:12mm; color: var(--muted); font-size: 9pt">TravelBuddy Basic 1.20 by Kotdesigner · as of 6 November 2026</p>
+  <p style="margin-top:12mm; color: var(--muted); font-size: 9pt">TravelBuddy Basic 1.21 by Kotdesigner · as of 7 November 2026</p>
 </section>
 
 </body>

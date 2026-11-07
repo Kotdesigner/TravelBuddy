@@ -1,4 +1,5 @@
 <script>
+  import { gruppiere } from './mehr-gruppen.js'
   import { t, je, LOCALE } from './i18n.js'
   import { ZWEI } from './format.js'
   import { blattRaus, ausblenden } from './motion.js'
@@ -20,8 +21,6 @@
     onTab = () => {},         // (tabId) => öffnet den Bildschirm
     springeZu = () => {},     // (pfad) => z. B. 'mehr/notfall'
     onSuche = () => {},
-    onBackup = () => {},
-    onImport = () => {},
     onHandbuch = () => {},
     onEinfuehrung = () => {},
     onTestreise = () => {},
@@ -82,17 +81,20 @@
   }
 
   const MEHR_SEKTIONEN = [
+    // Reihenfolge und Gruppen kommen aus mehr-gruppen.js (Sicherheit, Unterwegs, Vorbereitung, Extras, App)
     { id: 'notfall', icon: '🆘', label: t('Notfall'), info: t('Notrufe, nächste Hilfe, dein Standort'), rot: true },
-    { id: 'vorbereitung', icon: '🧳', label: t('Reisevorbereitung'), info: t('Checkliste, Dokumente, Buchungen') },
+    { id: 'gefahren', icon: '⚠️', label: t('Gefahrenlage'), info: t('Warnungen zu Feuer, Flut und Hitze') },
+    { id: 'praxis', icon: '🛠️', label: t('Praxis & Sicherheit'), info: t('Vorab buchen, Permits, Tanken, Reifen') },
     { id: 'buchungen', icon: '🎫', label: je('Buchungen', 'Bookings'), info: je('Termin, Nummer, Kosten und Belege', 'Date, number, cost and documents') },
     { id: 'fluege', icon: '✈️', label: t('Flüge & Bahn'), info: t('Status, Gate, Gleis und Verspätung') },
     { id: 'kosten', icon: '💰', label: t('Kosten'), info: t('Wofür, je Etappe und pro Tag') },
-    { id: 'gefahren', icon: '⚠️', label: t('Gefahrenlage'), info: t('Warnungen zu Feuer, Flut und Hitze') },
+    { id: 'vorbereitung', icon: '🧳', label: t('Reisevorbereitung'), info: t('Checkliste, Dokumente, Buchungen') },
     { id: 'packliste', icon: '🎒', label: t('Packliste'), info: t('Zum Abhaken, fürs Outback') },
-    { id: 'praxis', icon: '🛠️', label: t('Praxis & Sicherheit'), info: t('Vorab buchen, Permits, Tanken, Reifen') },
-    { id: 'musik', icon: '🎵', label: t('Musik unterwegs'), info: t('Sounds of the Road, Musik aus der Gegend') },
     { id: 'teilen', icon: '📤', label: t('Reisebericht teilen'), info: t('Etappen, Routen und Fotos als eine Datei') },
+    { id: 'musik', icon: '🎵', label: t('Musik unterwegs'), info: t('Sounds of the Road, Musik aus der Gegend') },
     { id: 'quiz', icon: '🇦🇺', label: t('Australien-Quiz'), info: t('Fragen mit Stufen vom Touri zum Local') },
+    // Jeder Punkt aus UNTER.mehr in App.svelte muss auch hier stehen (tests/mehr-blatt.test.mjs),
+    // sonst fehlt er am iPhone im Hochformat: dort gibt es keine Seitenleiste.
     // „Vacation (Ostküste)" stand hier noch aus der Zeit vor der Zusammenlegung.
     // Die Ostküste ist jetzt ein Abschnitt unter Orte — der Eintrag führte ins Leere.
   ]
@@ -144,17 +146,19 @@
     <div class="griff" aria-hidden="true"></div>
 
     <div class="s-liste">
-      {#each MEHR_SEKTIONEN as s (s.id)}
-        <button class="s-zeile" class:rot={s.rot} onclick={() => sheetLink(s.id)}>
-          <span class="s-icon">{s.icon}</span><span class="s-txt">{s.label}<small>{s.info}</small></span>
-          <span class="s-chev" aria-hidden="true">›</span>
-        </button>
+      {#each gruppiere(MEHR_SEKTIONEN, (s) => s.id, ['app']) as { gruppe, eintraege } (gruppe.id)}
+        <h3 class="s-gruppe"><span aria-hidden="true">{gruppe.icon}</span> {je(...gruppe.titel)}</h3>
+        {#each eintraege as s (s.id)}
+          <button class="s-zeile" class:rot={s.rot} onclick={() => sheetLink(s.id)}>
+            <span class="s-icon">{s.icon}</span><span class="s-txt">{s.label}<small>{s.info}</small></span>
+            <span class="s-chev" aria-hidden="true">›</span>
+          </button>
+        {/each}
       {/each}
     </div>
 
     <div class="s-aktionen">
-      <button class="s-aktion" onclick={() => sheetAktion(onBackup)}>💾<span>{t('Backup')}</span></button>
-      <button class="s-aktion" onclick={() => sheetAktion(onImport)}>📂<span>{t('Import')}</span></button>
+      <button class="s-aktion" onclick={() => sheetLink('backup')}>💾<span>{je('Backup & Import', 'Backup & import')}</span></button>
       <button class="s-aktion" onclick={() => sheetAktion(onHandbuch)}>📖<span>{t('Handbuch')}</span></button>
     </div>
 
@@ -261,6 +265,8 @@
   .griff { width: 38px; height: 4px; border-radius: 2px; background: var(--line); margin: 6px auto 10px; }
 
   .s-liste { display: flex; flex-direction: column; }
+  .s-gruppe { display: flex; align-items: center; gap: 6px; margin: 14px 6px 4px; font-size: calc(13px * var(--schrift, 1)); font-weight: 800; color: var(--muted); letter-spacing: 0.2px; }
+  .s-gruppe:first-child { margin-top: 2px; }
   .s-zeile {
     display: flex; align-items: center; gap: 12px; width: 100%;
     min-height: 54px; padding: 5px 6px; border: none; background: none; cursor: pointer;
@@ -281,7 +287,7 @@
   .s-chev { margin-left: auto; color: var(--muted); font-size: calc(18px * var(--schrift, 1)); }
 
   .s-backup { font-size: calc(13px * var(--schrift, 1)); color: var(--muted); }
-  .s-aktionen { display: flex; gap: 8px; margin-top: 12px; }
+  .s-aktionen { display: flex; gap: 8px; margin-top: 8px; }
   .s-einf { display: block; width: 100%; min-height: 44px; margin-top: 18px; padding: 8px 12px; border: 1px dashed var(--line-stark); border-radius: 12px; background: none; color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; text-align: left; cursor: pointer; }
   .s-aktion {
     flex: 1; min-height: 58px; border: 1px solid var(--line); border-radius: var(--radius-m);

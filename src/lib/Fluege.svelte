@@ -1,7 +1,8 @@
 <script>
   // Mehr → Flüge & Bahn: alle Fahrten der Reise mit Status, was noch fehlt, Kontingent und Schlüssel.
   // Jeder Termin mit Flug- oder Zugnummer erscheint hier von selbst, auch aus Route und Vorabausgaben.
-  import { t } from './i18n.js'
+  import { t, je } from './i18n.js'
+  import ZugangOk from './ZugangOk.svelte'
   import { mitWochentag } from './format.js'
   import { buchungen, vorabKosten, updateVorabKosten } from './userdata.js'
   import { fluege, flugspeicher, fluglauf, uhr, hatSchluessel, setzeSchluessel, jetztAbfragen, FEHLER } from './flug-dienst.js'
@@ -22,6 +23,7 @@
 
   let schluesselFeld = $state('')
   let aendern = $state(false)
+  const schluesselAbgelehnt = $derived($fluglauf.fehler === 'schluessel')
   function schluesselSichern() {
     if (!schluesselFeld.trim()) return
     setzeSchluessel(schluesselFeld)
@@ -58,16 +60,20 @@
 <section class="fl" aria-label={t('Flüge & Bahn')}>
   <div class="fl-karte">
     <button class="btn-primary" disabled={!kannAktualisieren || $fluglauf.laden} onclick={() => jetztAbfragen()}>{$fluglauf.laden ? t('Wird aktualisiert …') : t('Jetzt aktualisieren')}</button>
-    {#if $hatSchluessel}
+    {#if $hatSchluessel && !schluesselAbgelehnt}
+      {#if !aendern}
+        <ZugangOk titel={je('Flugabfrage eingerichtet', 'Flight lookup set up')} detail={genutzt($flugspeicher.zaehler, $uhr) > 0 ? je('Schlüssel funktioniert', 'Key works') : je('Wird bei der ersten Abfrage geprüft', 'Checked with the first lookup')} onAendern={() => (aendern = true)} knopf={t('Schlüssel ändern')} />
+      {/if}
       <p class="fl-klein">{t('Noch etwa {rest} von {gesamt} Flugabfragen in diesem Monat. Die App fragt selbst ab, solange sie offen ist.', { rest, gesamt: KONTINGENT })}</p>
-      {#if !aendern}<button class="fl-leise" onclick={() => (aendern = true)}>{t('Schlüssel ändern')}</button>{/if}
+    {:else if $hatSchluessel}
+      <p class="fl-klein">{je('RapidAPI hat den Schlüssel abgelehnt. Trag ihn unten neu ein.', 'RapidAPI rejected the key. Enter it again below.')}</p>
     {:else}
       <p class="fl-klein">{t('Für Flüge fehlt auf diesem Gerät noch dein Schlüssel. Züge brauchen keinen.')}</p>
     {/if}
     {#if $fluglauf.fehler}<p class="fl-fehler" role="alert">{FEHLER[$fluglauf.fehler]?.()}</p>{/if}
   </div>
 
-  {#if !$hatSchluessel || aendern}
+  {#if !$hatSchluessel || aendern || schluesselAbgelehnt}
     <form class="fl-karte" onsubmit={(e) => { e.preventDefault(); schluesselSichern() }}>
       <h2>{t('Flugabfrage einrichten')}</h2>
       <p>{t('Trag einmal deinen Schlüssel von RapidAPI ein. Er bleibt nur auf diesem Gerät und kommt nicht ins Backup. Abgefragt werden nur Flugnummer und Datum.')}</p>
@@ -135,7 +141,6 @@
   .fl-fehler { color: var(--danger-text); font-weight: 700; font-size: calc(13.5px * var(--schrift, 1)); }
   .fl-fehlt { border-color: var(--danger-linie); background: var(--warn-flaeche); }
   .fl-fehlt, .fl-fehlt .fl-klein { color: var(--warn-text); }
-  .fl-leise { align-self: flex-start; min-height: 36px; padding: 0; border: none; background: none; color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
   .fl-eingabe { font-size: max(16px, calc(14px * var(--schrift, 1))); min-height: 44px; padding: 6px 10px; border: 1px solid var(--line-stark); border-radius: var(--radius-s); background: var(--eingabe); color: var(--ink); min-width: 0; box-sizing: border-box; width: 100%; }
   .fl-reihe { display: flex; gap: 8px; }
   .fl-zeile { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }

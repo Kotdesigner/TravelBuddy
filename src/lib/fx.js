@@ -1,5 +1,5 @@
 // Währungsumrechnung AUD ↔ EUR zum Tageskurs der Ausgabe.
-// Online: Kurs pro Datum von frankfurter.app holen und cachen. Offline: gecachter
+// Online: Kurs pro Datum von Frankfurter (api.frankfurter.dev, die alte Adresse api.frankfurter.app leitet ohne CORS um und scheitert im Browser) holen und cachen. Offline: gecachter
 // Kurs oder grobe Näherung. Gespeichert wird EUR pro 1 AUD je Datum.
 import { writable, get } from 'svelte/store'
 
@@ -21,7 +21,7 @@ export async function stelleKursBereit(datum, online) {
   if (get(fxKurse)[datum] != null || laufend.has(datum)) return
   laufend.add(datum)
   try {
-    const res = await fetch(`https://api.frankfurter.app/${datum}?from=AUD&to=EUR`)
+    const res = await fetch(`https://api.frankfurter.dev/v1/${datum}?from=AUD&to=EUR`)
     if (res.ok) {
       const d = await res.json()
       const k = d?.rates?.EUR

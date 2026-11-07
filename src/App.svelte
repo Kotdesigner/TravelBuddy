@@ -19,6 +19,8 @@
   import { strassenlage, starteStrassenlage, aktualisiereStrassenlage } from './lib/strassenlage-dienst.js'
   import { starteFluege } from './lib/flug-dienst.js'
   import Fluege from './lib/Fluege.svelte'
+  import BackupImport from './lib/BackupImport.svelte'
+  import { gruppiere, neueGruppe } from './lib/mehr-gruppen.js'
   import Buchungen from './lib/Buchungen.svelte'
   import Naechte from './lib/Naechte.svelte'
   import VorgemerkteOrte from './lib/VorgemerkteOrte.svelte'
@@ -186,17 +188,25 @@
     orte: [['orte/sueden', t('Süden')], ['orte/norden', t('Norden')], ['orte/osten', t('Ostküste')], ['orte/meine', t('Meine Orte')], ['orte/routen', t('Routen-Ideen')]],
     logbuch: [['logbuch', je('Einträge', 'Entries')], ['logbuch/lesen', t('Lesen')], ['logbuch/tiere', t('Tierwelt')], ['logbuch/notizen', t('Notizen')]],
     // Dieselben Namen und Zeichen wie im Mehr-Blatt am iPhone und in den Seitentiteln
-    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/buchungen', je('🎫 Buchungen', '🎫 Bookings')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
+    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/buchungen', je('🎫 Buchungen', '🎫 Bookings')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
   }
   // V15 (Design B2): Unter Mehr heißt der große Titel wie die Seite, ohne Zeichen davor, statt immer „Mehr“
   const mehrName = $derived(ansicht.tab === 'mehr' && ansicht.unter ? (UNTER.mehr.find(([p]) => p === 'mehr/' + ansicht.unter)?.[1] || '').replace(/^[^\p{L}]+/u, '') : '')
   const TITEL = { heute: t('Heute'), plan: t('Plan'), orte: t('Orte'), logbuch: t('Logbuch'), mehr: t('Mehr') }
   // Eine Zeile je Punkt unter „Mehr“: was steckt dahinter (nur Namen, kein Wort dazu)
+  // Gruppe „App“ auf der Mehr-Seite: diese Seiten stehen nicht in der Chip-Reihe, gehören aber dazu
+  const APP_ZUSATZ_VORN = [['mehr/backup', je('💾 Backup & Import', '💾 Backup & import'), je('Alles als Datei sichern und auf ein anderes Gerät bringen.', 'Save everything as a file and move it to another device.')]]
+  const APP_ZUSATZ_HINTEN = [
+    ['mehr/design', '🎨 ' + t('Design'), je('Hell und Dunkel, Sprache, Schrift, Effekte.', 'Light and dark, language, text, effects.')],
+    ['mehr/handbuch', t('📖 Handbuch'), je('Alles zur App zum Nachlesen, auch als PDF.', 'Everything about the app to read, also as PDF.')],
+  ]
   const MEHR_INFO = {
     'mehr/notfall': t('Notrufnummern, nächste Hilfe und dein Standort zum Durchsagen. Geht auch offline.'),
     'mehr/vorbereitung': t('Checkliste bis zur Abreise, Dokumente, Buchungen und Ausgaben vorab.'),
     'mehr/buchungen': je('Jede Buchung mit Termin, Buchungsnummer, Kosten und Belegen. Auch Aktivitäten, die du unterwegs buchst.', 'Every booking with date, number, cost and documents. Also activities you book on the road.'),
     'mehr/gefahren': t('Amtliche Warnungen zu Feuer, Flut und Hitze rund um deine Orte und Routen.'),
+    'mehr/fluege': je('Status, Gate, Gleis und Verspätung deiner Flüge und Züge.', 'Status, gate, platform and delays of your flights and trains.'),
+    'mehr/kosten': je('Wofür das Geld geht, je Etappe und pro Tag.', 'Where the money goes, per leg and per day.'),
     'mehr/packliste': t('Zum Abhaken, abgestimmt auf allein mit dem Auto durchs Outback.'),
     'mehr/praxis': t('Was du vorab buchen musst, Permits, Tanken im Norden, Reifen, Buschfeuer.'),
     'mehr/musik': t('Sounds of the Road: Musik aus der Gegend, unterwegs in einer Spotify-Playlist gesammelt.'),
@@ -916,8 +926,8 @@
 <TempGlimmen />
 <div class="app">
 <div class="sl-mac">
-  <Seitenleiste {ansicht} unterpunkte={UNTER} {geh} onSuche={zurSuche} onBackup={onExport}
-    onImport={() => importInput.click()} onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')} onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} onEinrichten={appEinrichten} onZuruecksetzen={() => appZuruecksetzen(onExport)} />
+  <Seitenleiste {ansicht} unterpunkte={UNTER} {geh} onSuche={zurSuche} onBackupImport={() => geh('mehr/backup')}
+    onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')} onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} onEinrichten={appEinrichten} onZuruecksetzen={() => appZuruecksetzen(onExport)} />
 </div>
 
 <div class="inhalt">
@@ -938,14 +948,15 @@
     <div class="zurueck-leiste"><button class="zurueck-knopf" onclick={() => zurueck('mehr')}><span aria-hidden="true">‹</span> {t('Zurück')}</button></div>
   {/if}
   <header class="sk">
-    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : ansicht.unter === 'rechtliches' ? t('Datenschutz & Impressum') : ansicht.unter === 'design' ? t('Design') : mehrName || TITEL[ansicht.tab]}</h1>
+    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : ansicht.unter === 'rechtliches' ? t('Datenschutz & Impressum') : ansicht.unter === 'design' ? t('Design') : ansicht.unter === 'backup' ? je('Backup & Import', 'Backup & import') : mehrName || TITEL[ansicht.tab]}</h1>
     <span class="sk-musik"><MusikSymbol {geh} /></span>
     {#if ansicht.tab === 'plan'}<button class="sk-neu" onclick={() => oeffneNeu(ansicht.unter === 'wanderungen' ? 'wanderung' : 'route')}>{t('+ Neu')}</button>{/if}
     {#if ansicht.tab === 'logbuch' && ansicht.unter !== 'notizen'}<button class="sk-neu" onclick={() => oeffneNeu('tag')}>{t('+ Tag')}</button>{/if}
   </header>
-  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch', 'rechtliches', 'design'].includes(ansicht.unter)}
+  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch', 'rechtliches', 'design', 'backup'].includes(ansicht.unter)}
     <nav class="seg-leiste" aria-label={t('{wert}: Bereiche', { wert: TITEL[ansicht.tab] })} use:leisteRand={ansicht.pfad}>
-      {#each UNTER[ansicht.tab] as [pfad, label] (pfad)}
+      {#each UNTER[ansicht.tab] as [pfad, label], i (pfad)}
+        {#if ansicht.tab === 'mehr' && neueGruppe(UNTER.mehr, i, (e) => e[0])}<span class="seg-trenner" aria-hidden="true"></span>{/if}
         {@const an = ansicht.pfad === pfad || (pfad === ansicht.tab && (!ansicht.unter || ['etappe', 'route', 'tag'].includes(ansicht.unter))) || (ansicht.pfad.startsWith(pfad + '/') && pfad !== ansicht.tab) || (ansicht.tab === 'orte' && pfad === 'orte/' + orteUnter)}
         <a class="seg-chip" class:an href="#/{pfad}" aria-current={an ? 'page' : undefined} onclick={(e) => { e.preventDefault(); geh(pfad) }}>{label}</a>
       {/each}
@@ -1246,6 +1257,8 @@
       <Buchungen {geh} />
     {:else if ansicht.unter === 'fluege'}
       <Fluege />
+    {:else if ansicht.unter === 'backup'}
+      <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} />
     {:else if ansicht.unter === 'kosten'}
       <Kosten />
     {:else if ansicht.unter === 'gefahren'}
@@ -1278,17 +1291,20 @@
       <h2 class="abschnitt">{t('🇦🇺 Australien-Quiz')} {#if quizErgebnis.beantwortet}<span class="count">{t('{richtig}/{gesamt} · {emoji} Stufe {stufe}', { richtig: quizErgebnis.richtig, gesamt: quizErgebnis.gesamt, emoji: quizErgebnis.level?.emoji, stufe: quizErgebnis.level?.stufe })}</span>{/if}</h2>
       <Quiz fragen={quizData.fragen} levels={quizData.levels} />
     {:else}
-      <ul class="mehr-liste">
-        {#each UNTER.mehr as [pfad, label] (pfad)}
-          <li><a href="#/{pfad}" onclick={(e) => { e.preventDefault(); geh(pfad) }}><span class="ml-txt"><b>{label}</b><small>{MEHR_INFO[pfad]}</small></span><span class="ml-pfeil" aria-hidden="true">›</span></a></li>
-        {/each}
-      </ul>
+      {#each gruppiere(UNTER.mehr, (e) => e[0], ['app']) as { gruppe, eintraege } (gruppe.id)}
+        <h2 class="ml-gruppe"><span aria-hidden="true">{gruppe.icon}</span> {je(...gruppe.titel)}</h2>
+        <ul class="mehr-liste">
+          {#each gruppe.id === 'app' ? [...APP_ZUSATZ_VORN, ...eintraege, ...APP_ZUSATZ_HINTEN] : eintraege as [pfad, label, info] (pfad)}
+            <li><a href="#/{pfad}" onclick={(e) => { e.preventDefault(); geh(pfad) }}><span class="ml-txt"><b>{label}</b><small>{info ?? MEHR_INFO[pfad]}</small></span><span class="ml-pfeil" aria-hidden="true">›</span></a></li>
+          {/each}
+        </ul>
+      {/each}
       <SpeicherStand />
     {/if}
   {/if}
 </main>
 
-<footer class="app-footer">TravelBuddy <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
+<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online besuchen', 'Visit TravelBuddy online')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
 </div>
 </div>
 
@@ -1297,7 +1313,7 @@
 <!-- Unten fürs iPhone, am Mac steht links die Seitenleiste -->
 <div class="bb-mobil">
   <BottomBar {aktivTab} onTab={tabZu} {springeZu}
-    onSuche={zurSuche} onBackup={onExport} onImport={() => importInput.click()}
+    onSuche={zurSuche}
     onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')}
     onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} onEinrichten={appEinrichten} onZuruecksetzen={() => appZuruecksetzen(onExport)} />
 </div>
@@ -1458,6 +1474,8 @@
   }
   .fb-mehr { display: inline-block; padding: 8px 0; color: var(--brand-text); font-weight: 700; font-size: calc(13.5px * var(--schrift, 1)); }
   .app-footer .af-by { color: var(--brand-text); }
+  .app-footer .af-name { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 3px; padding: 8px 2px; }
+  .app-footer .af-web { display: block; width: fit-content; margin: 2px auto 0; padding: 8px; font-size: calc(12px * var(--schrift, 1)); font-weight: 600; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 2px; }
   .app-footer .af-by a { color: inherit; text-decoration: underline; text-underline-offset: 2px; padding: 8px 2px; }
   /* Stand der geladenen Fassung — macht sofort sichtbar, wenn der Service-Worker
      noch eine ältere Version ausliefert. */
@@ -1518,6 +1536,9 @@
   }
   .seg-chip:active { transform: scale(0.96); }
   .seg-chip.an { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .ml-gruppe { display: flex; align-items: center; gap: 6px; margin: 22px 0 2px; font-size: calc(14px * var(--schrift, 1)); font-weight: 800; color: var(--muted); letter-spacing: 0.2px; }
+  .ml-gruppe:first-of-type { margin-top: 6px; }
+  .seg-trenner { flex: none; width: 1px; margin: 10px 4px; background: var(--line-stark); }
   .mehr-liste { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; max-width: 520px; }
   @media (min-width: 900px) { .mehr-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 1040px; } .mehr-liste a { height: 100%; } }
   .mehr-liste a {
@@ -1714,6 +1735,6 @@
   .imp-ersetz { display: block; margin: 12px auto 0; background: none; border: none; cursor: pointer;
     font-size: calc(12px * var(--schrift, 1)); color: var(--danger-text); text-decoration: underline; }
   /* V17: größere Trefferfläche, sichtbar gleich (wie .ba-knopf::after) */
-  .app-footer .af-by a, .mo-del { position: relative; }
-  .app-footer .af-by a::after, .mo-del::after { content: ''; position: absolute; inset: -6px 0; }
+  .app-footer .af-by a, .app-footer .af-name, .mo-del { position: relative; }
+  .app-footer .af-by a::after, .app-footer .af-name::after, .mo-del::after { content: ''; position: absolute; inset: -6px 0; }
 </style>

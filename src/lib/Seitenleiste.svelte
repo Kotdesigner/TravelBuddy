@@ -1,4 +1,5 @@
 <script>
+  import { neueGruppe, gruppeVon } from './mehr-gruppen.js'
   import LogoAnimiert from './LogoAnimiert.svelte'
   import { t, LOCALE } from './i18n.js'
   // Seitenleiste am Mac: dieselben fünf Bereiche wie unten am iPhone, darunter die
@@ -10,7 +11,7 @@
   import { je } from './i18n.js'
   import { syncZeiten } from './userdata.js'
 
-  let { ansicht, unterpunkte = {}, geh = () => {}, onSuche = () => {}, onBackup = () => {}, onImport = () => {}, onHandbuch = () => {}, onDesign = () => {}, onEinrichten = () => {}, onZuruecksetzen = () => {}, onEinfuehrung = () => {}, onTestreise = () => {} } = $props()
+  let { ansicht, unterpunkte = {}, geh = () => {}, onSuche = () => {}, onBackupImport = () => {}, onHandbuch = () => {}, onDesign = () => {}, onEinrichten = () => {}, onZuruecksetzen = () => {}, onEinfuehrung = () => {}, onTestreise = () => {} } = $props()
 
   const BEREICHE = [
     { id: 'heute', label: t('Heute') },
@@ -37,7 +38,8 @@
           onclick={(e) => { e.preventDefault(); geh(b.id) }}>{b.label}</a>
         {#if ansicht.tab === b.id && unterpunkte[b.id]?.length}
           <ul class="sl-unter">
-            {#each unterpunkte[b.id] as [pfad, label]}
+            {#each unterpunkte[b.id] as [pfad, label], i}
+              {#if b.id === 'mehr' && (i === 0 || neueGruppe(unterpunkte.mehr, i, (e) => e[0]))}<li class="sl-gruppe" aria-hidden="true">{je(...gruppeVon(pfad).titel)}</li>{/if}
               <li><a href="#/{pfad}" class:aktiv={ansicht.pfad === pfad || (pfad === b.id && !ansicht.unter) || ansicht.pfad.startsWith(pfad + '/')}
                 onclick={(e) => { e.preventDefault(); geh(pfad) }}>{label}</a></li>
             {/each}
@@ -49,8 +51,7 @@
 
   <div class="sl-fuss">
     <div class="sl-aktionen">
-      <button onclick={onBackup}>{t('💾 Backup')}</button>
-      <button onclick={onImport}>{t('📂 Import')}</button>
+      <button onclick={onBackupImport}>💾 {je('Backup & Import', 'Backup & import')}</button>
       <button onclick={onHandbuch}>{t('📖 Handbuch')}</button>
       <button onclick={onDesign}>🎨 {t('Design')}</button>
       <button onclick={onEinfuehrung}>{t('🧭 Einführung')}</button>
@@ -63,6 +64,7 @@
 </nav>
 
 <style>
+  .sl-gruppe { padding: 10px 10px 2px; font-size: calc(11.5px * var(--schrift, 1)); font-weight: 800; color: var(--muted); letter-spacing: 0.3px; }
   .sl-gefahr { color: var(--danger-text) !important; }
   .sl {
     position: sticky; top: 0; height: 100dvh; overflow: auto; width: 232px; flex: none;

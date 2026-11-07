@@ -1,5 +1,6 @@
 <script>
-  import { t, LOCALE, tn } from '../i18n.js'
+  import { t, je, LOCALE, tn } from '../i18n.js'
+  import ZugangOk from '../ZugangOk.svelte'
   import { ZWEI } from '../format.js'
   // Musik unterwegs (Mehr → Musik): neue Titel, Playlist, Einrichtung, Standort, Protokoll.
   import { onDestroy } from 'svelte'
@@ -28,6 +29,27 @@
   let plLink = $state('')
   let plLaeuft = $state(false)
   let einrichtungAuf = $state(!istVerbunden())
+  // Funktionierende Zugänge klappen zu (grüner Haken), „Ändern“ öffnet sie wieder
+  let spotifyAendern = $state(false)
+  let lfFeld = $state(''), lfAendern = $state(false), lfLaeuft = $state(false)
+  async function lastfmPruefen(schluessel) {
+    const k = String(schluessel || '').trim()
+    if (!k) return
+    lfLaeuft = true
+    try {
+      const r = await fetch(`https://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=1&format=json&api_key=${encodeURIComponent(k)}`, { credentials: 'omit' })
+      const j = await r.json().catch(() => ({}))
+      if (r.ok && !j?.error) {
+        setze({ lastfmKey: k, lastfmOk: true })
+        lfFeld = ''; lfAendern = false
+        zeigeToast(je('Last.fm-Schlüssel funktioniert', 'Last.fm key works'), 'ok')
+      } else {
+        setze({ lastfmOk: false })
+        zeigeToast(je('Last.fm lehnt den Schlüssel ab.', 'Last.fm rejects the key.'), 'fehler')
+      }
+    } catch { zeigeToast(je('Keine Verbindung zu Last.fm.', 'No connection to Last.fm.'), 'fehler') }
+    lfLaeuft = false
+  }
   let protokollAuf = $state(false)
   let alleAuf = $state(false)
   let handOrt = $state('')
@@ -177,6 +199,9 @@
         {#if umg.iosSafari && !verbunden}
           <p class="mu-stand">{t('Du bist gerade in Safari. Verbinde Spotify in TravelBuddy vom Home-Bildschirm. Safari und die App haben getrennte Speicher, die Anmeldung gilt nur dort, wo du sie machst.')}</p>
         {/if}
+        {#if verbunden && !spotifyAendern}
+          <ZugangOk titel={je('Mit Spotify verbunden', 'Connected to Spotify')} detail={$musik.playlist?.id ? t('Playlist:') + ' ' + $musik.playlist.name : t('noch nicht verknüpft')} onAendern={() => (spotifyAendern = true)} />
+        {:else}
         <ol class="mu-schritte">
           <li>{t('In deiner Spotify-App auf')} <b>{t('developer.spotify.com')}</b> {t('unter „Redirect URIs“ genau diese Adresse eintragen:')}
             <code class="mu-code">{rueckAdresse}</code>
@@ -201,6 +226,8 @@
           {/if}
         </ol>
         <details class="mu-klein"><summary>{t('Client-ID')}</summary><input class="mu-feld" value={$musikCfg.spotifyClientId} oninput={(e) => setze({ spotifyClientId: e.target.value.trim() })} autocomplete="off" spellcheck="false" aria-label={t('Client-ID')} /></details>
+        {#if verbunden}<button class="mu-leise" onclick={() => (spotifyAendern = false)}>{je('Fertig', 'Done')}</button>{/if}
+        {/if}
         {#if !$musikCfg.lastfmKey}<p class="mu-stand">{t('Ohne Last.fm-Schlüssel kommen die Titel nur von Künstlern aus der Gegend (MusicBrainz). Mit Schlüssel kommen die Charts des Landes dazu, in dem du gerade bist.')}</p>{/if}
 
         <label class="mu-schalter"><input type="checkbox" switch checked={$musikCfg.aktiv} onchange={(e) => { const an = e.target.checked; e.target.checked = $musikCfg.aktiv; einschalten(an) }} /> {t('Musik unterwegs eingeschaltet')}</label>
@@ -217,7 +244,18 @@
           {#each QUELLEN as q (q.id)}
             <label class="mu-schalter"><input type="checkbox" switch checked={$musikCfg.quellen[q.id] !== false} onchange={(e) => setzeQuelle(q.id, e.target.checked)} /> {q.name} <small>({ART_TEXT[q.art]})</small></label>
           {/each}
-          <label>{t('Last.fm-Schlüssel (für die Charts des Landes)')}<input class="mu-feld" value={$musikCfg.lastfmKey} oninput={(e) => setze({ lastfmKey: e.target.value })} autocomplete="off" spellcheck="false" /></label>
+          {#if $musikCfg.lastfmKey && $musikCfg.lastfmOk && !lfAendern}
+            <ZugangOk titel={je('Last.fm verbunden', 'Last.fm connected')} detail={je('Charts des Landes kommen dazu', 'Country charts are included')} onAendern={() => (lfAendern = true)} />
+          {:else}
+            <form class="mu-lf" onsubmit={(e) => { e.preventDefault(); lastfmPruefen(lfFeld) }}>
+              <label>{t('Last.fm-Schlüssel (für die Charts des Landes)')}<input class="mu-feld" type="password" bind:value={lfFeld} placeholder={$musikCfg.lastfmKey ? je('Gespeichert, zum Ändern neu eintragen', 'Saved, enter again to change') : ''} autocomplete="off" spellcheck="false" /></label>
+              <span class="mu-knoepfe">
+                <button class="btn klein" type="submit" disabled={!lfFeld.trim() || lfLaeuft || !$online}>{lfLaeuft ? je('Prüft …', 'Checking …') : je('Prüfen und speichern', 'Check and save')}</button>
+                {#if $musikCfg.lastfmKey && !$musikCfg.lastfmOk && !lfFeld.trim()}<button class="btn klein" type="button" onclick={() => lastfmPruefen($musikCfg.lastfmKey)} disabled={lfLaeuft || !$online}>{je('Gespeicherten prüfen', 'Check saved key')}</button>{/if}
+                {#if lfAendern}<button class="btn klein" type="button" onclick={() => { lfAendern = false; lfFeld = '' }}>{je('Abbrechen', 'Cancel')}</button>{/if}
+              </span>
+            </form>
+          {/if}
         </fieldset>
       </div>
     {/if}
@@ -257,6 +295,8 @@
 </div>
 
 <style>
+  .mu-leise { align-self: flex-start; min-height: 40px; padding: 0; border: none; background: none; color: var(--brand-text); font-weight: 700; font-size: calc(13.5px * var(--schrift, 1)); cursor: pointer; }
+  .mu-lf { display: flex; flex-direction: column; gap: 6px; }
   .mu { display: flex; flex-direction: column; gap: 14px; max-width: 760px; }
   .mu-kopf { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .mu-note { width: 48px; height: 48px; border-radius: 50%; background: #1db954; color: #062b14; display: grid; place-items: center; flex: none; }
