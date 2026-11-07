@@ -44,6 +44,8 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 .wordmark img { width: 36px; height: 36px; border-radius: 9px; }
 .wordmark:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; border-radius: 8px; }
 .nav .btn { min-height: 44px; }
+.nav-actions { display: flex; align-items: center; gap: var(--space-xs); }
+.btn-gh svg { flex: none; }
 
 /* Hero */
 .hero { min-height: calc(100dvh - var(--nav-h)); display: flex; align-items: center; padding-block: var(--space-2xl) var(--space-2xl); }
@@ -205,6 +207,8 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 }
 @media (max-width: 40rem) {
   .nav .btn { padding-inline: var(--space-md); }
+  .btn-gh { padding-inline: 0; width: 44px; }
+  .btn-gh span { display: none; }
   .wordmark span { font-size: 1.375rem; }
   .facts, .plain { grid-template-columns: minmax(0, 1fr); }
   .qr { display: none; }
