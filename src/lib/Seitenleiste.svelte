@@ -71,6 +71,14 @@
     background: var(--flaeche); border-right: 1px solid var(--line); padding: 18px 12px 14px max(12px, env(safe-area-inset-left, 0px));
     display: flex; flex-direction: column; gap: 14px;
   }
+  /* Scrollbalken der Seitenleiste: schmal und unsichtbar, erst sichtbar, wenn die Maus über der Leiste ist
+     (oder die Tastatur darin steht). So stört er nicht, ist aber da, wenn man ihn braucht. */
+  .sl { scrollbar-width: thin; scrollbar-color: transparent transparent; }
+  .sl:hover, .sl:focus-within { scrollbar-color: color-mix(in srgb, var(--muted) 40%, transparent) transparent; }
+  .sl::-webkit-scrollbar { width: 6px; }
+  .sl::-webkit-scrollbar-track { background: transparent; }
+  .sl::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+  .sl:hover::-webkit-scrollbar-thumb, .sl:focus-within::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 40%, transparent); }
   .sl-marke { font-family: 'Anton', Impact, sans-serif; font-size: calc(30px * var(--schrift, 1)); line-height: 1.1; letter-spacing: 0.6px; color: var(--ink); text-align: center; white-space: nowrap; padding: 4px 0 10px; }
   .sl-marke span { color: var(--brand-text); }
   /* Logo über dem Schriftzug, wie das App-Symbol */
