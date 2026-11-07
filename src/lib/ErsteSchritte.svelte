@@ -25,7 +25,7 @@
     { id: 'pisten', icon: '🪨', titel: je('Pisten-Netz laden', 'Load the track network'), text: je('Routen ohne Netz auch auf Pisten und 4WD-Tracks, unter Plan, Karte', 'Offline routes on unsealed roads and 4WD tracks too, under Plan, Map'),
       fertig: Object.values($pistenStand).some(Boolean), los: zuOfflineRouten },
     { id: 'ausgaben', icon: '💶', titel: je('Vorabausgaben eintragen', 'Add expenses before the trip'), text: je('Flug, Camper, Versicherung: Plan und Kosten füllen sich von selbst', 'Flight, camper, insurance: plan and costs fill in by themselves'),
-      fertig: ($vorabKosten || []).length > 0 || ($buchungen?.events || []).length > 0, los: () => oeffneNeu('ausgabe') },
+      fertig: ($vorabKosten || []).length > 0 || ($buchungen?.events || []).length > 0, los: () => oeffneNeu('ausgabe', { vorab: true }) },
     { id: 'dokumente', icon: '🗂️', titel: je('Dokumente einpflegen', 'Add your documents'), text: je('Pass und Visum mit Datei, auf Wunsch gesperrt', 'Passport and visa with their file, locked if you like'),
       fertig: $dokumente.length > 0, los: () => geh('mehr/vorbereitung') },
     { id: 'tag', icon: '📖', titel: je('Den ersten Tag schreiben', 'Write your first day'), text: je('Daraus wird später dein Tagebuch', 'This becomes your journal later'),

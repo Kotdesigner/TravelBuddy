@@ -26,8 +26,11 @@
   let datum = $state(untrack(() => vorlage.datum) || $heuteTag)   // Vorlage nur als Startwert
   let bis = $state('')
   let zeitraum = $state(false)
-  let kat = $state(letzteKategorien($journal, 1)[0] || 'kosten_essen')
-  let offen = $state({ [clusterVon(untrack(() => kat))]: true })
+  // Vorabausgabe (Einführung, Erste Schritte): ohne Vorauswahl, denn „Essen gehen“ passt vor der Reise nie.
+  // Offen steht Verkehr mit Flug und Mietfahrzeug, das Häufigste, was man vorab bezahlt.
+  const vorabStart = untrack(() => !!vorlage.vorab)
+  let kat = $state(vorabStart ? '' : letzteKategorien($journal, 1)[0] || 'kosten_essen')
+  let offen = $state(vorabStart ? { verkehr: true } : { [clusterVon(untrack(() => kat))]: true })
   let betrag = $state('')
   let text = $state('')
   let waehrungVorab = $state('EUR')
@@ -133,6 +136,7 @@
     {:else}{je(`📍 Kommt in den Logbuch-Eintrag vom ${mitWochentag(datum)}.`, `📍 Goes into the logbook entry for ${mitWochentag(datum)}.`)}{/if}
   </p>
 
+  {#if !KATEGORIE[kat]}<p class="ag-wo">{je('Bitte noch eine Kategorie wählen, zum Beispiel Flug, Mietfahrzeug oder Behörde für das Visum.', 'Please pick a category, for example flight, rental vehicle or authorities for the visa.')}</p>{/if}
   <button class="btn-primary ag-los" type="submit" disabled={!ok}>{je('Ausgabe eintragen', 'Add expense')}</button>
 </form>
 

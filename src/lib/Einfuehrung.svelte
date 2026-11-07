@@ -301,7 +301,7 @@
       {#if vorab || verkehr || termine}<p class="ef-ok">✓ {[vorab && (vorab === 1 ? je('1 Ausgabe vorab', '1 expense before the trip') : je(`${vorab} Ausgaben vorab`, `${vorab} expenses before the trip`)), verkehr && (verkehr === 1 ? je('1 Flug oder Zug', '1 flight or train') : je(`${verkehr} Flüge oder Züge`, `${verkehr} flights or trains`)), termine && tn(termine, '{n} Buchung gespeichert', '{n} Buchungen gespeichert')].filter(Boolean).join(' · ')}</p>{/if}
       <div class="ef-knoepfe">
         {#if vorab || verkehr || termine}<button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>{/if}
-        <button class={vorab || verkehr || termine ? 'btn' : 'btn-primary ef-los'} onclick={() => blatt('ausgabe')}>{je('💶 Ausgabe vorab eintragen', '💶 Add an expense before the trip')}</button>
+        <button class={vorab || verkehr || termine ? 'btn' : 'btn-primary ef-los'} onclick={() => blatt('ausgabe', { vorab: true })}>{je('💶 Ausgabe vorab eintragen', '💶 Add an expense before the trip')}</button>
         <button class="btn" onclick={() => blatt('route', { art: 'flug' })}>{je('✈️ Flug oder Zug mit Nummer', '✈️ Flight or train with number')}</button>
         <button class="btn" onclick={() => blatt('buchung')}>{je('📧 Buchungsmail einfügen', '📧 Paste a booking email')}</button>
         {#if !(vorab || verkehr || termine)}<button class="ef-leise" onclick={weiter}>{t('Überspringen')}</button>{/if}
