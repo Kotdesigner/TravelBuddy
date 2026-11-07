@@ -61,3 +61,7 @@ __pycache__/
 
 # Große Karte (Stufe 14): zu groß fürs Repo, holen mit karten-gross/holen.sh
 karten-gross/*.pmtiles
+
+# Schlüssel nur in Netlify, nie im Repo
+.env
+.env.*

@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.23 · built for Western Australia**<br>
+**Version 1.24 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.23-e07b28?style=flat-square" alt="version: 1.23"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.24-e07b28?style=flat-square" alt="version: 1.24"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
-**[✨ What's new in 1.23](#-new-in-version-123)**
+**[✨ What's new in 1.24](#-new-in-version-124)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
@@ -144,12 +144,16 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 🐞 New in version 1.24
+
+**Report a problem, straight from the app.** Something not working or looking wrong? Under More → App → 🐞 Report a problem, or via the link at the bottom of every page, you write briefly what happened. Grey hints in the empty field ask what is not working and when it happens. You can add up to three screenshots and, if you like, an email for questions. “Send” delivers the report as an email to the developer, and a short note thanks you. Only the app version, device, browser, language, screen size and the last page you had open go along, shown openly in the form. Trip data, logbook, places and your location never do. Without a connection your text stays in the field until you send it.
+
+<details>
+<summary><b>📜 Earlier versions: 1.23 to 1.1</b></summary>
+
 ## 🌼 New in version 1.23
 
 **Two new places and fresh park info for the north.** On the way from Perth to Kalbarri there are two new stops, both with photo and season tips: Lesueur National Park near Jurien Bay, with more than 900 plant species, a scenic drive and the walk up Mount Lesueur, and Stockyard Gully, a 250 m limestone tunnel you walk through with a torch (4WD only). Kalbarri, Francois Peron, Kennedy Range and Mount Augustus now list their walks, entry fees and current closures from Parks and Wildlife WA, for example The Loop at Kalbarri, which from 1 November 2026 to 1 April 2027 is only open if you start before 7 am. The Eel Pool on the Oakover River now sits in the right spot on the map, and the route ideas North 1 to 3 take in the two new places.
-
-<details>
-<summary><b>📜 Earlier versions: 1.22 to 1.1</b></summary>
 
 ## 💡 New in version 1.22
 
@@ -834,6 +838,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.21:** Backup & Import on one page, green checks for working connections, More in groups, exchange rates fixed
 - [x] **Version 1.22:** fun facts along the route, a logbook that fills itself in, an automatic daily backup
 - [x] **Version 1.23:** Lesueur National Park and the Stockyard Gully tunnel, park walks, fees and closures in the north, Eel Pool on the right spot
+- [x] **Version 1.24:** report a problem from the app, with screenshots, straight to the developer
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -865,10 +870,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.23 · entwickelt für Western Australia**<br>
+**Version 1.24 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.23-e07b28?style=flat-square" alt="version: 1.23"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.24-e07b28?style=flat-square" alt="version: 1.24"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -876,7 +881,7 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
-**[✨ Neu in 1.23](#-neu-in-version-123)**
+**[✨ Neu in 1.24](#-neu-in-version-124)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
@@ -989,12 +994,16 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 🐞 Neu in Version 1.24
+
+**Fehler melden, direkt aus der App.** Geht etwas nicht oder sieht falsch aus? Unter Mehr → App → 🐞 Fehler melden, oder über den Link ganz unten auf jeder Seite, schreibst du kurz, was passiert ist. Graue Hinweise im leeren Feld fragen, was nicht geht und wann es auftritt. Bis zu drei Bildschirmfotos lassen sich anfügen, dazu freiwillig eine E-Mail für Rückfragen. „Absenden“ schickt die Meldung als Mail an den Entwickler, ein kurzer Hinweis bedankt sich. Mit gehen nur App-Version, Gerät, Browser, Sprache, Bildschirmgröße und die zuletzt offene Seite, offen im Formular aufgelistet. Reisedaten, Logbuch, Orte und dein Standort nie. Ohne Netz bleibt dein Text im Feld, bis du ihn abschickst.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.23 bis 1.1</b></summary>
+
 ## 🌼 Neu in Version 1.23
 
 **Zwei neue Orte und frische Parkinfos für den Norden.** Auf dem Weg von Perth nach Kalbarri gibt es zwei neue Stopps, beide mit Bild und Saisontipps: den Lesueur-Nationalpark bei Jurien Bay mit über 900 Pflanzenarten, einer Panoramastraße und dem Weg auf den Mount Lesueur, und Stockyard Gully, einen 250 m langen Kalksteintunnel, durch den man mit Taschenlampe läuft (nur mit 4WD). Kalbarri, Francois Peron, Kennedy Range und Mount Augustus nennen jetzt ihre Wege, Eintrittspreise und aktuellen Sperren laut Parkverwaltung, zum Beispiel The Loop in Kalbarri: vom 1. November 2026 bis 1. April 2027 nur offen, wenn man vor 7 Uhr losgeht. Der Eel Pool am Oakover River liegt auf der Karte jetzt an der richtigen Stelle, und die Routen-Ideen Nord 1 bis 3 führen über die beiden neuen Orte.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.22 bis 1.1</b></summary>
 
 ## 💡 Neu in Version 1.22
 
@@ -1647,6 +1656,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.21:** Backup & Import auf einer Seite, grüne Haken für funktionierende Verbindungen, Mehr in Gruppen, Wechselkurse repariert
 - [x] **Version 1.22:** Fun Facts entlang der Route, ein Logbuch, das sich selbst ausfüllt, ein automatisches tägliches Backup
 - [x] **Version 1.23:** Lesueur-Nationalpark und der Tunnel von Stockyard Gully, Wege, Eintritt und Sperren der Parks im Norden, Eel Pool an der richtigen Stelle
+- [x] **Version 1.24:** Fehler melden aus der App, mit Bildschirmfotos, direkt an den Entwickler
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

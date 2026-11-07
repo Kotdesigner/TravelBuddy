@@ -7,7 +7,7 @@ export const GRUPPEN = [
   { id: 'unterwegs', icon: '🧭', titel: ['Unterwegs', 'On the road'], punkte: ['buchungen', 'fluege', 'kosten'] },
   { id: 'vorbereitung', icon: '🧳', titel: ['Vorbereitung', 'Preparation'], punkte: ['vorbereitung', 'packliste'] },
   { id: 'extras', icon: '✨', titel: ['Extras', 'Extras'], punkte: ['funfacts', 'teilen', 'musik', 'quiz'] },
-  { id: 'app', icon: '⚙️', titel: ['App', 'App'], punkte: ['statistik'] },
+  { id: 'app', icon: '⚙️', titel: ['App', 'App'], punkte: ['statistik', 'fehler'] },
 ]
 
 /** Feste Reihenfolge aller Punkte über alle Gruppen */
