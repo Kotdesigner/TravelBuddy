@@ -153,6 +153,7 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 .reel-play:hover .reel-icon { transform: scale(1.06); }
 .reel-play:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -4px; }
 .reel-cap { margin-top: var(--space-sm); display: grid; gap: var(--space-2xs); }
+.reels-more { margin-top: var(--space-2xl); }
 .reels-note { display: block; margin-top: var(--space-xl); }
 
 /* Close: get it */
