@@ -173,13 +173,13 @@
   "beschreibung": "51 Antony Gormley sculptures scattered across a salt lake near Menzies — one of the most surreal places in Australia. The road is now fully sealed; the walk has no shade at all, so only go at sunrise/sunset."
  },
  "gwalia_ghost_town_hoover_house": {
-  "beschreibung": "Abandoned gold-mining town near Leonora (from your screenshots!), museum daily 9 am–4 pm, by donation — closed on some days over Christmas/New Year, check beforehand."
+  "beschreibung": "Abandoned gold-mining town near Leonora, museum daily 9 am–4 pm, by donation — closed on some days over Christmas/New Year, check beforehand."
  },
  "kookynie_niagara_dam": {
   "beschreibung": "“Living ghost town” (~10 residents) with a working Grand Hotel; free camp with toilets & BBQ at Niagara Dam (1897)."
  },
  "broad_arrow_tavern": {
-  "beschreibung": "The last building of the gold-rush town of Broad Arrow (1896), 38 km north of Kalgoorlie on the road to Leonora (from your screenshots). Almost every wall is covered in messages from earlier guests — bring a pen and sign it yourself. Known for the “Broady” burger. Once had eight hotels, two breweries and its own stock exchange; filming location of “Nickel Queen” in 1971.",
+  "beschreibung": "The last building of the gold-rush town of Broad Arrow (1896), 38 km north of Kalgoorlie on the road to Leonora. Almost every wall is covered in messages from earlier guests — bring a pen and sign it yourself. Known for the “Broady” burger. Once had eight hotels, two breweries and its own stock exchange; filming location of “Nickel Queen” in 1971.",
   "saison": "The Goldfields in high summer: 35–40 °C during the day, so more of a lunch stop than a destination for walks. Check opening hours (most recently daily 11 am–7 pm) over Christmas/New Year beforehand. On the way to Lake Ballard, Kookynie and Gwalia."
  },
  "lancelin_sand_dunes": {
@@ -189,11 +189,12 @@
   "beschreibung": "Thousands of limestone pillars in a desert field — best early in the morning or at sunset."
  },
  "kalbarri_np_murchison_station": {
-  "beschreibung": "Nature's Window & gorges; stay at Murchison Station (private river camps, a local's tip) instead of in Kalbarri itself."
+  "beschreibung": "The Murchison gorge runs 80 km through red and white sandstone. Highlights: Nature's Window, the Kalbarri Skywalk with two platforms 100 m above the gorge, Z Bend Lookout (1.2 km return) and, for the sure-footed, the Z Bend River Trail down to the river (2.6 km). Hawks Head and Ross Graham (700 m to the river, swimming and paddling) have their own access road. On the coast: Red Bluff, Natural Bridge and Island Rock. Entry 17 AU$ per car, the park pass is valid. Stay at Murchison Station (private river camps, a local's tip) instead of in Kalbarri itself.",
+  "saison": "The gorges reach up to 50 °C in summer. From 1 November 2026 to 1 April 2027 The Loop is only open to walkers starting before 7 am. Visit the lookouts and the Skywalk early or late in the afternoon, bring water and a hat."
  },
  "natures_window_the_loop": {
-  "beschreibung": "The famous rock window of Tumblagooda sandstone above the Murchison gorge (from your screenshots). 38 km (~35 min) on sealed road from Kalbarri to “The Loop” car park (toilets, shade shelter). Path 1 km return, 30–45 min, light scrambling at the end — sturdy shoes. No drinking water. Take your photo in front of the window, don't climb on it. Entry 17 AU$ per car (park pass valid).",
-  "saison": "The Loop walk (9 km, 3–5 hrs) is closed from 7 am between November and March — up to 50 °C in the gorge. Nature's Window itself stays open: go for sunrise (watch for emus and kangaroos on the access road) or late in the afternoon. Bring water, a hat and sunscreen, there's hardly any shade."
+  "beschreibung": "The famous rock window of Tumblagooda sandstone above the Murchison gorge. 38 km (~35 min) on sealed road from Kalbarri to “The Loop” car park (toilets, shade shelter). Path 1 km return, 30–45 min, light scrambling at the end, so wear sturdy shoes. No drinking water. Take your photo in front of the window, don't climb on it. Entry 17 AU$ per car (park pass valid).",
+  "saison": "From 1 November 2026 to 1 April 2027 The Loop walk (9 km, 3 to 5 hrs) is only open if you start before 7 am, entry after that is not allowed. The gorge reaches up to 50 °C. Nature's Window itself stays open: go for sunrise (watch for emus and kangaroos on the access road) or late in the afternoon. Bring water, a hat and sunscreen, there's hardly any shade."
  },
  "steep_point_edel_land": {
   "beschreibung": "Westernmost point of the Australian mainland. ~140 km of Useless Loop Road + 30 km of soft dune track (tyre pressure ≤20 psi). Book camping at Shelter Bay in advance via DBCA Park Stay — rangers on site."
@@ -205,7 +206,8 @@
   "beschreibung": "Barge “Hartog Explorer” from Blackies Beach near Steep Point (Fri–Wed mornings, max. 20 vehicles a day on the island, booking essential). Allow several days, fully self-sufficient."
  },
  "francois_peron_np_voll_loop": {
-  "beschreibung": "Big Lagoon → Cape Peron → Skipjack Point: ~50 km of deep sand track, compressor station at Peron Homestead. From Skipjack Point you can see rays, sharks and dugongs from the cliff. Full day from Denham."
+  "beschreibung": "Big Lagoon, Cape Peron and Skipjack Point: about 50 km of deep sand track, compressor station at Peron Homestead. From the two platforms at Skipjack Point you can see rays, sharks, turtles and dugongs. The Wanamalu Trail links Cape Peron and Skipjack Point along the red cliffs (3.6 km return). At the homestead there is a warm artesian hot tub. Since March 2026 windblown sand means even the Homestead Road needs a 4WD or high-clearance AWD. Beyond the homestead high-clearance 4WD only, lower your tyre pressure, no caravans. Don't swim at Cape Peron, two strong currents meet there. Entry 17 AU$ per car, the park pass is valid. Full day from Denham.",
+  "saison": "In high summer the sand is hot and extra soft, start early and let air out of your tyres. Bring plenty of water, shade is only at the campgrounds. Ask at the parks office in Denham about track conditions before you go."
  },
  "monkey_mia_herald_bight": {
   "beschreibung": "Dolphin feeding in the morning; then on to the insider beach camp at Herald Bight (no booking, hardly anyone there) or Bottle Bay."
@@ -220,10 +222,12 @@
   "beschreibung": "Open all year — and in Dec/Jan even twice as exciting: wind season (kiters) and loggerhead turtle nesting season (Nov–Feb) right on Gnaraloo Bay. The last kilometres are soft sand."
  },
  "kennedy_range_np_temple_gorge": {
-  "beschreibung": "Remote gorge walls above the plain. NEW since April 2026: Temple Gorge Campground must be booked online via Park Stay ($15/night, no drinking water). Unsealed access from Gascoyne Junction, closed after rain."
+  "beschreibung": "A sandstone plateau 75 km long and 80 m above the red plain, with fossils of sea creatures in the rock. Walks from the campground: Temple Gorge Trail (2 km return), Escarpment Trail up onto the plateau (3.4 km, steep, panoramic views), Escarpment Base Trail (5.8 km return) and Honeycomb Gorge (600 m). The honeycomb wall is a sacred Yinggarda site: please don't photograph or touch it. Drapers Gorge (2 km) is hard, with scrambling over loose rock. Free entry. Since April 2026 Temple Gorge Campground can only be booked online via Park Stay WA (15 AU$ per adult per night, up to 180 days ahead, no drinking water). Unsealed access from Gascoyne Junction, closed after rain. On the Kennedy Range Loop Track only cross the Gascoyne River if you have the experience.",
+  "saison": "Often above 40 °C in December and January. Only walk very early in the morning, the trails have hardly any shade. Sunrise View is worth it at sunrise."
  },
  "mount_augustus_burringurrah": {
-  "beschreibung": "The world's largest monocline — bigger than Uluru, but with hardly any visitors. IMPORTANT: the Summit Trail is COMPLETELY CLOSED from 1 Nov to the end of Feb after several heat deaths. Instead: the 49 km loop drive, lookouts, short walks at dusk. Tourist park open all year (fuel!)."
+  "beschreibung": "The world's largest monocline, bigger than Uluru, but with hardly any visitors. The 45 km Loop Drive is 2WD friendly and reaches every site in the park: Wajarri rock engravings at Mundee and on the Ooramboo Trail, Gum Grove (500 m), Edney's Trail to the lookout (5 km, steep) and Goordgeela (3 km). Cattle Pool (Goolinee) is a permanent waterhole for swimming and paddling. The Corella Trail at Cattle Pool has been closed since June 2026 after a fire, the day use area stays open. Free entry. Tourist park open all year (fuel!).",
+  "saison": "The Summit Trail (12.5 km, very hard) is completely closed from November to February because of the heat. In September, October, March and April you may only start before 7 am. Instead: the Loop Drive, lookouts and short walks at dusk. After rain the shire may close the Loop Drive for a while."
  },
  "cattle_pool_goolinee_lyons_river": {
   "beschreibung": "Permanent waterhole with paperbark trees, 3 km from the Mount Augustus Tourist Park — THE spot in the region for a swim to cool off, and probably what many think of as the “endless pool in the middle of nowhere”."
@@ -489,5 +493,15 @@
  "hypipamee_crater": {
   "beschreibung": "Narrow volcanic explosion crater that drops about 60 m vertically into the rock and is covered at the bottom by a dense layer of duckweed. Right next to it a path leads to the three-tiered Dinner Falls on the young Barron River. Free entry, loop about 1.5 km, a good hour.",
   "saison": "At about 1,000 m it's pleasantly cool when it's oppressively humid down below. In the wet season Dinner Falls run strongly, the paths are then slippery and leeches are about — sturdy shoes. Early in the morning or at dusk there's a good chance of Lumholtz's tree kangaroos in the canopy."
+ },
+ "lesueur_np_mount_lesueur": {
+  "anzeigeName": "Lesueur NP (Mount Lesueur)",
+  "beschreibung": "A botanical treasure near Jurien Bay with more than 900 plant species, about a tenth of all plants in Western Australia. The Lesueur Scenic Drive is an 18.5 km one-way sealed loop at 40 km/h with plenty of lay-bys. The walk up Mount Lesueur is 4 km return and ends with views to the ocean. There are also short walks from Drummonds and the Yued Ponar Trail (6 km, challenging). Entry 17 AU$ per car, the park pass is valid. Clean your shoes at the boot cleaning stations, the park is almost free of dieback and should stay that way. No dogs.",
+  "saison": "The wildflowers bloom in spring, December and January are dry and hot. Walk the summit trail early in the morning and bring water and a hat. The Yonga Trail (26 km, overnight) is only open from March to November."
+ },
+ "stockyard_gully_tunnel": {
+  "anzeigeName": "Stockyard Gully (cave tunnel)",
+  "beschreibung": "A 250 m tunnel through the limestone, tall enough to walk upright. Drovers on their way to Perth used to rest here, the deep gully made a cool natural stockyard. The Cave Trail is 1.3 km return, through a sandy gully and then through the tunnel. The middle is pitch black, so bring a torch. Wild bee hives hang at the tunnel entrances, keep your distance. Access is 4WD only over soft sand and limestone, not with a caravan. Free entry. The parks service lists the area as Stockyard Gully Reserve.",
+  "saison": "The tunnel stays cool, but the sand track gets soft and hot at midday. Go in the morning. Bring repellent for ticks and mosquitoes, after heavy rain the cave can flood."
  }
 }

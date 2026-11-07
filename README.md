@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.22 · built for Western Australia**<br>
+**Version 1.23 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.22-e07b28?style=flat-square" alt="version: 1.22"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.23-e07b28?style=flat-square" alt="version: 1.23"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
-**[✨ What's new in 1.22](#-new-in-version-122)**
+**[✨ What's new in 1.23](#-new-in-version-123)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
@@ -144,12 +144,16 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 🌼 New in version 1.23
+
+**Two new places and fresh park info for the north.** On the way from Perth to Kalbarri there are two new stops, both with photo and season tips: Lesueur National Park near Jurien Bay, with more than 900 plant species, a scenic drive and the walk up Mount Lesueur, and Stockyard Gully, a 250 m limestone tunnel you walk through with a torch (4WD only). Kalbarri, Francois Peron, Kennedy Range and Mount Augustus now list their walks, entry fees and current closures from Parks and Wildlife WA, for example The Loop at Kalbarri, which from 1 November 2026 to 1 April 2027 is only open if you start before 7 am. The Eel Pool on the Oakover River now sits in the right spot on the map, and the route ideas North 1 to 3 take in the two new places.
+
+<details>
+<summary><b>📜 Earlier versions: 1.22 to 1.1</b></summary>
+
 ## 💡 New in version 1.22
 
 **Fun facts, a logbook that fills itself in, and a daily backup.** 💡 Fun facts show short facts from Wikipedia about where you are and along your route: on Today for the day’s stop, as a short note while you drive, and on their own page under More → Extras. The app loads them ahead for your planned legs and routes, so they are there offline, and with a connection fresh ones from nearby are added. Tap “Save” and a fact lands in that day’s logbook under “Learned today”. The logbook now fills in what it can work out by itself: the road distance of the day’s route (estimated offline and marked “approx.”), the day’s weather with high, low, rain and wind, how hot it felt with UV and humidity, the night sky with moon and clouds, and the day’s transport from your leg and bookings. Only empty fields are filled, a small ✨ marks them, and anything you change stays yours. TravelBuddy also makes an automatic backup once a day: at 10 pm if the app is open, otherwise right at the next start, quietly in the background. The last three days stay on the device and can be restored under Backup & Import. In Chrome and Edge on a computer it can also write the file into a folder you choose.
-
-<details>
-<summary><b>📜 Earlier versions: 1.21 to 1.1</b></summary>
 
 ## 💾 New in version 1.21
 
@@ -509,7 +513,7 @@ The first time you open TravelBuddy, a setup assistant walks you through eight s
 <td align="center"><img src="bilder/en/iphone-route.jpg" width="220" alt="Route"><br><b>Route</b><br>stops, km per leg, car or flight</td>
 </tr>
 <tr>
-<td align="center"><img src="bilder/en/iphone-orte.jpg" width="220" alt="Places"><br><b>Places</b><br>144 places with photo and season</td>
+<td align="center"><img src="bilder/en/iphone-orte.jpg" width="220" alt="Places"><br><b>Places</b><br>146 places with photo and season</td>
 <td align="center"><img src="bilder/en/iphone-karte.jpg" width="220" alt="Offline map"><br><b>Offline map</b><br>fuel, water, camps, rest areas</td>
 <td align="center"><img src="bilder/en/iphone-logbuch.jpg" width="220" alt="Logbook"><br><b>Logbook</b><br>every travel day on its stage</td>
 </tr>
@@ -539,7 +543,7 @@ The first time you open TravelBuddy, a setup assistant walks you through eight s
 - **Your notes and reports** stay with each place. "Plan in" puts a place into your stage.
 
 ### 📷 For photographers
-TravelBuddy shows the light before you get there, at every one of the 144 places and every place you add.
+TravelBuddy shows the light before you get there, at every one of the 146 places and every place you add.
 - **Golden hour** in the morning and evening, to the minute.
 - **Blue hour** in the morning and evening.
 - **Sunrise, sunset and the sun's highest point** for midday shadows.
@@ -547,7 +551,7 @@ TravelBuddy shows the light before you get there, at every one of the 144 places
 - **Star photography rating** for every place and night, from excellent to "moon too bright": calculated offline from the moon phase and astronomical darkness, refined online with the cloud cover.
 - **Moon phase and brightness** in percent.
 - **Weather at the spot:** high and low, wind and humidity (online).
-- **Find the shots:** 144 places with photos and seasonal tips, labels like "hidden gem", and sights up to 75 km off your route.
+- **Find the shots:** 146 places with photos and seasonal tips, labels like "hidden gem", and sights up to 75 km off your route.
 - **In the logbook:** photos sort themselves by capture date and GPS, plus fields for sunset and night sky, the Southern Cross, and the dominant colour of the day. Camera and drone have their own cost categories.
 - **Show your pictures:** animated photo collage, travel journal to print and a trip film in portrait format.
 
@@ -829,6 +833,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.20:** a note when saving fails, protected storage, damaged backups are repaired, shorter voice notes
 - [x] **Version 1.21:** Backup & Import on one page, green checks for working connections, More in groups, exchange rates fixed
 - [x] **Version 1.22:** fun facts along the route, a logbook that fills itself in, an automatic daily backup
+- [x] **Version 1.23:** Lesueur National Park and the Stockyard Gully tunnel, park walks, fees and closures in the north, Eel Pool on the right spot
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -860,10 +865,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.22 · entwickelt für Western Australia**<br>
+**Version 1.23 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.22-e07b28?style=flat-square" alt="version: 1.22"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.23-e07b28?style=flat-square" alt="version: 1.23"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -871,7 +876,7 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
-**[✨ Neu in 1.22](#-neu-in-version-122)**
+**[✨ Neu in 1.23](#-neu-in-version-123)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
@@ -984,12 +989,16 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 🌼 Neu in Version 1.23
+
+**Zwei neue Orte und frische Parkinfos für den Norden.** Auf dem Weg von Perth nach Kalbarri gibt es zwei neue Stopps, beide mit Bild und Saisontipps: den Lesueur-Nationalpark bei Jurien Bay mit über 900 Pflanzenarten, einer Panoramastraße und dem Weg auf den Mount Lesueur, und Stockyard Gully, einen 250 m langen Kalksteintunnel, durch den man mit Taschenlampe läuft (nur mit 4WD). Kalbarri, Francois Peron, Kennedy Range und Mount Augustus nennen jetzt ihre Wege, Eintrittspreise und aktuellen Sperren laut Parkverwaltung, zum Beispiel The Loop in Kalbarri: vom 1. November 2026 bis 1. April 2027 nur offen, wenn man vor 7 Uhr losgeht. Der Eel Pool am Oakover River liegt auf der Karte jetzt an der richtigen Stelle, und die Routen-Ideen Nord 1 bis 3 führen über die beiden neuen Orte.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.22 bis 1.1</b></summary>
+
 ## 💡 Neu in Version 1.22
 
 **Fun Facts, ein Logbuch, das sich selbst ausfüllt, und ein tägliches Backup.** 💡 Fun Facts zeigen kurze Fakten aus Wikipedia zu dem Ort, an dem du bist, und entlang deiner Route: auf Heute zum Stopp des Tages, als kurzer Hinweis beim Fahren und auf einer eigenen Seite unter Mehr → Extras. Für deine geplanten Etappen und Routen lädt die App sie vorab, so sind sie auch ohne Netz da, und mit Netz kommen frische aus der Nähe dazu. Ein Tipp auf „Merken“, und der Fakt steht im Logbuch des Tages unter „Heute gelernt“. Das Logbuch trägt jetzt selbst ein, was sich ableiten lässt: die Straßenkilometer der Tagesstrecke (ohne Netz geschätzt und mit „ca.“ markiert), das Tageswetter mit Höchst- und Tiefstwert, Regen und Wind, die gefühlte Hitze mit UV und Luftfeuchte, den Sternenhimmel mit Mond und Wolken und die Verkehrsmittel des Tages aus Etappe und Buchungen. Gefüllt werden nur leere Felder, ein kleines ✨ zeigt sie an, und was du änderst, bleibt deins. Außerdem sichert TravelBuddy einmal am Tag von selbst: um 22 Uhr, wenn die App offen ist, sonst gleich beim nächsten Start, still im Hintergrund. Die letzten drei Tage bleiben auf dem Gerät und lassen sich unter Backup & Import zurückholen. In Chrome und Edge am Rechner schreibt sie die Datei auf Wunsch auch in einen Ordner.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.21 bis 1.1</b></summary>
 
 ## 💾 Neu in Version 1.21
 
@@ -1341,7 +1350,7 @@ Beim ersten Öffnen führt dich ein Einrichtungsassistent in acht kurzen Schritt
 <td align="center"><img src="bilder/de/iphone-route.jpg" width="220" alt="Route"><br><b>Route</b><br>Stopps, km je Abschnitt, Auto oder Flug</td>
 </tr>
 <tr>
-<td align="center"><img src="bilder/de/iphone-orte.jpg" width="220" alt="Orte"><br><b>Orte</b><br>144 Orte mit Bild und Saison</td>
+<td align="center"><img src="bilder/de/iphone-orte.jpg" width="220" alt="Orte"><br><b>Orte</b><br>146 Orte mit Bild und Saison</td>
 <td align="center"><img src="bilder/de/iphone-karte.jpg" width="220" alt="Offline-Karte"><br><b>Offline-Karte</b><br>Tanken, Wasser, Camps, Rastplätze</td>
 <td align="center"><img src="bilder/de/iphone-logbuch.jpg" width="220" alt="Logbuch"><br><b>Logbuch</b><br>jeder Reisetag an seiner Etappe</td>
 </tr>
@@ -1371,7 +1380,7 @@ Beim ersten Öffnen führt dich ein Einrichtungsassistent in acht kurzen Schritt
 - **Eigene Notizen und Berichte** bleiben am Ort. „Einplanen“ legt einen Ort in deine Etappe.
 
 ### 📷 Für Fotografen
-TravelBuddy zeigt das Licht, bevor du dort bist, an jedem der 144 Orte und an jedem Ort, den du selbst anlegst.
+TravelBuddy zeigt das Licht, bevor du dort bist, an jedem der 146 Orte und an jedem Ort, den du selbst anlegst.
 - **Goldene Stunde** morgens und abends, auf die Minute.
 - **Blaue Stunde** morgens und abends.
 - **Sonnenaufgang, Sonnenuntergang und Höchststand** für die Schatten am Mittag.
@@ -1379,7 +1388,7 @@ TravelBuddy zeigt das Licht, bevor du dort bist, an jedem der 144 Orte und an je
 - **Bewertung für Sternenfotos** an jedem Ort und in jeder Nacht, von exzellent bis „Mond zu hell“: offline berechnet aus Mondphase und astronomischer Dunkelheit, online verfeinert mit der Bewölkung.
 - **Mondphase und Helligkeit** in Prozent.
 - **Wetter am Ort:** Höchst- und Tiefstwert, Wind und Luftfeuchte (online).
-- **Motive finden:** 144 Orte mit Bildern und Saison-Tipps, Markierungen wie „Geheimtipp“ und Sehenswertes bis 75 km neben deiner Route.
+- **Motive finden:** 146 Orte mit Bildern und Saison-Tipps, Markierungen wie „Geheimtipp“ und Sehenswertes bis 75 km neben deiner Route.
 - **Im Logbuch:** Fotos sortieren sich nach Aufnahmedatum und GPS ein, dazu Felder für Sonnenuntergang und Nachthimmel, das Kreuz des Südens und die dominierende Farbe des Tages. Kamera und Drohne haben eigene Kostenkategorien.
 - **Bilder zeigen:** animierte Foto-Kollage, Reisetagebuch zum Drucken und Reise-Film im Hochformat.
 
@@ -1637,6 +1646,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.20:** Hinweis, wenn das Speichern scheitert, geschützter Speicher, beschädigte Sicherungen werden repariert, kürzere Sprachnotizen
 - [x] **Version 1.21:** Backup & Import auf einer Seite, grüne Haken für funktionierende Verbindungen, Mehr in Gruppen, Wechselkurse repariert
 - [x] **Version 1.22:** Fun Facts entlang der Route, ein Logbuch, das sich selbst ausfüllt, ein automatisches tägliches Backup
+- [x] **Version 1.23:** Lesueur-Nationalpark und der Tunnel von Stockyard Gully, Wege, Eintritt und Sperren der Parks im Norden, Eel Pool an der richtigen Stelle
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

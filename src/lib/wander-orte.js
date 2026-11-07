@@ -26,6 +26,8 @@ export const WANDER_ORTE = new Set([
   'Stokes National Park',
   'Conspicuous Cliffs',
   'Yardie Creek Track (Coral Bay ↔ Cape Range)',
+  'Lesueur NP (Mount Lesueur)',
+  'Stockyard Gully (Höhlentunnel)',
   'Kennedy Range NP (Temple Gorge)',
   'Francois Peron NP (Voll-Loop)',
   'Millstream Chichester NP',

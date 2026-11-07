@@ -881,7 +881,7 @@
   "tags": [
    "GEHEIMTIPP"
   ],
-  "beschreibung": "Verlassene Goldgräberstadt bei Leonora (aus deinen Screenshots!), Museum täglich 9–16 Uhr, Spendenbasis — über Weihnachten/Neujahr tageweise geschlossen, vorher prüfen.",
+  "beschreibung": "Verlassene Goldgräberstadt bei Leonora, Museum täglich 9–16 Uhr, Spendenbasis — über Weihnachten/Neujahr tageweise geschlossen, vorher prüfen.",
   "emoji": "🏚️",
   "mapsQuery": "Gwalia Ghost Town & Hoover House, Western Australia",
   "bild": "bilder/gwalia_ghost_town_hoover_house.jpg",
@@ -912,7 +912,7 @@
   "tags": [
    "GEHEIMTIPP"
   ],
-  "beschreibung": "Letztes Gebäude der Goldrausch-Stadt Broad Arrow (1896), 38 km nördlich von Kalgoorlie an der Straße nach Leonora (aus deinen Screenshots). Fast jede Wand ist mit Botschaften früherer Gäste beschrieben — Stift mitnehmen und selbst unterschreiben. Bekannt für den „Broady“-Burger. Einst acht Hotels, zwei Brauereien und eine eigene Börse; 1971 Drehort von „Nickel Queen“.",
+  "beschreibung": "Letztes Gebäude der Goldrausch-Stadt Broad Arrow (1896), 38 km nördlich von Kalgoorlie an der Straße nach Leonora. Fast jede Wand ist mit Botschaften früherer Gäste beschrieben — Stift mitnehmen und selbst unterschreiben. Bekannt für den „Broady“-Burger. Einst acht Hotels, zwei Brauereien und eine eigene Börse; 1971 Drehort von „Nickel Queen“.",
   "saison": "Goldfields im Hochsommer: tagsüber 35–40 °C, also eher Mittagspause als Wanderziel. Öffnungszeiten (zuletzt täglich 11–19 Uhr) über Weihnachten/Neujahr vorher prüfen. Liegt auf dem Weg zu Lake Ballard, Kookynie und Gwalia.",
   "emoji": "🍻",
   "mapsQuery": "Broad Arrow Tavern, Broad Arrow, Western Australia",
@@ -953,6 +953,39 @@
   "lon": 115.15579
  },
  {
+  "id": "lesueur_np_mount_lesueur",
+  "name": "Lesueur NP (Mount Lesueur)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Perth → Coral Coast (Auftakt)",
+  "tags": [
+   "GEHEIMTIPP"
+  ],
+  "beschreibung": "Botanischer Schatz bei Jurien Bay mit über 900 Pflanzenarten, rund ein Zehntel aller Pflanzen Westaustraliens. Die Lesueur Scenic Drive ist eine 18,5 km lange asphaltierte Einbahn-Runde mit Tempo 40 und vielen Haltebuchten. Der Weg auf den Mount Lesueur ist 4 km hin und zurück und endet mit Blick bis zum Meer. Dazu kommen kurze Wege ab Drummonds und der Yued Ponar Trail (6 km, anspruchsvoll). Eintritt 17 AU$ pro Auto, der Park-Pass gilt. Schuhe an den Reinigungsstationen säubern, im Park gibt es kaum Wurzelfäule und so soll es bleiben. Keine Hunde.",
+  "saison": "Die Wildblumen blühen im Frühling, im Dezember und Januar ist es trocken und heiß. Den Gipfelweg früh am Morgen gehen, Wasser und Hut mitnehmen. Der Yonga Trail (26 km mit Übernachtung) ist nur von März bis November offen.",
+  "emoji": "🌼",
+  "mapsQuery": "Lesueur National Park, Western Australia",
+  "bild": "bilder/lesueur_np_mount_lesueur.jpg",
+  "lat": -30.18338,
+  "lon": 115.14071
+ },
+ {
+  "id": "stockyard_gully_tunnel",
+  "name": "Stockyard Gully (Höhlentunnel)",
+  "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
+  "region": "Perth → Coral Coast (Auftakt)",
+  "tags": [
+   "GEHEIMTIPP",
+   "NUR-4WD"
+  ],
+  "beschreibung": "Ein 250 m langer Tunnel durch den Kalkstein, groß genug zum aufrecht Gehen. Früher machten hier Viehtreiber auf dem Weg nach Perth Rast, die tiefe Schlucht war ein kühler natürlicher Pferch. Der Cave Trail ist 1,3 km hin und zurück, durch eine sandige Schlucht und dann durch den Tunnel. In der Mitte ist es stockdunkel, eine Taschenlampe muss mit. An den Tunnelausgängen hängen wilde Bienenstöcke, Abstand halten. Hin geht es nur mit 4WD über weichen Sand und Kalksteinplatten, nicht mit Wohnwagen. Eintritt frei. Die Parkverwaltung führt das Gebiet als Stockyard Gully Reserve.",
+  "saison": "Im Tunnel bleibt es kühl, die Sandpiste davor wird in der Mittagshitze weich und heiß. Am besten morgens hinfahren. Schutz gegen Zecken und Mücken mitnehmen, nach starkem Regen kann die Höhle unter Wasser stehen.",
+  "emoji": "🔦",
+  "mapsQuery": "Stockyard Gully Cave, Western Australia",
+  "bild": "bilder/stockyard_gully_tunnel.jpg",
+  "lat": -29.94058,
+  "lon": 115.09935
+ },
+ {
   "id": "kalbarri_np_murchison_station",
   "name": "Kalbarri NP & Murchison Station",
   "abschnitt": "Norden: Steep Point, Ningaloo & Pilbara",
@@ -960,12 +993,13 @@
   "tags": [
    "MUSS-SEHEN"
   ],
-  "beschreibung": "Nature's Window & Schluchten; übernachten auf Murchison Station (private Fluss-Camps, Tipp des Ortskundigen) statt in Kalbarri selbst.",
+  "beschreibung": "Die Murchison-Schlucht zieht sich 80 km durch roten und weißen Sandstein. Höhepunkte: Nature's Window, der Kalbarri Skywalk mit zwei Plattformen 100 m über der Schlucht, Z Bend Lookout (1,2 km hin und zurück) und für Trittfeste der Z Bend River Trail hinunter zum Fluss (2,6 km). Hawks Head und Ross Graham (700 m zum Fluss, Baden und Paddeln) liegen an einer eigenen Zufahrt. An der Küste Red Bluff, Natural Bridge und Island Rock. Eintritt 17 AU$ pro Auto, der Park-Pass gilt. Übernachten auf Murchison Station (private Fluss-Camps, Tipp des Ortskundigen) statt in Kalbarri selbst.",
   "emoji": "🏞️",
   "mapsQuery": "Kalbarri NP & Murchison Station, Western Australia",
   "bild": "bilder/kalbarri_np_murchison_station.jpg",
   "lat": -27.61616,
-  "lon": 114.47554
+  "lon": 114.47554,
+  "saison": "In den Schluchten wird es im Sommer bis 50 °C heiß. The Loop ist vom 1. November 2026 bis 1. April 2027 nur offen, wenn man vor 7 Uhr losgeht. Lookouts und Skywalk früh oder am späten Nachmittag besuchen, Wasser und Hut mitnehmen."
  },
  {
   "id": "natures_window_the_loop",
@@ -975,8 +1009,8 @@
   "tags": [
    "MUSS-SEHEN"
   ],
-  "beschreibung": "Das berühmte Felsfenster aus Tumblagooda-Sandstein über der Murchison-Schlucht (aus deinen Screenshots). Ab Kalbarri 38 km (~35 Min.) auf Asphalt bis zum Parkplatz „The Loop“ (Toiletten, Schattendach). Weg 1 km hin & zurück, 30–45 Min., am Ende leichte Kletterei — feste Schuhe. Kein Trinkwasser. Foto vor dem Fenster, nicht draufklettern. Eintritt 17 AU$ pro Auto (Park-Pass gilt).",
-  "saison": "Der Rundweg The Loop (9 km, 3–5 Std.) ist von November bis März ab 7 Uhr gesperrt — in der Schlucht bis 50 °C. Nature's Window selbst bleibt offen: zum Sonnenaufgang hin (auf der Zufahrt dann auf Emus und Kängurus achten) oder spät am Nachmittag. Wasser, Hut und Sonnencreme mitnehmen, Schatten gibt es kaum.",
+  "beschreibung": "Das berühmte Felsfenster aus Tumblagooda-Sandstein über der Murchison-Schlucht. Ab Kalbarri 38 km (~35 Min.) auf Asphalt bis zum Parkplatz „The Loop“ (Toiletten, Schattendach). Weg 1 km hin & zurück, 30–45 Min., am Ende leichte Kletterei, also feste Schuhe. Kein Trinkwasser. Foto vor dem Fenster, nicht draufklettern. Eintritt 17 AU$ pro Auto (Park-Pass gilt).",
+  "saison": "Der Rundweg The Loop (9 km, 3 bis 5 Std.) ist vom 1. November 2026 bis 1. April 2027 nur offen, wenn man vor 7 Uhr losgeht, danach ist der Einstieg verboten. In der Schlucht wird es bis 50 °C heiß. Nature's Window selbst bleibt offen: zum Sonnenaufgang hin (auf der Zufahrt dann auf Emus und Kängurus achten) oder spät am Nachmittag. Wasser, Hut und Sonnencreme mitnehmen, Schatten gibt es kaum.",
   "emoji": "🪟",
   "mapsQuery": "Nature's Window, Kalbarri National Park, Western Australia",
   "bild": "bilder/natures_window_the_loop.jpg",
@@ -1041,12 +1075,13 @@
    "GEHEIMTIPP",
    "NUR-4WD"
   ],
-  "beschreibung": "Big Lagoon → Cape Peron → Skipjack Point: ~50 km Tiefsand-Piste, Kompressor-Station am Peron Homestead. Von Skipjack Point sieht man Rochen, Haie und Dugongs vom Kliff. Ganztägig ab Denham.",
+  "beschreibung": "Big Lagoon, Cape Peron und Skipjack Point: rund 50 km Tiefsand-Piste, Kompressor-Station am Peron Homestead. Von den zwei Plattformen am Skipjack Point sieht man Rochen, Haie, Schildkröten und Dugongs. Der Wanamalu Trail verbindet Cape Peron und Skipjack Point an der roten Steilküste (3,6 km hin und zurück). Am Homestead liegt ein warmes artesisches Becken zum Baden. Seit März 2026 ist schon die Homestead Road wegen Flugsand nur mit 4WD oder hochbeinigem Allrad befahrbar. Hinter dem Homestead nur hochbeiniger 4WD, Reifendruck senken, keine Wohnwagen. Am Cape Peron nicht baden, dort treffen zwei starke Strömungen aufeinander. Eintritt 17 AU$ pro Auto, der Park-Pass gilt. Ganztägig ab Denham.",
   "emoji": "🦈",
   "mapsQuery": "Francois Peron NP (Voll-Loop), Western Australia",
   "bild": "bilder/francois_peron_np_voll_loop.jpg",
   "lat": -25.69819,
-  "lon": 113.50724
+  "lon": 113.50724,
+  "saison": "Im Hochsommer ist der Sand heiß und besonders weich, früh losfahren und Luft aus den Reifen lassen. Viel Wasser mitnehmen, Schatten gibt es nur an den Campingplätzen. Vor der Fahrt im Parkbüro in Denham nach dem Zustand der Pisten fragen."
  },
  {
   "id": "monkey_mia_herald_bight",
@@ -1121,12 +1156,13 @@
    "NUR-4WD",
    "EXPEDITION"
   ],
-  "beschreibung": "Abgelegene Schluchten-Wände über der Ebene. NEU seit April 2026: Temple Gorge Campground muss online über Park Stay gebucht werden ($15/Nacht, kein Trinkwasser). Zufahrt ab Gascoyne Junction unbefestigt, nach Regen gesperrt.",
+  "beschreibung": "Ein Sandstein-Plateau, 75 km lang und 80 m über der roten Ebene, mit Fossilien von Meerestieren im Fels. Wege ab dem Campground: Temple Gorge Trail (2 km hin und zurück), Escarpment Trail hinauf aufs Plateau (3,4 km, steil, Rundumblick), Escarpment Base Trail (5,8 km hin und zurück) und Honeycomb Gorge (600 m). Die Wabenwand ist ein heiliger Ort der Yinggarda: bitte nicht fotografieren und nicht berühren. Drapers Gorge (2 km) ist schwer, mit Klettern über losen Fels. Eintritt frei. Temple Gorge Campground seit April 2026 nur online über Park Stay WA (15 AU$ pro Erwachsenem und Nacht, bis 180 Tage im Voraus, kein Trinkwasser). Zufahrt ab Gascoyne Junction unbefestigt, nach Regen gesperrt. Auf der Kennedy Range Loop Track den Gascoyne River nur mit Erfahrung durchqueren.",
   "emoji": "🏜️",
   "mapsQuery": "Kennedy Range NP (Temple Gorge), Western Australia",
   "bild": "bilder/kennedy_range_np_temple_gorge.jpg",
   "lat": -24.66114,
-  "lon": 115.16951
+  "lon": 115.16951,
+  "saison": "Im Dezember und Januar oft über 40 °C. Nur ganz früh am Morgen wandern, die Wege haben kaum Schatten. Der Sunrise View lohnt sich zum Sonnenaufgang."
  },
  {
   "id": "mount_augustus_burringurrah",
@@ -1137,12 +1173,13 @@
    "GEHEIMTIPP",
    "EXPEDITION"
   ],
-  "beschreibung": "Größter Monoklin der Welt — massiger als Uluru, aber fast ohne Besucher. WICHTIG: Der Summit Trail ist wegen mehrerer Hitzetoter vom 1. Nov. bis Ende Feb. KOMPLETT GESPERRT. Stattdessen: 49-km-Loop-Drive, Lookouts, kurze Dämmerungs-Walks. Tourist Park ganzjährig offen (Sprit!).",
+  "beschreibung": "Größter Monoklin der Welt, massiger als Uluru, aber fast ohne Besucher. Die 45 km lange Loop Drive ist mit 2WD befahrbar und führt zu allen Stellen im Park: Felsgravuren der Wajarri am Mundee und am Ooramboo Trail, Gum Grove (500 m), Edney's Trail zum Aussichtspunkt (5 km, steil) und Goordgeela (3 km). Cattle Pool (Goolinee) ist ein dauerhaftes Wasserloch zum Baden und Paddeln. Der Corella Trail am Cattle Pool ist seit Juni 2026 nach einem Feuer gesperrt, der Picknickplatz bleibt offen. Eintritt frei. Tourist Park ganzjährig offen (Sprit!).",
   "emoji": "⛰️",
   "mapsQuery": "Mount Augustus (Burringurrah), Western Australia",
   "bild": "bilder/mount_augustus_burringurrah.jpg",
   "lat": -24.89565,
-  "lon": 116.95715
+  "lon": 116.95715,
+  "saison": "Der Summit Trail (12,5 km, sehr schwer) ist von November bis Februar wegen der Hitze komplett gesperrt. Im September, Oktober, März und April darf man nur vor 7 Uhr starten. Stattdessen Loop Drive, Lookouts und kurze Wege in der Dämmerung. Nach Regen kann die Gemeinde die Loop Drive kurz sperren."
  },
  {
   "id": "cattle_pool_goolinee_lyons_river",
@@ -1299,8 +1336,8 @@
   "emoji": "💧",
   "mapsQuery": "-21.68536,121.12598",
   "bild": "bilder/running_waters_eel_pool_oakover_river.jpg",
-  "lat": -21.17149,
-  "lon": 119.74562
+  "lat": -21.68536,
+  "lon": 121.12598
  },
  {
   "id": "karlamilyi_rudall_river_np",

@@ -1582,5 +1582,27 @@
 "lizenzUrl": "https://creativecommons.org/licenses/by/2.0",
 "seite": "https://commons.wikimedia.org/wiki/File:Zuytdorp_Cliffs.jpg",
 "status": "belegt"
+},
+{
+"id": "lesueur_np_mount_lesueur",
+"name": "Lesueur NP (Mount Lesueur)",
+"datei": "lesueur_np_mount_lesueur.jpg",
+"titel": "Mount Lesueur, Lesueur National Park, September 2023 01.jpg",
+"autor": "Calistemon",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Mount_Lesueur,_Lesueur_National_Park,_September_2023_01.jpg",
+"status": "neu"
+},
+{
+"id": "stockyard_gully_tunnel",
+"name": "Stockyard Gully (Höhlentunnel)",
+"datei": "stockyard_gully_tunnel.jpg",
+"titel": "Stockyard Gully Cave exit in Drovers Cave National Park, Western Australia.png",
+"autor": "Maclearite",
+"lizenz": "CC BY-SA 4.0",
+"lizenzUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+"seite": "https://commons.wikimedia.org/wiki/File:Stockyard_Gully_Cave_exit_in_Drovers_Cave_National_Park,_Western_Australia.png",
+"status": "neu"
 }
 ]
