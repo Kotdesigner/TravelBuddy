@@ -6,6 +6,7 @@ The access token comes only from the environment (GitHub secret IG_TOKEN).
 It is never written to the website or printed in the log.
 """
 import json, os, re, sys, urllib.error, urllib.parse, urllib.request
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 API = "https://graph.instagram.com"
@@ -82,6 +83,25 @@ def write(site, data):
             "timestamp": m.get("timestamp", ""),
             "thumb": f"reels/{name}" if target.exists() else "",
         })
+    # Behold (free plan) refreshes once a day. A reel added to reels.json by hand
+    # stays until the feed has it, as long as it is newer than the feed and
+    # younger than three days. Matching is by permalink, so it is never doubled.
+    try:
+        before = json.loads((site / "reels.json").read_text())
+    except Exception:
+        before = []
+    seen = {r["permalink"].rstrip("/") for r in reels}
+    floor = max(reels[0]["timestamp"] if reels else "",
+                (datetime.now(timezone.utc) - timedelta(days=3)).strftime("%Y-%m-%dT%H:%M:%S+0000"))
+    for r in before if isinstance(before, list) else []:
+        link = r.get("permalink", "")
+        if PERMALINK.match(link) and link.rstrip("/") not in seen and r.get("timestamp", "") > floor:
+            reels.append(r)
+            if r.get("thumb", "").startswith("reels/"):
+                keep_files.add(r["thumb"][len("reels/"):])
+    reels.sort(key=lambda r: r.get("timestamp", ""), reverse=True)
+    reels = reels[:KEEP]
+
     for f in folder.iterdir():
         if f.name not in keep_files:
             f.unlink()
