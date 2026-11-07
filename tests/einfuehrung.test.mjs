@@ -3,6 +3,7 @@
 import fs from 'node:fs'
 import { SCHRITTE, bereinige, sollZeigen, istLeer, KEY } from '../src/lib/einfuehrung.js'
 import { neueRouteAllrad } from '../src/lib/fahrzeug.js'
+import { teileFuer } from '../src/lib/karten-config.js'
 import { vorgabeStart, reiseZeitraum } from '../src/lib/plan.js'
 import { fuehreZusammen } from '../src/lib/zusammenfuehren.js'
 
@@ -39,7 +40,12 @@ console.log('\n2  Gespeicherter Stand')
     p('Design am Anfang: Erscheinungsbild, Karten, Schrift', /\{:else if id === 'design'\}/.test(ef) && /setzeTheme\(m\)/.test(ef) && /setzeKarten\(m\)/.test(ef) && /setzeSchrift\(s\.id\)/.test(ef))
     p('Fahrzeug: Reichweite und 2WD oder 4WD als Vorgabe für neue Routen', /\{:else if id === 'fahrzeug'\}/.test(ef) && /reichweite\.set\(v\)/.test(ef) && /allradVorgabe\.set\(true\)/.test(ef) && /neueRouteAllrad\(vorlage\)/.test(fs.readFileSync(new URL('../src/lib/userdata.js', import.meta.url), 'utf8')))
     p('Vorabausgaben statt Buchungen: Ausgabe vorab, Flug oder Zug mit Nummer, Buchungsmail', /\{:else if id === 'ausgaben'\}/.test(ef) && /blatt\('ausgabe'\)/.test(ef) && /blatt\('route', \{ art: 'flug' \}\)/.test(ef) && /blatt\('buchung'\)/.test(ef) && !/\{:else if id === 'buchung'\}/.test(ef))
-    p('Bereit für unterwegs: Daten schützen, Home-Bildschirm, Backup, Notfall, Haken für Karten, Pisten-Netz, Routen', /\{:else if id === 'bereit'\}/.test(ef) && /navigator\.storage\?\.persist\?\.\(\)/.test(ef) && /onclick=\{appEinrichten\}/.test(ef) && /seite\('mehr\/backup'\)/.test(ef) && /seite\('mehr\/notfall'\)/.test(ef) && /karten-pmtiles-v2/.test(ef))
+    p('Bereit für unterwegs: Daten schützen, Home-Bildschirm, Backup, Notfall, Haken für Karten, Pisten-Netz, Routen', /\{:else if id === 'bereit'\}/.test(ef) && /navigator\.storage\?\.persist\?\.\(\)/.test(ef) && /onclick=\{appEinrichten\}/.test(ef) && /seite\('mehr\/backup'\)/.test(ef) && /seite\('mehr\/notfall'\)/.test(ef) && /caches\.open\(CACHE\)/.test(ef))
+    const paket = teileFuer(false)
+    p('Bereit: Karten zählen erst, wenn das ganze gewählte Paket liegt, der Australien-Überblick allein reicht nicht', paket.length > 1 && paket.some((r) => r.id === 'australien') && /const teile = teileFuer\(\$grosseKarteAn\)/.test(ef) && /m\.every\(Boolean\)/.test(ef) && !/k\.length > 0/.test(ef) && /\$kartenStand/.test(ef))
+    p('Bereit: fehlt Kartenmaterial, lädt ein Knopf direkt in der Liste, mit Fortschritt', /\{#if !kartenDa && !\$kartenLauf\}<button class="btn" disabled=\{!\$online\} onclick=\{\(\) => karten\(\$grosseKarteAn\)\}>/.test(ef) && /\$kartenLauf \? t\('\{name\} wird geladen/.test(ef))
+    p('Vorabausgaben: Einzahl bei einer Ausgabe und einem Flug', /vorab === 1 \? je\('1 Ausgabe vorab', '1 expense before the trip'\)/.test(ef) && /verkehr === 1 \? je\('1 Flug oder Zug', '1 flight or train'\)/.test(ef) && /Flüge oder Züge/.test(ef))
+    p('Pisten-Netz-Knöpfe: Größe in eigener Zeile, bricht nicht zwischen Zahl und MB', /<span>\{geb\.name\}<\/span><small>\{mbVon\(g\)\} MB<\/small>/.test(ef) && /\.ef-karten-knoepfe \.btn small \{[^}]*white-space: nowrap/.test(ef))
     p('Erste Schritte: Vorabausgaben statt Buchung', /id: 'ausgaben'/.test(es) && /oeffneNeu\('ausgabe'\)/.test(es) && !/id: 'buchung'/.test(es))
     p('4WD-Vorgabe: neue Auto-Route mit 4WD nur bei Vorgabe 4WD, 4WD-Idee immer, Flug nie, 2WD-Idee folgt der Vorgabe', neueRouteAllrad({}, true) === true && neueRouteAllrad({}, false) === false && neueRouteAllrad({ allrad: true }, false) === true && neueRouteAllrad({ art: 'flug' }, true) === false && neueRouteAllrad({ allrad: undefined }, true) === true && /allrad: brauchtAllrad\(r\) \|\| undefined/.test(fs.readFileSync(new URL('../src/lib/Routen.svelte', import.meta.url), 'utf8')))
     p('Erste Schritte auf Heute: „Pisten-Netz laden“, hakt sich ab, sobald eins geladen ist, führt zur aufgeklappten Box', /id: 'pisten'/.test(es) && /fertig: Object\.values\(\$pistenStand\)\.some\(Boolean\)/.test(es) && /localStorage\.setItem\('tb-offline-routen-offen', '1'\); sessionStorage\.setItem\('tb-offline-routen-zeigen', '1'\)/.test(es) && /geh\('plan\/karte'\)/.test(es))
@@ -81,6 +87,7 @@ console.log('\n4  Einbindung')
   p('führt zu den Belegen unter Buchungen', svelte.includes("seite('mehr/vorbereitung', '#bu-titel')") && fs.readFileSync(wurzel + 'lib/Reisevorbereitung.svelte', 'utf8').includes('id="bu-titel"'))
   p('noch einmal startbar: Mehr-Blatt und Seitenleiste', /onEinfuehrung/.test(fs.readFileSync(wurzel + 'lib/BottomBar.svelte', 'utf8')) && /onEinfuehrung/.test(fs.readFileSync(wurzel + 'lib/Seitenleiste.svelte', 'utf8')))
   p('keine Startdaten mehr (die waren privat)', !/startdaten/i.test(app))
+  p('Orte-Hinweis erst nach dem Laden und nie über einer angefangenen Einführung', /ansicht\.tab === 'orte' && \$ready && !\$einfuehrung && einfuehrungStand\(\)\?\.fertig !== false[^\n]*zeigeOrteHinweis\(\)/.test(app))
 }
 
 console.log(`\n  ${ok} bestanden · ${bad} gescheitert\n`)

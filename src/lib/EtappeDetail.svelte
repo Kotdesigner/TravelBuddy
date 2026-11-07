@@ -114,7 +114,7 @@
       if (a === null) return false
       if (a) aenderung.speichern(); else aenderung.verwerfen()
       return true
-    })
+    }, (id) => aenderung?.uebernehmen(id))
     const schliessen = (e) => { if (aenderung?.geaendert) e.preventDefault() }
     addEventListener('beforeunload', schliessen)
     return () => { setzeWaechter(null); removeEventListener('beforeunload', schliessen) }

@@ -24,9 +24,12 @@ export function leseAdresse(hash = location.hash) {
 }
 
 // Eine Seite mit ungespeicherten Änderungen kann das Verlassen aufhalten.
-let waechter = null
-export const setzeWaechter = (fn) => { waechter = fn }
+let waechter = null, uebernehmer = null
+export const setzeWaechter = (fn, uebernehmen = null) => { waechter = fn; uebernehmer = fn ? uebernehmen : null }
 export const fragWaechter = async () => (waechter ? waechter() : true)
+// Im Neu-Blatt Angelegtes ist mit „anlegen“ bestätigt. Auf der offenen Seite zählt es nicht als
+// ungespeicherte Änderung, sonst fragte sie beim Öffnen nach und „Nicht speichern“ löschte es wieder.
+export const alsGespeichert = (id) => { if (id) uebernehmer?.(id) }
 
 export function geh(pfad) {
   const ziel = '#/' + String(pfad).replace(/^#?\/?/, '')

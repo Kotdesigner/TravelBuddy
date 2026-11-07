@@ -53,7 +53,15 @@
     stand = kopie(jetzt()); verlauf = []
     zeigeToast(je('✓ Änderungen gespeichert', '✓ Changes saved'), 'ok', 3500)
   }
-  $effect(() => { api = { get geaendert() { return geaendert }, speichern, verwerfen } })
+  // Im Neu-Blatt Angelegtes gilt als gespeichert: in den gemerkten Stand und jeden Zwischenstand,
+  // damit weder die Frage beim Verlassen noch „Rückgängig“ es wieder löscht
+  function uebernehmen(id) {
+    const neu = jetzt().find((r) => r.id === id)
+    if (!neu || !gemerkt) return
+    const mit = (liste) => [...liste.filter((r) => r.id !== id), kopie(neu)]
+    stand = mit(stand); verlauf = verlauf.map(mit)
+  }
+  $effect(() => { api = { get geaendert() { return geaendert }, speichern, verwerfen, uebernehmen } })
 </script>
 
 {#if geaendert}

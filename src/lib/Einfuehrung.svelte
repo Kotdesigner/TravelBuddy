@@ -16,8 +16,9 @@
   import { blattRaus, ausblenden } from './motion.js'
   import { SCHRITTE, einfuehrung, lies, merke, sollZeigen, istLeer } from './einfuehrung.js'
   import { testreiseKnopf } from './testreise-dienst.js'
-  import { GROSSE_KARTE } from './karten-config.js'
-  import { kartenLauf, ladePaket, paketMB } from './karten-laden.js'
+  import { GROSSE_KARTE, teileFuer } from './karten-config.js'
+  import { kartenLauf, kartenStand, ladePaket, paketMB, CACHE, dateiUrl } from './karten-laden.js'
+  import { grosseKarteAn } from './karten-wahl.js'
   import { online } from './netz.js'
   import { zeigeToast } from './toast.js'
   import { GEBIETE, pistenStand, pistenLaedt, pistenLaden, pistenPruefen, netzInfo } from './routing-offline.js'
@@ -57,8 +58,12 @@
   let geschuetzt = $state(null), kartenDa = $state(false)
   $effect(() => {
     if (id !== 'bereit') return
+    $kartenStand   // nach jedem geladenen Kartenteil neu nachsehen
+    const teile = teileFuer($grosseKarteAn)
     try { navigator.storage?.persisted?.().then((x) => (geschuetzt = x)).catch(() => {}) } catch {}
-    try { caches.open('karten-pmtiles-v2').then((c) => c.keys()).then((k) => (kartenDa = k.length > 0)).catch(() => {}) } catch {}
+    // Kartenmaterial zählt erst, wenn das ganze gewählte Paket liegt. Den Australien-Überblick legt
+    // schon der erste Blick auf eine Karte ab, allein reicht er unterwegs aber nicht.
+    try { caches.open(CACHE).then((c) => Promise.all(teile.map((r) => c.match(dateiUrl(r))))).then((m) => (kartenDa = m.every(Boolean))).catch(() => {}) } catch {}
     pistenPruefen()
   })
   async function schuetzen() {
@@ -226,7 +231,7 @@
         <div class="ef-karten-knoepfe">
           {#each Object.entries(GEBIETE) as [g, geb] (g)}
             {#if $pistenStand[g]}<p class="ef-ok" role="status">✓ {geb.name}</p>
-            {:else}<button class="btn" disabled={!$online || $pistenLaedt[g]} onclick={() => pisten(g)}>{$pistenLaedt[g] ? je('lädt …', 'loading …') : `${geb.name} · ${mbVon(g)} MB`}</button>{/if}
+            {:else}<button class="btn" disabled={!$online || $pistenLaedt[g]} onclick={() => pisten(g)}>{#if $pistenLaedt[g]}{je('lädt …', 'loading …')}{:else}<span>{geb.name}</span><small>{mbVon(g)} MB</small>{/if}</button>{/if}
           {/each}
         </div>
         {#if !$online}<p class="ef-k">{je('Braucht Netz. Später geht es unter Plan, Karte, Offline-Routen.', 'Needs internet. Later you can do it under Plan, Map, Offline routes.')}</p>{/if}
@@ -293,7 +298,7 @@
       <p class="ef-icon" aria-hidden="true">💶</p>
       <h2 id="ef-titel">{je('Was schon bezahlt ist', 'What you have already paid')}<InfoKnopf id="aufbau-ausgaben" /></h2>
       <p id="ef-text">{je('Flug, Camper, Versicherung, Visum: trag ein, was du vor der Reise bezahlt hast. Flüge und Fahrzeuge kommen als Verkehrsmittel in den Plan, alle anderen Kosten bündelt die App von selbst unter Kosten.', 'Flight, camper, insurance, visa: enter what you paid before the trip. Flights and vehicles go into the plan as transport, all other costs are grouped by the app under Costs.')}</p>
-      {#if vorab || verkehr || termine}<p class="ef-ok">✓ {[vorab && je(`${vorab} Ausgaben vorab`, `${vorab} expenses before the trip`), verkehr && je(`${verkehr} Flug oder Zug`, `${verkehr} flight or train`), termine && tn(termine, '{n} Buchung gespeichert', '{n} Buchungen gespeichert')].filter(Boolean).join(' · ')}</p>{/if}
+      {#if vorab || verkehr || termine}<p class="ef-ok">✓ {[vorab && (vorab === 1 ? je('1 Ausgabe vorab', '1 expense before the trip') : je(`${vorab} Ausgaben vorab`, `${vorab} expenses before the trip`)), verkehr && (verkehr === 1 ? je('1 Flug oder Zug', '1 flight or train') : je(`${verkehr} Flüge oder Züge`, `${verkehr} flights or trains`)), termine && tn(termine, '{n} Buchung gespeichert', '{n} Buchungen gespeichert')].filter(Boolean).join(' · ')}</p>{/if}
       <div class="ef-knoepfe">
         {#if vorab || verkehr || termine}<button class="btn-primary ef-los" onclick={weiter}>{je('Weiter', 'Next')}</button>{/if}
         <button class={vorab || verkehr || termine ? 'btn' : 'btn-primary ef-los'} onclick={() => blatt('ausgabe')}>{je('💶 Ausgabe vorab eintragen', '💶 Add an expense before the trip')}</button>
@@ -339,7 +344,7 @@
         <li><span>📲</span><span><b>{je('Auf den Home-Bildschirm', 'Add to home screen')}</b><small>{je('Startet wie eine App und läuft offline.', 'Starts like an app and works offline.')}</small></span><button class="btn" onclick={appEinrichten}>{je('Zeigen', 'Show me')}</button></li>
         <li><span>🔁</span><span><b>{je('Tägliches Backup', 'Daily backup')}</b><small>{je('Läuft von selbst, am Computer auch in einen Ordner deiner Wahl.', 'Runs by itself, on a computer also into a folder you choose.')}</small></span><button class="btn" onclick={() => seite('mehr/backup')}>{je('Ansehen', 'View')}</button></li>
         <li><span>🆘</span><span><b>{je('Notfall', 'Emergency')}</b><small>{je('Notrufnummern, nächste Hilfe und dein Standort zum Durchsagen.', 'Emergency numbers, nearest help and your location to read out.')}</small></span><button class="btn" onclick={() => seite('mehr/notfall')}>{je('Ansehen', 'View')}</button></li>
-        <li class:ok={kartenDa}><span>{kartenDa ? '✓' : '🗺️'}</span><span><b>{je('Kartenmaterial', 'Maps')}</b><small>{kartenDa ? je('liegt auf dem Gerät', 'on the device') : je('noch nicht geladen, beim Willkommen oder unter Plan, Karte', 'not loaded yet, in the welcome step or under Plan, Map')}</small></span></li>
+        <li class:ok={kartenDa}><span>{kartenDa ? '✓' : '🗺️'}</span><span><b>{je('Kartenmaterial', 'Maps')}</b><small>{kartenDa ? je('liegt auf dem Gerät', 'on the device') : $kartenLauf ? t('{name} wird geladen, {fertig} von {gesamt}', $kartenLauf) : je('noch nicht geladen, geht auch später unter Plan, Karte', 'not loaded yet, also possible later under Plan, Map')}</small></span>{#if !kartenDa && !$kartenLauf}<button class="btn" disabled={!$online} onclick={() => karten($grosseKarteAn)}>{je(`Laden · ${paketMB($grosseKarteAn)} MB`, `Load · ${paketMB($grosseKarteAn)} MB`)}</button>{/if}</li>
         <li class:ok={Object.values($pistenStand).some(Boolean)}><span>{Object.values($pistenStand).some(Boolean) ? '✓' : '🪨'}</span><span><b>{je('Pisten-Netz', 'Track network')}</b><small>{Object.values($pistenStand).some(Boolean) ? Object.entries(GEBIETE).filter(([g]) => $pistenStand[g]).map(([, x]) => x.name).join(', ') : je('noch keins, Hauptstraßen sind dabei', 'none yet, main roads are included')}</small></span></li>
         <li class:ok={routen > 0}><span>{routen ? '✓' : '🛣️'}</span><span><b>{je('Routen', 'Routes')}</b><small>{routen ? je(`${routen} angelegt, die App rechnet sie aus`, `${routen} created, the app works them out`) : je('noch keine Route', 'no route yet')}</small></span></li>
       </ul>
@@ -404,7 +409,9 @@
   .ef-sprache button { min-height: 44px; }
   .ef-karten { display: flex; flex-direction: column; gap: 6px; }
   .ef-karten-knoepfe { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; }
-  .ef-karten-knoepfe .btn { min-height: 44px; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; }
+  .ef-karten-knoepfe .btn { min-height: 44px; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; line-height: 1.2; }
+  /* Gebiet oben, Größe darunter: bei großer Schrift bricht sonst „11“ von „MB“ */
+  .ef-karten-knoepfe .btn small { font-size: calc(12px * var(--schrift, 1)); font-weight: 600; color: var(--muted); white-space: nowrap; }
   .ef-knoepfe { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
   .ef-los { min-height: 52px; font-size: calc(17px * var(--schrift, 1)); }
   .ef-los:disabled { opacity: 0.5; }

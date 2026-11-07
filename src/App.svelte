@@ -45,7 +45,7 @@
   import InstallHinweis from './lib/InstallHinweis.svelte'
   import { installOffen, appEinrichten } from './lib/install.js'
   import { appZuruecksetzen } from './lib/zuruecksetzen.js'
-  import { einfuehrung, einfuehrungStarten } from './lib/einfuehrung.js'
+  import { einfuehrung, einfuehrungStarten, lies as einfuehrungStand } from './lib/einfuehrung.js'
   import { testreiseAn, testreiseKnopf } from './lib/testreise-dienst.js'
   import { kartenLauf } from './lib/karten-laden.js'
   import OrtNeu from './lib/OrtNeu.svelte'
@@ -55,7 +55,7 @@
   import TresorDialog from './lib/TresorDialog.svelte'
   import { frage, hinweis, loeschFrage } from './lib/dialog.js'
   import { neuAnfrage, oeffneNeu } from './lib/neu.js'
-  import { leseAdresse, geh, merke, fragWaechter, zurueck } from './lib/navigation.js'
+  import { leseAdresse, geh, merke, fragWaechter, zurueck, alsGespeichert } from './lib/navigation.js'
   import { etappenMitDatum, planUeberblick, reiseZeitraum, ymd as ymdPlan, ohneDoppelteStrecken } from './lib/plan.js'
   import Quiz from './lib/Quiz.svelte'
   import Packliste from './lib/Packliste.svelte'
@@ -253,6 +253,7 @@
   const neuOffen = $derived($neuAnfrage)
   function neuFertig(r) {
     neuAnfrage.set(null)
+    alsGespeichert(r.id)
     if (r.typ === 'etappe') geh('plan/etappe/' + r.id)
     else if (r.typ === 'route') geh(r.etappeId ? `plan/etappe/${r.etappeId}/${r.id}` : 'plan/route/' + r.id)
     else if (r.typ === 'wanderung') geh('plan/wanderungen/' + r.id)
@@ -973,7 +974,9 @@
   // Vor der Sprachfrage prüfen: nur wer schon eine ältere Version hatte, sieht das Update-Fenster
   let updateOffen = $state(updateZeigen())
   let sprachFrage = $state(spracheOffen())
-  $effect(() => { if (ansicht.tab === 'orte' && !$einfuehrung && !sprachFrage && !$installOffen) zeigeOrteHinweis() })
+  // Orte-Hinweis erst nach dem Laden und nie während einer angefangenen Einführung. Die öffnet sich
+  // nach dem Neuladen erst mit den Daten, vorher lag der Hinweis schon über ihr.
+  $effect(() => { if (ansicht.tab === 'orte' && $ready && !$einfuehrung && einfuehrungStand()?.fertig !== false && !sprachFrage && !$installOffen) zeigeOrteHinweis() })
   // Leisten darunter halten genau an der Unterkante des Kopfes, auch wenn er schrumpft
   function merkeKopf(el) {
     let alt = 0, wartet = false
