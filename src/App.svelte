@@ -102,6 +102,8 @@
   import { aktualisiereStimmung, pruefeSonnenuntergang } from './lib/stimmung.js'
   import { effekte } from './lib/effekte.js'
   import SpracheWahl from './lib/SpracheWahl.svelte'
+  import UpdateHinweis from './lib/UpdateHinweis.svelte'
+  import { updateZeigen } from './lib/update-hinweis.js'
   import { spracheOffen } from './lib/i18n.js'
   import { holeOrtsdaten } from './lib/ortdaten.js'
   import { FELD } from './lib/journal-schema.js'
@@ -943,6 +945,8 @@
     const uhr = setInterval(() => pruefeSonnenuntergang(ort), 60000)
     return () => clearInterval(uhr)
   })
+  // Vor der Sprachfrage prüfen: nur wer schon eine ältere Version hatte, sieht das Update-Fenster
+  let updateOffen = $state(updateZeigen())
   let sprachFrage = $state(spracheOffen())
   $effect(() => { if (ansicht.tab === 'orte' && !$einfuehrung && !sprachFrage && !$installOffen) zeigeOrteHinweis() })
   // Leisten darunter halten genau an der Unterkante des Kopfes, auch wenn er schrumpft
@@ -1446,6 +1450,7 @@
 
 <DialogHost />
 {#if sprachFrage}<SpracheWahl onfertig={() => (sprachFrage = false)} />{/if}
+{#if updateOffen && !sprachFrage && !$installOffen && !$einfuehrung}<UpdateHinweis onfertig={() => (updateOffen = false)} onhandbuch={() => geh('mehr/handbuch')} />{/if}
 <TresorDialog />
 
 {#if xoxoOffen}
