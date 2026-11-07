@@ -57,6 +57,11 @@ p('Nach dem Ziehen kein versehentlicher Tipp', /onclickcapture=\{klickFangen\}/.
 const css = lies('src/app.css')
 p('Fenster klar über der Karte bei den Wander-Ideen: Schleier, Schatten, Griff', /\.karten-schleier \{/.test(css) && /\.karten-pop \{/.test(css) && /\.karten-pop::before/.test(css) && /class="wi-pop karten-pop"/.test(lies('src/lib/WanderIdeen.svelte')))
 
+const farben = lies('src/app.css')
+p('Kartenfarben Atlas in hell und dunkel: Meer, Land, Küste, Punkt, Zahl', ['--karte-meer', '--karte-land', '--karte-kueste', '--karte-punkt', '--karte-zahl'].every((v) => (farben.match(new RegExp(v + ':', 'g')) || []).length === 2))
+p('Alle Übersichtskarten nutzen die Kartenfarben', /fill: var\(--karte-meer\)/.test(uk) && /class="uk-land-rand"/.test(uk) && /fill: var\(--karte-land\)/.test(gk) && /fill: var\(--karte-punkt\)/.test(gk) && /var\(--karte-punkt\)/.test(rk) && /var\(--karte-punkt\)/.test(ort))
+p('Keine Namen auf der Gesamtkarte', !/gk-name|<text[^>]*>\{t\(g\.r\.titel\)\}/.test(gk))
+
 console.log('\nWeltkugel auf Heute')
 const reiseK = lies('src/lib/ReiseKarte.svelte')
 p('Abspielen, Film, Tempo und Zoom in einem Menü zum Aufklappen', /class="rk-menue-knopf" aria-expanded=\{abspielMenue\}/.test(reiseK) && /\{#if abspielMenue && !spielt\}/.test(reiseK) && /abspielMenue = false; abspielen\(\)/.test(reiseK) && /abspielMenue = false; oeffneFilm\(\)/.test(reiseK))

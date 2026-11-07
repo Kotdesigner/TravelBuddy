@@ -71,6 +71,7 @@
 {#if proj}
   <figure class="gk">
     <svg viewBox="0 0 {B} {H}" role="img" aria-label={je('Gesamtkarte mit den Gegenden', 'Overview map of the areas')}>
+      <rect width={B} height={H} rx="8" class="gk-meer" />
       {#each land as d}<path {d} class="gk-land" />{/each}
       {#each ringe as g (g.r.titel)}
         {#if Math.hypot(g.x - g.x0, g.y - g.y0) > 3}<line x1={g.x0} y1={g.y0} x2={g.x} y2={g.y} class="gk-strich" /><circle cx={g.x0} cy={g.y0} r="1.8" class="gk-lage" />{/if}
@@ -80,6 +81,7 @@
           onclick={() => onwahl?.(g.r.titel)} onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), onwahl?.(g.r.titel))}>
           <title>{t(g.r.titel)}</title>
           <circle cx={g.x} cy={g.y} r={g.rad + 6} class="gk-treffer" />
+          <circle cx={g.x} cy={g.y} r={g.rad + 2.5} class="gk-saum" />
           <circle cx={g.x} cy={g.y} r={g.rad} class="gk-kreis" />
           <text x={g.x} y={g.y} class="gk-zahl" text-anchor="middle" dominant-baseline="central">{g.r.orte.length}</text>
         </g>
@@ -97,18 +99,20 @@
 <style>
   .gk { margin: 4px 0 10px; padding: 10px 10px 8px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .gk svg { width: 100%; max-width: 560px; height: auto; display: block; }
-  .gk-land { fill: var(--flaeche-2, var(--flaeche)); stroke: var(--muted); stroke-width: 1; stroke-opacity: 0.6; }
-  .gk-strich { stroke: var(--muted); stroke-width: 0.9; opacity: 0.6; }
-  .gk-lage { fill: #e07b28; }
+  .gk-meer { fill: var(--karte-meer); }
+  .gk-land { fill: var(--karte-land); stroke: var(--karte-kueste); stroke-width: 1.4; stroke-linejoin: round; }
+  .gk-strich { stroke: var(--karte-strich); stroke-width: 1; opacity: 0.85; }
+  .gk-lage { fill: var(--karte-punkt); }
   .gk-ring { cursor: pointer; outline: none; }
   .gk-treffer { fill: transparent; }
-  .gk-kreis { fill: rgba(224, 123, 40, 0.18); stroke: #e07b28; stroke-width: 1.8; transition: fill 0.2s; }
-  .gk-zahl { fill: var(--brand-text); font-weight: 800; font-size: calc(11px * var(--schrift, 1)); pointer-events: none; }
-  .gk-ring.an .gk-kreis { fill: #e07b28; }
-  .gk-ring.an .gk-zahl { fill: #fff; }
+  .gk-saum { fill: var(--karte-saum); opacity: 0.9; }
+  .gk-kreis { fill: var(--karte-punkt); stroke: var(--karte-punkt); stroke-width: 2.4; transition: stroke 0.2s; }
+  .gk-zahl { fill: var(--karte-zahl); font-weight: 800; font-size: calc(11px * var(--schrift, 1)); pointer-events: none; }
+  /* Offene Gegend: dunkler Rand um den Ring */
+  .gk-ring.an .gk-kreis { stroke: var(--ink); stroke-width: 3; }
   .gk-ring:focus-visible .gk-kreis { stroke: var(--ink); stroke-width: 2.5; }
-  .gk-einsatz { fill: var(--card); stroke: var(--line); }
-  .gk-iland { fill: var(--flaeche-2, var(--flaeche)); stroke: var(--muted); stroke-width: 0.6; stroke-opacity: 0.6; }
-  .gk-irahmen { fill: none; stroke: #e07b28; stroke-width: 1.3; }
+  .gk-einsatz { fill: var(--karte-meer); stroke: var(--karte-kueste); stroke-opacity: 0.6; }
+  .gk-iland { fill: var(--karte-land); stroke: var(--karte-kueste); stroke-width: 0.7; }
+  .gk-irahmen { fill: none; stroke: var(--karte-punkt); stroke-width: 1.5; }
   figcaption { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 700; text-align: center; }
 </style>

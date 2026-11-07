@@ -428,7 +428,7 @@
 <style>
   .in-route.vm { color: var(--brand-text); }
   .vm-stern { font-size: 0.9em; }
-  .ort-nr { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 5px; margin-right: 6px; border-radius: 11px; background: #c1662f; color: #fff; border: 2px solid #fff; font-size: calc(12px * var(--schrift, 1)); font-weight: 800; vertical-align: 2px; text-shadow: none; }
+  .ort-nr { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 5px; margin-right: 6px; border-radius: 11px; background: var(--karte-punkt); color: var(--karte-zahl); border: 2px solid var(--karte-saum); font-size: calc(12px * var(--schrift, 1)); font-weight: 800; vertical-align: 2px; text-shadow: none; }
   .anreise { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--info-text); }
   .nah-route { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--brand-text); }
   .in-route { margin: 2px 0 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--ok-text); }

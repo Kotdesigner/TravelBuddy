@@ -413,3 +413,14 @@ article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 
 /* Ortskacheln außerhalb des Bildschirms nicht vorab zeichnen: spart am iPhone beim Aufbau und Scrollen
    (der Platz bleibt reserviert, damit die Seite nicht springt) */
 .or-grid > article.card { content-visibility: auto; contain-intrinsic-size: auto 460px; }
+
+/* Kartenfarben der Übersichtskarten (Orte, Gegenden, Wander-Ideen, Routen-Ideen), Stil „Atlas“:
+   blaues Meer, sandiges Land, kräftige Küste, volle Ringe und Punkte mit Zahl */
+:root {
+  --karte-meer: #cfe4ef; --karte-land: #f1e7d3; --karte-kueste: #8a7a5c;
+  --karte-punkt: #c1662f; --karte-zahl: #ffffff; --karte-saum: #ffffff; --karte-strich: #8a7a5c; --karte-blass: #a99a80;
+}
+:root[data-theme='dark'] {
+  --karte-meer: #16303d; --karte-land: #4a3f33; --karte-kueste: #c9b99a;
+  --karte-punkt: #f08a3c; --karte-zahl: #1d130b; --karte-saum: #1d1814; --karte-strich: #c9b99a; --karte-blass: #8f826e;
+}

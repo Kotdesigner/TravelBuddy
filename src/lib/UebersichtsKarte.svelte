@@ -243,6 +243,9 @@
   onpointerdown={runter} onpointermove={bewege} onpointerup={hoch} onpointercancel={hoch} onwheel={rad} onclickcapture={klickFangen}>
   <rect width={breite} height={hoehe} class="uk-meer" />
   <g transform={geste ? `translate(${geste.tx} ${geste.ty}) scale(${geste.k})` : null}>
+  <!-- Küste in zwei Lagen: unten Fläche mit kräftigem Rand, oben Fläche mit Rand in Landfarbe.
+       So bleibt die Küstenlinie sichtbar, die Nähte zwischen den Kachelstücken verschwinden. -->
+  {#each land as d}<path {d} class="uk-land-rand" />{/each}
   {#each land as d}<path {d} class="uk-land" class:fein={!!fein} />{/each}
   {#each striche as l (l.id)}
     {#if onlinie}<path d={l.d} class="uk-linie-treffer" role="button" tabindex="-1" aria-label={l.label || ''} onclick={() => onlinie(l.id)} onkeydown={(e) => e.key === 'Enter' && onlinie(l.id)} />{/if}
@@ -294,22 +297,22 @@
   .uk.zoomt { touch-action: none; cursor: grab; }
   .uk-zurueck { position: absolute; right: 8px; bottom: 8px; min-height: 40px; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); font-weight: 700; font-size: calc(12.5px * var(--schrift, 1)); cursor: pointer; box-shadow: var(--shadow); }
   .uk-haufen { cursor: pointer; }
-  .uk-haufen-kreis { fill: #c1662f; stroke: var(--card); stroke-width: 2.5; }
-  .uk-haufen-zahl { fill: #fff; font-weight: 800; font-size: calc(11px * var(--schrift, 1)); pointer-events: none; }
+  .uk-haufen-kreis { fill: var(--karte-punkt); stroke: var(--karte-saum); stroke-width: 2.5; }
+  .uk-haufen-zahl { fill: var(--karte-zahl); font-weight: 800; font-size: calc(11px * var(--schrift, 1)); pointer-events: none; }
   .uk { display: block; width: 100%; max-width: 560px; margin: 0 auto; height: auto; border-radius: 10px; border: 1px solid var(--line); }
-  .uk-meer { fill: var(--info-flaeche); }
-  .uk-land { fill: var(--flaeche); stroke: var(--line-stark); stroke-width: 1; }
+  .uk-meer { fill: var(--karte-meer); }
+  .uk-land-rand { fill: var(--karte-land); stroke: var(--karte-kueste); stroke-width: 2.4; stroke-linejoin: round; }
+  .uk-land { fill: var(--karte-land); stroke: var(--karte-land); stroke-width: 0.8; stroke-linejoin: round; }
   /* Genaue Küste besteht aus Kachelstücken: Rand in Landfarbe, damit keine Nähte zu sehen sind */
-  .uk-land.fein { stroke: var(--flaeche); stroke-width: 0.8; stroke-linejoin: round; }
   .uk-linie-treffer { fill: none; stroke: transparent; stroke-width: 16; cursor: pointer; }
   .uk-punkt { cursor: pointer; }
   .uk-treffer { fill: transparent; }
-  .uk-kreis { fill: #c1662f; stroke: var(--card); stroke-width: 2; }
+  .uk-kreis { fill: var(--karte-punkt); stroke: var(--karte-saum); stroke-width: 2; }
   .uk-punkt.rot .uk-kreis { fill: #c0392b; }
-  .uk-punkt.aus .uk-kreis { fill: var(--aus-ink); stroke-width: 1; opacity: 0.6; }
-  .uk-nr { fill: #fff; font-weight: 800; font-size: calc(10.5px * var(--schrift, 1)); pointer-events: none; }
-  .uk-punkt.gewaehlt .uk-nr-kreis { fill: #8a3f16; }
-  .uk-strich { stroke: var(--muted); stroke-width: 0.9; opacity: 0.7; }
+  .uk-punkt.aus .uk-kreis { fill: var(--karte-blass); stroke-width: 1; opacity: 0.7; }
+  .uk-nr { fill: var(--karte-zahl); font-weight: 800; font-size: calc(10.5px * var(--schrift, 1)); pointer-events: none; }
+  .uk-punkt.gewaehlt .uk-nr-kreis { stroke: var(--ink); stroke-width: 3; }
+  .uk-strich { stroke: var(--karte-strich); stroke-width: 1; opacity: 0.8; }
   .uk-kreis.ring { stroke: var(--ink); stroke-width: 2.5; }
   .uk-punkt.gewaehlt .uk-kreis { stroke: var(--ink); stroke-width: 3; }
 </style>

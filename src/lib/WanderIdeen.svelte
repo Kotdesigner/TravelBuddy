@@ -162,7 +162,7 @@
   .wi-legende { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: center; margin-top: 6px; font-size: calc(11.5px * var(--schrift, 1)); color: var(--muted); font-weight: 600; }
   .wi-legende span { display: inline-flex; align-items: center; gap: 5px; }
   .wi-l { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
-  .wi-l.gruen { background: #c1662f; }
+  .wi-l.gruen { background: var(--karte-punkt); }
   .wi-l.rot { background: #c0392b; }
   .wi-l.ring { border: 2.5px solid var(--ink); width: 7px; height: 7px; }
   .wi-l.strich { width: 16px; height: 0; border-radius: 0; border-top: 2.5px solid #7a6fd6; }

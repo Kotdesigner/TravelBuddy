@@ -106,16 +106,16 @@
   .rk { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
   .rk-karte { position: relative; }
   .rk-lage { position: absolute; left: 8px; bottom: 8px; pointer-events: none; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25)); }
-  .rk-lage-grund { fill: var(--card); stroke: var(--line); }
-  .rk-lage-land { fill: var(--flaeche-2, var(--flaeche)); stroke: var(--muted); stroke-width: 0.6; stroke-opacity: 0.6; }
-  .rk-lage-ring { fill: rgba(224, 123, 40, 0.2); stroke: #e07b28; stroke-width: 1.3; }
+  .rk-lage-grund { fill: var(--karte-meer); stroke: var(--karte-kueste); stroke-opacity: 0.7; }
+  .rk-lage-land { fill: var(--karte-land); stroke: var(--karte-kueste); stroke-width: 0.7; }
+  .rk-lage-ring { fill: var(--karte-punkt); fill-opacity: 0.35; stroke: var(--karte-punkt); stroke-width: 1.5; }
   .rk-info { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border: 1px solid var(--line-stark); border-radius: 12px; background: var(--flaeche); }
   .rk-info-kopf { display: flex; gap: 10px; align-items: flex-start; }
   .rk-bild { width: 60px; height: 60px; flex: none; border-radius: 8px; object-fit: cover; background: var(--card); }
   .rk-bild.leer { display: flex; align-items: center; justify-content: center; font-size: calc(26px * var(--schrift, 1)); }
   .rk-info-titel { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
   .rk-info-titel b { font-size: calc(15px * var(--schrift, 1)); color: var(--ink); }
-  .rk-nr { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 4px; border-radius: 10px; background: #c1662f; color: #fff; font-size: calc(11px * var(--schrift, 1)); font-weight: 800; vertical-align: 1px; }
+  .rk-nr { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 4px; border-radius: 10px; background: var(--karte-punkt); color: var(--karte-zahl); font-size: calc(11px * var(--schrift, 1)); font-weight: 800; vertical-align: 1px; }
   .rk-tags { display: flex; flex-wrap: wrap; gap: 4px; }
   .rk-tag { font-size: calc(11px * var(--schrift, 1)); font-weight: 800; padding: 2px 8px; border-radius: 20px; background: var(--ok-flaeche); color: var(--ok-text); }
   .rk-tag.geheim { background: var(--info-flaeche); color: var(--info-text); }
