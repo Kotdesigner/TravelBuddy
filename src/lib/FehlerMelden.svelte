@@ -1,5 +1,5 @@
 <script>
-  // Mehr → Fehler melden: kurze Beschreibung, freiwillige E-Mail, bis zu drei Bildschirmfotos.
+  // Fehler melden (Link ganz unten auf jeder Seite): kurze Beschreibung, freiwillige E-Mail, bis zu drei Bildschirmfotos.
   // Geht über die eigene Netlify-Funktion und Resend als Mail an den Anbieter (siehe fehlermeldung.js).
   import { onDestroy } from 'svelte'
   import { je, istEn } from './i18n.js'

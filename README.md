@@ -146,7 +146,7 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ## 🐞 New in version 1.24
 
-**Report a problem, straight from the app.** Something not working or looking wrong? Under More → App → 🐞 Report a problem, or via the link at the bottom of every page, you write briefly what happened. Grey hints in the empty field ask what is not working and when it happens. You can add up to three screenshots and, if you like, an email for questions. “Send” delivers the report as an email to the developer, and a short note thanks you. Only the app version, device, browser, language, screen size and the last page you had open go along, shown openly in the form. Trip data, logbook, places and your location never do. Without a connection your text stays in the field until you send it.
+**Report a problem, straight from the app.** Something not working or looking wrong? Tap 🐞 Report a problem at the very bottom of any page and write briefly what happened. Grey hints in the empty field ask what is not working and when it happens. You can add up to three screenshots and, if you like, an email for questions. “Send” delivers the report as an email to the developer, and a short note thanks you. Only the app version, device, browser, language, screen size and the last page you had open go along, shown openly in the form. Trip data, logbook, places and your location never do. Without a connection your text stays in the field until you send it.
 
 <details>
 <summary><b>📜 Earlier versions: 1.23 to 1.1</b></summary>
@@ -996,7 +996,7 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ## 🐞 Neu in Version 1.24
 
-**Fehler melden, direkt aus der App.** Geht etwas nicht oder sieht falsch aus? Unter Mehr → App → 🐞 Fehler melden, oder über den Link ganz unten auf jeder Seite, schreibst du kurz, was passiert ist. Graue Hinweise im leeren Feld fragen, was nicht geht und wann es auftritt. Bis zu drei Bildschirmfotos lassen sich anfügen, dazu freiwillig eine E-Mail für Rückfragen. „Absenden“ schickt die Meldung als Mail an den Entwickler, ein kurzer Hinweis bedankt sich. Mit gehen nur App-Version, Gerät, Browser, Sprache, Bildschirmgröße und die zuletzt offene Seite, offen im Formular aufgelistet. Reisedaten, Logbuch, Orte und dein Standort nie. Ohne Netz bleibt dein Text im Feld, bis du ihn abschickst.
+**Fehler melden, direkt aus der App.** Geht etwas nicht oder sieht falsch aus? Tippe ganz unten auf jeder Seite auf 🐞 Fehler melden und schreib kurz, was passiert ist. Graue Hinweise im leeren Feld fragen, was nicht geht und wann es auftritt. Bis zu drei Bildschirmfotos lassen sich anfügen, dazu freiwillig eine E-Mail für Rückfragen. „Absenden“ schickt die Meldung als Mail an den Entwickler, ein kurzer Hinweis bedankt sich. Mit gehen nur App-Version, Gerät, Browser, Sprache, Bildschirmgröße und die zuletzt offene Seite, offen im Formular aufgelistet. Reisedaten, Logbuch, Orte und dein Standort nie. Ohne Netz bleibt dein Text im Feld, bis du ihn abschickst.
 
 <details>
 <summary><b>📜 Frühere Versionen: 1.23 bis 1.1</b></summary>

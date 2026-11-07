@@ -210,7 +210,7 @@
     orte: [['orte/sueden', t('Süden')], ['orte/norden', t('Norden')], ['orte/osten', t('Ostküste')], ['orte/meine', t('Meine Orte')], ['orte/routen', t('Routen-Ideen')]],
     logbuch: [['logbuch', je('Einträge', 'Entries')], ['logbuch/lesen', t('Lesen')], ['logbuch/tiere', t('Tierwelt')], ['logbuch/notizen', t('Notizen')]],
     // Dieselben Namen und Zeichen wie im Mehr-Blatt am iPhone und in den Seitentiteln
-    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/buchungen', je('🎫 Buchungen', '🎫 Bookings')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/funfacts', je('💡 Fun Facts', '💡 Fun facts')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')], ['mehr/fehler', je('🐞 Fehler melden', '🐞 Report a problem')]],
+    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/buchungen', je('🎫 Buchungen', '🎫 Bookings')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/funfacts', je('💡 Fun Facts', '💡 Fun facts')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
   }
   // V15 (Design B2): Unter Mehr heißt der große Titel wie die Seite, ohne Zeichen davor, statt immer „Mehr“
   const mehrName = $derived(ansicht.tab === 'mehr' && ansicht.unter ? (UNTER.mehr.find(([p]) => p === 'mehr/' + ansicht.unter)?.[1] || '').replace(/^[^\p{L}]+/u, '') : '')
@@ -235,7 +235,6 @@
     'mehr/funfacts': je('Kurze Fakten zu dem Ort, an dem du bist, und entlang deiner Route. Auch offline.', 'Short facts about where you are and along your route. Offline too.'),
     'mehr/teilen': t('Reisebericht als eine Datei für Familie und Freunde. Ohne Buchungen, Kosten und Dokumente.'),
     'mehr/quiz': t('Fragen zu Australien. Mit jeder richtigen Antwort steigst du eine Stufe auf.'),
-    'mehr/fehler': je('Etwas geht nicht? Schreib kurz, was passiert ist, gern mit Bildschirmfoto.', 'Something not working? Write briefly what happened, a screenshot helps.'),
   }
   const orteUnter = $derived(ansicht.tab === 'orte' ? (ansicht.unter || 'sueden') : '')
   // Neu-Blatt (auch von Ortskacheln aus, über neu.js)
@@ -972,12 +971,12 @@
     <div class="zurueck-leiste"><button class="zurueck-knopf" onclick={() => zurueck('mehr')}><span aria-hidden="true">‹</span> {t('Zurück')}</button></div>
   {/if}
   <header class="sk">
-    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : ansicht.unter === 'rechtliches' ? t('Datenschutz & Impressum') : ansicht.unter === 'design' ? t('Design') : ansicht.unter === 'backup' ? je('Backup & Import', 'Backup & import') : mehrName || TITEL[ansicht.tab]}</h1>
+    <h1 class="sk-titel">{ansicht.unter === 'handbuch' ? t('Handbuch') : ansicht.unter === 'rechtliches' ? t('Datenschutz & Impressum') : ansicht.unter === 'design' ? t('Design') : ansicht.unter === 'backup' ? je('Backup & Import', 'Backup & import') : ansicht.unter === 'fehler' ? je('Fehler melden', 'Report a problem') : mehrName || TITEL[ansicht.tab]}</h1>
     <span class="sk-musik"><MusikSymbol {geh} /></span>
     {#if ansicht.tab === 'plan'}<button class="sk-neu" onclick={() => oeffneNeu(ansicht.unter === 'wanderungen' ? 'wanderung' : 'route')}>{t('+ Neu')}</button>{/if}
     {#if ansicht.tab === 'logbuch' && ansicht.unter !== 'notizen'}<button class="sk-neu" onclick={() => oeffneNeu('tag')}>{t('+ Tag')}</button>{/if}
   </header>
-  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch', 'rechtliches', 'design', 'backup'].includes(ansicht.unter)}
+  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch', 'rechtliches', 'design', 'backup', 'fehler'].includes(ansicht.unter)}
     <nav class="seg-leiste" aria-label={t('{wert}: Bereiche', { wert: TITEL[ansicht.tab] })} use:leisteRand={ansicht.pfad}>
       {#each UNTER[ansicht.tab] as [pfad, label], i (pfad)}
         {#if ansicht.tab === 'mehr' && neueGruppe(UNTER.mehr, i, (e) => e[0])}<span class="seg-trenner" aria-hidden="true"></span>{/if}
@@ -1333,7 +1332,7 @@
 </main>
 <FunFactUnterwegs orte={[...orte, ...$eigeneOrte]} />
 
-<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online besuchen', 'Visit TravelBuddy online')}</a><a class="af-recht" href="#/mehr/fehler">🐞 {je('Fehler melden', 'Report a problem')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
+<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online', 'TravelBuddy online')}</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></span><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
 </div>
 </div>
 
@@ -1498,18 +1497,21 @@
   .karten-band { margin: 0 0 12px; padding: 8px 12px; border-radius: var(--radius-m); background: var(--flaeche-2); color: var(--ink); font-size: calc(13.5px * var(--schrift, 1)); font-weight: 600; }
   .app-footer {
     /* Steht immer am unteren Rand, auch auf kurzen Seiten. */
-    margin-top: auto; text-align: center; padding: 18px 16px calc(22px + env(safe-area-inset-bottom, 0px));
+    margin-top: auto; text-align: center; padding: 10px 16px calc(12px + env(safe-area-inset-bottom, 0px));
     font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); border-top: 1px solid var(--line);
   }
   .fb-mehr { display: inline-block; padding: 8px 0; color: var(--brand-text); font-weight: 700; font-size: calc(13.5px * var(--schrift, 1)); }
   .app-footer .af-by { color: var(--brand-text); }
   .app-footer .af-name { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 3px; padding: 8px 2px; }
-  .app-footer .af-web { display: block; width: fit-content; margin: 2px auto 0; padding: 8px; font-size: calc(12px * var(--schrift, 1)); font-weight: 600; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 2px; }
+  .app-footer .af-links { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 16px; margin-top: 2px; }
+  .app-footer .af-web { display: inline-flex; align-items: center; padding: 8px 2px; font-size: calc(12px * var(--schrift, 1)); font-weight: 600; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 2px; }
+  .app-footer .af-fehler { display: inline-flex; align-items: center; gap: 5px; padding: 8px 2px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
+  .app-footer .af-bug { color: var(--danger); flex: none; }
   .app-footer .af-by a { color: inherit; text-decoration: underline; text-underline-offset: 2px; padding: 8px 2px; }
   /* Stand der geladenen Fassung — macht sofort sichtbar, wenn der Service-Worker
      noch eine ältere Version ausliefert. */
-  .app-footer .af-recht { display: block; width: fit-content; margin: 2px auto 0; padding: 10px 8px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
-  .app-footer .af-build { display: block; margin-top: 4px; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }   /* vorher opacity .5: 2,2 : 1 */
+  .app-footer .af-recht { display: inline-flex; align-items: center; padding: 8px 2px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
+  .app-footer .af-build { display: block; margin-top: 0; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }   /* vorher opacity .5: 2,2 : 1 */
 
   .filter-hinweis {
     display: flex; align-items: center; gap: 8px; flex-wrap: wrap;

@@ -94,7 +94,6 @@
     { id: 'teilen', icon: '📤', label: t('Reisebericht teilen'), info: t('Etappen, Routen und Fotos als eine Datei') },
     { id: 'musik', icon: '🎵', label: t('Musik unterwegs'), info: t('Sounds of the Road, Musik aus der Gegend') },
     { id: 'quiz', icon: '🇦🇺', label: t('Australien-Quiz'), info: t('Fragen mit Stufen vom Touri zum Local') },
-    { id: 'fehler', icon: '🐞', label: je('Fehler melden', 'Report a problem'), info: je('Was nicht geht, mit Bildschirmfoto', 'What is not working, with a screenshot') },
     // Jeder Punkt aus UNTER.mehr in App.svelte muss auch hier stehen (tests/mehr-blatt.test.mjs),
     // sonst fehlt er am iPhone im Hochformat: dort gibt es keine Seitenleiste.
     // „Vacation (Ostküste)" stand hier noch aus der Zeit vor der Zusammenlegung.

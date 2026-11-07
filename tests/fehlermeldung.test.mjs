@@ -106,9 +106,9 @@ p('Netlify-Forms-Seite entfernt', !fs.existsSync(new URL('../public/__forms.html
 
 console.log('\n6  Einbau')
 const app = lies('src/App.svelte')
-p('Seite unter Mehr', /\['mehr\/fehler', je\('🐞 Fehler melden'/.test(app) && /ansicht\.unter === 'fehler'/.test(app))
-p('Link ganz unten', /href="#\/mehr\/fehler"/.test(app))
-p('In der Gruppe App', /punkte: \['statistik', 'fehler'\]/.test(lies('src/lib/mehr-gruppen.js')))
+p('Seite da, aber nicht in der Mehr-Liste', /ansicht\.unter === 'fehler'/.test(app) && !/\['mehr\/fehler'/.test(app) && !/id: 'fehler'/.test(lies('src/lib/BottomBar.svelte')))
+p('Link ganz unten mit rotem Bug', /class="af-fehler" href="#\/mehr\/fehler"><svg class="af-bug"/.test(app) && /\.af-bug \{ color: var\(--danger\)/.test(app))
+p('Eigener Titel, keine Chip-Reihe', /ansicht\.unter === 'fehler' \? je\('Fehler melden'/.test(app) && /'backup', 'fehler'\]\.includes\(ansicht\.unter\)/.test(app))
 const seite = lies('src/lib/FehlerMelden.svelte')
 p('Danke-Hinweis nach dem Absenden', /Danke für die Rückmeldung! Ich werde mich dem schnellstmöglich widmen\./.test(seite))
 p('Graue Hilfe als Platzhalter', /placeholder=\{istEn \? HILFE\.en : HILFE\.de\}/.test(seite))

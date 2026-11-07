@@ -8,7 +8,7 @@ const app = lies('App.svelte'), bi = lies('lib/BackupImport.svelte'), bar = lies
 console.log('\nBackup & Import')
 p('Seite eingebunden unter mehr/backup', /ansicht\.unter === 'backup'\}\s*<BackupImport onBackup=\{onExport\} onImport=\{\(\) => importInput\.click\(\)\} onRueckgaengig=\{importZurueck\} onImportDatei=/.test(app))
 p('Titel „Backup & Import“', /ansicht\.unter === 'backup' \? je\('Backup & Import'/.test(app))
-p('Keine Chip-Reihe auf der Seite (wie Handbuch, Design)', /'design', 'backup'\]\.includes\(ansicht\.unter\)/.test(app))
+p('Keine Chip-Reihe auf der Seite (wie Handbuch, Design)', /'design', 'backup'(, '[a-z]+')*\]\.includes\(ansicht\.unter\)/.test(app))
 p('iPhone-Blatt: ein Knopf statt Backup und Import', /sheetLink\('backup'\)/.test(bar) && !/sheetAktion\(onBackup\)|sheetAktion\(onImport\)/.test(bar))
 p('Mac-Seitenleiste: ein Knopf statt zwei', /onclick=\{onBackupImport\}/.test(sl) && !/onclick=\{onBackup\}|onclick=\{onImport\}/.test(sl) && /onBackupImport=\{\(\) => geh\('mehr\/backup'\)\}/.test(app))
 p('Erklärt Sichern, Importieren, Abgleichen, Wann', ['Backup sichern', 'Backup importieren', 'Zwischen Geräten abgleichen', 'Wann sichern?'].every((x) => bi.includes(x)))
