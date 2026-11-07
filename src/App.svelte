@@ -782,7 +782,10 @@
   async function zuOrt(o) {
     sucheOffen = false
     if (filternAktiv && !passt(o)) reset()
-    geh('orte/' + bereichVon(o))
+    const bereich = bereichVon(o)
+    // Die Gegenden sind zugeklappt: erst die Gegend des Orts öffnen, sonst gibt es seine Kachel nicht
+    if (bereich !== 'meine' && o.region) regionAuf(bereich, o.region)
+    geh('orte/' + bereich)
     await tick(); await new Promise((r) => setTimeout(r, 120)); await tick()
     const el = document.getElementById('ort-' + o.id)
     if (!el) return

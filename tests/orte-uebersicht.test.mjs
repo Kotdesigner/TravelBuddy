@@ -24,6 +24,7 @@ const app = lies('src/App.svelte'), gk = lies('src/lib/OrteGesamtkarte.svelte'),
 p('Oben nur die Gesamtkarte, darunter die Gegenden (Süden, Norden, Ostküste)', ['sueden', 'norden', 'osten'].every((b) => app.includes(`<OrteGesamtkarte regionen={${b}} offen={orteOffen.${b}} onwahl={(r) => zurRegion('${b}', r)} />`) && app.includes(`<OrteRegionen regionen={${b}} bind:offen={orteOffen.${b}} reisen={reisenOhneIdeen}`)) && !/OrteUebersicht|orteGegend|nurGegend/.test(app))
 const reg = lies('src/lib/OrteRegionen.svelte')
 p('Gegenden zum Auf- und Zuklappen, zu Beginn zu', /let orteOffen = \$state\(\{ sueden: \{\}, norden: \{\}, osten: \{\} \}\)/.test(app) && /aria-expanded=\{auf\}/.test(reg) && /\{#if auf\}/.test(reg))
+p('Sprung zur Ortskachel (Suche, neuer Ort) öffnet erst die Gegend', /if \(bereich !== 'meine' && o\.region\) regionAuf\(bereich, o\.region\)/.test(app) && app.indexOf('regionAuf(bereich, o.region)') < app.indexOf("geh('orte/' + bereich)"))
 p('Suchergebnisse stehen offen, ohne Karte', /<OrteRegionen regionen=\{treffer\} alleOffen mitKarte=\{false\}/.test(app))
 p('Ring auf der Gesamtkarte klappt die Gegend auf und springt hin', /onclick=\{\(\) => onwahl\?\.\(g\.r\.titel\)\}/.test(gk) && /async function zurRegion\(tab, titel\)/.test(app) && /data-region=\{r\.titel\}/.test(reg))
 p('Balken in einer Liste: der nächste legt sich über den alten', /<div class="or-liste">/.test(reg) && /\.or-balken \{ position: sticky; top: var\(--kopf-h/.test(reg) && !/<section class="region">/.test(app))
