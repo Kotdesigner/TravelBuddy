@@ -6,11 +6,14 @@
 // oder liegen die Stopps in verschiedenen Gebieten, bleibt die Schätzung (Luftlinie mal Faktor).
 import { writable } from 'svelte/store'
 import { PISTEN_AUFSCHLAG } from './offline-router.js'
+import { je } from './i18n.js'
 
+// name je nach Sprache (beim Lesen bestimmt, damit Toasts und Listen auf Englisch englisch sind)
+const gebiet = (de, en, rahmen) => ({ de, en, rahmen, get name() { return je(de, en) } })
 export const GEBIETE = {
-  wa: { name: 'Western Australia', rahmen: [112.5, -35.6, 129.1, -13.4] },
-  vic: { name: 'Melbourne und Umgebung', rahmen: [143.5, -39.25, 146.7, -37.2] },
-  qld: { name: 'Cairns bis Whitsundays', rahmen: [144.0, -21.6, 149.6, -15.4] },
+  wa: gebiet('Western Australia', 'Western Australia', [112.5, -35.6, 129.1, -13.4]),
+  vic: gebiet('Melbourne und Umgebung', 'Melbourne and surrounds', [143.5, -39.25, 146.7, -37.2]),
+  qld: gebiet('Cairns bis Whitsundays', 'Cairns to the Whitsundays', [144.0, -21.6, 149.6, -15.4]),
 }
 export const PISTEN_CACHE = 'routing-netze-v1'
 export const netzUrl = (gebiet, art) => `/routing/${gebiet}-${art}.bin`

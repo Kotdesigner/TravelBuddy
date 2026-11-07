@@ -70,7 +70,7 @@ export async function umleitungRechnen(r, { still = false } = {}) {
       ...res.route, quelle: res.quelle, gebiet: res.gebiet, offline: false,
       berechnetAm: new Date().toISOString(), sig: stopsSignatur(r.stops),
       umleitung: {
-        sperrungen: betroffen.map((b) => ({ id: b.meldung.id, strasse: b.meldung.strasse, was: [b.meldung.sperrungDe || b.meldung.level, b.meldung.artDe].filter(Boolean).join(', '), km: b.km })),
+        sperrungen: betroffen.map((b) => ({ id: b.meldung.id, strasse: b.meldung.strasse, was: [b.meldung.sperrungDe || b.meldung.level, b.meldung.artDe].filter(Boolean).join(', '), wasEn: [b.meldung.sperrung || b.meldung.level, b.meldung.art].filter(Boolean).join(', '), km: b.km })),
         mehrKm: res.route.km - (vorher?.km || 0), mehrMin: res.route.dauerMin - (vorher?.dauerMin || 0), vorherKm: vorher?.km || null, stand: lage.zeit || null,
       },
     }

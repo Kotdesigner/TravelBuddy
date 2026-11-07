@@ -26,7 +26,7 @@ console.log('\nInhalt')
 const app = lies('src/App.svelte'), uh = lies('src/lib/UpdateHinweis.svelte')
 p('Oben die Zahlen zur Offline-Berechnung: 0,4 %, 22 von 22, 0,06 s', /const ZAHLEN = \[/.test(uh) && /je\('0,4 %', '0\.4 %'\)/.test(uh) && /je\('22 von 22', '22 of 22'\)/.test(uh) && /je\('0,06 s', '0\.06 s'\)/.test(uh) && uh.indexOf('uh-zahlen') < uh.indexOf('uh-liste"'))
 p('Sechs Neuerungen, deutsch und englisch, die Offline-Routen zuerst', (uh.match(/\['[^']+', je\(/g) || []).length === 6 && uh.indexOf("['🛣️', je('Routen ohne Netz") < uh.indexOf("['🪨'"))
-p('Sperrungen, 4WD und Pisten-Netz genannt', /Sperrungen umfahren/.test(uh) && /4WD-Schalter an der Route/.test(uh) && /Pisten-Netz je Gebiet/.test(uh))
+p('Sperrungen, 4WD und Pisten-Netz genannt', /Sperrungen umfahren/.test(uh) && /4WD-Schalter an der Route|2WD oder 4WD/.test(uh) && /Pisten-Netz je Gebiet/.test(uh))
 p('Keine Gedankenstriche in Sätzen', !/ [–—] /.test(uh))
 
 console.log('\nEinbau')

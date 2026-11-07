@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.27 · built for Western Australia**<br>
+**Version 1.28 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.27-e07b28?style=flat-square" alt="version: 1.27"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.28-e07b28?style=flat-square" alt="version: 1.28"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -144,12 +144,16 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 🧭 New in version 1.28
+
+**A setup that prepares everything.** The introduction now has 12 steps, in the order in which the app builds on your data: first look and dates, then your vehicle and the road networks, then leg and route, then the money, finally the journal. Choose light or dark, the maps and your text size right at the start. Set the range of one tank and 2WD or 4WD once, and every new route follows it. Create your first route from a route idea or your own. Instead of bookings, enter what you have already paid: flights and vehicles go into the plan as transport, all other costs are grouped under Costs. The last step, “Ready for the road?”, protects your data from being cleared by the browser and checks maps, track network and routes. Behind the small i in each step: what the app makes of it later. Everything works in English and German, area names and detours included.
+
+<details>
+<summary><b>📜 Earlier versions: 1.27 to 1.1</b></summary>
+
 ## 🛣️ New in version 1.27
 
 **Routes without internet, on real roads, almost as accurate as online.** TravelBuddy now calculates your routes itself when there is no connection, on a road network from OpenStreetMap that comes with the app. Measured against the online calculation on 22 routes with 19,289 km in Western Australia, around Melbourne and in Queensland, distances on sealed roads are 0.4 % off on average and driving times 0.9 %. A 4,200 km route from Albany to Kununurra with 10 stops takes 0.06 seconds. The main roads of all three areas are always included (3.6 MB). Under Plan → Map → Offline routes you can add the track network per area (2.4 to 12 MB) with gravel, unsealed roads and 4WD tracks, out to Steep Point or Israelite Bay. A table there shows the difference. Every route now has a 4WD switch: with it, the app takes tracks as planned, also instead of the online road route when that goes the long way round, for example Mount Augustus to Tom Price in 346 instead of 687 km. Without 4WD, long drives stay on sealed roads. When Main Roads WA reports a closed road, for example after a storm, a flooded floodway or a washed out road, the app tells you and offers to calculate a detour, offline too. Once you are online again, the app replaces the offline values with the online ones by itself. What’s new is now always under More → Updates.
-
-<details>
-<summary><b>📜 Earlier versions: 1.26 to 1.1</b></summary>
 
 ## 🌏 New in version 1.26
 
@@ -854,6 +858,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.26:** real maps for places, route ideas and hikes, route ideas on real roads, 40 stopover towns with supplies, light or dark maps, three new places
 - [x] **Version 1.25:** maps with areas, zoom and pop-ups for places, route ideas and hikes, over 20 hike ideas, faster place tiles
 - [x] **Version 1.27:** routes without internet on real roads, track network per area, 4WD switch, detours around road closures
+- [x] **Version 1.28:** setup in 12 steps with design, vehicle, first route, expenses before the trip and a ready check
 - [ ] On the App Store
 - [ ] More regions of Australia in detail
 - [ ] More countries
@@ -885,10 +890,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.27 · entwickelt für Western Australia**<br>
+**Version 1.28 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.27-e07b28?style=flat-square" alt="version: 1.27"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.28-e07b28?style=flat-square" alt="version: 1.28"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -1009,12 +1014,16 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 🧭 Neu in Version 1.28
+
+**Eine Einrichtung, die alles vorbereitet.** Die Einführung hat jetzt 12 Schritte, in der Reihenfolge, in der die App auf deinen Daten aufbaut: erst Aussehen und Datum, dann Fahrzeug und Straßennetze, dann Etappe und Route, dann das Geld, zuletzt das Tagebuch. Hell oder dunkel, die Karten und die Schriftgröße wählst du gleich am Anfang. Reichweite einer Tankfüllung und 2WD oder 4WD stellst du einmal ein, jede neue Route richtet sich danach. Die erste Route legst du aus einer Routen-Idee oder selbst an. Statt Buchungen trägst du ein, was schon bezahlt ist: Flüge und Fahrzeuge kommen als Verkehrsmittel in den Plan, alle anderen Kosten bündelt die App unter Kosten. Der letzte Schritt „Bereit für unterwegs?“ schützt deine Daten vor dem Aufräumen durch den Browser und prüft Karten, Pisten-Netz und Routen. Hinter dem kleinen i jedes Schritts steht, was die App später daraus macht. Alles geht auf Deutsch und Englisch, auch Gebietsnamen und Umleitungen.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.27 bis 1.1</b></summary>
+
 ## 🛣️ Neu in Version 1.27
 
 **Routen ohne Netz, auf echten Straßen, fast so genau wie online.** TravelBuddy rechnet deine Routen jetzt selbst, wenn kein Netz da ist, auf einem Straßennetz aus OpenStreetMap, das in der App steckt. Gemessen an 22 Strecken mit 19.289 km in Western Australia, um Melbourne und in Queensland liegen die Kilometer auf Asphalt im Mittel 0,4 % neben der Online-Berechnung, die Fahrzeit 0,9 %. Eine Route über 4.200 km von Albany nach Kununurra mit 10 Stopps braucht 0,06 Sekunden. Die Hauptstraßen aller drei Gebiete sind immer dabei (3,6 MB). Unter Plan → Karte → Offline-Routen lädst du je Gebiet das Pisten-Netz dazu (2,4 bis 12 MB), mit Schotter, Pisten und 4WD-Tracks bis Steep Point oder Israelite Bay. Eine Tabelle dort zeigt den Unterschied. Jede Route hat jetzt einen 4WD-Schalter: Damit nimmt die App Pisten wie geplant, auch statt der Online-Straßenroute, wenn die weit außen herum fährt, etwa Mount Augustus bis Tom Price in 346 statt 687 km. Ohne 4WD bleiben Fernstrecken auf Asphalt. Meldet Main Roads WA eine gesperrte Straße, etwa nach einem Unwetter, bei einem überfluteten Floodway oder einer ausgespülten Fahrbahn, sagt die App Bescheid und bietet eine Umleitung an, auch ohne Netz. Sobald wieder Netz da ist, ersetzt sie die Offline-Werte von selbst durch die Online-Werte. Was neu ist, steht jetzt immer unter Mehr → Updates.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.26 bis 1.1</b></summary>
 
 ## 🌏 Neu in Version 1.26
 
@@ -1687,6 +1696,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.26:** echte Karten für Orte, Routen-Ideen und Wanderungen, Routen-Ideen auf echten Straßen, 40 Etappenorte mit Versorgung, Karten hell oder dunkel, drei neue Orte
 - [x] **Version 1.25:** Karten mit Gegenden, Zoom und Fenstern für Orte, Routen-Ideen und Wanderungen, gut 20 Wander-Ideen, schnellere Ortskacheln
 - [x] **Version 1.27:** Routen ohne Netz auf echten Straßen, Pisten-Netz je Gebiet, 4WD-Schalter, Umleitung um Straßensperrungen
+- [x] **Version 1.28:** Einrichtung in 12 Schritten mit Design, Fahrzeug, erster Route, Vorabausgaben und Check vor der Abreise
 - [ ] Im App Store
 - [ ] Weitere Regionen Australiens im Detail
 - [ ] Weitere Länder

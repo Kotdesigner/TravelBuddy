@@ -183,7 +183,7 @@
           {/if}
         </div>
         {#if r.route.umleitung}
-          <div class="r-sperr umgeht">⛔ {je('Umleitung wegen Sperrung', 'Detour because of a closure')}: {r.route.umleitung.sperrungen.map((s) => `${s.strasse} (${s.was})`).join(', ')} · {umleitungText(r.route.umleitung)}</div>
+          <div class="r-sperr umgeht">⛔ {je('Umleitung wegen Sperrung', 'Detour because of a closure')}: {r.route.umleitung.sperrungen.map((s) => `${s.strasse} (${je(s.was, s.wasEn || s.was)})`).join(', ')} · {umleitungText(r.route.umleitung)}</div>
         {:else if sperrAn.length}
           <div class="r-sperr">
             <span>⛔ {je('Gesperrt auf der Strecke', 'Closed on the way')}: {sperrAn.map((b) => je(`${b.meldung.strasse} (${[b.meldung.sperrungDe || b.meldung.level, b.meldung.artDe].filter(Boolean).join(', ')}) bei km ${zahl(b.km)}`, `${b.meldung.strasse} (${[b.meldung.sperrung || b.meldung.level, b.meldung.art].filter(Boolean).join(', ')}) at km ${zahl(b.km)}`)).join(', ')} · Main Roads WA</span>
