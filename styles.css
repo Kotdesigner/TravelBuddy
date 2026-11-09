@@ -212,6 +212,11 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 .footer-links a:hover { text-decoration: underline; text-decoration-color: var(--color-accent); }
 .footer-links a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; border-radius: 4px; }
 .footer small { display: block; max-width: 70ch; }
+.footer-social { margin: 0 0 var(--space-xl); }
+.footer-social p { margin: 0 0 var(--space-sm); font-weight: 700; }
+.footer-social ul { display: flex; flex-wrap: wrap; gap: var(--space-sm); list-style: none; margin: 0; padding: 0; }
+.footer-social svg { flex: none; }
+.footer-social .handle { font-weight: 400; color: var(--color-muted); }
 
 /* Under 60rem everything stacks in reading order */
 @media (max-width: 60rem) {
