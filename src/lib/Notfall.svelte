@@ -9,7 +9,14 @@
   // und ein „Ich bin OK"-Lebenszeichen-Log (exportierbar, im Backup).
   import { haversine } from './routing.js'
   import { REGIONEN, poiRegionFuer } from './karten-config.js'
-  import { checkins, neuerCheckin, loescheCheckin } from './userdata.js'
+  import { checkins, neuerCheckin, loescheCheckin, notfallKontakte } from './userdata.js'
+  import { bescheidBlatt, personBlatt, rollenName, MAX_PERSONEN } from './bescheid.js'
+  import InfoKnopf from './InfoKnopf.svelte'
+  import { onMount } from 'svelte'
+  import { standort } from './standort.js'
+  import { schnellBescheid } from './bescheid-aktion.js'
+
+  let { orte = [] } = $props()
 
   let pos = $state(null) // { lat, lon, acc, manuell }
   let posFehler = $state(null)
@@ -75,11 +82,19 @@
     posFehler = null; laedt = true
     if (!navigator.geolocation) { posFehler = t('GPS auf diesem Gerät nicht verfügbar.'); laedt = false; return }
     navigator.geolocation.getCurrentPosition(
-      (p) => { pos = { lat: p.coords.latitude, lon: p.coords.longitude, acc: Math.round(p.coords.accuracy), manuell: false }; laedt = false; ladePois(pos.lat, pos.lon) },
+      (p) => {
+        pos = { lat: p.coords.latitude, lon: p.coords.longitude, acc: Math.round(p.coords.accuracy), manuell: false }; laedt = false; ladePois(pos.lat, pos.lon)
+        // auch für „Mir geht's gut“ und Heute: ein Standort für die ganze App
+        standort.set({ lat: pos.lat, lon: pos.lon, genauigkeit: pos.acc, zeit: Date.now() })
+      },
       (e) => { posFehler = fehlerText(e); laedt = false },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
     )
   }
+
+  // V34: im Notfall zählt jeder Tipp. Der Standort bestimmt sich beim Öffnen von selbst.
+  onMount(() => { if (!pos) ortBestimmen() })
+  const posFuerBescheid = () => (pos ? { lat: pos.lat, lon: pos.lon, genauigkeit: pos.acc, zeit: Date.now() } : null)
 
   function manuellUebernehmen() {
     const leer = (v) => v == null || String(v).trim() === ''
@@ -143,9 +158,35 @@
 </script>
 
 <div class="notfall">
-  <p class="hinweis">{t('🔌 Funktioniert komplett offline.')} <b>{t('Echter Notfall zuerst: 000.')}</b> {t('Ohne Handynetz brauchst du ein Satelliten-Gerät/EPIRB. Anrufe kann die App nicht ersetzen.')}</p>
+  <!-- V34: das Wichtigste zuerst. 000 ganz oben, dann deine Leute, dann Standort (bestimmt sich beim Öffnen) und Hilfe -->
+  <section class="nf-notruf" aria-label={je('Notruf', 'Emergency call')}>
+    <a class="nf-000" href="tel:000"><span>📞 {je('000 anrufen', 'Call 000')}</span><small>{t('Polizei · Feuer · Ambulanz')}</small></a>
+    <div class="nf-weitere">
+      {#each NOTRUF.filter((n) => !n.haupt) as n (n.tel)}
+        <a class="nf-nr" href={`tel:${n.tel}`}><b>{n.nr}</b><small>{n.label}</small></a>
+      {/each}
+    </div>
+    <p class="mini">{je('Funktioniert komplett offline. Ohne Handynetz hilft nur ein Satelliten-Gerät oder EPIRB, Anrufe kann die App nicht ersetzen.', 'Works completely offline. Without mobile signal only a satellite device or EPIRB helps, the app cannot replace calls.')}</p>
+  </section>
 
-  <!-- 1) Standort -->
+
+  <!-- V34: wichtige Personen, ein Tipp öffnet die fertige Nachricht (BescheidBlatt.svelte, bescheid.js) -->
+  <section class="karte nf-leute" aria-labelledby="nf-leute-t">
+    <h3 id="nf-leute-t">{je('👨‍👩‍👧 Deinen Leuten Bescheid geben', '👨‍👩‍👧 Let your people know')}<InfoKnopf id="bescheid" /></h3>
+    <div class="nf-chips">
+      {#each $notfallKontakte as p (p.id)}
+        <button class="nf-chip" onclick={() => personBlatt.set({ id: p.id })} aria-label={je(`${p.name} ändern`, `Edit ${p.name}`)}>{p.name}{#if p.rolle !== 'andere' && p.name !== rollenName(p.rolle)}<small>{` · ${rollenName(p.rolle)}`}</small>{/if}</button>
+      {/each}
+      {#if $notfallKontakte.length < MAX_PERSONEN}
+        <button class="nf-chip neu" onclick={() => personBlatt.set({})}>＋ {$notfallKontakte.length ? je('Person', 'Person') : je('Mama, Papa, Partner/in anlegen', 'Add mum, dad, partner')}</button>
+      {/if}
+    </div>
+    <button class="btn nf-knopf ok" onclick={() => schnellBescheid('ok', { orte, pos: posFuerBescheid() })}>✅ {je('Mir geht\'s gut', 'I\'m okay')}</button>
+    <button class="btn nf-knopf" onclick={() => schnellBescheid('standort', { orte, pos: posFuerBescheid() })}>📍 {je('Mein Standort senden', 'Send my location')}</button>
+    <p class="mini">{je('Ein Tipp öffnet die fertige Nachricht an alle. Per SMS geht das auch ohne Internet, solange etwas Handynetz da ist.', 'One tap opens the finished message to everyone. By SMS this works without internet as long as there is some mobile signal.')}</p>
+  </section>
+
+  <!-- Standort: bestimmt sich beim Öffnen der Seite von selbst -->
   <section class="karte standort">
     <h3>{t('📍 Mein Standort')}</h3>
     {#if pos}
@@ -174,21 +215,7 @@
     </details>
   </section>
 
-  <!-- 2) Notruf -->
-  <section class="karte">
-    <h3>{t('🆘 Notruf')}</h3>
-    <div class="notruf-grid">
-      {#each NOTRUF as n}
-        <a class="notruf" class:haupt={n.haupt} href={`tel:${n.tel}`}>
-          <span class="n-nr">{n.nr}</span>
-          <span class="n-label">{n.label}</span>
-          <span class="n-sub">{n.sub}</span>
-        </a>
-      {/each}
-    </div>
-  </section>
-
-  <!-- 3) Nächste Hilfe -->
+  <!-- Nächste Hilfe -->
   <section class="karte">
     <h3>{t('🧭 Nächste Hilfe')} {#if poiRegion}<span class="reg">· {REGIONEN.find((r) => r.id === poiRegion)?.name}</span>{/if}</h3>
     {#if !pos}
@@ -224,14 +251,13 @@
     {/if}
   </section>
 
-  <!-- 4) Teilen & Check-in -->
-  <section class="karte">
-    <h3>{t('📤 Standort teilen & Check-in')}</h3>
+  <details class="karte nf-mehr">
+    <summary>{je('📤 Anders teilen und Lebenszeichen', '📤 Share another way and check-ins')}</summary>
     <div class="zeile">
-      <button class="btn breit" onclick={teileStandort} disabled={!pos}>{t('📍 Standort teilen')}</button>
-      <button class="btn breit ok" onclick={checkin}>{t('✅ Ich bin OK')}</button>
+      <button class="btn breit" onclick={teileStandort} disabled={!pos}>{je('📍 Standort teilen …', '📍 Share location …')}</button>
+      <button class="btn breit" onclick={checkin}>{je('✅ Nur Lebenszeichen speichern', '✅ Just save a check-in')}</button>
     </div>
-    <p class="mini">{t('„Ich bin OK" speichert Zeit + Ort als Lebenszeichen (unten). Alles liegt im Backup.')}</p>
+    <p class="mini">{je('„Standort teilen“ öffnet das Teilen-Menü für jeden Empfänger. „Nur Lebenszeichen speichern“ merkt Zeit und Ort hier in der App, ohne etwas zu senden. Alles liegt im Backup.', '“Share location” opens the share menu for any recipient. “Just save a check-in” keeps time and place here in the app without sending anything. Everything is in your backup.')}</p>
 
     {#if $checkins.length}
       <div class="log-kopf">
@@ -249,7 +275,7 @@
         {/each}
       </ul>
     {/if}
-  </section>
+  </details>
 
   {#if meldung}<div class="toast">{meldung}</div>{/if}
 </div>
@@ -302,6 +328,20 @@
   .h-ri { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-weight: 700; }
   .h-go { text-decoration: none; font-size: calc(18px * var(--schrift, 1)); font-weight: 800; color: var(--ok-text); padding: 0 4px; }
   .mini { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); margin: 9px 0 0; }
+  .nf-notruf { display: flex; flex-direction: column; gap: 8px; }
+  .nf-000 { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 76px; padding: 12px; border-radius: 14px; background: #c0392b; color: #fff; text-decoration: none; font-size: calc(22px * var(--schrift, 1)); font-weight: 900; box-shadow: var(--shadow); }
+  .nf-000 small { font-size: calc(13px * var(--schrift, 1)); font-weight: 600; opacity: 0.92; }
+  .nf-weitere { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .nf-nr { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 52px; padding: 6px 4px; border: 1px solid var(--danger-linie); border-radius: var(--radius-m); color: var(--danger-text, var(--ink)); text-decoration: none; text-align: center; line-height: 1.2; }
+  .nf-nr b { font-size: calc(15px * var(--schrift, 1)); }
+  .nf-nr small { font-size: calc(11.5px * var(--schrift, 1)); color: var(--muted); }
+  .nf-mehr summary { min-height: 44px; display: flex; align-items: center; font-size: calc(14px * var(--schrift, 1)); font-weight: 800; cursor: pointer; }
+  .nf-leute h3 { display: flex; align-items: center; gap: 6px; }
+  .nf-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .nf-chip { min-height: 40px; padding: 4px 12px; border: 1px solid var(--line-stark); border-radius: 999px; background: none; color: var(--ink); font: inherit; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+  .nf-chip small { font-weight: 500; color: var(--muted); }
+  .nf-chip.neu { border-style: dashed; color: var(--brand-text); }
+  .nf-knopf { width: 100%; justify-content: center; min-height: 52px; margin-top: 8px; font-size: calc(16px * var(--schrift, 1)); font-weight: 800; }
 
   .log-kopf { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
   .log-titel { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 800; color: var(--ink); }

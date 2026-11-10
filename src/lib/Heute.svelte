@@ -32,6 +32,8 @@
   import MeldungZeile from './MeldungZeile.svelte'
   import { standort, standortFrisch } from './standort.js'
   import { heutigeFahrt } from './fahrtag.js'
+  import { notfallKontakte } from './userdata.js'
+  import { schnellBescheid } from './bescheid-aktion.js'
   let { orte = [], warnAnzahl = 0, sperrAnzahl = 0, sperrRoute = 0, onneu = () => {}, ontag = () => {}, geh = () => {} } = $props()
 
   const heute = $derived($heuteTag)
@@ -53,6 +55,20 @@
   })
   // V32: Meldungen auf Heute: auf der heutigen Fahrt, sonst in der Gegend (Standort in Australien, sonst Ort der Etappe)
   const fahrtHeute = $derived(heutigeFahrt({ reisen: $reisen, gesamtStart: $gesamtStart, heute, journal: $journal }))
+  // V34: am Tagesziel angekommen (bis 3 km, frischer Standort) und jemand angelegt: kurz Bescheid geben anbieten
+  const ANKUNFT_KEY = 'tb-bescheid-ankunft'
+  let ankunftErledigt = $state((() => { try { return localStorage.getItem(ANKUNFT_KEY) } catch { return null } })())
+  const ankunft = $derived.by(() => {
+    const z = fahrtHeute?.fahrt?.ziel
+    if (!z || !$notfallKontakte.length || ankunftErledigt === heute || !standortFrisch($standort)) return null
+    const r = Math.PI / 180, a = Math.sin(((z.lat - $standort.lat) * r) / 2) ** 2 + Math.cos($standort.lat * r) * Math.cos(z.lat * r) * Math.sin(((z.lon - $standort.lon) * r) / 2) ** 2
+    return 12742 * Math.asin(Math.sqrt(a)) <= 3 ? { nach: fahrtHeute.fahrt.nach || '' } : null
+  })
+  function ankunftWeg(senden) {
+    ankunftErledigt = heute
+    try { localStorage.setItem(ANKUNFT_KEY, heute) } catch {}
+    if (senden) schnellBescheid('ok', { orte })
+  }
   // Der Abschnitt ist eine Zeile und öffnet sich von selbst, wenn wirklich etwas auf dem Weg liegt.
   // Wer ihn zuklappt, dem bleibt er zu, bis eine neue Meldung auf dem Weg dazukommt.
   const weg = $derived(aufDemWeg({ reise: fahrtHeute?.reise || null, standort: !fahrtHeute?.reise && standortFrisch($standort) ? $standort : null, alle: $meldungen.liste }))
@@ -162,6 +178,12 @@
           : je(`Heute Wechsel nach „${wechselHeute.etappe.reise.name}“`, `Change today to “${wechselHeute.etappe.reise.name}”`)}{#if wechselHeute.quelle}<small> · {wechselHeute.quelle}</small>{/if}</p>
       {/if}
       <FahrtHeute reisen={$reisen} {heute} {geh} />
+      {#if ankunft}
+        <div class="ht-ankunft">
+          <button class="ht-ankunft-knopf" onclick={() => ankunftWeg(true)}>🏁 {ankunft.nach ? je(`Angekommen in ${ankunft.nach}? Kurz Bescheid geben`, `Arrived in ${ankunft.nach}? Let them know`) : je('Angekommen? Kurz Bescheid geben', 'Arrived? Let them know')}</button>
+          <button class="ht-ankunft-weg" onclick={() => ankunftWeg(false)} aria-label={je('Heute nicht mehr zeigen', 'Do not show again today')}>✕</button>
+        </div>
+      {/if}
       <button class="btn-primary ht-schreiben" onclick={() => { if (!heuteGeschrieben) neuerJournalEintrag({ datum: heute }); ontag(heute) }}>{heuteGeschrieben ? t('Heutigen Logbuch-Eintrag öffnen') : t('Heute ins Logbuch schreiben')}</button>
       {#each [[heute, t('Heute')], [morgen, t('Morgen')]] as [d, titel]}
         {@const b = amSortiert(d)}
@@ -286,6 +308,9 @@
   .ht-dringend { color: inherit; text-decoration: none; }
   .ht-dringend:not(.stark) { background: var(--warn-flaeche); border-color: var(--warn-linie, var(--line)); }
   .ht-warn { background: var(--danger-flaeche); border-color: var(--danger-linie); }
+  .ht-ankunft { display: flex; align-items: stretch; gap: 6px; }
+  .ht-ankunft-knopf { flex: 1; min-height: 48px; padding: 8px 12px; border: 1px solid var(--ok-linie, var(--line-stark)); border-radius: var(--radius-m); background: var(--ok-flaeche); color: var(--ok-text); font: inherit; font-weight: 800; text-align: left; cursor: pointer; }
+  .ht-ankunft-weg { width: 48px; min-height: 48px; border: 1px solid var(--line); border-radius: var(--radius-m); background: none; color: var(--muted); font: inherit; cursor: pointer; }
   .ht-mit { display: flex; flex-direction: column; margin-top: 4px; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--card); overflow: hidden; }
   .ht-mit-kopf { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 56px; padding: 8px 12px; border: none; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
   .ht-mit-txt { flex: 1; }

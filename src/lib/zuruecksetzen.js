@@ -31,8 +31,8 @@ export async function allesLoeschen() {
 export async function appZuruecksetzen(backup) {
   const erst = await frage({
     titel: je('App zurücksetzen?', 'Reset the app?'),
-    text: je('Alles, was TravelBuddy auf diesem Gerät gespeichert hat, wird gelöscht: Reisen, Etappen, Logbuch, Fotos, Buchungen, Dokumente mit ihren Dateien, Belege, Einstellungen und die Offline-Karten. Danach startet die App wie neu. Willst du etwas behalten, sichere vorher ein Backup.',
-      'Everything TravelBuddy has stored on this device is deleted: trips, legs, logbook, photos, bookings, documents with their files, receipts, settings and the offline maps. The app then starts like new. To keep anything, save a backup first.'),
+    text: je('Alles, was TravelBuddy auf diesem Gerät gespeichert hat, wird gelöscht: Reisen, Etappen, Logbuch, Fotos, Buchungen, Dokumente mit ihren Dateien, Belege, deine wichtigen Personen im Notfall, Einstellungen und die Offline-Karten. Danach startet die App wie neu. Willst du etwas behalten, sichere vorher ein Backup.',
+      'Everything TravelBuddy has stored on this device is deleted: trips, legs, logbook, photos, bookings, documents with their files, receipts, your emergency contacts, settings and the offline maps. The app then starts like new. To keep anything, save a backup first.'),
     ja: je('Erst Backup sichern', 'Save a backup first'), nein: je('Ohne Backup weiter', 'Continue without backup'), abbruch: null,
   })
   if (erst === null) return false

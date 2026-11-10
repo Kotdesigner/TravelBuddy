@@ -3,7 +3,7 @@
   // „Bereit für unterwegs?“: prüft vor der Fahrt ins Funkloch, was offline auf diesem Gerät liegt.
   // Nur lesen: Karten-Cache (wie Karte.svelte), Offline-Speicher der App (Service Worker),
   // berechnete Routen, Spotify-Verbindung, letzte Sicherung.
-  import { reisen, gesamtStart, syncZeiten } from './userdata.js'
+  import { reisen, gesamtStart, syncZeiten, notfallKontakte } from './userdata.js'
   import { heuteTag } from './heute.js'
   import { online } from './netz.js'
   import { veraltet } from './routen-dienst.js'
@@ -99,6 +99,14 @@
       stand: spotify ? t('Musik unterwegs kann Titel in deine Playlist schreiben.') : t('Nicht verbunden. Titel aus der Gegend werden dann nur vorgemerkt.'),
       tun: je('Mit Netz unter Mehr → Musik unterwegs „Mit Spotify verbinden“ tippen. Gespeicherte Playlists in der Spotify-App vorher für offline laden.', 'With signal, go to More → Music on the road and tap “Connect to Spotify”. Download saved playlists in the Spotify app for offline use beforehand.'),
       knopf: geh ? { text: t('Zur Musik'), ziel: 'mehr/musik' } : null,
+    },
+    {
+      // V34: wer Bescheid bekommt, wenn unterwegs etwas ist
+      id: 'kontakte', titel: je('Wichtige Personen angelegt', 'Important people added'),
+      ok: $notfallKontakte.length > 0,
+      stand: $notfallKontakte.length ? je(`${$notfallKontakte.map((k) => k.name).join(', ')} bekommen mit einem Tipp Bescheid.`, `${$notfallKontakte.map((k) => k.name).join(', ')} hear from you with one tap.`) : je('Noch niemand, der mit einem Tipp „Mir geht\'s gut“ oder deinen Standort bekommt.', 'Nobody yet who gets “I\'m okay” or your location with one tap.'),
+      tun: je('Unter Mehr → Notfall Mama, Papa oder deine Partnerin mit Nummer anlegen.', 'Under More → Emergency add your mum, dad or partner with their number.'),
+      knopf: geh ? { text: je('Zum Notfall', 'To Emergency'), ziel: 'mehr/notfall' } : null,
     },
     {
       id: 'backup', titel: t('Letzte Sicherung'),

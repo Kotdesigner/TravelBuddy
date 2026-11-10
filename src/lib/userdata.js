@@ -23,6 +23,8 @@ const KEY_PACK = 'packliste-v1'
 const KEY_NOTIZEN = 'notizen-v1'
 const KEY_WANDER = 'wanderungen-v1'
 const KEY_CHECKINS = 'checkins-v1'
+// V34: wichtige Personen für „Deinen Leuten Bescheid geben“ (Notfall)
+const KEY_KONTAKTE = 'notfall-kontakte-v1'
 // „Mein Urlaub" (Ostküste) — komplett getrennte Datentöpfe.
 const KEY_U_REISEN = 'urlaub-reisen-v1'
 const KEY_U_ORTE = 'urlaub-orte-v1'
@@ -129,6 +131,8 @@ export const notizen = writable([])
 export const wanderungen = writable([])
 /** Lebenszeichen-Check-ins der Notfall-Karte: [{ id, ts, tsLokal, lat, lon, text }] */
 export const checkins = writable([])
+/** Notfall, „Deinen Leuten Bescheid geben“: [{ id, rolle, name, nummer, weg: 'sms' | 'whatsapp', geaendert }] (bescheid.js) */
+export const notfallKontakte = writable([])
 /**
  * Gebuchtes aus der eigenen Kalender-App — Flüge, Hotels, Transfers, Fahrzeuge.
  * NUR GELESEN: die Kalender-App bleibt die Quelle, hier wird nichts bearbeitet.
@@ -250,6 +254,8 @@ export async function initUserData() {
     if (Array.isArray(wd)) wanderungen.set(nachruesten(wd))
     const ci = await idbGet(KEY_CHECKINS)
     if (Array.isArray(ci)) checkins.set(heileListe(ci))
+    const nk = await idbGet(KEY_KONTAKTE)
+    if (Array.isArray(nk)) notfallKontakte.set(heileListe(nk))
     // Ostküste: getrennte Töpfe des Altformats einmalig in die Haupttöpfe überführen.
     const schonZusammen = await idbGet(KEY_ZUSAMMEN)
     const ur = await idbGet(KEY_U_REISEN)
@@ -302,6 +308,7 @@ export async function initUserData() {
   autoSave(notizen, KEY_NOTIZEN)
   autoSave(wanderungen, KEY_WANDER)
   autoSave(checkins, KEY_CHECKINS)
+  autoSave(notfallKontakte, KEY_KONTAKTE)
   autoSave(reiseBudget, KEY_BUDGET)
   autoSave(reiseTage, KEY_DAUER)
   autoSave(vorbereitung, KEY_VORB)
@@ -336,7 +343,7 @@ function beobachteSkalar(store, feld) {
 const NOTSPEICHER = {
   [KEY]: 'daten', [KEY_REISEN]: 'reisen', [KEY_ORTE]: 'eigeneOrte', [KEY_JOURNAL]: 'journal',
   [KEY_PACK]: 'packliste', [KEY_NOTIZEN]: 'notizen', [KEY_WANDER]: 'wanderungen',
-  [KEY_CHECKINS]: 'checkins', [KEY_VORB]: 'vorbereitung', [KEY_DOKU]: 'dokumente',
+  [KEY_CHECKINS]: 'checkins', [KEY_KONTAKTE]: 'notfallKontakte', [KEY_VORB]: 'vorbereitung', [KEY_DOKU]: 'dokumente',
   [KEY_VORAB]: 'vorabKosten', [KEY_BUCHUNGEN]: 'buchungen', [KEY_GRAB]: 'grabsteine',
 }
 function rettenAusNotspeicher() {
@@ -494,6 +501,17 @@ export function neuerCheckin({ lat, lon, text = '' } = {}) {
 export function loescheCheckin(id) {
   checkins.update((cs) => cs.filter((c) => c.id !== id))
   grabstein('checkins', id)
+}
+
+/** V34: wichtige Person anlegen oder ändern (schon gesäubert durch bescheid.js). Rückgabe: die gespeicherte Person */
+export function speichereNotfallKontakt(k) {
+  const neu = { ...k, id: k.id || uid(), geaendert: jetzt() }
+  notfallKontakte.update((ks) => (ks.some((x) => x.id === neu.id) ? ks.map((x) => (x.id === neu.id ? neu : x)) : [...ks, neu]))
+  return neu
+}
+export function loescheNotfallKontakt(id) {
+  notfallKontakte.update((ks) => ks.filter((k) => k.id !== id))
+  grabstein('notfallKontakte', id)
 }
 
 // ---------- Notizen ----------
@@ -1096,6 +1114,7 @@ export function baueBackupPayload() {
     notizen: get(notizen),
     wanderungen: get(wanderungen),
     checkins: get(checkins),
+    notfallKontakte: get(notfallKontakte),
     reiseBudget: get(reiseBudget),
     reiseTage: get(reiseTage),
     vorbereitung: get(vorbereitung),
@@ -1189,7 +1208,7 @@ export function leseBackup(file) {
 
 // Fremde oder beschädigte Dateien: nur Felder der erwarteten Art kommen in die App, sonst
 // stürzt sie bei jedem Start über einzelne Einträge. Ohne ein einziges bekanntes Feld: null.
-const BACKUP_LISTEN = ['reisen', 'eigeneOrte', 'journal', 'notizen', 'wanderungen', 'checkins', 'dokumente', 'vorabKosten']
+const BACKUP_LISTEN = ['reisen', 'eigeneOrte', 'journal', 'notizen', 'wanderungen', 'checkins', 'notfallKontakte', 'dokumente', 'vorabKosten']
 const BACKUP_OBJEKTE = ['daten', 'quizAntworten', 'packliste', 'vorbereitung', 'buchungen', 'grabsteine']
 export function saeubereBackup(p) {
   if (!p || typeof p !== 'object' || Array.isArray(p)) return null
@@ -1295,6 +1314,7 @@ function uebernehmeRoh(p) {
   if (Array.isArray(p.notizen)) notizen.set(p.notizen)
   if (Array.isArray(p.wanderungen)) wanderungen.set(p.wanderungen)
   if (Array.isArray(p.checkins)) checkins.set(p.checkins)
+  if (Array.isArray(p.notfallKontakte)) notfallKontakte.set(p.notfallKontakte)
   // Sicherungen bis Version 4 hatten eigene Ostküsten-Töpfe — direkt mit übernehmen.
   if (p.urlaubOrte?.length || p.urlaubReisen?.length || p.urlaubJournal?.length) {
     fuehreOstDatenZusammen(p.urlaubOrte || [], p.urlaubReisen || [], p.urlaubJournal || [])

@@ -134,14 +134,16 @@
     <MehrUebersicht eintraege={MEHR_EINTRAEGE} onwahl={sheetLink}
       app={[...appEintraege(), ...basicAktionen({ einrichten: $einrichtenZeigen, testreise: $testreiseKnopfZeigen, testreiseAn: $testreiseAn })].map((a) => ({ ...a,
         onclick: () => (a.id === 'backup' ? sheetLink('backup') : sheetAktion({ design: onDesign, handbuch: onHandbuch, updates: onUpdates, einfuehrung: onEinfuehrung, einrichten: onEinrichten, testreise: onTestreise }[a.id])) }))}
-      gefahr={{ label: '↩️ ' + je('App zurücksetzen', 'Reset the app'), onclick: () => sheetAktion(onZuruecksetzen) }} />
-
-    <div class="s-status">
-      <span class="dot gross" class:on={$online}></span>{$online ? t('Online') : t('Offline. Alles Wichtige ist auf dem Gerät gespeichert.')}
-    </div>
-    <div class="s-status s-backup">
-      {#if $syncZeiten.gesichert}{t('Letztes Backup von diesem Gerät: {gesichertText}', { gesichertText: gesichertText($syncZeiten.gesichert) })}{:else}{t('Von diesem Gerät gibt es noch kein Backup.')}{/if}
-    </div>
+      gefahr={{ label: je('App zurücksetzen', 'Reset the app'), onclick: () => sheetAktion(onZuruecksetzen) }}>
+      {#snippet unten()}
+      <div class="s-status">
+        <span class="dot gross" class:on={$online}></span>{$online ? t('Online') : t('Offline. Alles Wichtige ist auf dem Gerät gespeichert.')}
+      </div>
+      <div class="s-status s-backup">
+        {#if $syncZeiten.gesichert}{t('Letztes Backup von diesem Gerät: {gesichertText}', { gesichertText: gesichertText($syncZeiten.gesichert) })}{:else}{t('Von diesem Gerät gibt es noch kein Backup.')}{/if}
+      </div>
+      {/snippet}
+    </MehrUebersicht>
   </div>
 {/if}
 

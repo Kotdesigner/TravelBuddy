@@ -61,6 +61,9 @@
   import { ladeGruppen } from './lib/verbinden.js'
   import MeldungNeu from './lib/MeldungNeu.svelte'
   import MeldungBlatt from './lib/MeldungBlatt.svelte'
+  import BescheidBlatt from './lib/BescheidBlatt.svelte'
+  import PersonBlatt from './lib/PersonBlatt.svelte'
+  import { bescheidBlatt, personBlatt } from './lib/bescheid.js'
   import { laden as meldungenLaden, sendeWartende, nachsehen as meldungenNachsehen, meldungen, OFFIZIELL } from './lib/meldungen.js'
   import { PAYPAL } from './lib/spenden.js'
   import { meldenBlatt, meldungAuf } from './lib/meldungen-text.js'
@@ -1017,6 +1020,8 @@
 {#if ansicht.tab === 'heute'}
 <header class="hero">
   <div class="hero-musik"><MusikSymbol {geh} hell /></div>
+  <!-- V34: im Notfall ein Tipp von Heute zur Notfall-Seite (000, deine Leute, Standort) -->
+  <a class="hero-sos" href="#/mehr/notfall" onclick={(e) => { e.preventDefault(); geh('mehr/notfall') }} aria-label={je('SOS: Notfall öffnen', 'SOS: open Emergency')}>SOS</a>
   <div class="kicker"><span>{t('Roadtrip')}</span>{#if kopfZeit}<span class="k-datum" class:k-wartet={!$ready}>{kopfDatum(kopfZeit.von)}<span class="k-bis">{kopfDatum(kopfZeit.bis)}</span></span>{/if}</div>
   <h1>
     <span class="stretch">{#each 'WESTERN'.split('') as ch}<span>{ch}</span>{/each}</span>
@@ -1318,7 +1323,7 @@
 
   {:else if ansicht.tab === 'mehr'}
     {#if ansicht.unter === 'notfall'}
-      <Notfall />
+      <Notfall orte={[...orte, ...$eigeneOrte]} />
     {:else if ansicht.unter === 'vorbereitung'}
       <OfflineCheck {geh} onbackup={onExport} />
       <Reisevorbereitung />
@@ -1329,7 +1334,7 @@
     {:else if ansicht.unter === 'funfacts'}
       <FunFacts />
     {:else if ansicht.unter === 'fehler'}
-      <FehlerMelden version="Basic 1.29" build={buildText} />
+      <FehlerMelden version="Basic 1.30" build={buildText} />
     {:else if ansicht.unter === 'backup'}
       <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
     {:else if ansicht.unter === 'meldungen'}
@@ -1373,8 +1378,9 @@
       <MehrUebersicht eintraege={mehrEintraege().filter((e) => UNTER.mehr.some(([pfad]) => pfad === 'mehr/' + e.id))} onwahl={(id) => geh('mehr/' + id)}
         app={[...appEintraege(), ...basicAktionen({ einrichten: $einrichtenZeigen, testreise: $testreiseKnopfZeigen, testreiseAn: $testreiseAn })].map((a) => ({ ...a,
           onclick: () => ({ updates: () => (updateOffen = true), einfuehrung: einfuehrungStarten, einrichten: appEinrichten, testreise: testreiseKnopf }[a.id] ?? (() => geh('mehr/' + a.id)))() }))}
-        gefahr={{ label: '↩️ ' + je('App zurücksetzen', 'Reset the app'), onclick: () => appZuruecksetzen(onExport) }} />
-      <SpeicherStand />
+        gefahr={{ label: je('App zurücksetzen', 'Reset the app'), onclick: () => appZuruecksetzen(onExport) }}>
+        {#snippet unten()}<SpeicherStand />{/snippet}
+      </MehrUebersicht>
     {/if}
   {/if}
 </main>
@@ -1485,6 +1491,9 @@
 
 {#if $meldenBlatt && $meldungen.verfuegbar !== false}<MeldungNeu vorlage={$meldenBlatt} orte={[...orte, ...$eigeneOrte]} reisen={$reisen} onclose={() => meldenBlatt.set(null)} onmeine={() => { meldenBlatt.set(null); geh('mehr/meldungen/meine') }} />{/if}
 {#if $meldungAuf}<MeldungBlatt id={$meldungAuf.id} onclose={() => meldungAuf.set(null)} />{/if}
+<!-- V34: Deinen Leuten Bescheid geben (Notfall, Ankunft auf Heute) -->
+{#if $bescheidBlatt}<BescheidBlatt art={$bescheidBlatt.art} orte={[...orte, ...$eigeneOrte]} onclose={() => bescheidBlatt.set(null)} />{/if}
+{#if $personBlatt}<PersonBlatt id={$personBlatt.id || null} onclose={() => personBlatt.set(null)} />{/if}
 {#if neuOffen}
   <NeuBlatt typ={neuOffen.typ} vorlage={neuOffen.vorlage} orte={[...orte, ...$eigeneOrte]}
     onclose={() => neuAnfrage.set(null)} onfertig={neuFertig} />
@@ -1508,6 +1517,10 @@
 {/if}
 
 <style>
+  /* rechts oben neben der Musik: links stehen „Roadtrip“, Datum und Titel */
+  .hero > .hero-sos { position: absolute; z-index: 2; top: calc(env(safe-area-inset-top, 0px) + 14px); right: calc(14px + 44px + 10px); display: inline-flex; align-items: center; justify-content: center;
+    min-width: 56px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #c0392b; color: #fff; text-decoration: none; font-weight: 900; letter-spacing: 0.08em;
+    font-size: calc(14px * var(--schrift, 1)); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); text-shadow: none; }
   .hero > .hero-musik { position: absolute; z-index: 2; top: calc(env(safe-area-inset-top, 0px) + 14px); right: 14px; text-shadow: none; }
   .sk-musik { margin-left: auto; display: inline-flex; }
   .sk-musik + .sk-neu { margin-left: 0; }

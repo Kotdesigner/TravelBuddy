@@ -87,6 +87,15 @@ export const HILFE = jeSprache(() => ({
     ],
     teil: 9,
   },
+  // V34: Notfall, Deinen Leuten Bescheid geben
+  bescheid: {
+    titel: je('Deinen Leuten Bescheid geben', 'Let your people know'),
+    text: [
+      je('Leg bis zu fünf wichtige Personen an, etwa Mama, Papa oder deine Partnerin: Rolle tippen, Nummer mit Ländervorwahl, SMS, WhatsApp oder beides. Sie bleiben nur auf diesem Gerät und im Backup.', 'Add up to five important people, such as your mum, dad or partner: tap a role, enter the number with country code, SMS, WhatsApp or both. They stay only on this device and in your backup.'),
+      je('„Mir geht\'s gut“ und „Mein Standort senden“ öffnen die fertige Nachricht mit Ort, Uhrzeit und Kartenlink. In der SMS- oder WhatsApp-App tippst du nur noch auf Senden. Eine Web-App darf nichts von selbst verschicken.', '“I\'m okay” and “Send my location” open the finished message with place, time and a map link. In your messages or WhatsApp app you just tap Send. A web app is not allowed to send anything by itself.'),
+      je('SMS geht auch ohne Internet, sobald etwas Handynetz da ist, und an mehrere auf einmal. WhatsApp braucht Internet und geht an eine Person je Nachricht. Bei beidem kommen die Knöpfe nacheinander: erst SMS, dann WhatsApp, zwei Apps auf einmal öffnet kein Handy. Im echten Notfall zuerst 000 anrufen.', 'SMS works without internet as soon as there is some mobile signal, and to several people at once. WhatsApp needs internet and goes to one person per message. With both, the buttons come one after another: first SMS, then WhatsApp, no phone opens two apps at once. In a real emergency call 000 first.'),
+    ],
+  },
   // V29: hinter dem ⓘ in der Box Offline-Routen (Plan, Karte)
   meldungen: {
     titel: je('Meldungen für andere Reisende', 'Reports for other travellers'),

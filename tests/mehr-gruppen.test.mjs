@@ -36,8 +36,8 @@ p('Trenner nur beim Gruppenwechsel', !neueGruppe(liste, 0, (e) => e[0]) && !neue
 
 console.log('\n4  Überall eingebaut')
 p('Mehr-Seite und iPhone-Blatt nutzen dieselbe Übersicht', /<MehrUebersicht eintraege=/.test(app) && /<MehrUebersicht eintraege=\{MEHR_EINTRAEGE\}/.test(bar))
-p('Mehr-Seite: App und Einstellungen aus appEintraege und den Basic-Aktionen, Updates öffnet das Fenster, App zurücksetzen wie am iPhone', /app=\{\[\.\.\.appEintraege\(\), \.\.\.basicAktionen\(/.test(app) && /updates: \(\) => \(updateOffen = true\), einfuehrung: einfuehrungStarten, einrichten: appEinrichten, testreise: testreiseKnopf/.test(app) && /label: '↩️ ' \+ je\('App zurücksetzen', 'Reset the app'\), onclick: \(\) => appZuruecksetzen\(onExport\)/.test(app))
-p('iPhone-Blatt: dieselben App-Einträge, Backup, Design, Handbuch, Updates, Einführung, Einrichten, Testreise, App zurücksetzen', /app=\{\[\.\.\.appEintraege\(\), \.\.\.basicAktionen\(/.test(bar) && /sheetLink\('backup'\)/.test(bar) && /design: onDesign, handbuch: onHandbuch, updates: onUpdates, einfuehrung: onEinfuehrung, einrichten: onEinrichten, testreise: onTestreise/.test(bar) && /gefahr=\{\{ label: '↩️ ' \+ je\('App zurücksetzen', 'Reset the app'\), onclick: \(\) => sheetAktion\(onZuruecksetzen\)/.test(bar) && /onUpdates=\{\(\) => \(updateOffen = true\)\}/.test(app))
+p('Mehr-Seite: App und Einstellungen aus appEintraege und den Basic-Aktionen, Updates öffnet das Fenster, App zurücksetzen wie am iPhone, ganz unten', /app=\{\[\.\.\.appEintraege\(\), \.\.\.basicAktionen\(/.test(app) && /updates: \(\) => \(updateOffen = true\), einfuehrung: einfuehrungStarten, einrichten: appEinrichten, testreise: testreiseKnopf/.test(app) && /gefahr=\{\{ label: je\('App zurücksetzen', 'Reset the app'\), onclick: \(\) => appZuruecksetzen\(onExport\) \}\}>/.test(app))
+p('iPhone-Blatt: dieselben App-Einträge, Backup, Design, Handbuch, Updates, Einführung, Einrichten, Testreise, App zurücksetzen', /app=\{\[\.\.\.appEintraege\(\), \.\.\.basicAktionen\(/.test(bar) && /sheetLink\('backup'\)/.test(bar) && /design: onDesign, handbuch: onHandbuch, updates: onUpdates, einfuehrung: onEinfuehrung, einrichten: onEinrichten, testreise: onTestreise/.test(bar) && /gefahr=\{\{ label: je\('App zurücksetzen', 'Reset the app'\), onclick: \(\) => sheetAktion\(onZuruecksetzen\) \}\}>/.test(bar) && /onUpdates=\{\(\) => \(updateOffen = true\)\}/.test(app))
 p('App und Einstellungen eingeklappt, merkt sich den Zustand', /aria-expanded=\{appOffen\}/.test(mu) && /tb-mehr-app-offen/.test(mu) && /localStorage\.getItem\(KEY\) === '1'/.test(mu))
 p('Notfall-Kachel rot', /class:rot=\{e\.rot\}/.test(mu) && /\.mu-kachel\.rot \{ background: var\(--danger-flaeche\)/.test(mu))
 p('Mac-Seitenleiste: Gruppen-Zeilen unter Mehr', /class="sl-gruppe"/.test(sl) && /neueGruppe\(unterpunkte\.mehr/.test(sl) && /sl-gruppe" aria-hidden="true"/.test(sl))
@@ -58,4 +58,13 @@ const tote = ['Mehr → Import', 'More → Import', 'unter Mehr, Updates', 'Mehr
 p('Keine Verweise auf alte Wege im Menü', tote.length === 0, tote.join(', '))
 
 if (fehler) { console.log(`\n${fehler} Fehler`); process.exit(1) }
+{
+  // V34: Werkseinstellungen klein und grau ganz am Ende, unter Spenden, Speicher und Online-Stand
+  const ende = mu.slice(mu.lastIndexOf('{#if unten}'))
+  p('Werkseinstellungen ganz unten in der Übersicht, nicht mehr bei App und Einstellungen', /\{#if unten\}\{@render unten\(\)\}\{\/if\}[\s\S]*\{#if gefahr\}<button class="mu-gefahr"/.test(ende) && !/mu-app-liste[\s\S]*mu-gefahr[\s\S]*\{\/if\}\s*<\/div>\s*\{\/if\}\s*<\/div>/.test(mu.slice(0, mu.lastIndexOf('{#if unten}'))))
+  p('klein, grau, unterstrichen, ohne roten Rahmen', /\.mu-gefahr \{[^}]*color: var\(--muted\)[^}]*text-decoration: underline/.test(mu) && !/\.mu-gefahr \{[^}]*danger-linie/.test(mu))
+  p('Mehr-Seite: Speicherstand davor, Werkseinstellungen als letztes', /\{#snippet unten\(\)\}<SpeicherStand \/>\{\/snippet\}/.test(app))
+  p('iPhone-Blatt: Online- und Backup-Stand davor, Werkseinstellungen als letztes', /\{#snippet unten\(\)\}[\s\S]*s-status s-backup[\s\S]*\{\/snippet\}/.test(bar))
+}
+
 console.log('\nAlles grün')

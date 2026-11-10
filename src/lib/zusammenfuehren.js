@@ -7,7 +7,7 @@
 // Lieber ein Eintrag doppelt als einer weg.
 //
 // Reine Funktionen ohne Stores und ohne DOM: so lässt sich jede Regel einzeln prüfen.
-import { LOCALE, t, tn, jeSprache } from './i18n.js'
+import { LOCALE, t, tn, je, jeSprache } from './i18n.js'
 import { eur } from './format.js'
 
 export const URZEIT = '2000-01-01T00:00:00.000Z'
@@ -284,6 +284,7 @@ const LISTEN = jeSprache(() => ([
   ['vorabKosten', t('Vorab-Ausgaben'), false],
   ['reisen', t('Reisen'), false],
   ['checkins', t('Check-ins'), false],
+  ['notfallKontakte', je('Notfallkontakte', 'Emergency contacts'), false],
 ]))
 
 /**
