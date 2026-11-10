@@ -217,6 +217,9 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 .footer-social ul { display: flex; flex-wrap: wrap; gap: var(--space-sm); list-style: none; margin: 0; padding: 0; }
 .footer-social svg { flex: none; }
 .footer-social .handle { font-weight: 400; color: var(--color-muted); }
+.footer-donate { max-width: 60ch; margin: 0 0 var(--space-xl); }
+.footer-donate p { margin: 0 0 var(--space-sm); }
+.footer-donate small { display: block; margin-top: var(--space-xs); color: var(--color-muted); }
 
 /* Under 60rem everything stacks in reading order */
 @media (max-width: 60rem) {
@@ -259,3 +262,4 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 @media (max-width: 22.5rem) {
   .wordmark span { display: none; }
 }
+.ep-new { margin-left: var(--space-xs); padding: 0 var(--space-xs); border: 1px solid var(--color-accent); border-radius: 999px; color: var(--color-accent); font-weight: 700; }
