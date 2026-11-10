@@ -146,7 +146,7 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ## 🔄 New in version 1.32
 
-**Pull down to update.** Like in other apps: pull down at the very top of a page and let go. TravelBuddy fetches the newest version and reloads, without internet it loads from what is stored on your device. If you have unsaved changes, the app asks first. On maps, in open sheets and in text fields nothing happens, so nothing gets reloaded by mistake.
+**Pull down to update.** Like in other apps: pull down at the very top of a page and let go. TravelBuddy fetches the newest version and reloads, without internet it loads from what is stored on your device. Each time a different figure drops by: a kangaroo hopping across, a koala munching eucalyptus, a boomerang, a campervan, the sun rising over Uluru or a snake. If you have unsaved changes, the app asks first. On maps, in open sheets and in text fields nothing happens, so nothing gets reloaded by mistake.
 
 <details>
 <summary><b>📜 Earlier versions: 1.31 to 1.1</b></summary>
@@ -886,7 +886,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.25:** maps with areas, zoom and pop-ups for places, route ideas and hikes, over 20 hike ideas, faster place tiles
 - [x] **Version 1.27:** routes without internet on real roads, track network per area, 4WD switch, detours around road closures
 - [x] **Version 1.28:** setup in 12 steps with design, vehicle, first route, expenses before the trip and a ready check
-- [x] **Version 1.32:** pull down at the top to update
+- [x] **Version 1.32:** pull down at the top to update, with a different Aussie figure each time
 - [x] **Version 1.31:** SOS to your people with location, emergency call by tapping 7 times, shortcut on iPhone and Mac, WhatsApp Business on Android
 - [x] **Version 1.30:** let your people know by SMS or WhatsApp with one tap, SOS button on Today, emergency page with 000 first
 - [x] **Version 1.29:** reports from other travellers, contact code and QR, share places and routes, TravelBuddy group on Telegram, donate via PayPal
@@ -1047,7 +1047,7 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ## 🔄 Neu in Version 1.32
 
-**Runterziehen zum Aktualisieren.** Wie in anderen Apps: ganz oben auf einer Seite nach unten ziehen und loslassen. TravelBuddy holt die neueste Fassung und lädt neu, ohne Internet aus dem Vorrat auf deinem Gerät. Hast du gerade etwas nicht gespeichert, fragt die App vorher. Auf Karten, in offenen Blättern und in Eingabefeldern passiert nichts, so wird nichts aus Versehen neu geladen.
+**Runterziehen zum Aktualisieren.** Wie in anderen Apps: ganz oben auf einer Seite nach unten ziehen und loslassen. TravelBuddy holt die neueste Fassung und lädt neu, ohne Internet aus dem Vorrat auf deinem Gerät. Jedes Mal schaut eine andere Figur vorbei: ein Känguru, das durchs Bild hüpft, ein Koala, der Eukalyptus knabbert, ein Bumerang, ein Camper, die Sonne über dem Uluru oder eine Schlange. Hast du gerade etwas nicht gespeichert, fragt die App vorher. Auf Karten, in offenen Blättern und in Eingabefeldern passiert nichts, so wird nichts aus Versehen neu geladen.
 
 <details>
 <summary><b>📜 Frühere Versionen: 1.31 bis 1.1</b></summary>
@@ -1755,7 +1755,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.25:** Karten mit Gegenden, Zoom und Fenstern für Orte, Routen-Ideen und Wanderungen, gut 20 Wander-Ideen, schnellere Ortskacheln
 - [x] **Version 1.27:** Routen ohne Netz auf echten Straßen, Pisten-Netz je Gebiet, 4WD-Schalter, Umleitung um Straßensperrungen
 - [x] **Version 1.28:** Einrichtung in 12 Schritten mit Design, Fahrzeug, erster Route, Vorabausgaben und Check vor der Abreise
-- [x] **Version 1.32:** Runterziehen zum Aktualisieren
+- [x] **Version 1.32:** Runterziehen zum Aktualisieren, jedes Mal mit einer anderen Figur aus Australien
 - [x] **Version 1.31:** SOS an deine Leute mit Standort, Notruf durch 7× Tippen, Kurzbefehl am iPhone und Mac, WhatsApp Business am Android
 - [x] **Version 1.30:** Deinen Leuten mit einem Tipp per SMS oder WhatsApp Bescheid geben, SOS-Knopf auf Heute, Notfall mit 000 ganz oben
 - [x] **Version 1.29:** Meldungen anderer Reisender, Kontakt-Code mit QR, Orte und Routen teilen, TravelBuddy-Gruppe auf Telegram, Spenden über PayPal
