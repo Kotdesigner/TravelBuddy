@@ -564,7 +564,7 @@
       </div>
     {/if}
     {#if buListe.length === 0 && !einfuegenAuf}
-      <p class="leer">{t('Noch keine Buchungen. Importiere deinen Reisekalender (Mehr → Import) oder füge mit „+ Aus Mail“ eine Bestätigungsmail ein.')}</p>
+      <p class="leer">{je('Noch keine Buchungen. Importiere deinen Reisekalender (Mehr → Backup & Import) oder füge mit „+ Aus Mail“ eine Bestätigungsmail ein.', 'No bookings yet. Import your travel calendar (More → Backup & import) or paste a confirmation email with “+ From email”.')}</p>
     {/if}
     {#if ausKalender}
     <div class="bu-quelle">

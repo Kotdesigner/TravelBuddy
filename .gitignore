@@ -65,3 +65,6 @@ karten-gross/*.pmtiles
 # Schlüssel nur in Netlify, nie im Repo
 .env
 .env.*
+
+# Netlify-Testumgebung (netlify dev)
+.netlify/

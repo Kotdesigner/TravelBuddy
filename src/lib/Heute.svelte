@@ -9,7 +9,7 @@
   import { mitWochentag, tagMonatJahr, tageText, bereich, zahl } from './format.js'
   import { katInfo } from './reisekalender.js'
   import { STATUS_MAP } from './wanderungen-daten.js'
-  import { zaehlHoch } from './motion.js'
+  import { zaehlHoch, klapp, dauer } from './motion.js'
   import { VORBEREITUNG } from './vorbereitung-daten.js'
 
   import FahrtHeute from './FahrtHeute.svelte'
@@ -26,6 +26,12 @@
   import { etappeJetzt, wechselZeit, uhrzeitIn } from './buchung.js'
   import { ausgabenVon } from './kosten.js'
   import { stelleAm } from './abschnitte.js'
+  import { gruppen } from './verbinden.js'
+  import { meldungen, inGegend, gegendVon, aufDemWeg, vonSelbstOffen, zugeklappt, merkeZugeklappt, zuklappenMit } from './meldungen.js'
+  import { meldenBlatt, gegendName } from './meldungen-text.js'
+  import MeldungZeile from './MeldungZeile.svelte'
+  import { standort, standortFrisch } from './standort.js'
+  import { heutigeFahrt } from './fahrtag.js'
   let { orte = [], warnAnzahl = 0, sperrAnzahl = 0, sperrRoute = 0, onneu = () => {}, ontag = () => {}, geh = () => {} } = $props()
 
   const heute = $derived($heuteTag)
@@ -45,6 +51,32 @@
     for (const r of routenJetzt) { const st = (r.stops || []).find((x) => x?.lat != null); if (st) return { lat: st.lat, lon: st.lon, name: st.name } }
     return fotoOrt
   })
+  // V32: Meldungen auf Heute: auf der heutigen Fahrt, sonst in der Gegend (Standort in Australien, sonst Ort der Etappe)
+  const fahrtHeute = $derived(heutigeFahrt({ reisen: $reisen, gesamtStart: $gesamtStart, heute, journal: $journal }))
+  // Der Abschnitt ist eine Zeile und öffnet sich von selbst, wenn wirklich etwas auf dem Weg liegt.
+  // Wer ihn zuklappt, dem bleibt er zu, bis eine neue Meldung auf dem Weg dazukommt.
+  const weg = $derived(aufDemWeg({ reise: fahrtHeute?.reise || null, standort: !fahrtHeute?.reise && standortFrisch($standort) ? $standort : null, alle: $meldungen.liste }))
+  let zuIds = $state(zugeklappt())
+  let mitAuf = $state(null)   // null: von selbst; true: selbst aufgemacht
+  const mitOffen = $derived(mitAuf ?? vonSelbstOffen(weg.liste, zuIds))
+  function mitUmschalten() {
+    if (mitOffen) { zuIds = zuklappenMit(zuIds, weg.liste.map((m) => m.id)); merkeZugeklappt(zuIds); mitAuf = null }
+    else mitAuf = true
+  }
+  const nWeg = $derived(weg.liste.length)
+  const nAlle = $derived($meldungen.liste.length)
+  const mKontext = $derived.by(() => {
+    const alle = $meldungen.liste
+    if (fahrtHeute?.reise) return { titel: je('Auf deiner Fahrt heute', 'On your drive today'), leer: je('Keine Meldungen auf deiner Fahrt heute.', 'No reports on your drive today.'), liste: weg.mitBlassen }
+    // Ohne Fahrt: was bis 25 km um dich liegt, sonst die ganze Gegend
+    if (weg.liste.length) return { titel: je('In deiner Nähe', 'Near you'), leer: '', liste: weg.liste }
+    const hier = standortFrisch($standort) && gegendVon($standort.lat, $standort.lon) !== 'australien' ? $standort : faktOrt
+    const g = hier?.lat != null ? gegendVon(hier.lat, hier.lon) : 'australien'
+    if (g === 'australien') return { titel: '', leer: '', liste: [] }
+    return { titel: je(`In der Gegend: ${gegendName(g)}`, `In the area: ${gegendName(g)}`), leer: je(`Gerade keine Meldungen in der Gegend ${gegendName(g)}.`, `No reports in ${gegendName(g)} right now.`), liste: inGegend(g, alle) }
+  })
+  const fremd = $derived(($gruppen.telegram && !$gruppen.telegramEigen) || ($gruppen.discord && !$gruppen.discordEigen))
+  const eigen = $derived(($gruppen.telegram && $gruppen.telegramEigen) || ($gruppen.discord && $gruppen.discordEigen))
   const wandAm = (d) => $wanderungen.filter((w) => w.datum === d)
   const heuteGeschrieben = $derived($journal.some((j) => deckt(j, heute)))
   const vorbItems = $derived([...VORBEREITUNG.flatMap((g) => g.items), ...($vorbereitung.custom || [])])
@@ -93,7 +125,7 @@
   {#if s.phase === 'leer'}
     <div class="ht-karte">
       <p class="ht-gross">{t('Willkommen.')}</p>
-      <p>{t('Leg im Plan die erste Etappe deiner Reise an oder lade deinen Reisekalender (Mehr → Import). Danach steht hier jeden Tag, was ansteht.')}</p>
+      <p>{je('Leg im Plan die erste Etappe deiner Reise an oder lade deinen Reisekalender (Mehr → Backup & Import). Danach steht hier jeden Tag, was ansteht.', 'Add the first leg of your trip in Plan or load your travel calendar (More → Backup & import). After that, this page shows what’s on each day.')}</p>
       <button class="btn-primary" onclick={() => geh('plan')}>{t('Zum Plan')}</button>
     </div>
   {:else if s.phase === 'vorher'}
@@ -171,6 +203,47 @@
       <span aria-hidden="true">⛔</span><span><b>{tn(sperrAnzahl, '{n} Straßensperrung', '{n} Straßensperrungen')}</b> {sperrRoute ? t('auf deinen Routen oder in der Nähe') : t('in der Nähe deiner Orte')}</span><span class="ht-pfeil" aria-hidden="true">›</span>
     </button>
   {/if}
+  <!-- V32: Mit anderen Reisenden als Klapp-Zeile. Offen von selbst nur, wenn etwas auf dem Weg liegt. Innen oben
+       Meldungen auf der heutigen Route oder in der Gegend, dann Melden, darunter die TravelBuddy-Gruppe.
+       Inhalte aus Telegram erscheinen nie hier, nur der Weg dorthin. -->
+  <section class="ht-mit" aria-labelledby="ht-mit-t">
+    <button class="ht-mit-kopf" aria-expanded={mitOffen} aria-controls="ht-mit-inhalt" onclick={mitUmschalten}>
+      <span class="ht-i" aria-hidden="true">👥</span>
+      <span class="ht-t ht-mit-txt">
+        <b class="ht-mit-t" id="ht-mit-t">{je('Mit anderen Reisenden', 'With other travellers')}</b>
+        {#if !mitOffen && nWeg}
+          <small class="ht-mit-weg">{weg.art === 'strecke' ? je(`${nWeg} ${nWeg === 1 ? 'Meldung' : 'Meldungen'} auf deiner Strecke`, `${nWeg} ${nWeg === 1 ? 'report' : 'reports'} on your route`) : je(`${nWeg} ${nWeg === 1 ? 'Meldung' : 'Meldungen'} in deiner Nähe`, `${nWeg} ${nWeg === 1 ? 'report' : 'reports'} near you`)}</small>
+        {:else if !mitOffen}
+          <small>{nAlle ? (nAlle === 1 ? je('1 Meldung, nichts auf deinem Weg', '1 report, nothing on your way') : je(`${nAlle} Meldungen, nichts auf deinem Weg`, `${nAlle} reports, nothing on your way`)) : je('Melden, Meldungen, Gruppe', 'Report, reports, group')}</small>
+        {/if}
+      </span>
+      <span class="aufklapp klein" class:offen={mitOffen} aria-hidden="true"></span>
+    </button>
+    {#if mitOffen}
+    <div class="ht-mit-inhalt" id="ht-mit-inhalt" transition:klapp={{ duration: dauer(200) }}>
+    {#if mKontext.liste.length}
+      <div class="ht-meld">
+        <p class="ht-meld-t">{mKontext.titel}</p>
+        {#each mKontext.liste.slice(0, 3) as m (m.id)}<MeldungZeile {m} km={m.km ?? null} ort={m.km == null} />{/each}
+      </div>
+    {:else if mKontext.titel}
+      <p class="ht-extern-h">{mKontext.leer}</p>
+    {/if}
+    <div class="ht-mit-knoepfe">
+      <button class="btn" onclick={() => meldenBlatt.set(standortFrisch($standort) ? { lat: $standort.lat, lon: $standort.lon } : {})}>📣 {je('Hier etwas melden', 'Report something here')}</button>
+      <button class="btn" onclick={() => geh('mehr/meldungen')}>{je('Alle Meldungen', 'All reports')}{$meldungen.liste.length ? ` (${$meldungen.liste.length})` : ''}</button>
+    </div>
+    {#if $gruppen.telegram}<a class="ht-ext" href={$gruppen.telegram} target="_blank" rel="noopener noreferrer"><span class="ht-i" aria-hidden="true">👥</span><span class="ht-t"><b>{$gruppen.telegramEigen ? je('TravelBuddy-Gruppe auf Telegram', 'TravelBuddy group on Telegram') : je('Gruppe auf Telegram', 'Group on Telegram')}</b><small>{je('Gespräch, Fragen, Fotos', 'Chat, questions, photos')}</small></span><span class="ht-pfeil" aria-hidden="true">↗</span></a>{/if}
+    {#if $gruppen.discord}<a class="ht-ext" href={$gruppen.discord} target="_blank" rel="noopener noreferrer"><span class="ht-i" aria-hidden="true">👥</span><span class="ht-t"><b>{$gruppen.discordEigen ? je('TravelBuddy-Server auf Discord', 'TravelBuddy server on Discord') : je('Server auf Discord', 'Server on Discord')}</b><small>{je('Kanäle je Gegend, auch im Browser', 'channels per area, also in the browser')}</small></span><span class="ht-pfeil" aria-hidden="true">↗</span></a>{/if}
+    {#if $gruppen.telegram || $gruppen.discord}
+      <p class="ht-extern-h">
+        {#if eigen}{je('Öffnet Telegram. Betreut von TravelBuddy, Beiträge sind Meinungen von Reisenden, keine amtlichen Informationen.', 'Opens Telegram. Run by TravelBuddy, posts are opinions of travellers, not official information.')}{/if}
+        {#if fremd}{je('Externe Gruppen sind nicht von TravelBuddy betrieben, ihre Inhalte prüfen wir nicht.', 'External groups are not run by TravelBuddy, we do not check their content.')}{/if}
+      </p>
+    {/if}
+    </div>
+    {/if}
+  </section>
   <FotoLage ersatz={fotoOrt} />
   <FunFactKarte ersatz={faktOrt} {orte} {geh} />
 </section>
@@ -213,5 +286,17 @@
   .ht-dringend { color: inherit; text-decoration: none; }
   .ht-dringend:not(.stark) { background: var(--warn-flaeche); border-color: var(--warn-linie, var(--line)); }
   .ht-warn { background: var(--danger-flaeche); border-color: var(--danger-linie); }
+  .ht-mit { display: flex; flex-direction: column; margin-top: 4px; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--card); overflow: hidden; }
+  .ht-mit-kopf { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 56px; padding: 8px 12px; border: none; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+  .ht-mit-txt { flex: 1; }
+  .ht-mit-t { font-size: calc(15px * var(--schrift, 1)); font-weight: 700; }
+  .ht-mit-txt .ht-mit-weg { color: var(--warn-text); font-weight: 700; }
+  .ht-mit-inhalt { display: flex; flex-direction: column; gap: 8px; padding: 0 12px 12px; }
+  .ht-meld { border-top: 1px solid var(--line); padding: 2px 0 0; }
+  .ht-meld-t { margin: 6px 0 2px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
+  .ht-mit-knoepfe { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .ht-mit-knoepfe .btn { min-height: 48px; }
+  .ht-ext { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 10px 12px; border: 1.5px dashed var(--line-stark); border-radius: var(--radius-m); color: var(--ink); text-decoration: none; }
+  .ht-extern-h { margin: 0; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); line-height: 1.45; }
   .ht-flug { display: block; color: inherit; text-decoration: none; animation: rein-unten var(--t-slow) var(--ease-out) backwards; }
 </style>

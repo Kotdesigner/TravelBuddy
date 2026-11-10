@@ -1,7 +1,7 @@
 {
   "name": "travelapp",
   "private": true,
-  "version": "1.28.0",
+  "version": "1.29.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,9 +17,11 @@
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.13",
+    "jsqr": "^1.4.0",
     "maplibre-gl": "^6.16.0",
     "pmtiles": "^4.4.1",
     "protomaps-themes-base": "^4.5.0",
+    "qrcode-generator": "^2.0.4",
     "suncalc": "^2.0.1"
   }
 }

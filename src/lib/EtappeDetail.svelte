@@ -13,6 +13,7 @@
   import { STATUS_MAP, S_MAP, dauerText } from './wanderungen-daten.js'
   import { WANDER_VORSCHLAEGE, alsWanderung, schonDa, sommerText } from './wander-vorschlaege.js'
   import { naechsteReise } from './wander-zuordnung.js'
+  import { meldungen, anRoute } from './meldungen.js'
   import { neueWanderung } from './userdata.js'
   import { frage, loeschFrage } from './dialog.js'
   import { etappenSummen } from './kosten.js'
@@ -47,6 +48,8 @@
   })
   const eintrag = $derived(etappenMitDatum($reisen, $gesamtStart).find((e) => e.reise.id === etappeId) || null)
   const etappe = $derived(eintrag?.reise || $reisen.find((r) => r.id === etappeId) || null)
+  // V32: Meldungen an der Anreise. Stehen im zugeklappten Block, darum der Hinweis schon an dessen Kopf.
+  const etappeMeld = $derived(etappe && (etappe.art || 'auto') === 'auto' ? anRoute(etappe, $meldungen.liste).length : 0)
   const einzelRoute = $derived(!etappeId && routeId ? $reisen.find((r) => r.id === routeId) : null)
   // V16: Routen in der Reihenfolge eingeplant (nach Datum), ohne Datum, Ideen
   const gruppen = $derived(etappe ? abschnitteDerEtappe($reisen, etappe.id) : { eingeplant: [], offen: einzelRoute ? [einzelRoute] : [], ideen: [] })
@@ -243,7 +246,7 @@
       <section class="ed-block">
         <button class="ed-auf" aria-expanded={anreiseOffen} onclick={() => (anreiseOffen = !anreiseOffen)}>
           <span class="aufklapp klein" class:offen={anreiseOffen} aria-hidden="true"></span>
-          <span class="ed-auf-txt"><b>{t('Anreise und Orte der Etappe')}</b><small>{(etappe.stops || []).map((s) => s.name).join(' → ')}{#if etappe.route?.km}&nbsp;· {etappe.route.flug ? '✈️' : '🛣️'} {zahl(etappe.route.km)} km{/if}</small></span>
+          <span class="ed-auf-txt"><b>{t('Anreise und Orte der Etappe')}</b><small>{(etappe.stops || []).map((s) => s.name).join(' → ')}{#if etappe.route?.km}&nbsp;· {etappe.route.flug ? '✈️' : '🛣️'} {zahl(etappe.route.km)} km{/if}</small>{#if etappeMeld && !anreiseOffen}<small class="ed-meld">📣 {etappeMeld === 1 ? je('1 Meldung an der Strecke', '1 report along the route') : je(`${etappeMeld} Meldungen an der Strecke`, `${etappeMeld} reports along the route`)}</small>{/if}</span>
         </button>
         {#if anreiseOffen}<div class="ed-innen" transition:klapp={{ duration: dauer(220) }}><RouteEditor r={etappe} {orte} reisen={$reisen} {warnungen} {umkreisKm} /><Versorgung r={etappe} {orte} /></div>{/if}
       </section>
@@ -402,6 +405,7 @@
   .ed-auf-txt { display: flex; flex-direction: column; min-width: 0; }
   .ed-auf-txt b { font-size: calc(15px * var(--schrift, 1)); }
   .ed-auf-txt small { font-size: calc(13px * var(--schrift, 1)); color: var(--muted); }
+  .ed-auf-txt small.ed-meld { color: var(--warn-text); font-weight: 700; }
   .ed-innen { padding-top: 6px; }
   .ed-route { border: 1px solid var(--line); border-left: 5px solid var(--farbe); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; background: var(--card); }
   .ed-r-kopf { display: flex; align-items: center; gap: 8px; }

@@ -1,5 +1,5 @@
 <script>
-  import { t } from './i18n.js'
+  import { t, je } from './i18n.js'
   // „Bereit für unterwegs?“: prüft vor der Fahrt ins Funkloch, was offline auf diesem Gerät liegt.
   // Nur lesen: Karten-Cache (wie Karte.svelte), Offline-Speicher der App (Service Worker),
   // berechnete Routen, Spotify-Verbindung, letzte Sicherung.
@@ -97,7 +97,7 @@
       id: 'spotify', titel: t('Spotify verbunden'),
       ok: spotify,
       stand: spotify ? t('Musik unterwegs kann Titel in deine Playlist schreiben.') : t('Nicht verbunden. Titel aus der Gegend werden dann nur vorgemerkt.'),
-      tun: t('Mit Netz unter Mehr → Musik „Mit Spotify verbinden“ tippen. Gespeicherte Playlists in der Spotify-App vorher für offline laden.'),
+      tun: je('Mit Netz unter Mehr → Musik unterwegs „Mit Spotify verbinden“ tippen. Gespeicherte Playlists in der Spotify-App vorher für offline laden.', 'With signal, go to More → Music on the road and tap “Connect to Spotify”. Download saved playlists in the Spotify app for offline use beforehand.'),
       knopf: geh ? { text: t('Zur Musik'), ziel: 'mehr/musik' } : null,
     },
     {

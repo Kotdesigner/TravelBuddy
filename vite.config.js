@@ -184,6 +184,9 @@ const BUILD = new Date().toISOString()
 
 export default defineConfig({
   define: { __BUILD__: JSON.stringify(BUILD) },
+  // V32: nur zum lokalen Testen der Meldungen (MELDUNGEN_LOKAL=1, Test-Server scripts/meldungen-lokal.mjs).
+  // Im echten Betrieb beantwortet Netlify /api/meldungen selbst, die Vorschau wird dort nicht benutzt.
+  preview: process.env.MELDUNGEN_LOKAL ? { proxy: { '/api/meldungen': 'http://127.0.0.1:9107' } } : undefined,
   plugins: [
     svelte(),
     reisedokumente(),

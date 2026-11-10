@@ -3,20 +3,22 @@
 [build]
   command = "sh scripts/netlify-bau.sh"
   # Nur bauen, wenn sich die App ändert. README und Bilder kosten keinen neuen Lauf.
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- src public scripts netlify package.json package-lock.json vite.config.js netlify.toml index.html"
+  # Ein Neubau ohne neuen Commit (von Hand oder per Skript, etwa nach neuen Variablen für die Funktionen)
+  # läuft immer: gleicher Stand heißt sonst „no content change“ und Netlify bricht ab.
+  ignore = "if [ \"$CACHED_COMMIT_REF\" = \"$COMMIT_REF\" ]; then exit 1; fi; git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- src public scripts netlify package.json package-lock.json vite.config.js netlify.toml index.html"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
 
-# Sicherheits-Header für alle Seiten (dieselben Regeln wie in public/_headers)
+# Sicherheits-Header für alle Seiten (dieselben Regeln wie in public/_headers). Kamera nur für die eigene Seite (Kontakt-Code-Scanner)
 [[headers]]
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), payment=(), usb=()"
+    Permissions-Policy = "camera=(self), payment=(), usb=()"
 
 # Der Service Worker muss immer frisch geholt werden, sonst bleiben Geräte auf dem alten Stand
 [[headers]]

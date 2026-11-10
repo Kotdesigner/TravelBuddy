@@ -7,7 +7,8 @@ const WURZEL = new URL('../', import.meta.url).pathname
 const paket = JSON.parse(fs.readFileSync(WURZEL + 'package.json', 'utf8'))
 // Laufzeit: die eigenen Abhängigkeiten, Svelte und was der Service Worker mitbringt
 const start = [...Object.keys(paket.dependencies), 'svelte', 'workbox-window', 'workbox-precaching', 'workbox-routing', 'workbox-strategies', 'workbox-expiration', 'workbox-cacheable-response', 'workbox-core']
-const NUR_BAU = /^(acorn|@sveltejs\/acorn-typescript|@types\/|aria-query|axobject-query|esrap|is-reference|locate-character|magic-string|zimmerframe|devalue|@jridgewell\/)/
+// @netlify/…: nur in den Server-Funktionen (netlify/functions), nicht in der App
+const NUR_BAU = /^(@netlify\/|acorn|@sveltejs\/acorn-typescript|@types\/|aria-query|axobject-query|esrap|is-reference|locate-character|magic-string|zimmerframe|devalue|@jridgewell\/)/
 
 function finde(name, von) {
   for (let d = von; (d + '/').startsWith(WURZEL); d = path.dirname(d)) {
@@ -32,7 +33,7 @@ function text(ort) {
   return f ? fs.readFileSync(path.join(ort, f), 'utf8').trim() : ''
 }
 // Diese beiden Pakete liefern ihren Lizenztext nicht mit, er stammt aus den Projekten selbst
-const NACHGETRAGEN = { pmtiles: 'scripts/lizenz-pmtiles.txt', 'protomaps-themes-base': 'scripts/lizenz-protomaps-themes.txt' }
+const NACHGETRAGEN = { 'qrcode-generator': 'scripts/lizenz-qrcode-generator.txt', pmtiles: 'scripts/lizenz-pmtiles.txt', 'protomaps-themes-base': 'scripts/lizenz-protomaps-themes.txt' }
 const eintraege = [...gesehen].map(([ort, p]) => ({ name: p.name, version: p.version, lizenz: typeof p.license === 'string' ? p.license : p.license?.type || p.licenses?.[0]?.type || 'BSD', url: String(p.repository?.url || p.repository || p.homepage || '').replace(/^git\+/, '').replace(/\.git$/, ''), text: text(ort) || (NACHGETRAGEN[p.name] ? fs.readFileSync(WURZEL + NACHGETRAGEN[p.name], 'utf8').trim() : '') }))
   .sort((a, b) => a.name.localeCompare(b.name))
 

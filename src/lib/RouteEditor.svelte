@@ -26,8 +26,14 @@
   import { umleitungRechnen, umleitungText, sperrendeFuer } from './sperr-dienst.js'
   import { lage } from './warnlage-dienst.js'
   import { zahl } from './format.js'
+  import { routePaket } from './verbinden.js'
+  import { meldungen, anRoute } from './meldungen.js'
+  import { meldenBlatt } from './meldungen-text.js'
+  import MeldungZeile from './MeldungZeile.svelte'
+  let teilenOffen = $state(false)
 
   let { r, orte = [], reisen = [], warnungen = [], umkreisKm = 150 } = $props()
+  const meldListe = $derived(anRoute(r, $meldungen.liste))
 
   // Offline-Routen: Gebiet der Stopps und Vorschlag, das Pisten-Netz zu laden
   const gebiet = $derived(gebietFuer(r.stops))
@@ -292,6 +298,16 @@
         {/if}
       {/if}
 
+      <!-- V32: Meldungen anderer Reisender an dieser Strecke, nach Kilometer -->
+      {#if artVon(r) === 'auto' && st.filter((s) => s.lat != null).length >= 2}
+        <div class="r-meld">
+          <div class="r-meld-kopf"><b>📣 {je('Meldungen an der Strecke', 'Reports along the route')}</b>{#if meldListe.length}<span>{meldListe.length}</span>{/if}</div>
+          {#each meldListe as m (m.id)}<MeldungZeile {m} km={m.km} />{/each}
+          {#if !meldListe.length}<p class="r-meld-leer">{je('Gerade keine. Bis 25 km neben der Strecke, nicht älter als 3 Tage.', 'None right now. Up to 25 km off the route, no older than 3 days.')}</p>{/if}
+          <button class="btn" onclick={() => meldenBlatt.set({})}>{je('📣 Etwas zu dieser Strecke melden', '📣 Report something on this route')}</button>
+        </div>
+      {/if}
+
       <!-- Fahrtag-Planer: spätestens losfahren, um vor Sonnenuntergang anzukommen -->
       {#if !gerade(r) && st.filter((s) => s.lat != null).length >= 2}
         <Fahrtag {r} aktuell={!alt} />
@@ -299,6 +315,7 @@
 
       <div class="r-ctrl">
         <button class="btn" onclick={openMaps} disabled={st.length < 2}>{t('📍 In Google Maps öffnen')}</button>
+        <button class="btn" onclick={() => (teilenOffen = true)} disabled={st.length < 2}>{je('📤 Route teilen', '📤 Share route')}</button>
         <button class="btn" onclick={() => routeRechnen(r)} disabled={(!$online && !gebiet) || $rechnet[r.id] || st.filter((s) => s.lat != null).length < 2}>
           {$rechnet[r.id] ? t('rechnet …') : (r.route ? t('🔄 Neu berechnen') : t('🛣️ Route berechnen'))}
         </button>
@@ -326,6 +343,7 @@
     </div>
   {/if}
 </div>
+{#if teilenOffen}{#await import('./TeilenBlatt.svelte') then { default: TeilenBlatt }}<TeilenBlatt paket={routePaket(r)} titel={r.name} onclose={() => (teilenOffen = false)} />{/await}{/if}
 
 <style>
   .re-film { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: calc(14px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
@@ -380,6 +398,11 @@
   .r-stats { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; color: var(--ink); }
   .r-km { color: var(--brand-text); }
   .r-tank { color: var(--ok-text); } .r-tank.warn { color: var(--danger-text); }
+  .r-meld { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  .r-meld-kopf { display: flex; align-items: center; gap: 8px; font-size: calc(14px * var(--schrift, 1)); }
+  .r-meld-kopf span { font-size: calc(12px * var(--schrift, 1)); font-weight: 800; padding: 1px 8px; border-radius: 999px; background: var(--flaeche); color: var(--brand-text); }
+  .r-meld-leer { margin: 0; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
+  .r-meld .btn { align-self: flex-start; min-height: 44px; }
   .r-gefahr { font-size: calc(13px * var(--schrift, 1)); color: var(--ink); background: var(--danger-flaeche); border: 1px solid var(--danger-linie); border-radius: 10px; padding: 8px 10px; }
   .rg-w { margin-top: 4px; }
   .rg-stufe { display: inline-block; font-size: calc(12px * var(--schrift, 1)); font-weight: 800; padding: 1px 7px; border-radius: 8px; }

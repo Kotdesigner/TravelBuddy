@@ -88,6 +88,22 @@ export const HILFE = jeSprache(() => ({
     teil: 9,
   },
   // V29: hinter dem ⓘ in der Box Offline-Routen (Plan, Karte)
+  meldungen: {
+    titel: je('Meldungen für andere Reisende', 'Reports for other travellers'),
+    text: [
+      je('Mit einer Meldung sagst du anderen TravelBuddy-Reisenden, was unterwegs los ist: ein Fluss nicht passierbar, viele Delfine am Strand, kein Diesel, Campground voll, Unwetter oder ein Tipp. Ein Satz reicht. Jede Meldung gilt 3 Tage.', 'With a report you tell other TravelBuddy travellers what is going on: a river not passable, lots of dolphins on the beach, no diesel, campground full, a storm or a tip. One sentence is enough. Each report is valid for 3 days.'),
+      je('Andere sehen sie an ihrer Route nach Kilometer, an der Ortskachel und auf Heute. Mit „Stimmt noch“ verlängert sie sich um einen Tag, sagen mehrere „Nicht mehr“, fällt sie aus Heute raus. Ohne Netz bleibt sie auf dem Gerät und geht raus, sobald Netz da ist.', 'Others see it on their route by kilometre, on the place card and on Today. “Still true” extends it by a day, if several people say “No longer”, it drops off Today. Without signal it stays on the device and goes out once there is signal.'),
+      je('Fotos teilst du in der TravelBuddy-Gruppe auf Telegram, die App nimmt keine. Keine Telefonnummern, keine Namen anderer, keine Werbung. Unpassendes kannst du melden, es wird entfernt.', 'Share photos in the TravelBuddy group on Telegram, the app does not take any. No phone numbers, no names of others, no advertising. You can report anything inappropriate, it will be removed.'),
+    ],
+  },
+  verbinden: {
+    titel: je('Unterwegs verbinden', 'Connect on the road'),
+    text: [
+      je('Dein Kontakt-Code enthält deinen Namen und die Wege, die du einschaltest: Telegram, Signal oder WhatsApp. Wer ihn scannt, schreibt dir direkt im Messenger. TravelBuddy hat dafür keinen Server, gechattet wird nur im Messenger.', 'Your contact code holds your name and the ways you switch on: Telegram, Signal or WhatsApp. Whoever scans it can message you straight away in the messenger. TravelBuddy has no server for this, chats only happen in the messenger.'),
+      je('Scannen geht hier mit „Code scannen“ oder mit der Kamera-App. Am iPhone öffnet die Kamera-App den Code in Safari, nicht in der App vom Home-Bildschirm. Zum Merken lieber hier scannen.', 'Scan here with “Scan a code” or with the camera app. On iPhone the camera app opens the code in Safari, not in the home screen app. To save a contact, better scan here.'),
+      je('Orte und Routen teilst du über „Einplanen“ an der Ortskachel und „Route teilen“ an der Route. Mit geht nur Name, Lage und Stopps, nie Logbuch, Kosten oder Buchungen.', 'Share places with “Add to trip” on the place card and routes with “Share route” on the route. Only name, location and stops are sent, never logbook, costs or bookings.'),
+    ],
+  },
   sperrungen: {
     titel: je('Straßensperrungen umfahren', 'Getting around road closures'),
     text: [

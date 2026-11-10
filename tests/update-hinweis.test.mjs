@@ -25,7 +25,7 @@ p('Name der Fassung im Fenster', /^TravelBuddy (V\d+|Basic \d+\.\d+)$/.test(UPDA
 console.log('\nInhalt')
 const app = lies('src/App.svelte'), uh = lies('src/lib/UpdateHinweis.svelte')
 p('Oben die Zahlen zur Offline-Berechnung: 0,4 %, 22 von 22, 0,06 s', /const ZAHLEN = \[/.test(uh) && /je\('0,4 %', '0\.4 %'\)/.test(uh) && /je\('22 von 22', '22 of 22'\)/.test(uh) && /je\('0,06 s', '0\.06 s'\)/.test(uh) && uh.indexOf('uh-zahlen') < uh.indexOf('uh-liste"'))
-p('Sechs Neuerungen, deutsch und englisch, die Offline-Routen zuerst', (uh.match(/\['[^']+', je\(/g) || []).length === 6 && uh.indexOf("['🛣️', je('Routen ohne Netz") < uh.indexOf("['🪨'"))
+p('V33: zehn Neuerungen, deutsch und englisch, Meldungen vorn, dann Verbinden, Teilen, Telegram-Gruppe und die Offline-Routen', (uh.match(/\['[^']+', je\(/g) || []).length === 10 && uh.indexOf("['📣', je('Meldungen für andere Reisende") < uh.indexOf("['🤝', je('Unterwegs verbinden") && uh.indexOf("['🤝'") < uh.indexOf("['📤'") && uh.indexOf("['📤'") < uh.indexOf("['👥', je('TravelBuddy-Gruppe auf Telegram") && uh.indexOf("['👥'") < uh.indexOf("['🛣️', je('Routen ohne Netz") && uh.indexOf("['🛣️', je('Routen ohne Netz") < uh.indexOf("['🪨'"))
 p('Sperrungen, 4WD und Pisten-Netz genannt', /Sperrungen umfahren/.test(uh) && /4WD-Schalter an der Route|2WD oder 4WD/.test(uh) && /Pisten-Netz je Gebiet/.test(uh))
 p('Keine Gedankenstriche in Sätzen', !/ [–—] /.test(uh))
 
@@ -34,7 +34,8 @@ p('Prüfung vor der Sprachfrage', app.indexOf('let updateOffen = $state(updateZe
 p('Nicht gleichzeitig mit der Sprachfrage (in der Basic auch nicht mit Installieren und Einführung)', /\{#if updateOffen && !sprachFrage( && !\$installOffen && !\$einfuehrung)?\}<UpdateHinweis/.test(app))
 p('Jedes Schließen merkt sich die Version (Knopf, Hintergrund, Esc)', /function zu\(\) \{ updateGesehen\(\); onfertig\(\) \}/.test(uh) && /onclick=\{zu\}/.test(uh) && /use:modal=\{\{ onclose: zu/.test(uh))
 p('Handbuch-Knopf führt ins Handbuch', /onhandbuch=\{\(\) => geh\('mehr\/handbuch'\)\}/.test(app))
-p('Unter Mehr ganz unten „Updates“: öffnet das Fenster, keine eigene Seite', /\['mehr\/updates', je\('📋 Updates', '📋 Updates'\)/.test(app) && /if \(pfad === 'mehr\/updates'\) updateOffen = true; else geh\(pfad\)/.test(app) && app.indexOf("'mehr/updates'") > app.indexOf("['mehr/handbuch'"))
+const me = fs.readFileSync(new URL('../src/lib/mehr-eintraege.js', import.meta.url), 'utf8')
+p('Unter Mehr, App und Einstellungen: „Updates“ öffnet das Fenster, keine eigene Seite, auch im iPhone-Blatt', /\{ id: 'updates', icon: '📋', label: je\('Updates', 'Updates'\)/.test(me) && me.indexOf("id: 'updates'") > me.indexOf("id: 'handbuch'") && /updates: \(\) => \(updateOffen = true\)/.test(app) && /onUpdates=\{\(\) => \(updateOffen = true\)\}/.test(app))
 
 if (fehler) { console.log(`\n${fehler} Fehler`); process.exit(1) }
 console.log('\nAlles grün')

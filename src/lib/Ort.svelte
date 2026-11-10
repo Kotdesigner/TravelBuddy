@@ -23,6 +23,12 @@
   import { holeOrtsdaten } from './ortdaten.js'
   import { rubrikPatch } from './rubrik.js'
   import { online } from './netz.js'
+  import { ortPaket } from './verbinden.js'
+  import { meldungen, nahe } from './meldungen.js'
+  import { meldenBlatt } from './meldungen-text.js'
+  import MeldungZeile from './MeldungZeile.svelte'
+  const meldNahe = $derived(nahe(ort.lat, ort.lon, $meldungen.liste))
+  let teilenOffen = $state(false)
 
   // Eigene Orte auf denselben Stand bringen wie die hinterlegten 88:
   // Koordinaten (→ Sonne/Sterne/Wetter), Region, Beschreibung und Vorschaubild.
@@ -377,6 +383,10 @@
       </div>
     {/if}
 
+    <!-- V32: was andere Reisende hier gerade melden (bis 15 km), die zwei wichtigsten -->
+    {#if meldNahe.length}
+      <div class="o-meld">{#each meldNahe.slice(0, 2) as m (m.id)}<MeldungZeile {m} />{/each}{#if meldNahe.length > 2}<small>{je(`und ${meldNahe.length - 2} weitere unter Mehr, Meldungen`, `and ${meldNahe.length - 2} more under More, Reports`)}</small>{/if}</div>
+    {/if}
     <div class="aktionen">
       <a class="maps" href={mapsUrl} target="_blank" rel="noopener">Google Maps</a>
       <div class="reise-wrap">
@@ -403,6 +413,8 @@
             <button role="menuitem" class="neu" onclick={vormerken}>{vorgemerkt ? je('⭐ Nicht mehr vormerken', '⭐ Remove from saved') : je('⭐ Vormerken, für eine spätere Route', '⭐ Save for a later route')}</button>
             <button role="menuitem" class="neu" onclick={zuNeuerReise}>{je('＋ Neue Route mit diesem Ort …', '＋ New route with this place …')}</button>
             <button role="menuitem" class="neu" onclick={alsWanderung}>{t('🥾 Als Wanderung merken')}</button>
+            <button role="menuitem" class="neu" onclick={() => { zeigeReiseWahl = false; teilenOffen = true }}>{je('📤 Ort teilen', '📤 Share place')}</button>
+            <button role="menuitem" class="neu" onclick={() => { zeigeReiseWahl = false; meldenBlatt.set({ lat: ort.lat, lon: ort.lon, ort: ort.name }) }} disabled={ort.lat == null}>{je('📣 Hier etwas melden', '📣 Report something here')}</button>
           </div>
         {/if}
       </div>
@@ -415,6 +427,7 @@
     </div>
   </div>
 </article>
+{#if teilenOffen}{#await import('./TeilenBlatt.svelte') then { default: TeilenBlatt }}<TeilenBlatt paket={ortPaket(ort)} titel={ort.name} onclose={() => (teilenOffen = false)} />{/await}{/if}
 
 <style>
   .in-route.vm { color: var(--brand-text); }
@@ -511,6 +524,9 @@
   .e-btn:disabled { background: var(--aus-flaeche); color: var(--aus-ink); border-color: var(--aus-linie); box-shadow: none; cursor: not-allowed; }
   .e-msg { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
   .e-hinweis { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-style: italic; }
+  .o-meld { display: flex; flex-direction: column; padding: 0 2px; }
+  .o-meld :global(.mz:first-child) { border-top: none; }
+  .o-meld small { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
   .aktionen { margin-top: auto; padding-top: 4px; display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 6px; }
   .maps, .reise-btn { box-sizing: border-box; display: flex; align-items: center; justify-content: center; width: 100%; min-width: 0; min-height: 44px; padding: 0 8px; border: 1px solid var(--line-stark); border-radius: 10px; background: none; color: var(--ink); font-size: calc(13.5px * var(--schrift, 1)); font-weight: 700; text-decoration: none; cursor: pointer; }
   .maps { grid-column: 1 / -1; }

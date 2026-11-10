@@ -1,6 +1,7 @@
 <script>
-  import { gruppiere } from './mehr-gruppen.js'
-  import { t, je, LOCALE } from './i18n.js'
+  import MehrUebersicht from './MehrUebersicht.svelte'
+  import { mehrEintraege, appEintraege, basicAktionen } from './mehr-eintraege.js'
+  import { t, je, LOCALE, sprache, setzeSprache } from './i18n.js'
   import { ZWEI } from './format.js'
   import { blattRaus, ausblenden } from './motion.js'
   // Mobile Bottom-Tab-Bar: Navigation im Daumenbereich.
@@ -27,6 +28,7 @@
     onEinrichten = () => {},
     onZuruecksetzen = () => {},
     onDesign = () => {},
+    onUpdates = () => {},
   } = $props()
 
   let sheetOffen = $state(false)
@@ -80,25 +82,8 @@
     dragging = false; dragY = 0
   }
 
-  const MEHR_SEKTIONEN = [
-    // Reihenfolge und Gruppen kommen aus mehr-gruppen.js (Sicherheit, Unterwegs, Vorbereitung, Extras, App)
-    { id: 'notfall', icon: '🆘', label: t('Notfall'), info: t('Notrufe, nächste Hilfe, dein Standort'), rot: true },
-    { id: 'gefahren', icon: '⚠️', label: t('Gefahrenlage'), info: t('Warnungen zu Feuer, Flut und Hitze') },
-    { id: 'praxis', icon: '🛠️', label: t('Praxis & Sicherheit'), info: t('Vorab buchen, Permits, Tanken, Reifen') },
-    { id: 'buchungen', icon: '🎫', label: je('Buchungen', 'Bookings'), info: je('Termin, Nummer, Kosten und Belege', 'Date, number, cost and documents') },
-    { id: 'fluege', icon: '✈️', label: t('Flüge & Bahn'), info: t('Status, Gate, Gleis und Verspätung') },
-    { id: 'kosten', icon: '💰', label: t('Kosten'), info: t('Wofür, je Etappe und pro Tag') },
-    { id: 'vorbereitung', icon: '🧳', label: t('Reisevorbereitung'), info: t('Checkliste, Dokumente, Buchungen') },
-    { id: 'packliste', icon: '🎒', label: t('Packliste'), info: t('Zum Abhaken, fürs Outback') },
-    { id: 'funfacts', icon: '💡', label: je('Fun Facts', 'Fun facts'), info: je('Wissenswertes da, wo du bist', 'Facts about where you are') },
-    { id: 'teilen', icon: '📤', label: t('Reisebericht teilen'), info: t('Etappen, Routen und Fotos als eine Datei') },
-    { id: 'musik', icon: '🎵', label: t('Musik unterwegs'), info: t('Sounds of the Road, Musik aus der Gegend') },
-    { id: 'quiz', icon: '🇦🇺', label: t('Australien-Quiz'), info: t('Fragen mit Stufen vom Touri zum Local') },
-    // Jeder Punkt aus UNTER.mehr in App.svelte muss auch hier stehen (tests/mehr-blatt.test.mjs),
-    // sonst fehlt er am iPhone im Hochformat: dort gibt es keine Seitenleiste.
-    // „Vacation (Ostküste)" stand hier noch aus der Zeit vor der Zusammenlegung.
-    // Die Ostküste ist jetzt ein Abschnitt unter Orte — der Eintrag führte ins Leere.
-  ]
+  // Einträge, Gruppen und Aufbau teilt sich das Blatt mit der Mehr-Seite (MehrUebersicht.svelte)
+  const MEHR_EINTRAEGE = mehrEintraege()
 </script>
 
 <nav class="bar" aria-label={t('Hauptnavigation')} data-dialog-hg>
@@ -146,24 +131,10 @@
     ontouchstart={tStart} ontouchmove={tMove} ontouchend={tEnd} ontouchcancel={tEnd}>
     <div class="griff" aria-hidden="true"></div>
 
-    <div class="s-liste">
-      {#each gruppiere(MEHR_SEKTIONEN, (s) => s.id, ['app']) as { gruppe, eintraege } (gruppe.id)}
-        <h3 class="s-gruppe"><span aria-hidden="true">{gruppe.icon}</span> {je(...gruppe.titel)}</h3>
-        {#each eintraege as s (s.id)}
-          <button class="s-zeile" class:rot={s.rot} onclick={() => sheetLink(s.id)}>
-            <span class="s-icon">{s.icon}</span><span class="s-txt">{s.label}<small>{s.info}</small></span>
-            <span class="s-chev" aria-hidden="true">›</span>
-          </button>
-        {/each}
-      {/each}
-    </div>
-
-    <div class="s-aktionen">
-      <button class="s-aktion" onclick={() => sheetLink('backup')}>💾<span>{je('Backup & Import', 'Backup & import')}</span></button>
-      <button class="s-aktion" onclick={() => sheetAktion(onHandbuch)}>📖<span>{t('Handbuch')}</span></button>
-    </div>
-
-    <button class="s-design" onclick={() => sheetAktion(onDesign)}><span>🎨 {t('Design')}</span><small>{je('Hell und Dunkel, Sprache, Schrift, Effekte', 'Light and dark, language, text, effects')}</small></button>
+    <MehrUebersicht eintraege={MEHR_EINTRAEGE} onwahl={sheetLink}
+      app={[...appEintraege(), ...basicAktionen({ einrichten: $einrichtenZeigen, testreise: $testreiseKnopfZeigen, testreiseAn: $testreiseAn })].map((a) => ({ ...a,
+        onclick: () => (a.id === 'backup' ? sheetLink('backup') : sheetAktion({ design: onDesign, handbuch: onHandbuch, updates: onUpdates, einfuehrung: onEinfuehrung, einrichten: onEinrichten, testreise: onTestreise }[a.id])) }))}
+      gefahr={{ label: '↩️ ' + je('App zurücksetzen', 'Reset the app'), onclick: () => sheetAktion(onZuruecksetzen) }} />
 
     <div class="s-status">
       <span class="dot gross" class:on={$online}></span>{$online ? t('Online') : t('Offline. Alles Wichtige ist auf dem Gerät gespeichert.')}
@@ -171,18 +142,10 @@
     <div class="s-status s-backup">
       {#if $syncZeiten.gesichert}{t('Letztes Backup von diesem Gerät: {gesichertText}', { gesichertText: gesichertText($syncZeiten.gesichert) })}{:else}{t('Von diesem Gerät gibt es noch kein Backup.')}{/if}
     </div>
-    <!-- Basic: statt „Startdaten laden“ die Einführung vom ersten Öffnen noch einmal -->
-    <button class="s-einf" onclick={() => sheetAktion(onEinfuehrung)}>🧭 {t('Einführung noch einmal')}</button>
-    {#if $einrichtenZeigen}<button class="s-einf" onclick={() => sheetAktion(onEinrichten)}>📲 {je('App einrichten', 'Set up the app')}</button>{/if}
-    {#if $testreiseKnopfZeigen}<button class="s-einf" onclick={() => sheetAktion(onTestreise)}>🧪 {$testreiseAn ? t('Testreise beenden') : t('Testreise ausprobieren')}</button>{/if}
-    <button class="s-einf s-gefahr" onclick={() => sheetAktion(onZuruecksetzen)}>↩️ {je('App zurücksetzen', 'Reset the app')}</button>
   </div>
 {/if}
 
 <style>
-  .s-gefahr { color: var(--danger-text); }
-  .s-design { display: flex; flex-direction: column; gap: 2px; width: 100%; min-height: 56px; margin-top: 12px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); font-size: calc(15px * var(--schrift, 1)); font-weight: 700; text-align: left; cursor: pointer; }
-  .s-design small { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 500; }
   /* ---------- Bar ----------
      Schwebende Leiste aus „Glas“ (Stil iOS 26): zwei Kapseln über dem Inhalt, der darunter
      durchscheint. Ohne backdrop-filter fast deckend. Tippflächen bleiben 56 px hoch. */
@@ -265,38 +228,8 @@
   @keyframes hoch { from { transform: translateY(100%); } }
   .griff { width: 38px; height: 4px; border-radius: 2px; background: var(--line); margin: 6px auto 10px; }
 
-  .s-liste { display: flex; flex-direction: column; }
-  .s-gruppe { display: flex; align-items: center; gap: 6px; margin: 14px 6px 4px; font-size: calc(13px * var(--schrift, 1)); font-weight: 800; color: var(--muted); letter-spacing: 0.2px; }
-  .s-gruppe:first-child { margin-top: 2px; }
-  .s-zeile {
-    display: flex; align-items: center; gap: 12px; width: 100%;
-    min-height: 54px; padding: 5px 6px; border: none; background: none; cursor: pointer;
-    font-size: calc(15px * var(--schrift, 1)); font-weight: 600; color: var(--ink); text-align: left;
-    border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
-    border-radius: var(--radius-s);
-  }
-  .s-zeile:active { background: var(--flaeche-2); }
-  .s-zeile.rot { color: var(--danger); font-weight: 800; }
-  .s-icon { font-size: calc(19px * var(--schrift, 1)); width: 26px; text-align: center; }
-  .s-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
-  .s-txt small { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 500; color: var(--muted); }
-  .s-zeile.rot .s-txt small { font-weight: 500; }
-  .s-zeile { animation: rein-unten var(--t-slow) var(--ease-out) backwards; }
-  .s-zeile:nth-child(2) { animation-delay: 25ms; } .s-zeile:nth-child(3) { animation-delay: 50ms; }
-  .s-zeile:nth-child(4) { animation-delay: 75ms; } .s-zeile:nth-child(5) { animation-delay: 100ms; }
-  .s-zeile:nth-child(6) { animation-delay: 125ms; } .s-zeile:nth-child(7) { animation-delay: 150ms; }
-  .s-chev { margin-left: auto; color: var(--muted); font-size: calc(18px * var(--schrift, 1)); }
 
   .s-backup { font-size: calc(13px * var(--schrift, 1)); color: var(--muted); }
-  .s-aktionen { display: flex; gap: 8px; margin-top: 8px; }
-  .s-einf { display: block; width: 100%; min-height: 44px; margin-top: 18px; padding: 8px 12px; border: 1px dashed var(--line-stark); border-radius: 12px; background: none; color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); font-weight: 700; text-align: left; cursor: pointer; }
-  .s-aktion {
-    flex: 1; min-height: 58px; border: 1px solid var(--line); border-radius: var(--radius-m);
-    background: var(--bg); cursor: pointer; font-size: calc(19px * var(--schrift, 1));
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  }
-  .s-aktion span { font-size: calc(12px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
-  .s-aktion:active { background: var(--flaeche-2); }
 
 
   .s-status {

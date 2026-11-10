@@ -107,7 +107,7 @@
     <div class="pl-leer">
       <p><b>{t('Noch keine Etappe.')}</b> {t('Eine Etappe ist ein Abschnitt deiner Reise mit Datum, zum Beispiel „Melbourne, 30.11. bis 3.12.“. Die Strecken, die du darin fährst, legst du danach als Routen an.')}<InfoKnopf id="zusammenhang" /></p>
       <button class="btn-primary" onclick={() => onneu('etappe')}>{t('Erste Etappe anlegen')}</button>
-      <p class="pl-leer-k">{t('Oder deinen Reisekalender laden: Mehr → Import.')}</p>
+      <p class="pl-leer-k">{je('Oder deinen Reisekalender laden: Mehr → Backup & Import.', 'Or load your travel calendar: More → Backup & import.')}</p>
     </div>
   {:else}
     <ol class="pl-liste">

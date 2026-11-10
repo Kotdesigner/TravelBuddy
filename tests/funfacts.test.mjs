@@ -85,7 +85,7 @@ p('Texte nie als HTML', !/\{@html/.test(lies('lib/FunFactKarte.svelte') + lies('
 
 console.log('\n6  Eingebaut')
 const app = lies('App.svelte'), heute = lies('lib/Heute.svelte'), bar = lies('lib/BottomBar.svelte'), gr = lies('lib/mehr-gruppen.js'), tl = lies('lib/TagebuchLese.svelte'), mk = lies('lib/funfacts-merken.js')
-p('Unter Mehr in der Gruppe Extras', /punkte: \['funfacts', 'teilen', 'musik', 'quiz'\]/.test(gr) && /\['mehr\/funfacts', je\('💡 Fun Facts'/.test(app) && /\{ id: 'funfacts', icon: '💡'/.test(bar))
+p('Unter Mehr in der Gruppe Unterhaltung', /punkte: \['funfacts', 'musik', 'quiz'\]/.test(gr) && /\['mehr\/funfacts', je\('💡 Fun Facts'/.test(app) && /\{ id: 'funfacts', icon: '💡'/.test(fs.readFileSync(new URL('../src/lib/mehr-eintraege.js', import.meta.url), 'utf8')))
 p('Seite eingebunden', /ansicht\.unter === 'funfacts'\}\s*<FunFacts \/>/.test(app))
 p('Karte auf Heute', /<FunFactKarte ersatz=\{faktOrt\} \{orte\} \{geh\} \/>/.test(heute))
 p('Hinweis beim Fahren in der App', /<FunFactUnterwegs orte=/.test(app))

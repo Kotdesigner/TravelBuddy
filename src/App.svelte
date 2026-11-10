@@ -30,7 +30,9 @@
   import { starteWaechter } from './lib/autosicherung.js'
   import { starteWanderZuordnung } from './lib/wander-zuordnung.js'
   import { WANDER_VORSCHLAEGE } from './lib/wander-vorschlaege.js'
-  import { gruppiere, neueGruppe } from './lib/mehr-gruppen.js'
+  import { geschwister } from './lib/mehr-gruppen.js'
+  import MehrUebersicht from './lib/MehrUebersicht.svelte'
+  import { mehrEintraege, appEintraege, basicAktionen } from './lib/mehr-eintraege.js'
   import Buchungen from './lib/Buchungen.svelte'
   import Naechte from './lib/Naechte.svelte'
   import VorgemerkteOrte from './lib/VorgemerkteOrte.svelte'
@@ -43,10 +45,10 @@
   import NeuBlatt from './lib/NeuBlatt.svelte'
   import Einfuehrung from './lib/Einfuehrung.svelte'
   import InstallHinweis from './lib/InstallHinweis.svelte'
-  import { installOffen, appEinrichten } from './lib/install.js'
+  import { installOffen, appEinrichten, einrichtenZeigen } from './lib/install.js'
   import { appZuruecksetzen } from './lib/zuruecksetzen.js'
   import { einfuehrung, einfuehrungStarten, lies as einfuehrungStand } from './lib/einfuehrung.js'
-  import { testreiseAn, testreiseKnopf } from './lib/testreise-dienst.js'
+  import { testreiseAn, testreiseKnopf, testreiseKnopfZeigen } from './lib/testreise-dienst.js'
   import { kartenLauf } from './lib/karten-laden.js'
   import OrtNeu from './lib/OrtNeu.svelte'
   import Seitenleiste from './lib/Seitenleiste.svelte'
@@ -56,6 +58,12 @@
   import { frage, hinweis, loeschFrage } from './lib/dialog.js'
   import { neuAnfrage, oeffneNeu } from './lib/neu.js'
   import { leseAdresse, geh, merke, fragWaechter, zurueck, alsGespeichert } from './lib/navigation.js'
+  import { ladeGruppen } from './lib/verbinden.js'
+  import MeldungNeu from './lib/MeldungNeu.svelte'
+  import MeldungBlatt from './lib/MeldungBlatt.svelte'
+  import { laden as meldungenLaden, sendeWartende, nachsehen as meldungenNachsehen, meldungen, OFFIZIELL } from './lib/meldungen.js'
+  import { PAYPAL } from './lib/spenden.js'
+  import { meldenBlatt, meldungAuf } from './lib/meldungen-text.js'
   import { etappenMitDatum, planUeberblick, reiseZeitraum, ymd as ymdPlan, ohneDoppelteStrecken } from './lib/plan.js'
   import Quiz from './lib/Quiz.svelte'
   import Packliste from './lib/Packliste.svelte'
@@ -207,6 +215,26 @@
   // main.js wartet beim Sprachwechsel darauf
   let { onbereit = () => {} } = $props()
   $effect(() => { if (!laden && $ready) tick().then(onbereit) })
+  // V31: Links auf externe Gruppen (public/gruppen.json) einmal nach dem Start, ohne Netz bleibt der letzte Stand
+  let gruppenGeholt = false
+  $effect(() => { if ($ready && !gruppenGeholt) { gruppenGeholt = true; ladeGruppen() } })
+  // V32: Meldungen nach dem Start und jedes Mal, wenn das Netz wiederkommt: Wartende senden, dann frisch laden
+  $effect(() => { if ($ready && $online) sendeWartende().then(() => meldungenLaden()) })
+  // Selbst veröffentlichte Kopie ohne Server: Melden erklärt das, statt ins Leere zu senden
+  $effect(() => {
+    if (!$meldenBlatt || $meldungen.verfuegbar !== false) return
+    meldenBlatt.set(null)
+    zeigeToast(je(`Meldungen gibt es auf dieser Seite nicht, nur in TravelBuddy auf ${OFFIZIELL}.`, `Reports are not available on this site, only in TravelBuddy at ${OFFIZIELL}.`), 'info', 6000)
+  })
+  // Im Funkloch meldet das iPhone oft weiter „online“, und im Hintergrund ändert sich am Netz nichts.
+  // Darum alle zwei Minuten und beim Zurückkommen nachsehen: Wartende senden, alten Stand neu laden.
+  $effect(() => {
+    if (!$ready) return
+    const sehen = () => { if (document.visibilityState === 'visible' && navigator.onLine) meldungenNachsehen() }
+    const takt = setInterval(sehen, 120000)
+    document.addEventListener('visibilitychange', sehen)
+    return () => { clearInterval(takt); document.removeEventListener('visibilitychange', sehen) }
+  })
   // V14: Ausgaben, die eindeutig zu einer Buchung gehören, einmal je Start verbinden. Unsichere stehen unter Buchungen zum Bestätigen.
   let verbunden = false
   $effect(() => {
@@ -220,34 +248,16 @@
     orte: [['orte/sueden', t('Süden')], ['orte/norden', t('Norden')], ['orte/osten', t('Ostküste')], ['orte/meine', t('Meine Orte')], ['orte/routen', t('Routen-Ideen')]],
     logbuch: [['logbuch', je('Einträge', 'Entries')], ['logbuch/lesen', t('Lesen')], ['logbuch/tiere', t('Tierwelt')], ['logbuch/notizen', t('Notizen')]],
     // Dieselben Namen und Zeichen wie im Mehr-Blatt am iPhone und in den Seitentiteln
-    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/buchungen', je('🎫 Buchungen', '🎫 Bookings')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/funfacts', je('💡 Fun Facts', '💡 Fun facts')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
+    mehr: [['mehr/notfall', t('🆘 Notfall')], ['mehr/gefahren', t('⚠️ Gefahrenlage')], ['mehr/buchungen', je('🎫 Buchungen', '🎫 Bookings')], ['mehr/fluege', t('✈️ Flüge & Bahn')], ['mehr/kosten', t('💰 Kosten')], ['mehr/vorbereitung', t('🧳 Reisevorbereitung')], ['mehr/packliste', t('🎒 Packliste')], ['mehr/praxis', t('🛠️ Praxis & Sicherheit')], ['mehr/meldungen', je('📣 Meldungen', '📣 Reports')], ['mehr/verbinden', je('🤝 Unterwegs verbinden', '🤝 Connect on the road')], ['mehr/teilen', t('📤 Reisebericht teilen')], ['mehr/funfacts', je('💡 Fun Facts', '💡 Fun facts')], ['mehr/musik', t('🎵 Musik unterwegs')], ['mehr/quiz', t('🇦🇺 Australien-Quiz')]],
   }
   // V15 (Design B2): Unter Mehr heißt der große Titel wie die Seite, ohne Zeichen davor, statt immer „Mehr“
+  // V31: unter Mehr nur die Chips der eigenen Gruppe; eine Gruppe mit nur einer Seite braucht keine Reihe
+  const mehrChips = $derived(ansicht.tab === 'mehr' ? geschwister(UNTER.mehr, ansicht.unter, (e) => e[0]) : [])
   const mehrName = $derived(ansicht.tab === 'mehr' && ansicht.unter ? (UNTER.mehr.find(([p]) => p === 'mehr/' + ansicht.unter)?.[1] || '').replace(/^[^\p{L}]+/u, '') : '')
   const TITEL = { heute: t('Heute'), plan: t('Plan'), orte: t('Orte'), logbuch: t('Logbuch'), mehr: t('Mehr') }
   // Eine Zeile je Punkt unter „Mehr“: was steckt dahinter (nur Namen, kein Wort dazu)
   // Gruppe „App“ auf der Mehr-Seite: diese Seiten stehen nicht in der Chip-Reihe, gehören aber dazu
-  const APP_ZUSATZ_VORN = [['mehr/backup', je('💾 Backup & Import', '💾 Backup & import'), je('Alles als Datei sichern und auf ein anderes Gerät bringen.', 'Save everything as a file and move it to another device.')]]
-  const APP_ZUSATZ_HINTEN = [
-    ['mehr/design', '🎨 ' + t('Design'), je('Hell und Dunkel, Sprache, Schrift, Effekte.', 'Light and dark, language, text, effects.')],
-    ['mehr/handbuch', t('📖 Handbuch'), je('Alles zur App zum Nachlesen, auch als PDF.', 'Everything about the app to read, also as PDF.')],
-    // Öffnet das Fenster zum letzten großen Update (keine eigene Seite)
-    ['mehr/updates', je('📋 Updates', '📋 Updates'), je('Was in der letzten Version neu ist.', 'What’s new in the latest version.')],
-  ]
-  const MEHR_INFO = {
-    'mehr/notfall': t('Notrufnummern, nächste Hilfe und dein Standort zum Durchsagen. Geht auch offline.'),
-    'mehr/vorbereitung': t('Checkliste bis zur Abreise, Dokumente, Buchungen und Ausgaben vorab.'),
-    'mehr/buchungen': je('Jede Buchung mit Termin, Buchungsnummer, Kosten und Belegen. Auch Aktivitäten, die du unterwegs buchst.', 'Every booking with date, number, cost and documents. Also activities you book on the road.'),
-    'mehr/gefahren': t('Amtliche Warnungen zu Feuer, Flut und Hitze rund um deine Orte und Routen.'),
-    'mehr/fluege': je('Status, Gate, Gleis und Verspätung deiner Flüge und Züge.', 'Status, gate, platform and delays of your flights and trains.'),
-    'mehr/kosten': je('Wofür das Geld geht, je Etappe und pro Tag.', 'Where the money goes, per leg and per day.'),
-    'mehr/packliste': t('Zum Abhaken, abgestimmt auf allein mit dem Auto durchs Outback.'),
-    'mehr/praxis': t('Was du vorab buchen musst, Permits, Tanken im Norden, Reifen, Buschfeuer.'),
-    'mehr/musik': t('Sounds of the Road: Musik aus der Gegend, unterwegs in einer Spotify-Playlist gesammelt.'),
-    'mehr/funfacts': je('Kurze Fakten zu dem Ort, an dem du bist, und entlang deiner Route. Auch offline.', 'Short facts about where you are and along your route. Offline too.'),
-    'mehr/teilen': t('Reisebericht als eine Datei für Familie und Freunde. Ohne Buchungen, Kosten und Dokumente.'),
-    'mehr/quiz': t('Fragen zu Australien. Mit jeder richtigen Antwort steigst du eine Stufe auf.'),
-  }
+  // Basic: Einträge der Mehr-Seite kommen aus mehr-eintraege.js (dieselben wie im iPhone-Blatt)
   const orteUnter = $derived(ansicht.tab === 'orte' ? (ansicht.unter || 'sueden') : '')
   // Neu-Blatt (auch von Ortskacheln aus, über neu.js)
   const neuOffen = $derived($neuAnfrage)
@@ -1026,10 +1036,10 @@
     {#if ansicht.tab === 'plan'}<button class="sk-neu" onclick={() => oeffneNeu(ansicht.unter === 'wanderungen' ? 'wanderung' : 'route')}>{t('+ Neu')}</button>{/if}
     {#if ansicht.tab === 'logbuch' && ansicht.unter !== 'notizen'}<button class="sk-neu" onclick={() => oeffneNeu('tag')}>{t('+ Tag')}</button>{/if}
   </header>
-  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && !ansicht.unter) && !['etappe', 'route', 'tag', 'handbuch', 'rechtliches', 'design', 'backup', 'fehler'].includes(ansicht.unter)}
+  {#if UNTER[ansicht.tab] && !(ansicht.tab === 'mehr' && (!ansicht.unter || mehrChips.length < 2)) && !['etappe', 'route', 'tag', 'handbuch', 'rechtliches', 'design', 'backup', 'fehler'].includes(ansicht.unter)}
     <nav class="seg-leiste" aria-label={t('{wert}: Bereiche', { wert: TITEL[ansicht.tab] })} use:leisteRand={ansicht.pfad}>
-      {#each UNTER[ansicht.tab] as [pfad, label], i (pfad)}
-        {#if ansicht.tab === 'mehr' && neueGruppe(UNTER.mehr, i, (e) => e[0])}<span class="seg-trenner" aria-hidden="true"></span>{/if}
+      <!-- V31: unter Mehr nur die Chips der eigenen Gruppe (Buchungen: Buchungen, Flüge, Kosten) statt aller 14 -->
+      {#each ansicht.tab === 'mehr' ? mehrChips : UNTER[ansicht.tab] as [pfad, label] (pfad)}
         {@const an = ansicht.pfad === pfad || (pfad === ansicht.tab && (!ansicht.unter || ['etappe', 'route', 'tag'].includes(ansicht.unter))) || (ansicht.pfad.startsWith(pfad + '/') && pfad !== ansicht.tab) || (ansicht.tab === 'orte' && pfad === 'orte/' + orteUnter)}
         <a class="seg-chip" class:an href="#/{pfad}" aria-current={an ? 'page' : undefined} onclick={(e) => { e.preventDefault(); geh(pfad) }}>{label}</a>
       {/each}
@@ -1319,9 +1329,14 @@
     {:else if ansicht.unter === 'funfacts'}
       <FunFacts />
     {:else if ansicht.unter === 'fehler'}
-      <FehlerMelden version="Basic 1.28" build={buildText} />
+      <FehlerMelden version="Basic 1.29" build={buildText} />
     {:else if ansicht.unter === 'backup'}
       <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
+    {:else if ansicht.unter === 'meldungen'}
+      {#await import('./lib/Meldungen.svelte') then { default: Meldungen }}<Meldungen tab={ansicht.id === 'meine' ? 'meine' : 'alle'} />{/await}
+    {:else if ansicht.unter === 'verbinden'}
+      <!-- erst beim Öffnen laden: QR-Code und Scanner gehören nicht in den Start -->
+      {#await import('./lib/Verbinden.svelte') then { default: Verbinden }}<Verbinden id={ansicht.id} orte={[...orte, ...$eigeneOrte]} {geh} zuort={zuOrt} />{/await}
     {:else if ansicht.unter === 'kosten'}
       <Kosten />
     {:else if ansicht.unter === 'gefahren'}
@@ -1354,21 +1369,18 @@
       <h2 class="abschnitt">{t('🇦🇺 Australien-Quiz')} {#if quizErgebnis.beantwortet}<span class="count">{t('{richtig}/{gesamt} · {emoji} Stufe {stufe}', { richtig: quizErgebnis.richtig, gesamt: quizErgebnis.gesamt, emoji: quizErgebnis.level?.emoji, stufe: quizErgebnis.level?.stufe })}</span>{/if}</h2>
       <Quiz fragen={quizData.fragen} levels={quizData.levels} />
     {:else}
-      {#each gruppiere(UNTER.mehr, (e) => e[0], ['app']) as { gruppe, eintraege } (gruppe.id)}
-        <h2 class="ml-gruppe"><span aria-hidden="true">{gruppe.icon}</span> {je(...gruppe.titel)}</h2>
-        <ul class="mehr-liste">
-          {#each gruppe.id === 'app' ? [...APP_ZUSATZ_VORN, ...eintraege, ...APP_ZUSATZ_HINTEN] : eintraege as [pfad, label, info] (pfad)}
-            <li><a href="#/{pfad}" onclick={(e) => { e.preventDefault(); if (pfad === 'mehr/updates') updateOffen = true; else geh(pfad) }}><span class="ml-txt"><b>{label}</b><small>{info ?? MEHR_INFO[pfad]}</small></span><span class="ml-pfeil" aria-hidden="true">›</span></a></li>
-          {/each}
-        </ul>
-      {/each}
+      <!-- V31: aufgeräumt, dieselbe Übersicht wie im iPhone-Blatt (MehrUebersicht.svelte) -->
+      <MehrUebersicht eintraege={mehrEintraege().filter((e) => UNTER.mehr.some(([pfad]) => pfad === 'mehr/' + e.id))} onwahl={(id) => geh('mehr/' + id)}
+        app={[...appEintraege(), ...basicAktionen({ einrichten: $einrichtenZeigen, testreise: $testreiseKnopfZeigen, testreiseAn: $testreiseAn })].map((a) => ({ ...a,
+          onclick: () => ({ updates: () => (updateOffen = true), einfuehrung: einfuehrungStarten, einrichten: appEinrichten, testreise: testreiseKnopf }[a.id] ?? (() => geh('mehr/' + a.id)))() }))}
+        gefahr={{ label: '↩️ ' + je('App zurücksetzen', 'Reset the app'), onclick: () => appZuruecksetzen(onExport) }} />
       <SpeicherStand />
     {/if}
   {/if}
 </main>
 <FunFactUnterwegs orte={[...orte, ...$eigeneOrte]} />
 
-<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online', 'TravelBuddy online')}</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></span><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
+<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online', 'TravelBuddy online')}</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-spende" href={PAYPAL} target="_blank" rel="noopener noreferrer" title={je('Freiwillig über PayPal', 'Voluntary, via PayPal')}>☕ {je('Spenden', 'Donate')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></span><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
 </div>
 </div>
 
@@ -1378,7 +1390,7 @@
 <div class="bb-mobil">
   <BottomBar {aktivTab} onTab={tabZu} {springeZu}
     onSuche={zurSuche}
-    onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')}
+    onHandbuch={() => geh('mehr/handbuch')} onDesign={() => geh('mehr/design')} onUpdates={() => (updateOffen = true)}
     onEinfuehrung={einfuehrungStarten} onTestreise={testreiseKnopf} onEinrichten={appEinrichten} onZuruecksetzen={() => appZuruecksetzen(onExport)} />
 </div>
 
@@ -1471,6 +1483,8 @@
 {#if !sprachFrage}<InstallHinweis />{/if}
 {#if !sprachFrage && !$installOffen}<Einfuehrung {geh} anzahlOrte={orte.length} />{/if}
 
+{#if $meldenBlatt && $meldungen.verfuegbar !== false}<MeldungNeu vorlage={$meldenBlatt} orte={[...orte, ...$eigeneOrte]} reisen={$reisen} onclose={() => meldenBlatt.set(null)} onmeine={() => { meldenBlatt.set(null); geh('mehr/meldungen/meine') }} />{/if}
+{#if $meldungAuf}<MeldungBlatt id={$meldungAuf.id} onclose={() => meldungAuf.set(null)} />{/if}
 {#if neuOffen}
   <NeuBlatt typ={neuOffen.typ} vorlage={neuOffen.vorlage} orte={[...orte, ...$eigeneOrte]}
     onclose={() => neuAnfrage.set(null)} onfertig={neuFertig} />
@@ -1542,6 +1556,7 @@
   .app-footer .af-name { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 3px; padding: 8px 2px; }
   .app-footer .af-links { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 16px; margin-top: 2px; }
   .app-footer .af-web { display: inline-flex; align-items: center; padding: 8px 2px; font-size: calc(12px * var(--schrift, 1)); font-weight: 600; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 2px; }
+  .app-footer .af-spende { display: inline-flex; align-items: center; padding: 8px 2px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
   .app-footer .af-fehler { display: inline-flex; align-items: center; gap: 5px; padding: 8px 2px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
   .app-footer .af-bug { color: var(--danger); flex: none; }
   .app-footer .af-by a { color: inherit; text-decoration: underline; text-underline-offset: 2px; padding: 8px 2px; }
@@ -1604,27 +1619,6 @@
   }
   .seg-chip:active { transform: scale(0.96); }
   .seg-chip.an { background: var(--ink); border-color: var(--ink); color: var(--bg); }
-  .ml-gruppe { display: flex; align-items: center; gap: 6px; margin: 22px 0 2px; font-size: calc(14px * var(--schrift, 1)); font-weight: 800; color: var(--muted); letter-spacing: 0.2px; }
-  .ml-gruppe:first-of-type { margin-top: 6px; }
-  .seg-trenner { flex: none; width: 1px; margin: 10px 4px; background: var(--line-stark); }
-  .mehr-liste { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; max-width: 520px; }
-  @media (min-width: 900px) { .mehr-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 1040px; } .mehr-liste a { height: 100%; } }
-  .mehr-liste a {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; padding: 10px 16px;
-    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-m); color: var(--ink);
-    text-decoration: none; font-size: calc(16px * var(--schrift, 1)); box-shadow: var(--shadow);
-    transition: transform 120ms var(--ease-out), box-shadow var(--t-fast) var(--ease-out);
-  }
-  .mehr-liste a:active { transform: scale(0.98); }
-  .mehr-liste a:hover { box-shadow: var(--shadow-float); }
-  .ml-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .ml-txt b { font-weight: 700; }
-  .ml-txt small { font-size: calc(13.5px * var(--schrift, 1)); color: var(--muted); line-height: 1.35; }
-  .mehr-liste .ml-pfeil { font-size: calc(22px * var(--schrift, 1)); color: var(--muted); }
-  .mehr-liste li { animation: rein-unten var(--t-slow) var(--ease-out) backwards; }
-  .mehr-liste li:nth-child(2) { animation-delay: 30ms; } .mehr-liste li:nth-child(3) { animation-delay: 60ms; }
-  .mehr-liste li:nth-child(4) { animation-delay: 90ms; } .mehr-liste li:nth-child(5) { animation-delay: 120ms; }
-  .mehr-liste li:nth-child(6) { animation-delay: 150ms; }
   .heute-zahlen { margin-top: 18px; }
   .wrap > .abschnitt:first-child { margin-top: 8px; }
   @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
