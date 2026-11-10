@@ -413,6 +413,10 @@ article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 
 /* Ortskacheln außerhalb des Bildschirms nicht vorab zeichnen: spart am iPhone beim Aufbau und Scrollen
    (der Platz bleibt reserviert, damit die Seite nicht springt) */
 .or-grid > article.card { content-visibility: auto; contain-intrinsic-size: auto 460px; }
+/* Offenes Einplanen-Menü: am Handy ein Blatt über allem (position: fixed). content-visibility sperrte es in die
+   Kachel und schnitt es ab, kein Punkt ließ sich tippen (Fehler seit Basic 1.25, behoben in 1.33). Solange es offen
+   ist, zeichnet die Kachel ganz normal. */
+.or-grid > article.card.menu-offen { content-visibility: visible; }
 
 /* Kartenfarben der Übersichtskarten (Orte, Gegenden, Wander-Ideen, Routen-Ideen), Stil „Atlas“:
    blaues Meer, sandiges Land, kräftige Küste, volle Ringe und Punkte mit Zahl */

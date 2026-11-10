@@ -225,7 +225,7 @@
 </script>
 
 {#if neuFrage}<ZuordnenBlatt vorlage={{ titel: ort.name, name: ort.name, stops: [{ name: ort.name, lat: ort.lat, lon: ort.lon }], tage: 1 }} knopf={je('Route anlegen', 'Add route')} onfertig={neuZugeordnet} onabbruch={() => (neuFrage = false)} />{/if}
-<article class="card" id="ort-{ort.id}" tabindex="-1">
+<article class="card" class:menu-offen={zeigeReiseWahl} id="ort-{ort.id}" tabindex="-1">
   <div class="img">
     {#if bildSrc}
       <img src={bildSrc} alt={ort.name} loading="lazy" />
@@ -535,7 +535,7 @@
   .reise-menu {
     position: absolute; bottom: calc(100% + 4px); left: 0; z-index: 20; background: var(--card);
     border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.18);
-    padding: 5px; min-width: 170px; max-height: 220px; overflow-y: auto;
+    padding: 5px; min-width: 170px; max-height: min(440px, 62vh); overflow-y: auto;
     transform-origin: bottom left; animation: rm-auf var(--t-med) var(--ease-spring);
   }
   @keyframes rm-auf { from { opacity: 0; transform: translateY(6px) scale(0.97); } }
@@ -549,6 +549,9 @@
   .reise-menu .dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
   .reise-menu .neu { color: var(--ok-text); font-weight: 700; border-top: 1px solid var(--line); margin-top: 3px; }
   .rm-hg { position: fixed; inset: 0; z-index: 19; }
+  /* Offenes Menü am Rechner: darf über die Kachel hinausragen und liegt über den Nachbarkacheln (V37) */
+  .card.menu-offen { overflow: visible; position: relative; z-index: 21; }
+  .card.menu-offen .img { border-radius: var(--radius-m) var(--radius-m) 0 0; }
   .rm-kopf { display: none; }
   /* iPhone: als Blatt über der Leiste, nicht als Klappmenü, das am Kachelrand abgeschnitten wird */
   @media (max-width: 639px), (max-width: 899px) and (orientation: portrait) {
@@ -560,6 +563,8 @@
     }
     .reise-menu button { min-height: 50px; font-size: calc(15.5px * var(--schrift, 1)); }
     .rm-kopf { display: block; font-size: calc(17px * var(--schrift, 1)); font-weight: 800; padding: 6px 10px 2px; color: var(--ink); }
+    /* am Handy ist das Menü ein Blatt über allem: die Kachel bekommt keine eigene Ebene */
+    .card.menu-offen { overflow: hidden; position: static; z-index: auto; }
   }
   .desc.kurz {
     display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
