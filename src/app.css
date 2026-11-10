@@ -438,3 +438,7 @@ article.card:focus-visible { outline: 3px solid var(--brand-2); outline-offset: 
   --karte-meer: #16303d; --karte-land: #3d342b; --karte-kueste: #c9b99a;
   --karte-punkt: #c9612a; --karte-zahl: #ffffff; --karte-saum: #ffffff; --karte-strich: #c9b99a; --karte-blass: #8f826e;
 }
+
+/* Basic 1.36: Netlify blendet auf manchen Seiten unten rechts ein eigenes Schild „Powered by Netlify“ ein (iframe über allem).
+   Es würde am Handy Logbuch, Mehr und den Melden-Knopf verdecken. */
+#nl-badge-frame, #nl-hud-frame { display: none !important; }

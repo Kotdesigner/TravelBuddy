@@ -13,6 +13,13 @@
     [je('22 von 22', '22 of 22'), je('Teststrecken gefunden, auch Pisten und Tracks', 'test routes found, tracks too')],
     [je('0,06 s', '0.06 s'), je('für 4.200 km mit 10 Stopps', 'for 4,200 km with 10 stops')],
   ]
+  /** Basic 1.36: was seit dem letzten Fenster (1.32) dazugekommen ist, steht oben */
+  const JETZT = [
+    ['🗺️', je('Orte direkt in deine Etappe.', 'Places straight into your leg.'), je('Im Menü „Einplanen“ einer Ortskachel steht oben deine Etappe, zum Beispiel „Coral Coast“. Ein Tipp legt dort die erste Route an, jeder weitere Ort aus der Gegend kommt in dieselbe Route.', 'In the “Add to trip” menu of a place card your leg comes first, for example “Coral Coast”. One tap starts its first route there, every further place from the area joins the same route.')],
+    ['🛠️', je('Einplanen geht am Handy wieder.', 'Add to trip works on phones again.'), je('Vormerken, neue Route, Wanderung, Teilen und Melden lassen sich im Menü der Ortskacheln wieder antippen.', 'Save for later, new route, hike, share and report can be tapped again in the place card menu.')],
+    ['🆘', je('Sicherer im Notfall.', 'Safer in an emergency.'), je('Trägst du die Koordinaten von Hand ein, schickt das SOS sie mit. Die 7 Tipps für 000 klappen auch am iPhone zuverlässig.', 'If you enter your coordinates by hand, the SOS sends them along. Tapping 7 times for 000 also works reliably on iPhone.')],
+    ['📣', je('Melden, klar erklärt.', 'Reporting, clearly explained.'), je('Bist du noch nicht in Australien, sagt das Melde-Blatt das sofort und öffnet die Ortssuche. Meldungen gehen nur für Orte dort.', 'If you are not in Australia yet, the report sheet says so right away and opens the place search. Reports only work for places there.')],
+  ]
   const NEU = [
     ['🔄', je('Runterziehen zum Aktualisieren.', 'Pull down to update.'), je('Wie in anderen Apps: ganz oben auf einer Seite nach unten ziehen und loslassen. TravelBuddy holt die neueste Fassung und lädt neu. Jedes Mal schaut eine andere Figur vorbei: Känguru, Koala, Bumerang, Camper, Sonne über dem Uluru oder Schlange. Hast du gerade etwas nicht gespeichert, fragt die App vorher.', 'Like in other apps: pull down at the very top of a page and let go. TravelBuddy fetches the newest version and reloads. Each time a different figure drops by: kangaroo, koala, boomerang, camper, sun over Uluru or snake. If you have unsaved changes, the app asks first.')],
     ['🆘', je('SOS an deine Leute.', 'SOS to your people.'), je('Auf Heute oben SOS tippen oder unter Notfall „SOS an meine Leute“, dann „SOS jetzt senden“: Alarm mit Standort als SMS an alle, auch ohne Internet, danach WhatsApp. Am iPhone und Mac auf Wunsch ganz ohne Tipp auf Senden, über einen Kurzbefehl. Am Android wählst du einmal WhatsApp oder WhatsApp Business. Und: 7× schnell irgendwo auf eine freie Fläche tippen ruft 000.', 'Tap SOS at the top of Today or “SOS to my people” under Emergency, then “Send SOS now”: an alert with your location as a text to everyone, even without internet, then WhatsApp. On iPhone and Mac optionally without tapping Send at all, via a shortcut. On Android you choose WhatsApp or WhatsApp Business once. And: tapping 7 times quickly on any empty area calls 000.')],
@@ -39,10 +46,16 @@
   <div class="uh-kopf">
     <span class="uh-symbol" aria-hidden="true">✨</span>
     <div>
-      <h2 id="uh-titel">{je('Das größte Update', 'The biggest update')}</h2>
+      <h2 id="uh-titel">{je('Das ist neu', 'What’s new')}</h2>
       <p class="uh-ver">{UPDATE_NAME}</p>
     </div>
   </div>
+  <ul class="uh-liste uh-jetzt">
+    {#each JETZT as [zeichen, titel, text]}
+      <li><span class="uh-z" aria-hidden="true">{zeichen}</span><span><b>{titel}</b> <span class="uh-t">{text}</span></span></li>
+    {/each}
+  </ul>
+  <h3 class="uh-zwischen">{je('Seit dem großen Update dabei', 'Since the big update')}</h3>
   <p class="uh-einl">{je('TravelBuddy rechnet deine Routen jetzt auch ohne Netz, auf echten Straßen und fast so genau wie online. Deine Reise, dein Logbuch und deine Orte sind alle noch da.', 'TravelBuddy now calculates your routes without internet too, on real roads and almost as accurately as online. Your trip, your logbook and your places are all still there.')}</p>
   <div class="uh-zahlen">
     {#each ZAHLEN as [zahl, was]}<div class="uh-zahl"><b>{zahl}</b><span>{was}</span></div>{/each}
@@ -74,6 +87,8 @@
   .uh-zahl b { font-size: calc(16.5px * var(--schrift, 1)); color: var(--brand-text); line-height: 1.1; white-space: nowrap; }
   .uh-zahl span { font-size: calc(11.5px * var(--schrift, 1)); color: var(--muted); line-height: 1.3; }
   .uh-quelle { margin: 6px 0 12px; color: var(--muted); font-size: calc(11.5px * var(--schrift, 1)); line-height: 1.4; }
+  .uh-liste.uh-jetzt { margin: 14px 0 4px; padding: 12px 12px 12px 8px; border-radius: 12px; background: var(--flaeche); border: 1px solid var(--line); }
+  .uh-zwischen { margin: 14px 0 0; font-size: calc(14px * var(--schrift, 1)); color: var(--muted); }
   .uh-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
   .uh-liste li { display: flex; gap: 10px; align-items: flex-start; font-size: calc(14px * var(--schrift, 1)); line-height: 1.45; }
   .uh-z { flex: none; width: 24px; text-align: center; }
