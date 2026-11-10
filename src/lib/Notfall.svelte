@@ -10,11 +10,12 @@
   import { haversine } from './routing.js'
   import { REGIONEN, poiRegionFuer } from './karten-config.js'
   import { checkins, neuerCheckin, loescheCheckin, notfallKontakte } from './userdata.js'
-  import { bescheidBlatt, personBlatt, rollenName, MAX_PERSONEN } from './bescheid.js'
+  import { bescheidBlatt, personBlatt, rollenName, MAX_PERSONEN, sosBlatt, kurzbefehlBlatt, kurzbefehlAn, kurzbefehlGeht, geraetArt, whatsappApp, whatsappAppName, wegeVon } from './bescheid.js'
   import InfoKnopf from './InfoKnopf.svelte'
   import { onMount } from 'svelte'
   import { standort } from './standort.js'
   import { schnellBescheid } from './bescheid-aktion.js'
+  import { notrufTippenAn, ANZAHL as TIPP_ANZAHL } from './notruf-tippen.js'
 
   let { orte = [] } = $props()
 
@@ -95,6 +96,9 @@
   // V34: im Notfall zählt jeder Tipp. Der Standort bestimmt sich beim Öffnen von selbst.
   onMount(() => { if (!pos) ortBestimmen() })
   const posFuerBescheid = () => (pos ? { lat: pos.lat, lon: pos.lon, genauigkeit: pos.acc, zeit: Date.now() } : null)
+  // V35: je Gerät die passende Einstellung (Kurzbefehl am iPhone und Mac, WhatsApp-App am Android, Hinweis am Windows-PC)
+  const geraet = geraetArt()
+  const mitWhatsapp = $derived($notfallKontakte.some((p) => wegeVon(p).includes('whatsapp')))
 
   function manuellUebernehmen() {
     const leer = (v) => v == null || String(v).trim() === ''
@@ -161,12 +165,19 @@
   <!-- V34: das Wichtigste zuerst. 000 ganz oben, dann deine Leute, dann Standort (bestimmt sich beim Öffnen) und Hilfe -->
   <section class="nf-notruf" aria-label={je('Notruf', 'Emergency call')}>
     <a class="nf-000" href="tel:000"><span>📞 {je('000 anrufen', 'Call 000')}</span><small>{t('Polizei · Feuer · Ambulanz')}</small></a>
+    <!-- V35: SOS an deine Leute (SosBlatt.svelte): ein Tipp hier, ein zweiter auf „SOS jetzt senden“ -->
+    <button class="nf-sos" onclick={() => sosBlatt.set(true)}><span>🆘 {je('SOS an meine Leute', 'SOS to my people')}</span><small>{je('Alarm mit Standort an alle, per SMS und WhatsApp', 'Alert with location to everyone, by SMS and WhatsApp')}</small></button>
     <div class="nf-weitere">
       {#each NOTRUF.filter((n) => !n.haupt) as n (n.tel)}
         <a class="nf-nr" href={`tel:${n.tel}`}><b>{n.nr}</b><small>{n.label}</small></a>
       {/each}
     </div>
     <p class="mini">{je('Funktioniert komplett offline. Ohne Handynetz hilft nur ein Satelliten-Gerät oder EPIRB, Anrufe kann die App nicht ersetzen.', 'Works completely offline. Without mobile signal only a satellite device or EPIRB helps, the app cannot replace calls.')}</p>
+    <!-- V35: Notruf durch 7 schnelle Tipps auf eine freie Fläche (NotrufTippen.svelte) -->
+    <label class="nf-tippen">
+      <input type="checkbox" checked={$notrufTippenAn} onchange={(e) => notrufTippenAn.set(e.currentTarget.checked)} />
+      <span><b>{je(`${TIPP_ANZAHL}× schnell tippen: Notruf 000`, `Tap ${TIPP_ANZAHL} times quickly: call 000`)}</b><small>{je('Irgendwo in TravelBuddy auf eine freie Fläche, nicht auf Knöpfe. Ab dem dritten Tipp zählt eine rote Fläche mit, darunter wird nichts verstellt. Das Handy fragt vor dem Anruf noch einmal.', 'Anywhere in TravelBuddy on an empty area, not on buttons. From the third tap a red screen counts along, nothing underneath changes. Your phone asks once more before calling.')}</small></span>
+    </label>
   </section>
 
 
@@ -184,6 +195,21 @@
     <button class="btn nf-knopf ok" onclick={() => schnellBescheid('ok', { orte, pos: posFuerBescheid() })}>✅ {je('Mir geht\'s gut', 'I\'m okay')}</button>
     <button class="btn nf-knopf" onclick={() => schnellBescheid('standort', { orte, pos: posFuerBescheid() })}>📍 {je('Mein Standort senden', 'Send my location')}</button>
     <p class="mini">{je('Ein Tipp öffnet die fertige Nachricht an alle. Per SMS geht das auch ohne Internet, solange etwas Handynetz da ist.', 'One tap opens the finished message to everyone. By SMS this works without internet as long as there is some mobile signal.')}</p>
+    <!-- V35: Einstellungen je Gerät -->
+    {#if kurzbefehlGeht(geraet)}
+      <button class="nf-einst" onclick={() => kurzbefehlBlatt.set(true)}>⚡ {$kurzbefehlAn ? je('Direkt senden ist an (Kurzbefehl) · ändern', 'Sending directly is on (shortcut) · change') : je('Ohne Tipp auf Senden: Kurzbefehl einrichten', 'Without tapping Send: set up a shortcut')}</button>
+    {/if}
+    {#if geraet === 'android' && mitWhatsapp}
+      <div class="nf-wa" role="radiogroup" aria-label={je('Welches WhatsApp?', 'Which WhatsApp?')}>
+        <span>{je('WhatsApp über:', 'WhatsApp via:')}</span>
+        {#each ['whatsapp', 'business'] as a (a)}
+          <button class="nf-chip" class:an={$whatsappApp === a} role="radio" aria-checked={$whatsappApp === a} onclick={() => whatsappApp.set(a)}>{whatsappAppName(a)}</button>
+        {/each}
+      </div>
+    {/if}
+    {#if geraet === 'windows'}
+      <p class="mini">{je('Am Windows-PC öffnet sich eine SMS nur mit der App Smartphone-Link. WhatsApp und Text kopieren gehen immer.', 'On a Windows PC a text message only opens with the Phone Link app. WhatsApp and copying the text always work.')}</p>
+    {/if}
   </section>
 
   <!-- Standort: bestimmt sich beim Öffnen der Seite von selbst -->
@@ -267,7 +293,7 @@
       <ul class="log">
         {#each $checkins as c (c.id)}
           <li>
-            <span class="l-zeit">{ciZeit(c)}</span>
+            <span class="l-zeit">{ciZeit(c)}{#if c.text}<small class="l-text">{c.text}</small>{/if}</span>
             <button class="l-koord" onclick={() => kopiere(`${c.lat.toFixed(5)}, ${c.lon.toFixed(5)}`)} title={t('kopieren')}>{c.lat.toFixed(4)}, {c.lon.toFixed(4)}</button>
             <a class="l-go" href={mapsUrl(c.lat, c.lon)} target="_blank" rel="noopener">🗺️</a>
             <button class="l-del" onclick={() => loescheCheckin(c.id)} title={t('löschen')}>✕</button>
@@ -341,6 +367,17 @@
   .nf-chip { min-height: 40px; padding: 4px 12px; border: 1px solid var(--line-stark); border-radius: 999px; background: none; color: var(--ink); font: inherit; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
   .nf-chip small { font-weight: 500; color: var(--muted); }
   .nf-chip.neu { border-style: dashed; color: var(--brand-text); }
+  .nf-sos { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 64px; padding: 10px 12px; border: 2px solid var(--danger-text); border-radius: 14px;
+    background: var(--card); color: var(--danger-text); font: inherit; cursor: pointer; }
+  .nf-sos span { font-size: calc(19px * var(--schrift, 1)); font-weight: 900; }
+  .nf-sos small { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 600; color: var(--muted); }
+  .nf-tippen { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-m); cursor: pointer; }
+  .nf-tippen input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--brand); flex: none; }
+  .nf-tippen span { display: flex; flex-direction: column; gap: 3px; font-size: calc(14px * var(--schrift, 1)); }
+  .nf-tippen small { font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); line-height: 1.4; }
+  .nf-einst { display: block; min-height: 44px; margin-top: 6px; padding: 0; border: none; background: none; color: var(--brand-text); font: inherit; font-size: calc(14px * var(--schrift, 1)); font-weight: 700; text-align: left; cursor: pointer; }
+  .nf-wa { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; font-size: calc(13.5px * var(--schrift, 1)); color: var(--muted); }
+  .nf-chip.an { border: 2px solid var(--brand); background: var(--flaeche); color: var(--brand-text); }
   .nf-knopf { width: 100%; justify-content: center; min-height: 52px; margin-top: 8px; font-size: calc(16px * var(--schrift, 1)); font-weight: 800; }
 
   .log-kopf { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
@@ -349,6 +386,7 @@
   .log { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
   .log li { display: flex; align-items: center; gap: 8px; font-size: calc(12.5px * var(--schrift, 1)); padding: 5px 8px; background: var(--flaeche); border-radius: 7px; }
   .l-zeit { font-weight: 700; color: var(--ink); white-space: nowrap; }
+  .l-text { display: block; font-size: calc(11.5px * var(--schrift, 1)); color: var(--muted); font-weight: 600; }
   .l-koord { flex: 1; text-align: left; border: none; background: none; cursor: pointer; color: var(--brand-text); font-weight: 600; font-size: calc(12.5px * var(--schrift, 1)); font-variant-numeric: tabular-nums; }
   .l-go { text-decoration: none; }
   .l-del { border: none; background: none; color: var(--danger-text); cursor: pointer; font-size: calc(12px * var(--schrift, 1)); }

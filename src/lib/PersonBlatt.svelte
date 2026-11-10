@@ -1,10 +1,11 @@
 <script>
   // V34: eine wichtige Person anlegen oder ändern (Notfall, „Deinen Leuten Bescheid geben“).
   // Rolle tippen, Nummer mit Ländervorwahl, SMS oder WhatsApp. Bleibt nur auf dem Gerät und im Backup.
+  // V35: am Android zusätzlich die Frage nach WhatsApp oder WhatsApp Business (einmal je Gerät).
   import { untrack } from 'svelte'
   import { je } from './i18n.js'
   import { modal } from './modal.js'
-  import { ROLLEN, rollenName, bereinigeKontakt, nummerProblem, MAX_PERSONEN, wegeVon } from './bescheid.js'
+  import { ROLLEN, rollenName, bereinigeKontakt, nummerProblem, MAX_PERSONEN, wegeVon, geraetArt, whatsappApp, whatsappAppName } from './bescheid.js'
   import { notfallKontakte, speichereNotfallKontakt, loescheNotfallKontakt } from './userdata.js'
   import { zeigeToast } from './toast.js'
 
@@ -23,6 +24,12 @@
     { id: 'beides', wege: ['sms', 'whatsapp'], titel: () => je('Beides', 'Both'), sub: () => je('erst SMS, dann WhatsApp', 'first SMS, then WhatsApp') },
   ]
   const wahl = $derived(wege.length === 2 ? 'beides' : wege[0] || 'sms')
+  // V35: am Android einmal fragen, über welches WhatsApp gesendet wird (normal oder Business). Gilt fürs ganze Gerät,
+  // danach öffnet sich direkt die richtige App statt jedes Mal der Auswahl.
+  const android = geraetArt() === 'android'
+  let waWahl = $state(untrack(() => $whatsappApp))
+  let waAendern = $state(false)
+  const waFrage = $derived(android && wege.includes('whatsapp'))
   let fehler = $state('')
   const voll = $derived(!alt && $notfallKontakte.length >= MAX_PERSONEN)
 
@@ -50,6 +57,8 @@
     const p = nummerProblem(nummer)
     if (p) { fehler = PROBLEM[p](); return }
     if (voll) { fehler = je(`Höchstens ${MAX_PERSONEN} Personen.`, `At most ${MAX_PERSONEN} people.`); return }
+    if (waFrage && !waWahl) { fehler = je('Bitte wählen, über welches WhatsApp du sendest.', 'Please choose which WhatsApp you send from.'); return }
+    if (waFrage) whatsappApp.set(waWahl)
     const k = bereinigeKontakt({ id: alt?.id, rolle, name, nummer, wege })
     if (!k) { fehler = PROBLEM.form(); return }
     speichereNotfallKontakt(k)
@@ -82,6 +91,22 @@
       </label>
     {/each}
   </fieldset>
+  {#if waFrage}
+    {#if $whatsappApp && !waAendern}
+      <p class="pb-k">{je(`Gesendet wird über ${whatsappAppName($whatsappApp)}.`, `Sent via ${whatsappAppName($whatsappApp)}.`)} <button class="pb-leise pb-inline" onclick={() => (waAendern = true)}>{je('Ändern', 'Change')}</button></p>
+    {:else}
+      <fieldset class="pb-frage">
+        <legend>{je('Über welches WhatsApp sendest du?', 'Which WhatsApp do you send from?')}</legend>
+        {#each ['whatsapp', 'business'] as a (a)}
+          <label class="pb-karte" class:an={waWahl === a}>
+            <input type="radio" name="pb-wa" value={a} checked={waWahl === a} onchange={() => { waWahl = a; fehler = '' }} />
+            <span><b>{whatsappAppName(a)}</b><small>{a === 'business' ? je('wenn du die Business-App nutzt', 'if you use the Business app') : je('die normale App', 'the regular app')}</small></span>
+          </label>
+        {/each}
+        <small class="pb-k">{je('Einmal wählen, gilt für alle deine Leute.', 'Choose once, applies to all your people.')}</small>
+      </fieldset>
+    {/if}
+  {/if}
   {#if fehler}<p class="pb-fehler" role="alert">{fehler}</p>{/if}
   <p class="pb-k">{je('Bleibt nur auf diesem Gerät und im Backup.', 'Stays only on this device and in your backup.')}</p>
   <div class="pb-knoepfe">
@@ -111,6 +136,7 @@
   .pb-karte small { font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
   .pb-k { margin: 0; font-size: calc(13px * var(--schrift, 1)); color: var(--muted); line-height: 1.45; }
   .pb-fehler { margin: 0; font-size: calc(13px * var(--schrift, 1)); color: var(--danger-text); font-weight: 700; }
+  .pb-inline { min-height: 40px; padding: 0 4px; }
   .pb-leise { align-self: flex-start; min-height: 44px; border: none; background: none; color: var(--brand-text); font: inherit; font-weight: 700; cursor: pointer; }
   .pb-knoepfe { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .pb-weg-knopf { min-height: 44px; border: 1px solid var(--danger-linie); border-radius: var(--radius-m); background: none; color: var(--danger-text); font: inherit; font-weight: 700; cursor: pointer; }

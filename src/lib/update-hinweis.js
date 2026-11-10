@@ -2,8 +2,8 @@
 // Nur für Nutzer, die die App schon kannten (Sprache oder Einführung gespeichert). Wer sie zum ersten
 // Mal öffnet, bekommt kein Update-Fenster. Unter Mehr, „Updates“ lässt es sich jederzeit wieder öffnen.
 // Je Gerät in localStorage. Für ein späteres großes Update nur UPDATE_VERSION und die Liste ändern.
-export const UPDATE_VERSION = '1.30'
-export const UPDATE_NAME = 'TravelBuddy Basic 1.30'
+export const UPDATE_VERSION = '1.31'
+export const UPDATE_NAME = 'TravelBuddy Basic 1.31'
 export const UPDATE_KEY = 'tb-update-gesehen'
 const SPUREN = ['wa-sprache', 'tb-einfuehrung-v1']
 

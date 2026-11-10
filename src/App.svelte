@@ -63,7 +63,10 @@
   import MeldungBlatt from './lib/MeldungBlatt.svelte'
   import BescheidBlatt from './lib/BescheidBlatt.svelte'
   import PersonBlatt from './lib/PersonBlatt.svelte'
-  import { bescheidBlatt, personBlatt } from './lib/bescheid.js'
+  import SosBlatt from './lib/SosBlatt.svelte'
+  import KurzbefehlBlatt from './lib/KurzbefehlBlatt.svelte'
+  import NotrufTippen from './lib/NotrufTippen.svelte'
+  import { bescheidBlatt, personBlatt, sosBlatt, kurzbefehlBlatt } from './lib/bescheid.js'
   import { laden as meldungenLaden, sendeWartende, nachsehen as meldungenNachsehen, meldungen, OFFIZIELL } from './lib/meldungen.js'
   import { PAYPAL } from './lib/spenden.js'
   import { meldenBlatt, meldungAuf } from './lib/meldungen-text.js'
@@ -95,7 +98,7 @@
   import MusikSymbol from './lib/musik/MusikSymbol.svelte'
   import MusikSeite from './lib/musik/MusikSeite.svelte'
   import { starteMusik, setzeOrte } from './lib/musik/dienst.js'
-  import { quizAntworten } from './lib/userdata.js'
+  import { quizAntworten, notfallKontakte } from './lib/userdata.js'
   import { auswerten } from './lib/quiz.js'
   import { istReisekalender, leseReisekalender, kalenderInfo, baueAbschnitte } from './lib/reisekalender.js'
   import { initUserData, userData, exportBackup, baueBackupPayload, leseBackup, saeubereBackup, wendeBackupAn, backupInfo, datenStand, syncZeiten,
@@ -1020,8 +1023,10 @@
 {#if ansicht.tab === 'heute'}
 <header class="hero">
   <div class="hero-musik"><MusikSymbol {geh} hell /></div>
-  <!-- V34: im Notfall ein Tipp von Heute zur Notfall-Seite (000, deine Leute, Standort) -->
-  <a class="hero-sos" href="#/mehr/notfall" onclick={(e) => { e.preventDefault(); geh('mehr/notfall') }} aria-label={je('SOS: Notfall öffnen', 'SOS: open Emergency')}>SOS</a>
+  <!-- V34: im Notfall ein Tipp von Heute. V35: öffnet gleich das SOS-Blatt (SOS an deine Leute, 000, Notfall-Seite) -->
+  <!-- V35: rot, sobald jemand eingerichtet ist; sonst leicht ausgegraut (öffnet trotzdem: 000 und „Person anlegen“) -->
+  <a class="hero-sos" class:leer={!$notfallKontakte.length} href="#/mehr/notfall" onclick={(e) => { e.preventDefault(); sosBlatt.set(true) }}
+    aria-label={$notfallKontakte.length ? je('SOS: deine Leute alarmieren oder 000 anrufen', 'SOS: alert your people or call 000') : je('SOS: noch niemand eingerichtet. 000 anrufen oder deine Leute anlegen', 'SOS: nobody set up yet. Call 000 or add your people')}>SOS</a>
   <div class="kicker"><span>{t('Roadtrip')}</span>{#if kopfZeit}<span class="k-datum" class:k-wartet={!$ready}>{kopfDatum(kopfZeit.von)}<span class="k-bis">{kopfDatum(kopfZeit.bis)}</span></span>{/if}</div>
   <h1>
     <span class="stretch">{#each 'WESTERN'.split('') as ch}<span>{ch}</span>{/each}</span>
@@ -1334,7 +1339,7 @@
     {:else if ansicht.unter === 'funfacts'}
       <FunFacts />
     {:else if ansicht.unter === 'fehler'}
-      <FehlerMelden version="Basic 1.30" build={buildText} />
+      <FehlerMelden version="Basic 1.31" build={buildText} />
     {:else if ansicht.unter === 'backup'}
       <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
     {:else if ansicht.unter === 'meldungen'}
@@ -1492,7 +1497,12 @@
 {#if $meldenBlatt && $meldungen.verfuegbar !== false}<MeldungNeu vorlage={$meldenBlatt} orte={[...orte, ...$eigeneOrte]} reisen={$reisen} onclose={() => meldenBlatt.set(null)} onmeine={() => { meldenBlatt.set(null); geh('mehr/meldungen/meine') }} />{/if}
 {#if $meldungAuf}<MeldungBlatt id={$meldungAuf.id} onclose={() => meldungAuf.set(null)} />{/if}
 <!-- V34: Deinen Leuten Bescheid geben (Notfall, Ankunft auf Heute) -->
-{#if $bescheidBlatt}<BescheidBlatt art={$bescheidBlatt.art} orte={[...orte, ...$eigeneOrte]} onclose={() => bescheidBlatt.set(null)} />{/if}
+{#if $bescheidBlatt}<BescheidBlatt art={$bescheidBlatt.art} smsErledigt={!!$bescheidBlatt.smsErledigt} kurzbefehl={!!$bescheidBlatt.kurzbefehl} orte={[...orte, ...$eigeneOrte]} onclose={() => bescheidBlatt.set(null)} />{/if}
+<!-- V35: SOS an deine Leute und Direkt senden per Kurzbefehl -->
+{#if $sosBlatt}<SosBlatt orte={[...orte, ...$eigeneOrte]} onclose={() => sosBlatt.set(false)} onnotfall={() => geh('mehr/notfall')} />{/if}
+{#if $kurzbefehlBlatt}<KurzbefehlBlatt onclose={() => kurzbefehlBlatt.set(false)} />{/if}
+<!-- V35: 7 schnelle Tipps auf eine freie Fläche: Notruf 000 -->
+<NotrufTippen />
 {#if $personBlatt}<PersonBlatt id={$personBlatt.id || null} onclose={() => personBlatt.set(null)} />{/if}
 {#if neuOffen}
   <NeuBlatt typ={neuOffen.typ} vorlage={neuOffen.vorlage} orte={[...orte, ...$eigeneOrte]}
@@ -1521,6 +1531,8 @@
   .hero > .hero-sos { position: absolute; z-index: 2; top: calc(env(safe-area-inset-top, 0px) + 14px); right: calc(14px + 44px + 10px); display: inline-flex; align-items: center; justify-content: center;
     min-width: 56px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: #c0392b; color: #fff; text-decoration: none; font-weight: 900; letter-spacing: 0.08em;
     font-size: calc(14px * var(--schrift, 1)); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); text-shadow: none; }
+  .hero > .hero-sos.leer { background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.35); color: rgba(255, 255, 255, 0.82); box-shadow: none;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
   .hero > .hero-musik { position: absolute; z-index: 2; top: calc(env(safe-area-inset-top, 0px) + 14px); right: 14px; text-shadow: none; }
   .sk-musik { margin-left: auto; display: inline-flex; }
   .sk-musik + .sk-neu { margin-left: 0; }
