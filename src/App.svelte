@@ -69,7 +69,6 @@
   import Runterziehen from './lib/Runterziehen.svelte'
   import { bescheidBlatt, personBlatt, sosBlatt, kurzbefehlBlatt } from './lib/bescheid.js'
   import { laden as meldungenLaden, sendeWartende, nachsehen as meldungenNachsehen, meldungen, OFFIZIELL } from './lib/meldungen.js'
-  import { PAYPAL } from './lib/spenden.js'
   import { meldenBlatt, meldungAuf } from './lib/meldungen-text.js'
   import { etappenMitDatum, planUeberblick, reiseZeitraum, ymd as ymdPlan, ohneDoppelteStrecken } from './lib/plan.js'
   import Quiz from './lib/Quiz.svelte'
@@ -1340,7 +1339,7 @@
     {:else if ansicht.unter === 'funfacts'}
       <FunFacts />
     {:else if ansicht.unter === 'fehler'}
-      <FehlerMelden version="Basic 1.36" build={buildText} />
+      <FehlerMelden version="Basic 1.37" build={buildText} />
     {:else if ansicht.unter === 'backup'}
       <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
     {:else if ansicht.unter === 'meldungen'}
@@ -1392,7 +1391,7 @@
 </main>
 <FunFactUnterwegs orte={[...orte, ...$eigeneOrte]} />
 
-<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online', 'TravelBuddy online')}</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-spende" href={PAYPAL} target="_blank" rel="noopener noreferrer" title={je('Freiwillig über PayPal', 'Voluntary, via PayPal')}>☕ {je('Spenden', 'Donate')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></span><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
+<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online', 'TravelBuddy online')}</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></span><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>{t('Basic · Build {__BUILD__}', { __BUILD__: buildText })}</span></footer>
 </div>
 </div>
 
@@ -1584,7 +1583,6 @@
   .app-footer .af-name { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 3px; padding: 8px 2px; }
   .app-footer .af-links { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 16px; margin-top: 2px; }
   .app-footer .af-web { display: inline-flex; align-items: center; padding: 8px 2px; font-size: calc(12px * var(--schrift, 1)); font-weight: 600; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 2px; }
-  .app-footer .af-spende { display: inline-flex; align-items: center; padding: 8px 2px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
   .app-footer .af-fehler { display: inline-flex; align-items: center; gap: 5px; padding: 8px 2px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
   .app-footer .af-bug { color: var(--danger); flex: none; }
   .app-footer .af-by a { color: inherit; text-decoration: underline; text-underline-offset: 2px; padding: 8px 2px; }

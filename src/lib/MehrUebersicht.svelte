@@ -5,7 +5,6 @@
   import { je } from './i18n.js'
   import { uebersicht } from './mehr-gruppen.js'
   import { klapp, dauer } from './motion.js'
-  import { PAYPAL } from './spenden.js'
 
   /**
    * eintraege: [{ id, icon, label, info, rot }] aus mehr-eintraege.js
@@ -67,13 +66,6 @@
       {/if}
     {/if}
   {/each}
-  <!-- V33: Spenden über PayPal. Ganz unten, freundlich, ohne zu drängeln. Auf der Mehr-Seite und im iPhone-Blatt. -->
-  <div class="mu-spende">
-    <span class="mu-icon" aria-hidden="true">☕</span>
-    <span class="mu-txt"><b>{je('Dir gefällt TravelBuddy?', 'Enjoying TravelBuddy?')}</b><small>{je('Die App ist kostenlos und ohne Werbung. Wenn du etwas zurückgeben möchtest, freue ich mich über eine kleine Spende.', 'The app is free and has no ads. If you would like to give something back, a small donation is very welcome.')}</small></span>
-    <a class="btn mu-spende-knopf" href={PAYPAL} target="_blank" rel="noopener noreferrer">{je('Mit PayPal spenden', 'Donate with PayPal')} ↗</a>
-  </div>
-  <p class="mu-spende-k">{je('Freiwillig und ohne Gegenleistung, eine Spendenquittung gibt es nicht. Öffnet PayPal.', 'Voluntary and nothing in return, there is no tax receipt. Opens PayPal.')}</p>
   {#if unten}{@render unten()}{/if}
   <!-- V34: der gefährliche Knopf (hier App zurücksetzen) klein und grau ganz am Ende, mit Rückfrage (vom Aufrufer) -->
   {#if gefahr}<button class="mu-gefahr" onclick={gefahr.onclick}>{gefahr.label}</button>{/if}
@@ -106,10 +98,4 @@
   .mu-app { margin-top: 10px; }
   .mu-app-liste { display: flex; flex-direction: column; }
   .mu-gefahr { align-self: center; min-height: 44px; margin-top: 6px; padding: 0 10px; border: none; background: none; color: var(--muted); font: inherit; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 500; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
-  .mu-spende { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; align-items: center; margin-top: 10px; padding: 12px 14px;
-    border: 1px dashed var(--line-stark); border-radius: var(--radius-l, 14px); background: var(--card); }
-  .mu-spende .mu-txt b { font-size: calc(15px * var(--schrift, 1)); }
-  .mu-spende-knopf { grid-column: 1 / -1; min-height: 48px; display: flex; align-items: center; justify-content: center; text-decoration: none; margin-top: 6px; }
-  @media (min-width: 700px) { .mu-spende { grid-template-columns: auto minmax(0, 1fr) auto; } .mu-spende-knopf { grid-column: auto; margin-top: 0; padding: 0 18px; } }
-  .mu-spende-k { margin: 2px 4px 0; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }
 </style>
