@@ -106,6 +106,8 @@
     const la = Number(String(manLat).replace(',', '.')), lo = Number(String(manLon).replace(',', '.'))
     if (!Number.isFinite(la) || !Number.isFinite(lo) || la < -90 || la > 90 || lo < -180 || lo > 180) { zeigMeldung(t('⚠️ Ungültige Koordinaten')); return }
     pos = { lat: la, lon: lo, acc: null, manuell: true }; posFehler = null
+    // V40: auch für SOS und „Deinen Leuten Bescheid geben“, die den Standort der ganzen App lesen
+    standort.set({ lat: la, lon: lo, genauigkeit: null, zeit: Date.now(), manuell: true })
     ladePois(la, lo)
   }
 

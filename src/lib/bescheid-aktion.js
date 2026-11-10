@@ -55,7 +55,7 @@ export function schnellBescheid(art, { orte = [], pos = null, oeffne = (url) => 
     merke(art, textPos)
     oeffne(kurzbefehlLink(text()))
     bescheidBlatt.set({ art, kurzbefehl: true })
-    zeigeToast(je('Gesendet über deinen Kurzbefehl.', 'Sent via your shortcut.'), 'ok', 5000)
+    zeigeToast(je('An deinen Kurzbefehl übergeben. Kam nichts an, sende im Blatt von Hand.', 'Handed to your shortcut. If nothing arrived, send by hand in the sheet.'), 'ok', 6000)
     return 'kurzbefehl'
   }
 

@@ -81,7 +81,7 @@
     <button class="bedien-knopf haupt" onclick={personNeu}>＋ {je('Person anlegen', 'Add a person')}</button>
     {#if sos}<a class="bedien-knopf bb-000" href="tel:000">📞 {je('000 anrufen', 'Call 000')}</a>{/if}
   {:else}
-    {#if kurzbefehl}<p class="bb-alles" role="status">⚡ {je('Über deinen Kurzbefehl gesendet. Kam nichts an, sende unten von Hand.', 'Sent via your shortcut. If nothing arrived, send by hand below.')}</p>
+    {#if kurzbefehl}<p class="bb-alles" role="status">⚡ {je('An deinen Kurzbefehl übergeben. Er sendet ohne weiteren Tipp. Kam nichts an, sende unten von Hand.', 'Handed to your shortcut. It sends without another tap. If nothing arrived, send by hand below.')}</p>
     {:else if smsErledigt}<p class="bb-alles" role="status">💬 {je('Die SMS an alle ist offen. Danach hier weiter mit WhatsApp.', 'The text to everyone is open. Then continue here with WhatsApp.')}</p>{/if}
 
     <div class="bb-liste" role="group" aria-label={je('An wen?', 'To whom?')}>

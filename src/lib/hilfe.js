@@ -74,7 +74,7 @@ export const HILFE = jeSprache(() => ({
   orte: {
     titel: je('Orte einplanen', 'Planning places'),
     text: [
-      je('Mit „Einplanen“ legst du einen Ort in eine Route in der Nähe oder beginnst eine neue.', 'With “Add to trip” you put a place into a nearby route or start a new one.'),
+      je('Mit „Einplanen“ legst du einen Ort in deine Etappe oder in eine Route in der Nähe. Hat die Etappe noch keine Route, legt der erste Ort sie an, alle weiteren aus der Gegend kommen in dieselbe. Eine eigene neue Route geht auch.', 'With “Add to trip” you put a place into your leg or into a nearby route. If the leg has no route yet, the first place starts it and every further one from the area joins it. Your own new route works too.'),
       je('Ist er weit weg, merk ihn vor: Sobald eine Route bis 100 km an ihm vorbeiführt, schlägt die App ihn dort zuerst vor. Mit 💬 hältst du Notizen und Fotos zum Ort fest.', 'If it is far away, save it for later: as soon as a route passes within 100 km, the app suggests it there first. With 💬 you keep notes and photos for the place.'),
     ],
     teil: 7,

@@ -60,11 +60,21 @@
   }
   onMount(() => {
     const o = { passive: false }
+    // V40: Der Finger-Wächter, der das Scrollen anhalten darf, hängt nur dran, solange die Seite ganz oben steht.
+    // Weiter unten scrollt der Browser so ungebremst, ohne auf JavaScript zu warten.
+    let dran = false
+    const pruefe = () => {
+      const oben = (globalThis.scrollY || 0) <= 0
+      if (oben && !dran) { document.addEventListener('touchmove', bewegt, o); dran = true }
+      else if (!oben && dran && !zieht) { document.removeEventListener('touchmove', bewegt, o); dran = false }
+    }
+    pruefe()
+    window.addEventListener('scroll', pruefe, { passive: true })
     document.addEventListener('touchstart', anfang, { passive: true })
-    document.addEventListener('touchmove', bewegt, o)
     document.addEventListener('touchend', ende, { passive: true })
     document.addEventListener('touchcancel', ende, { passive: true })
     return () => {
+      window.removeEventListener('scroll', pruefe)
       document.removeEventListener('touchstart', anfang)
       document.removeEventListener('touchmove', bewegt, o)
       document.removeEventListener('touchend', ende)

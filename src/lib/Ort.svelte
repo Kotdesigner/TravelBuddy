@@ -1,7 +1,8 @@
 <script>
   import { t, LOCALE, tn, je } from './i18n.js'
-  import { userData, updateOrt, reisen, stopHinzufuegen, neueReise, neueRoute, uid, journal, neuerJournalEintrag } from './userdata.js'
-  import { istFahrt, istReiseEtappe } from './abschnitte.js'
+  import { userData, updateOrt, reisen, stopHinzufuegen, neueReise, neueRoute, uid, journal, neuerJournalEintrag, gesamtStart } from './userdata.js'
+  import { istFahrt, istReiseEtappe, etappenZumEinplanen, ersterFreierTag } from './abschnitte.js'
+  import { bereich } from './format.js'
   import ZuordnenBlatt from './ZuordnenBlatt.svelte'
   import SonneWetter from './SonneWetter.svelte'
   import { STUFE_FARBE, typName } from './gefahren.js'
@@ -10,7 +11,7 @@
   import BildAendern from './BildAendern.svelte'
   import { bildNachweis } from './bild-nachweis.js'
   import { istWanderung, istPerle } from './wander-orte.js'
-  import { istRoute, abstandZurRoute, ymd as ymdPlan } from './plan.js'
+  import { istRoute, abstandZurRoute, ymd as ymdPlan, etappenMitDatum } from './plan.js'
   import { INSELN, ANREISE_ZEICHEN, abfahrtPunkt } from './inseln.js'
   import { naechsteReise } from './wander-zuordnung.js'
   import { norm } from './suche.js'
@@ -128,6 +129,16 @@
     zeigeReiseWahl = false
     flash('✓ in ' + rname)
     zeigeToast(nach ? t('{name} in „{rname}“ nach {nach} eingefügt', { name: ort.name, rname, nach }) : t('{name} als Start von „{rname}“ eingefügt', { name: ort.name, rname }), 'ok')
+  }
+  // V39: In deine Etappe. Hat die passende Etappe noch keine Fahrt, legt ein Tipp dort die erste Route mit diesem Ort
+  // an (erster freier Tag, wie „Neue Route“). Weitere Orte der Gegend stehen dann unter „In eine Fahrt in der Nähe“.
+  const etappenWahl = $derived(zeigeReiseWahl ? etappenZumEinplanen(ort, etappenMitDatum(alleReisen, $gesamtStart), alleReisen) : { nah: [], andere: [] })
+  let andereEtappenAuf = $state(false)
+  function inEtappe(e) {
+    zeigeReiseWahl = false
+    neueRoute({ name: e.reise.name, etappeId: e.reise.id, von: ersterFreierTag(alleReisen, e), tage: 1, stops: [{ name: ort.name, lat: ort.lat ?? null, lon: ort.lon ?? null, img: null }] })
+    flash('✓ in ' + e.reise.name)
+    zeigeToast(je(`${ort.name} in „${e.reise.name}“ eingeplant. Weitere Orte hier kommen in dieselbe Route.`, `${ort.name} planned into “${e.reise.name}”. More places nearby go into the same route.`), 'ok', 5000)
   }
   let neuFrage = $state(false)
   function neuZugeordnet(w) {
@@ -398,7 +409,13 @@
           <div class="rm-hg" onclick={() => (zeigeReiseWahl = false)} aria-hidden="true"></div>
           <div class="reise-menu" role="menu" aria-label={t('{name} einplanen', { name: ort.name })}>
             <span class="rm-kopf">{ort.name}</span>
-            {#if routenNachNaehe.length}<span class="rm-titel">{je('In eine Fahrt in der Nähe', 'Into a nearby drive')}</span>{:else}<span class="rm-titel">{je('Keine Fahrt bis 300 km in der Nähe', 'No drive within 300 km')}</span>{/if}
+            {#if etappenWahl.nah.length}
+              <span class="rm-titel">{je('In deine Etappe', 'Into your leg')}</span>
+              {#each etappenWahl.nah as e (e.reise.id)}
+                <button role="menuitem" class="rm-etappe" onclick={() => inEtappe(e)}><span class="dot" style="background:{e.reise.farbe || 'var(--brand)'}"></span><span class="rm-name">{e.reise.name}<small>{bereich(e.von, e.bis)} · {je('legt dort die erste Route an', 'starts the first route there')}</small></span></button>
+              {/each}
+            {/if}
+            {#if routenNachNaehe.length}<span class="rm-titel">{je('In eine Fahrt in der Nähe', 'Into a nearby drive')}</span>{:else if !etappenWahl.nah.length}<span class="rm-titel">{je('Keine Fahrt bis 300 km in der Nähe', 'No drive within 300 km')}</span>{/if}
             {#each routenNachNaehe as { r, km } (r.id)}
               <button role="menuitem" onclick={() => zuReise(r.id, r.name)}><span class="dot" style="background:{r.farbe}"></span><span class="rm-name">{r.name}{#if etappeName(r.etappeId)}<small>{etappeName(r.etappeId)}</small>{/if}{#if km < 60}<small>{t('{round} km von der Strecke', { round: Math.round(km) })}</small>{/if}</span></button>
             {/each}
@@ -407,6 +424,14 @@
               {#if weitAuf}
                 {#each weiteFahrten as { r, km } (r.id)}
                   <button role="menuitem" onclick={() => zuWeiterReise(r, km)}><span class="dot" style="background:{r.farbe}"></span><span class="rm-name">{r.name}<small>{etappeName(r.etappeId)}{etappeName(r.etappeId) ? ' · ' : ''}{je(`${zahl(Math.round(km))} km entfernt`, `${zahl(Math.round(km))} km away`)}</small></span></button>
+                {/each}
+              {/if}
+            {/if}
+            {#if etappenWahl.andere.length}
+              <button role="menuitem" class="neu" aria-expanded={andereEtappenAuf} onclick={() => (andereEtappenAuf = !andereEtappenAuf)}>{andereEtappenAuf ? je('Andere Etappen ausblenden', 'Hide other legs') : je(`Andere Etappe wählen … (${etappenWahl.andere.length})`, `Choose another leg … (${etappenWahl.andere.length})`)}</button>
+              {#if andereEtappenAuf}
+                {#each etappenWahl.andere as e (e.reise.id)}
+                  <button role="menuitem" onclick={() => inEtappe(e)}><span class="dot" style="background:{e.reise.farbe || 'var(--brand)'}"></span><span class="rm-name">{e.reise.name}<small>{bereich(e.von, e.bis)} · {je('legt dort die erste Route an', 'starts the first route there')}</small></span></button>
                 {/each}
               {/if}
             {/if}
@@ -548,6 +573,7 @@
   .reise-menu button:hover { background: var(--flaeche-2); }
   .reise-menu .dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
   .reise-menu .neu { color: var(--ok-text); font-weight: 700; border-top: 1px solid var(--line); margin-top: 3px; }
+  .reise-menu .rm-etappe { font-weight: 700; }
   .rm-hg { position: fixed; inset: 0; z-index: 19; }
   /* Offenes Menü am Rechner: darf über die Kachel hinausragen und liegt über den Nachbarkacheln (V37) */
   .card.menu-offen { overflow: visible; position: relative; z-index: 21; }

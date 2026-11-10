@@ -98,6 +98,65 @@ export function istReiseEtappe(e, reisen = []) {
 }
 
 /**
+ * V39: In welche Etappe gehört ein Ort? Für „In Etappe …“ im Einplanen-Menü der Ortskachel: Hat die Etappe noch
+ * keine Fahrt, legt ein Tipp dort die erste Route mit diesem Ort an, weitere Orte kommen dann in dieselbe Route.
+ * Maßgeblich ist, wo man in der Etappe ist: ihr letzter Stopp mit Ort (Flug Melbourne → Cairns: Cairns) und die
+ * Stopps ihrer Fahrten, nicht ihr Abflugort. Ohne eigenen Ort liegt sie dort, wo die vorige Etappe ankommt; sonst
+ * zählt der Name (Etappe „Melbourne & Kinglake“ passt zu Orten in „Melbourne & Bucht“). Hin- und Heimreise bleiben draußen: ihre eigenen Stopps liegen über 3000 km
+ * auseinander, bei der ersten und letzten Etappe zählen auch die Flüge darin. Ein langer Flug mitten in der Reise
+ * (etwa der Weiterflug ab Proserpine) macht eine Etappe dagegen nicht zur Heimreise.
+ * eintraege aus etappenMitDatum. Rückgabe: [{ eintrag, km, grund: 'nah' | 'name', hatFahrt }] nach Nähe.
+ */
+function ankunftVor(reihe, reisen, id) {
+  const i = reihe.findIndex((e) => e.reise.id === id)
+  if (i < 1) return null
+  const vorige = reihe[i - 1].reise
+  const rs = reisen.filter((x) => istRoute(x) && x.etappeId === vorige.id).sort((a, b) => String(a.von || '').localeCompare(String(b.von || '')))
+  const letzte = rs.length ? mitKoord(rs[rs.length - 1].stops).at(-1) : null
+  return letzte || mitKoord(vorige.stops).at(-1) || null
+}
+/** Hin- oder Heimreise im Plan? Eigene Stopps über 3000 km auseinander, bei erster und letzter Etappe auch ihre Flüge */
+export function istReiseImPlan(reise, eintraege = [], reisen = []) {
+  const reihe = [...eintraege].sort((a, b) => String(a.von).localeCompare(String(b.von)))
+  const rand = reise.id === reihe[0]?.reise.id || reise.id === reihe.at(-1)?.reise.id
+  return istReiseEtappe(reise, []) || (rand && istReiseEtappe(reise, reisen))
+}
+/**
+ * Für das Einplanen-Menü: Etappen ohne eigene Fahrt, in die ein Ort mit einem Tipp kommt (dort entsteht die erste
+ * Route). nah: passend zum Ort (höchstens zwei), andere: alle übrigen außer Hin- und Heimreise.
+ */
+export function etappenZumEinplanen(ort, eintraege = [], reisen = []) {
+  const ohneFahrt = (e) => !reisen.some((x) => istRoute(x) && x.etappeId === e.reise.id && istFahrt(x))
+  const nah = etappenFuerOrt(ort, eintraege, reisen).filter((x) => !x.hatFahrt).slice(0, 2).map((x) => x.eintrag)
+  const ids = new Set(nah.map((e) => e.reise.id))
+  const andere = [...eintraege].sort((a, b) => String(a.von).localeCompare(String(b.von)))
+    .filter((e) => !ids.has(e.reise.id) && ohneFahrt(e) && !istReiseImPlan(e.reise, eintraege, reisen))
+  return { nah, andere }
+}
+export function etappenFuerOrt(ort, eintraege = [], reisen = [], maxKm = 300) {
+  if (!ort) return []
+  const reihe = [...eintraege].sort((a, b) => String(a.von).localeCompare(String(b.von)))
+  const woerter = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/[^a-z]+/).filter((w) => w.length >= 5)
+  const ortWorte = new Set([...woerter(ort.name), ...woerter(ort.region)])
+  const aus = []
+  for (const e of eintraege) {
+    const r = e.reise
+    if (istReiseImPlan(r, eintraege, reisen)) continue
+    const fahrten = reisen.filter((x) => istRoute(x) && x.etappeId === r.id && istFahrt(x))
+    const eigene = mitKoord(r.stops)
+    const punkte = [...(eigene.length ? [eigene[eigene.length - 1]] : []), ...fahrten.flatMap((x) => mitKoord(x.stops))]
+    // Ohne eigenen Ort: dort, wo die vorige Etappe ankommt (letzter Stopp ihrer letzten Route oder ihr eigener)
+    if (!eigene.length) { const an = ankunftVor(reihe, reisen, r.id); if (an) punkte.push(an) }
+    let bester = Infinity
+    if (ort.lat != null && ort.lon != null) for (const p of punkte) bester = Math.min(bester, km(p, ort))
+    if (bester <= maxKm) { aus.push({ eintrag: e, km: bester, grund: 'nah', hatFahrt: fahrten.length > 0 }); continue }
+    // Etappe ohne eigenen Ort und nichts in Reichweite: der Name (nur Wörter ab fünf Buchstaben, „Kinglake“, „Melbourne“)
+    if (!eigene.length && woerter(r.name).some((w) => ortWorte.has(w))) aus.push({ eintrag: e, km: Infinity, grund: 'name', hatFahrt: fahrten.length > 0 })
+  }
+  return aus.sort((a, b) => a.km - b.km)
+}
+
+/**
  * Vorschlag für eine Etappe zu Stopps. Nie Hin- oder Heimreise. Erst eine Etappe mit einem Stopp oder
  * Abschnitt bis 300 km entfernt, sonst die längste Etappe, in der man selbst fährt.
  * @returns { etappe (Eintrag aus etappenMitDatum), grund: 'nah' | 'laengste' } oder null

@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.33 · built for Western Australia**<br>
+**Version 1.34 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.33-e07b28?style=flat-square" alt="version: 1.33"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.34-e07b28?style=flat-square" alt="version: 1.34"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
-**[✨ What's new in 1.33](#-new-in-version-133)**
+**[✨ What's new in 1.34](#-new-in-version-134)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
@@ -144,12 +144,18 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 🗺️ New in version 1.34
+
+**Plan places straight into your leg.** In the “Add to trip” menu of a place, “Into your leg” now comes first, for example “Cairns & Great Barrier Reef”. If the leg has no route yet, one tap starts it with this place, and every further place from the area joins the same route. TravelBuddy finds the leg by where you actually are in it, not where you fly out. For places far away there is “Choose another leg …”.
+
+**Safer in an emergency.** If you enter your coordinates by hand because GPS fails, the SOS to your people now sends them along instead of “location unknown”. Tapping 7 times for 000 also works reliably on iPhone, and pulling down to update no longer slows down scrolling.
+
+<details>
+<summary><b>📜 Earlier versions: 1.33 to 1.1</b></summary>
+
 ## 🛠️ New in version 1.33
 
 **Planning places works again on phones.** Since version 1.25 the “Add to trip” menu on the place cards got trapped inside the card on phones, so none of its options could be tapped: save for later, new route, hike, share, report or a nearby drive. Now the menu opens again as a sheet above everything. On computers the list is taller, so all options are in reach without scrolling.
-
-<details>
-<summary><b>📜 Earlier versions: 1.32 to 1.1</b></summary>
 
 ## 🔄 New in version 1.32
 
@@ -890,6 +896,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.25:** maps with areas, zoom and pop-ups for places, route ideas and hikes, over 20 hike ideas, faster place tiles
 - [x] **Version 1.27:** routes without internet on real roads, track network per area, 4WD switch, detours around road closures
 - [x] **Version 1.28:** setup in 12 steps with design, vehicle, first route, expenses before the trip and a ready check
+- [x] **Version 1.34:** plan places straight into your leg, coordinates by hand go along with the SOS
 - [x] **Version 1.33:** “Add to trip” on place cards works on phones again
 - [x] **Version 1.32:** pull down at the top to update, with a different Aussie figure each time
 - [x] **Version 1.31:** SOS to your people with location, emergency call by tapping 7 times, shortcut on iPhone and Mac, WhatsApp Business on Android
@@ -926,10 +933,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.33 · entwickelt für Western Australia**<br>
+**Version 1.34 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.33-e07b28?style=flat-square" alt="version: 1.33"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.34-e07b28?style=flat-square" alt="version: 1.34"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -937,7 +944,7 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
-**[✨ Neu in 1.33](#-neu-in-version-133)**
+**[✨ Neu in 1.34](#-neu-in-version-134)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
@@ -1050,12 +1057,18 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 🗺️ Neu in Version 1.34
+
+**Orte direkt in deine Etappe einplanen.** Im Menü „Einplanen“ einer Ortskachel steht jetzt oben „In deine Etappe“, zum Beispiel „Cairns & Great Barrier Reef“. Hat die Etappe noch keine Route, legt ein Tipp sie mit diesem Ort an, und jeder weitere Ort aus der Gegend kommt in dieselbe Route. TravelBuddy erkennt die Etappe daran, wo du in ihr bist, nicht wo du abfliegst. Für Orte weit weg gibt es „Andere Etappe wählen …“.
+
+**Sicherer im Notfall.** Trägst du die Koordinaten von Hand ein, weil das GPS fehlt, schickt das SOS an deine Leute sie jetzt mit, statt „Standort unbekannt“. Die 7 Tipps für 000 klappen auch am iPhone zuverlässig, und Runterziehen zum Aktualisieren bremst das Scrollen nicht mehr.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.33 bis 1.1</b></summary>
+
 ## 🛠️ Neu in Version 1.33
 
 **Orte einplanen geht am Handy wieder.** Seit Version 1.25 steckte das Menü „Einplanen“ der Ortskacheln am Handy in der Kachel fest, keiner der Punkte ließ sich tippen: Vormerken, neue Route, Wanderung, Teilen, Melden oder eine Fahrt in der Nähe. Jetzt öffnet es sich wieder als Blatt über allem. Am Rechner ist die Liste höher, so sind alle Punkte ohne Scrollen erreichbar.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.32 bis 1.1</b></summary>
 
 ## 🔄 Neu in Version 1.32
 
@@ -1764,6 +1777,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.25:** Karten mit Gegenden, Zoom und Fenstern für Orte, Routen-Ideen und Wanderungen, gut 20 Wander-Ideen, schnellere Ortskacheln
 - [x] **Version 1.27:** Routen ohne Netz auf echten Straßen, Pisten-Netz je Gebiet, 4WD-Schalter, Umleitung um Straßensperrungen
 - [x] **Version 1.28:** Einrichtung in 12 Schritten mit Design, Fahrzeug, erster Route, Vorabausgaben und Check vor der Abreise
+- [x] **Version 1.34:** Orte direkt in deine Etappe einplanen, Koordinaten von Hand gehen mit dem SOS mit
 - [x] **Version 1.33:** „Einplanen“ an den Ortskacheln geht am Handy wieder
 - [x] **Version 1.32:** Runterziehen zum Aktualisieren, jedes Mal mit einer anderen Figur aus Australien
 - [x] **Version 1.31:** SOS an deine Leute mit Standort, Notruf durch 7× Tippen, Kurzbefehl am iPhone und Mac, WhatsApp Business am Android

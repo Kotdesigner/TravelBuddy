@@ -14,7 +14,12 @@
   let gewaehlt = $state(false) // nach dem siebten Tipp: Hinweis und SOS an deine Leute
   let uhr
 
+  // V40: Am iPhone kommt ein Tipp auf Text oder leere Fläche nicht immer als click an. Finger zählen deshalb über
+  // pointerup (zählt auch als Tipp für den Anruf), Maus und Tastatur über click. Derselbe Tipp zählt nie doppelt.
+  let letzterFinger = -Infinity
   function tipp(e) {
+    if (e.type === 'pointerup') { if (e.pointerType === 'mouse') return; letzterFinger = e.timeStamp || performance.now() }
+    else if ((e.timeStamp || performance.now()) - letzterFinger < 700) { if (stand || gewaehlt) { e.preventDefault(); e.stopPropagation() } return }
     if (!$notrufTippenAn || gewaehlt) return
     if (zaehltNicht(e.target)) { if (!stand) z.zurueck(); return }
     const r = z.tipp(e.timeStamp || performance.now())
@@ -31,7 +36,8 @@
   }
   onMount(() => {
     document.addEventListener('click', tipp, true)
-    return () => { document.removeEventListener('click', tipp, true); clearTimeout(uhr) }
+    document.addEventListener('pointerup', tipp, true)
+    return () => { document.removeEventListener('click', tipp, true); document.removeEventListener('pointerup', tipp, true); clearTimeout(uhr) }
   })
   function abbrechen(e) { e.stopPropagation(); clearTimeout(uhr); z.zurueck(); stand = 0 }
 </script>
