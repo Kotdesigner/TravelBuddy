@@ -32,6 +32,9 @@ export function grundText(g) {
     mail: je('Bitte keine Mailadressen.', 'Please no email addresses.'),
     link: je('Bitte keine Links.', 'Please no links.'),
     ort: je('Wähle, wo es ist: Standort oder Ort.', 'Choose where it is: location or place.'),
+    // Basic 1.35: Standort oder Ort außerhalb Australiens hieß vorher auch „Wähle, wo es ist“, obwohl schon gewählt
+    'standort-ausserhalb': je('Du bist gerade nicht in Australien. Meldungen gehen nur für Orte dort. Such den Ort stattdessen.', 'You are not in Australia right now. Reports only work for places there. Search for the place instead.'),
+    ausserhalb: je('Dieser Ort liegt nicht in Australien. Meldungen gehen nur für Orte dort.', 'This place is not in Australia. Reports only work for places there.'),
     art: je('Wähle, worum es geht.', 'Choose what it is about.'),
     'zu-viele': je('Gerade zu viele Meldungen von diesem Gerät. Versuch es in einer Stunde.', 'Too many reports from this device right now. Try again in an hour.'),
   }[g] || je('Das ging nicht. Versuch es später noch einmal.', 'That did not work. Please try again later.')

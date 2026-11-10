@@ -71,7 +71,7 @@
           <div class="ms-mein" class:aus={m.status === 'zurueck' || m.status === 'vorbei'}>
             <span class="ms-art">{ART[m.roh.art]?.icon} {artName(m.roh.art)}</span>
             <span class="ms-text">{m.roh.text}</span>
-            <small>{m.roh.ort || gegendName(m.roh.gegend)} · {alter(m.erstellt)} · {STATUS[m.status]?.()}{m.status === 'abgelehnt' ? ': ' + grundText(m.grund) : ''}</small>
+            <small>{m.roh.ort || gegendName(m.roh.gegend)} · {alter(m.erstellt)} · {STATUS[m.status]?.()}{m.status === 'abgelehnt' ? ': ' + grundText(m.grund === 'ort' ? 'ausserhalb' : m.grund) : ''}</small>
             {#if m.status === 'wartet' || m.status === 'live'}<button class="btn ms-weg" onclick={() => weg(m)}>{m.status === 'wartet' ? je('Nicht senden', 'Do not send') : je('Zurückziehen', 'Withdraw')}</button>{/if}
           </div>
         {/each}

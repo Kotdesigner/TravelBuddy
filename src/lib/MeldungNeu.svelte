@@ -2,6 +2,7 @@
   // Neue Meldung (V32): beim ersten Mal kurz die Regeln und der Name, dann Art, Ort, ein Satz. Gilt 3 Tage.
   // Ohne Netz bleibt sie in der Warteschlange (meldungen.js) und geht raus, sobald Netz da ist.
   import { get } from 'svelte/store'
+  import { tick } from 'svelte'
   import { je } from './i18n.js'
   import { modal } from './modal.js'
   import { online } from './netz.js'
@@ -10,7 +11,7 @@
   import OrtWahl from './OrtWahl.svelte'
   import { melden, regelnGelesen, regelnOk, meldungen } from './meldungen.js'
   import { ART, artName, BEISPIEL, grundText } from './meldungen-text.js'
-  import { textProblem, MAX_TEXT, TAGE } from './meldungen-regeln.js'
+  import { textProblem, inAustralien, MAX_TEXT, TAGE } from './meldungen-regeln.js'
 
   let { vorlage = {}, orte = [], reisen = [], onclose = () => {}, onmeine = () => {} } = $props()
 
@@ -18,10 +19,15 @@
   let name = $state(get(profil).name || '')
   let art = $state(vorlage.art || '')
   let text = $state('')
-  let wo = $state(vorlage.lat != null && vorlage.lon != null ? { lat: vorlage.lat, lon: vorlage.lon, name: vorlage.ort || '' } : null)
+  // Basic 1.35: Meldungen gehen nur für Orte in Australien. Ein Standort außerhalb (z. B. noch zu Hause) wird nicht still übernommen.
+  const hatVorlage = vorlage.lat != null && vorlage.lon != null
+  const vorlageOk = hatVorlage && inAustralien(Number(vorlage.lat), Number(vorlage.lon))
+  let wo = $state(vorlageOk ? { lat: vorlage.lat, lon: vorlage.lon, name: vorlage.ort || '' } : null)
   let suche = $state(false)
   let holt = $state(false)
   let fehler = $state('')
+  /** Hinweis zum Ort, direkt unter „Wo?“ (Basic 1.35) */
+  let woFehler = $state(hatVorlage && !vorlageOk ? grundText(vorlage.ort ? 'ausserhalb' : 'standort-ausserhalb') : '')
   let sendet = $state(false)
   let ergebnis = $state(null)
 
@@ -31,24 +37,36 @@
     schritt = 'form'
   }
   async function standortNehmen() {
-    holt = true; fehler = ''
+    holt = true; fehler = ''; woFehler = ''
     await frageStandortAn({ hoheGenauigkeit: true, alterMs: 60000 })
     holt = false
     const s = get(standort)
-    if (s) { wo = { lat: s.lat, lon: s.lon, name: '' }; suche = false }
-    else fehler = je('Standort nicht verfügbar. Such den Ort stattdessen.', 'Location not available. Search for the place instead.')
+    if (s && !inAustralien(s.lat, s.lon)) { wo = null; suche = true; woFehler = grundText('standort-ausserhalb') }
+    else if (s) { wo = { lat: s.lat, lon: s.lon, name: '' }; suche = false }
+    else woFehler = je('Standort nicht verfügbar. Such den Ort stattdessen.', 'Location not available. Search for the place instead.')
+  }
+  function ortGewaehlt(o) {
+    if (!inAustralien(Number(o.lat), Number(o.lon))) { woFehler = grundText('ausserhalb'); return }
+    wo = { lat: o.lat, lon: o.lon, name: o.name }; suche = false; fehler = ''; woFehler = ''
+  }
+  /** Beim Melden: Hinweis zum Ort zeigen und hinscrollen, er steht oben unter „Wo?“ */
+  async function woZeigen(text) {
+    woFehler = text; wo = null
+    await tick(); document.querySelector('.mn-wo-fehler')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
   }
   async function senden() {
     fehler = ''
     if (!art) { fehler = grundText('art'); return }
-    if (!wo) { fehler = grundText('ort'); return }
+    if (!wo) { woZeigen(woFehler || grundText('ort')); return }
+    if (!inAustralien(Number(wo.lat), Number(wo.lon))) { woZeigen(grundText(wo.name ? 'ausserhalb' : 'standort-ausserhalb')); return }
     const p = textProblem(text)
     if (p) { fehler = grundText(p); return }
     sendet = true
     const e = await melden({ art, text, name: get(profil).name, lat: wo.lat, lon: wo.lon, ort: wo.name }, { online: get(online) })
     sendet = false
+    if (e.fehler === 'ort') { woZeigen(grundText('ausserhalb')); return }
     if (e.fehler) { fehler = grundText(e.fehler); return }
-    if (e.eintrag?.status === 'abgelehnt') { fehler = grundText(e.eintrag.grund); return }
+    if (e.eintrag?.status === 'abgelehnt') { if (e.eintrag.grund === 'ort') woZeigen(grundText('ausserhalb')); else fehler = grundText(e.eintrag.grund); return }
     ergebnis = e.eintrag
     schritt = 'fertig'
   }
@@ -85,9 +103,10 @@
     {:else}
       <div class="mn-wo-wahl">
         <button class="btn" onclick={standortNehmen} disabled={holt}>{holt ? je('sucht …', 'locating …') : je('📍 Mein Standort', '📍 My location')}</button>
-        <OrtWahl {orte} {reisen} label={je('Ort suchen', 'Search place')} onwahl={(o) => { wo = { lat: o.lat, lon: o.lon, name: o.name }; suche = false; fehler = '' }} />
+        <OrtWahl {orte} {reisen} label={je('Ort suchen', 'Search place')} onwahl={ortGewaehlt} />
       </div>
     {/if}
+    {#if woFehler}<p class="mn-fehler mn-wo-fehler" role="alert">{woFehler}</p>{/if}
     <label class="mn-f">{je('Was genau?', 'What exactly?')}
       <textarea class={schritt === 'form' && wo ? 'mn-fokus' : ''} bind:value={text} rows="3" maxlength={MAX_TEXT} placeholder={art ? BEISPIEL[art]() : je('Ein Satz reicht', 'One sentence is enough')} oninput={() => (fehler = '')}></textarea>
     </label>
