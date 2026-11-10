@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.31 · built for Western Australia**<br>
+**Version 1.32 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.31-e07b28?style=flat-square" alt="version: 1.31"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.32-e07b28?style=flat-square" alt="version: 1.32"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
-**[✨ What's new in 1.31](#-new-in-version-131)**
+**[✨ What's new in 1.32](#-new-in-version-132)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
@@ -144,6 +144,13 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 🔄 New in version 1.32
+
+**Pull down to update.** Like in other apps: pull down at the very top of a page and let go. TravelBuddy fetches the newest version and reloads, without internet it loads from what is stored on your device. If you have unsaved changes, the app asks first. On maps, in open sheets and in text fields nothing happens, so nothing gets reloaded by mistake.
+
+<details>
+<summary><b>📜 Earlier versions: 1.31 to 1.1</b></summary>
+
 ## 🆘 New in version 1.31
 
 **SOS to your people.** Tap SOS at the top of Today or “SOS to my people” under Emergency, then “Send SOS now”. Your people get an alert with your location as a text, even without internet, and then by WhatsApp. If there is no fresh location, the last known one goes along with its time. Two taps on purpose, so nobody is alarmed by mistake. The SOS button turns red once someone is set up, until then it is slightly greyed out.
@@ -151,9 +158,6 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 **Emergency call by tapping.** Tap 7 times quickly on any empty area in TravelBuddy and the call to 000 opens. From the third tap a red screen counts along, nothing underneath changes. Your phone asks once more before calling. You can turn it off under Emergency.
 
 **On every device.** On iPhone and Mac a shortcut can send your message without tapping Send at all. On Android you choose WhatsApp or WhatsApp Business once. On a Windows PC the app offers WhatsApp first and copying the text. The music symbol turns green once Spotify is fully set up.
-
-<details>
-<summary><b>📜 Earlier versions: 1.30 to 1.1</b></summary>
 
 ## 👨‍👩‍👧 New in version 1.30
 
@@ -882,6 +886,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.25:** maps with areas, zoom and pop-ups for places, route ideas and hikes, over 20 hike ideas, faster place tiles
 - [x] **Version 1.27:** routes without internet on real roads, track network per area, 4WD switch, detours around road closures
 - [x] **Version 1.28:** setup in 12 steps with design, vehicle, first route, expenses before the trip and a ready check
+- [x] **Version 1.32:** pull down at the top to update
 - [x] **Version 1.31:** SOS to your people with location, emergency call by tapping 7 times, shortcut on iPhone and Mac, WhatsApp Business on Android
 - [x] **Version 1.30:** let your people know by SMS or WhatsApp with one tap, SOS button on Today, emergency page with 000 first
 - [x] **Version 1.29:** reports from other travellers, contact code and QR, share places and routes, TravelBuddy group on Telegram, donate via PayPal
@@ -916,10 +921,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.31 · entwickelt für Western Australia**<br>
+**Version 1.32 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.31-e07b28?style=flat-square" alt="version: 1.31"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.32-e07b28?style=flat-square" alt="version: 1.32"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -927,7 +932,7 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
-**[✨ Neu in 1.31](#-neu-in-version-131)**
+**[✨ Neu in 1.32](#-neu-in-version-132)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
@@ -1040,6 +1045,13 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 🔄 Neu in Version 1.32
+
+**Runterziehen zum Aktualisieren.** Wie in anderen Apps: ganz oben auf einer Seite nach unten ziehen und loslassen. TravelBuddy holt die neueste Fassung und lädt neu, ohne Internet aus dem Vorrat auf deinem Gerät. Hast du gerade etwas nicht gespeichert, fragt die App vorher. Auf Karten, in offenen Blättern und in Eingabefeldern passiert nichts, so wird nichts aus Versehen neu geladen.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.31 bis 1.1</b></summary>
+
 ## 🆘 Neu in Version 1.31
 
 **SOS an deine Leute.** Tippe oben auf Heute auf SOS oder unter Notfall auf „SOS an meine Leute“, dann auf „SOS jetzt senden“. Deine Leute bekommen einen Alarm mit deinem Standort als SMS, auch ohne Internet, und danach per WhatsApp. Gibt es gerade keinen frischen Standort, geht der letzte bekannte mit seiner Uhrzeit mit. Zwei Tipps mit Absicht, damit niemand aus Versehen alarmiert wird. Der SOS-Knopf wird rot, sobald jemand eingerichtet ist, bis dahin ist er leicht ausgegraut.
@@ -1047,9 +1059,6 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 **Notruf durch Tippen.** Tippe 7× schnell irgendwo in TravelBuddy auf eine freie Fläche, dann öffnet sich der Anruf an 000. Ab dem dritten Tipp zählt eine rote Fläche mit, darunter wird nichts verstellt. Das Handy fragt vor dem Anruf noch einmal. Abschalten kannst du es unter Notfall.
 
 **Auf jedem Gerät.** Am iPhone und Mac kann ein Kurzbefehl deine Nachricht ganz ohne Tipp auf Senden schicken. Am Android wählst du einmal WhatsApp oder WhatsApp Business. Am Windows-PC bietet die App zuerst WhatsApp und Text kopieren an. Das Musik-Symbol wird grün, sobald Spotify ganz eingerichtet ist.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.30 bis 1.1</b></summary>
 
 ## 👨‍👩‍👧 Neu in Version 1.30
 
@@ -1746,6 +1755,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.25:** Karten mit Gegenden, Zoom und Fenstern für Orte, Routen-Ideen und Wanderungen, gut 20 Wander-Ideen, schnellere Ortskacheln
 - [x] **Version 1.27:** Routen ohne Netz auf echten Straßen, Pisten-Netz je Gebiet, 4WD-Schalter, Umleitung um Straßensperrungen
 - [x] **Version 1.28:** Einrichtung in 12 Schritten mit Design, Fahrzeug, erster Route, Vorabausgaben und Check vor der Abreise
+- [x] **Version 1.32:** Runterziehen zum Aktualisieren
 - [x] **Version 1.31:** SOS an deine Leute mit Standort, Notruf durch 7× Tippen, Kurzbefehl am iPhone und Mac, WhatsApp Business am Android
 - [x] **Version 1.30:** Deinen Leuten mit einem Tipp per SMS oder WhatsApp Bescheid geben, SOS-Knopf auf Heute, Notfall mit 000 ganz oben
 - [x] **Version 1.29:** Meldungen anderer Reisender, Kontakt-Code mit QR, Orte und Routen teilen, TravelBuddy-Gruppe auf Telegram, Spenden über PayPal

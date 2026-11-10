@@ -66,6 +66,7 @@
   import SosBlatt from './lib/SosBlatt.svelte'
   import KurzbefehlBlatt from './lib/KurzbefehlBlatt.svelte'
   import NotrufTippen from './lib/NotrufTippen.svelte'
+  import Runterziehen from './lib/Runterziehen.svelte'
   import { bescheidBlatt, personBlatt, sosBlatt, kurzbefehlBlatt } from './lib/bescheid.js'
   import { laden as meldungenLaden, sendeWartende, nachsehen as meldungenNachsehen, meldungen, OFFIZIELL } from './lib/meldungen.js'
   import { PAYPAL } from './lib/spenden.js'
@@ -1339,7 +1340,7 @@
     {:else if ansicht.unter === 'funfacts'}
       <FunFacts />
     {:else if ansicht.unter === 'fehler'}
-      <FehlerMelden version="Basic 1.31" build={buildText} />
+      <FehlerMelden version="Basic 1.32" build={buildText} />
     {:else if ansicht.unter === 'backup'}
       <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
     {:else if ansicht.unter === 'meldungen'}
@@ -1503,6 +1504,8 @@
 {#if $kurzbefehlBlatt}<KurzbefehlBlatt onclose={() => kurzbefehlBlatt.set(false)} />{/if}
 <!-- V35: 7 schnelle Tipps auf eine freie Fläche: Notruf 000 -->
 <NotrufTippen />
+<!-- V36: ganz oben nach unten ziehen und loslassen: aktualisieren -->
+<Runterziehen />
 {#if $personBlatt}<PersonBlatt id={$personBlatt.id || null} onclose={() => personBlatt.set(null)} />{/if}
 {#if neuOffen}
   <NeuBlatt typ={neuOffen.typ} vorlage={neuOffen.vorlage} orte={[...orte, ...$eigeneOrte]}
