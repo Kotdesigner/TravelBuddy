@@ -195,6 +195,7 @@ export default {
  "{n} Etappen": "{n} legs",
  "{n} Etappen angelegt": "{n} legs created",
  "{n} Etappen liegen nach deinem Rückflug": "{n} legs are after your flight home",
+ "Zwischenlandung in {ort} aus der Flugnummer ergänzt. Bitte Zeiten je Flug prüfen.": "Stopover in {ort} filled in from the flight number. Please check the times for each flight.",
  "{n} Flüge erkannt. Jeder wird als eigener Termin angelegt.": "{n} flights recognised. Each one becomes its own event.",
  "{n} Foto": "{n} photo",
  "{n} Foto fürs Tagebuch": "{n} journal photo",

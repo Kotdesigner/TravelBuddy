@@ -77,7 +77,7 @@
   // Ohne Mail: dasselbe Formular leer, z. B. für einen Fallschirmsprung, der vor Ort gebucht wurde
   function ohneMail() {
     erkannt = null; geaendert = {}
-    f = { art: 'tour', fahrzeug: 'camper', titel: '', anbieter: '', von: $heuteTag, bis: '', zeitVon: '', zeitBis: '', ort: '', ortBis: '', ref: '', flugNr: '', betrag: '', waehrung: 'AUD', segmente: [] }
+    f = { art: 'tour', fahrzeug: 'camper', titel: '', anbieter: '', von: $heuteTag, bis: '', zeitVon: '', zeitBis: '', ort: '', ortBis: '', ref: '', flugNr: '', sitz: '', betrag: '', waehrung: 'AUD', segmente: [] }
     zahlung = 'bezahlt'; bezahltAm = $heuteTag
   }
   function verwerfen() {
@@ -284,6 +284,7 @@
                 <label class="be-f">{t('Datum')}<input type="date" bind:value={s.datum} /></label>
                 <label class="be-f be-schmal">{t('Abflug')}<input type="time" bind:value={s.zeitVon} /></label>
                 <label class="be-f be-schmal">{t('Ankunft')}<input type="time" bind:value={s.zeitBis} /></label>
+                <label class="be-f be-schmal">{je('Sitzplatz', 'Seat')}<input bind:value={s.sitz} autocomplete="off" /></label>
               </div>
             </div>
           {/each}
@@ -310,7 +311,10 @@
           </label>
         </div>
         {#if f.art === 'flug'}
-          <label class="be-f">{t('Flugnummer')}<input bind:value={f.flugNr} oninput={() => anfassen('flugNr')} placeholder={t('z. B. QF 642')} /></label>
+          <div class="be-zeile">
+            <label class="be-f">{t('Flugnummer')}<input bind:value={f.flugNr} oninput={() => anfassen('flugNr')} placeholder={t('z. B. QF 642')} /></label>
+            <label class="be-f be-schmal">{je('Sitzplatz', 'Seat')}<input bind:value={f.sitz} autocomplete="off" placeholder="12A" /></label>
+          </div>
         {/if}
       {/if}
 

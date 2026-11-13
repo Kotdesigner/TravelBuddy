@@ -363,5 +363,27 @@ console.log('\n15  Aktivitäten und Tickets (V17)')
   p('Anbieterzeile gegen Tourzeile: die Tour wird Titel', w(kar, 'titel') === 'Weano Gorge & Hancock Gorge Adventure', zeig(kar))
 }
 
+console.log('\nKompakte Bestätigung: alle Flugnummern in einer Zeile')
+{
+  const bk = erkenne(['Bestätigt', 'Ihre Buchungsinformationen', 'Kundenreferenznummer: 40-1000000001', 'PIN-Code: 1234',
+    'Von Perth (PER) nach Hamburg (HAM)', 'Do, 28. Jan · 22:20 - Fr, 29. Jan · 12:55', '1 Stopp · 21 Std. 35 Min. · Economy',
+    'Emirates Airlines · EK421, EK59', 'Buchungsnummer: AB1CD2', 'Sitzplätze', 'Flug nach Hamburg',
+    '1 Sitzplatz ausgewählt 73A', '1 Sitzplatz ausgewählt 40A', 'Gesamtbetrag EUR 1,110.41'].join('\n'), KTX)
+  p('Abflugtag ist der erste Tag der Spanne', w(bk, 'von') === '2038-01-28', zeig(bk))
+  p('Ankunftstag ist der zweite', w(bk, 'bis') === '2038-01-29', zeig(bk))
+  p('Buchungsnummer und Betrag stimmen', w(bk, 'ref') === 'AB1CD2' && w(bk, 'betrag') === 1110.41, zeig(bk))
+  const sg = bk.segmente
+  p('Zwei Flüge, je einer mit eigenem Tag', sg.length === 2 && sg[0].datum === '2038-01-28' && sg[1].datum === '2038-01-29', JSON.stringify(sg))
+  p('Abflugzeit beim ersten, Ankunft beim zweiten', sg[0].zeitVon === '22:20' && sg[1].zeitBis === '12:55', JSON.stringify(sg))
+  p('Zwischenlandung aus der Flugnummer: über Dubai', sg[0].titel === 'Perth → Dubai' && sg[1].titel === 'Dubai → Hamburg', JSON.stringify(sg.map((x) => x.titel)))
+  p('Sitzplätze der Reihe nach verteilt', sg[0].sitz === '73A' && sg[1].sitz === '40A', JSON.stringify(sg.map((x) => x.sitz)))
+  const ev = alsBuchungen(alsFormular(bk), { jetzt: 'x' })
+  p('Daraus werden zwei Termine mit Sitzplatz', ev.length === 2 && ev[0].sitz === '73A' && ev[1].sitz === '40A' && ev[0].datum === '2038-01-28', JSON.stringify(ev.map((e) => [e.datum, e.titel, e.sitz])))
+  p('Der erste Termin trägt Abflugzeit und Nummer', ev[0].zeit === '22:20' && /EK ?421/.test(ev[0].flugNr), JSON.stringify(ev[0]))
+  p('Es bleibt eine Buchung (gleiche Buchungsnummer)', ev.every((e) => e.ref === 'AB1CD2') && new Set(ev.map((e) => e.gruppe)).size === 1)
+  const dir = erkenne('Qantas\nFlight QF 642\nPerth (PER) to Melbourne (MEL)\nMon, 7 Dec 2037\nDeparture 09:15 Arrival 15:45\nBooking reference QF8H2K\nSeat 14C', KTX)
+  p('Einzelflug: ein Flug, kein erfundener Umstieg', (dir.segmente || []).length === 0 && w(dir, 'von') === '2037-12-07', zeig(dir))
+}
+
 console.log(`\n${ok} bestanden · ${bad} gescheitert`)
 process.exit(bad ? 1 : 0)

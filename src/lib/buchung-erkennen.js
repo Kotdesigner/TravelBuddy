@@ -435,6 +435,22 @@ const IATA = {
   CBR: 'Canberra', PPP: 'Proserpine', HTI: 'Hamilton Island', TSV: 'Townsville',
   DXB: 'Dubai', DOH: 'Doha', SIN: 'Singapur', KUL: 'Kuala Lumpur', HKG: 'Hongkong', DPS: 'Bali', AKL: 'Auckland',
   FRA: 'Frankfurt', MUC: 'München', HAM: 'Hamburg', BER: 'Berlin', DUS: 'Düsseldorf', ZRH: 'Zürich', VIE: 'Wien', LHR: 'London',
+  AUH: 'Abu Dhabi', IST: 'Istanbul', BKK: 'Bangkok', AMS: 'Amsterdam', CDG: 'Paris',
+}
+
+/**
+ * Drehkreuz einer Airline. Steht in einer kompakten Bestätigung nur „1 Stopp“ und keine
+ * Zwischenstation, ergibt sich der Umstieg aus der Flugnummer: EK fliegt über Dubai, QR über Doha.
+ */
+const DREHKREUZ = { EK: 'DXB', QR: 'DOH', SQ: 'SIN', EY: 'AUH', TK: 'IST', TG: 'BKK', MH: 'KUL', CX: 'HKG', KL: 'AMS', AF: 'CDG', BA: 'LHR', LX: 'ZRH', OS: 'VIE' }
+const drehkreuz = (nr) => DREHKREUZ[String(nr || '').slice(0, 2).toUpperCase()] || null
+
+/** Sitzplätze aus der Mail: „1 Sitzplatz ausgewählt 73A“, „Seat: 12A“, auch über zwei Zeilen. */
+function sitzplaetze(text) {
+  const out = []
+  for (const m of String(text).matchAll(/(?:sitzpl[aä]tze?|seats?)\b[^\n]{0,40}?\b(\d{1,3}[A-K])\b/gi)) out.push(m[1].toUpperCase())
+  for (const m of String(text).matchAll(/(?:sitzpl[aä]tze?|seats?)[^\n]*\n\s*(\d{1,3}[A-K])\b/gi)) out.push(m[1].toUpperCase())
+  return [...new Set(out)]
 }
 const IATA_RE = new RegExp(`\\b(${Object.keys(IATA).join('|')})\\b`, 'g')
 
@@ -784,6 +800,43 @@ export function erkenne(text, { zeitraum = null, heute = null } = {}) {
       }
     })
   }
+  // Kompakte Bestätigung (Booking.com, Opodo, Expedia): alle Flugnummern stehen in EINER Zeile
+  // („Emirates Airlines · EK421, EK59“), Abflug und Ankunft nur als Spanne darüber
+  // („Do, 28. Jan · 22:20 - Fr, 29. Jan · 12:55“). Dann gehört die erste Zeit zum ersten Flug,
+  // die letzte zum letzten, und die Zwischenlandung ergibt sich aus dem Drehkreuz der Airline.
+  const zeilenAnfang = (i) => txt.lastIndexOf('\n', i - 1) + 1
+  const eineZeile = eindeutig.length > 1 && new Set(eindeutig.map((n) => zeilenAnfang(n.start))).size === 1
+  if (eineZeile) {
+    const tage = [...new Set(pool.map((d) => d.iso))].sort()
+    const zs = zeiten.filter((z) => z.rolle !== 'boarding' && z.rolleArt !== 'ignorieren').sort((a, b) => a.start - b.start)
+    const codes = iataFolge(txt)
+    const kette = codes.filter((c, i) => c !== codes[i - 1])
+    const ganzeKette = kette.length === eindeutig.length + 1
+    const dreh = drehkreuz(eindeutig[0].wert)
+    const ab = tage[0] || null
+    const an = tage.length > 1 ? tage[tage.length - 1] : ab
+    const letzt = eindeutig.length - 1
+    segmente = eindeutig.map((n, i) => {
+      const vonC = ganzeKette ? kette[i] : (i === 0 ? kette[0] || null : (eindeutig.length === 2 ? dreh : null))
+      const nachC = ganzeKette ? kette[i + 1] : (i === letzt ? kette[kette.length - 1] || null : (eindeutig.length === 2 ? dreh : null))
+      return {
+        flugNr: n.wert,
+        datum: i === letzt ? an : ab,
+        datumAn: null,
+        zeitVon: i === 0 ? (zs[0]?.zeit || null) : null,
+        zeitBis: i === letzt && zs.length > 1 ? zs[zs.length - 1].zeit : null,
+        von: vonC || null, nach: nachC || null,
+        titel: vonC && nachC ? `${stadt(vonC)} → ${stadt(nachC)}` : t('Flug {nr}', { nr: n.wert }),
+        konfidenz: 0.7,
+      }
+    })
+    if (!ganzeKette && dreh && eindeutig.length === 2) hinweise.push(t('Zwischenlandung in {ort} aus der Flugnummer ergänzt. Bitte Zeiten je Flug prüfen.', { ort: stadt(dreh) }))
+  }
+
+  // Sitzplätze der Reihe nach auf die Flüge verteilen
+  const sitze = sitzplaetze(txt)
+  if (sitze.length && segmente.length) segmente.forEach((g, i) => { g.sitz = sitze[i] || '' })
+
   let strecke = null
   if (art === 'flug') {
     const codes = segmente.length ? segmente.flatMap((s) => [s.von, s.nach]).filter(Boolean) : iataFolge(txt)
@@ -794,7 +847,7 @@ export function erkenne(text, { zeitraum = null, heute = null } = {}) {
         ? t('{a} → {b} und zurück', { a: stadt(kette[0]), b: stadt(kette[1]) })
         : `${stadt(kette[0])} → ${stadt(ziel)}`
     }
-    if (segmente[0]?.datum && (!von?.wert || von.konfidenz < 0.8)) von = feld(segmente[0].datum, segmente[0].konfidenz)
+    if (segmente[0]?.datum && (!von?.wert || von.konfidenz < 0.8 || (eineZeile && segmente[0].datum < von.wert))) von = feld(segmente[0].datum, segmente[0].konfidenz)
     if (segmente.length > 1) {
       const letzte = segmente[segmente.length - 1]
       const end = letzte.datumAn || letzte.datum
@@ -862,9 +915,9 @@ export function alsFormular(e) {
     art: e.art.wert || 'sonstiges', fahrzeug: e.fahrzeug.wert || 'camper',
     titel: w(e.titel), anbieter: w(e.anbieter),
     von: w(e.von), bis: w(e.bis), zeitVon: w(e.zeitVon), zeitBis: w(e.zeitBis),
-    ort: w(e.ort), ortBis: w(e.ortBis), ref: w(e.ref), flugNr: w(e.flugNr),
+    ort: w(e.ort), ortBis: w(e.ortBis), ref: w(e.ref), flugNr: w(e.flugNr), sitz: (e.segmente || []).length > 1 ? '' : ((e.segmente || [])[0]?.sitz || e.sitz?.wert || ''),
     betrag: e.betrag.wert == null ? '' : dezimal(e.betrag.wert), waehrung: e.waehrung.wert || 'AUD',
-    segmente: (e.segmente || []).map((s) => ({ an: true, datum: s.datum || '', zeitVon: s.zeitVon || '', zeitBis: s.zeitBis || '', flugNr: s.flugNr || '', titel: s.titel || '' })),
+    segmente: (e.segmente || []).map((s) => ({ an: true, datum: s.datum || '', zeitVon: s.zeitVon || '', zeitBis: s.zeitBis || '', flugNr: s.flugNr || '', titel: s.titel || '', sitz: s.sitz || '' })),
   }
 }
 
@@ -897,10 +950,10 @@ export function alsBuchungen(f, { id = () => Math.random().toString(36).slice(2,
 
   if (f.art === 'flug') {
     const segs = (f.segmente || []).filter((x) => x.an && gueltigesIso(x.datum))
-    const liste = segs.length ? segs : [{ datum: f.von, zeitVon: f.zeitVon, zeitBis: f.zeitBis, flugNr: f.flugNr, titel }]
+    const liste = segs.length ? segs : [{ datum: f.von, zeitVon: f.zeitVon, zeitBis: f.zeitBis, flugNr: f.flugNr, titel, sitz: f.sitz }]
     liste.forEach((g) => {
       out.push({ ...basis, id: 'eb-' + id(), gruppe, datum: g.datum, titel: s(g.titel) || titel, flugNr: s(g.flugNr),
-        zeit: s(g.zeitVon), ort: segs.length ? '' : s(f.ort),
+        zeit: s(g.zeitVon), ort: segs.length ? '' : s(f.ort), sitz: s(g.sitz),
         sub: teile(g.zeitVon && t('Abflug {zeit}', { zeit: s(g.zeitVon) }), g.zeitBis && t('Ankunft {zeit}', { zeit: s(g.zeitBis) }), g.flugNr, f.anbieter) })
     })
     return out.map(mitBetrag)
