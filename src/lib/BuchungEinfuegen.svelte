@@ -5,7 +5,7 @@
   // Angelegt wird über buchungenEinfuegen() im Buchungs-Topf, deshalb erscheint die
   // Buchung danach überall wie die aus dem Reisekalender (Heute, Etappe, Kalender).
   import { erkenne, alsFormular, alsBuchungen, formularOk, dubletten, stufe, ARTEN, artInfo, zahlAus } from './buchung-erkennen.js'
-  import { reisen, gesamtStart, buchungen, buchungenEinfuegen, neueVorabKosten } from './userdata.js'
+  import { reisen, gesamtStart, buchungen, buchungenEinfuegen, ersetzeBuchung, neueVorabKosten } from './userdata.js'
   import { etappenMitDatum, planUeberblick, etappeAm, vorgabeStart, plusTage } from './plan.js'
   import { bereich, mitWochentag } from './format.js'
   import { heuteTag } from './heute.js'
@@ -21,7 +21,9 @@
   /** kompakt: ohne eigene Überschrift (im Neu-Blatt). onfertig({ typ:'buchung', datum, etappeId, anzahl })
    *  start: 'mail' (erst Mailtext einfügen) oder 'formular' (gleich das Formular, die Mail ist ein Angebot
    *  oben drüber: „Aus Mail ausfüllen“, wie das automatische Ausfüllen anderer Apps). */
-  let { kompakt = false, start = 'mail', onfertig = () => {} } = $props()
+  /** statt: eine vorhandene Buchung (aus buchungenMitKosten). Dann wird sie ersetzt (umgebucht),
+   *  statt eine zweite Buchung anzulegen — V44, „Buchung ändern → Umbuchen“. */
+  let { kompakt = false, start = 'mail', statt = null, onfertig = () => {} } = $props()
   const formularZuerst = start === 'formular'
   let mailAuf = $state(false)        // Mailfeld über dem Formular aufgeklappt
 
@@ -139,7 +141,8 @@
 
   const etappe = $derived(f?.von ? etappeAm(eintraege, f.von) : null)
   const vorschau = $derived(f && formularOk(f) ? alsBuchungen($state.snapshot(f), { jetzt: '' }) : [])
-  const doppelt = $derived(dubletten(($buchungen?.events || []), vorschau))
+  // Beim Umbuchen ist die alte Buchung natürlich „doppelt“ — die wird ja gerade ersetzt.
+  const doppelt = $derived(dubletten(($buchungen?.events || []).filter((e) => !statt?.ids?.includes(e.id)), vorschau))
   const betragZahl = $derived(f?.betrag ? zahlAus(f.betrag) : null)
   const vorabMoeglich = $derived(betragZahl != null && ['AUD', 'EUR'].includes(f?.waehrung))
   const segmenteAn = $derived((f?.segmente || []).filter((s) => s.an).length)
@@ -153,7 +156,8 @@
       text: t('Am {mitWochentag} steht schon „{titel}“ mit derselben Nummer oder demselben Namen. Trotzdem anlegen?', { mitWochentag: mitWochentag(doppelt[0].datum), titel: doppelt[0].titel }),
       ja: t('Trotzdem anlegen'),
     }))) return
-    const n = buchungenEinfuegen(ev)
+    const n = statt ? (ersetzeBuchung(statt.ids, ev) ? ev.length : 0) : buchungenEinfuegen(ev)
+    if (!n) return
     if (vorabMoeglich && zahlung !== 'keine') {
       const reisetag = ev[0].datum
       neueVorabKosten({ text: f.titel.trim(), kat: artInfo(f.art).vorab, betrag: betragZahl, waehrung: f.waehrung, reiseId: etappe?.reise.id || null,
@@ -173,8 +177,9 @@
       if (anhaengen.length) belegeAnhaengen(anhaengen)
     }
     haptic.confirm()
-    zeigeToast(n > 1 ? t('{n} Termine übernommen ✓', { n }) : t('Buchung übernommen ✓'), 'ok')
-    const ergebnis = { typ: 'buchung', datum: ev[0].datum, etappeId: etappe?.reise.id || null, anzahl: n }
+    zeigeToast(statt ? t('Umgebucht ✓ Die alte Buchung steht grau darunter.')
+      : n > 1 ? t('{n} Termine übernommen ✓', { n }) : t('Buchung übernommen ✓'), 'ok', statt ? 4200 : undefined)
+    const ergebnis = { typ: 'buchung', datum: ev[0].datum, etappeId: etappe?.reise.id || null, anzahl: n, ersetzt: !!statt }
     text = ''; erkannt = null; f = null; geaendert = {}; belegDateien = []
     if (formularZuerst) ohneMail()
     onfertig(ergebnis)

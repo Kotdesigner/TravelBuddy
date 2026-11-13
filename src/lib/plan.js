@@ -1,3 +1,4 @@
+import { terminGilt } from './buchung.js'
 // Reiseplan: Etappen und Routen.
 //
 // ETAPPE = ein Zeitabschnitt im Kalender mit festem Datum (von + Tage).
@@ -315,7 +316,7 @@ export function chronik({ eintraege = [], journal = [], wanderungen = [], buchun
   }
   for (const e of journal) for (const d of eintragTage(e)) tagObj(d).journal.push(e)
   for (const w of wanderungen) if (gueltigesDatum(w?.datum)) tagObj(w.datum).wanderungen.push(w)
-  for (const b of buchungen) if (gueltigesDatum(b?.datum) && !b.platzhalter) tagObj(b.datum).buchungen.push(b)
+  for (const b of buchungen) if (gueltigesDatum(b?.datum) && terminGilt(b)) tagObj(b.datum).buchungen.push(b)
   for (const t of ortTage) if (gueltigesDatum(t?.datum)) tagObj(t.datum).ortTage.push(t)
   for (const n of notizen) if (gueltigesDatum(n?.datum)) tagObj(n.datum).notizen.push(n)
   for (const f of fotos) if (gueltigesDatum(f?.datum)) tagObj(f.datum).fotos.push(f)

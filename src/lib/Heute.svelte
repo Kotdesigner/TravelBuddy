@@ -23,7 +23,7 @@
   import BuchungZusatz from './BuchungZusatz.svelte'
   import SchnellAusgabe from './SchnellAusgabe.svelte'
   import ErsteSchritte from './ErsteSchritte.svelte'
-  import { etappeJetzt, wechselZeit, uhrzeitIn } from './buchung.js'
+  import { etappeJetzt, wechselZeit, uhrzeitIn, terminGilt } from './buchung.js'
   import { ausgabenVon } from './kosten.js'
   import { stelleAm } from './abschnitte.js'
   import { gruppen } from './verbinden.js'
@@ -40,7 +40,7 @@
   const morgen = $derived(plusTage(heute, 1))
   const eintraege = $derived(etappenMitDatum($reisen, $gesamtStart))
   const s = $derived(reiseStatus(eintraege, heute))
-  const termine = $derived(($buchungen?.events || []).filter((b) => !b.platzhalter))
+  const termine = $derived(($buchungen?.events || []).filter((b) => terminGilt(b)))
   const am = (d) => termine.filter((b) => b.datum === d)
   const naechste = $derived(termine.filter((b) => b.datum >= heute).sort((a, b) => a.datum.localeCompare(b.datum)).slice(0, 3))
   // Ohne Standort gilt der erste Stopp der laufenden oder nächsten Etappe

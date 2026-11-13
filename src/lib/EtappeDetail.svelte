@@ -27,7 +27,7 @@
   import RouteEditor from './RouteEditor.svelte'
   import Versorgung from './Versorgung.svelte'
   import BuchungZusatz from './BuchungZusatz.svelte'
-  import { wechselZeit } from './buchung.js'
+  import { wechselZeit, terminGilt } from './buchung.js'
   import AbschnittPlan from './AbschnittPlan.svelte'
   import { abschnitteDerEtappe, bereichVon } from './abschnitte.js'
   import { naechteUebersicht } from './naechte.js'
@@ -83,7 +83,7 @@
 
   const von = $derived(eintrag?.von), bis = $derived(eintrag?.bis)
   const imZeitraum = (d) => d && von && d >= von && d <= bis
-  const gebucht = $derived(($buchungen?.events || []).filter((b) => !b.platzhalter && imZeitraum(b.datum)).sort((a, b) => a.datum.localeCompare(b.datum)))
+  const gebucht = $derived(($buchungen?.events || []).filter((b) => terminGilt(b) && imZeitraum(b.datum)).sort((a, b) => a.datum.localeCompare(b.datum)))
   const ids = $derived(new Set([etappe?.id, ...routen.map((r) => r.id)].filter(Boolean)))
   const wand = $derived($wanderungen.filter((w) => (w.datum ? imZeitraum(w.datum) : ids.has(w.reiseId))))
   // Wander-Ideen, die nah an dieser Etappe oder ihren Routen liegen und noch nicht auf der Liste stehen

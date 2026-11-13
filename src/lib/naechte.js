@@ -8,6 +8,7 @@
 import { plusTage, gueltigesDatum } from './plan.js'
 import { buendle, uhrzeitIn } from './buchung.js'
 import { abschnitteDerEtappe, bereichVon } from './abschnitte.js'
+import { terminGilt } from './buchung.js'
 
 /**
  * Gesetzliche Feiertage in Western Australia über die Jahreswende, für jedes Jahr gerechnet
@@ -81,7 +82,7 @@ export function naechteUebersicht({ eintraege = [], reisen = [], events = [] } =
   if (!eintraege.length) return { naechte: [], zahl: { gebucht: 0, geplant: 0, flug: 0, camper: 0, offen: 0 } }
   const start = eintraege[0].von
   const ende = eintraege.reduce((m, e) => (e.bis > m ? e.bis : m), start)
-  const liste = events.filter((e) => e && !e.platzhalter && gueltigesDatum(e.datum))
+  const liste = events.filter((e) => terminGilt(e) && gueltigesDatum(e.datum))
   const bus = buendle(liste)
 
   const belegt = new Map()   // datum -> { zustand, text }

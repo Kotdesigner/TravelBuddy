@@ -19,6 +19,7 @@ import { writable } from 'svelte/store'
 import { zumAnzeigen } from './pdf-portfolio.js'
 import { t } from './i18n.js'
 import { tresorAktiv, istGesperrt, oeffentlicherSchluessel, privaterSchluessel, verschluessele, entschluessele, entsperreDann, ladeTresor } from './tresor.js'
+import { terminGilt } from './buchung.js'
 
 const DB_NAME = 'wa-belege'
 const STORE = 'dateien'
@@ -252,7 +253,7 @@ export function schlageZielVor(name, events = []) {
   const nFlach = flach(n)
   const kandidaten = []
   for (const e of events) {
-    if (!e || e.platzhalter) continue
+    if (!terminGilt(e)) continue
     let punkte = 0
     const ref = flach(e.ref || '')
     if (ref.length >= 4 && nFlach.includes(ref)) punkte += 10

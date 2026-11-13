@@ -3,6 +3,7 @@
 // `terminId` an der Ausgabe. Hier wird daraus eine Ansicht, und vorhandene Ausgaben werden ihren
 // Terminen zugeordnet.
 import { etappeAm } from './plan.js'
+import { t } from './i18n.js'
 
 /** Kostenart passend zur Art des Termins. */
 export const KOSTEN_FUER = {
@@ -55,6 +56,11 @@ export function buendle(events = []) {
       id: teil[0].id, ids: teil.map((e) => e.id), kat: teil[0].kat, titel: strecke(teil) || erst.titel, termine: teil,
       von: teil[0].datum, bis: teil.at(-1).datum, ref: erst.ref || '',
       docs: teil.flatMap((e) => e.docs || []), eigen: teil.some((e) => e.quelle === 'eigen'),
+      // V44: storniert oder umgebucht gilt für die ganze Buchung, sobald alle ihre Termine es sind.
+      storniert: teil.every((e) => e.storniert) ? teil[0].storniert : '',
+      stornoGrund: teil.find((e) => e.stornoGrund)?.stornoGrund || '',
+      umgebucht: teil.every((e) => e.umgebucht) ? teil[0].umgebucht : '',
+      ersetztDurch: teil.find((e) => e.ersetztDurch)?.ersetztDurch || '',
     }
   })
 }
@@ -101,6 +107,10 @@ export function verbindungsVorschlaege(vorab = [], buchungen = [], eintraege = [
 export const kostenPasst = (kat, buchungKat) => !PASST[kat] || PASST[kat].includes(buchungKat)
 /** Kalendermarken (Aufenthalt, „Weihnachten“) sind keine Buchung, solange keine Nummer, kein Beleg und keine Kosten daran hängen. */
 export const istEchteBuchung = (b) => b.eigen || !!(b.ref || b.docs.length || b.kosten?.length)
+/** Gilt die Buchung noch? Storniert und umgebucht bleiben sichtbar, zählen aber nicht mehr. */
+export const buchungGilt = (b) => !!b && !b.storniert && !b.umgebucht
+/** Zählt dieser Termin im Reiseplan? Stornierte und umgebuchte stehen nur noch unter Buchungen (V44). */
+export const terminGilt = (e) => !!e && !e.platzhalter && !e.storniert && !e.umgebucht
 
 /** Buchungen mit ihren Kosten. Kosten zählen zu der Buchung, deren Termin sie tragen. */
 export function buchungenMitKosten(events = [], vorab = [], eintraege = []) {
@@ -116,7 +126,7 @@ const BEWEGUNG = ['flight', 'train', 'shuttle', 'boat']
 /** Wechselzeit an einem Etappentag: gesetzt, sonst die erste Abfahrt an dem Tag. */
 export function wechselZeit(etappe, von, events = []) {
   if (etappe?.wechselUm) return { zeit: etappe.wechselUm, quelle: null }
-  const e = events.filter((x) => x.datum === von && BEWEGUNG.includes(x.kat) && uhrzeitIn(`${x.sub} ${x.titel}`)).sort((a, b) => uhrzeitIn(`${a.sub} ${a.titel}`).localeCompare(uhrzeitIn(`${b.sub} ${b.titel}`)))[0]
+  const e = events.filter((x) => x.datum === von && !x.storniert && !x.umgebucht && BEWEGUNG.includes(x.kat) && uhrzeitIn(`${x.sub} ${x.titel}`)).sort((a, b) => uhrzeitIn(`${a.sub} ${a.titel}`).localeCompare(uhrzeitIn(`${b.sub} ${b.titel}`)))[0]
   return e ? { zeit: uhrzeitIn(`${e.sub} ${e.titel}`), quelle: e.titel } : null
 }
 /** Die Etappe jetzt: Am Wechseltag gilt bis zur Wechselzeit noch die vorige. */
@@ -126,4 +136,53 @@ export function etappeJetzt(eintraege, datum, uhr, events = []) {
   const vorher = [...eintraege].reverse().find((x) => x !== e && x.von <= datum && x.bis >= datum)
   const w = wechselZeit(e.reise, e.von, events)
   return vorher && w && uhr < w.zeit ? vorher : e
+}
+
+
+// ---------- Ändern (V44) ----------
+//
+// Beim Ändern wird der Untertitel NEU gebaut. Sonst bliebe die alte Flugnummer darin stehen
+// („Qatar Airways QR901 · Abflug 22:45“) und die App würde sie weiter als Anschlussflug zeigen.
+
+const txt = (x) => String(x ?? '').trim()
+const teile = (...xs) => xs.map(txt).filter(Boolean).join(' · ')
+
+/** Flugnummern aus einem Feld: „SQ224, SQ334“ oder „SQ224 / SQ334“. */
+export const nummernListe = (s) => txt(s).toUpperCase().split(/[\s,/;]+/).map((x) => x.replace(/[^A-Z0-9]/g, '')).filter(Boolean)
+
+/**
+ * Untertitel eines Termins aus den Angaben. `rolle` unterscheidet Anfang und Ende einer
+ * mehrtägigen Buchung (Check-in / Check-out, Übernahme / Rückgabe).
+ */
+export function baueUntertitel(kat, f = {}, rolle = 'start') {
+  const nrs = nummernListe(f.nr).join(' / ')
+  if (kat === 'flight') return teile(f.zeitVon && t('Abflug {zeit}', { zeit: txt(f.zeitVon) }), f.zeitBis && t('Ankunft {zeit}', { zeit: txt(f.zeitBis) }), nrs, f.anbieter)
+  if (kat === 'train') return teile(f.zeitVon && t('Abfahrt {zeit}', { zeit: txt(f.zeitVon) }), f.zeitBis && t('Ankunft {zeit}', { zeit: txt(f.zeitBis) }), nrs, f.bahnhof, f.anbieter)
+  const [anfang, schluss] = kat === 'hotel' || kat === 'stay' ? [t('Check-in'), t('Check-out')]
+    : kat === 'car' || kat === 'camper' ? [t('Übernahme'), t('Rückgabe')] : ['', t('Ende')]
+  const wort = rolle === 'ende' ? schluss : anfang
+  const zeit = rolle === 'ende' ? txt(f.zeitBis) : txt(f.zeitVon)
+  const kopf = wort ? `${wort}${zeit ? ' ' + zeit : ''}` : zeit
+  return teile(kopf, rolle === 'ende' ? f.ortBis || f.ort : f.ort, f.anbieter)
+}
+
+/** Die Felder einer Buchung fürs Änderungs-Formular. */
+export function angabenAusBuchung(b) {
+  const erst = b?.termine?.[0] || {}
+  const letzt = b?.termine?.at(-1) || erst
+  const mehrteilig = (b?.termine?.length || 0) > 1
+  return {
+    titel: b?.titel || erst.titel || '',
+    anbieter: erst.anbieter || '',
+    nr: (Array.isArray(erst.flugNrs) && erst.flugNrs.length ? erst.flugNrs : b?.termine?.map((e) => e.flugNr || e.zugNr).filter(Boolean) || []).join(' / '),
+    bahnhof: erst.bahnhof || '',
+    von: b?.von || erst.datum || '',
+    bis: mehrteilig ? (b?.bis || letzt.datum || '') : '',
+    zeitVon: erst.zeit || erst.zeitVon || uhrzeitIn(erst.sub) || '',
+    zeitBis: mehrteilig ? (letzt.zeit || letzt.zeitBis || uhrzeitIn(letzt.sub) || '') : (erst.zeitBis || ''),
+    ort: erst.ort || '',
+    ortBis: letzt.ort || '',
+    ref: b?.ref || '',
+    sitz: erst.sitz || '',
+  }
 }

@@ -16,6 +16,7 @@
   import { loeschFrage } from './dialog.js'
   import { zeigeToast } from './toast.js'
   import { artVon } from './routen-dienst.js'
+  import { terminGilt } from './buchung.js'
 
   let { onoeffne = () => {}, onneu = () => {} } = $props()
 
@@ -37,7 +38,7 @@
     const routen = routenDerEtappe($reisen, e.reise.id)
     const ids = new Set([e.reise.id, ...routen.map((r) => r.id)])
     const wand = $wanderungen.filter((w) => (w.datum ? w.datum >= e.von && w.datum <= e.bis : ids.has(w.reiseId)))
-    const buch = imZeitraum(($buchungen?.events || []).filter((b) => !b.platzhalter), e)
+    const buch = imZeitraum(($buchungen?.events || []).filter((b) => terminGilt(b)), e)
     const tage = new Set(imZeitraum($journal, e).map((j) => j.datum)).size
     const km = routen.reduce((n, r) => n + (r.route && !r.route.flug ? r.route.km : 0), 0)
     return { routen, wand: wand.length, buch: buch.length, tage, km }

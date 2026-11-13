@@ -122,6 +122,8 @@ export function kostenAuswertung({ journal = [], vorab = [], kurse = {}, eintrae
   // V14: Vor der Reise ist, was vor dem ersten Reisetag bezahlt wurde; der Rest zählt zu unterwegs
   const reiseStart = eintraege.reduce((m, x) => (!m || x.von < m ? x.von : m), '')
   for (const k of vorab) {
+    // V44: Was nach einem Storno voll erstattet wurde, zählt nicht mehr zu den Reisekosten.
+    if (k.erstattung === 'voll') continue
     const x = inBeide(k.betrag, k.waehrung, kursFuer(kurse, k.datum))
     if (!x.eur && !x.aud) continue
     const kat = KATEGORIE[k.kat] ? k.kat : 'kosten_sonstiges'

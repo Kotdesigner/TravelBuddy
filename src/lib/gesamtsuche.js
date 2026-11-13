@@ -125,7 +125,10 @@ export function gesamtsuche(begriff, d = {}) {
     ...(d.buchungen?.events || []).filter((b) => b && !b.platzhalter).map((b) => {
       const r = pruefe(b.titel || '', [b.sub, kat(b.kat).label, b.ref, b.ort, b.anbieter, ...(b.docs || []).map((x) => x.label)].join(' '), b.datum)
       if (!r) return null
-      return { id: 'bu:' + b.id, titel: `${b.emoji || kat(b.kat).icon} ${b.titel}`, unter: [b.datum ? mitWochentag(b.datum) : '', b.sub].filter(Boolean).join(' · '), icon: b.emoji || kat(b.kat).icon, ziel: b.datum ? 'logbuch/tag/' + b.datum : 'plan/kalender', datum: b.datum, ...r }
+      // Storniert oder umgebucht bleibt auffindbar (man sucht die Nummer noch für die Erstattung),
+      // steht aber mit Vermerk da, damit niemand denkt, der Termin gelte noch.
+      const vermerk = b.storniert ? (T.storniert || 'storniert') : b.umgebucht ? (T.umgebucht || 'umgebucht') : ''
+      return { id: 'bu:' + b.id, titel: `${b.emoji || kat(b.kat).icon} ${b.titel}${vermerk ? ' (' + vermerk + ')' : ''}`, unter: [b.datum ? mitWochentag(b.datum) : '', b.sub].filter(Boolean).join(' · '), icon: b.emoji || kat(b.kat).icon, ziel: b.datum ? 'logbuch/tag/' + b.datum : 'plan/kalender', datum: b.datum, ...r }
     }),
     ...(datum ? [] : (d.buchungen?.persoenlich || []).map((x) => {
       const r = bewerte(woerter, x.label || '', '')

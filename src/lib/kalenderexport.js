@@ -16,6 +16,7 @@ import { katInfo } from './reisekalender.js'
 import { dauerText } from './wanderungen-daten.js'
 import { LOCALE, t, tn, istEn, jeSprache } from './i18n.js'
 import { wochentag, ZWEI } from './format.js'
+import { terminGilt } from './buchung.js'
 
 const tag = (s) => new Date(s + 'T12:00')
 const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
@@ -40,7 +41,7 @@ export function baueEintraege({ plan, buchungen, wanderungen = [], journal = [] 
 
   const out = []
   for (const e of buchungen?.events || []) {
-    if (e.platzhalter) continue
+    if (!terminGilt(e)) continue
     out.push({
       datum: e.datum, zeit: '', kat: e.kat, quelle: 'Buchung',
       titel: e.titel, details: e.sub, ref: e.ref,

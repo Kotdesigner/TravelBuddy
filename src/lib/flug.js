@@ -54,13 +54,20 @@ function zugAusTermin(e, ohneNummer, zuege) {
 }
 
 /** Termine → Flüge und Züge in Reihenfolge. Termine ohne erkennbare Nummer stehen in `ohneNummer`. */
+/** Storniert oder umgebucht: steht noch in den Buchungen, ist aber keine Fahrt mehr (V44). */
+export const gilt = (e) => !!e && !e.storniert && !e.umgebucht
+
 export function fluegeAusTerminen(events = []) {
   const fluege = [], zuege = [], ohneNummer = []
   for (const e of events) {
-    if (!e || e.platzhalter) continue
+    if (!e || e.platzhalter || !gilt(e)) continue
     if (e.kat === 'train') { zugAusTermin(e, ohneNummer, zuege); continue }
     if (!istFlug(e)) continue
-    const nummern = [...new Set([normalNummer(e.flugNr), ...nummernImText(e.sub), ...nummernImText(e.titel)].filter(Boolean))]
+    // V44: `flugNrs` setzt das Formular beim Ändern. Dann gelten genau diese Nummern — sonst bliebe
+    // eine alte Nummer aus dem Untertitel („Qatar Airways QR901 · Abflug 22:45“) als Anschlussflug stehen.
+    const nummern = Array.isArray(e.flugNrs) && e.flugNrs.length
+      ? [...new Set(e.flugNrs.map(normalNummer).filter(Boolean))]
+      : [...new Set([normalNummer(e.flugNr), ...nummernImText(e.sub), ...nummernImText(e.titel)].filter(Boolean))]
     if (!nummern.length) {
       // „Ankunft Melbourne“ steht nur im Kalender und ist kein eigener Flug
       if (!/^ankunft/i.test(e.titel || '')) ohneNummer.push(e)

@@ -61,6 +61,7 @@
   const sichtbar = $derived(treffer.slice(0, GRENZE))
   const TEXTE = {
     tage: t('Logbuch-Tage'), tiere: t('Tiere'), wanderungen: t('Wanderungen'), buchungen: t('Buchungen und Belege'),
+    storniert: t('storniert'), umgebucht: t('umgebucht'),
     reisen: t('Etappen und Routen'), etappenorte: je('Etappenorte', 'Stopover towns'), notizen: t('Notizen'), packliste: t('Packliste'), vorbereitung: t('Vorbereitung'),
     gesehen: (n, tage) => tn(n, '{n}× gesehen', '{n}× gesehen') + ', ' + tn(tage, 'an {n} Tag', 'an {n} Tagen'),
     nochNicht: t('noch nicht gesehen'), eigeneDokumente: t('Eigene Dokumente'), dokument: t('Dokument'), gueltigBis: t('gültig bis'),

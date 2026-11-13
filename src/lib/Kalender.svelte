@@ -10,6 +10,7 @@
   import { A4_HOCH, htmlBlaetter, sammleDatei } from './ausgabe.js'
   import Ausgabe from './Ausgabe.svelte'
   import KalenderRaster from './KalenderRaster.svelte'
+  import { terminGilt } from './buchung.js'
 
   let { kalender = [], box = '' } = $props()
 
@@ -52,7 +53,7 @@
 
   // GEBUCHTES aus dem Reisekalender — feste Punkte, die der Plan einhalten muss.
   const gebucht = $derived(
-    ($buchungen?.events || []).filter((e) => !e.platzhalter)
+    ($buchungen?.events || []).filter((e) => terminGilt(e))
       .map((e) => ({ id: e.id, datum: e.datum, kat: e.kat, titel: e.titel, sub: e.sub, ref: e.ref, docs: e.docs || [] }))
       .sort((a, b) => a.datum.localeCompare(b.datum))
   )

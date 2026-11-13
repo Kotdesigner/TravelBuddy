@@ -19,6 +19,7 @@ import { wetterBild } from './wetter.js'
 import { metWetter } from './wetter-ausweich.js'
 import { zieleVon } from './plan.js'
 import { je } from './i18n.js'
+import { terminGilt } from './buchung.js'
 
 export const AUTO_FELDER = ['distance_km', 'temp_celsius', 'weather_feeling', 'night_sky', 'verkehrsmittel']
 export const UMWEG = 1.25                       // wie im Fahrtag-Planer: Luftlinie → Straße
@@ -99,7 +100,7 @@ export function verkehrsmittelFuer({ art = null, buchungen = [], strasse = false
 /** Buchungen, die an einem der Tage liegen */
 export function buchungenAm(events = [], tage = []) {
   const set = new Set(tage)
-  return (events || []).filter((e) => e?.datum && set.has(e.datum))
+  return (events || []).filter((e) => terminGilt(e) && set.has(e.datum))
 }
 
 // ---------------------------------------------------------------- Wetter

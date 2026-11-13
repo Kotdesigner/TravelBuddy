@@ -357,6 +357,9 @@ export function fuehreZusammen(hier, datei, { quelle = t('anderes Gerät'), grun
   // außer sie wurden auf einer Seite gelöscht.
   if (ergebnis.buchungen?.events) {
     const totB = new Set([...(graeberHier.buchungenEigen || []), ...(graeberDort.buchungenEigen || [])].map((x) => x.id))
+    // V44: auf einem Gerät gelöschte Kalender-Termine bleiben auch nach dem Zusammenführen weg.
+    const totI = new Set([...(graeberHier.buchungenImport || []), ...(graeberDort.buchungenImport || [])].map((x) => x.id))
+    if (totI.size) ergebnis.buchungen = { ...ergebnis.buchungen, events: ergebnis.buchungen.events.filter((e) => !totI.has(e.id)) }
     const eigene = vereinigeNachSchluessel(
       (bh?.events || []).filter((e) => e.quelle === 'eigen'), (bd?.events || []).filter((e) => e.quelle === 'eigen'), 'id', totB)
     const vorher = ergebnis.buchungen.events.filter((e) => e.quelle === 'eigen').length

@@ -27,6 +27,7 @@
   import { planUeberblick } from './plan.js'
   import TagebuchFotos from './TagebuchFotos.svelte'
   import { tagebuchFotos, holeTagebuchBild, geraetBild } from './tagebuch-fotos.js'
+  import { terminGilt } from './buchung.js'
 
   let { orte = [], reisen = [], zahlen = null } = $props()
 
@@ -136,7 +137,7 @@
     const nimm = (o) => { if (o && !ortIds.has(o.id)) { ortIds.add(o.id); ortListe.push(o) } }
     for (const e of besucht) nimm(e.ortId ? orte.find((o) => o.id === e.ortId) : null)
     for (const st of stopps) nimm(ortZuStopp(st))
-    const gebucht = ($buchungen?.events || []).filter((b) => !b.platzhalter && imZeitraum(b.datum))
+    const gebucht = ($buchungen?.events || []).filter((b) => terminGilt(b) && imZeitraum(b.datum))
     const km = routen.reduce((n, x) => n + (Number(x.route?.km) || 0), 0)
     const anreiseKm = Number(r.route?.km) || 0
     const punkte = [
@@ -323,7 +324,7 @@
     const aus = !zeige.etappen && planE.length > 0
     const routen = zeige.etappen ? reisen.filter((r) => !istEtappe(r)) : []
     const wand = zeige.wanderungen ? $wanderungen : []
-    const gebucht = zeige.etappen ? ($buchungen?.events || []).filter((b) => !b.platzhalter) : []
+    const gebucht = zeige.etappen ? ($buchungen?.events || []).filter((b) => terminGilt(b)) : []
     return { aus, routen, wand, gebucht, da: routen.length + wand.length + gebucht.length > 0 }
   })
   // Daten & Fakten und Ausgaben wie auf der Startseite, dazu die Summe je Etappe mit den Vorabausgaben

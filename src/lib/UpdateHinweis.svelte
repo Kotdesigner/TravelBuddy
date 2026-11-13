@@ -13,12 +13,13 @@
     [je('22 von 22', '22 of 22'), je('Teststrecken gefunden, auch Pisten und Tracks', 'test routes found, tracks too')],
     [je('0,06 s', '0.06 s'), je('für 4.200 km mit 10 Stopps', 'for 4,200 km with 10 stops')],
   ]
-  /** Basic 1.36: was seit dem letzten Fenster (1.32) dazugekommen ist, steht oben */
+  /** Basic 1.38: was seit dem letzten Fenster (1.36) dazugekommen ist, steht oben */
   const JETZT = [
-    ['🗺️', je('Orte direkt in deine Etappe.', 'Places straight into your leg.'), je('Im Menü „Einplanen“ einer Ortskachel steht oben deine Etappe, zum Beispiel „Coral Coast“. Ein Tipp legt dort die erste Route an, jeder weitere Ort aus der Gegend kommt in dieselbe Route.', 'In the “Add to trip” menu of a place card your leg comes first, for example “Coral Coast”. One tap starts its first route there, every further place from the area joins the same route.')],
-    ['🛠️', je('Einplanen geht am Handy wieder.', 'Add to trip works on phones again.'), je('Vormerken, neue Route, Wanderung, Teilen und Melden lassen sich im Menü der Ortskacheln wieder antippen.', 'Save for later, new route, hike, share and report can be tapped again in the place card menu.')],
-    ['🆘', je('Sicherer im Notfall.', 'Safer in an emergency.'), je('Trägst du die Koordinaten von Hand ein, schickt das SOS sie mit. Die 7 Tipps für 000 klappen auch am iPhone zuverlässig.', 'If you enter your coordinates by hand, the SOS sends them along. Tapping 7 times for 000 also works reliably on iPhone.')],
-    ['📣', je('Melden, klar erklärt.', 'Reporting, clearly explained.'), je('Bist du noch nicht in Australien, sagt das Melde-Blatt das sofort und öffnet die Ortssuche. Meldungen gehen nur für Orte dort.', 'If you are not in Australia yet, the report sheet says so right away and opens the place search. Reports only work for places there.')],
+    ['🔁', je('Buchungen ändern, umbuchen, stornieren.', 'Change, rebook or cancel bookings.'), je('Fliegst du anders zurück oder sagt die Tour ab? An jeder Buchung steht jetzt „Ändern“: Strecke, Airline, Flugnummern, Datum und Zeiten berichtigen, mit einer neuen Mail umbuchen, stornieren oder ganz löschen. Heute, Kalender, Etappe, Flüge und Kosten ziehen mit.', 'Flying home differently, or the tour is off? Every booking now has “Change”: correct the route, airline, flight numbers, dates and times, rebook from a new email, cancel it or delete it. Today, calendar, leg, flights and costs follow along.')],
+    ['✈️', je('Keine alte Flugnummer mehr.', 'No more old flight numbers.'), je('Änderst du die Flugnummer, verschwindet die alte wirklich. Vorher blieb sie als Geister-Anschlussflug stehen und wurde weiter abgefragt.', 'When you change a flight number, the old one really goes away. Before it stayed on as a ghost connecting flight and was still being checked.')],
+    ['🚫', je('Storniert heißt nicht gelöscht.', 'Cancelled is not deleted.'), je('Eine stornierte Buchung bleibt grau stehen, damit du siehst, was gebucht war. Aus Heute, Kalender und der Flugabfrage ist sie raus. Bei den Kosten trägst du ein, was du zurückbekommst. Voll erstattet zählt nicht mehr mit.', 'A cancelled booking stays, greyed out, so you can see what was booked. It is out of Today, the calendar and the flight lookup. Under costs you note what you get back. Fully refunded no longer counts.')],
+    ['🗑', je('Auch Buchungen aus dem Reiseplan löschen.', 'Delete bookings from the trip plan too.'), je('Früher ließen sich nur selbst eingefügte Buchungen löschen. Jetzt jede, und sie kommt auch nach einem neuen Import nicht zurück.', 'Previously you could only delete bookings you added yourself. Now any of them, and they stay gone even after a new import.')],
+    ['🧹', je('Ruhiger geworden.', 'Calmer now.'), je('Der Spenden-Knopf unten auf der Seite und unter Mehr ist weg. TravelBuddy bleibt kostenlos und ohne Werbung.', 'The donate button at the bottom of the page and under More is gone. TravelBuddy stays free and without ads.')],
   ]
   const NEU = [
     ['🔄', je('Runterziehen zum Aktualisieren.', 'Pull down to update.'), je('Wie in anderen Apps: ganz oben auf einer Seite nach unten ziehen und loslassen. TravelBuddy holt die neueste Fassung und lädt neu. Jedes Mal schaut eine andere Figur vorbei: Känguru, Koala, Bumerang, Camper, Sonne über dem Uluru oder Schlange. Hast du gerade etwas nicht gespeichert, fragt die App vorher.', 'Like in other apps: pull down at the very top of a page and let go. TravelBuddy fetches the newest version and reloads. Each time a different figure drops by: kangaroo, koala, boomerang, camper, sun over Uluru or snake. If you have unsaved changes, the app asks first.')],
@@ -55,7 +56,7 @@
       <li><span class="uh-z" aria-hidden="true">{zeichen}</span><span><b>{titel}</b> <span class="uh-t">{text}</span></span></li>
     {/each}
   </ul>
-  <h3 class="uh-zwischen">{je('Seit dem großen Update dabei', 'Since the big update')}</h3>
+  <h3 class="uh-zwischen">{je('Schon länger dabei', 'Already there for a while')}</h3>
   <p class="uh-einl">{je('TravelBuddy rechnet deine Routen jetzt auch ohne Netz, auf echten Straßen und fast so genau wie online. Deine Reise, dein Logbuch und deine Orte sind alle noch da.', 'TravelBuddy now calculates your routes without internet too, on real roads and almost as accurately as online. Your trip, your logbook and your places are all still there.')}</p>
   <div class="uh-zahlen">
     {#each ZAHLEN as [zahl, was]}<div class="uh-zahl"><b>{zahl}</b><span>{was}</span></div>{/each}

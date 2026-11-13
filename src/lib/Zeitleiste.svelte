@@ -5,6 +5,7 @@
   import { FELD, QUICKSTATS } from './journal-schema.js'
   import { S_MAP, dauerText } from './wanderungen-daten.js'
   import { katInfo } from './reisekalender.js'
+  import { terminGilt } from './buchung.js'
 
   let { orte = [], eigeneOrte = [] } = $props()
 
@@ -45,7 +46,7 @@
     if ($buchungen?.events?.length) {
       const proTag = new Map()
       for (const e of $buchungen.events) {
-        if (e.platzhalter) continue
+        if (!terminGilt(e)) continue
         if (!proTag.has(e.datum)) proTag.set(e.datum, [])
         proTag.get(e.datum).push(e)
       }

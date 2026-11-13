@@ -32,6 +32,7 @@
   import { vorabArt, nummernImText, zugnummernImText } from './flug.js'
   import { KOSTEN_CLUSTER, etappeVorschlag } from './kosten.js'
   import VerkehrBlock from './VerkehrBlock.svelte'
+  import { terminGilt } from './buchung.js'
 
   // Kategorien für Vorab-Ausgaben (Keys = dieselben wie im Tagebuch-Kostenmodul).
   const KAT = [
@@ -67,7 +68,7 @@
   let einfuegenAuf = $state(false)
 
   // ---- Gebuchtes aus der eigenen Kalender-App (nur Anzeige) ----
-  const buListe = $derived(($buchungen?.events || []).filter((e) => !e.platzhalter))
+  const buListe = $derived(($buchungen?.events || []).filter((e) => terminGilt(e)))
   const buBelege = $derived(buListe.reduce((n, e) => n + (e.docs?.length || 0), 0))
   // Selbst eingefügte Buchungen (aus einer Mail) neben denen aus dem Reisekalender.
   const buEigene = $derived(buListe.filter((e) => e.quelle === 'eigen').length)

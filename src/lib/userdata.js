@@ -366,6 +366,11 @@ function rettenAusNotspeicher() {
   // Der Notspeicher wird erst geleert, wenn der Wert wirklich in der Datenbank steht (persist).
 }
 
+/** IDs von Kalender-Terminen, die der Nutzer gelöscht hat (V44). */
+function geloeschteImportIds() {
+  return new Set((get(grabsteine).buchungenImport || []).map((x) => x.id))
+}
+
 function behalteErgaenztes(alte = [], neue = []) {
   const vorher = new Map(alte.filter((e) => e.ergaenzt).map((e) => [e.id, e]))
   return neue.map((e) => {
@@ -935,7 +940,9 @@ export function importiereReisekalender(kalender, { orte = [], reisenAnlegen = t
     stand: kalender.stand, von: kalender.von, bis: kalender.bis,
     // Eigene, aus Mails eingefügte Buchungen bleiben beim Neu-Import des Kalenders erhalten,
     // ebenso selbst zugeordnete Belege (am Termin mit derselben ID bzw. bei den eigenen Dokumenten)
-    events: [...behalteErgaenztes(vorher?.events, eigeneBelegeUebernehmen(vorher?.events, kalender.events)), ...((vorher?.events || []).filter((e) => e.quelle === 'eigen'))],
+    // V44: was von Hand gelöscht wurde, kommt beim Neu-Import nicht zurück (Grabstein).
+    events: [...behalteErgaenztes(vorher?.events, eigeneBelegeUebernehmen(vorher?.events, kalender.events)).filter((e) => !geloeschteImportIds().has(e.id)),
+      ...((vorher?.events || []).filter((e) => e.quelle === 'eigen'))],
     persoenlich: [...kalender.persoenlich, ...((vorher?.persoenlich || []).filter((d) => d.eigen))],
     // Damit „entfernen" wirklich zurücknimmt, was der Import angerichtet hat.
     startVorher: get(gesamtStart),
@@ -997,7 +1004,93 @@ export function entferneReisekalender() {
 
 /** Angaben an einem Termin ergänzen (Flugnummer, Sitzplatz …). `ergaenzt` schützt sie vor dem nächsten Kalender-Import. */
 export function aendereTermin(id, patch) {
-  buchungen.update((b) => b && ({ ...b, stand: new Date().toISOString(), events: b.events.map((e) => (e.id === id ? { ...e, ...patch, ergaenzt: Object.keys(patch) } : e)) }))
+  buchungen.update((b) => b && ({ ...b, stand: new Date().toISOString(), events: b.events.map((e) => (e.id === id ? mitPatch(e, patch) : e)) }))
+}
+
+// ---------- Buchung ändern, stornieren, ersetzen, löschen (V44) ----------
+//
+// Eine Buchung sind mehrere Termine (Hinflug und Anschluss, Check-in und Check-out). Geändert wird
+// deshalb immer die ganze Buchung über ihre `ids`. Alle Felder, die hier gesetzt werden, landen in
+// `ergaenzt` und überleben damit einen erneuten Kalender-Import (behalteErgaenztes).
+//
+// Storniert und umgebucht wird NICHT gelöscht: der Termin bleibt mit `storniert` bzw. `umgebucht`
+// stehen, grau und durchgestrichen. So ist später noch nachvollziehbar, was gebucht war, und die
+// Kosten behalten ihren Beleg. Ausgeblendet wird er überall dort, wo er als Termin zählen würde
+// (Flüge & Bahn, Flugabfrage, Wechselzeit, Tank- und Tageshinweise).
+
+/** Patch anwenden und `ergaenzt` mit dem schon Geschützten vereinen. */
+function mitPatch(e, patch) {
+  const schutz = [...new Set([...(e.ergaenzt || []), ...Object.keys(patch)])]
+  return { ...e, ...patch, ergaenzt: schutz }
+}
+
+/** Dieselbe Änderung an allen Terminen einer Buchung. `proTermin(e)` darf je Termin ergänzen. */
+export function aendereBuchung(ids, patch = {}, proTermin = null) {
+  const menge = new Set(Array.isArray(ids) ? ids : [ids])
+  buchungen.update((b) => b && ({
+    ...b, stand: new Date().toISOString(),
+    events: b.events.map((e) => (menge.has(e.id) ? mitPatch(e, { ...patch, ...(proTermin?.(e) || {}) }) : e)),
+  }))
+}
+
+/** Buchung stornieren: bleibt sichtbar, zählt aber nirgends mehr als Termin. */
+export function storniereBuchung(ids, grund = '') {
+  aendereBuchung(ids, { storniert: new Date().toISOString(), stornoGrund: String(grund || '').trim() })
+}
+
+/** Storno zurücknehmen. */
+export function storniereBuchungZurueck(ids) {
+  aendereBuchung(ids, { storniert: '', stornoGrund: '' })
+}
+
+/**
+ * Buchung durch neue Termine ersetzen (umgebucht). Die alten Termine bleiben grau stehen und
+ * zeigen auf die neue Buchung. Buchungsnummer und Belege werden übernommen, wenn die neuen
+ * Termine keine eigenen haben. Gibt die ID des ersten neuen Termins zurück.
+ */
+export function ersetzeBuchung(ids, neueTermine = [], { refUebernehmen = true, belegeUebernehmen = true } = {}) {
+  const alteIds = new Set(Array.isArray(ids) ? ids : [ids])
+  const alte = (get(buchungen)?.events || []).filter((e) => alteIds.has(e.id))
+  if (!alte.length || !neueTermine.length) return null
+  const altRef = alte.find((e) => e.ref)?.ref || ''
+  const altDocs = alte.flatMap((e) => e.docs || [])
+  const gruppe = 'bg-' + uid()
+  const fertig = neueTermine.map((e, i) => ({
+    ...e,
+    ref: e.ref || (refUebernehmen ? altRef : ''),
+    docs: [...(e.docs || []), ...(belegeUebernehmen && i === 0 ? altDocs : [])],
+    gruppe: e.gruppe || gruppe,
+    ersetzt: [...alteIds],
+  }))
+  const anzahl = buchungenEinfuegen(fertig)
+  if (!anzahl) return null
+  const neuId = fertig[0].id || (get(buchungen)?.events || []).find((e) => e.gruppe === gruppe)?.id || null
+  aendereBuchung([...alteIds], { umgebucht: new Date().toISOString(), ersetztDurch: neuId })
+  // Kosten der alten Buchung zeigen weiter auf den alten Termin: sie gehören zur alten Zahlung.
+  return neuId
+}
+
+/** Umbuchung zurücknehmen: die alte Buchung gilt wieder, die neue bleibt bestehen. */
+export function ersetzeBuchungZurueck(ids) {
+  aendereBuchung(ids, { umgebucht: '', ersetztDurch: '' })
+}
+
+/**
+ * Buchung ganz entfernen, auch eine aus dem Reisekalender. Der Grabstein verhindert, dass sie
+ * beim nächsten Import oder beim Zusammenführen wiederkommt. Kosten bleiben unter Ausgaben vorab.
+ */
+export function loescheBuchung(ids) {
+  const menge = new Set(Array.isArray(ids) ? ids : [ids])
+  let weg = 0
+  buchungen.update((b) => {
+    if (!b?.events) return b
+    const events = b.events.filter((e) => !menge.has(e.id))
+    weg = b.events.length - events.length
+    if (!weg) return b
+    for (const e of b.events) if (menge.has(e.id)) grabstein(e.quelle === 'eigen' ? 'buchungenEigen' : 'buchungenImport', e.id)
+    return { ...b, events, stand: new Date().toISOString() }
+  })
+  return weg
 }
 
 /** Fügt fertige Termine (siehe buchung-erkennen.js → alsBuchungen) hinzu. Gibt die Anzahl zurück. */

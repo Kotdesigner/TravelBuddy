@@ -3,6 +3,7 @@
 // im Topf `reisen` (typ 'route', etappeId), neu sind nur `von` (Datum) und `idee` (zählt nicht mit).
 // Ohne `von` ist eine Route „noch nicht eingeplant“. Reine Rechnungen, ohne Speicher.
 import { gueltigesDatum, plusTage, tageVon, istRoute } from './plan.js'
+import { terminGilt } from './buchung.js'
 
 export const ARTEN = ['auto', 'flug', 'bus', 'bahn', 'boot']
 export const FAHRZEUG = new Set(['auto', 'camper', undefined, null, ''])
@@ -71,7 +72,7 @@ export function datiereAbschnitte(reisen = [], events = [], eintraege = []) {
     const kats = KAT_FUER[r.art]
     const e = etappe.get(r.etappeId)
     if (!kats || !e) continue
-    const kandidaten = events.filter((x) => !x.platzhalter && kats.includes(x.kat) && x.datum >= e.von && x.datum <= e.bis && !vergeben.has(x.id) && passt(r, x))
+    const kandidaten = events.filter((x) => terminGilt(x) && kats.includes(x.kat) && x.datum >= e.von && x.datum <= e.bis && !vergeben.has(x.id) && passt(r, x))
     if (kandidaten.length !== 1) continue
     const x = kandidaten[0]
     vergeben.add(x.id)

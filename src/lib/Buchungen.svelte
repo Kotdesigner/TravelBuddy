@@ -5,7 +5,7 @@
   // Termine kommen aus dem Reisekalender oder sind selbst eingetragen, Kosten aus den Ausgaben
   // vorab (über die Termin-ID verbunden). Was die App nicht sicher zuordnen kann, steht oben zum Bestätigen.
   import { t, je } from './i18n.js'
-  import { buchungen, vorabKosten, updateVorabKosten, reisen, gesamtStart, loescheEigeneBuchung, belegeAnhaengen, aendereTermin } from './userdata.js'
+  import { buchungen, vorabKosten, updateVorabKosten, reisen, gesamtStart, belegeAnhaengen, aendereTermin } from './userdata.js'
   import { etappenMitDatum } from './plan.js'
   import { buchungenMitKosten, buendle, verbindungsVorschlaege, uhrzeitIn, kostenPasst, istEchteBuchung } from './buchung.js'
   import { katInfo } from './reisekalender.js'
@@ -13,10 +13,10 @@
   import { heuteTag } from './heute.js'
   import { betragVon } from './kosten.js'
   import { speichereBeleg, eigenerPfad, belegLabel } from './belege.js'
-  import { loeschFrage } from './dialog.js'
   import { zeigeToast } from './toast.js'
   import BelegKnoepfe from './BelegKnoepfe.svelte'
   import BuchungEinfuegen from './BuchungEinfuegen.svelte'
+  import BuchungAendern from './BuchungAendern.svelte'
 
   let { geh = () => {} } = $props()
 
@@ -57,11 +57,9 @@
     if (neu.length) { belegeAnhaengen(neu); zeigeToast(je('Beleg gespeichert ✓', 'Document saved ✓'), 'ok') }
   }
   function nummerSetzen(b, wert) { const v = wert.trim(); if (v !== b.ref) aendereTermin(b.id, { ref: v }) }
-  async function loeschen(b) {
-    if (!(await loeschFrage(t('Buchung „{titel}“', { titel: b.titel }), je('Alle Termine dieser Buchung verschwinden. Verbundene Kosten bleiben unter den Ausgaben vorab.', 'All dates of this booking are removed. Linked costs stay under costs before the trip.')))) return
-    for (const k of b.kosten) updateVorabKosten(k.id, { terminId: null })
-    loescheEigeneBuchung(b.id)
-  }
+  // V44: Ändern, umbuchen, stornieren und löschen in einem Blatt — für jede Buchung, auch die aus dem Kalender.
+  let aendernId = $state(null)
+  const aendern = $derived(aendernId ? liste.find((x) => x.id === aendernId) || null : null)
   // Zum Zuordnen nur Ausgaben, deren Art zur Buchung passt (ein Flug bekommt keine Drohne angeboten)
   const kostenWahl = (b) => ohneTermin.filter((k) => KOSTEN_ART.has(k.kat) && kostenPasst(k.kat, b.kat)).map((k) => ({ id: k.id, label: `${k.text || '…'} · ${kostenText(k)}` }))
   const KOSTEN_ART = new Set(['kosten_unterkunft', 'kosten_flug', 'kosten_bahn', 'kosten_bus', 'kosten_boot', 'kosten_mietfahrzeug', 'kosten_attraktion', 'kosten_sonstiges'])
@@ -117,7 +115,9 @@
   <ul class="bu-liste">
     {#each gezeigt as b (b.id)}
       {@const zeiten = uhrzeiten(b)}
-      <li class="bu-karte" class:vorbei={b.bis < $heuteTag} style="--farbe:{b.etappe?.farbe || 'var(--line-stark)'}">
+      <li class="bu-karte" class:vorbei={b.bis < $heuteTag} class:weg={!!b.storniert || !!b.umgebucht} style="--farbe:{b.etappe?.farbe || 'var(--line-stark)'}">
+        {#if b.storniert}<p class="bu-weg-marke">{je('Storniert', 'Cancelled')}{b.stornoGrund ? ' · ' + b.stornoGrund : ''}</p>
+        {:else if b.umgebucht}<p class="bu-weg-marke">{je('Umgebucht', 'Rebooked')}</p>{/if}
         <div class="bu-titel">
           <span class="bu-i" aria-hidden="true">{b.termine[0].emoji || katInfo(b.kat).icon}</span>
           <span><b>{b.titel}</b>
@@ -151,6 +151,14 @@
                     <small>{je('bezahlt', 'paid')} {tagMonat(k.datum)}</small>
                   {/if}
                   <button class="bu-mini bu-weg" onclick={() => kostenLoesen(k)} aria-label={je('Kosten von der Buchung lösen', 'Detach cost')}>✕</button>
+                {#if b.storniert || k.erstattung}
+                  <select class="bu-erst" aria-label={je('Erstattung', 'Refund')} value={k.erstattung || 'offen'}
+                    onchange={(e) => updateVorabKosten(k.id, { erstattung: e.currentTarget.value })}>
+                    <option value="offen">{je('Erstattung offen', 'Refund pending')}</option>
+                    <option value="voll">{je('voll erstattet', 'fully refunded')}</option>
+                    <option value="keine">{je('nichts zurück', 'nothing back')}</option>
+                  </select>
+                {/if}
                 </span>
               {/each}
             </span>
@@ -175,12 +183,16 @@
         <div class="bu-fuss">
           <button class="btn btn-ghost" onclick={() => geh('logbuch/tag/' + b.von)}>{je('Tag öffnen', 'Open day')}</button>
           {#if b.etappe}<button class="btn btn-ghost" onclick={() => geh('plan/etappe/' + b.etappe.id)}>{je('Etappe', 'Leg')}</button>{/if}
-          {#if b.eigen}<button class="btn btn-ghost bu-rot" onclick={() => loeschen(b)}>{je('Löschen', 'Delete')}</button>{/if}
+          <button class="btn btn-ghost" onclick={() => (aendernId = b.id)}>{je('Ändern', 'Change')}</button>
         </div>
       </li>
     {/each}
   </ul>
 </section>
+
+{#if aendern}
+  <BuchungAendern buchung={aendern} onfertig={() => (aendernId = null)} onabbruch={() => (aendernId = null)} />
+{/if}
 
 <style>
   .bu { display: flex; flex-direction: column; gap: 12px; }
@@ -191,6 +203,10 @@
   .bu-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .bu-karte { border: 1px solid var(--line); border-left: 4px solid var(--farbe, var(--line-stark)); border-radius: var(--radius-m); background: var(--karte, var(--flaeche)); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
   .bu-karte.vorbei { opacity: 0.8; }
+  .bu-karte.weg { opacity: 0.66; border-left-color: var(--line-stark); }
+  .bu-karte.weg .bu-titel b { text-decoration: line-through; }
+  .bu-erst { font-size: calc(12.5px * var(--schrift, 1)); min-height: 34px; padding: 2px 6px; }
+  .bu-weg-marke { margin: 0; align-self: flex-start; padding: 2px 8px; border-radius: 999px; background: var(--flaeche); border: 1px solid var(--line-stark); color: var(--muted); font-size: calc(12px * var(--schrift, 1)); font-weight: 700; }
   .bu-pruefen { border-left-color: var(--brand); }
   .bu-pruefen h2 { margin: 0; font-size: calc(15px * var(--schrift, 1)); }
   .bu-pruefen ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }

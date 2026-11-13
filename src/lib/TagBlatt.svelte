@@ -13,6 +13,7 @@
   import JournalEintrag from './JournalEintrag.svelte'
   import BuchungZusatz from './BuchungZusatz.svelte'
   import { stelleAm } from './abschnitte.js'
+  import { terminGilt } from './buchung.js'
 
   let { datum, orte = [], warnungen = [], umkreisKm = 150, onzurueck = () => {}, ontag = () => {}, onwanderung = () => {} } = $props()
 
@@ -23,7 +24,7 @@
   const ueber = $derived(planUeberblick(eintraege))
   const nr = $derived(ueber.start && datum >= ueber.start && datum <= ueber.ende ? tageZwischen(ueber.start, datum) + 1 : null)
   const eintraegeTag = $derived($journal.filter((j) => deckt(j, datum)))
-  const gebucht = $derived(($buchungen?.events || []).filter((b) => !b.platzhalter && b.datum === datum))
+  const gebucht = $derived(($buchungen?.events || []).filter((b) => terminGilt(b) && b.datum === datum))
   const wand = $derived($wanderungen.filter((w) => w.datum === datum).sort((a, b) => (a.zeit || '12:00').localeCompare(b.zeit || '12:00')))
   const ortName = $derived(new Map(orte.map((o) => [o.id, o.name])))
   const ortTage = $derived(Object.entries($userData).flatMap(([id, ud]) => (ud?.tagebuch || []).filter((t) => t.datum === datum).map((t) => ({ ...t, ortName: ortName.get(id) || id }))))
