@@ -31,6 +31,18 @@ export function abflugzeitImText(text) {
 
 const istFlug = (e) => e.kat === 'flight' || !!e.flugNr
 
+/**
+ * Die gültigen Flugnummern eines Termins.
+ * Erst die beim Ändern gesetzten (`flugNrs`) — so verschwindet eine alte Nummer wirklich.
+ * Steht dort nichts Gültiges, wird wie früher aus Feld, Untertitel und Titel gelesen. Sonst
+ * stünde ein Flug mit einer verunglückten Liste („EK“, „421“) für immer unter „Hier fehlt noch etwas“.
+ */
+export function flugNummern(e = {}) {
+  const gesetzt = (Array.isArray(e.flugNrs) ? e.flugNrs : []).map(normalNummer).filter(Boolean)
+  if (gesetzt.length) return [...new Set(gesetzt)]
+  return [...new Set([normalNummer(e.flugNr), ...nummernImText(e.sub), ...nummernImText(e.titel)].filter(Boolean))]
+}
+
 /** „ice 100“ → „ICE100“, „S 9“ → „S9“. Leerer Text, wenn es keine Zugnummer ist. */
 export function normalZug(s) {
   const m = String(s || '').toUpperCase().trim().match(/^(ICE|IC|ECE|EC|RJX|RJ|NJ|EN|FLX|TGV|IRE|RE|RB|MEX|S|U)[ -]?(\d{1,5})$/)
@@ -63,11 +75,7 @@ export function fluegeAusTerminen(events = []) {
     if (!e || e.platzhalter || !gilt(e)) continue
     if (e.kat === 'train') { zugAusTermin(e, ohneNummer, zuege); continue }
     if (!istFlug(e)) continue
-    // V44: `flugNrs` setzt das Formular beim Ändern. Dann gelten genau diese Nummern — sonst bliebe
-    // eine alte Nummer aus dem Untertitel („Qatar Airways QR901 · Abflug 22:45“) als Anschlussflug stehen.
-    const nummern = Array.isArray(e.flugNrs) && e.flugNrs.length
-      ? [...new Set(e.flugNrs.map(normalNummer).filter(Boolean))]
-      : [...new Set([normalNummer(e.flugNr), ...nummernImText(e.sub), ...nummernImText(e.titel)].filter(Boolean))]
+    const nummern = flugNummern(e)
     if (!nummern.length) {
       // „Ankunft Melbourne“ steht nur im Kalender und ist kein eigener Flug
       if (!/^ankunft/i.test(e.titel || '')) ohneNummer.push(e)

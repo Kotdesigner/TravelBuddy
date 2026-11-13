@@ -2,7 +2,7 @@
 // Gerechnet wird mit einem Beispiel-Rückflug (Testdaten 2037/2038, wie in den anderen Tests).
 // Ausführen: node tests/buchung-aendern.test.mjs   (kein Netz)
 import fs from 'node:fs'
-import { fluegeAusTerminen, gilt } from '../src/lib/flug.js'
+import { fluegeAusTerminen, gilt, flugNummern } from '../src/lib/flug.js'
 import { buendle, buchungenMitKosten, terminGilt, buchungGilt, baueUntertitel, nummernListe, angabenAusBuchung, wechselZeit } from '../src/lib/buchung.js'
 import { kostenAuswertung } from '../src/lib/kosten.js'
 
@@ -176,6 +176,38 @@ console.log('\nBackup und zweites Gerät')
   p('Gelöschte Kalender-Buchung kommt auch vom anderen Gerät nicht zurück', (r2.ergebnis?.buchungen?.events || []).length === 0, JSON.stringify((r2.ergebnis?.buchungen?.events || []).map((e) => e.id)))
 }
 
+console.log('\nFlugnummern mit Leerzeichen')
+{
+  p('„EK 421“ bleibt EINE Nummer', JSON.stringify(nummernListe('EK 421')) === '["EK421"]', JSON.stringify(nummernListe('EK 421')))
+  p('Einmal verunglücktes „EK / 421“ wird geheilt', JSON.stringify(nummernListe('EK / 421')) === '["EK421"]', JSON.stringify(nummernListe('EK / 421')))
+  p('Zugnummer bleibt heil', JSON.stringify(nummernListe('ICE 771')) === '["ICE771"]', JSON.stringify(nummernListe('ICE 771')))
+  p('Mehrere Nummern bleiben getrennt', JSON.stringify(nummernListe('EK421 / EK59')) === '["EK421","EK59"]')
+  // Ein Termin, dem die kaputte Liste schon eingetragen wurde
+  const kaputt = [{ id: 'e1', kat: 'flight', datum: '2037-01-29', titel: 'Flug EK 421', sub: 'Abflug 22:20 · EK / 421 · Emirates', flugNr: 'EK421', flugNrs: ['EK', '421'], docs: [] }]
+  const r = fluegeAusTerminen(kaputt)
+  p('Steht nicht mehr unter „Hier fehlt noch etwas“', r.ohneNummer.length === 0 && r.fluege.length === 1, JSON.stringify(r))
+  p('Die Nummer ist wieder EK421', r.fluege[0]?.nr === 'EK421', r.fluege[0]?.nr)
+  p('Das Blatt zeigt EK421 statt „EK / 421“', flugNummern(kaputt[0]).join(' / ') === 'EK421', flugNummern(kaputt[0]).join(' / '))
+  const sub = baueUntertitel('flight', { zeitVon: '22:20', nr: 'EK 421', anbieter: 'Emirates' })
+  p('Nach dem Speichern steht EK421 im Untertitel', sub === 'Abflug 22:20 · EK421 · Emirates', sub)
+  p('Eine geleerte Nummer holt die aus dem Titel zurück', flugNummern({ titel: 'Flug EK 59', flugNrs: [] }).join() === 'EK59')
+}
+
+console.log('\nSitzplatz je Abschnitt (Gabelflug)')
+{
+  const gabel = [
+    { id: 'g1', kat: 'flight', datum: '2037-01-29', titel: 'Hamburg → Dubai', sub: '', flugNr: 'EK59', flugNrs: ['EK59'], sitz: '73A', ref: 'EK-1', docs: [] },
+    { id: 'g2', kat: 'flight', datum: '2037-01-29', titel: 'Dubai → Perth', sub: '', flugNr: 'EK421', flugNrs: ['EK421'], sitz: '40A', ref: 'EK-1', docs: [] },
+  ]
+  const f = fluegeAusTerminen(gabel).fluege
+  p('Jeder Flug trägt seinen eigenen Sitzplatz', f[0].sitz === '73A' && f[1].sitz === '40A', JSON.stringify(f.map((x) => x.sitz)))
+  p('Es bleibt trotzdem eine Buchung', buendle(gabel).length === 1)
+  const ba = lies('src/lib/BuchungAendern.svelte')
+  p('Das Blatt fragt den Sitzplatz je Abschnitt ab', /sitzJeTeil/.test(ba) && /bind:value=\{z\.sitz\}/.test(ba))
+  p('Das eine Feld für alles gibt es nur ohne Abschnitte', /fahrt && !sitzJeTeil/.test(ba))
+  p('Gespeichert wird der Sitzplatz dann je Termin', /if \(sitzJeTeil\) felder\.sitz/.test(ba) && /if \(!sitzJeTeil\) gemeinsam\.sitz/.test(ba))
+}
+
 console.log('\nEinbau')
 {
   const ud = lies('src/lib/userdata.js'), bu = lies('src/lib/Buchungen.svelte'), ba = lies('src/lib/BuchungAendern.svelte'), be = lies('src/lib/BuchungEinfuegen.svelte')
@@ -188,6 +220,8 @@ console.log('\nEinbau')
   p('Umbuchen läuft über das Einfüge-Blatt', /statt=\{buchung\}/.test(ba) && /statt \? \(ersetzeBuchung/.test(be))
   p('Beim Umbuchen keine falsche Dubletten-Warnung', /!statt\?\.ids\?\.includes\(e\.id\)/.test(be))
   p('Keine Gedankenstriche in Sätzen', !/ [–—] /.test(ba.split('<style>')[0]))
+  p('Ergänzen hält flugNr und flugNrs zusammen', /flugNummern\(alt \|\| \{\}\)\.length <= 1/.test(lies('src/lib/verkehr.js')))
+  p('Die Nummer im Titel füllt das Ergänzen-Formular vor', /flugNummern\(e\)\[0\]/.test(lies('src/lib/verkehr.js')))
 }
 
 if (fehler) { console.log(`\n${fehler} Fehler`); process.exit(1) }

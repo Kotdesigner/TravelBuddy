@@ -9,6 +9,7 @@
   import { modal } from './modal.js'
   import { aendereBuchung, storniereBuchung, storniereBuchungZurueck, ersetzeBuchungZurueck, loescheBuchung, updateVorabKosten } from './userdata.js'
   import { angabenAusBuchung, baueUntertitel, nummernListe, uhrzeitIn } from './buchung.js'
+  import { flugNummern } from './flug.js'
   import { mitWochentag } from './format.js'
   import { loeschFrage, frage } from './dialog.js'
   import { zeigeToast } from './toast.js'
@@ -36,9 +37,15 @@
     // und ein Speichern ohne Anfassen würde die Uhrzeit löschen.
     zeit: e.zeit || e.zeitVon || uhrzeitIn(e.sub) || '',
     zeitBis: e.zeitBis || '',
-    nr: (Array.isArray(e.flugNrs) && e.flugNrs.length ? e.flugNrs.join(' / ') : (e.flugNr || e.zugNr || '')),
+    // Nur gültige Nummern vorfüllen. Stand da einmal „EK“ und „421“, holt flugNummern() die
+    // Nummer aus Titel oder Untertitel zurück, statt den Fehler im Feld weiterzureichen.
+    nr: (kat === 'train' ? (e.zugNr || '') : (flugNummern(e).join(' / ') || e.flugNr || '')),
+    // Sitzplatz gehört zum Abschnitt: bei einem Gabelflug hat jeder Flug seinen eigenen.
+    sitz: e.sitz || '',
   })))
 
+  // Gabelflug oder Umsteigeflug: Sitzplatz steht dann bei jedem Abschnitt, nicht einmal für alles.
+  const sitzJeTeil = $derived(fahrt && mehrteilig)
   const rolleVon = (i) => (mehrteilig && i === zeilen.length - 1 ? 'ende' : 'start')
   const datumOk = $derived(zeilen.every((z) => /^\d{4}-\d{2}-\d{2}$/.test(z.datum)))
   const reihenfolgeOk = $derived(zeilen.every((z, i) => i === 0 || z.datum >= zeilen[i - 1].datum))
@@ -66,9 +73,12 @@
       }
       if (kat === 'flight') { felder.flugNr = nrs[0] || ''; felder.flugNrs = nrs }
       if (kat === 'train') { felder.zugNr = nrs[0] || ''; felder.bahnhof = f.bahnhof.trim() }
+      if (sitzJeTeil) felder.sitz = (z.sitz || '').trim()
       return felder
     }
-    aendereBuchung(buchung.ids, { ref: f.ref.trim(), anbieter: f.anbieter.trim(), sitz: f.sitz.trim() }, proTermin)
+    const gemeinsam = { ref: f.ref.trim(), anbieter: f.anbieter.trim() }
+    if (!sitzJeTeil) gemeinsam.sitz = f.sitz.trim()
+    aendereBuchung(buchung.ids, gemeinsam, proTermin)
     haptic()
     zeigeToast(je('Buchung geändert ✓', 'Booking updated ✓'), 'ok')
     onfertig()
@@ -162,6 +172,9 @@
               <label>{kat === 'flight' ? je('Flugnummer(n)', 'Flight number(s)') : je('Zugnummer', 'Train number')}
                 <input bind:value={z.nr} placeholder={kat === 'flight' ? 'SQ224 / SQ334' : 'ICE 100'} autocapitalize="characters" autocomplete="off" /></label>
             {/if}
+            {#if sitzJeTeil}
+              <label>{je('Sitzplatz', 'Seat')}<input bind:value={z.sitz} placeholder="12A" autocomplete="off" /></label>
+            {/if}
           </div>
         </li>
       {/each}
@@ -170,7 +183,7 @@
       <p class="ba-k">{je('Mehrere Nummern mit Schrägstrich, wenn du umsteigst. Alte Nummern verschwinden beim Speichern.',
         'Several numbers with a slash if you change planes. Old numbers go away when you save.')}</p>
     {/if}
-    {#if fahrt}
+    {#if fahrt && !sitzJeTeil}
       <div class="ba-feld"><label>{je('Sitzplatz', 'Seat')}<input bind:value={f.sitz} placeholder="12A" autocomplete="off" /></label></div>
     {/if}
     {#if !reihenfolgeOk}<p class="ba-warn" role="status">{je('Ein Datum liegt vor dem Datum davor.', 'One date is before the one above it.')}</p>{/if}

@@ -4,7 +4,7 @@ import { get } from 'svelte/store'
 import { t } from './i18n.js'
 import { buchungen, buchungenEinfuegen, aendereTermin, belegeAnhaengen } from './userdata.js'
 import { eigenerPfad, speichereBeleg, belegLabel, lokaleBelege, ladeBelegListe } from './belege.js'
-import { normalNummer, normalZug } from './flug.js'
+import { normalNummer, normalZug, flugNummern } from './flug.js'
 
 const neueId = () => 'eb-' + Math.random().toString(36).slice(2, 10)
 
@@ -12,7 +12,8 @@ export const leereAngaben = (vorlage = {}) => ({ nr: '', bahnhof: '', datum: '',
 
 /** Die Angaben eines vorhandenen Termins für das Formular. */
 export const angabenAus = (e) => e ? leereAngaben({
-  nr: e.flugNr || e.zugNr || '', bahnhof: e.bahnhof || '', datum: e.datum || '', zeit: e.zeit || e.zeitVon || '', ref: e.ref || '', sitz: e.sitz || '',
+  // Auch eine Nummer, die nur im Titel steht („Flug EK 421“), füllt das Feld vor.
+  nr: e.kat === 'train' ? (e.zugNr || '') : (flugNummern(e)[0] || e.flugNr || ''), bahnhof: e.bahnhof || '', datum: e.datum || '', zeit: e.zeit || e.zeitVon || '', ref: e.ref || '', sitz: e.sitz || '',
 }) : leereAngaben()
 
 function untertitel(art, f, nr) {
@@ -24,9 +25,15 @@ function untertitel(art, f, nr) {
 export async function speichereVerkehr(art, f, { id = null, titel = '', datei = null } = {}) {
   const nr = art === 'flug' ? normalNummer(f.nr) : normalZug(f.nr)
   const felder = { datum: f.datum, zeit: f.zeit || '', ref: String(f.ref || '').trim(), sitz: String(f.sitz || '').trim() }
-  if (art === 'flug') felder.flugNr = nr
-  else { felder.zugNr = nr; felder.bahnhof = String(f.bahnhof || '').trim() }
-  const vorhanden = id && (get(buchungen)?.events || []).some((e) => e.id === id)
+  const alt = id ? (get(buchungen)?.events || []).find((e) => e.id === id) : null
+  if (art === 'flug') {
+    felder.flugNr = nr
+    // `flugNr` und `flugNrs` dürfen nicht auseinanderlaufen, sonst zählt die leere Liste und der
+    // Flug steht nach dem Ergänzen weiter unter „Hier fehlt noch etwas“. Bei einem Umsteigeflug
+    // mit mehreren gültigen Nummern bleibt die Liste, wie sie ist.
+    if (flugNummern(alt || {}).length <= 1) felder.flugNrs = nr ? [nr] : []
+  } else { felder.zugNr = nr; felder.bahnhof = String(f.bahnhof || '').trim() }
+  const vorhanden = !!alt
   if (vorhanden) aendereTermin(id, felder)
   else {
     id = neueId()

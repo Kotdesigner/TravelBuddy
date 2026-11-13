@@ -4,6 +4,7 @@
 // Terminen zugeordnet.
 import { etappeAm } from './plan.js'
 import { t } from './i18n.js'
+import { nummernImText, flugNummern } from './flug.js'
 
 /** Kostenart passend zur Art des Termins. */
 export const KOSTEN_FUER = {
@@ -147,8 +148,30 @@ export function etappeJetzt(eintraege, datum, uhr, events = []) {
 const txt = (x) => String(x ?? '').trim()
 const teile = (...xs) => xs.map(txt).filter(Boolean).join(' · ')
 
-/** Flugnummern aus einem Feld: „SQ224, SQ334“ oder „SQ224 / SQ334“. */
-export const nummernListe = (s) => txt(s).toUpperCase().split(/[\s,/;]+/).map((x) => x.replace(/[^A-Z0-9]/g, '')).filter(Boolean)
+/**
+ * Flugnummern aus einem Feld: „SQ224, SQ334“, „SQ224 / SQ334“, „EK 421“ oder „EK / 421“.
+ * Am Leerzeichen zu trennen ging schief: „EK 421“ wurde zu „EK“ und „421“, und damit galt der
+ * Flug als ohne Nummer. Getrennt wird nur an Komma, Schrägstrich, Semikolon und Zeilenumbruch.
+ */
+export const nummernListe = (s) => {
+  const roh = txt(s).toUpperCase().split(/[,;/\n]+/).map((x) => x.trim()).filter(Boolean)
+  // „EK / 421“: ein Stück ohne Ziffer gehört mit dem nächsten ohne Buchstabe zusammen.
+  const stuecke = []
+  for (const x of roh) {
+    const vor = stuecke.at(-1)
+    if (vor && !/\d/.test(vor) && !/[A-Z]/.test(x)) stuecke[stuecke.length - 1] = vor + x
+    else stuecke.push(x)
+  }
+  const out = []
+  for (const st of stuecke) {
+    // „EK 421“ und „EK421 EK59“: echte Flugnummern im Text finden. Sonst hart säubern,
+    // damit Zugnummern wie „ICE 771“ ebenfalls zusammenbleiben.
+    const gefunden = nummernImText(st)
+    if (gefunden.length) out.push(...gefunden)
+    else { const k = st.replace(/[^A-Z0-9]/g, ''); if (k) out.push(k) }
+  }
+  return [...new Set(out)]
+}
 
 /**
  * Untertitel eines Termins aus den Angaben. `rolle` unterscheidet Anfang und Ende einer
@@ -174,7 +197,8 @@ export function angabenAusBuchung(b) {
   return {
     titel: b?.titel || erst.titel || '',
     anbieter: erst.anbieter || '',
-    nr: (Array.isArray(erst.flugNrs) && erst.flugNrs.length ? erst.flugNrs : b?.termine?.map((e) => e.flugNr || e.zugNr).filter(Boolean) || []).join(' / '),
+    // Jede Nummer der Buchung, geheilt: aus flugNrs, sonst aus Feld, Untertitel oder Titel.
+    nr: [...new Set((b?.termine || []).flatMap((e) => (flugNummern(e).length ? flugNummern(e) : [e.flugNr || e.zugNr].filter(Boolean))))].join(' / '),
     bahnhof: erst.bahnhof || '',
     von: b?.von || erst.datum || '',
     bis: mehrteilig ? (b?.bis || letzt.datum || '') : '',
