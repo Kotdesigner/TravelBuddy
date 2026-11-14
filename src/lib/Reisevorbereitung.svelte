@@ -690,7 +690,7 @@
               <div class="bu-text">
                 <b>{b.titel}{#if b.quelle === 'eigen'}<span class="bu-eigen">{t('aus Mail')}</span>{/if}</b>
                 {#if b.sub}<span class="bu-sub">{b.sub}</span>{/if}
-                <BelegKnoepfe docs={b.docs} entfernbar />
+                <BelegKnoepfe docs={b.docs} ziele={[b.id]} entfernbar />
               </div>
               {#if b.ref}<span class="bu-ref">{b.ref}</span>{/if}
               {#if b.quelle === 'eigen'}

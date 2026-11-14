@@ -16,16 +16,18 @@
 </script>
 
 <script>
-  import { t } from './i18n.js'
+  import { t, je } from './i18n.js'
   // Die Belege eines Termins als Knöpfe: tippen öffnet sie (vom Gerät oder aus dem Build).
   // Dieselbe Darstellung in Vorbereitung, Etappe, Tag, Logbuch und Kalender.
   import { dokumentUrl, belegDa } from './reisekalender.js'
   import { lokaleBelege, oeffneBeleg, loescheBeleg, dateiName } from './belege.js'
-  import { belegAbnehmen } from './userdata.js'
+  import { belegAbnehmen, belegHaengtWoanders } from './userdata.js'
   import { loeschFrage } from './dialog.js'
   import { zeigeToast } from './toast.js'
 
-  let { docs = [], entfernbar = false, klein = false } = $props()
+  // `ziele`: die Termine dieser Buchung. Ohne sie ginge ein Beleg von jedem Termin ab, an dem
+  // dieselbe Datei hängt, und nicht nur von der Buchung, die man gerade vor sich hat.
+  let { docs = [], entfernbar = false, klein = false, ziele = null } = $props()
   ladeEinmal()
 
   const istLokal = (pfad) => $lokaleBelege.has((pfad || '').normalize('NFC'))
@@ -37,9 +39,23 @@
     oeffneBeleg(pfad).then((ok) => { if (!ok) zeigeToast(t('Dieser Beleg liegt nicht auf dem Gerät.')) })
   }
   async function entfernen(d) {
-    if (!(await loeschFrage(t('Beleg „{label}“', { label: d.label }), t('Die Datei verschwindet von diesem Gerät und vom Termin. Der Termin selbst bleibt.')))) return
-    belegAbnehmen(d.datei)
-    try { await loescheBeleg(d.datei) } catch {}
+    // Die Rückfrage soll die Wahrheit sagen: hängt die Datei noch an einer anderen Buchung,
+    // bleibt sie auf dem Gerät, und dann darf hier nichts anderes stehen.
+    const woanders = belegHaengtWoanders(d.datei, ziele)
+    const text = d.eigen
+      ? (woanders
+        ? je('Der Beleg geht von diesem Termin ab. Die Datei bleibt auf dem Gerät, weil sie noch an einer anderen Buchung hängt.',
+          'The document is detached from this booking. The file stays on the device because another booking still uses it.')
+        : t('Die Datei verschwindet von diesem Gerät und vom Termin. Der Termin selbst bleibt.'))
+      : (woanders
+        ? je('Der Beleg geht von dieser Buchung ab und kommt beim nächsten Import des Reisekalenders nicht zurück. Die Datei bleibt auf dem Gerät, weil sie noch an einer anderen Buchung hängt.',
+          'The document is detached from this booking and will not come back on the next calendar import. The file stays on the device because another booking still uses it.')
+        : je('Der Beleg geht von dieser Buchung ab und die Datei verschwindet von diesem Gerät. Beim nächsten Import des Reisekalenders kommt er nicht zurück.',
+          'The document is detached from this booking and the file is removed from this device. It will not come back on the next calendar import.'))
+    if (!(await loeschFrage(t('Beleg „{label}“', { label: d.label }), text))) return
+    // Hängt dieselbe Datei noch an einer anderen Buchung, bleibt sie auf dem Gerät.
+    const { nochInBenutzung } = belegAbnehmen(d.datei, ziele) || {}
+    if (!nochInBenutzung) { try { await loescheBeleg(d.datei) } catch {} }
   }
 </script>
 
@@ -54,7 +70,7 @@
         {:else}
           <span class="bk fehlt" title={t('{belegName}, noch nicht geladen', { belegName: dateiName(d.datei) })}>{t('📎 {label} · fehlt', { label: d.label })}</span>
         {/if}
-        {#if entfernbar && d.eigen}
+        {#if entfernbar}
           <button class="bk-x" onclick={() => entfernen(d)} aria-label={t('Beleg „{label}“ entfernen', { label: d.label })}>✕</button>
         {/if}
       </span>

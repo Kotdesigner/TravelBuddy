@@ -13,6 +13,14 @@ const b = buendle(ev)
 assert.equal(b.length, 4)
 const palm = b.find((x) => x.titel === 'Coral Lagoon Resort')
 assert.deepEqual([palm.von, palm.bis, palm.ref, palm.docs.length], ['2037-12-08', '2037-12-10', 'PB1', 1])
+// Derselbe Voucher an Check-in und Check-out gehört einmal auf die Karte, nicht zweimal: sonst
+// sähe ein Tipp aufs ✕ aus, als wären zwei Belege verschwunden.
+{
+  const doppelt = buendle([{ ...ev[0], docs: [{ label: 'Voucher', datei: 'x.pdf' }] }, ev[1]])
+    .find((x) => /Coral Lagoon/.test(x.titel))
+  assert.equal(doppelt.docs.length, 1)
+  assert.equal(doppelt.ids.length, 2)
+}
 assert.equal(b.find((x) => x.kat === 'car').ids.length, 2)
 assert.equal(grundTitel('Mietwagen Ost Rückgabe'), 'mietwagen ost')
 assert.equal(grundTitel('Camper-Übernahme'), grundTitel('Camper-Rückgabe'))

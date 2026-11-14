@@ -63,9 +63,31 @@ p('leere Liste ändert nichts', haengeBelegeAn(topf, []) === topf)
 
 const ab = nimmBelegAb(neu, 'eigen/rk-3/Rechnung.pdf')
 p('Abnehmen entfernt den eigenen Beleg', ab.events.find((e) => e.id === 'rk-3').docs.length === 0)
+// Kalender-Belege waren früher ausgenommen. Dann liess sich an einer importierten Buchung kein
+// einziger Anhang entfernen, auch kein falsch zugeordneter.
 const ab2 = nimmBelegAb(neu, 'Flug/eticket.pdf')
-p('Kalender-Beleg lässt sich so nicht abnehmen', ab2.events[0].docs.length === 1)
+p('Kalender-Beleg geht auch ab', ab2.events[0].docs.length === 0)
 p('Abnehmen bei den persönlichen Dokumenten', nimmBelegAb(neu, 'eigen/persoenlich/Versicherung.pdf').persoenlich.length === 1)
+
+console.log('\nEinzeln abnehmen: nur von dieser Buchung')
+// Derselbe Beleg kann an Hin- und Rückflug hängen. Abnehmen am Hinflug darf den Rückflug nicht treffen.
+const beide = haengeBelegeAn(topf, [
+  { ziel: 'rk-1', label: 'E-Ticket eigen', datei: 'eigen/beides/eticket.pdf' },
+  { ziel: 'rk-2', label: 'E-Ticket eigen', datei: 'eigen/beides/eticket.pdf' },
+], () => 'abc')
+const hat = (e, d) => (e.docs || []).some((x) => x.datei === d)
+const nurHin = nimmBelegAb(beide, 'eigen/beides/eticket.pdf', ['rk-1'])
+p('Beleg geht nur vom genannten Termin ab', !hat(nurHin.events[0], 'eigen/beides/eticket.pdf'))
+p('Am anderen Termin hängt er weiter', hat(nurHin.events[1], 'eigen/beides/eticket.pdf'))
+p('Der Kalender-Beleg desselben Termins bleibt', hat(nurHin.events[0], 'Flug/eticket.pdf'))
+p('Mit beiden Terminen geht er ganz ab',
+  nimmBelegAb(beide, 'eigen/beides/eticket.pdf', ['rk-1', 'rk-2']).events.every((e) => !hat(e, 'eigen/beides/eticket.pdf')))
+p('Ein Termin auch ohne Liste', !hat(nimmBelegAb(beide, 'eigen/beides/eticket.pdf', 'rk-1').events[0], 'eigen/beides/eticket.pdf'))
+p('Termin-Liste lässt die persönlichen Dokumente in Ruhe',
+  nimmBelegAb(neu, 'eigen/persoenlich/Versicherung.pdf', ['rk-1']).persoenlich.length === 2)
+p('Umlaute im Pfad treffen trotzdem (NFD gegen NFC)',
+  !hat(nimmBelegAb(haengeBelegeAn(topf, [{ ziel: 'rk-3', label: 'B', datei: 'eigen/rk-3/Bestätigung.pdf'.normalize('NFC') }], () => 'abc'),
+    'eigen/rk-3/Bestätigung.pdf'.normalize('NFD'), ['rk-3']).events.find((e) => e.id === 'rk-3'), 'eigen/rk-3/Bestätigung.pdf'.normalize('NFC')))
 
 console.log('\nNeu-Import des Reisekalenders')
 const neuImport = events.map((e) => ({ ...e, docs: [...(e.docs || [])] }))

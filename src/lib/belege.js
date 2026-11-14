@@ -46,7 +46,9 @@ function tx(modus, fn) {
   }))
 }
 
-const norm = (p) => (p || '').normalize('NFC')
+/** Pfade immer gleich schreiben: iOS liefert Umlaute zerlegt (NFD), die Datenbank hält NFC. */
+export const belegPfad = (p) => (p || '').normalize('NFC')
+const norm = belegPfad
 export const dateiName = (p) => norm(p).split('/').pop()
 
 /**
@@ -290,15 +292,26 @@ export function haengeBelegeAn(topf, liste, id = () => Math.random().toString(36
   return { ...basis, events, persoenlich, stand: new Date().toISOString() }
 }
 
-/** Nimmt einen selbst zugeordneten Beleg wieder ab (Kalender-Belege bleiben unangetastet). */
-export function nimmBelegAb(topf, datei) {
+/**
+ * Nimmt einen Beleg wieder vom Termin ab, den selbst zugeordneten wie den aus dem Reisekalender.
+ *
+ * `ziele` begrenzt das auf bestimmte Termine, damit ein Beleg einzeln von einer Buchung abgeht.
+ * Eine Buchung besteht oft aus mehreren Terminen (Hin- und Rückflug, Check-in und Check-out),
+ * und derselbe Beleg kann an mehreren hängen. Ohne `ziele` geht er überall ab.
+ *
+ * Kalender-Belege waren hier früher ausgenommen. Dann ließ sich kein einziger Anhang einer
+ * importierten Buchung löschen, auch kein falsch zugeordneter. Der Grabstein in userdata.js
+ * sorgt dafür, dass er beim nächsten Import nicht wieder auftaucht.
+ */
+export function nimmBelegAb(topf, datei, ziele = null) {
   if (!topf?.events) return topf
   const p = norm(datei)
-  const weg = (d) => d?.eigen && norm(d.datei) === p
+  const nur = ziele == null ? null : new Set(Array.isArray(ziele) ? ziele : [ziele])
+  const weg = (d) => norm(d?.datei) === p
   return {
     ...topf,
-    events: topf.events.map((e) => ((e.docs || []).some(weg) ? { ...e, docs: e.docs.filter((d) => !weg(d)) } : e)),
-    persoenlich: (topf.persoenlich || []).filter((d) => !weg(d)),
+    events: topf.events.map((e) => ((!nur || nur.has(e.id)) && (e.docs || []).some(weg) ? { ...e, docs: e.docs.filter((d) => !weg(d)) } : e)),
+    persoenlich: nur && !nur.has('persoenlich') ? (topf.persoenlich || []) : (topf.persoenlich || []).filter((d) => !weg(d)),
     stand: new Date().toISOString(),
   }
 }

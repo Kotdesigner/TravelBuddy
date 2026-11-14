@@ -59,7 +59,7 @@
   function nummerSetzen(b, wert) { const v = wert.trim(); if (v !== b.ref) aendereTermin(b.id, { ref: v }) }
   // V44: Ändern, umbuchen, stornieren und löschen in einem Blatt — für jede Buchung, auch die aus dem Kalender.
   let aendernId = $state(null)
-  const aendern = $derived(aendernId ? liste.find((x) => x.id === aendernId) || null : null)
+  const aendern = $derived(aendernId ? liste.find((x) => x.id === aendernId || x.ids?.includes(aendernId)) || null : null)
   // Zum Zuordnen nur Ausgaben, deren Art zur Buchung passt (ein Flug bekommt keine Drohne angeboten)
   const kostenWahl = (b) => ohneTermin.filter((k) => KOSTEN_ART.has(k.kat) && kostenPasst(k.kat, b.kat)).map((k) => ({ id: k.id, label: `${k.text || '…'} · ${kostenText(k)}` }))
   const KOSTEN_ART = new Set(['kosten_unterkunft', 'kosten_flug', 'kosten_bahn', 'kosten_bus', 'kosten_boot', 'kosten_mietfahrzeug', 'kosten_attraktion', 'kosten_sonstiges'])
@@ -175,7 +175,7 @@
         <div class="bu-zeile">
           <span class="bu-l">{je('Belege', 'Documents')}</span>
           <span class="bu-belege">
-            <BelegKnoepfe docs={b.docs} entfernbar />
+            <BelegKnoepfe docs={b.docs} ziele={b.ids} entfernbar />
             <label class="bu-mini bu-datei">{je('📎 dazu', '📎 add')}<input type="file" multiple accept="application/pdf,image/*" onchange={(e) => { belegDazu(b, [...e.currentTarget.files]); e.currentTarget.value = '' }} /></label>
           </span>
         </div>
@@ -191,7 +191,7 @@
 </section>
 
 {#if aendern}
-  <BuchungAendern buchung={aendern} onfertig={() => (aendernId = null)} onabbruch={() => (aendernId = null)} />
+  <BuchungAendern buchung={aendern} onfertig={() => (aendernId = null)} onabbruch={() => (aendernId = null)} onwechsel={(id) => (aendernId = id)} />
 {/if}
 
 <style>

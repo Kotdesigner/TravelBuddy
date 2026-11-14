@@ -30,6 +30,23 @@ function strecke(teil) {
 
 /** Termine zu Buchungen bündeln: gleiche Gruppe, gleiche Buchungsnummer oder gleiche Art mit gleichem Grundtitel
  *  (Check-out ohne Nummer findet so seinen Check-in). Zwei verschiedene Nummern bleiben zwei Buchungen. */
+/**
+ * Die Belege einer ganzen Buchung, jeden einmal.
+ *
+ * Derselbe Voucher hängt oft an mehreren Terminen einer Buchung: am Check-in und am Check-out,
+ * an Übernahme und Rückgabe. Zusammengelegt stand er auf der Karte doppelt, und beim Entfernen
+ * verschwanden scheinbar zwei Belege auf einen Tipp.
+ */
+function docsEinmal(teil) {
+  const da = new Set(), out = []
+  for (const e of teil) for (const d of e.docs || []) {
+    const k = (d?.datei || '').normalize('NFC')
+    if (da.has(k)) continue
+    da.add(k); out.push(d)
+  }
+  return out
+}
+
 export function buendle(events = []) {
   const liste = events.filter((x) => x && !x.platzhalter).sort((a, b) => a.datum.localeCompare(b.datum))
   const chef = liste.map((_, i) => i)
@@ -56,7 +73,7 @@ export function buendle(events = []) {
     return {
       id: teil[0].id, ids: teil.map((e) => e.id), kat: teil[0].kat, titel: strecke(teil) || erst.titel, termine: teil,
       von: teil[0].datum, bis: teil.at(-1).datum, ref: erst.ref || '',
-      docs: teil.flatMap((e) => e.docs || []), eigen: teil.some((e) => e.quelle === 'eigen'),
+      docs: docsEinmal(teil), eigen: teil.some((e) => e.quelle === 'eigen'),
       // V44: storniert oder umgebucht gilt für die ganze Buchung, sobald alle ihre Termine es sind.
       storniert: teil.every((e) => e.storniert) ? teil[0].storniert : '',
       stornoGrund: teil.find((e) => e.stornoGrund)?.stornoGrund || '',

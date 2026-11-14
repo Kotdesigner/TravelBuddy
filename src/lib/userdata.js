@@ -5,7 +5,7 @@ import { baueAbschnitte, alsReisen } from './reisekalender.js'
 import { fuehreZusammen, URZEIT as URZEIT_M } from './zusammenfuehren.js'
 import { planMigrieren, etappenMitDatum, etappeAm, planUeberblick, istRoute, istEtappe, besteEinfuegeStelle, zuordnungNachImport, plusTage, vorgabeStart } from './plan.js'
 import { t } from './i18n.js'
-import { haengeBelegeAn, nimmBelegAb, eigeneBelegeUebernehmen } from './belege.js'
+import { haengeBelegeAn, nimmBelegAb, eigeneBelegeUebernehmen, belegPfad } from './belege.js'
 import { musikFuerBackup, musikAusBackup } from './musik/speicher.js'
 import { datiereAbschnitte } from './abschnitte.js'
 import { heileListe, heileOrtDaten, heileBuchungen } from './heilen.js'
@@ -369,6 +369,26 @@ function rettenAusNotspeicher() {
 /** IDs von Kalender-Terminen, die der Nutzer gelöscht hat (V44). */
 function geloeschteImportIds() {
   return new Set((get(grabsteine).buchungenImport || []).map((x) => x.id))
+}
+
+/** Kalender-Belege, die der Nutzer von einem Termin genommen hat: „<Termin>|<Datei>“. */
+function abgenommeneBelege() {
+  return new Set((get(grabsteine).belegeImport || []).map((x) => x.id))
+}
+
+/**
+ * Abgenommene Kalender-Belege beim Neu-Import nicht wieder anhängen. Ohne das käme jeder von
+ * Hand entfernte Anhang zurück, und das Entfernen sähe wie ein Fehler aus. Selbst zugeordnete
+ * Belege sind nie betroffen: die kommen gar nicht aus dem Kalender.
+ */
+function ohneAbgenommeneBelege(events = []) {
+  const weg = abgenommeneBelege()
+  if (!weg.size) return events
+  return events.map((e) => {
+    const alt = e.docs || []
+    const docs = alt.filter((d) => d?.eigen || !weg.has(e.id + '|' + belegPfad(d?.datei)))
+    return docs.length === alt.length ? e : { ...e, docs }
+  })
 }
 
 function behalteErgaenztes(alte = [], neue = []) {
@@ -949,7 +969,7 @@ export function importiereReisekalender(kalender, { orte = [], reisenAnlegen = t
     // Eigene, aus Mails eingefügte Buchungen bleiben beim Neu-Import des Kalenders erhalten,
     // ebenso selbst zugeordnete Belege (am Termin mit derselben ID bzw. bei den eigenen Dokumenten)
     // V44: was von Hand gelöscht wurde, kommt beim Neu-Import nicht zurück (Grabstein).
-    events: [...behalteErgaenztes(vorher?.events, eigeneBelegeUebernehmen(vorher?.events, kalender.events)).filter((e) => !geloeschteImportIds().has(e.id)),
+    events: [...ohneAbgenommeneBelege(behalteErgaenztes(vorher?.events, eigeneBelegeUebernehmen(vorher?.events, kalender.events))).filter((e) => !geloeschteImportIds().has(e.id)),
       ...((vorher?.events || []).filter((e) => e.quelle === 'eigen'))],
     persoenlich: [...kalender.persoenlich, ...((vorher?.persoenlich || []).filter((d) => d.eigen))],
     // Damit „entfernen" wirklich zurücknimmt, was der Import angerichtet hat.
@@ -1233,9 +1253,39 @@ export function belegeAnhaengen(liste) {
   buchungen.update((b) => haengeBelegeAn(b, JSON.parse(JSON.stringify(liste || [])), uid))
 }
 
-/** Selbst zugeordneten Beleg wieder vom Termin nehmen. */
-export function belegAbnehmen(datei) {
-  buchungen.update((b) => nimmBelegAb(b, datei))
+/**
+ * Hängt dieselbe Datei noch an einer anderen Buchung als den genannten Terminen? Die Rückfrage
+ * vor dem Entfernen soll nur dann sagen, dass die Datei vom Gerät verschwindet, wenn das stimmt.
+ */
+export function belegHaengtWoanders(datei, ziele = null) {
+  const p = belegPfad(datei)
+  const nur = ziele == null ? null : new Set(Array.isArray(ziele) ? ziele : [ziele])
+  const b = get(buchungen)
+  return (b?.events || []).some((e) => (!nur || !nur.has(e.id)) && (e.docs || []).some((d) => belegPfad(d?.datei) === p))
+    || (nur ? (b?.persoenlich || []).some((d) => belegPfad(d?.datei) === p) : false)
+}
+
+/**
+ * Einen Beleg wieder vom Termin nehmen, den selbst zugeordneten wie den aus dem Reisekalender.
+ *
+ * `ziele` sind die Termine, von denen er abgeht; eine Buchung besteht oft aus mehreren. Ein
+ * Kalender-Beleg bekommt dabei einen Grabstein, sonst hinge er nach dem nächsten Import wieder da.
+ *
+ * Zurück kommt, ob die Datei noch an einer anderen Stelle hängt. Nur wenn nicht, darf die
+ * Oberfläche sie auch vom Gerät löschen: sonst wäre sie bei der anderen Buchung plötzlich „fehlt“.
+ */
+export function belegAbnehmen(datei, ziele = null) {
+  const p = belegPfad(datei)
+  const nur = ziele == null ? null : new Set(Array.isArray(ziele) ? ziele : [ziele])
+  for (const e of get(buchungen)?.events || []) {
+    if (nur && !nur.has(e.id)) continue
+    if ((e.docs || []).some((d) => !d?.eigen && belegPfad(d?.datei) === p)) grabstein('belegeImport', e.id + '|' + p)
+  }
+  buchungen.update((b) => nimmBelegAb(b, datei, ziele))
+  const rest = get(buchungen)
+  const nochInBenutzung = (rest?.events || []).some((e) => (e.docs || []).some((d) => belegPfad(d?.datei) === p))
+    || (rest?.persoenlich || []).some((d) => belegPfad(d?.datei) === p)
+  return { nochInBenutzung }
 }
 
 /** Löscht eine selbst eingefügte Buchung samt den Terminen derselben Gruppe (Check-in und Check-out). */

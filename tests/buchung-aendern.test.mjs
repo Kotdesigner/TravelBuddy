@@ -208,6 +208,34 @@ console.log('\nSitzplatz je Abschnitt (Gabelflug)')
   p('Gespeichert wird der Sitzplatz dann je Termin', /if \(sitzJeTeil\) felder\.sitz/.test(ba) && /if \(!sitzJeTeil\) gemeinsam\.sitz/.test(ba))
 }
 
+console.log('\nEinen Abschnitt aus der Buchung nehmen')
+{
+  // Nach dem Umbuchen können mehrere gleiche Abschnitte in einer Buchung stehen, alle vom neuen
+  // Flug: dieselbe Bestätigungsnummer legt sie zusammen. Bisher half nur „Ganz löschen“.
+  const drei = [
+    { id: 'e1', kat: 'flight', datum: '2037-01-28', titel: 'Perth → Dubai', sub: 'Abflug 22:20 · EK 421', flugNr: 'EK421', ref: 'NL3ZV2', docs: [] },
+    { id: 'e2', kat: 'flight', datum: '2037-01-29', titel: 'Dubai → Hamburg', sub: 'Ankunft 12:55 · EK 59', flugNr: 'EK59', ref: 'NL3ZV2', docs: [] },
+    { id: 'e3', kat: 'flight', datum: '2037-01-29', titel: 'Dubai → Hamburg', sub: 'Ankunft 12:55 · EK 59', flugNr: 'EK59', ref: 'NL3ZV2', docs: [] },
+  ]
+  p('Doppelte Abschnitte landen in EINER Buchung', buendle(drei).length === 1 && buendle(drei)[0].ids.length === 3)
+  const nachher = buendle(drei.filter((e) => e.id !== 'e3'))
+  p('Nach dem Entfernen bleiben die anderen Abschnitte', nachher.length === 1 && nachher[0].ids.join() === 'e1,e2', JSON.stringify(nachher.map((x) => x.ids)))
+  p('Die Strecke stimmt wieder', nachher[0].titel === 'Perth → Dubai → Hamburg', nachher[0].titel)
+  p('Zwei Flüge, keine Geister', fluegeAusTerminen(drei.filter((e) => e.id !== 'e3')).fluege.length === 2)
+  const ohneErsten = buendle(drei.filter((e) => e.id !== 'e1'))
+  p('Ohne den ersten Abschnitt bekommt die Buchung eine neue ID', ohneErsten[0].id === 'e2')
+
+  const ba = lies('src/lib/BuchungAendern.svelte'), bu = lies('src/lib/Buchungen.svelte')
+  p('Das Blatt kann einen Abschnitt entfernen', /async function teilWeg/.test(ba) && /loescheBuchung\(\[z\.id\]\)/.test(ba))
+  p('Der letzte Abschnitt bleibt stehen', /if \(zeilen\.length < 2\) return/.test(ba) && /\{#if zeilen\.length > 1\}/.test(ba))
+  p('Es wird vorher gefragt', /teilWeg[\s\S]{0,400}loeschFrage/.test(ba))
+  // Beim Hotel heißen Anfang und Ende gleich: ohne die Rolle sagte die Rückfrage nicht, welcher gemeint ist.
+  p('Die Rückfrage sagt, welcher Abschnitt gemeint ist', /function teilName/.test(ba) && /i === 0 \? je\('Anfang', 'Start'\)/.test(ba) && /loeschFrage\(teilName\(z, i\)/.test(ba))
+  p('Das Blatt bleibt offen und zeigt auf den nächsten Termin', /onwechsel\(zeilen\[0\]\?\.id \|\| null\)/.test(ba) && /onwechsel=\{\(id\) => \(aendernId = id\)\}/.test(bu))
+  p('Die Liste findet die Buchung auch über ihre Termine', /x\.ids\?\.includes\(aendernId\)/.test(bu))
+  p('Das Blatt sagt, dass die Reihenfolge vom Datum kommt', /Reihenfolge der Abschnitte kommt vom Datum/.test(ba))
+}
+
 console.log('\nEinbau')
 {
   const ud = lies('src/lib/userdata.js'), bu = lies('src/lib/Buchungen.svelte'), ba = lies('src/lib/BuchungAendern.svelte'), be = lies('src/lib/BuchungEinfuegen.svelte')

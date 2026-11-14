@@ -17,7 +17,9 @@
   import BuchungEinfuegen from './BuchungEinfuegen.svelte'
 
   /** buchung: ein Eintrag aus buchungenMitKosten (hat ids, termine, kosten). */
-  let { buchung, onfertig = () => {}, onabbruch = () => {} } = $props()
+  // onwechsel: der erste Termin einer Buchung gibt ihr die ID. Nimmt man genau den heraus, muss
+  // die Liste dahinter wissen, auf welchen Termin das offene Blatt jetzt zeigt.
+  let { buchung, onfertig = () => {}, onabbruch = () => {}, onwechsel = () => {} } = $props()
 
   const kat = $derived(buchung?.kat || '')
   const fahrt = $derived(kat === 'flight' || kat === 'train')
@@ -112,6 +114,38 @@
     onfertig()
   }
 
+  /**
+   * Wie der Abschnitt in der Rückfrage heißt. „Abschnitt „Hotel am Hafen““ sagte nicht, welcher
+   * der beiden gemeint ist: beim Hotel heißen Anfang und Ende gleich.
+   */
+  function teilName(z, i) {
+    const was = (z.titel || '').trim()
+    if (fahrt) return was ? je(`Abschnitt ${i + 1} „${was}“`, `Leg ${i + 1} “${was}”`) : je(`Abschnitt ${i + 1}`, `Leg ${i + 1}`)
+    const rolle = i === 0 ? je('Anfang', 'Start') : je('Ende', 'End')
+    return je(`${rolle} von „${buchung.titel}“`, `${rolle} of “${buchung.titel}”`)
+  }
+
+  /**
+   * Einen einzelnen Abschnitt aus der Buchung nehmen.
+   *
+   * Nötig, seit sich Buchungen umbuchen lassen: steht ein Flug am Ende doppelt da, war bisher nur
+   * die ganze Buchung zu löschen und alles neu einzutragen. Der letzte Abschnitt bleibt, denn dann
+   * wäre es keine Buchung mehr: dafür gibt es unten „Ganz löschen“.
+   */
+  async function teilWeg(z, i) {
+    if (zeilen.length < 2) return
+    const ok = await loeschFrage(teilName(z, i),
+      je('Nur dieser Abschnitt verschwindet, der Rest der Buchung bleibt. Verbundene Kosten bleiben unter den Ausgaben vorab.',
+        'Only this leg is removed, the rest of the booking stays. Linked costs stay under upfront costs.'))
+    if (!ok) return
+    loescheBuchung([z.id])
+    zeilen = zeilen.filter((x) => x.id !== z.id)
+    haptic()
+    zeigeToast(je('Abschnitt entfernt', 'Leg removed'), 'ok')
+    // Die Buchung hieß nach ihrem ersten Termin. Ist der weg, zeigt das Blatt auf den nächsten.
+    if (z.id === buchung.id) onwechsel(zeilen[0]?.id || null)
+  }
+
   function umbuchungZurueck() { ersetzeBuchungZurueck(buchung.ids); zeigeToast(je('Umbuchung zurückgenommen', 'Rebooking undone'), 'ok'); onfertig() }
 
 </script>
@@ -160,7 +194,13 @@
       {#each zeilen as z, i (z.id)}
         <li>
           {#if mehrteilig}
-            <span class="ba-nr">{fahrt ? je(`Abschnitt ${i + 1}`, `Leg ${i + 1}`) : (i === 0 ? je('Anfang', 'Start') : je('Ende', 'End'))}</span>
+            <span class="ba-kopf">
+              <span class="ba-nr">{fahrt ? je(`Abschnitt ${i + 1}`, `Leg ${i + 1}`) : (i === 0 ? je('Anfang', 'Start') : je('Ende', 'End'))}</span>
+              {#if zeilen.length > 1}
+                <button class="ba-teil-weg" onclick={() => teilWeg(z, i)}
+                  aria-label={je(`${teilName(z, i)} entfernen`, `Remove ${teilName(z, i)}`)}>✕</button>
+              {/if}
+            </span>
           {/if}
           {#if fahrt && mehrteilig}
             <label class="ba-breit">{je('Strecke', 'Route')}<input bind:value={z.titel} placeholder="Perth → Singapur" /></label>
@@ -187,6 +227,10 @@
     {/if}
     {#if fahrt && !sitzJeTeil}
       <div class="ba-feld"><label>{je('Sitzplatz', 'Seat')}<input bind:value={f.sitz} placeholder="12A" autocomplete="off" /></label></div>
+    {/if}
+    {#if mehrteilig}
+      <p class="ba-k">{je('Die Reihenfolge der Abschnitte kommt vom Datum. Soll einer woanders hin, ändere sein Datum.',
+        'The order of the legs comes from the date. To move one, change its date.')}</p>
     {/if}
     {#if !reihenfolgeOk}<p class="ba-warn" role="status">{je('Ein Datum liegt vor dem Datum davor.', 'One date is before the one above it.')}</p>{/if}
 
@@ -227,6 +271,11 @@
   .ba input { font-size: max(16px, calc(14px * var(--schrift, 1))); min-height: 44px; padding: 6px 10px; border: 1px solid var(--line-stark); border-radius: var(--radius-s); background: var(--eingabe); color: var(--ink); width: 100%; box-sizing: border-box; }
   .ba-teile { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .ba-teile li { border-top: 1px solid var(--line); padding-top: 10px; }
+  .ba-kopf { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .ba-teil-weg {
+    width: 44px; min-height: 44px; border: none; background: none; color: var(--danger-text);
+    font-size: calc(15px * var(--schrift, 1)); cursor: pointer; border-radius: 50%; flex: none;
+  }
   .ba-nr { display: block; font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); font-weight: 700; margin-bottom: 6px; }
   .ba-knoepfe { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
   .ba-knoepfe button { flex: 1 1 140px; min-height: 48px; }
