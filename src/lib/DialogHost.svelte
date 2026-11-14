@@ -8,14 +8,16 @@
 </script>
 
 {#if d}
-  <div class="dh-hg" out:ausblenden data-dialog-hg onclick={() => d.antwort(d.abbruch)} aria-hidden="true"></div>
+  <!-- Beim Ausblenden ist die Rückfrage schon beantwortet, der dunkle Rand steht aber noch da.
+       Ein Tipp darauf lief dann in einen Fehler, weil es die Anfrage nicht mehr gibt. -->
+  <div class="dh-hg" out:ausblenden data-dialog-hg onclick={() => d?.antwort?.(d.abbruch)} aria-hidden="true"></div>
   <div class="dh" out:ausblenden={{ skala: 0.96 }} role="alertdialog" aria-labelledby={d.titel ? 'dh-titel' : undefined} aria-describedby={d.text ? 'dh-text' : undefined}
-    use:modal={{ onclose: () => d.antwort(d.abbruch), fokus: d.gefahr ? '.dh-nein' : '.dh-ja' }}>
+    use:modal={{ onclose: () => d?.antwort?.(d.abbruch), fokus: d.gefahr ? '.dh-nein' : '.dh-ja' }}>
     {#if d.titel}<h2 id="dh-titel">{d.titel}</h2>{/if}
     {#if d.text}<p id="dh-text">{d.text}</p>{/if}
     <div class="dh-knoepfe" class:einzeln={!d.nein}>
-      {#if d.nein}<button class="dh-nein" onclick={() => d.antwort(false)}>{d.nein}</button>{/if}
-      <button class="dh-ja" class:gefahr={d.gefahr} onclick={() => d.antwort(true)}>{d.ja}</button>
+      {#if d.nein}<button class="dh-nein" onclick={() => d?.antwort?.(false)}>{d.nein}</button>{/if}
+      <button class="dh-ja" class:gefahr={d.gefahr} onclick={() => d?.antwort?.(true)}>{d.ja}</button>
     </div>
   </div>
 {/if}
