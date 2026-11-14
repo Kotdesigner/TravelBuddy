@@ -61,6 +61,29 @@ console.log('\nEine Rückfrage liegt über jedem Blatt')
   p('Kein Blatt liegt über der Rückfrage', drueber.length === 0, drueber.join(' | '))
 }
 
+console.log('\nEine Meldung liegt über jedem Blatt und jeder Rückfrage')
+{
+  // Eine Meldung kommt oft aus einem Blatt heraus („Text kopiert“, „Storniert“). Lag sie darunter,
+  // stand sie hinter dem dunklen Rand und war nicht zu lesen. Nur Vollbild-Sachen bleiben darüber.
+  const AUSNAHME = ['NotrufTippen.svelte', 'XoxoSpiel.svelte', 'VierSpiel.svelte', 'SnakeSpiel.svelte', 'Runterziehen.svelte']
+  const zMeldung = Number((lies('src/app.css').match(/--z-meldung:\s*(\d+)/) || [])[1])
+  const toast = lies('src/lib/Toast.svelte')
+  p('Die Meldungen haben eine eigene Lage', zMeldung > 0, String(zMeldung))
+  p('Der Meldungsbereich nimmt sie auch', /\.toasts\s*\{[^}]*z-index:\s*var\(--z-meldung\)/.test(toast))
+  const drueber = []
+  for (const datei of fs.readdirSync(ordner).filter((f) => f.endsWith('.svelte'))) {
+    if (AUSNAHME.includes(datei) || datei === 'Toast.svelte') continue
+    const stil = lies(path.join('src/lib', datei)).split('<style>')[1] || ''
+    for (const m of stil.matchAll(/\n\s*([.#][\w-]+)\s*\{([^}]*)\}/g)) {
+      const [, wahl, regeln] = m
+      if (!/position:\s*fixed/.test(regeln)) continue
+      const z = Number((regeln.match(/z-index:\s*(\d+)/) || [])[1])
+      if (z && z >= zMeldung) drueber.push(`${datei} ${wahl} z${z}`)
+    }
+  }
+  p('Kein Blatt und keine Rückfrage liegt über der Meldung', drueber.length === 0, drueber.join(' | '))
+}
+
 console.log('\nHinter einer Rückfrage ist nichts mehr bedienbar')
 {
   const m = lies('src/lib/modal.js')

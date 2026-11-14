@@ -73,6 +73,10 @@
   --z-bar: 55;
   --z-sheet: 90;
   --z-overlay: 100;
+  /* Meldungen liegen über allem, was man aufmachen kann: über den Blättern (1000/1001) und über
+     jeder Rückfrage (1400/1401). Sonst steht eine Meldung aus einem Blatt heraus hinter dem
+     dunklen Rand und ist nicht zu lesen. Notruf, Spiele und der Zieh-Hinweis bleiben darüber. */
+  --z-meldung: 1500;
 
   color-scheme: light;
 }
