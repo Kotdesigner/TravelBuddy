@@ -135,7 +135,7 @@
 </div>
 
 <style>
-  .ag { position: fixed; inset: 0; z-index: calc(var(--z-overlay) + 20); display: flex; flex-direction: column; background: var(--bg, #14100c); color: var(--ink); padding: calc(8px + env(safe-area-inset-top, 0px)) 14px calc(14px + env(safe-area-inset-bottom, 0px)); overflow: auto; }
+  .ag { position: fixed; inset: 0; z-index: calc(var(--z-overlay) + 20); display: flex; flex-direction: column; background: var(--bg, #14100c); color: var(--ink); padding: calc(8px + env(safe-area-inset-top, 0px)) 14px calc(14px + env(safe-area-inset-bottom, 0px)); overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
   .ag-kopf { display: flex; align-items: center; gap: 10px; width: min(560px, 100%); margin: 0 auto 10px; }
   .ag-kopf h2 { flex: 1; min-width: 0; margin: 0; font-size: calc(17px * var(--schrift, 1)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .ag-zurueck { flex: none; min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--flaeche-2); color: var(--ink); font-size: calc(15px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }

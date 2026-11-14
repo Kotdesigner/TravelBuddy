@@ -48,7 +48,7 @@
 
 <style>
   .mb-hg { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, 0.6); }
-  .mb { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(400px, calc(100% - 24px)); max-height: calc(100dvh - 32px); overflow-y: auto;
+  .mb { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(400px, calc(100% - 24px)); max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
     padding: 18px; border-radius: 18px; border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); display: flex; flex-direction: column; gap: 10px; }
   .mb-art { align-self: flex-start; font-size: calc(12px * var(--schrift, 1)); font-weight: 800; padding: 3px 10px; border-radius: 999px; background: var(--flaeche); color: var(--brand-text); }
   .mb-weg { background: var(--danger-flaeche); color: var(--danger-text); }

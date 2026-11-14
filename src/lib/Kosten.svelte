@@ -30,6 +30,10 @@
     <div class="ko-kacheln">
       <div class="ko-kachel gross"><span>{t('Gesamt')}<InfoKnopf id="kosten" /></span><b>{eur(a.gesamt.eur)}</b><small>{aud(a.gesamt.aud)}</small></div>
       <div class="ko-kachel"><span>{t('Vor der Reise')}</span><b>{eur(a.vorab.eur)}</b><small>{aud(a.vorab.aud)}</small></div>
+      {#if a.erstattet?.anzahl}
+        <!-- Voll erstattet zählt nicht zu den Reisekosten, verschwindet aber auch nicht spurlos. -->
+        <div class="ko-kachel"><span>{je('Voll erstattet', 'Fully refunded')}</span><b>{eur(a.erstattet.eur)}</b><small>{a.erstattet.anzahl === 1 ? je('1 Ausgabe · zählt nicht mit', '1 expense · not counted') : je(`${a.erstattet.anzahl} Ausgaben · zählen nicht mit`, `${a.erstattet.anzahl} expenses · not counted`)}</small></div>
+      {/if}
       <div class="ko-kachel"><span>{t('Unterwegs')}</span><b>{eur(a.unterwegs.eur)}</b><small>{aud(a.unterwegs.aud)}</small></div>
       <div class="ko-kachel"><span>🪙 {t('Short-Values')}</span><b>{eur(cluster('short').eur)}</b><small>{aud(cluster('short').aud)}</small></div>
       <div class="ko-kachel"><span>📦 {t('Long-Values')}</span><b>{eur(cluster('long').eur)}</b><small>{aud(cluster('long').aud)}</small></div>

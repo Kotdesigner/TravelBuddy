@@ -71,7 +71,7 @@
 
 <style>
   .zb-hg { position: fixed; inset: 0; z-index: 900; background: rgba(20, 14, 8, 0.5); }
-  .zb { position: fixed; left: 50%; top: 50%; z-index: 901; transform: translate(-50%, -50%); width: min(460px, calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow: auto; display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: var(--radius-l); background: var(--card); color: var(--ink); box-shadow: var(--shadow-float); }
+  .zb { position: fixed; left: 50%; top: 50%; z-index: 901; transform: translate(-50%, -50%); width: min(460px, calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: var(--radius-l); background: var(--card); color: var(--ink); box-shadow: var(--shadow-float); }
   h2 { margin: 0; font-size: calc(18px * var(--schrift, 1)); }
   .zb-titel { margin: 0; font-weight: 700; font-size: calc(14px * var(--schrift, 1)); }
   .zb-f { display: flex; flex-direction: column; gap: 4px; font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }

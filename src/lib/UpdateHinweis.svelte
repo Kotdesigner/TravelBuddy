@@ -75,7 +75,7 @@
 
 <style>
   .uh-hg { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, 0.6); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); animation: uh-blende 0.2s ease-out; }
-  .uh { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(400px, calc(100% - 28px)); max-height: calc(100dvh - 40px); overflow-y: auto; padding: 18px 18px 16px;
+  .uh { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(400px, calc(100% - 28px)); max-height: calc(100dvh - 40px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 18px 18px 16px;
     border-radius: 18px; border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25); animation: uh-auf 0.24s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .uh-griff { width: 36px; height: 4px; border-radius: 2px; background: var(--line-stark); margin: -6px auto 12px; }
   .uh-kopf { display: flex; align-items: center; gap: 12px; }

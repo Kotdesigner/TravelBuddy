@@ -1,4 +1,5 @@
 <script>
+  import { veraltet } from './routen-dienst.js'
   import { ladePois } from './versorgung.js'
   import TourenWahl from './TourenWahl.svelte'
   import PistenNetz from './PistenNetz.svelte'
@@ -1046,7 +1047,7 @@
       {#if gewaehlteReisen.size === 1}
         {@const rr = reisen.find((x) => gewaehlteReisen.has(x.id))}
         {#if rr?.route}
-          <span class="rs-info">🛣️ <b>{rr.route.km} km</b> · ⏱️ {fahrzeitText(rr.route.dauerMin)}{#if rr.route.tank}&nbsp;{t('· ⛽ max {maxLuecke} km', { maxLuecke: rr.route.tank.maxLuecke })}{/if}</span>
+          <span class="rs-info">🛣️ <b>{rr.route.km} km</b> · ⏱️ {fahrzeitText(rr.route.dauerMin)}{#if rr.route.tank}&nbsp;{t('· ⛽ max {maxLuecke} km', { maxLuecke: rr.route.tank.maxLuecke })}{/if}{#if veraltet(rr)}&nbsp;{je('· Stopps geändert, Werte noch von vorher', '· stops changed, values still the old ones')}{/if}</span>
         {:else}
           <span class="rs-info">{t('⤳ Luftlinie · km und Fahrzeit rechnet die Route im Plan')}</span>
         {/if}

@@ -121,9 +121,15 @@ export function kostenAuswertung({ journal = [], vorab = [], kurse = {}, eintrae
   const etappeVon = (id) => (etappenIds.has(id) ? id : etappenIds.has(etappeDerRoute.get(id)) ? etappeDerRoute.get(id) : null)
   // V14: Vor der Reise ist, was vor dem ersten Reisetag bezahlt wurde; der Rest zählt zu unterwegs
   const reiseStart = eintraege.reduce((m, x) => (!m || x.von < m ? x.von : m), '')
+  // V44: Was nach einem Storno voll erstattet wurde, zählt nicht mehr zu den Reisekosten.
+  // Es verschwindet aber nicht spurlos: die Kosten-Seite nennt es als eigene Zeile.
+  const erstattet = { anzahl: 0, eur: 0, aud: 0 }
   for (const k of vorab) {
-    // V44: Was nach einem Storno voll erstattet wurde, zählt nicht mehr zu den Reisekosten.
-    if (k.erstattung === 'voll') continue
+    if (k.erstattung === 'voll') {
+      const e = inBeide(k.betrag, k.waehrung, kursFuer(kurse, k.datum))
+      erstattet.anzahl++; erstattet.eur += e.eur; erstattet.aud += e.aud
+      continue
+    }
     const x = inBeide(k.betrag, k.waehrung, kursFuer(kurse, k.datum))
     if (!x.eur && !x.aud) continue
     const kat = KATEGORIE[k.kat] ? k.kat : 'kosten_sonstiges'
@@ -162,6 +168,7 @@ export function kostenAuswertung({ journal = [], vorab = [], kurse = {}, eintrae
     kategorien: sichtbar, cluster,
     etappen: nachEtappe.filter((z) => z.eur || z.aud).map((z) => ({ ...z, anteil: anteil(z) })),
     posten: [...posten].sort((a, b) => b.datum.localeCompare(a.datum)),
+    erstattet: { ...erstattet, eur: Math.round(erstattet.eur), aud: Math.round(erstattet.aud) },
   }
 }
 

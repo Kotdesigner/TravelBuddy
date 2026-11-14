@@ -6,7 +6,7 @@
 //   offen     nichts bekannt
 // Dazu Feiertage in Western Australia und die Hochsaison. Reine Rechnungen, ohne Speicher.
 import { plusTage, gueltigesDatum } from './plan.js'
-import { buendle, uhrzeitIn } from './buchung.js'
+import { buendle, terminZeit } from './buchung.js'
 import { abschnitteDerEtappe, bereichVon } from './abschnitte.js'
 import { terminGilt } from './buchung.js'
 
@@ -56,7 +56,7 @@ function nachtflugAm(events, datum) {
   const morgen = plusTage(datum, 1)
   const ankunftMorgen = events.some((e) => e.datum === morgen && e.kat === 'flight' && /ankunft|arrival/i.test(e.titel || ''))
   return events.find((e) => e.datum === datum && e.kat === 'flight' && !/ankunft|arrival/i.test(e.titel || '') &&
-    ((uhrzeitIn(`${e.sub} ${e.titel}`) || '00:00') >= '18:00' || ankunftMorgen)) || null
+    ((terminZeit(e) || '00:00') >= '18:00' || ankunftMorgen)) || null
 }
 
 /** Nächte aus den Stopps eines eingeplanten Abschnitts: Stopp für Stopp ab dem ersten Tag. */

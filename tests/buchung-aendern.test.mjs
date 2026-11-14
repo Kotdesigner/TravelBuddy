@@ -220,7 +220,10 @@ console.log('\nEinbau')
   p('Umbuchen läuft über das Einfüge-Blatt', /statt=\{buchung\}/.test(ba) && /statt \? \(ersetzeBuchung/.test(be))
   p('Beim Umbuchen keine falsche Dubletten-Warnung', /!statt\?\.ids\?\.includes\(e\.id\)/.test(be))
   p('Keine Gedankenstriche in Sätzen', !/ [–—] /.test(ba.split('<style>')[0]))
-  p('Ergänzen hält flugNr und flugNrs zusammen', /flugNummern\(alt \|\| \{\}\)\.length <= 1/.test(lies('src/lib/verkehr.js')))
+  const vk = lies('src/lib/verkehr.js')
+  p('Ergänzen hält flugNr und flugNrs zusammen', /const alteNummern = flugNummern\(alt \|\| \{\}\)/.test(vk) && /alteNummern\.length <= 1/.test(vk))
+  p('Ergänzen zieht auch eine Nummer im Umsteigeflug nach', /\[nr, \.\.\.alteNummern\.slice\(1\)\]/.test(vk))
+  p('Ergänzen zieht den Untertitel mit', /export function textNachziehen/.test(vk) && /textNachziehen\(alt, art, f, nr\)/.test(vk))
   p('Die Nummer im Titel füllt das Ergänzen-Formular vor', /flugNummern\(e\)\[0\]/.test(lies('src/lib/verkehr.js')))
 }
 

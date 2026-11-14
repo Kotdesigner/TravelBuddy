@@ -3,7 +3,7 @@ import { neueRouteAllrad } from './fahrzeug.js'
 import { writable, get } from 'svelte/store'
 import { baueAbschnitte, alsReisen } from './reisekalender.js'
 import { fuehreZusammen, URZEIT as URZEIT_M } from './zusammenfuehren.js'
-import { planMigrieren, etappenMitDatum, planUeberblick, istRoute, istEtappe, besteEinfuegeStelle, zuordnungNachImport, plusTage, vorgabeStart } from './plan.js'
+import { planMigrieren, etappenMitDatum, etappeAm, planUeberblick, istRoute, istEtappe, besteEinfuegeStelle, zuordnungNachImport, plusTage, vorgabeStart } from './plan.js'
 import { t } from './i18n.js'
 import { haengeBelegeAn, nimmBelegAb, eigeneBelegeUebernehmen } from './belege.js'
 import { musikFuerBackup, musikAusBackup } from './musik/speicher.js'
@@ -206,10 +206,10 @@ function grabstein(topf, id) {
     return { ...g, [topf]: [...alt, { id, ts: jetzt() }] }
   })
 }
-/** Grabsteine älter als ein Jahr wegräumen — deutlich länger als die Reise. */
 /** Grabstein für Teil-Einträge (z. B. eine Tier-Sichtung), damit das Zusammenführen sie nicht zurückholt. */
 export function merkeGeloescht(topf, id) { grabstein(topf, id) }
 
+/** Grabsteine älter als ein Jahr wegräumen, deutlich länger als die Reise. */
 function grabsteineAufraeumen() {
   const grenze = new Date(Date.now() - 365 * 86400000).toISOString()
   grabsteine.update((g) => Object.fromEntries(
@@ -729,10 +729,15 @@ export const neueEtappe = (vorlage = {}) => neueReise({ ...vorlage, typ: 'etappe
 export const neueRoute = (vorlage = {}) => neueReise({ ...vorlage, typ: 'route' })
 
 export function updateReise(id, patch) {
-  reisen.update((rs) => {
+  // Ändert sich der Zeitraum, rutschen die folgenden Etappen mit. Dann kann eine Buchung in eine
+  // andere Etappe fallen, und die Etappe ihrer Ausgabe muss mit.
+  const zeitraum = 'von' in patch || 'tage' in patch || 'typ' in patch || 'etappeId' in patch
+  const tun = () => reisen.update((rs) => {
     const neu = rs.map((r) => (r.id === id ? stempeln({ ...r, ...patch }) : r))
-    return ('von' in patch || 'tage' in patch || 'typ' in patch || 'etappeId' in patch) ? sortiereReisen(neu) : neu
+    return zeitraum ? sortiereReisen(neu) : neu
   })
+  if (zeitraum) mitEtappenNachzug(tun)
+  else tun()
 }
 
 /**
@@ -759,8 +764,11 @@ export function wandleReiseUm(id, typ, etappeId = null) {
 }
 
 export function loescheReise(id) {
-  reisen.update((rs) => rs.filter((r) => r.id !== id))
-  grabstein('reisen', id)
+  mitEtappenNachzug(() => { reisen.update((rs) => rs.filter((r) => r.id !== id)); grabstein('reisen', id) })
+  // Ausgaben, die auf diese Etappe (oder Route) zeigten, hängen sonst an etwas, das es nicht mehr
+  // gibt: sie zählten weiter mit, ständen aber unter „ohne Etappe“ und bekämen keinen Vorschlag
+  // für eine neue. Darum hier lösen.
+  vorabKosten.update((ks) => ks.map((k) => (k?.reiseId === id ? stempeln({ ...k, reiseId: null }) : k)))
 }
 
 export function verschiebeReise(id, richtung) {
@@ -948,14 +956,23 @@ export function importiereReisekalender(kalender, { orte = [], reisenAnlegen = t
     startVorher: get(gesamtStart),
   })
 
+  // Termine, die im neuen Kalender nicht mehr vorkommen, sind weg: ihre Ausgaben dürfen nicht
+  // auf sie zeigen bleiben, sonst fehlen sie in „bezahlt, noch keinem Termin zugeordnet“.
+  {
+    const jetztDa = new Set((get(buchungen)?.events || []).map((e) => e.id))
+    const verschwunden = (vorher?.events || []).map((e) => e.id).filter((id) => !jetztDa.has(id))
+    if (verschwunden.length) loeseKostenVonTerminen(verschwunden)
+  }
+
   let angelegt = 0, ersetzt = 0, eigene = 0
   if (reisenAnlegen) {
     const abschnitte = baueAbschnitte(kalender.events)
     const neue = alsReisen(abschnitte, orte, naechsteFarbe)
       .map((r) => ({ ...r, id: uid(), typ: 'etappe', von: r.kalenderVon, imGesamtplan: true }))
-    let umzug = new Map()
+    let umzug = new Map(), alteIds = new Set()
     reisen.update((rs) => {
       const alte = rs.filter((r) => r.quelle === 'reisekalender')
+      alteIds = new Set(alte.map((r) => r.id))
       const behalten = rs.filter((r) => r.quelle !== 'reisekalender')
       ersetzt = alte.length
       eigene = behalten.length
@@ -966,10 +983,20 @@ export function importiereReisekalender(kalender, { orte = [], reisenAnlegen = t
         ? stempeln({ ...r, etappeId: umzug.get(r.etappeId) }) : r))
       return sortiereReisen([...neue, ...umgehaengt])
     })
-    // Logbuchtage und Wanderungen, die auf eine alte Etappe zeigten, ebenso.
-    if (umzug.size) {
-      journal.update((js) => js.map((e) => (e.reiseId && umzug.has(e.reiseId) ? stempeln({ ...e, reiseId: umzug.get(e.reiseId) }) : e)))
-      wanderungen.update((ws) => ws.map((w) => (w.reiseId && umzug.has(w.reiseId) ? stempeln({ ...w, reiseId: umzug.get(w.reiseId) }) : w)))
+    // Alles, was an einer Etappe hängt, zieht mit: Logbuchtage, Wanderungen, Ausgaben und Notizen.
+    // Ohne das stünde nach jedem Neu-Import die halbe Kosten-Seite ohne Etappe da. Gibt es für eine
+    // alte Etappe keine neue, wird die Verknüpfung gelöst statt ins Leere zu zeigen.
+    if (alteIds.size) {
+      const neueId = (id) => (umzug.has(id) ? umzug.get(id) : alteIds.has(id) ? null : id)
+      const umhaengen = (topf, feld) => topf.update((liste) => liste.map((x) => {
+        if (!x || !x[feld]) return x
+        const z = neueId(x[feld])
+        return z === x[feld] ? x : stempeln({ ...x, [feld]: z })
+      }))
+      umhaengen(journal, 'reiseId')
+      umhaengen(wanderungen, 'reiseId')
+      umhaengen(vorabKosten, 'reiseId')
+      umhaengen(notizen, 'etappeId')
     }
     angelegt = neue.length
     if (kalender.von) gesamtStart.set(kalender.von)
@@ -984,6 +1011,7 @@ export function importiereReisekalender(kalender, { orte = [], reisenAnlegen = t
 export function entferneReisekalender() {
   const alt = get(buchungen)?.startVorher
   if (typeof alt === 'string' && alt) gesamtStart.set(alt)
+  loeseKostenVonTerminen((get(buchungen)?.events || []).map((e) => e.id))
   buchungen.set(null)
   let weg = 0
   reisen.update((rs) => {
@@ -1004,7 +1032,7 @@ export function entferneReisekalender() {
 
 /** Angaben an einem Termin ergänzen (Flugnummer, Sitzplatz …). `ergaenzt` schützt sie vor dem nächsten Kalender-Import. */
 export function aendereTermin(id, patch) {
-  buchungen.update((b) => b && ({ ...b, stand: new Date().toISOString(), events: b.events.map((e) => (e.id === id ? mitPatch(e, patch) : e)) }))
+  mitEtappenNachzug(() => buchungen.update((b) => b && ({ ...b, stand: new Date().toISOString(), events: b.events.map((e) => (e.id === id ? mitPatch(e, patch) : e)) })))
 }
 
 // ---------- Buchung ändern, stornieren, ersetzen, löschen (V44) ----------
@@ -1027,10 +1055,10 @@ function mitPatch(e, patch) {
 /** Dieselbe Änderung an allen Terminen einer Buchung. `proTermin(e)` darf je Termin ergänzen. */
 export function aendereBuchung(ids, patch = {}, proTermin = null) {
   const menge = new Set(Array.isArray(ids) ? ids : [ids])
-  buchungen.update((b) => b && ({
+  mitEtappenNachzug(() => buchungen.update((b) => b && ({
     ...b, stand: new Date().toISOString(),
     events: b.events.map((e) => (menge.has(e.id) ? mitPatch(e, { ...patch, ...(proTermin?.(e) || {}) }) : e)),
-  }))
+  })))
 }
 
 /** Buchung stornieren: bleibt sichtbar, zählt aber nirgends mehr als Termin. */
@@ -1067,12 +1095,90 @@ export function ersetzeBuchung(ids, neueTermine = [], { refUebernehmen = true, b
   const neuId = fertig[0].id || (get(buchungen)?.events || []).find((e) => e.gruppe === gruppe)?.id || null
   aendereBuchung([...alteIds], { umgebucht: new Date().toISOString(), ersetztDurch: neuId })
   // Kosten der alten Buchung zeigen weiter auf den alten Termin: sie gehören zur alten Zahlung.
+  // Ob von dem alten Ticket etwas zurückkommt, weiß nur die Airline. Die Ausgabe steht darum ab
+  // jetzt unter „Erstattung offen“, genau wie nach einer Stornierung. Sonst zählt das alte Ticket
+  // stillschweigend neben dem neuen weiter mit.
+  vorabKosten.update((ks) => ks.map((k) => (k?.terminId && alteIds.has(k.terminId) && !k.erstattung
+    ? stempeln({ ...k, erstattung: 'offen' }) : k)))
   return neuId
 }
 
 /** Umbuchung zurücknehmen: die alte Buchung gilt wieder, die neue bleibt bestehen. */
 export function ersetzeBuchungZurueck(ids) {
   aendereBuchung(ids, { umgebucht: '', ersetztDurch: '' })
+}
+
+/**
+ * Welche Etappe deckt gerade welchen Termin? Die Etappen-Zeiträume werden gerechnet (Gesamtstart
+ * plus Tage je Etappe), nicht gespeichert.
+ */
+function terminEtappen() {
+  const eintraege = etappenMitDatum((get(reisen) || []).filter((r) => r?.typ === 'etappe'), get(gesamtStart))
+  const karte = new Map()
+  for (const e of get(buchungen)?.events || []) karte.set(e.id, etappeAm(eintraege, e.datum)?.reise?.id || null)
+  return karte
+}
+
+/**
+ * Eine Änderung ausführen und danach die Etappe der verknüpften Ausgaben nachziehen.
+ *
+ * Die Etappe steht bei der Ausgabe als eigenes Feld (`reiseId`), die Etappe der Buchung wird
+ * dagegen aus dem Datum gerechnet. Verschiebt sich eine Buchung in eine andere Etappe, oder
+ * verschieben sich die Etappen selbst, liefen beide auseinander: die Kosten-Seite zählte die
+ * Ausgabe weiter bei der alten Etappe.
+ *
+ * Nachgezogen wird nur, wenn Ausgabe und Buchung vorher in derselben Etappe lagen. Wer die Etappe
+ * von Hand anders gesetzt hat (ein Mietwagen über zwei Etappen), behält sie.
+ */
+function mitEtappenNachzug(aendern) {
+  const vor = terminEtappen()
+  const ergebnis = aendern()
+  const nach = terminEtappen()
+  vorabKosten.update((ks) => ks.map((k) => {
+    if (!k?.terminId || !vor.has(k.terminId) || !nach.has(k.terminId)) return k
+    const alt = vor.get(k.terminId) || null, neu = nach.get(k.terminId) || null
+    if (alt === neu || (k.reiseId || null) !== alt) return k
+    return stempeln({ ...k, reiseId: neu })
+  }))
+  return ergebnis
+}
+
+/**
+ * Verschwindet ein Termin, darf keine Ausgabe mehr an ihm hängen: sonst zeigt die Ausgabe auf
+ * eine Buchung, die es nicht mehr gibt, und fehlt zugleich in der Liste „bezahlt, aber noch
+ * keinem Termin zugeordnet“. Gilt für jeden Weg, auf dem Termine verschwinden.
+ */
+function loeseKostenVonTerminen(ids) {
+  const menge = new Set((Array.isArray(ids) ? ids : [ids]).filter(Boolean))
+  if (!menge.size) return 0
+  let geloest = 0
+  vorabKosten.update((ks) => ks.map((k) => {
+    if (!k?.terminId || !menge.has(k.terminId)) return k
+    geloest++
+    return stempeln({ ...k, terminId: null })
+  }))
+  return geloest
+}
+
+/**
+ * Die neue Buchung einer Umbuchung wird gelöscht? Dann gilt die alte wieder. Ohne das bliebe sie
+ * grau als „umgebucht“ stehen, obwohl es nichts mehr gibt, worauf sie verweist.
+ * Die Reise hätte diesen Flug oder dieses Zimmer dann gar nicht mehr.
+ */
+function gibUmgebuchteZurueck(weggefallen) {
+  const menge = new Set((weggefallen || []).filter(Boolean))
+  if (!menge.size) return 0
+  let zurueck = 0
+  buchungen.update((b) => {
+    if (!b?.events) return b
+    const events = b.events.map((e) => {
+      if (!e?.umgebucht || !e.ersetztDurch || !menge.has(e.ersetztDurch)) return e
+      zurueck++
+      return { ...e, umgebucht: '', ersetztDurch: '' }
+    })
+    return zurueck ? { ...b, events, stand: new Date().toISOString() } : b
+  })
+  return zurueck
 }
 
 /**
@@ -1090,6 +1196,12 @@ export function loescheBuchung(ids) {
     for (const e of b.events) if (menge.has(e.id)) grabstein(e.quelle === 'eigen' ? 'buchungenEigen' : 'buchungenImport', e.id)
     return { ...b, events, stand: new Date().toISOString() }
   })
+  if (weg) {
+    loeseKostenVonTerminen([...menge])
+    // War die gelöschte Buchung der Ersatz für eine umgebuchte, gilt die alte wieder: sonst stünde
+    // die alte für immer grau da und die Reise hätte diesen Flug gar nicht mehr.
+    gibUmgebuchteZurueck([...menge])
+  }
   return weg
 }
 
@@ -1129,15 +1241,17 @@ export function belegAbnehmen(datei) {
 /** Löscht eine selbst eingefügte Buchung samt den Terminen derselben Gruppe (Check-in und Check-out). */
 export function loescheEigeneBuchung(id) {
   let weg = 0
+  const raus = []
   buchungen.update((b) => {
     if (!b?.events) return b
     const ziel = b.events.find((e) => e.id === id && e.quelle === 'eigen')
     if (!ziel) return b
     const events = b.events.filter((e) => !(e.quelle === 'eigen' && (e.id === id || (ziel.gruppe && e.gruppe === ziel.gruppe))))
-    for (const e of b.events) if (!events.includes(e)) grabstein('buchungenEigen', e.id)
+    for (const e of b.events) if (!events.includes(e)) { grabstein('buchungenEigen', e.id); raus.push(e.id) }
     weg = b.events.length - events.length
     return { ...b, events, stand: new Date().toISOString() }
   })
+  if (weg) { loeseKostenVonTerminen(raus); gibUmgebuchteZurueck(raus) }
   return weg
 }
 

@@ -31,7 +31,7 @@
   import AbschnittPlan from './AbschnittPlan.svelte'
   import { abschnitteDerEtappe, bereichVon } from './abschnitte.js'
   import { naechteUebersicht } from './naechte.js'
-  import { hinweise } from './routen-dienst.js'
+  import { hinweise, veraltet } from './routen-dienst.js'
   import { dauer, klapp, istMorph, morphName } from './motion.js'
 
   let { etappeId = null, routeId = null, orte = [], warnungen = [], umkreisKm = 150,
@@ -246,7 +246,7 @@
       <section class="ed-block">
         <button class="ed-auf" aria-expanded={anreiseOffen} onclick={() => (anreiseOffen = !anreiseOffen)}>
           <span class="aufklapp klein" class:offen={anreiseOffen} aria-hidden="true"></span>
-          <span class="ed-auf-txt"><b>{t('Anreise und Orte der Etappe')}</b><small>{(etappe.stops || []).map((s) => s.name).join(' → ')}{#if etappe.route?.km}&nbsp;· {etappe.route.flug ? '✈️' : '🛣️'} {zahl(etappe.route.km)} km{/if}</small>{#if etappeMeld && !anreiseOffen}<small class="ed-meld">📣 {etappeMeld === 1 ? je('1 Meldung an der Strecke', '1 report along the route') : je(`${etappeMeld} Meldungen an der Strecke`, `${etappeMeld} reports along the route`)}</small>{/if}</span>
+          <span class="ed-auf-txt"><b>{t('Anreise und Orte der Etappe')}</b><small>{(etappe.stops || []).map((s) => s.name).join(' → ')}{#if etappe.route?.km}&nbsp;· {etappe.route.flug ? '✈️' : '🛣️'} {zahl(etappe.route.km)} km{#if veraltet(etappe)}&nbsp;{je('(Stopps geändert, km noch von vorher)', '(stops changed, km still the old ones)')}{/if}{/if}</small>{#if etappeMeld && !anreiseOffen}<small class="ed-meld">📣 {etappeMeld === 1 ? je('1 Meldung an der Strecke', '1 report along the route') : je(`${etappeMeld} Meldungen an der Strecke`, `${etappeMeld} reports along the route`)}</small>{/if}</span>
         </button>
         {#if anreiseOffen}<div class="ed-innen" transition:klapp={{ duration: dauer(220) }}><RouteEditor r={etappe} {orte} reisen={$reisen} {warnungen} {umkreisKm} /><Versorgung r={etappe} {orte} /></div>{/if}
       </section>
@@ -273,7 +273,7 @@
           <input class="ed-r-name" value={r.name} aria-label={t('Name der Route')} oninput={(e) => updateReise(r.id, { name: e.target.value })} />
         </div>
         {#if zeitText(r)}<p class="ed-r-zeit">{VERKEHR[r.art] || '🚗'} {zeitText(r)}</p>{/if}
-        <p class="ed-r-meta">{t('{length} Stopps', { length: (r.stops || []).length })}{#if r.route?.km}&nbsp;· {r.route.flug ? '✈️' : '🛣️'} {zahl(r.route.km)} km{/if}{#if (r.stops || []).length >= 2}&nbsp;· {r.stops[0].name} → {r.stops[r.stops.length - 1].name}{/if}</p>
+        <p class="ed-r-meta">{t('{length} Stopps', { length: (r.stops || []).length })}{#if r.route?.km}&nbsp;· {r.route.flug ? '✈️' : '🛣️'} {zahl(r.route.km)} km{#if veraltet(r)}&nbsp;{je('(Stopps geändert, km noch von vorher)', '(stops changed, km still the old ones)')}{/if}{/if}{#if (r.stops || []).length >= 2}&nbsp;· {r.stops[0].name} → {r.stops[r.stops.length - 1].name}{/if}</p>
         {#if offen[r.id]}
           <div class="ed-innen" transition:klapp={{ duration: dauer(240) }}>
             <AbschnittPlan {r} etappe={eintrag} {orte} />

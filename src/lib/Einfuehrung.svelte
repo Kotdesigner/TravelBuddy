@@ -372,7 +372,7 @@
   .ef-begriffe .ef-wo { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; }
   .ef-hg { position: fixed; inset: 0; background: rgba(20, 14, 8, 0.45); z-index: 130; animation: hg var(--t-med) var(--ease-out); }
   .ef {
-    position: fixed; z-index: 131; left: 0; right: 0; bottom: 0; max-height: 92dvh; overflow: auto;
+    position: fixed; z-index: 131; left: 0; right: 0; bottom: 0; max-height: 92dvh; overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
     background: var(--bg); color: var(--ink); border-radius: 22px 22px 0 0; box-shadow: var(--shadow-float);
     --unten: calc(20px + env(safe-area-inset-bottom, 0px)); padding: 14px 20px var(--unten); display: flex; flex-direction: column; gap: 12px;
     animation: hoch var(--t-slow) var(--ease-spring);

@@ -42,7 +42,7 @@
   .ik::after { content: ''; position: absolute; inset: -11px; }
   .ik:hover { background: var(--flaeche); }
   .ik-hg { position: fixed; inset: 0; z-index: 900; background: rgba(20, 14, 8, 0.45); }
-  .ik-blatt { position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); z-index: 901; transform: translateX(-50%); width: min(480px, calc(100% - 24px)); max-height: calc(100dvh - 40px); overflow: auto;
+  .ik-blatt { position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); z-index: 901; transform: translateX(-50%); width: min(480px, calc(100% - 24px)); max-height: calc(100dvh - 40px); overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
     display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: var(--radius-l); background: var(--card); color: var(--ink); box-shadow: var(--shadow-float); text-align: left; font-weight: 400; }
   h2 { margin: 0; font-size: calc(18px * var(--schrift, 1)); }
   p { margin: 0; font-size: calc(14.5px * var(--schrift, 1)); line-height: 1.5; color: var(--ink); }

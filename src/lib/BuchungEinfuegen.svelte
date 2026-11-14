@@ -177,8 +177,12 @@
       if (anhaengen.length) belegeAnhaengen(anhaengen)
     }
     haptic.confirm()
-    zeigeToast(statt ? t('Umgebucht ✓ Die alte Buchung steht grau darunter.')
-      : n > 1 ? t('{n} Termine übernommen ✓', { n }) : t('Buchung übernommen ✓'), 'ok', statt ? 4200 : undefined)
+    zeigeToast(statt
+      ? (statt.kosten?.length
+        ? je('Umgebucht ✓ Die alte Buchung steht grau darunter. Trag unter Kosten ein, was du für das alte Ticket zurückbekommst.',
+          'Rebooked ✓ The old booking stays, greyed out. Note under costs what you get back for the old ticket.')
+        : t('Umgebucht ✓ Die alte Buchung steht grau darunter.'))
+      : n > 1 ? t('{n} Termine übernommen ✓', { n }) : t('Buchung übernommen ✓'), 'ok', statt ? (statt.kosten?.length ? 5600 : 4200) : undefined)
     const ergebnis = { typ: 'buchung', datum: ev[0].datum, etappeId: etappe?.reise.id || null, anzahl: n, ersetzt: !!statt }
     text = ''; erkannt = null; f = null; geaendert = {}; belegDateien = []
     if (formularZuerst) ohneMail()

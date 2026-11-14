@@ -15,7 +15,7 @@ import { t } from './i18n.js'
 import { zeigeToast } from './toast.js'
 import { frage, dialogAnfrage } from './dialog.js'
 import { geh } from './navigation.js'
-import { fluegeAusTerminen, faellig, zugFaellig, leseZug, darfAbfragen, genutzt, monatVon, abfrageDatum, leseAntwort, aenderungen, naechsteGruppe, flugImFokus, abflugMs, stundenBis, statusText } from './flug.js'
+import { fluegeAusTerminen, faellig, zugFaellig, leseZug, darfAbfragen, genutzt, monatVon, abfrageDatum, ohneVerschobene, leseAntwort, aenderungen, naechsteGruppe, flugImFokus, abflugMs, stundenBis, statusText } from './flug.js'
 
 const DB = 'wa-plan', TOPF = 'kv', SCHLUESSEL = 'flugstatus-v1'
 const KEY_API = 'tb-flug-schluessel'
@@ -124,10 +124,18 @@ async function lauf({ liste = null, vonHand = false } = {}) {
     return
   }
   const { fluege: fl, zuege } = get(fluege)
+  // Wurde eine Fahrt von Hand auf einen anderen Tag gelegt, gehört der gemerkte Stand zum alten
+  // Tag. Er käme sonst mit alten Zeiten weiter auf die Karte. Also zuerst vergessen, noch vor der
+  // Frage, ob überhaupt etwas fällig ist.
+  const gemerkt = ohneVerschobene(stand.staende, [...fl, ...zuege])
+  if (gemerkt !== stand.staende) {
+    flugspeicher.update((s) => ({ ...s, staende: gemerkt }))
+    schreib(get(flugspeicher)).catch(() => {})
+  }
   const fluegeFrei = schluessel && (vonHand || stand.gesperrtBis <= jetzt)
   const zuHolen = (liste || [
-    ...fl.filter((f) => faellig(f, stand.staende[f.id], jetzt, stand.staende)),
-    ...zuege.filter((z) => zugFaellig(z, stand.staende[z.id], jetzt)),
+    ...fl.filter((f) => faellig(f, gemerkt[f.id], jetzt, gemerkt)),
+    ...zuege.filter((z) => zugFaellig(z, gemerkt[z.id], jetzt)),
   ]).filter((f) => !ausgedacht(f) && (f.art === 'bahn' || fluegeFrei))
   if (!zuHolen.length) {
     if (vonHand && liste?.some(ausgedacht)) zeigeToast(t('In der Testreise sind die Daten ausgedacht. Abgefragt wird nichts.'), 'ok')
@@ -135,8 +143,8 @@ async function lauf({ liste = null, vonHand = false } = {}) {
   }
 
   fluglauf.set({ ...get(fluglauf), laden: true, fehler: null })
-  let { staende, zaehler, gesperrtBis } = stand
-  staende = { ...staende }
+  let { zaehler, gesperrtBis } = stand
+  let staende = { ...gemerkt }
   let fehler = null
   for (const [i, flug] of zuHolen.entries()) {
     const bahn = flug.art === 'bahn'
@@ -155,7 +163,8 @@ async function lauf({ liste = null, vonHand = false } = {}) {
     const alt = staende[flug.id]
     const neu = aenderungen(alt?.daten, antwort.daten)
     staende[flug.id] = {
-      geholt: nun, leer: !!antwort.leer, daten: antwort.daten || alt?.daten || null,
+      // Für welchen Tag gefragt wurde: so lässt sich später erkennen, dass die Fahrt verlegt wurde.
+      geholt: nun, gefragtFuer: abfrageDatum(flug, staende), leer: !!antwort.leer, daten: antwort.daten || alt?.daten || null,
       verlauf: [...neu.map((a) => ({ zeit: nun, text: a.text })), ...(alt?.verlauf || [])].slice(0, 12),
     }
     melde(flug, neu)

@@ -124,11 +124,17 @@ export function buchungenMitKosten(events = [], vorab = [], eintraege = []) {
 /** Erste Uhrzeit in einem Text, z. B. „Abflug 08:35“. */
 export const uhrzeitIn = (s) => String(s || '').match(/\b([01]?\d|2[0-3])[:.]([0-5]\d)\b/)?.slice(1).map((x) => x.padStart(2, '0')).join(':') || ''
 const BEWEGUNG = ['flight', 'train', 'shuttle', 'boat']
+/**
+ * Die Uhrzeit eines Termins. Das Feld gewinnt, der Text ist nur Rückfall.
+ * Wichtig, weil dieselbe Zeit zweimal dasteht: als Feld und im Untertitel. Wer die Zeit unter
+ * Ergänzen oder Ändern berichtigt, soll sie überall berichtigt haben.
+ */
+export const terminZeit = (e) => String(e?.zeit || e?.zeitVon || '') || uhrzeitIn(`${e?.sub || ''} ${e?.titel || ''}`)
 /** Wechselzeit an einem Etappentag: gesetzt, sonst die erste Abfahrt an dem Tag. */
 export function wechselZeit(etappe, von, events = []) {
   if (etappe?.wechselUm) return { zeit: etappe.wechselUm, quelle: null }
-  const e = events.filter((x) => x.datum === von && !x.storniert && !x.umgebucht && BEWEGUNG.includes(x.kat) && uhrzeitIn(`${x.sub} ${x.titel}`)).sort((a, b) => uhrzeitIn(`${a.sub} ${a.titel}`).localeCompare(uhrzeitIn(`${b.sub} ${b.titel}`)))[0]
-  return e ? { zeit: uhrzeitIn(`${e.sub} ${e.titel}`), quelle: e.titel } : null
+  const e = events.filter((x) => x.datum === von && !x.storniert && !x.umgebucht && BEWEGUNG.includes(x.kat) && terminZeit(x)).sort((a, b) => terminZeit(a).localeCompare(terminZeit(b)))[0]
+  return e ? { zeit: terminZeit(e), quelle: e.titel } : null
 }
 /** Die Etappe jetzt: Am Wechseltag gilt bis zur Wechselzeit noch die vorige. */
 export function etappeJetzt(eintraege, datum, uhr, events = []) {
@@ -171,6 +177,17 @@ export const nummernListe = (s) => {
     else { const k = st.replace(/[^A-Z0-9]/g, ''); if (k) out.push(k) }
   }
   return [...new Set(out)]
+}
+
+/**
+ * „3 Nächte“ aus dem alten Untertitel mitnehmen. Steht bei einer Unterkunft kein Check-out dabei,
+ * rechnen die Nächte genau aus diesem Text. Ohne ihn wären aus drei Nächten nach dem Ändern eine.
+ */
+export function mitNaechten(neu, alt) {
+  const m = String(alt || '').match(/\d+\s*(?:N(?:ä|ae)cht\w*|nights?)/i)
+  if (!m) return neu
+  const schon = new RegExp(m[0].replace(/\s+/g, '\\s*'), 'i').test(neu)
+  return schon ? neu : [neu, m[0]].filter(Boolean).join(' · ')
 }
 
 /**

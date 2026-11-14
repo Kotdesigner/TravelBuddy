@@ -288,6 +288,26 @@ const LISTEN = jeSprache(() => ([
 ]))
 
 /**
+ * Von Hand Geändertes an einem Kalender-Termin überlebt das Zusammenführen.
+ * Die Kalender-Fassung selbst wird nie feldweise gemischt (sie ist der Spiegel der Kalender-App),
+ * aber was jemand selbst daran gesetzt hat, steht in `ergaenzt`: storniert, umgebucht, berichtigte
+ * Zeiten, Flugnummern. Ohne das käme eine stornierte oder umgebuchte Buchung vom anderen Gerät
+ * als wieder gültig zurück und stünde doppelt neben der neuen.
+ */
+function behalteMarken(basis, andere) {
+  const map = new Map((andere || []).filter((e) => e?.id && e.ergaenzt?.length).map((e) => [e.id, e]))
+  if (!map.size) return basis || []
+  return (basis || []).map((e) => {
+    const a = map.get(e?.id)
+    if (!a) return e
+    const schon = new Set(e.ergaenzt || [])
+    const dazu = a.ergaenzt.filter((k) => !schon.has(k))
+    if (!dazu.length) return e
+    return { ...e, ...Object.fromEntries(dazu.map((k) => [k, a[k]])), ergaenzt: [...schon, ...dazu] }
+  })
+}
+
+/**
  * Trockenlauf UND echter Lauf benutzen dieselbe Funktion — die Vorschau zeigt
  * damit garantiert dieselben Zahlen wie das Ergebnis.
  *
@@ -350,8 +370,10 @@ export function fuehreZusammen(hier, datei, { quelle = t('anderes Gerät'), grun
   // Buchungen sind der Spiegel der Kalender-App — nie feldweise mischen.
   const bh = hier.buchungen, bd = datei.buchungen
   if (bd?.events?.length && (!bh?.events?.length || (bd.stand || '') > (bh.stand || ''))) {
-    ergebnis.buchungen = { ...bd, startVorher: bh?.startVorher ?? bd.startVorher }
+    ergebnis.buchungen = { ...bd, startVorher: bh?.startVorher ?? bd.startVorher, events: behalteMarken(bd.events, bh?.events) }
     hinweise.push(t('Buchungen: die Fassung aus der Datei ist neuer und wird ganz übernommen.'))
+  } else if (bh?.events?.length) {
+    ergebnis.buchungen = { ...bh, events: behalteMarken(bh.events, bd?.events) }
   } else ergebnis.buchungen = bh
   // Selbst eingefügte Buchungen (aus Mails) gibt es je Gerät: die von beiden Seiten behalten,
   // außer sie wurden auf einer Seite gelöscht.

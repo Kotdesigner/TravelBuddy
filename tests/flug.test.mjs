@@ -5,7 +5,7 @@ import {
   normalNummer, nummernImText, abflugzeitImText, fluegeAusTerminen, abfrageDatum, abstandStunden, faellig,
   naechsteGruppe, darfAbfragen, genutzt, monatVon, KONTINGENT, RESERVE, leseAntwort, verspaetung, statusText,
   aenderungen, umstiege, flugImFokus, istSchlecht, normalZug, zugnummernImText, bahnhofAusTitel, zugFaellig, leseZug,
-  offeneVorab, verkehrOk, abflugMs,
+  offeneVorab, verkehrOk, abflugMs, ohneVerschobene,
 } from '../src/lib/flug.js'
 
 let ok = 0, bad = 0
@@ -53,6 +53,11 @@ const termine = [
   const staende = { [fluege[0].id]: { daten: leseAntwort(antwort('2037-03-01 13:55', '2037-03-02 06:30'), '2037-03-01') } }
   p('Anschluss nimmt den Ankunftstag des Vorgängers', abfrageDatum(fluege[1], staende) === '2037-03-02')
   p('ohne Antwort das Datum des Termins', abfrageDatum(fluege[1], {}) === '2037-03-01')
+  // Auf einen anderen Tag gelegt: der gemerkte Stand gehört zum alten Tag und muss weg
+  const merker = { [fluege[0].id]: { geholt: Date.now(), gefragtFuer: '2037-03-01', daten: { ab: { planDatum: '2037-03-01' } } } }
+  p('Stand bleibt, solange der Tag stimmt', ohneVerschobene(merker, [{ ...fluege[0], datum: '2037-03-01' }]) === merker)
+  p('Stand ist weg, wenn der Flug verlegt wurde', Object.keys(ohneVerschobene(merker, [{ ...fluege[0], datum: '2037-03-05', terminDatum: '2037-03-05' }])).length === 0)
+  p('Ein alter Stand ohne Merker bleibt unangetastet', Object.keys(ohneVerschobene({ [fluege[0].id]: { geholt: 1 } }, [{ ...fluege[0], datum: '2037-03-05' }])).length === 1)
   const neu = fluegeAusTerminen([...termine, { id: 'g', datum: '2037-04-01', kat: 'flight', titel: 'Neu', flugNr: 'AB5' }])
   p('neuer Termin ist sofort ein Flug', neu.fluege.some((f) => f.nr === 'AB5'))
 }

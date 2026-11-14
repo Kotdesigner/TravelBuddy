@@ -22,10 +22,10 @@ export function nummernImText(text) {
   return [...String(text || '').matchAll(NUMMER)].map((m) => m[1] + m[2])
 }
 
-// „Abflug 13:55“ oder „08:35 → 11:05“. „Ankunft 13:00“ ist keine Abflugzeit.
+// „Abflug 13:55“, „Abfahrt 10:45“ oder „08:35 → 11:05“. „Ankunft 13:00“ ist keine Abflugzeit.
 export function abflugzeitImText(text) {
   const s = String(text || '')
-  const m = s.match(/Abflug\D{0,3}(\d{1,2}:\d{2})/i) || s.match(/(\d{1,2}:\d{2})\s*(?:→|->|-|–)\s*\d{1,2}:\d{2}/)
+  const m = s.match(/(?:Abflug|Abfahrt|Departure|Departs)\D{0,3}(\d{1,2}:\d{2})/i) || s.match(/(\d{1,2}:\d{2})\s*(?:→|->|-|–)\s*\d{1,2}:\d{2}/)
   return m ? m[1].padStart(5, '0') : ''
 }
 
@@ -38,8 +38,12 @@ const istFlug = (e) => e.kat === 'flight' || !!e.flugNr
  * stünde ein Flug mit einer verunglückten Liste („EK“, „421“) für immer unter „Hier fehlt noch etwas“.
  */
 export function flugNummern(e = {}) {
-  const gesetzt = (Array.isArray(e.flugNrs) ? e.flugNrs : []).map(normalNummer).filter(Boolean)
+  const roh = Array.isArray(e.flugNrs) ? e.flugNrs : null
+  const gesetzt = (roh || []).map(normalNummer).filter(Boolean)
   if (gesetzt.length) return [...new Set(gesetzt)]
+  // Eine bewusst geleerte Liste gewinnt: wer eine falsche Nummer entfernt, soll sie los sein.
+  // Eine Liste mit Schrott („EK“, „421“) ist dagegen kein Wunsch, sondern ein Fehler und wird geheilt.
+  if (roh && roh.length === 0 && (e.ergaenzt || []).includes('flugNrs')) return []
   return [...new Set([normalNummer(e.flugNr), ...nummernImText(e.sub), ...nummernImText(e.titel)].filter(Boolean))]
 }
 
@@ -65,10 +69,10 @@ function zugAusTermin(e, ohneNummer, zuege) {
   })
 }
 
-/** Termine → Flüge und Züge in Reihenfolge. Termine ohne erkennbare Nummer stehen in `ohneNummer`. */
 /** Storniert oder umgebucht: steht noch in den Buchungen, ist aber keine Fahrt mehr (V44). */
 export const gilt = (e) => !!e && !e.storniert && !e.umgebucht
 
+/** Termine → Flüge und Züge in Reihenfolge. Termine ohne erkennbare Nummer stehen in `ohneNummer`. */
 export function fluegeAusTerminen(events = []) {
   const fluege = [], zuege = [], ohneNummer = []
   for (const e of events) {
@@ -114,6 +118,25 @@ export function verkehrOk(art, f = {}) {
 export function abfrageDatum(flug, staende = {}) {
   if (flug.datum) return flug.datum
   return staende[flug.anschlussVon]?.daten?.an?.planDatum || flug.terminDatum
+}
+
+/**
+ * Stände vergessen, die zu einem anderen Tag gehören.
+ *
+ * Gemerkt wird je Flug, für welchen Tag gefragt wurde (`gefragtFuer`). Legt man den Flug danach auf
+ * einen anderen Tag, passt die gemerkte Antwort nicht mehr: sie würde mit den alten Zeiten und dem
+ * alten Datum weiter dastehen. Eine Verschiebung durch die Airline bleibt dagegen erhalten, die
+ * steckt in den Daten selbst und ist der eigentliche Zweck der Abfrage.
+ */
+export function ohneVerschobene(staende = {}, fahrten = []) {
+  const weg = fahrten.filter((f) => {
+    const s = staende[f.id]
+    return s && s.gefragtFuer && s.gefragtFuer !== abfrageDatum(f, staende)
+  }).map((f) => f.id)
+  if (!weg.length) return staende
+  const raus = { ...staende }
+  for (const id of weg) delete raus[id]
+  return raus
 }
 
 /** Abflug in ms: aus der Antwort, sonst aus Datum und Uhrzeit, sonst Tagesmitte. */

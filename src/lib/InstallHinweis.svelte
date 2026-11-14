@@ -157,7 +157,7 @@
 <style>
   .ih-hg { position: fixed; inset: 0; background: rgba(20, 14, 8, 0.45); z-index: 130; animation: hg var(--t-med) var(--ease-out); }
   .ih {
-    position: fixed; z-index: 131; left: 0; right: 0; bottom: 0; max-height: 92dvh; overflow: auto;
+    position: fixed; z-index: 131; left: 0; right: 0; bottom: 0; max-height: 92dvh; overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
     background: var(--bg); color: var(--ink); border-radius: 22px 22px 0 0; box-shadow: var(--shadow-float);
     --unten: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 12px 18px var(--unten); display: flex; flex-direction: column; gap: 10px;
     animation: hoch var(--t-slow) var(--ease-spring);
