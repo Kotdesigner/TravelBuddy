@@ -5,9 +5,9 @@
   // Termine kommen aus dem Reisekalender oder sind selbst eingetragen, Kosten aus den Ausgaben
   // vorab (über die Termin-ID verbunden). Was die App nicht sicher zuordnen kann, steht oben zum Bestätigen.
   import { t, je } from './i18n.js'
-  import { buchungen, vorabKosten, updateVorabKosten, reisen, gesamtStart, belegeAnhaengen, aendereTermin } from './userdata.js'
+  import { buchungen, vorabKosten, updateVorabKosten, reisen, gesamtStart, belegeAnhaengen, aendereTermin, aendereBuchung } from './userdata.js'
   import { etappenMitDatum } from './plan.js'
-  import { buchungenMitKosten, buendle, verbindungsVorschlaege, uhrzeitIn, kostenPasst, istEchteBuchung } from './buchung.js'
+  import { buchungenMitKosten, buendle, verbindungsVorschlaege, uhrzeitIn, kostenPasst, istEchteBuchung, etappeDerBuchung } from './buchung.js'
   import { katInfo } from './reisekalender.js'
   import { mitWochentag, dezimal, tagMonat } from './format.js'
   import { heuteTag } from './heute.js'
@@ -57,6 +57,12 @@
     if (neu.length) { belegeAnhaengen(neu); zeigeToast(je('Beleg gespeichert ✓', 'Document saved ✓'), 'ok') }
   }
   function nummerSetzen(b, wert) { const v = wert.trim(); if (v !== b.ref) aendereTermin(b.id, { ref: v }) }
+  // Die Etappe einer Buchung von Hand setzen. Ohne eigene Wahl rechnet die App sie aus dem
+  // Datum. Ein Hotel, das einen Tag vor der Etappe anfängt, ließ sich sonst nirgends zuordnen.
+  const etappeWahl = (b) => b.termine.map((e) => e.etappeId).find(Boolean) || ''
+  // Was die App ohne eigene Wahl aus dem Datum rechnet, damit die erste Zeile im Feld stimmt
+  const autoEtappe = (b) => etappeDerBuchung(eintraege, { von: b.von, bis: b.bis, termine: [] })
+  function etappeSetzen(b, id) { aendereBuchung(b.ids, { etappeId: id || '' }) }
   // V44: Ändern, umbuchen, stornieren und löschen in einem Blatt — für jede Buchung, auch die aus dem Kalender.
   let aendernId = $state(null)
   const aendern = $derived(aendernId ? liste.find((x) => x.id === aendernId || x.ids?.includes(aendernId)) || null : null)
@@ -115,6 +121,7 @@
   <ul class="bu-liste">
     {#each gezeigt as b (b.id)}
       {@const zeiten = uhrzeiten(b)}
+      {@const autoEt = autoEtappe(b)}
       <li class="bu-karte" class:vorbei={b.bis < $heuteTag} class:weg={!!b.storniert || !!b.umgebucht} style="--farbe:{b.etappe?.farbe || 'var(--line-stark)'}">
         {#if b.storniert}<p class="bu-weg-marke">{je('Storniert', 'Cancelled')}{b.stornoGrund ? ' · ' + b.stornoGrund : ''}</p>
         {:else if b.umgebucht}<p class="bu-weg-marke">{je('Umgebucht', 'Rebooked')}</p>{/if}
@@ -122,7 +129,6 @@
           <span class="bu-i" aria-hidden="true">{b.termine[0].emoji || katInfo(b.kat).icon}</span>
           <span><b>{b.titel}</b>
             <small>{mitWochentag(b.von)}{#if b.bis !== b.von}{' '}{je('bis', 'to')}{' '}{mitWochentag(b.bis)}{/if}{#if zeiten.length}{' · '}{zeiten.join(' / ')}{/if}</small>
-            {#if b.etappe}<small class="bu-etappe">{je('Etappe', 'Leg')} {b.etappe.name}</small>{/if}
           </span>
         </div>
         {#each b.termine as e (e.id)}{#if e.sub}<p class="bu-sub">{e.sub}</p>{/if}{/each}
@@ -173,6 +179,15 @@
         </div>
 
         <div class="bu-zeile">
+          <span class="bu-l">{je('Etappe', 'Leg')}</span>
+          <select class="bu-etappe-wahl" aria-label={je('Etappe der Buchung', 'Leg of this booking')} value={etappeWahl(b)}
+            onchange={(e) => etappeSetzen(b, e.currentTarget.value)}>
+            <option value="">{autoEt ? je(`nach Datum: ${autoEt.name}`, `by date: ${autoEt.name}`) : je('keiner Etappe', 'no leg')}</option>
+            {#each eintraege as e (e.reise.id)}<option value={e.reise.id}>{e.reise.name}</option>{/each}
+          </select>
+        </div>
+
+        <div class="bu-zeile">
           <span class="bu-l">{je('Belege', 'Documents')}</span>
           <span class="bu-belege">
             <BelegKnoepfe docs={b.docs} ziele={b.ids} entfernbar />
@@ -219,7 +234,7 @@
   .bu-titel { display: flex; gap: 10px; align-items: flex-start; }
   .bu-titel > span:last-child { display: flex; flex-direction: column; min-width: 0; font-size: calc(15px * var(--schrift, 1)); }
   .bu-titel small { color: var(--muted); font-size: calc(13px * var(--schrift, 1)); }
-  .bu-etappe { font-weight: 700; }
+  .bu-etappe-wahl { flex: 1 1 200px; min-width: 0; max-width: 320px; }
   .bu-i { font-size: calc(22px * var(--schrift, 1)); line-height: 1.2; }
   .bu-sub { margin: 0; font-size: calc(13px * var(--schrift, 1)); color: var(--muted); }
   .bu-zeile { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: calc(14px * var(--schrift, 1)); min-height: 36px; border-top: 1px solid var(--line); padding-top: 6px; }

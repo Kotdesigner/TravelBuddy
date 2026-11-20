@@ -27,7 +27,7 @@
   import RouteEditor from './RouteEditor.svelte'
   import Versorgung from './Versorgung.svelte'
   import BuchungZusatz from './BuchungZusatz.svelte'
-  import { wechselZeit, terminGilt } from './buchung.js'
+  import { wechselZeit, terminGilt, buendle, etappeDerBuchung } from './buchung.js'
   import AbschnittPlan from './AbschnittPlan.svelte'
   import { abschnitteDerEtappe, bereichVon } from './abschnitte.js'
   import { naechteUebersicht } from './naechte.js'
@@ -83,7 +83,20 @@
 
   const von = $derived(eintrag?.von), bis = $derived(eintrag?.bis)
   const imZeitraum = (d) => d && von && d >= von && d <= bis
-  const gebucht = $derived(($buchungen?.events || []).filter((b) => terminGilt(b) && imZeitraum(b.datum)).sort((a, b) => a.datum.localeCompare(b.datum)))
+  // Welche Buchungen stehen in dieser Etappe? Hat die Buchung eine selbst gewählte Etappe,
+  // gilt nur die. Sonst zählt das Datum, und zusätzlich die Buchung, die in den Zeitraum
+  // hineinreicht (ein Hotel, das einen Tag vor der Etappe anfängt).
+  const vonBuchung = $derived.by(() => {
+    const ids = new Set()
+    if (!etappe) return ids
+    for (const b of buendle(($buchungen?.events || []).filter(terminGilt))) {
+      if (etappeDerBuchung(alleEtappen, b)?.id === etappe.id) for (const id of b.ids) ids.add(id)
+    }
+    return ids
+  })
+  const gebucht = $derived(($buchungen?.events || [])
+    .filter((b) => terminGilt(b) && (b.etappeId ? b.etappeId === etappeId : imZeitraum(b.datum) || vonBuchung.has(b.id)))
+    .sort((a, b) => a.datum.localeCompare(b.datum)))
   const ids = $derived(new Set([etappe?.id, ...routen.map((r) => r.id)].filter(Boolean)))
   const wand = $derived($wanderungen.filter((w) => (w.datum ? imZeitraum(w.datum) : ids.has(w.reiseId))))
   // Wander-Ideen, die nah an dieser Etappe oder ihren Routen liegen und noch nicht auf der Liste stehen
@@ -394,9 +407,16 @@
 
   .ed-k { margin: 0; font-size: calc(13.5px * var(--schrift, 1)); color: var(--muted); }
   .ed-quelle { background: var(--info-flaeche); color: var(--info-text); padding: 8px 10px; border-radius: 10px; }
-  .ed-buch { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-  .ed-buch li { display: grid; grid-template-columns: 82px 26px 1fr; gap: 8px; align-items: center; font-size: calc(14px * var(--schrift, 1)); min-height: 40px; }
+  .ed-buch { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .ed-buch li { display: grid; grid-template-columns: 82px 26px 1fr; gap: 4px 8px; align-items: center; font-size: calc(14px * var(--schrift, 1)); min-height: 40px; padding: 8px 0; }
+  .ed-buch li + li { border-top: 1px solid var(--line); }
   .ed-b-tag { font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); font-variant-numeric: tabular-nums; }
+  /* Schmaler Bildschirm: Datum als eigene Zeile über der Buchung, sonst laufen zwei Buchungen ineinander */
+  @media (max-width: 560px) {
+    .ed-buch li { grid-template-columns: 26px 1fr; align-items: start; }
+    .ed-b-icon { line-height: 1.3; }
+    .ed-b-tag { grid-column: 1 / -1; font-weight: 700; color: var(--ink); }
+  }
   .ed-b-icon { font-size: calc(17px * var(--schrift, 1)); text-align: center; }
   .ed-b-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
   .ed-b-txt small { color: var(--muted); font-size: calc(12.5px * var(--schrift, 1)); }

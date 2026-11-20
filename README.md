@@ -10,10 +10,10 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 **One app for the whole trip. It does it all.**<br>
 📔 **Not just a road trip planner: a diary maker.** While you travel, your travel diary writes itself.
 
-**Version 1.40 · built for Western Australia**<br>
+**Version 1.41 · built for Western Australia**<br>
 <sub>More regions and countries will follow.</sub>
 
-<img src="https://img.shields.io/badge/version-1.40-e07b28?style=flat-square" alt="version: 1.40"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
+<img src="https://img.shields.io/badge/version-1.41-e07b28?style=flat-square" alt="version: 1.41"> <img src="https://img.shields.io/badge/offline-first-2e7d32?style=flat-square" alt="offline: first"> <img src="https://img.shields.io/badge/account-none-6e5a4a?style=flat-square" alt="account: none"> <img src="https://img.shields.io/badge/installs%20as-app-8a4b1c?style=flat-square" alt="installs as: app"> <img src="https://img.shields.io/badge/license-public%20domain-3b6ea8?style=flat-square" alt="license: public domain">
 
 <br>
 
@@ -21,7 +21,7 @@ Plan it, drive it, remember it. On iPhone, Android, Mac, Windows and Linux, offl
 
 <sub>Opens in your browser on iPhone, Android or computer. One tap on <b>🧪 test trip</b> fills it with a sample journey.</sub>
 
-**[✨ What's new in 1.40](#-new-in-version-140)**
+**[✨ What's new in 1.41](#-new-in-version-141)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Follow the trip: new reels on Instagram, TikTok and Facebook.</sub>
@@ -144,12 +144,16 @@ Real recordings from the app with the made-up sample trip, nothing staged. The c
 
 ---
 
+## 🧭 New in version 1.41
+
+**Bookings know their leg.** Every booking now shows which leg it belongs to, and you can change it right there. A hotel that checks in a day before the leg starts finds its leg by itself; before, a booking like that had no leg at all. Cancel a place to stay or rebook it and it also disappears as a stop in the leg, instead of staying in the route while the app looks for map points for it. In the leg, bookings on the phone are separated by a line with the date above them. And “+ Expense” under advance expenses creates the new row at the very top with the cursor in it, while the list itself is sorted by date.
+
+<details>
+<summary><b>📜 Earlier versions: 1.40 to 1.1</b></summary>
+
 ## ↕️ New in version 1.40
 
 **Everything in the sidebar is reachable.** On the Mac, opening the items under “More” used to make the sidebar taller than the window, and the rest sat below it, out of sight: backup, manual, theme and the intro. The scrollbar stayed invisible until the mouse was right over it, so the list looked like it ended there. Now the five sections stay in place, the foot stays at the bottom, and only the items of the open section scroll, with a bar you can see.
-
-<details>
-<summary><b>📜 Earlier versions: 1.39 to 1.1</b></summary>
 
 ## 🧷 New in version 1.39
 
@@ -920,6 +924,7 @@ Licence-free: TravelBuddy's own code is released into the public domain under [T
 - [x] **Version 1.25:** maps with areas, zoom and pop-ups for places, route ideas and hikes, over 20 hike ideas, faster place tiles
 - [x] **Version 1.27:** routes without internet on real roads, track network per area, 4WD switch, detours around road closures
 - [x] **Version 1.28:** setup in 12 steps with design, vehicle, first route, expenses before the trip and a ready check
+- [x] **Version 1.41:** bookings know their leg, cancelled stays leave the plan
 - [x] **Version 1.40:** everything in the Mac sidebar stays reachable
 - [x] **Version 1.39:** remove single documents and single legs from a booking
 - [x] **Version 1.38:** change, rebook, cancel and delete bookings
@@ -963,10 +968,10 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 **Eine App für die ganze Reise. Sie kann alles.**<br>
 📔 **Nicht nur ein Roadtrip-Planer, sondern ein Tagebuch-Macher.** Während du reist, schreibt sich dein Reisetagebuch von selbst.
 
-**Version 1.40 · entwickelt für Western Australia**<br>
+**Version 1.41 · entwickelt für Western Australia**<br>
 <sub>Weitere Regionen und Länder folgen.</sub>
 
-<img src="https://img.shields.io/badge/version-1.40-e07b28?style=flat-square" alt="version: 1.40"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
+<img src="https://img.shields.io/badge/version-1.41-e07b28?style=flat-square" alt="version: 1.41"> <img src="https://img.shields.io/badge/offline-zuerst-2e7d32?style=flat-square" alt="offline: zuerst"> <img src="https://img.shields.io/badge/Konto-keins-6e5a4a?style=flat-square" alt="Konto: keins"> <img src="https://img.shields.io/badge/als%20App-installierbar-8a4b1c?style=flat-square" alt="als App: installierbar"> <img src="https://img.shields.io/badge/Lizenz-gemeinfrei-3b6ea8?style=flat-square" alt="Lizenz: gemeinfrei">
 
 <br>
 
@@ -974,7 +979,7 @@ Planen, fahren, festhalten. Auf iPhone, Android, Mac, Windows und Linux, offline
 
 <sub>Öffnet sich im Browser auf iPhone, Android oder Rechner. Ein Tipp auf <b>🧪 Testreise</b> füllt sie mit einer Beispielreise.</sub>
 
-**[✨ Neu in 1.40](#-neu-in-version-140)**
+**[✨ Neu in 1.41](#-neu-in-version-141)**
 
 <a href="https://www.instagram.com/travelbuddy.oz/"><img src="https://img.shields.io/badge/Instagram-travelbuddy.oz-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram: travelbuddy.oz"></a> <a href="https://www.tiktok.com/@stevekiel"><img src="https://img.shields.io/badge/TikTok-TravelBuddy.OZ-111111?style=for-the-badge&logo=tiktok&logoColor=white" alt="TikTok: TravelBuddy.OZ"></a> <a href="https://www.facebook.com/profile.php?id=61595467816787"><img src="https://img.shields.io/badge/Facebook-TravelBuddy.OZ-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook: TravelBuddy.OZ"></a><br>
 <sub>Die Reise verfolgen: neue Reels auf Instagram, TikTok und Facebook.</sub>
@@ -1087,12 +1092,16 @@ Echte Aufnahmen aus der App mit der ausgedachten Beispielreise, nichts nachgeste
 
 ---
 
+## 🧭 Neu in Version 1.41
+
+**Buchungen kennen ihre Etappe.** An jeder Buchung steht jetzt, zu welcher Etappe sie gehört, und du kannst es dort auch ändern. Ein Hotel, das einen Tag vor der Etappe eincheckt, findet seine Etappe von selbst; vorher stand so eine Buchung ganz ohne Etappe da. Stornierst du eine Unterkunft oder buchst sie um, verschwindet sie auch als Ort aus der Etappe, statt in der Anreise stehen zu bleiben, während die App Kartenpunkte dafür sucht. In der Etappe sind die Buchungen am Telefon mit einer Linie getrennt und das Datum steht darüber. Und „+ Ausgabe“ bei den Vorab-Ausgaben legt die neue Zeile ganz oben an, mit dem Schreibzeiger darin, während die Liste selbst nach Datum steht.
+
+<details>
+<summary><b>📜 Frühere Versionen: 1.40 bis 1.1</b></summary>
+
 ## ↕️ Neu in Version 1.40
 
 **In der Seitenleiste kommst du überall hin.** Klappten am Mac unter „Mehr“ die Unterpunkte auf, wurde die Leiste länger als das Fenster, und der Rest stand unsichtbar darunter: Backup, Handbuch, Design und die Einführung. Der Scrollbalken blieb dabei unsichtbar, solange die Maus nicht genau darüber stand, und die Liste sah aus, als wäre sie zu Ende. Jetzt stehen die fünf Bereiche fest, der Fuß bleibt unten, und scrollen tun nur die Unterpunkte des offenen Bereichs, mit einem Balken, den man sieht.
-
-<details>
-<summary><b>📜 Frühere Versionen: 1.39 bis 1.1</b></summary>
 
 ## 🧷 Neu in Version 1.39
 
@@ -1831,6 +1840,7 @@ Lizenzfrei: Der eigene Code von TravelBuddy ist unter [The Unlicense](LICENSE) g
 - [x] **Version 1.25:** Karten mit Gegenden, Zoom und Fenstern für Orte, Routen-Ideen und Wanderungen, gut 20 Wander-Ideen, schnellere Ortskacheln
 - [x] **Version 1.27:** Routen ohne Netz auf echten Straßen, Pisten-Netz je Gebiet, 4WD-Schalter, Umleitung um Straßensperrungen
 - [x] **Version 1.28:** Einrichtung in 12 Schritten mit Design, Fahrzeug, erster Route, Vorabausgaben und Check vor der Abreise
+- [x] **Version 1.41:** Buchungen kennen ihre Etappe, Storniertes räumt den Plan
 - [x] **Version 1.40:** in der Seitenleiste am Mac ist alles erreichbar
 - [x] **Version 1.39:** einzelne Anhänge und einzelne Abschnitte aus einer Buchung nehmen
 - [x] **Version 1.38:** Buchungen ändern, umbuchen, stornieren und löschen

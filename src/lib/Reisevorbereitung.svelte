@@ -64,6 +64,22 @@
   // Zugeklappt bleibt die Seite ueberschaubar; die Kopfzeile sagt trotzdem, was drin ist.
   let dokAuf = $state(false)
   let vkAuf = $state(false)
+  // Vorab-Ausgaben stehen nach Datum, die älteste zuerst. Eine frisch angelegte Ausgabe
+  // steht ganz oben und bekommt den Schreibzeiger: vorher landete sie unten hinter allen anderen.
+  let vkNeu = $state(null)
+  const vkListe = $derived.by(() => {
+    const nach = [...$vorabKosten].sort((a, b) => String(a.datum || '').localeCompare(String(b.datum || '')))
+    const frisch = nach.find((k) => k.id === vkNeu)
+    return frisch ? [frisch, ...nach.filter((k) => k !== frisch)] : nach
+  })
+  function vorabAusgabeNeu() {
+    vkAuf = true
+    vkNeu = neueVorabKosten()
+    setTimeout(() => {
+      const f = document.querySelector('.vk-neu .vk-text')
+      f?.scrollIntoView({ block: 'center', behavior: 'smooth' }); f?.focus()
+    }, 80)
+  }
   let buAuf = $state(false)
   let einfuegenAuf = $state(false)
 
@@ -755,7 +771,7 @@
         </span>
       {/if}
     </button>
-    <button class="neu" onclick={() => { vkAuf = true; neueVorabKosten() }}>{t('+ Ausgabe')}</button>
+    <button class="neu" onclick={vorabAusgabeNeu}>{t('+ Ausgabe')}</button>
   </div>
   {#if vkAuf}
   <p class="vk-intro">{t('Kosten, die schon')} <b>{t('vor der Abreise')}</b> {t('anfallen (Flüge, Visum, Versicherung, Kamera/Drohne …). Jede Ausgabe wird')} <b>{t('nur einmal')}</b> {t('gezählt. Ordne sie optional einer Etappe zu (🔗), dann ist alles lückenlos und je Etappe dokumentiert, ganz ohne Doppelzählung. Die Summe fließt in Ausgaben und Budget auf „Heute“.')}</p>
@@ -766,8 +782,8 @@
       <button class="bedien-knopf vk-alle" onclick={alleVorschlaege}>{je(`${vorschlaege.length} Vorschläge für Etappen übernehmen`, `Accept ${vorschlaege.length} leg suggestions`)}</button>
     {/if}
     <div class="vk-liste">
-      {#each $vorabKosten as k (k.id)}
-        <div class="vk">
+      {#each vkListe as k (k.id)}
+        <div class="vk" class:vk-neu={k.id === vkNeu}>
           <input class="vk-text" value={k.text} oninput={(e) => updateVorabKosten(k.id, { text: e.target.value })} placeholder={t('Wofür? (z.B. Flug FRA→MEL)')} />
           <div class="vk-z2">
             <select value={k.kat} onchange={(e) => updateVorabKosten(k.id, { kat: e.target.value })}>
@@ -926,6 +942,7 @@
   .vk-intro b { color: var(--ink); }
   .vk-liste { display: flex; flex-direction: column; gap: 8px; }
   .vk { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--eingabe); display: flex; flex-direction: column; gap: 6px; }
+  .vk-neu { border-color: var(--brand); box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 22%, transparent); }
   .vk-text { font-size: calc(13.5px * var(--schrift, 1)); font-weight: 700; padding: 6px 8px; border: 1px solid var(--line-stark); border-radius: 6px; color: var(--ink); }
   .vk-z2 { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
   .vk-z2 select, .vk-z2 input { font-size: calc(12.5px * var(--schrift, 1)); padding: 6px 7px; border: 1px solid var(--line-stark); border-radius: 6px; background: var(--card); color: var(--ink); }

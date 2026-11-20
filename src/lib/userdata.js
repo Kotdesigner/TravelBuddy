@@ -9,6 +9,7 @@ import { haengeBelegeAn, nimmBelegAb, eigeneBelegeUebernehmen, belegPfad } from 
 import { musikFuerBackup, musikAusBackup } from './musik/speicher.js'
 import { datiereAbschnitte } from './abschnitte.js'
 import { heileListe, heileOrtDaten, heileBuchungen } from './heilen.js'
+import { ohneVerwaisteStopps } from './buchung.js'
 
 const DB_NAME = 'wa-plan'
 const STORE = 'kv'
@@ -294,6 +295,7 @@ export async function initUserData() {
   try { rettenAusNotspeicher() } catch (e) { console.warn('Notspeicher nicht lesbar', e) }
   try { planNachziehen() } catch (e) { console.warn('Plan-Umbau fehlgeschlagen', e) }
   try { abschnitteDatieren() } catch (e) { console.warn('Abschnitte nicht datiert', e) }
+  try { stoppsNachziehen() } catch (e) { console.warn('Stornierte Stopps nicht entfernt', e) }
   planUmbauAktiv = true
   loaded = true
   ready.set(true)
@@ -1081,9 +1083,34 @@ export function aendereBuchung(ids, patch = {}, proTermin = null) {
   })))
 }
 
+/**
+ * Stopps nachziehen: Eine Unterkunft steht auch als Stopp in der Etappe (der Kalender-Import nimmt
+ * den Titel des Check-ins als Ortsnamen). Fällt die Buchung weg, also storniert, umgebucht oder
+ * gelöscht, muss der Stopp mit. Die Regel selbst steht in buchung.js (ohneVerwaisteStopps).
+ *
+ * Wird auch beim Start aufgerufen: Was früher storniert wurde, steht sonst für immer in der Etappe.
+ */
+export function stoppsNachziehen(geloescht = []) {
+  const events = get(buchungen)?.events || []
+  const rs = get(reisen) || []
+  const neu = ohneVerwaisteStopps(rs, events, geloescht)
+  if (neu.every((r, i) => r === rs[i])) return 0
+  let weg = 0
+  reisen.set(neu.map((r, i) => {
+    if (r === rs[i]) return r
+    weg += (rs[i].stops || []).length - (r.stops || []).length
+    return stempeln(r)
+  }))
+  return weg
+}
+
+/** Die Termine einer Buchung, so wie sie gerade gespeichert sind. */
+const termineVon = (ids) => { const m = new Set(Array.isArray(ids) ? ids : [ids]); return (get(buchungen)?.events || []).filter((e) => m.has(e.id)) }
+
 /** Buchung stornieren: bleibt sichtbar, zählt aber nirgends mehr als Termin. */
 export function storniereBuchung(ids, grund = '') {
   aendereBuchung(ids, { storniert: new Date().toISOString(), stornoGrund: String(grund || '').trim() })
+  stoppsNachziehen()
 }
 
 /** Storno zurücknehmen. */
@@ -1114,6 +1141,7 @@ export function ersetzeBuchung(ids, neueTermine = [], { refUebernehmen = true, b
   if (!anzahl) return null
   const neuId = fertig[0].id || (get(buchungen)?.events || []).find((e) => e.gruppe === gruppe)?.id || null
   aendereBuchung([...alteIds], { umgebucht: new Date().toISOString(), ersetztDurch: neuId })
+  stoppsNachziehen()
   // Kosten der alten Buchung zeigen weiter auf den alten Termin: sie gehören zur alten Zahlung.
   // Ob von dem alten Ticket etwas zurückkommt, weiß nur die Airline. Die Ausgabe steht darum ab
   // jetzt unter „Erstattung offen“, genau wie nach einer Stornierung. Sonst zählt das alte Ticket
@@ -1207,6 +1235,7 @@ function gibUmgebuchteZurueck(weggefallen) {
  */
 export function loescheBuchung(ids) {
   const menge = new Set(Array.isArray(ids) ? ids : [ids])
+  const termine = termineVon([...menge])
   let weg = 0
   buchungen.update((b) => {
     if (!b?.events) return b
@@ -1218,6 +1247,7 @@ export function loescheBuchung(ids) {
   })
   if (weg) {
     loeseKostenVonTerminen([...menge])
+    stoppsNachziehen(termine)
     // War die gelöschte Buchung der Ersatz für eine umgebuchte, gilt die alte wieder: sonst stünde
     // die alte für immer grau da und die Reise hätte diesen Flug gar nicht mehr.
     gibUmgebuchteZurueck([...menge])

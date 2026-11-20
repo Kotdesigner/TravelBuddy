@@ -83,6 +83,46 @@ export function buendle(events = []) {
   })
 }
 
+/** Arten, die beim Kalender-Import einen Stopp in der Etappe angelegt haben (reisekalender.js). */
+const WOHNT = new Set(['hotel', 'stay', 'city'])
+const stoppName = (e) => String(e?.titel || '').trim()
+
+/**
+ * Namen von Stopps, die zu keiner gültigen Unterkunft mehr gehören.
+ *
+ * Der Kalender-Import nimmt den Titel eines Check-ins als Ortsnamen in der Etappe. Wird die
+ * Buchung storniert, umgebucht oder gelöscht, bliebe der Ort für immer stehen: Ein abgesagtes
+ * Hotel stand weiter in der Anreise, und die App suchte im Netz Kartenpunkte dafür.
+ *
+ * Vorsichtig: nur Unterkünfte (so sind die Stopps entstanden), nur bei genau gleichem Namen, und
+ * nur wenn kein gültiger Termin mehr so heißt. Eine Stadt aus einer Fahrt bleibt also stehen.
+ *
+ * @param events     alle Termine, so wie sie nach der Änderung dastehen
+ * @param geloescht  Termine, die gerade ganz verschwunden sind
+ */
+export function verwaisteStopps(events = [], geloescht = []) {
+  const raus = new Set([...events.filter((e) => WOHNT.has(e?.kat) && (e.storniert || e.umgebucht)),
+    ...geloescht.filter((e) => WOHNT.has(e?.kat))].map(stoppName).filter(Boolean))
+  if (!raus.size) return raus
+  const fort = new Set(geloescht.map((e) => e?.id))
+  for (const e of events) {
+    if (fort.has(e?.id) || !WOHNT.has(e?.kat) || e.platzhalter || e.storniert || e.umgebucht) continue
+    raus.delete(stoppName(e))
+  }
+  return raus
+}
+
+/** Dieselben Reisen ohne die verwaisten Stopps. Unveränderte Reisen kommen unangetastet zurück. */
+export function ohneVerwaisteStopps(reisen = [], events = [], geloescht = []) {
+  const raus = verwaisteStopps(events, geloescht)
+  if (!raus.size) return reisen
+  return reisen.map((r) => {
+    const alt = r?.stops || []
+    const stops = alt.filter((st) => !raus.has(String(st?.name || '').trim()))
+    return stops.length === alt.length ? r : { ...r, stops }
+  })
+}
+
 /** Welche Buchung passt zu einer Ausgabe? Liefert { buchung, sicher } oder null. */
 export function passendeBuchung(k, buchungen) {
   if (k.terminId) { const b = buchungen.find((x) => x.ids.includes(k.terminId)); if (b) return { buchung: b, sicher: true } }
@@ -115,7 +155,7 @@ export function verbindungsVorschlaege(vorab = [], buchungen = [], eintraege = [
     if (alle.has(k.terminId) || k.ohneBuchung) continue
     const p = passendeBuchung(k, buchungen)
     if (!p) continue
-    const etappe = etappeAm(eintraege, p.buchung.von)?.reise.id || null
+    const etappe = etappeDerBuchung(eintraege, p.buchung)?.id || null
     out.push({ kostenId: k.id, terminId: p.buchung.id, titel: p.buchung.titel, von: p.buchung.von, sicher: p.sicher && !vergeben.has(p.buchung.id), etappe })
   }
   return out
@@ -130,11 +170,29 @@ export const buchungGilt = (b) => !!b && !b.storniert && !b.umgebucht
 /** Zählt dieser Termin im Reiseplan? Stornierte und umgebuchte stehen nur noch unter Buchungen (V44). */
 export const terminGilt = (e) => !!e && !e.platzhalter && !e.storniert && !e.umgebucht
 
+/**
+ * Die Etappe einer Buchung.
+ *
+ * Erst die selbst gewählte (`etappeId` an den Terminen), dann die am Anreisetag, dann die erste,
+ * in deren Zeitraum die Buchung hineinreicht. Nur das Anfangsdatum zu nehmen ging schief: Ein
+ * Hotel vom 28. bis 30. gehört zu der Etappe, die am 29. beginnt, stand aber ohne Etappe da und
+ * ließ sich nirgends zuordnen.
+ */
+export function etappeDerBuchung(eintraege = [], b) {
+  if (!b) return null
+  const gewaehlt = (b.termine || []).map((e) => e?.etappeId).find(Boolean)
+  if (gewaehlt) return eintraege.find((x) => x.reise.id === gewaehlt)?.reise || null
+  const am = etappeAm(eintraege, b.von)
+  if (am) return am.reise
+  const bis = b.bis || b.von
+  return eintraege.find((x) => x.von <= bis && x.bis >= b.von)?.reise || null
+}
+
 /** Buchungen mit ihren Kosten. Kosten zählen zu der Buchung, deren Termin sie tragen. */
 export function buchungenMitKosten(events = [], vorab = [], eintraege = []) {
   return buendle(events).map((b) => {
     const kosten = vorab.filter((k) => k.terminId && b.ids.includes(k.terminId))
-    return { ...b, kosten, offen: kosten.filter((k) => k.zahlung === 'vorOrt'), etappe: etappeAm(eintraege, b.von)?.reise || null }
+    return { ...b, kosten, offen: kosten.filter((k) => k.zahlung === 'vorOrt'), etappe: etappeDerBuchung(eintraege, b) }
   })
 }
 
