@@ -62,7 +62,9 @@
 
 <style>
   .sb-hg { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, 0.66); }
-  .sb { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(420px, calc(100% - 24px)); max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  /* Mitte dessen, was dem Inhalt gehört: nicht hinter Notch oder Dynamic Island. */
+  .sb { --oben: env(safe-area-inset-top, 0px); --unten: env(safe-area-inset-bottom, 0px); --frei: calc(100dvh - var(--oben) - var(--unten));
+    position: fixed; left: 50%; top: calc(var(--oben) + var(--frei) / 2); z-index: 1001; transform: translate(-50%, -50%); width: min(420px, calc(100% - 24px)); max-height: calc(100vh - 32px); max-height: calc(var(--frei) - 32px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
     padding: 18px; border-radius: 18px; border: 2px solid #c0392b; background: var(--card); color: var(--ink); display: flex; flex-direction: column; gap: 12px; }
   h2 { margin: 0; font-size: calc(21px * var(--schrift, 1)); }
   .sb-wer { display: flex; flex-direction: column; gap: 4px; }

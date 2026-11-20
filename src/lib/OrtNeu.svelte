@@ -248,7 +248,7 @@
 <style>
   .on-hg { position: fixed; inset: 0; background: rgba(20, 14, 8, 0.4); z-index: 120; animation: hg var(--t-med) var(--ease-out); }
   .on {
-    position: fixed; z-index: 121; left: 0; right: 0; bottom: 0; max-height: 92dvh; overflow: auto; overscroll-behavior: contain;
+    position: fixed; z-index: 121; left: 0; right: 0; bottom: 0; max-height: 92vh; max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 10px); overflow: auto; overscroll-behavior: contain;
     background: var(--bg); color: var(--ink); border-radius: 22px 22px 0 0; box-shadow: var(--shadow-float);
     padding: 8px 18px calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 12px;
     animation: hoch var(--t-slow) var(--ease-spring);

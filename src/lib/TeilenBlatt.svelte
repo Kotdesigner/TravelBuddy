@@ -40,7 +40,9 @@
 
 <style>
   .tb-hg { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, 0.6); }
-  .tb { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(380px, calc(100% - 28px)); max-height: calc(100dvh - 40px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  /* Mitte dessen, was dem Inhalt gehört: nicht hinter Notch oder Dynamic Island. */
+  .tb { --oben: env(safe-area-inset-top, 0px); --unten: env(safe-area-inset-bottom, 0px); --frei: calc(100dvh - var(--oben) - var(--unten));
+    position: fixed; left: 50%; top: calc(var(--oben) + var(--frei) / 2); z-index: 1001; transform: translate(-50%, -50%); width: min(380px, calc(100% - 28px)); max-height: calc(100vh - 40px); max-height: calc(var(--frei) - 40px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
     padding: 18px; border-radius: 18px; border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); display: flex; flex-direction: column; gap: 10px; }
   h2 { margin: 0; font-size: calc(19px * var(--schrift, 1)); }
   .tb-name { margin: 0; font-weight: 700; }

@@ -80,7 +80,9 @@
   .ba-knopf::after { content: ''; position: absolute; inset: -7px; }
   .ba-knopf.einladen { background: var(--brand); border-color: var(--brand); }
   .ba-hg { position: fixed; inset: 0; z-index: 900; background: rgba(0,0,0,.55); }
-  .ba { position: fixed; left: 50%; top: 50%; z-index: 901; transform: translate(-50%, -50%); width: min(440px, calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 8px; padding: 18px; border-radius: var(--radius-l); background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+  /* Mitte dessen, was dem Inhalt gehört: nicht hinter Notch oder Dynamic Island. */
+  .ba { --oben: env(safe-area-inset-top, 0px); --unten: env(safe-area-inset-bottom, 0px); --frei: calc(100dvh - var(--oben) - var(--unten));
+    position: fixed; left: 50%; top: calc(var(--oben) + var(--frei) / 2); z-index: 901; transform: translate(-50%, -50%); width: min(440px, calc(100% - 32px)); max-height: calc(100vh - 32px); max-height: calc(var(--frei) - 32px); overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 8px; padding: 18px; border-radius: var(--radius-l); background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
   .ba h2 { margin: 0; font-size: calc(19px * var(--schrift, 1)); }
   .ba p { margin: 0; font-size: calc(14px * var(--schrift, 1)); }
   .ba-name { color: var(--muted); font-weight: 700; }

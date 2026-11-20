@@ -57,6 +57,20 @@ const quelltexte = fs.readdirSync(new URL('../src/lib/', import.meta.url)).filte
 const tote = ['Mehr → Import', 'More → Import', 'unter Mehr, Updates', 'Mehr → Musik „'].filter((x) => quelltexte.includes(x))
 p('Keine Verweise auf alte Wege im Menü', tote.length === 0, tote.join(', '))
 
+{
+  // Gemeldet: Klappte man unter „Mehr“ die Unterpunkte auf, wuchs die Seitenleiste
+  // über das Fenster hinaus. Die letzten Unterpunkte und der ganze Fuß standen darunter, und der
+  // Scrollbalken war unsichtbar. Jetzt scrollen nur die Unterpunkte des offenen Bereichs.
+  p('Seitenleiste: die Leiste selbst scrollt nicht mehr', /\.sl \{[\s\S]{0,160}overflow: hidden/.test(sl))
+  p('Seitenleiste: die Liste scrollt, und nur sie', /\.sl-liste \{ flex: 1 1 auto; min-height: 0; overflow-y: auto/.test(sl))
+  p('Seitenleiste: die fünf Bereiche bleiben stehen, scrollen tun die Unterpunkte', /\.sl-liste > li \{ flex: none; \}/.test(sl) && /\.sl-liste > li\.sl-offen \{ flex: 1 1 auto; min-height: 0/.test(sl) && /\.sl-liste > li\.sl-offen \.sl-unter \{ min-height: 0; overflow-y: auto/.test(sl))
+  p('Seitenleiste: der offene Bereich ist gekennzeichnet', /class:sl-offen=\{ansicht\.tab === b\.id && unterpunkte\[b\.id\]\?\.length\}/.test(sl))
+  p('Seitenleiste: der Fuß steht fest unten', /\.sl-fuss \{ flex: none/.test(sl) && !/\.sl-fuss \{ margin-top: auto/.test(sl))
+  p('Seitenleiste: der Scrollbalken ist auch ohne Maus darüber zu sehen', /\.sl-liste, \.sl-unter \{ scrollbar-width: thin; scrollbar-color: color-mix/.test(sl))
+  p('Seitenleiste: niemand scrollt sie von sich aus', !/scrollIntoView|scrollTop \+=/.test(sl))
+  p('Seitenleiste: im niedrigen Fenster weichen Logo und Schriftzug (Fuß trägt hier mehr)', /@media \(max-height: 700px\) \{ \.sl-logo, \.sl-marke \{ display: none/.test(sl))
+}
+
 if (fehler) { console.log(`\n${fehler} Fehler`); process.exit(1) }
 {
   // V34: Werkseinstellungen klein und grau ganz am Ende, unter Spenden, Speicher und Online-Stand

@@ -33,7 +33,7 @@
   </button>
   <ul class="sl-liste">
     {#each BEREICHE as b (b.id)}
-      <li>
+      <li class:sl-offen={ansicht.tab === b.id && unterpunkte[b.id]?.length}>
         <a href="#/{b.id}" class="sl-b" class:aktiv={ansicht.tab === b.id} aria-current={ansicht.tab === b.id ? 'page' : undefined}
           onclick={(e) => { e.preventDefault(); geh(b.id) }}>{b.label}</a>
         {#if ansicht.tab === b.id && unterpunkte[b.id]?.length}
@@ -67,30 +67,46 @@
   .sl-gruppe { padding: 10px 10px 2px; font-size: calc(11.5px * var(--schrift, 1)); font-weight: 800; color: var(--muted); letter-spacing: 0.3px; }
   .sl-gefahr { color: var(--danger-text) !important; }
   .sl {
-    position: sticky; top: 0; height: 100dvh; overflow: auto; width: 232px; flex: none;
+    position: sticky; top: 0; height: 100dvh; overflow: hidden; width: 232px; flex: none;
     background: var(--flaeche); border-right: 1px solid var(--line); padding: 18px 12px 14px max(12px, env(safe-area-inset-left, 0px));
     display: flex; flex-direction: column; gap: 14px;
   }
-  /* Scrollbalken der Seitenleiste: schmal und unsichtbar, erst sichtbar, wenn die Maus über der Leiste ist
-     (oder die Tastatur darin steht). So stört er nicht, ist aber da, wenn man ihn braucht. */
-  .sl { scrollbar-width: thin; scrollbar-color: transparent transparent; }
-  .sl:hover, .sl:focus-within { scrollbar-color: color-mix(in srgb, var(--muted) 40%, transparent) transparent; }
-  .sl::-webkit-scrollbar { width: 6px; }
-  .sl::-webkit-scrollbar-track { background: transparent; }
-  .sl::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
-  .sl:hover::-webkit-scrollbar-thumb, .sl:focus-within::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 40%, transparent); }
+  /*
+   * Nur die Liste scrollt, Marke oben und Fuß unten stehen fest.
+   *
+   * Vorher scrollte die ganze Leiste. Klappte man unter „Mehr“ die Unterpunkte auf, wurde sie
+   * länger als das Fenster, und die letzten davon standen unsichtbar darunter, zusammen mit
+   * Backup, Handbuch, Design und Einführung. Der Scrollbalken war dazu unsichtbar, solange die
+   * Maus nicht genau über der Leiste stand: Es sah aus, als ließe sich dort nichts mehr antippen.
+   */
+  .sl-liste { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+  /* Die fünf Bereiche bleiben stehen; scrollen tun nur die Unterpunkte des offenen Bereichs.
+     So verliert man beim Aufklappen weder Heute und Plan oben noch den Fuß unten aus dem Blick. */
+  .sl-liste > li { flex: none; }
+  .sl-liste > li.sl-offen { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  .sl-liste > li.sl-offen .sl-unter { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+  /* Scrollbalken der Liste: schmal und leise, aber immer zu sehen, sobald es etwas zu scrollen gibt. */
+  .sl-liste, .sl-unter { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--muted) 28%, transparent) transparent; }
+  .sl:hover .sl-liste, .sl:focus-within .sl-liste, .sl:hover .sl-unter, .sl:focus-within .sl-unter { scrollbar-color: color-mix(in srgb, var(--muted) 55%, transparent) transparent; }
+  .sl-liste::-webkit-scrollbar, .sl-unter::-webkit-scrollbar { width: 6px; }
+  .sl-liste::-webkit-scrollbar-track, .sl-unter::-webkit-scrollbar-track { background: transparent; }
+  .sl-liste::-webkit-scrollbar-thumb, .sl-unter::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 28%, transparent); border-radius: 3px; }
+  .sl:hover .sl-liste::-webkit-scrollbar-thumb, .sl:focus-within .sl-liste::-webkit-scrollbar-thumb,
+  .sl:hover .sl-unter::-webkit-scrollbar-thumb, .sl:focus-within .sl-unter::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 55%, transparent); }
   .sl-marke { font-family: 'Anton', Impact, sans-serif; font-size: calc(30px * var(--schrift, 1)); line-height: 1.1; letter-spacing: 0.6px; color: var(--ink); text-align: center; white-space: nowrap; padding: 4px 0 10px; }
   .sl-marke span { color: var(--brand-text); }
   /* Logo über dem Schriftzug, wie das App-Symbol */
   .sl-logo { display: flex; justify-content: center; margin: 2px 0 -8px; }
   /* iPhone quer: wenig Höhe, dort lieber Platz für die Bereiche */
-  @media (max-height: 520px) { .sl-logo { display: none; } }
+  /* Niedriges Fenster: Logo und Schriftzug weichen, damit die Liste genug Platz behält. Hier eher
+     als in der eigenen App, denn der Fuß trägt zusätzlich Einführung, Testreise und Zurücksetzen. */
+  @media (max-height: 700px) { .sl-logo, .sl-marke { display: none; } }
   .sl-suche {
     display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 10px; border-radius: 10px;
     border: 1px solid var(--line-stark); background: var(--card); color: var(--muted); font-size: calc(14px * var(--schrift, 1)); cursor: pointer; text-align: left;
   }
   .sl-suche kbd { margin-left: auto; font-family: inherit; font-size: calc(12px * var(--schrift, 1)); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; }
-  .sl-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .sl-liste { list-style: none; margin: 0; padding: 0 4px 0 0; display: flex; flex-direction: column; gap: 2px; }
   .sl-b {
     display: flex; align-items: center; min-height: 40px; padding: 0 10px; border-radius: 10px;
     font-size: calc(15px * var(--schrift, 1)); font-weight: 700; color: var(--ink); text-decoration: none;
@@ -101,7 +117,7 @@
   .sl-unter a { display: flex; align-items: center; min-height: 34px; padding: 0 10px; border-radius: 8px; font-size: calc(14px * var(--schrift, 1)); color: var(--muted); text-decoration: none; }
   .sl-unter a:hover { background: var(--flaeche-2); color: var(--ink); }
   .sl-unter a.aktiv { color: var(--brand-text); font-weight: 700; background: var(--card); }
-  .sl-fuss { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
+  .sl-fuss { flex: none; display: flex; flex-direction: column; gap: 10px; }
   .sl-aktionen { display: flex; flex-direction: column; gap: 4px; }
   .sl-aktionen button { min-height: 36px; text-align: left; padding: 0 10px; border: none; background: none; border-radius: 8px; font-size: calc(14px * var(--schrift, 1)); color: var(--ink); cursor: pointer; }
   .sl-aktionen button:hover { background: var(--flaeche-2); }

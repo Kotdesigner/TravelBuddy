@@ -1339,7 +1339,7 @@
     {:else if ansicht.unter === 'funfacts'}
       <FunFacts />
     {:else if ansicht.unter === 'fehler'}
-      <FehlerMelden version="Basic 1.39" build={buildText} />
+      <FehlerMelden version="Basic 1.40" build={buildText} />
     {:else if ansicht.unter === 'backup'}
       <BackupImport onBackup={onExport} onImport={() => importInput.click()} onRueckgaengig={importZurueck} onImportDatei={(f) => onImport({ target: { files: [f], value: '' } })} baueBackup={autoPayload} autoPause={$testreiseAn} />
     {:else if ansicht.unter === 'meldungen'}
@@ -1617,9 +1617,12 @@
   /* Inhalt verblasst kurz vor dem Kopf. Nur ein schmaler Streifen, das Lesen bleibt ungestört. */
   .kopf-fest::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 22px; pointer-events: none; background: linear-gradient(var(--bg), transparent); }
   :global(html[data-ohne-verblassen]) .kopf-fest::after { display: none; }
+  /* Seit iOS 26 liegt über der Statusleiste ein milchiger Streifen. Vier Pixel Luft darunter
+     waren zu wenig: Die Zurück-Taste wirkte angeschnitten und verschwommen. Links und rechts
+     zählt der Ausschnitt mit, der am iPhone und am Android quer an der Seite sitzt. */
   .zurueck-leiste {
     background: var(--bg);
-    padding: calc(env(safe-area-inset-top, 0px) + 4px) 8px 0;
+    padding: max(10px, calc(env(safe-area-inset-top, 0px) + 10px)) max(8px, env(safe-area-inset-right, 0px)) 0 max(8px, env(safe-area-inset-left, 0px));
   }
   .zurueck-leiste + .sk { padding-top: 0; }
   .zurueck-knopf { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 12px 0 4px; border: none; background: none; color: var(--brand-text); font-size: calc(16px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
@@ -1653,8 +1656,8 @@
   @media (max-width: 639px), (max-width: 899px) and (orientation: portrait) {
     .sl-mac { display: none; }
     .bb-mobil { display: contents; }
-    .wrap { padding: 14px 14px calc(96px + env(safe-area-inset-bottom, 0px)); }
-    .sk { padding: 14px 14px 2px; padding-top: max(18px, calc(env(safe-area-inset-top, 0px) + 8px)); }
+    .wrap { padding: 14px max(14px, env(safe-area-inset-right, 0px)) calc(96px + env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)); }
+    .sk { padding: 14px max(14px, env(safe-area-inset-right, 0px)) 2px max(14px, env(safe-area-inset-left, 0px)); padding-top: max(18px, calc(env(safe-area-inset-top, 0px) + 10px)); }
     .sk-titel { font-size: calc(34px * var(--schrift, 1)); }
     .seg-leiste { padding: 8px 14px 2px; scroll-padding: 0 14px; }
     /* Läuft die Leiste über, blendet der rechte Rand weich aus: man sieht, dass es weitergeht */
@@ -1785,8 +1788,9 @@
   /* ---- Zusammenführender Import ---- */
   .imp-hg { position: fixed; inset: 0; background: rgba(20,15,10,0.45); z-index: calc(var(--z-sheet) - 1); }
   .imp {
-    position: fixed; z-index: var(--z-sheet); left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: min(520px, calc(100% - 28px)); max-height: 86vh; max-height: 86dvh; overflow: auto; overscroll-behavior: contain;
+    --oben: env(safe-area-inset-top, 0px); --unten: env(safe-area-inset-bottom, 0px); --frei: calc(100dvh - var(--oben) - var(--unten));
+    position: fixed; z-index: var(--z-sheet); left: 50%; top: calc(var(--oben) + var(--frei) / 2); transform: translate(-50%, -50%);
+    width: min(520px, calc(100% - 28px)); max-height: 86vh; max-height: calc(var(--frei) - 24px); overflow: auto; overscroll-behavior: contain;
     background: var(--card); border: 1px solid var(--line); border-radius: 14px;
     padding: 20px 22px; box-shadow: var(--shadow-float);
   }

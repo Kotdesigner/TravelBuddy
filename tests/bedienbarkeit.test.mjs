@@ -76,5 +76,34 @@ console.log('\n3  Suchfeld unten am iPhone (iOS 26), oben am Mac')
     /querySelectorAll\('\[data-hilfsfeld\]'\)/.test(modal) && /hasAttribute\?\.\('data-hilfsfeld'\)/.test(modal))
 }
 
+console.log('\nNotch und Dynamic Island')
+{
+  // Gemeldet: Das Update-Fenster lag oben hinter der Dynamic Island, und über der Statusleiste
+  // liegt inzwischen ein milchiger Streifen, unter dem alles verschwommen aussieht. Dasselbe gilt
+  // für den Ausschnitt eines Android-Telefons. Regel: Wer sich über das ganze Fenster streckt,
+  // muss den sicheren Bereich kennen.
+  const lies2 = (f) => fs.readFileSync(new URL('../' + f, import.meta.url), 'utf8')
+  const dir = new URL('../src/lib/', import.meta.url)
+  const dateien = ['src/App.svelte', ...fs.readdirSync(dir).filter((f) => f.endsWith('.svelte')).map((f) => 'src/lib/' + f)]
+  const hoch = /max-height:\s*(calc\(\s*100dvh|8[5-9]dvh|9\ddvh)/
+  const ohne = []
+  for (const f of dateien) {
+    for (const block of lies2(f).match(/\{[^{}]*\}/g) || []) {
+      if (!/position:\s*fixed/.test(block) || !hoch.test(block)) continue
+      if (/safe-area-inset-top/.test(block)) continue
+      ohne.push(f.replace('src/lib/', '') + ': ' + block.replace(/\s+/g, ' ').slice(0, 70))
+    }
+  }
+  p('Jedes Fenster, das sich über die ganze Höhe streckt, kennt den sicheren Bereich', !ohne.length, ohne.slice(0, 3).join(' | '))
+  const uh = lies2('src/lib/UpdateHinweis.svelte')
+  p('Das Update-Fenster steht in der Mitte des sicheren Bereichs', /top: calc\(var\(--oben\) \+ var\(--frei\) \/ 2\)/.test(uh) && /--oben: env\(safe-area-inset-top, 0px\)/.test(uh))
+  p('Die Rückfrage ebenso', /top: calc\(var\(--oben\) \+ var\(--frei\) \/ 2\)/.test(lies2('src/lib/DialogHost.svelte')))
+  const app2 = lies2('src/App.svelte')
+  p('Die Zurück-Taste hat Luft unter der Statusleiste', /\.zurueck-leiste \{[\s\S]{0,200}padding: max\(10px, calc\(env\(safe-area-inset-top, 0px\) \+ 10px\)\)/.test(app2))
+  p('Und sie weicht dem Ausschnitt an der Seite aus', /\.zurueck-leiste \{[\s\S]{0,200}max\(8px, env\(safe-area-inset-right, 0px\)\) 0 max\(8px, env\(safe-area-inset-left, 0px\)\)/.test(app2))
+  p('Seitenkopf und Inhalt am Handy auch', /\.sk \{ padding: 14px max\(14px, env\(safe-area-inset-right/.test(app2) && /\.wrap \{ padding: 14px max\(14px, env\(safe-area-inset-right/.test(app2))
+  p('Die Seite rechnet überhaupt mit dem Ausschnitt (viewport-fit)', /viewport-fit=cover/.test(lies2('index.html')))
+}
+
 console.log(`\n${'═'.repeat(46)}\n  ${ok} bestanden · ${bad} gescheitert\n`)
 process.exit(bad ? 1 : 0)

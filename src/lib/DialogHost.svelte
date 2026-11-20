@@ -28,8 +28,10 @@
      ging ins Leere. Vollbild-Sachen wie Notruf oder die Spiele bleiben darüber. */
   .dh-hg { position: fixed; inset: 0; background: rgba(20, 14, 8, 0.42); z-index: 1400; animation: hg var(--t-med) var(--ease-out); }
   .dh {
-    position: fixed; z-index: 1401; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: min(360px, calc(100% - 40px)); max-height: 86vh; max-height: 86dvh; overflow: auto; overscroll-behavior: contain;
+    /* Mitte dessen, was dem Inhalt gehört: nicht hinter Notch oder Dynamic Island. */
+    --oben: env(safe-area-inset-top, 0px); --unten: env(safe-area-inset-bottom, 0px); --frei: calc(100dvh - var(--oben) - var(--unten));
+    position: fixed; z-index: 1401; left: 50%; top: calc(var(--oben) + var(--frei) / 2); transform: translate(-50%, -50%);
+    width: min(360px, calc(100% - 40px)); max-height: 86vh; max-height: calc(var(--frei) - 24px); overflow: auto; overscroll-behavior: contain;
     background: var(--card); color: var(--ink);
     border-radius: var(--radius-l); box-shadow: var(--shadow-float); padding: 22px 20px 16px;
     animation: rein var(--t-med) var(--ease-spring);

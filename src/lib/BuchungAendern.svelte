@@ -256,7 +256,9 @@
   /* Am Handy darf hinter dem Blatt nichts mitscrollen: der Hintergrund nimmt keine Wischgeste an,
      und am Ende der Liste wandert die Geste nicht auf die Seite dahinter (wie bei den anderen Blättern). */
   .ba-hg { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, 0.6); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); touch-action: none; }
-  .ba { position: fixed; left: 50%; top: 50%; z-index: 1001; transform: translate(-50%, -50%); width: min(520px, calc(100% - 24px)); max-height: calc(100dvh - 40px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  /* Mitte dessen, was dem Inhalt gehört: nicht hinter Notch oder Dynamic Island. */
+  .ba { --oben: env(safe-area-inset-top, 0px); --unten: env(safe-area-inset-bottom, 0px); --frei: calc(100dvh - var(--oben) - var(--unten));
+    position: fixed; left: 50%; top: calc(var(--oben) + var(--frei) / 2); z-index: 1001; transform: translate(-50%, -50%); width: min(520px, calc(100% - 24px)); max-height: calc(100vh - 40px); max-height: calc(var(--frei) - 40px); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
     padding: 16px 16px 18px; border-radius: 18px; border: 1px solid var(--line-stark); background: var(--card); color: var(--ink); box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45); }
   .ba-griff { width: 36px; height: 4px; border-radius: 2px; background: var(--line-stark); margin: -4px auto 10px; }
   .ba h2 { margin: 0; font-size: calc(18px * var(--schrift, 1)); }
