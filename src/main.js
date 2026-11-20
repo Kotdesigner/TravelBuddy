@@ -6,6 +6,10 @@ import { beobachteNetz } from './lib/netz-aktivitaet.js'
 import { starteZaehler } from './lib/zaehler.js'
 import App from './App.svelte'
 import { beimSprachwechsel } from './lib/i18n.js'
+import { drehsperre } from './lib/drehsperre.js'
+
+// Am Telefon im Hochformat bleiben (nur die installierte App kann das wirklich sperren)
+drehsperre()
 
 // Die App zoomt nicht als Ganzes. Safari übergeht „user-scalable=no“ im Browser-Tab, deshalb fangen wir
 // die Zwei-Finger-Geste hier ab. Karten und Weltkugeln (Canvas) zoomen weiter mit ihren eigenen Gesten.

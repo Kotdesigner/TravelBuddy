@@ -60,7 +60,7 @@ console.log('\n3  Suchfeld unten am iPhone (iOS 26), oben am Mac')
   const block = (kopf) => { const i = blatt.indexOf(kopf); let tiefe = 0, j = blatt.indexOf('{', i); const start = j
     for (; j < blatt.length; j++) { if (blatt[j] === '{') tiefe++; else if (blatt[j] === '}' && --tiefe === 0) break }
     return blatt.slice(start, j) }
-  const handy = block('@media (max-width: 899px), (max-height: 599px)'), mac = block('@media (min-width: 900px) and (min-height: 600px)')
+  const handy = block('@media (max-width: 767px), (max-height: 599px)'), mac = block('@media (min-width: 768px) and (min-height: 600px)')
   const reihe = Object.fromEntries([...handy.matchAll(/\.(s-[a-z]+) \{ order: (\d+)/g)].map((m) => [m[1], +m[2]]))
   p('iPhone: Suchfeld steht ganz unten (höchste Reihenfolge)', reihe['s-kopf'] === Math.max(...Object.values(reihe)), JSON.stringify(reihe))
   p('iPhone: Treffer über den Etiketten, Etiketten über dem Feld', reihe['s-liste'] < reihe['s-tags'] && reihe['s-tags'] < reihe['s-kopf'])
@@ -80,19 +80,35 @@ console.log('\nHoch und quer')
 {
   const lies2 = (f) => fs.readFileSync(new URL('../' + f, import.meta.url), 'utf8')
   // Gemeldet: Im Querformat eines Telefons stand die Seitenleiste da, aber die Unterpunkte
-  // fehlten. Die Umschaltung hängte an „schmal oder hochkant“, und ein gekipptes Telefon ist
-  // 874 px breit und quer. Jetzt zählen Breite UND Höhe: Seitenleiste erst ab 900×600.
+  // fehlten. Danach stand quer die Leiste unten — auch das gefiel nicht. Jetzt gilt: Am Telefon
+  // ist Querformat nicht vorgesehen (Sperre plus Hinweis), und ab Tablet-Breite steht die Leiste
+  // links. Dazwischen gibt es nichts mehr zu kippen.
   const alle = ['src/App.svelte', 'src/app.css', ...fs.readdirSync(new URL('../src/lib/', import.meta.url)).filter((f) => f.endsWith('.svelte')).map((f) => 'src/lib/' + f)]
   const alt = []
   for (const f of alle) {
-    const t = lies2(f)
-    if (/orientation: (landscape|portrait)\)/.test(t)) alt.push(f.replace('src/lib/', ''))
+    for (const m of (lies2(f).match(/@media[^{]*orientation: (landscape|portrait)\)[^{]*/g) || [])) {
+      // Erlaubt ist genau eine Stelle: der Hinweis „Bitte hochhalten“ am gekippten Telefon
+      if (!/max-height: 480px[\s\S]*pointer: coarse/.test(m)) alt.push(f.replace('src/lib/', '') + ': ' + m.trim())
+    }
   }
-  p('Keine Umschaltung mehr nach Ausrichtung', !alt.length, alt.join(', '))
-  p('Seitenleiste erst ab 900 breit und 600 hoch', /@media \(min-width: 900px\) and \(min-height: 600px\)/.test(lies2('src/App.svelte')))
-  p('Darunter die Leiste unten', /@media \(max-width: 899px\), \(max-height: 599px\)/.test(lies2('src/App.svelte')))
+  p('Keine Umschaltung des Aufbaus nach Ausrichtung', !alt.length, alt.join(' | '))
+
+  const app2 = lies2('src/App.svelte')
+  p('Leiste links ab Tablet-Breite (768 breit, 600 hoch)', /@media \(min-width: 768px\) and \(min-height: 600px\)/.test(app2))
+  p('Darunter die Leiste unten', /@media \(max-width: 767px\), \(max-height: 599px\)/.test(app2))
+  p('Kein 900er-Umschalter mehr übrig', !/\(min-width: 900px\) and \(min-height: 600px\)|\(max-width: 899px\), \(max-height: 599px\)/.test(alle.map(lies2).join('\n')))
   p('Im niedrigen Fenster wird die Leiste unten flacher', /@media \(max-height: 599px\) \{[\s\S]{0,260}flex-direction: row; min-height: 42px/.test(lies2('src/lib/BottomBar.svelte')))
 
+  p('Das gekippte Telefon bekommt den Hinweis „Bitte hochhalten“', /class="dreh-hinweis"/.test(app2) && /Bitte hochhalten/.test(app2))
+  p('Der Hinweis liegt über allem', /\.dreh-hinweis \{[\s\S]{0,200}z-index: 9000/.test(app2))
+  p('Er kommt nur am Telefon, nicht am Tablet', /@media \(orientation: landscape\) and \(max-height: 480px\) and \(pointer: coarse\)/.test(app2))
+  p('Sonst ist er weg', /\.dreh-hinweis \{ display: none; \}/.test(app2))
+  p('Er kennt den Ausschnitt oben und unten', /\.dreh-hinweis \{[\s\S]{0,400}env\(safe-area-inset-top/.test(app2))
+
+  const ds = lies2('src/lib/drehsperre.js')
+  p('Die installierte App sperrt die Ausrichtung', /screen\.orientation\?\.lock\?\.\('portrait'\)/.test(ds))
+  p('Nur Telefone: Finger und kurze Seite unter 500 px', /matchMedia\('\(pointer: coarse\)'\)/.test(ds) && /kurz <= 500/.test(ds))
+  p('Die Sperre wird beim Start gezogen', /import \{ drehsperre \}/.test(lies2('src/main.js')) && /^drehsperre\(\)$/m.test(lies2('src/main.js')))
 }
 
 console.log('\nNotch und Dynamic Island')

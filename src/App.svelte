@@ -1528,6 +1528,17 @@
   <VierSpiel onClose={() => (vierOffen = false)} />
 {/if}
 
+<!-- Hochformat. Am Telefon ist Querformat nicht vorgesehen: Die Leisten, die Blätter und die
+     Karte sind für eine hohe, schmale Fläche gebaut. Gekippt bliebe vom Inhalt ein Streifen.
+     Tablets und Rechner sind nicht gemeint, die haben auch gekippt genug Höhe (siehe Stil unten). -->
+<div class="dreh-hinweis">
+  <div class="dh-innen">
+    <span class="dh-bild" aria-hidden="true">📱</span>
+    <strong>{je('Bitte hochhalten', 'Please hold upright')}</strong>
+    <span>{je('TravelBuddy ist fürs Hochformat gemacht.', 'TravelBuddy is made for portrait.')}</span>
+  </div>
+</div>
+
 <style>
   /* rechts oben neben der Musik: links stehen „Roadtrip“, Datum und Titel */
   .hero > .hero-sos { position: absolute; z-index: 2; top: calc(env(safe-area-inset-top, 0px) + 14px); right: calc(14px + 44px + 10px); display: inline-flex; align-items: center; justify-content: center;
@@ -1613,7 +1624,7 @@
   }
   .kopf-fest { position: sticky; top: 0; z-index: 30; padding-bottom: 8px; background: var(--bg); }
   /* Ohne Untermenü (Mac) bräuchte der Titel sonst Luft zur stehenden Leiste darunter */
-  @media (min-width: 900px) and (min-height: 600px) { .kopf-fest { padding-bottom: 22px; } }
+  @media (min-width: 768px) and (min-height: 600px) { .kopf-fest { padding-bottom: 22px; } }
   /* Inhalt verblasst kurz vor dem Kopf. Nur ein schmaler Streifen, das Lesen bleibt ungestört. */
   .kopf-fest::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 22px; pointer-events: none; background: linear-gradient(var(--bg), transparent); }
   :global(html[data-ohne-verblassen]) .kopf-fest::after { display: none; }
@@ -1627,7 +1638,7 @@
   .zurueck-leiste + .sk { padding-top: 0; }
   .zurueck-knopf { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 12px 0 4px; border: none; background: none; color: var(--brand-text); font-size: calc(16px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
   .zurueck-knopf span { font-size: calc(28px * var(--schrift, 1)); line-height: 1; margin-top: -3px; }
-  @media (min-width: 900px) and (min-height: 600px) { .zurueck-leiste { display: none; } .zurueck-leiste + .sk { padding-top: 26px; } }
+  @media (min-width: 768px) and (min-height: 600px) { .zurueck-leiste { display: none; } .zurueck-leiste + .sk { padding-top: 26px; } }
   .sk-titel { min-height: 44px; display: flex; align-items: center; margin: 0; font-family: 'Anton', Impact, 'Arial Narrow', sans-serif; font-weight: 400; font-size: calc(40px * var(--schrift, 1)); line-height: 1.05; letter-spacing: 0.3px; color: var(--ink); }
   .sk-neu {
     margin-left: auto; min-height: 44px; padding: 0 18px; border-radius: 22px; border: none; cursor: pointer;
@@ -1638,7 +1649,7 @@
     scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-padding: 0 28px;
   }
   /* Am Mac stehen dieselben Unterpunkte schon in der Seitenleiste */
-  @media (min-width: 900px) and (min-height: 600px) { .seg-leiste { display: none; } }
+  @media (min-width: 768px) and (min-height: 600px) { .seg-leiste { display: none; } }
   .seg-leiste::-webkit-scrollbar { display: none; }
   .seg-chip {
     flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 22px;
@@ -1650,10 +1661,10 @@
   .seg-chip.an { background: var(--ink); border-color: var(--ink); color: var(--bg); }
   .heute-zahlen { margin-top: 18px; }
   .wrap > .abschnitt:first-child { margin-top: 8px; }
-  @media (min-width: 900px) and (min-height: 600px) {
+  @media (min-width: 768px) and (min-height: 600px) {
     .hero { padding: 48px 28px 40px; }
   }
-  @media (max-width: 899px), (max-height: 599px) {
+  @media (max-width: 767px), (max-height: 599px) {
     .sl-mac { display: none; }
     .bb-mobil { display: contents; }
     .wrap { padding: 14px max(14px, env(safe-area-inset-right, 0px)) calc(96px + env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)); }
@@ -1822,4 +1833,21 @@
   .app-footer .af-by a, .app-footer .af-name, .mo-del { position: relative; }
   .app-footer .af-by a::after, .app-footer .af-name::after, .mo-del::after { content: ''; position: absolute; inset: -6px 0; }
   .rk-platz { min-height: 420px; }
+
+  /* Der Hinweis liegt über allem, aber nur auf einem gekippten TELEFON:
+     grobe Zeige-Geste (Finger) und quer unter 480 px Höhe. Das höchste Telefon ist
+     gekippt knapp 440 px hoch, das kleinste Tablet 600 px — dazwischen liegt die Grenze.
+     Reines CSS: kein Zustand, der beim Kippen hinterherhinken könnte. */
+  .dreh-hinweis { display: none; }
+  @media (orientation: landscape) and (max-height: 480px) and (pointer: coarse) {
+    .dreh-hinweis {
+      display: grid; place-items: center; position: fixed; inset: 0; z-index: 9000;
+      background: var(--bg); color: var(--ink);
+      padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    }
+    .dh-innen { display: grid; justify-items: center; gap: 6px; text-align: center; }
+    .dh-bild { font-size: calc(40px * var(--schrift, 1)); line-height: 1; }
+    .dh-innen strong { font-size: calc(19px * var(--schrift, 1)); }
+    .dh-innen span:last-child { font-size: calc(14px * var(--schrift, 1)); color: var(--muted); }
+  }
 </style>

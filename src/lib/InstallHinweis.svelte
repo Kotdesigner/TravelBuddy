@@ -162,7 +162,7 @@
     --unten: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 12px 18px var(--unten); display: flex; flex-direction: column; gap: 10px;
     animation: hoch var(--t-slow) var(--ease-spring);
   }
-  @media (min-width: 900px) and (min-height: 600px) {
+  @media (min-width: 768px) and (min-height: 600px) {
     .ih { --unten: 22px; left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 520px; max-height: calc(100dvh - 16px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); border-radius: var(--radius-l); padding: 18px 24px var(--unten); animation: rein var(--t-med) var(--ease-spring); }
   }
   .ih-kopf { display: flex; align-items: center; justify-content: space-between; }
