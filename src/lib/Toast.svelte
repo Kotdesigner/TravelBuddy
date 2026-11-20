@@ -35,7 +35,7 @@
   }
   .toast.ok .t-ikon { background: var(--ok); }
   .toast.fehler .t-ikon { background: var(--danger); }
-  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
+  @media (min-width: 900px) and (min-height: 600px) {
     .toasts { left: auto; right: 24px; transform: none; bottom: 84px; align-items: flex-end; }
   }
 </style>

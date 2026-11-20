@@ -71,7 +71,7 @@
   .fu { position: fixed; z-index: var(--z-bar, 40); left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px));
     bottom: calc(86px + env(safe-area-inset-bottom, 0px)); max-width: 560px; margin: 0 auto; background: var(--card); border: 1px solid var(--line-stark);
     border-radius: var(--radius-l); padding: 12px 14px; box-shadow: var(--shadow-float); animation: fu-rein var(--t-slow, .3s) var(--ease-out, ease-out); }
-  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) { .fu { bottom: 20px; } }
+  @media (min-width: 900px) and (min-height: 600px) { .fu { bottom: 20px; } }
   @keyframes fu-rein { from { transform: translateY(12px); opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .fu { animation: none; } }
   .fu-kopf { display: flex; align-items: baseline; gap: 8px; font-size: calc(15px * var(--schrift, 1)); }

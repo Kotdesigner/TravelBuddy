@@ -1613,7 +1613,7 @@
   }
   .kopf-fest { position: sticky; top: 0; z-index: 30; padding-bottom: 8px; background: var(--bg); }
   /* Ohne Untermenü (Mac) bräuchte der Titel sonst Luft zur stehenden Leiste darunter */
-  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) { .kopf-fest { padding-bottom: 22px; } }
+  @media (min-width: 900px) and (min-height: 600px) { .kopf-fest { padding-bottom: 22px; } }
   /* Inhalt verblasst kurz vor dem Kopf. Nur ein schmaler Streifen, das Lesen bleibt ungestört. */
   .kopf-fest::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 22px; pointer-events: none; background: linear-gradient(var(--bg), transparent); }
   :global(html[data-ohne-verblassen]) .kopf-fest::after { display: none; }
@@ -1627,7 +1627,7 @@
   .zurueck-leiste + .sk { padding-top: 0; }
   .zurueck-knopf { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 12px 0 4px; border: none; background: none; color: var(--brand-text); font-size: calc(16px * var(--schrift, 1)); font-weight: 600; cursor: pointer; }
   .zurueck-knopf span { font-size: calc(28px * var(--schrift, 1)); line-height: 1; margin-top: -3px; }
-  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) { .zurueck-leiste { display: none; } .zurueck-leiste + .sk { padding-top: 26px; } }
+  @media (min-width: 900px) and (min-height: 600px) { .zurueck-leiste { display: none; } .zurueck-leiste + .sk { padding-top: 26px; } }
   .sk-titel { min-height: 44px; display: flex; align-items: center; margin: 0; font-family: 'Anton', Impact, 'Arial Narrow', sans-serif; font-weight: 400; font-size: calc(40px * var(--schrift, 1)); line-height: 1.05; letter-spacing: 0.3px; color: var(--ink); }
   .sk-neu {
     margin-left: auto; min-height: 44px; padding: 0 18px; border-radius: 22px; border: none; cursor: pointer;
@@ -1638,7 +1638,7 @@
     scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-padding: 0 28px;
   }
   /* Am Mac stehen dieselben Unterpunkte schon in der Seitenleiste */
-  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) { .seg-leiste { display: none; } }
+  @media (min-width: 900px) and (min-height: 600px) { .seg-leiste { display: none; } }
   .seg-leiste::-webkit-scrollbar { display: none; }
   .seg-chip {
     flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 22px;
@@ -1650,13 +1650,15 @@
   .seg-chip.an { background: var(--ink); border-color: var(--ink); color: var(--bg); }
   .heute-zahlen { margin-top: 18px; }
   .wrap > .abschnitt:first-child { margin-top: 8px; }
-  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
+  @media (min-width: 900px) and (min-height: 600px) {
     .hero { padding: 48px 28px 40px; }
   }
-  @media (max-width: 639px), (max-width: 899px) and (orientation: portrait) {
+  @media (max-width: 899px), (max-height: 599px) {
     .sl-mac { display: none; }
     .bb-mobil { display: contents; }
     .wrap { padding: 14px max(14px, env(safe-area-inset-right, 0px)) calc(96px + env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)); }
+    /* Niedriges Fenster: Die Leiste unten ist dort flacher, der Inhalt braucht weniger Luft. */
+    @media (max-height: 599px) { .wrap { padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px)); } }
     .sk { padding: 14px max(14px, env(safe-area-inset-right, 0px)) 2px max(14px, env(safe-area-inset-left, 0px)); padding-top: max(18px, calc(env(safe-area-inset-top, 0px) + 10px)); }
     .sk-titel { font-size: calc(34px * var(--schrift, 1)); }
     .seg-leiste { padding: 8px 14px 2px; scroll-padding: 0 14px; }

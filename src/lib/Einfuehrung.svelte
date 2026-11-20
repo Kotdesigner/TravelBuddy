@@ -377,7 +377,7 @@
     --unten: calc(20px + env(safe-area-inset-bottom, 0px)); padding: 14px 20px var(--unten); display: flex; flex-direction: column; gap: 12px;
     animation: hoch var(--t-slow) var(--ease-spring);
   }
-  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) {
+  @media (min-width: 900px) and (min-height: 600px) {
     .ef { --unten: 22px; left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%); width: 520px; max-height: calc(100dvh - 16px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); border-radius: var(--radius-l); padding: 18px 24px var(--unten); animation: rein var(--t-med) var(--ease-spring); }
   }
   .ef-kopf { display: flex; align-items: center; justify-content: space-between; }
@@ -426,7 +426,7 @@
     background: var(--brand); color: #fff; box-shadow: var(--shadow-float); max-width: calc(100vw - 32px);
     animation: hochMitte var(--t-slow) var(--ease-spring);
   }
-  @media (min-width: 900px), (orientation: landscape) and (min-width: 640px) { .ef-weiter { bottom: 24px; } }
+  @media (min-width: 900px) and (min-height: 600px) { .ef-weiter { bottom: 24px; } }
   .ef-weiter button { border: none; background: none; color: inherit; cursor: pointer; }
   .ef-weiter-los { min-height: 44px; padding: 0 14px; font-size: calc(15px * var(--schrift, 1)); font-weight: 700; white-space: nowrap; }
   .ef-weiter-los small { opacity: 0.8; font-weight: 600; margin-left: 4px; font-size: calc(13px * var(--schrift, 1)); }

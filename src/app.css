@@ -293,7 +293,7 @@ input[type='checkbox'], input[type='radio'] { accent-color: var(--brand); width:
 
 /* V4: Am iPhone zoomt Safari in jedes Feld mit Schrift unter 16 px hinein und bleibt dort
    stehen. Bis V3 betraf das fast alle Felder (13 px), nur die Suche war schon angepasst. */
-@media (max-width: 639px), (max-width: 899px) and (orientation: portrait) {
+@media (max-width: 899px), (max-height: 599px) {
   input:not([type='checkbox']):not([type='radio']):not([type='range']), select, textarea { font-size: max(16px, calc(16px * var(--schrift, 1))) !important; }
 }   /* 18 → 22 px (Tippfläche) */
 

@@ -187,6 +187,16 @@
     color: var(--muted); transition: color var(--t-med) var(--ease-out), transform var(--t-feder) var(--ease-federnd);
   }
   .tab.aktiv { color: var(--brand-text); }
+  /*
+   * Niedriges Fenster, also ein Telefon im Querformat: Symbol und Text stehen nebeneinander
+   * statt untereinander, die Leiste wird dadurch 50 statt 66 px hoch. Genauso schiebt iOS seine
+   * Tab-Leiste im Querformat zusammen.
+   */
+  @media (max-height: 599px) {
+    .tabs { padding: 3px; border-radius: 24px; }
+    .tab { flex-direction: row; min-height: 42px; gap: 7px; padding: 4px 8px; border-radius: 21px; }
+    .such-knopf { width: 48px; height: 48px; }
+  }
   .tab svg { width: 24px; height: 24px; }
   /* Beschriftung der Leiste wächst nicht mit (wie bei iOS): sonst stoßen fünf Wörter aneinander. Kleiner geht. */
   .tab .lbl { font-size: min(11px, calc(11px * var(--schrift, 1))); font-weight: 700; letter-spacing: 0.01em; }

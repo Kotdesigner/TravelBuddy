@@ -33,7 +33,7 @@
   </button>
   <ul class="sl-liste">
     {#each BEREICHE as b (b.id)}
-      <li class:sl-offen={ansicht.tab === b.id && unterpunkte[b.id]?.length}>
+      <li>
         <a href="#/{b.id}" class="sl-b" class:aktiv={ansicht.tab === b.id} aria-current={ansicht.tab === b.id ? 'page' : undefined}
           onclick={(e) => { e.preventDefault(); geh(b.id) }}>{b.label}</a>
         {#if ansicht.tab === b.id && unterpunkte[b.id]?.length}
@@ -80,19 +80,20 @@
    * Maus nicht genau über der Leiste stand: Es sah aus, als ließe sich dort nichts mehr antippen.
    */
   .sl-liste { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-  /* Die fünf Bereiche bleiben stehen; scrollen tun nur die Unterpunkte des offenen Bereichs.
-     So verliert man beim Aufklappen weder Heute und Plan oben noch den Fuß unten aus dem Blick. */
-  .sl-liste > li { flex: none; }
-  .sl-liste > li.sl-offen { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
-  .sl-liste > li.sl-offen .sl-unter { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+  /*
+   * Zweimal versucht, die fünf Bereiche festzuhalten und nur die Unterpunkte scrollen zu lassen,
+   * zweimal zurückgenommen. Erst schob es Heute und Plan oben aus der Liste, dann fiel der offene
+   * Bereich im Querformat eines Telefons auf null zusammen: Die Unterpunkte waren im Baum, aber
+   * nicht zu sehen. Die Leiste ist je nach Gerät zwischen 400 und 1000 px hoch, da geht die
+   * Rechnung nicht immer auf. Es scrollt deshalb wieder die ganze Liste, in einem Stück.
+   */
   /* Scrollbalken der Liste: schmal und leise, aber immer zu sehen, sobald es etwas zu scrollen gibt. */
-  .sl-liste, .sl-unter { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--muted) 28%, transparent) transparent; }
-  .sl:hover .sl-liste, .sl:focus-within .sl-liste, .sl:hover .sl-unter, .sl:focus-within .sl-unter { scrollbar-color: color-mix(in srgb, var(--muted) 55%, transparent) transparent; }
-  .sl-liste::-webkit-scrollbar, .sl-unter::-webkit-scrollbar { width: 6px; }
-  .sl-liste::-webkit-scrollbar-track, .sl-unter::-webkit-scrollbar-track { background: transparent; }
-  .sl-liste::-webkit-scrollbar-thumb, .sl-unter::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 28%, transparent); border-radius: 3px; }
-  .sl:hover .sl-liste::-webkit-scrollbar-thumb, .sl:focus-within .sl-liste::-webkit-scrollbar-thumb,
-  .sl:hover .sl-unter::-webkit-scrollbar-thumb, .sl:focus-within .sl-unter::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 55%, transparent); }
+  .sl-liste { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--muted) 28%, transparent) transparent; }
+  .sl:hover .sl-liste, .sl:focus-within .sl-liste { scrollbar-color: color-mix(in srgb, var(--muted) 55%, transparent) transparent; }
+  .sl-liste::-webkit-scrollbar { width: 6px; }
+  .sl-liste::-webkit-scrollbar-track { background: transparent; }
+  .sl-liste::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 28%, transparent); border-radius: 3px; }
+  .sl:hover .sl-liste::-webkit-scrollbar-thumb, .sl:focus-within .sl-liste::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 55%, transparent); }
   .sl-marke { font-family: 'Anton', Impact, sans-serif; font-size: calc(30px * var(--schrift, 1)); line-height: 1.1; letter-spacing: 0.6px; color: var(--ink); text-align: center; white-space: nowrap; padding: 4px 0 10px; }
   .sl-marke span { color: var(--brand-text); }
   /* Logo über dem Schriftzug, wie das App-Symbol */

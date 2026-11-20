@@ -60,7 +60,7 @@ console.log('\n3  Suchfeld unten am iPhone (iOS 26), oben am Mac')
   const block = (kopf) => { const i = blatt.indexOf(kopf); let tiefe = 0, j = blatt.indexOf('{', i); const start = j
     for (; j < blatt.length; j++) { if (blatt[j] === '{') tiefe++; else if (blatt[j] === '}' && --tiefe === 0) break }
     return blatt.slice(start, j) }
-  const handy = block('@media (max-width: 639px), (max-width: 899px) and (orientation: portrait)'), mac = block('@media (min-width: 900px), (orientation: landscape) and (min-width: 640px)')
+  const handy = block('@media (max-width: 899px), (max-height: 599px)'), mac = block('@media (min-width: 900px) and (min-height: 600px)')
   const reihe = Object.fromEntries([...handy.matchAll(/\.(s-[a-z]+) \{ order: (\d+)/g)].map((m) => [m[1], +m[2]]))
   p('iPhone: Suchfeld steht ganz unten (höchste Reihenfolge)', reihe['s-kopf'] === Math.max(...Object.values(reihe)), JSON.stringify(reihe))
   p('iPhone: Treffer über den Etiketten, Etiketten über dem Feld', reihe['s-liste'] < reihe['s-tags'] && reihe['s-tags'] < reihe['s-kopf'])
@@ -74,6 +74,25 @@ console.log('\n3  Suchfeld unten am iPhone (iOS 26), oben am Mac')
     /data-hilfsfeld/.test(leiste) && /data-dialog-hg/.test(leiste) && /font-size:16px/.test(leiste))
   p('Dialog räumt das Hilfsfeld nach der Fokus-Übergabe weg und springt nie dorthin zurück',
     /querySelectorAll\('\[data-hilfsfeld\]'\)/.test(modal) && /hasAttribute\?\.\('data-hilfsfeld'\)/.test(modal))
+}
+
+console.log('\nHoch und quer')
+{
+  const lies2 = (f) => fs.readFileSync(new URL('../' + f, import.meta.url), 'utf8')
+  // Gemeldet: Im Querformat eines Telefons stand die Seitenleiste da, aber die Unterpunkte
+  // fehlten. Die Umschaltung hängte an „schmal oder hochkant“, und ein gekipptes Telefon ist
+  // 874 px breit und quer. Jetzt zählen Breite UND Höhe: Seitenleiste erst ab 900×600.
+  const alle = ['src/App.svelte', 'src/app.css', ...fs.readdirSync(new URL('../src/lib/', import.meta.url)).filter((f) => f.endsWith('.svelte')).map((f) => 'src/lib/' + f)]
+  const alt = []
+  for (const f of alle) {
+    const t = lies2(f)
+    if (/orientation: (landscape|portrait)\)/.test(t)) alt.push(f.replace('src/lib/', ''))
+  }
+  p('Keine Umschaltung mehr nach Ausrichtung', !alt.length, alt.join(', '))
+  p('Seitenleiste erst ab 900 breit und 600 hoch', /@media \(min-width: 900px\) and \(min-height: 600px\)/.test(lies2('src/App.svelte')))
+  p('Darunter die Leiste unten', /@media \(max-width: 899px\), \(max-height: 599px\)/.test(lies2('src/App.svelte')))
+  p('Im niedrigen Fenster wird die Leiste unten flacher', /@media \(max-height: 599px\) \{[\s\S]{0,260}flex-direction: row; min-height: 42px/.test(lies2('src/lib/BottomBar.svelte')))
+
 }
 
 console.log('\nNotch und Dynamic Island')
