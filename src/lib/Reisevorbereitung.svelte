@@ -887,7 +887,9 @@
   .bu-priv-z { display: flex; justify-content: space-between; gap: 10px; font-size: calc(12px * var(--schrift, 1)); flex-wrap: wrap; text-decoration: none; color: var(--ink); padding: 4px 0; }
   .bu-priv-z:active { opacity: 0.6; }
   .bu-pfad { font-size: calc(12px * var(--schrift, 1)); color: var(--muted); font-family: ui-monospace, monospace; }
-  .b-kopf h3 { margin: 0; font-size: calc(15px * var(--schrift, 1)); font-weight: 800; color: var(--brand-text); }
+  /* Der Titel bricht nicht mehr mitten im Wort um („Buchung / en“). Platz nimmt sich zuerst er,
+     die Zahlen daneben weichen und kürzen sich mit drei Punkten. */
+  .b-kopf h3 { margin: 0; flex: none; white-space: nowrap; font-size: calc(15px * var(--schrift, 1)); font-weight: 800; color: var(--brand-text); }
   .fortschritt { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); }
   .neu { font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; min-height: 36px; padding: 6px 12px; border: 1px solid #2f7a63; background: #2f7a63; color: #fff; border-radius: 8px; cursor: pointer; }
   .bar { height: 8px; background: var(--flaeche-2); border-radius: 5px; overflow: hidden; margin-bottom: 12px; }
@@ -960,6 +962,7 @@
   }
   .b-pfeil { color: var(--muted); font-size: calc(12px * var(--schrift, 1)); flex-shrink: 0; }
   .b-summe {
+    flex: 1 1 auto; min-width: 0;
     font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
