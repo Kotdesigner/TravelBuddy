@@ -129,6 +129,8 @@
 
   <p class="ag-wo" aria-live="polite">
     {#if !gueltigesDatum(datum)}{je('Bitte ein Datum wählen.', 'Please pick a date.')}
+    <!-- Sonst steht man vor einem ausgefüllten Formular und einem grauen Knopf, ohne zu wissen warum -->
+    {:else if betrag.trim() && !betragVon(betrag)}{je('Diesen Betrag kann ich nicht lesen. Zum Beispiel 1234,56.', 'I cannot read this amount. For example 1234.56.')}
     {:else if vorab}{je(`📍 ${mitWochentag(datum)} liegt vor der Reise. Die Ausgabe zählt zu den Ausgaben vorab (Reisevorbereitung).`, `📍 ${mitWochentag(datum)} is before the trip. It counts as an expense before the trip (trip preparation).`)}
     {:else if zeitraumFehlt}{je('Bitte ein Enddatum nach dem ersten Tag wählen.', 'Please pick an end date after the first day.')}
     {:else if mehrereTage}{je(`📍 ${bereich(datum, bis)}: ${tage} Tage im Logbuch, je ${teile.length ? dezimal(teile[0], 2) : '…'} ${waehrung}${teile.length && teile.at(-1) !== teile[0] ? ' (gerundet, zusammen genau der Betrag)' : ''}.`, `📍 ${bereich(datum, bis)}: ${tage} days in the logbook, ${teile.length ? dezimal(teile[0], 2) : '…'} ${waehrung} each${teile.length && teile.at(-1) !== teile[0] ? ' (rounded, adds up to the amount)' : ''}.`)}

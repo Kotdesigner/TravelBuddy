@@ -3,6 +3,10 @@
 // Firefox). Solche Rohmeldungen sollen nie unübersetzt in der Oberfläche landen.
 import { t } from './i18n.js'
 const NETZ = /failed to fetch|load failed|networkerror|network request failed|network error|err_internet|err_network/i
+// Grafik: Die Karte braucht WebGL. Fehlt es (altes Gerät, abgeschaltete Beschleunigung, manche
+// Browser mit strengem Datenschutz), wirft die Kartenbibliothek einen technischen Brocken.
+// Beim Prüfdurchgang zu V45 stand der als JSON mitten auf der Kartenseite.
+const GRAFIK = /webgl|webgl2|gpu|graphics context|context lost|failifmajorperformancecaveat/i
 
 export function fehlerText(e, rueckfall = t('Das hat nicht geklappt.')) {
   const m = String(e?.message || e || '')
@@ -12,5 +16,9 @@ export function fehlerText(e, rueckfall = t('Das hat nicht geklappt.')) {
       ? t('Gerade offline. Das holt die App nach, sobald du wieder Netz hast.')
       : t('Der Dienst ist gerade nicht erreichbar. Später noch einmal versuchen.')
   }
+  if (GRAFIK.test(m)) return t('Die Karte braucht eine Grafikbeschleunigung, die dieses Gerät gerade nicht anbietet. Plan, Orte und Listen gehen weiter.')
+  // Was wie Technik aussieht, gehört nicht auf den Bildschirm: JSON-Brocken, Stapelspuren,
+  // ellenlange Meldungen. Die Einzelheiten stehen weiter in der Konsole.
+  if (/^[[{<]/.test(m.trim()) || m.length > 160 || /\n\s+at /.test(m)) return rueckfall
   return m || rueckfall
 }

@@ -9,7 +9,7 @@ import { haengeBelegeAn, nimmBelegAb, eigeneBelegeUebernehmen, belegPfad } from 
 import { musikFuerBackup, musikAusBackup } from './musik/speicher.js'
 import { datiereAbschnitte } from './abschnitte.js'
 import { heileListe, heileOrtDaten, heileBuchungen } from './heilen.js'
-import { ohneVerwaisteStopps } from './buchung.js'
+import { ohneVerwaisteStopps, etappeDerBuchung, buendle } from './buchung.js'
 
 const DB_NAME = 'wa-plan'
 const STORE = 'kv'
@@ -1104,6 +1104,36 @@ export function stoppsNachziehen(geloescht = []) {
   return weg
 }
 
+/** Arten, die als Ort in der Etappe stehen — so legt der Kalender-Import sie an. */
+const WOHNT_KAT = new Set(['hotel', 'stay', 'city'])
+
+/**
+ * Die neue Unterkunft als Ort in ihre Etappe schreiben, so wie der Kalender-Import es täte.
+ *
+ * V45 nahm beim Umbuchen den Ort der alten Unterkunft aus der Etappe, legte für die neue aber
+ * keinen an: Die Etappe hatte danach einen Ort weniger, und für die Nacht stand kein Punkt auf
+ * der Karte (Prüfbericht V45, 3.2). Koordinaten stehen hier noch nicht drin — die holt die App
+ * selbst nach, genau wie bei importierten Orten („Orte ohne Kartenpunkt“ im Plan).
+ *
+ * Gibt 1 zurück, wenn ein Ort dazugekommen ist.
+ */
+export function stoppFuerBuchung(termine = []) {
+  const ein = (termine || []).find((e) => WOHNT_KAT.has(e?.kat) && !/check-?out/i.test(e?.sub || ''))
+  const name = String(ein?.titel || '').trim()
+  if (!name) return 0
+  const et = etappeDerBuchung(etappenMitDatum(get(reisen) || [], get(gesamtStart)), buendle(termine)[0])
+  if (!et) return 0
+  let dazu = 0
+  reisen.update((rs) => rs.map((r) => {
+    if (r.id !== et.id) return r
+    const stops = r.stops || []
+    if (stops.some((st) => String(st?.name || '').trim() === name)) return r
+    dazu = 1
+    return stempeln({ ...r, stops: [...stops, { name, lat: null, lon: null, img: null }] })
+  }))
+  return dazu
+}
+
 /** Die Termine einer Buchung, so wie sie gerade gespeichert sind. */
 const termineVon = (ids) => { const m = new Set(Array.isArray(ids) ? ids : [ids]); return (get(buchungen)?.events || []).filter((e) => m.has(e.id)) }
 
@@ -1142,6 +1172,8 @@ export function ersetzeBuchung(ids, neueTermine = [], { refUebernehmen = true, b
   const neuId = fertig[0].id || (get(buchungen)?.events || []).find((e) => e.gruppe === gruppe)?.id || null
   aendereBuchung([...alteIds], { umgebucht: new Date().toISOString(), ersetztDurch: neuId })
   stoppsNachziehen()
+  // Der alte Ort ist jetzt weg — der neue muss hinein, sonst fehlt die Nacht auf der Karte.
+  try { stoppFuerBuchung(fertig) } catch (e) { console.warn('Neuer Ort nicht eingetragen', e) }
   // Kosten der alten Buchung zeigen weiter auf den alten Termin: sie gehören zur alten Zahlung.
   // Ob von dem alten Ticket etwas zurückkommt, weiß nur die Airline. Die Ausgabe steht darum ab
   // jetzt unter „Erstattung offen“, genau wie nach einer Stornierung. Sonst zählt das alte Ticket

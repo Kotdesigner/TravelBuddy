@@ -12,7 +12,10 @@ p('Keine Chip-Reihe auf der Seite (wie Handbuch, Design)', /'design', 'backup'(,
 p('iPhone-Blatt: ein Knopf statt Backup und Import', /sheetLink\('backup'\)/.test(bar) && !/sheetAktion\(onBackup\)|sheetAktion\(onImport\)/.test(bar))
 p('Mac-Seitenleiste: ein Knopf statt zwei', /onclick=\{onBackupImport\}/.test(sl) && !/onclick=\{onBackup\}|onclick=\{onImport\}/.test(sl) && /onBackupImport=\{\(\) => geh\('mehr\/backup'\)\}/.test(app))
 p('Erklärt Sichern, Importieren, Abgleichen, Wann', ['Backup sichern', 'Backup importieren', 'Zwischen Geräten abgleichen', 'Wann sichern?'].every((x) => bi.includes(x)))
-p('Sagt, was nicht in der Datei ist', /Nicht in der Datei: Tickets und Ausweise, Fotos fürs Tagebuch/.test(bi))
+// Beim Prüfdurchgang zu V45: Der Satz sagte „Nicht in der Datei: Tickets und Ausweise" — die ANGABEN zu den
+// Papieren (Art, Nummer, Gültigkeit) liegen aber sehr wohl im Backup, nur die Dateien nicht.
+p('Sagt, welche Dokumente nicht in der Datei sind', /Nicht in der Datei: die Dokumente selbst/.test(bi))
+p('Und sagt ehrlich, dass die Angaben zu den Papieren mitkommen', /Angaben zu den Papieren/.test(bi))
 p('Zusammenführen löscht nichts, Ersetzen übernimmt ganz', /„Zusammenführen“ ergänzt nur und löscht nichts/.test(bi) && /„Ersetzen“ übernimmt die Datei ganz/.test(bi))
 p('Knöpfe: sichern, importieren, rückgängig', /onclick=\{onBackup\}/.test(bi) && /onclick=\{onImport\}/.test(bi) && /onRueckgaengig && \$schnappschuss/.test(bi))
 p('Zeigt letztes Backup und warnt nach 7 Tagen', /\$syncZeiten\.gesichert/.test(bi) && /alt >= 7/.test(bi))

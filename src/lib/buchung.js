@@ -85,6 +85,16 @@ export function buendle(events = []) {
 
 /** Arten, die beim Kalender-Import einen Stopp in der Etappe angelegt haben (reisekalender.js). */
 const WOHNT = new Set(['hotel', 'stay', 'city'])
+/**
+ * Arten, deren Wegfall einen Stopp wieder mitnimmt — bewusst OHNE Städte.
+ *
+ * Der Abgleich läuft über den Namen. Ein Hotelname wie „Zleep Hotel" steht nirgends sonst, ein
+ * Stadtname wie „Cairns" dagegen schnell auch in der eigenen Planung. Mit 'city' in dieser Menge
+ * riss eine stornierte Stadt den selbst eingeplanten Stopp samt Koordinaten und Bild mit sich
+ * (Prüfbericht V45, 3.3). Eine stehengebliebene Stadt stört niemanden, ein verschwundener
+ * eigener Ort schon.
+ */
+const RAEUMT = new Set(['hotel', 'stay'])
 const stoppName = (e) => String(e?.titel || '').trim()
 
 /**
@@ -101,8 +111,8 @@ const stoppName = (e) => String(e?.titel || '').trim()
  * @param geloescht  Termine, die gerade ganz verschwunden sind
  */
 export function verwaisteStopps(events = [], geloescht = []) {
-  const raus = new Set([...events.filter((e) => WOHNT.has(e?.kat) && (e.storniert || e.umgebucht)),
-    ...geloescht.filter((e) => WOHNT.has(e?.kat))].map(stoppName).filter(Boolean))
+  const raus = new Set([...events.filter((e) => RAEUMT.has(e?.kat) && (e.storniert || e.umgebucht)),
+    ...geloescht.filter((e) => RAEUMT.has(e?.kat))].map(stoppName).filter(Boolean))
   if (!raus.size) return raus
   const fort = new Set(geloescht.map((e) => e?.id))
   for (const e of events) {

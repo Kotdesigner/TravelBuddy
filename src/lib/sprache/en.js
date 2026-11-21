@@ -1036,6 +1036,7 @@ export default {
  "Der Computer denkt …": "The computer is thinking …",
  "Der Dienst hat zu lange gebraucht. Später noch einmal versuchen.": "The service took too long. Try again later.",
  "Der Dienst ist gerade nicht erreichbar. Später noch einmal versuchen.": "The service can't be reached right now. Try again later.",
+ "Die Karte braucht eine Grafikbeschleunigung, die dieses Gerät gerade nicht anbietet. Plan, Orte und Listen gehen weiter.": "The map needs graphics acceleration that this device does not offer right now. Plan, places and lists keep working.",
  "Der Film ließ sich nicht vorbereiten. ": "The film couldn't be prepared. ",
  "Der Notfall-Code ist nicht vollständig.": "The emergency code is incomplete.",
  "Die PIN braucht 6 bis 12 Ziffern.": "The PIN needs 6 to 12 digits.",

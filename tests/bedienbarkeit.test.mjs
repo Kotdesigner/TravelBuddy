@@ -7,6 +7,8 @@ import { sucheOrte, passtOrt, rangFuer } from '../src/lib/suche.js'
 import { schriftAuf, kontrast } from '../src/lib/kontrast.js'
 import { STUFE_FARBE } from '../src/lib/gefahren.js'
 import fs from 'node:fs'
+import { betragVon } from '../src/lib/kosten.js'
+import { ohneVerwaisteStopps } from '../src/lib/buchung.js'
 
 let ok = 0, bad = 0
 const p = (name, bed, zusatz = '') => {
@@ -109,6 +111,22 @@ console.log('\nHoch und quer')
   p('Die installierte App sperrt die Ausrichtung', /screen\.orientation\?\.lock\?\.\('portrait'\)/.test(ds))
   p('Nur Telefone: Finger und kurze Seite unter 500 px', /matchMedia\('\(pointer: coarse\)'\)/.test(ds) && /kurz <= 500/.test(ds))
   p('Die Sperre wird beim Start gezogen', /import \{ drehsperre \}/.test(lies2('src/main.js')) && /^drehsperre\(\)$/m.test(lies2('src/main.js')))
+}
+
+console.log('\nBefunde aus dem Prüfbericht zu V45')
+{
+  const lies3 = (f) => fs.readFileSync(new URL('../' + f, import.meta.url), 'utf8')
+  const geld = [['12,50', 12.5], ['1.234,56', 1234.56], ['1234,56 €', 1234.56], ['412,80', 412.8], ['abc', 0], ['', 0]]
+  const falsch = geld.filter(([ein, soll]) => betragVon(ein) !== soll).map(([ein, soll]) => `${JSON.stringify(ein)} → ${betragVon(ein)} statt ${soll}`)
+  p('Beträge werden gelesen, wie Menschen sie schreiben', !falsch.length, falsch.join(' | '))
+  p('Das Ausgabe-Blatt sagt, wenn es den Betrag nicht lesen kann', /betrag\.trim\(\) && !betragVon\(betrag\)/.test(lies3('src/lib/AusgabeNeu.svelte')))
+  const meine = [{ id: 'e9', name: 'Ost', stops: [{ name: 'Cairns', lat: -16.9, lon: 145.7 }, { name: 'Haus am Meer', lat: null, lon: null }] }]
+  p('Eine stornierte Stadt nimmt keinen eigenen Ort mit',
+    ohneVerwaisteStopps(meine, [{ id: 'c1', kat: 'city', datum: '2037-05-05', titel: 'Cairns', storniert: '2037-05-01T00:00:00Z' }])[0].stops.length === 2)
+  p('Eine stornierte Unterkunft nimmt ihren Ort weiterhin mit',
+    ohneVerwaisteStopps(meine, [{ id: 'h1', kat: 'hotel', datum: '2037-05-05', titel: 'Haus am Meer', storniert: '2037-05-01T00:00:00Z' }])[0].stops.length === 1)
+  p('Umbuchen trägt den neuen Ort in die Etappe ein', /stoppFuerBuchung\(fertig\)/.test(lies3('src/lib/userdata.js')) && /export function stoppFuerBuchung/.test(lies3('src/lib/userdata.js')))
+  p('Technische Brocken kommen nicht auf den Bildschirm', /GRAFIK\.test\(m\)/.test(lies3('src/lib/fehlertext.js')) && /m\.length > 160/.test(lies3('src/lib/fehlertext.js')))
 }
 
 console.log('\nNotch und Dynamic Island')

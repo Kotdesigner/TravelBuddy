@@ -12,6 +12,9 @@ import { t, jeSprache } from './i18n.js'
 import { kursFuer, inBeide } from './fx.js'
 import { rundeAufSumme } from './runden.js'
 import { etappeAm, etappeVonEintrag, eintragTage } from './plan.js'
+// Dieselbe Zahlenregel wie beim Lesen einer Bestätigungsmail: Kommen Punkt und Komma vor,
+// ist der letzte das Dezimaltrennzeichen. Zwei Regeln für dieselbe Sache wären eine zu viel.
+import { zahlAus } from './buchung-erkennen.js'
 
 // Reihenfolge wie in der Auswahl: was unterwegs am häufigsten vorkommt, zuerst
 export const KOSTEN_KATEGORIEN = jeSprache(() => ([
@@ -55,9 +58,17 @@ export const KOSTEN_CLUSTER = jeSprache(() => ([
 ]))
 export const clusterVon = (kat) => Object.keys(CLUSTER_KATS).find((c) => CLUSTER_KATS[c].includes(kat)) || 'erleben'
 
-/** „12,50“ und „12.50“ → 12.5, alles andere → 0. */
+/**
+ * Ein getippter Betrag als Zahl. 0, wenn nichts Brauchbares dasteht.
+ *
+ * Versteht, wie Menschen Beträge schreiben: „12,50“, „12.50“, „1.234,56“, „1 234,56“, „412,80 €“.
+ * Bis V45 wurde nur das erste Komma ersetzt — „1.234,56“ war damit 0, der Knopf blieb grau, und
+ * die App sagte nicht, warum (Prüfbericht V45, 3.1). Vierstellige Beträge sind bei Flug, Camper
+ * und Versicherung der Normalfall.
+ */
 export function betragVon(w) {
-  const n = Number(String(w ?? '').trim().replace(',', '.'))
+  // Währungszeichen und Buchstaben weg, Zahl, Trennzeichen und Vorzeichen bleiben
+  const n = zahlAus(String(w ?? '').replace(/[^\d.,'\s-]/g, ''))
   return Number.isFinite(n) && n > 0 ? n : 0
 }
 const cent = (n) => Math.round(n * 100) / 100
