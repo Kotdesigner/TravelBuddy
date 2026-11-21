@@ -89,9 +89,15 @@ export function sortierbar(node, optionen = {}) {
   }
 }
 
-/** Element von Position a nach b verschieben (neue Liste). */
+/** Element von Position a nach b verschieben (neue Liste).
+ *
+ *  Greift eine der beiden Stellen ins Leere, bleibt die Liste, wie sie war. Ohne diese Zeile
+ *  schob splice ein `undefined` hinein: aus einer Liste mit zwei Stopps wurden drei, einer davon
+ *  leer. Beim Ziehen kann das passieren, wenn sich die Liste zwischendurch ändert
+ *  (gefunden beim Prüfdurchgang zu V45). */
 export function verschiebe(liste, a, b) {
   const l = [...liste]
+  if (!(a >= 0 && a < l.length) || !(b >= 0 && b < l.length)) return l
   const [x] = l.splice(a, 1)
   l.splice(b, 0, x)
   return l
