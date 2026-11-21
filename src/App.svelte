@@ -69,7 +69,7 @@
   import Runterziehen from './lib/Runterziehen.svelte'
   import { bescheidBlatt, personBlatt, sosBlatt, kurzbefehlBlatt } from './lib/bescheid.js'
   import { laden as meldungenLaden, sendeWartende, nachsehen as meldungenNachsehen, meldungen, OFFIZIELL } from './lib/meldungen.js'
-  import { PAYPAL } from './lib/spenden.js'
+  import { KOFI } from './lib/spenden.js'
   import { meldenBlatt, meldungAuf } from './lib/meldungen-text.js'
   import { etappenMitDatum, planUeberblick, reiseZeitraum, ymd as ymdPlan, ohneDoppelteStrecken } from './lib/plan.js'
   import Quiz from './lib/Quiz.svelte'
@@ -1395,7 +1395,7 @@
 <footer class="app-footer">
 <div class="af-wer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span></div>
 <div class="af-reihe af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener" title={je('Die Fassung im Browser, ohne Installation', 'The browser version, no install needed')}>Online</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></div>
-<span class="af-kaffee-text">{je('TravelBuddy ist kostenlos und ohne Werbung. Wenn sie dir gefällt, freue ich mich über einen Kaffee.', 'TravelBuddy is free and has no ads. If you like it, a coffee is always welcome.')}</span><a class="af-kaffee" href={PAYPAL} target="_blank" rel="noopener noreferrer" title={je('Freiwillig, über PayPal. Die App überträgt dabei nichts.', 'Voluntary, via PayPal. The app transmits nothing.')}><span aria-hidden="true">☕</span> {je('Kaffee spendieren', 'Tip for a coffee')}</a>
+<span class="af-kaffee-text">{je('TravelBuddy ist kostenlos und ohne Werbung. Wenn sie dir gefällt, freue ich mich über einen Kaffee.', 'TravelBuddy is free and has no ads. If you like it, a coffee is always welcome.')}</span><a class="af-kaffee" href={KOFI} target="_blank" rel="noopener noreferrer" title={je('Freiwillig, über Ko-fi. Die App überträgt dabei nichts.', 'Voluntary, via Ko-fi. The app transmits nothing.')}><span aria-hidden="true">☕</span> {je('Kaffee spendieren', 'Tip for a coffee')}</a>
 <span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>Basic {UPDATE_VERSION} · Build {buildText}</span>
 </footer>
 </div>
