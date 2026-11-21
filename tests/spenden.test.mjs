@@ -29,6 +29,10 @@ console.log('\nKaffeekasse')
   p('Er trägt das Kaffeesymbol', /☕/.test(app))
   p('Er öffnet ein neues Fenster und gibt die Seite nicht preis', /class="af-kaffee"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/.test(app))
   p('Die Tippfläche ist groß genug (44 px)', /\.af-kaffee \{[\s\S]{0,400}min-height: 44px/.test(app))
+  p('Über dem Knopf steht ein Satz dazu', /class="af-kaffee-text"/.test(app) && /kostenlos und ohne Werbung/.test(app) && /free and has no ads/.test(app))
+  // Zwei kurze Sätze, kein Absatz: so machen es die kostenlosen Apps, und so bettelt es nicht.
+  const satz = (app.match(/class="af-kaffee-text">\{je\('([^']+)'/) || [])[1] || ''
+  p('Der Satz bleibt kurz', satz.length > 20 && satz.length < 140, satz)
 }
 
 console.log('\nNichts Fremdes in der App')

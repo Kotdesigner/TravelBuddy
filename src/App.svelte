@@ -1392,7 +1392,12 @@
 </main>
 <FunFactUnterwegs orte={[...orte, ...$eigeneOrte]} />
 
-<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online', 'TravelBuddy online')}</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></span><a class="af-kaffee" href={PAYPAL} target="_blank" rel="noopener noreferrer" title={je('Freiwillig, über PayPal. Die App überträgt dabei nichts.', 'Voluntary, via PayPal. The app transmits nothing.')}><span aria-hidden="true">☕</span> {je('Kaffee spendieren', 'Tip for a coffee')}</a><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>Basic {UPDATE_VERSION} · Build {buildText}</span></footer>
+<footer class="app-footer">
+<div class="af-wer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span></div>
+<div class="af-reihe af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener" title={je('Die Fassung im Browser, ohne Installation', 'The browser version, no install needed')}>Online</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></div>
+<span class="af-kaffee-text">{je('TravelBuddy ist kostenlos und ohne Werbung. Wenn sie dir gefällt, freue ich mich über einen Kaffee.', 'TravelBuddy is free and has no ads. If you like it, a coffee is always welcome.')}</span><a class="af-kaffee" href={PAYPAL} target="_blank" rel="noopener noreferrer" title={je('Freiwillig, über PayPal. Die App überträgt dabei nichts.', 'Voluntary, via PayPal. The app transmits nothing.')}><span aria-hidden="true">☕</span> {je('Kaffee spendieren', 'Tip for a coffee')}</a>
+<span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>Basic {UPDATE_VERSION} · Build {buildText}</span>
+</footer>
 </div>
 </div>
 
@@ -1586,31 +1591,49 @@
   .test-band .btn { flex: none; min-height: 40px; }
   .karten-band { margin: 0 0 12px; padding: 8px 12px; border-radius: var(--radius-m); background: var(--flaeche-2); color: var(--ink); font-size: calc(13.5px * var(--schrift, 1)); font-weight: 600; }
   .app-footer {
-    /* Steht immer am unteren Rand, auch auf kurzen Seiten. */
-    margin-top: auto; text-align: center; padding: 10px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    /* Steht immer am unteren Rand. Vorher hing der beige Block auf kurzen Seiten mitten im Bild.
+       Reihenfolge seit dem 21.11., auf Steves Ansage: wer es gebaut hat, die Links, klein der
+       Satz zur Kaffeekasse, der Knopf, zuletzt der Stand der Fassung. Eine Spalte, überall
+       gleich. Vorher brachen die Links auf zwei Zeilen um und der Name stand noch einmal
+       allein: am Telefon 318 px, jetzt 269. */
+    margin-top: auto; text-align: center; padding: 8px 16px calc(12px + env(safe-area-inset-bottom, 0px));
     font-size: calc(12.5px * var(--schrift, 1)); font-weight: 700; color: var(--muted); border-top: 1px solid var(--line);
   }
-  .fb-mehr { display: inline-block; padding: 8px 0; color: var(--brand-text); font-weight: 700; font-size: calc(13.5px * var(--schrift, 1)); }
+  .app-footer .af-wer { font-size: calc(12.5px * var(--schrift, 1)); }
+  .app-footer .af-reihe { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; }
+  /* Der Trennpunkt hängt am Wort davor, er steht nicht als eigenes Zeichen dazwischen. So rutscht
+     beim Umbruch nie ein einzelner Punkt an den Zeilenanfang. */
+  .app-footer .af-reihe > *:not(:last-child)::after { content: '·'; color: var(--line-stark); font-weight: 700; margin: 0 4px 0 6px; }
+  .app-footer .af-links > * { padding: 7px 0; font-size: calc(12px * var(--schrift, 1)); }
   .app-footer .af-by { color: var(--brand-text); }
-  .app-footer .af-name { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 3px; padding: 8px 2px; }
-  .app-footer .af-links { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 16px; margin-top: 2px; }
-  .app-footer .af-web { display: inline-flex; align-items: center; padding: 8px 2px; font-size: calc(12px * var(--schrift, 1)); font-weight: 600; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 2px; }
-  .app-footer .af-fehler { display: inline-flex; align-items: center; gap: 5px; padding: 8px 2px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
+  .app-footer .af-name { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 3px; padding: 5px 0; }
+  .app-footer .af-web { display: inline-flex; align-items: center; font-weight: 600; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line-stark); text-underline-offset: 2px; }
+  .app-footer .af-fehler { display: inline-flex; align-items: center; gap: 5px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
   .app-footer .af-bug { color: var(--danger); flex: none; }
-  .app-footer .af-by a { color: inherit; text-decoration: underline; text-underline-offset: 2px; padding: 8px 2px; }
-  /* Stand der geladenen Fassung — macht sofort sichtbar, wenn der Service-Worker
-     noch eine ältere Version ausliefert. */
-  .app-footer .af-recht { display: inline-flex; align-items: center; padding: 8px 2px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
-  /* Kaffeekasse: eigene Zeile als Kapsel. Steht unter den Fußnoten, nicht dazwischen —
-     ein Trinkgeld soll zu finden sein, aber niemanden beim Lesen anspringen. */
+  .app-footer .af-recht { display: inline-flex; align-items: center; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
+  .app-footer .af-by a { color: inherit; text-decoration: underline; text-underline-offset: 2px; padding: 5px 0; }
+  /* Trefferfläche, sichtbar gleich. Eine Klasse mehr als die allgemeine Regel weiter unten,
+     sonst gewinnt die mit ihren -6px, weil sie später im Stylesheet steht. */
+  .app-footer .af-wer .af-name::after, .app-footer .af-wer .af-by a::after { inset: -11px 0; }
+  /* Kaffeekasse: klein der Satz, darunter die Kapsel. Ein Trinkgeld soll zu finden sein, aber
+     niemanden beim Lesen anspringen. */
+  .app-footer .af-kaffee-text { display: block; max-width: 34em; margin: 4px auto 0; font-size: calc(11.5px * var(--schrift, 1)); font-weight: 600; color: var(--muted); line-height: 1.45; }
   .app-footer .af-kaffee {
-    display: inline-flex; align-items: center; gap: 7px; margin: 10px auto 2px; padding: 9px 16px;
+    display: inline-flex; align-items: center; gap: 7px; margin: 6px auto 3px; padding: 8px 15px;
     border: 1px solid var(--line-stark); border-radius: 999px; background: var(--card);
     color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); font-weight: 700;
     text-decoration: none; min-height: 44px; box-sizing: border-box;
   }
   .app-footer .af-kaffee:hover { border-color: var(--brand); }
-  .app-footer .af-build { display: block; margin-top: 0; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }   /* vorher opacity .5: 2,2 : 1 */
+  /* Stand der geladenen Fassung, ganz unten. Liefert der Service-Worker eine ältere aus,
+     sieht man es hier sofort. */
+  .app-footer .af-build { display: block; margin-top: 2px; font-size: calc(11px * var(--schrift, 1)); color: var(--muted); }
+  /* Unter 390 px Breite passt die Linkzeile sonst nicht in eine Reihe. Eine halbe Stufe
+     kleiner reicht, darunter bricht sie wie vorher um. */
+  @media (max-width: 390px) {
+    .app-footer .af-links > * { font-size: calc(11px * var(--schrift, 1)); }
+    .app-footer .af-kaffee-text { font-size: calc(11px * var(--schrift, 1)); }
+  }
 
   .filter-hinweis {
     display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
