@@ -1,10 +1,14 @@
-// Kaffeekasse (V33, in V43 entfernt, auf Steves Wunsch wieder da).
+// Kaffeekasse (V33, in V43 entfernt, auf Steves Wunsch wieder da — jetzt über Ko-fi).
 //
 // Wer TravelBuddy mag, kann etwas zurückgeben. Freiwillig, ohne Gegenleistung.
-// Die App schickt dabei NICHTS an PayPal und bindet kein fremdes Skript ein: Der Knopf ist ein
-// gewöhnlicher Link. Erst wer ihn antippt, landet bei PayPal, und zwar im Browser oder in der
-// PayPal-App. Deshalb bleibt die App auch offline vollständig und ohne fremde Mitleser.
+// Die App schickt dabei NICHTS an Ko-fi und bindet kein fremdes Skript ein: Der Knopf ist ein
+// gewöhnlicher Link. Erst wer ihn antippt, landet auf der Ko-fi-Seite. Deshalb bleibt die App
+// auch offline vollständig und ohne fremde Mitleser.
+//
+// Warum Ko-fi und nicht mehr PayPal.me: Die PayPal-Seite zeigt jedem den vollen Kontonamen.
+// Auf Ko-fi steht nur der selbst gewählte Name, die Zahlung läuft dahinter trotzdem über
+// PayPal oder Stripe.
 //
 // Nur hier ändern — Fußzeile und Datenschutz lesen die Adresse von hier.
-export const PAYPAL_NAME = 'Kohlesonstbeule'
-export const PAYPAL = `https://www.paypal.me/${PAYPAL_NAME}`
+export const KOFI_NAME = 'TravelBuddy'
+export const KOFI = `https://ko-fi.com/${KOFI_NAME}`
