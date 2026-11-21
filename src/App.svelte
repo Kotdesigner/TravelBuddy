@@ -69,6 +69,7 @@
   import Runterziehen from './lib/Runterziehen.svelte'
   import { bescheidBlatt, personBlatt, sosBlatt, kurzbefehlBlatt } from './lib/bescheid.js'
   import { laden as meldungenLaden, sendeWartende, nachsehen as meldungenNachsehen, meldungen, OFFIZIELL } from './lib/meldungen.js'
+  import { PAYPAL } from './lib/spenden.js'
   import { meldenBlatt, meldungAuf } from './lib/meldungen-text.js'
   import { etappenMitDatum, planUeberblick, reiseZeitraum, ymd as ymdPlan, ohneDoppelteStrecken } from './lib/plan.js'
   import Quiz from './lib/Quiz.svelte'
@@ -1391,7 +1392,7 @@
 </main>
 <FunFactUnterwegs orte={[...orte, ...$eigeneOrte]} />
 
-<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online', 'TravelBuddy online')}</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></span><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>Basic {UPDATE_VERSION} · Build {buildText}</span></footer>
+<footer class="app-footer"><a class="af-name" href="https://github.com/Kotdesigner/TravelBuddy" target="_blank" rel="noopener" title={je('Quellcode und Downloads auf GitHub', 'Source code and downloads on GitHub')}>TravelBuddy</a> <span class="af-by">by <a href="https://github.com/Kotdesigner" target="_blank" rel="noopener">Kotdesigner</a></span><span class="af-links"><a class="af-web" href="https://kotdesigner.github.io/TravelBuddy/" target="_blank" rel="noopener">🌐 {je('TravelBuddy online', 'TravelBuddy online')}</a><a class="af-fehler" href="#/mehr/fehler"><svg class="af-bug" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.5 4.5 11 6.5M14.5 4.5 13 6.5M6 10.5H3.5M6 14.5H3M6.5 18.5 4 20M18 10.5h2.5M18 14.5h3M17.5 18.5 20 20"/><path fill="currentColor" stroke="none" d="M12 6.5c-3.3 0-6 2.7-6 6V14a6 6 0 0 0 12 0v-1.5c0-3.3-2.7-6-6-6z"/><path d="M12 9.5v10" stroke="var(--bg)" stroke-width="1.5"/></svg>{je('Fehler melden', 'Report a problem')}</a><a class="af-recht" href="#/mehr/rechtliches">{t('Datenschutz & Impressum')}</a></span><a class="af-kaffee" href={PAYPAL} target="_blank" rel="noopener noreferrer" title={je('Freiwillig, über PayPal. Die App überträgt dabei nichts.', 'Voluntary, via PayPal. The app transmits nothing.')}><span aria-hidden="true">☕</span> {je('Kaffee spendieren', 'Tip for a coffee')}</a><span class="af-build" title={t('Stand dieser Fassung. Zeigt der Browser eine ältere, hilft ein harter Neuladen.')}>Basic {UPDATE_VERSION} · Build {buildText}</span></footer>
 </div>
 </div>
 
@@ -1600,6 +1601,15 @@
   /* Stand der geladenen Fassung — macht sofort sichtbar, wenn der Service-Worker
      noch eine ältere Version ausliefert. */
   .app-footer .af-recht { display: inline-flex; align-items: center; padding: 8px 2px; color: var(--brand-text); text-decoration: underline; text-underline-offset: 2px; }
+  /* Kaffeekasse: eigene Zeile als Kapsel. Steht unter den Fußnoten, nicht dazwischen —
+     ein Trinkgeld soll zu finden sein, aber niemanden beim Lesen anspringen. */
+  .app-footer .af-kaffee {
+    display: inline-flex; align-items: center; gap: 7px; margin: 10px auto 2px; padding: 9px 16px;
+    border: 1px solid var(--line-stark); border-radius: 999px; background: var(--card);
+    color: var(--brand-text); font-size: calc(13px * var(--schrift, 1)); font-weight: 700;
+    text-decoration: none; min-height: 44px; box-sizing: border-box;
+  }
+  .app-footer .af-kaffee:hover { border-color: var(--brand); }
   .app-footer .af-build { display: block; margin-top: 0; font-size: calc(12px * var(--schrift, 1)); color: var(--muted); }   /* vorher opacity .5: 2,2 : 1 */
 
   .filter-hinweis {
