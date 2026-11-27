@@ -285,9 +285,10 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 .sticker-grid { list-style: none; margin: 0 0 var(--space-2xl); padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: var(--space-md); }
 .sticker-grid li { aspect-ratio: 1; display: grid; place-items: center; border-radius: var(--radius-card); background: var(--color-paper-2); }
 .sticker-grid img { width: 88%; height: auto; }
-.sticker-get { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); }
+.sticker-get { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap-columns); }
 .sticker-get li { display: grid; gap: var(--space-sm); align-content: start; justify-items: start; border-top: 1px solid var(--color-rule); padding-top: var(--space-lg); }
 .sticker-get span { color: var(--color-ink-2); max-width: 34ch; }
 .sticker-get .btn small { color: var(--color-muted); font-weight: 400; }
-@media (max-width: 60rem) { .sticker-get { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); } }
+@media (max-width: 75rem) { .sticker-get { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl) var(--gap-columns); } }
+@media (max-width: 40rem) { .sticker-get { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 40rem) { .sticker-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-sm); } .sticker-get .btn { white-space: normal; text-align: center; } }
