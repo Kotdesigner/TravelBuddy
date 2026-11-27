@@ -225,6 +225,10 @@
       <div class="get-text">
         <h2 id="get-title">On your home screen in half a minute</h2>
         <div class="get-howto" data-howto>
+          <div class="get-howto-seg" role="group" aria-label="Choose your phone" data-howto-seg hidden>
+            <button type="button" data-os="ios" aria-pressed="false">iPhone</button>
+            <button type="button" data-os="android" aria-pressed="false">Android</button>
+          </div>
           <div class="get-howto-videos">
             <figure data-os="ios">
               <video controls playsinline preload="metadata" poster="video/install/install-iphone.jpg" width="1080" height="1920" data-goatcounter-click="install-video-iphone">
@@ -239,7 +243,6 @@
               <figcaption><b>Android</b> · Chrome, step by step</figcaption>
             </figure>
           </div>
-          <button type="button" class="get-howto-wechsel text-link" data-howto-wechsel hidden></button>
           <small>Watch first, then open the app. Recorded in the live app, the voices are AI.</small>
         </div>
         <ol class="steps">
@@ -434,15 +437,14 @@
   const ua = navigator.userAgent;
   const os = /Android/i.test(ua) ? 'android' : (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) ? 'ios' : null;
   if (!os) return;
-  const reihe = box.querySelector('.get-howto-videos'), knopf = box.querySelector('[data-howto-wechsel]');
-  const name = { ios: 'iPhone', android: 'Android' };
+  const reihe = box.querySelector('.get-howto-videos'), seg = box.querySelector('[data-howto-seg]');
   const zeige = (o) => {
     reihe.classList.add('eins');
     reihe.querySelectorAll('figure').forEach((f) => { const an = f.dataset.os === o; f.hidden = !an; if (!an) f.querySelector('video').pause(); });
-    const andere = o === 'ios' ? 'android' : 'ios';
-    knopf.textContent = `Using ${name[andere]}? Watch that one instead`; knopf.dataset.ziel = andere; knopf.hidden = false;
+    seg.querySelectorAll('button').forEach((k) => k.setAttribute('aria-pressed', String(k.dataset.os === o)));
   };
-  knopf.addEventListener('click', () => zeige(knopf.dataset.ziel));
+  seg.hidden = false;
+  seg.addEventListener('click', (e) => { const k = e.target.closest('button[data-os]'); if (k) zeige(k.dataset.os); });
   zeige(os);
 })();
 </script>

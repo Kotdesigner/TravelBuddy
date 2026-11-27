@@ -197,7 +197,11 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 .get-howto-videos { display: grid; grid-template-columns: repeat(2, minmax(0, 240px)); gap: var(--space-lg); width: 100%; }
 .get-howto-videos.eins { grid-template-columns: minmax(0, 300px); }
 .get-howto figure[hidden] { display: none; }
-.get-howto-wechsel { background: none; border: 0; padding: 0; font: inherit; cursor: pointer; min-height: 44px; }
+.get-howto-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; width: 100%; max-width: 340px; border-radius: 999px; background: var(--color-paper); border: 1px solid var(--color-rule); }
+.get-howto-seg[hidden] { display: none; }
+.get-howto-seg button { min-height: 48px; border: 0; border-radius: 999px; background: transparent; color: var(--color-ink); font: inherit; font-weight: 700; font-size: 1.05rem; cursor: pointer; }
+.get-howto-seg button[aria-pressed="true"] { background: var(--color-accent); color: var(--color-paper); }
+.get-howto-seg button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .get-howto figure { margin: 0; display: grid; gap: var(--space-sm); }
 .get-howto video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; border-radius: var(--screen-radius); background: var(--color-paper); color: var(--color-ink); }
 .get-howto figcaption, .get-howto small { color: var(--color-ink-2); font-size: var(--text-sm); }
@@ -236,6 +240,7 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
   .get-howto-videos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
   .get-howto-videos.eins { grid-template-columns: minmax(0, 300px); justify-content: center; }
   .get-howto { justify-items: stretch; }
+  .get-howto-seg { justify-self: center; }
   .hero .container, .pinned .container, .split .container, .index .container, .get .container, .photo-head, .reel .container, .faq-grid, .gh .container { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
   .hero-screens { justify-self: start; max-width: 520px; }
   .hero-screens .screen:nth-child(2) { margin-top: var(--space-2xl); }
