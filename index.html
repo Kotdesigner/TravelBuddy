@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TravelBuddy, the free road trip app for Western Australia</title>
-<meta name="description" content="A free road trip app for Western Australia with offline maps, fuel and water along your route, warnings, photo times and a diary that writes itself.">
+<title>TravelBuddy · Free offline road trip app for Western Australia (WA)</title>
+<meta name="description" content="TravelBuddy is a free road trip app for Western Australia: offline maps and routes, fuel and water along the way, official warnings, SOS to your people and a travel diary that writes itself. No account, no ads.">
 <meta name="theme-color" content="#1e150e">
 <meta property="og:title" content="TravelBuddy, the WA road trip app that works offline">
 <meta property="og:description" content="Offline maps, over 10,000 fuel, water and camp spots in WA, and a diary that writes itself. Free, no account.">
@@ -12,11 +12,143 @@
 <meta property="og:url" content="https://kotdesigner.github.io/TravelBuddy/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="application-name" content="TravelBuddy">
+<meta name="robots" content="index, follow, max-image-preview:large, max-video-preview:-1">
+<meta property="og:site_name" content="TravelBuddy">
+<meta property="og:locale" content="en_AU">
+<meta property="og:image:alt" content="Road trains on a red dirt road in Western Australia, TravelBuddy">
+<meta name="twitter:title" content="TravelBuddy, the WA road trip app that works offline">
+<meta name="twitter:description" content="Offline maps, over 10,000 fuel, water and camp spots in WA, and a diary that writes itself. Free, no account.">
+<meta name="twitter:image" content="https://kotdesigner.github.io/TravelBuddy/img/og.jpg">
 <link rel="canonical" href="https://kotdesigner.github.io/TravelBuddy/">
 <link rel="icon" href="img/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preload" href="font/anton.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebSite",
+   "@id": "https://kotdesigner.github.io/TravelBuddy/#website",
+   "url": "https://kotdesigner.github.io/TravelBuddy/",
+   "name": "TravelBuddy",
+   "alternateName": [
+    "TravelBuddy WA",
+    "TravelBuddy Western Australia",
+    "TravelBuddy.OZ"
+   ],
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://kotdesigner.github.io/TravelBuddy/#app"
+   }
+  },
+  {
+   "@type": "WebApplication",
+   "@id": "https://kotdesigner.github.io/TravelBuddy/#app",
+   "name": "TravelBuddy",
+   "alternateName": [
+    "TravelBuddy WA",
+    "TravelBuddy Western Australia"
+   ],
+   "url": "https://travelbuddy-v1-wa.netlify.app/",
+   "applicationCategory": "TravelApplication",
+   "operatingSystem": "iOS, Android, macOS, Windows, Linux (in the browser)",
+   "browserRequirements": "Requires a modern web browser",
+   "isAccessibleForFree": true,
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+   },
+   "description": "Free road trip app and travel diary for Western Australia with offline maps and routes, fuel and water along the way, official warnings, SOS to your people and a diary that writes itself.",
+   "image": "https://kotdesigner.github.io/TravelBuddy/img/og.jpg",
+   "screenshot": [
+    "https://kotdesigner.github.io/TravelBuddy/img/screen-karte.jpg",
+    "https://kotdesigner.github.io/TravelBuddy/img/screen-tagebuch.jpg",
+    "https://kotdesigner.github.io/TravelBuddy/img/screen-heute.jpg"
+   ],
+   "inLanguage": [
+    "en",
+    "de"
+   ],
+   "sameAs": [
+    "https://www.instagram.com/travelbuddy.oz/",
+    "https://www.tiktok.com/@stevekiel",
+    "https://www.facebook.com/profile.php?id=61595467816787",
+    "https://github.com/Kotdesigner/TravelBuddy"
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://kotdesigner.github.io/TravelBuddy/#faq",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Does it work on Android?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Open it in Chrome and tap Install. On iPhone it’s Safari, Share, Add to Home Screen."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does it really work offline?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Save the map once on Wi‑Fi. Then the map, your route, fuel, water and emergency info work with zero bars. Weather, warnings and flights update when you have signal again."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Is it really free?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. No account, no ads, no subscription, no personal data collected. The code is public domain."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does it give turn-by-turn directions?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. It shows your route and your blue dot on the offline map, and opens Google Maps when you want directions."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Only Western Australia?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It’s built for WA. The map covers all of Australia, the fuel and water points cover WA plus Melbourne, Cairns and the Whitsundays."
+     }
+    }
+   ]
+  },
+  {
+   "@type": "VideoObject",
+   "name": "How to install TravelBuddy on iPhone",
+   "description": "Step by step: open TravelBuddy in Safari, tap Share, Add to Home Screen, Add. Recorded in the live app.",
+   "thumbnailUrl": "https://kotdesigner.github.io/TravelBuddy/video/install/install-iphone.jpg",
+   "contentUrl": "https://kotdesigner.github.io/TravelBuddy/video/install/install-iphone.mp4",
+   "uploadDate": "2026-11-27",
+   "duration": "PT35S",
+   "embedUrl": "https://kotdesigner.github.io/TravelBuddy/#get"
+  },
+  {
+   "@type": "VideoObject",
+   "name": "How to install TravelBuddy on Android",
+   "description": "Step by step: open TravelBuddy in Chrome, tap Install, add it to your home screen. Recorded in the live app.",
+   "thumbnailUrl": "https://kotdesigner.github.io/TravelBuddy/video/install/install-android.jpg",
+   "contentUrl": "https://kotdesigner.github.io/TravelBuddy/video/install/install-android.mp4",
+   "uploadDate": "2026-11-27",
+   "duration": "PT30S",
+   "embedUrl": "https://kotdesigner.github.io/TravelBuddy/#get"
+  }
+ ]
+}
+</script>
 </head>
 <body>
 

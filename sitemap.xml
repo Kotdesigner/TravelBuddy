@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+ <url>
+  <loc>https://kotdesigner.github.io/TravelBuddy/</loc>
+  <lastmod>2026-11-27</lastmod>
+  <video:video>
+   <video:thumbnail_loc>https://kotdesigner.github.io/TravelBuddy/video/install/install-iphone.jpg</video:thumbnail_loc>
+   <video:title>How to install TravelBuddy on iPhone</video:title>
+   <video:description>Step by step: open TravelBuddy in Safari, tap Share, Add to Home Screen, Add.</video:description>
+   <video:content_loc>https://kotdesigner.github.io/TravelBuddy/video/install/install-iphone.mp4</video:content_loc>
+   <video:duration>35</video:duration>
+  </video:video>
+  <video:video>
+   <video:thumbnail_loc>https://kotdesigner.github.io/TravelBuddy/video/install/install-android.jpg</video:thumbnail_loc>
+   <video:title>How to install TravelBuddy on Android</video:title>
+   <video:description>Step by step: open TravelBuddy in Chrome, tap Install, add it to your home screen.</video:description>
+   <video:content_loc>https://kotdesigner.github.io/TravelBuddy/video/install/install-android.mp4</video:content_loc>
+   <video:duration>30</video:duration>
+  </video:video>
+ </url>
+</urlset>
