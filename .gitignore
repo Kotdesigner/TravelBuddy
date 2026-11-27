@@ -35,6 +35,8 @@ startdaten.json
 werbung/film/node_modules/
 werbung/film/out/
 *.mp4
+# Die zwei Einbau-Videos im Einrichten-Hinweis gehoeren zur App und muessen mit hoch (je rund 3 MB)
+!public/video/*.mp4
 *.mov
 *.webm
 *.wav

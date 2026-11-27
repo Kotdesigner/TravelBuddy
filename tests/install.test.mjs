@@ -13,6 +13,7 @@ p('iPhone ist iOS', istIOS({ ua: IPHONE, touch: 5 }))
 p('iPad mit Mac-Kennung und Touch ist iOS', istIOS({ ua: IPAD, platform: 'MacIntel', touch: 5 }))
 p('Mac ohne Touch ist kein iOS', !istIOS({ ua: MAC, platform: 'MacIntel', touch: 0 }))
 p('Android ist kein iOS', !istIOS({ ua: ANDROID, touch: 5 }))
+p('Android mit Mac-Kennung bleibt Android', !istIOS({ ua: ANDROID, platform: 'MacIntel', touch: 5 }) && hinweisArt({ ua: ANDROID, platform: 'MacIntel', touch: 5 }) === 'android')
 p('iPad wird als iPad erkannt', istIPad({ ua: IPAD, platform: 'MacIntel', touch: 5 }))
 p('iPhone ist kein iPad', !istIPad({ ua: IPHONE, platform: 'iPhone', touch: 5 }))
 
@@ -46,6 +47,37 @@ console.log('\n3  Reihenfolge in der App')
 const app = fs.readFileSync(new URL('../src/App.svelte', import.meta.url), 'utf8')
 p('Einführung wartet auf den Hinweis', app.includes('{#if !sprachFrage && !$installOffen}<Einfuehrung'))
 p('Hinweis steht vor der Einführung', app.indexOf('<InstallHinweis') < app.indexOf('<Einfuehrung {geh}'))
+
+console.log('\n4  Video zum Einrichten')
+// Die Videos liegen bei der App selbst. Fremde Einbettungen von TikTok oder Instagram würden
+// Skripte und Cookies in die App holen, das verträgt sich nicht mit dem, was in Rechtliches steht.
+const hd = fs.readFileSync(new URL('../public/_headers', import.meta.url), 'utf8')
+const nt = fs.readFileSync(new URL('../netlify.toml', import.meta.url), 'utf8')
+const vite = fs.readFileSync(new URL('../vite.config.js', import.meta.url), 'utf8')
+for (const [art, name, sek, mb] of [['iPhone', 'install-iphone', 35, 3], ['Android', 'install-android', 30, 3]]) {
+  const mp4 = new URL(`../public/video/${name}.mp4`, import.meta.url)
+  const jpg = new URL(`../public/video/${name}.jpg`, import.meta.url)
+  const da = fs.existsSync(mp4) && fs.existsSync(jpg)
+  p(`${art}: Video und Standbild liegen bei der App`, da)
+  if (!da) continue
+  const echt = fs.statSync(mp4).size / 1048576
+  p(`${art}: Video bleibt klein (${echt.toFixed(1)} MB)`, echt < 8)
+  p(`${art}: Größe am Knopf stimmt noch (${mb} MB angesagt)`, Math.abs(echt - mb) < 1.5)
+  p(`${art}: Standbild unter 150 KB`, fs.statSync(jpg).size < 150 * 1024)
+  // moov vorne heißt: der Browser kann sofort anfangen und muss nicht erst alles laden
+  p(`${art}: läuft gleich los, nicht erst nach dem vollen Laden`, fs.readFileSync(mp4).subarray(0, 2048).toString('latin1').includes('moov'))
+  p(`${art}: Hinweis zeigt genau dieses Video`, ih.includes(`/video/${name}.mp4`) && ih.includes(`/video/${name}.jpg`))
+  p(`${art}: Länge am Knopf stimmt`, ih.includes(`sek: ${sek}`))
+}
+p('Knopf nennt Länge und Größe', /Sekunden, rund \$\{video\.mb\} MB/.test(ih) && /seconds, about \$\{video\.mb\} MB/.test(ih))
+p('Video lädt erst nach dem Tippen', ih.indexOf('{#if videoAuf}') > 0 && ih.indexOf('<video') > ih.indexOf('{#if videoAuf}'))
+p('Läuft im Blatt, nicht im Vollbild', /playsinline/.test(ih))
+p('Lässt sich wieder ausblenden', /videoAuf = false\)\}>\{je\('Video ausblenden'/.test(ih))
+p('Video steckt im iPhone- und im Android-Hinweis', (ih.match(/\{@render videoHilfe\(\)\}/g) || []).length === 2)
+p('Kein fremder Rahmen, kein fremdes Skript', !/<iframe/.test(ih) && !/embed/.test(ih) && !/script src/.test(ih))
+p('Instagram und TikTok nur als Verweis nach draußen', /instagram\.com\/travelbuddy\.oz/.test(ih) && /tiktok\.com\/@/.test(ih) && (ih.match(/rel="noopener noreferrer"/g) || []).length >= 2)
+p('Service Worker lädt die Videos nicht mit in den Speicher', !/mp4/.test(vite))
+p('Netlify speichert die Videos lange zwischen', /\/video\/\*/.test(hd) && /\/video\/\*/.test(nt))
 
 if (fehler) { console.log(`\n${fehler} Fehler`); process.exit(1) }
 console.log('\nAlles grün')

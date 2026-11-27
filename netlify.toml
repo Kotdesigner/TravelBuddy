@@ -26,6 +26,12 @@
   [headers.values]
     Cache-Control = "no-cache"
 
+# Einbau-Videos: ändern sich nicht, also einmal laden und behalten
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
 # Offline-Karten: groß und unveränderlich, die App lädt sie stückweise (Range-Anfragen)
 [[headers]]
   for = "/karten/*"

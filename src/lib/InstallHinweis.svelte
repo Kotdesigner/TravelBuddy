@@ -12,6 +12,20 @@
   let ipad = $state(false)
   let mac = $state(false)                      // „danach“: Dock statt Home-Bildschirm
 
+  // Die zwei Einbau-Videos liegen bei der App selbst, in public/video. Nichts kommt von fremden
+  // Servern, kein Skript von Instagram oder TikTok. Geladen wird erst beim Tippen, darum steht
+  // die Größe am Knopf: wer im Funkloch sitzt, soll vorher wissen, worauf er sich einlässt.
+  const VIDEOS = {
+    ios: { datei: '/video/install-iphone.mp4', bild: '/video/install-iphone.jpg', sek: 35, mb: 3 },
+    android: { datei: '/video/install-android.mp4', bild: '/video/install-android.jpg', sek: 30, mb: 3 },
+  }
+  const INSTAGRAM = 'https://www.instagram.com/travelbuddy.oz/'
+  const TIKTOK = 'https://www.tiktok.com/@stevekiel'
+  let videoAuf = $state(false)
+  const video = $derived(VIDEOS[art] ?? null)
+  // Nach dem Tippen gleich loslaufen. Verbietet der Browser den Ton, bleibt der Startknopf stehen.
+  function starte(el) { el.play?.().catch(() => {}) }
+
   // erzwungen: aus dem Menü „📲 App einrichten“, dann auch nach „Später“ oder „Erledigt“
   function pruefe(erzwungen = false) {
     let spaeter = false
@@ -22,6 +36,7 @@
     ipad = istIPad(g)
     mac = a === 'mac'
     art = a
+    videoAuf = false
     installOffen.set(!!a)
   }
   onMount(() => pruefe())
@@ -29,7 +44,7 @@
   $effect(() => { if ($installAngebot && !art) untrack(() => pruefe()) })
   $effect(() => { if ($installOeffnen) untrack(() => pruefe(true)) })
 
-  function zu() { art = null; installOffen.set(false) }
+  function zu() { art = null; videoAuf = false; installOffen.set(false) }
   function spaeter() { try { sessionStorage.setItem(SPAETER, '1') } catch {} zu() }
   function fertig() { merkeErledigt(); zu() }
   // Auf dem iPhone läuft nach „Erledigt“ noch der Safari-Tab: sagen, wo es weitergeht
@@ -52,6 +67,25 @@
 
 {#snippet teilen()}<svg class="ih-teilen" viewBox="0 0 24 24" role="img" aria-label={je('Teilen', 'Share')}><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>{/snippet}
 
+{#snippet videoHilfe()}
+  {#if video}
+    {#if videoAuf}
+      <video class="ih-video" src={video.datei} poster={video.bild} controls playsinline preload="auto" use:starte></video>
+      <button class="ih-video-zu" onclick={() => (videoAuf = false)}>{je('Video ausblenden', 'Hide the video')}</button>
+    {:else}
+      <button class="ih-video-knopf" onclick={() => (videoAuf = true)}>
+        <img src={video.bild} alt="" width="36" height="64" />
+        <span class="ih-video-text">
+          <b>{je('Zeig mir das als Video', 'Show me a video')}</b>
+          <small>{je(`${video.sek} Sekunden, rund ${video.mb} MB`, `${video.sek} seconds, about ${video.mb} MB`)}</small>
+        </span>
+        <span class="ih-video-play" aria-hidden="true">▶</span>
+      </button>
+    {/if}
+    <p class="ih-k ih-social">{je('Das Video läuft auch auf', 'The video also runs on')} <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer">Instagram</a> {je('und', 'and')} <a href={TIKTOK} target="_blank" rel="noopener noreferrer">TikTok</a>.</p>
+  {/if}
+{/snippet}
+
 {#if art}
   <div class="ih-hg" out:ausblenden data-dialog-hg aria-hidden="true"></div>
   <div class="ih" out:blattRaus role="dialog" aria-labelledby="ih-titel" aria-describedby="ih-text" use:modal={{ onclose: () => (art === 'danach' ? zu() : spaeter()) }}>
@@ -62,6 +96,7 @@
     <h2 id="ih-titel">{TITEL[art] ? TITEL[art]() : je('TravelBuddy auf den Home-Bildschirm', 'Put TravelBuddy on your home screen')}</h2>
     {#if art === 'ios'}
       <p id="ih-text">{je('Dann startet TravelBuddy wie eine echte App, auch ohne Netz. Mach das am besten jetzt, bevor du etwas einträgst: Safari und Home-Bildschirm haben getrennte Speicher.', 'Then TravelBuddy starts like a real app, even without signal. Best do it now, before you enter anything: Safari and the home screen keep separate storage.')}</p>
+      {@render videoHilfe()}
       <ol class="ih-schritte">
         <li>
           <span class="ih-nr" aria-hidden="true">1</span>
@@ -89,6 +124,7 @@
       </div>
     {:else if art === 'android'}
       <p id="ih-text">{je('Dann startet TravelBuddy wie eine echte App, mit eigenem Symbol und auch ohne Netz. Was du schon eingetragen hast, bleibt dabei erhalten.', 'Then TravelBuddy starts like a real app, with its own icon and even without signal. Anything you have already entered stays.')}</p>
+      {@render videoHilfe()}
       {#if $installAngebot}
         <div class="ih-knoepfe">
           <button class="btn-primary ih-los" onclick={installieren}>{je('Installieren', 'Install')}</button>
@@ -183,4 +219,16 @@
   .ih-knoepfe > :only-child { flex: 1 1 100%; }
   .ih-los { min-height: 50px; font-size: calc(17px * var(--schrift, 1)); }
   .ih-leise { min-height: 50px; border: 1px solid var(--line-stark); border-radius: 14px; background: none; color: var(--brand-text); font-size: calc(15px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+  /* Knopf zum Video: Standbild, Beschriftung, Größe. Das Video selbst kommt erst nach dem Tippen. */
+  .ih-video-knopf { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 8px 12px; border: 1px solid var(--line-stark); border-radius: 14px; background: var(--flaeche-2); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+  .ih-video-knopf img { flex: none; width: 36px; height: 64px; object-fit: cover; border-radius: 8px; background: #000; }
+  .ih-video-text { display: flex; flex-direction: column; flex: 1; gap: 1px; }
+  .ih-video-text b { font-size: calc(15px * var(--schrift, 1)); }
+  .ih-video-text small { font-size: calc(12.5px * var(--schrift, 1)); color: var(--muted); }
+  .ih-video-play { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--brand); color: #fff; font-size: calc(13px * var(--schrift, 1)); }
+  /* Hochkant wie das Reel. Die Höhe ist begrenzt, damit die drei Schritte darunter nicht verschwinden. */
+  .ih-video { align-self: center; aspect-ratio: 9 / 16; height: 42vh; max-width: 100%; object-fit: contain; border-radius: 14px; background: #000; }
+  .ih-video-zu { align-self: center; min-height: 44px; padding: 0 14px; border: none; background: none; color: var(--brand-text); font-size: calc(13.5px * var(--schrift, 1)); font-weight: 700; cursor: pointer; }
+  .ih .ih-social { text-align: center; }
+  .ih-social a { color: var(--brand-text); font-weight: 700; }
 </style>

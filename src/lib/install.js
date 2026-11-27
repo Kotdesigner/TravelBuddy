@@ -6,8 +6,13 @@ import { writable, derived } from 'svelte/store'
 
 export const KEY = 'tb-install-hinweis-v1'
 
-/** iPhone oder iPad? iPadOS meldet sich wie ein Mac, hat aber Touch. */
+/**
+ * iPhone oder iPad? iPadOS meldet sich wie ein Mac, hat aber Touch.
+ * Android zuerst aussortieren: dort steht nie MacIntel, aber ein Browser mit umgestellter
+ * Kennung (oder Chrome mit Android-Kennung am Mac) landete sonst auf dem iPhone-Weg.
+ */
 export function istIOS({ ua = '', platform = '', touch = 0 } = {}) {
+  if (/Android/.test(ua)) return false
   return /iPhone|iPad|iPod/.test(ua) || (platform === 'MacIntel' && touch > 1) || (/Macintosh/.test(ua) && touch > 1)
 }
 /** iPad: dort sitzt Teilen oben rechts neben der Adresse, nicht unten. */
