@@ -224,6 +224,24 @@
     <div class="container">
       <div class="get-text">
         <h2 id="get-title">On your home screen in half a minute</h2>
+        <div class="get-howto" data-howto>
+          <div class="get-howto-videos">
+            <figure data-os="ios">
+              <video controls playsinline preload="metadata" poster="video/install/install-iphone.jpg" width="1080" height="1920" data-goatcounter-click="install-video-iphone">
+                <source src="video/install/install-iphone.mp4" type="video/mp4">
+              </video>
+              <figcaption><b>iPhone</b> · Safari, step by step</figcaption>
+            </figure>
+            <figure data-os="android">
+              <video controls playsinline preload="metadata" poster="video/install/install-android.jpg" width="1080" height="1920" data-goatcounter-click="install-video-android">
+                <source src="video/install/install-android.mp4" type="video/mp4">
+              </video>
+              <figcaption><b>Android</b> · Chrome, step by step</figcaption>
+            </figure>
+          </div>
+          <button type="button" class="get-howto-wechsel text-link" data-howto-wechsel hidden></button>
+          <small>Watch first, then open the app. Recorded in the live app, the voices are AI.</small>
+        </div>
         <ol class="steps">
           <li><span>Open <a class="text-link" href="https://travelbuddy-v1-wa.netlify.app">travelbuddy-v1-wa.netlify.app</a></span></li>
           <li><span><b>iPhone:</b> Safari, Share, Add to Home Screen. <b>Android:</b> tap Install.</span></li>
@@ -244,24 +262,6 @@
       <figure class="screen" data-kind="product">
         <img src="img/screen-heute.jpg" width="575" height="1250" loading="lazy" alt="The Today screen with the day’s drive, a live flight and warnings">
       </figure>
-      <div class="get-howto">
-        <h3>Watch how, step by step</h3>
-        <div class="get-howto-videos">
-          <figure>
-            <video controls playsinline preload="none" poster="video/install/install-iphone.jpg" width="1080" height="1920" data-goatcounter-click="install-video-iphone">
-              <source src="video/install/install-iphone.mp4" type="video/mp4">
-            </video>
-            <figcaption><b>iPhone</b> · Safari, 35 seconds</figcaption>
-          </figure>
-          <figure>
-            <video controls playsinline preload="none" poster="video/install/install-android.jpg" width="1080" height="1920" data-goatcounter-click="install-video-android">
-              <source src="video/install/install-android.mp4" type="video/mp4">
-            </video>
-            <figcaption><b>Android</b> · Chrome, 30 seconds</figcaption>
-          </figure>
-        </div>
-        <small>Recorded in the live app. The voices are AI.</small>
-      </div>
     </div>
   </section>
 
@@ -426,6 +426,24 @@
     if (matchMedia('(max-width: 60rem)').matches) video.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'series-ep-' + n, title: nowT.textContent, event: true });
   });
+})();
+</script>
+<script>
+(() => {
+  const box = document.querySelector('[data-howto]'); if (!box) return;
+  const ua = navigator.userAgent;
+  const os = /Android/i.test(ua) ? 'android' : (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) ? 'ios' : null;
+  if (!os) return;
+  const reihe = box.querySelector('.get-howto-videos'), knopf = box.querySelector('[data-howto-wechsel]');
+  const name = { ios: 'iPhone', android: 'Android' };
+  const zeige = (o) => {
+    reihe.classList.add('eins');
+    reihe.querySelectorAll('figure').forEach((f) => { const an = f.dataset.os === o; f.hidden = !an; if (!an) f.querySelector('video').pause(); });
+    const andere = o === 'ios' ? 'android' : 'ios';
+    knopf.textContent = `Using ${name[andere]}? Watch that one instead`; knopf.dataset.ziel = andere; knopf.hidden = false;
+  };
+  knopf.addEventListener('click', () => zeige(knopf.dataset.ziel));
+  zeige(os);
 })();
 </script>
 <script data-goatcounter="https://travelbuddy-oz.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
