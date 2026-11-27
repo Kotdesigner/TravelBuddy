@@ -193,6 +193,11 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 .get { background: var(--color-paper-2); }
 .get .container { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 2fr) minmax(0, 4fr); gap: var(--space-3xl); align-items: center; }
 .get-text { display: grid; gap: var(--space-lg); }
+.get-howto { grid-column: 1 / -1; display: grid; gap: var(--space-md); }
+.get-howto-videos { display: grid; grid-template-columns: repeat(2, minmax(0, 260px)); gap: var(--space-xl); }
+.get-howto figure { margin: 0; display: grid; gap: var(--space-sm); }
+.get-howto video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; border-radius: var(--screen-radius); background: var(--color-paper); color: var(--color-ink); }
+.get-howto figcaption, .get-howto small { color: var(--color-ink-2); font-size: var(--text-sm); }
 .steps { margin: 0; padding: 0; list-style: none; counter-reset: step; display: grid; gap: var(--space-md); }
 .steps li { counter-increment: step; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: var(--space-sm); color: var(--color-ink-2); }
 .steps li::before { content: counter(step); font-family: var(--font-display); font-size: 1.5rem; line-height: 1.1; color: var(--color-accent); }
@@ -225,6 +230,7 @@ small, figcaption { font-size: var(--text-sm); color: var(--color-muted); line-h
 @media (max-width: 60rem) {
   :root { --nav-h: 64px; }
   .hero { min-height: 0; padding-block: var(--space-xl) var(--space-2xl); }
+  .get-howto-videos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
   .hero .container, .pinned .container, .split .container, .index .container, .get .container, .photo-head, .reel .container, .faq-grid, .gh .container { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
   .hero-screens { justify-self: start; max-width: 520px; }
   .hero-screens .screen:nth-child(2) { margin-top: var(--space-2xl); }
